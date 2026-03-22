@@ -1,0 +1,48 @@
+# Research Briefing (THEORIST thread)
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+
+---
+
+### Round 1  (04:21)
+
+I made partial progress setting up the computations but did not confirm the claimed negative result: I only ran a Gaussian-elimination check on one chosen 8-tuple of vectors (found rank 3 with 5 free variables) and stopped before producing a kernel basis or running the essential bitset dynamic programming test that would certify whether any 8-element support with multiplicity 6 is short-zero-sum-free. I have not run the 343-bit DP over all k≤7 subsequences for any full support, and I did not complete a systematic search over supports (enumerating all 8-element subsets of the 342 nonzero elements is astronomically large). Concretely, checking a single 8-element support is entirely feasible (for each k≤7 there are only C(8+k-1,k) multisets to test, so ~O(10^4) sums per support) and the bitset-DP approach with 343-bit integers will quickly decide the short-zero-sum property for one support; the real bottleneck is the vast number of supports, so practical strategies are (a) exhaustive check up to GL(3,7)-equivalence to collapse symmetric cases, (b) random/heuristic search seeded from length-42 constructions and greedy extensions, or (c) integer-program / SAT-style search to find a counterexample support—none of which I've completed yet. Next concrete step I recommend: implement the 343-bit DP to test a single support end-to-end, then run it on your 3000+ sampled supports (and on deterministic canonical representatives under GL(3,7)) to either produce an extremal example or provide strong evidence that no support of size 8 with multiplicity 6 works. Overall: working and salvageable but not yet decisive — (yellow)
+
+**Cost so far: $0.16** | Tokens: 65,169 in / 4,671 out
+
+### Round 2  (04:25)
+
+We aimed to decide the exact short-zero-sum constant η for the group C7^3 (whether the machine-checked lower bound 49 is tight), by (1) exhaustively checking with a 343-bit DP that no 8-element support with multiplicity 6 is short-zero-sum-free, and then (2) searching for longer zero-sum-free sequences or a universal upper bound; instead of finishing that computation, this round produced a clean theoretical lemma by incidence double-counting showing any cap in AG(3,p) has at most 2p^2 points (so for p=7 a nontrivial global upper bound was obtained), and indicated a plan to refine the count toward the conjectured p^2 bound; no exhaustive bitset DP search results were reported here, so the core computational verification (searching all 8-element supports and the mixed-multiplicity/longer-sequence explorations) remains to be run and reported. (yellow)
+
+**Cost so far: $0.28** | Tokens: 83,920 in / 11,530 out
+
+### Round 3  (04:28)
+
+We aimed to decide η(C7^3) — whether the proven lower bound 49 (eight distinct nonzero elements each repeated 6 times) is actually attainable — by combining a machine-checked DP search with analytic structure arguments; so far the practical work and the math both fell short. Computationally, 3000+ random 8-element supports tested with the 343-bit DP produced no extremal examples, but that sample is far from exhaustive (there are astronomically many 8-subsets of the 342 nonzero vectors), so a systematic negative verification is still pending. Analytically I tried to force a large cap into the zero-set of a quadratic polynomial by a linear-algebra count, but the dimension/sign in that argument was wrong (large |C| does not give the nontrivial kernel claimed), so that route is blocked and needs reworking. Concrete next steps I will execute: (1) implement the fast bitset DP to test any given support and use it inside a backtracking enumerator so we can prune early when short zero-sums appear; (2) drastically reduce the search via symmetry (fix one or two vectors using GL(3,7) actions to enumerate supports up to orbit representatives) and via canonical labeling to avoid duplicate-equivalent supports; (3) perform a focused search from guaranteed zero-sum-free length-42 sequences, extending greedily and with DFS/branch-and-bound to hunt longer examples (including 8-element supports with mixed multiplicities and 9-element supports); and (4) if we exhaust all symmetry-reduced supports up to a target length, declare an upper bound. What’s blocking me now is (A) the combinatorial explosion of supports unless symmetry+pruning is applied carefully and (B) the need to replace the incorrect polynomial lemma with a valid structural constraint; I will start by coding the orbit-pruned bitset-DP enumerator and report back with either a found 8-support (a major discovery) or a systematic negative result. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.35** | Tokens: 103,429 in / 15,013 out
+

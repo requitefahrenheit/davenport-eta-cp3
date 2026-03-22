@@ -1,0 +1,21 @@
+# Research Result
+
+**Goal:** Prove: for a,b,c in F_p* with no pair summing to 0 mod p and a+b+c != 0 mod p,
+the wrap count k(lambda) = floor(([la]+[lb]+[lc])/p) is NOT identically 1.
+
+Equivalently: f(lambda) = [la]+[lb]+[lc] < p for some lambda in F_p*.
+
+By the involution f(l)+f(-l)=3p and sum(k)=p-1: this is equivalent to showing
+k=2 for some lambda (then -lambda gives k=0, f <= p-1).
+
+Verified for p = 5,7,11,13,17,19. Zero exceptions.
+**Arch:** gpt
+**Turns:** 4
+**Cost:** $0.4658
+
+## Log
+
+
+[Turn 1] Turn 1: Tried an inequality/bounding approach to prove (†) by bounding \(t=[vu^{-1}]\) in terms of \(A=[u]\), but the key bound \(t\le2\) is false (explicit counterexample \(p=11,u=7,v=8\) gives \(t=9\)). So approach #1 currently fails due to an over-crude estimate; no new lemma/usable obstruction yet beyond “\(t\) can be large and depends on \(d\)”. Lakatos threshold not reached (only 1 approach, 1 local failure).
+[Turn 2] Turn 2: Worker found an explicit counterexample \((p,u,v)=(11,7,8)\) showing auxiliary implication (†) is false: \(S_1,S_2,S_3\ge p+1\) simultaneously. This is genuine progress: it kills approach #1 decisively and forces a pivot to a new global strategy (carry-indicator/combinatorial counting based on constraints coming from a common triple \((a,b,c)\) for all \(\lambda\)). Approaches tried: 1 (disproved). Lakatos threshold not reached (only one approach, but a clear global refutation of the sub-lemma).
+[Turn 3] Turn 3: Worker produced a substantive counting/intersection framework using carry indicators \(Y_{xy}(\lambda)\), derived block equations, and obtained a parity contradiction ruling out “\(k(\lambda)=1\) for all \(\lambda\)” when \(p\equiv 3\pmod 4\) (under no antipodal pair). This is a genuine partial result (covers half the primes) and introduces a structured partition for the remaining case \(p\equiv1\pmod4\), with a predicted rigid distribution \(t=\frac14(p-1)\), \(o=\frac34(p-1)\), \(s=n=0\). Approaches tried: 2 (inequality sublemma failed; counting approach yielding partial theorem). Lakatos threshold not reached.

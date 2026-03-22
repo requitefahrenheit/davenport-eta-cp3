@@ -1,0 +1,337 @@
+
+============================================================
+BLOCK 1 (451 chars)
+============================================================
+The user wants me to act as the ADVERSARY agent in a multi-agent research setup. My job is to try to break things - find counterexamples, disprove lemmas, find boundaries where things fail.
+
+Let me start by:
+1. Searching Cortex (the shared memory/knowledge base) for what others have found
+2. Reading the seed document for full context
+3. Then trying to construct counterexamples or find weaknesses
+
+Let me search Cortex first, then read the briefing.
+
+============================================================
+BLOCK 2 (45618 chars)
+============================================================
+Cortex is down. Let me proceed with my adversary role. I've read the briefing. Let me think about what I can attack.
+
+My job as adversary:
+1. Try to construct counterexamples
+2. Find boundaries where things break
+3. Disprove proposed lemmas
+4. Check if things verified at p=5 fail at larger primes
+
+Let me think carefully about what to attack.
+
+**Key claims to stress-test:**
+
+1. **The inductive approach itself**: The claim is α(r+1) = 2α(r)+1. Does the doubling+e₁ construction actually generalize cleanly? Let me check if the multi-fiber gap might actually be exploitable.
+
+
+2. **The "every collinear triple is degenerate" obstruction**: Can I construct a multi-fiber configuration at p=7 or p=11 where every collinear triple IS degenerate and no short zero-sum exists?
+3. **The two-fiber bound**: Is the proof actually correct? Let me check the logic.
+4. **Lemma 3 from the post-mortem**: "If |F₀| ≥ 9 nonzero non-proportional vectors in the kernel of a linear form w, then a weighted zero-sum of weight ≤ p exists among F₀ alone." I need to examine where this argument relies on specific assumptions about the kernel structure.
+
+Now I'm checking whether 9 distinct non-proportional vectors in F_p³ actually guarantee a zero-sum under the η bound. With multiplicity p-1 per vector, 9 distinct vectors give 9(p-1) total copies, which exceeds the threshold of 8(p-1)+1 for p ≥ 5, so the bound does hold.
+
+But I need to be more careful about what η(C_p^r) actually measures—it's the smallest N such that any sequence of N elements from the nonzero part of the group contains a zero-sum subsequence of length between 1 and p, and I should double-check whether the "no two proportional" constraint and the multiplicity condition are being applied correctly to this definition.
+
+Looking at the setup: we have α(r)+1 distinct nonzero non-proportional vectors, each repeated p−1 times, giving us a total sequence length of (α(r)+1)(p−1). Since η(C_p^r) = α(r)(p−1)+1, having this many elements guarantees a zero-sum of length at most p. When I restrict to a single fiber containing 9 vectors, I get 9(p−1) elements, which exceeds the threshold needed.
+
+Now checking whether this is enough: I need 8(p−1)+1 elements to guarantee a zero-sum, and I have 9(p−1). Since 9p−9 ≥ 8p−7 whenever p ≥ 2, this works for all odd primes, so Lemma 3 holds.
+
+Let me explore whether the multi-fiber structure creates any gaps. The question is whether three or more fibers always force a zero-sum of weight at most p. At rank 4, the construction gives 8 vectors in one fiber and 9 in another for 17 total, but I need 18 non-proportional vectors—so the 18th vector must come from somewhere else, which would introduce a third fiber.
+
+The real constraint is the weight of zero-sums: if s₁v₁ + ... + s_kv_k = 0 with coefficients in {1,...,p−1}, then the weight s₁+...+s_k must be at most p. For a counterexample, I'd need 18 non-proportional vectors in F_p^4 where no zero-sum achieves weight ≤ p. Testing at p = 5 shows all 607 possible placements for the 18th vector create a zero-sum of weight at most 5, so no counterexample exists there.
+
+But I'm realizing the computation only tested one specific 17-vector configuration—the doubled+e₁ construction. The theorem needs to hold for ANY 18 vectors, which means either all maximal 17-vector zero-sum-free sets are equivalent up to transformation, or there are other extremal configurations that also need checking. This is a gap: I haven't verified whether other 17-vector bases exist or whether they'd also force the same constraint on any 18th vector.
+
+At rank 3, A₈ appears to be the unique maximal ZSF set, but I'm not sure if that's proven or just computationally verified at p=5. If extremal sets aren't unique at higher ranks or larger primes, then testing just one specific base is insufficient. For instance, at p=7 and rank 4, the bound is 103 vectors, meaning 18 non-proportional vectors with multiplicity 6 should be ZSF—but is the doubled+e₁ construction the only way to achieve this? I doubt it, which suggests the computational verification might be incomplete.
+
+Now I'm looking at the triple-sum-zero claim: for any collinear triple with dependency (α, β, γ) where α + β + γ ≡ 0 (mod p) and no pair sums to zero, the post-mortem asserts there exists μ ∈ F_p* such that ⟨μα⟩ + ⟨μβ⟩ + ⟨μγ⟩ = p exactly. But if α + β + γ ≡ 0 (mod p), then for any μ we have μα + μβ + μγ ≡ 0 (mod p), so the sum of the bracket values should also be ≡ 0 (mod p).
+
+Since each bracket value is between 1 and p-1, the sum must be either p or 2p (or higher multiples, but the upper bound rules those out for reasonable p). The claim that we can always achieve exactly p rather than 2p is what I'm checking now—for p = 5, I need to verify whether this is actually possible.
+
+Let me test this with (α,β,γ) = (1,2,2). When μ = 1, the sum is 1+2+2 = 5, which equals p exactly. But when μ = 2, the sum jumps to 10 = 2p. When μ = 3, it drops back to 5 = p. So the sum oscillates between p and 2p depending on the choice of μ.
+
+Now I'm wondering if this pattern always holds—whether for any valid triple, we always get either p or 2p, never something else. Let me think about the general structure. For (α,β,γ) where α+β+γ = 0, the sum S(μ) = ⟨μα⟩+⟨μβ⟩+⟨μγ⟩ should decompose using the fractional part formula, but I need to be careful about how the constraint α+β+γ = 0 constrains the possible values. = 0 in Z/pZ, so as integers μα+μβ+μγ = kp for some integer k. And ⟨μα⟩+⟨μβ⟩+⟨μγ⟩ = μα+μβ+μγ - p(⌊μα/p⌋+⌊μβ/p⌋+⌊μγ/p⌋)... hmm this is getting complicated.
+
+Actually, ⟨x⟩ is defined as x mod p in {1,...,p-1} for x ∈ F_p*. So ⟨x⟩ is the representative in {1,...,p-1}.
+
+For α, β, γ ∈ F_p* with α+β+γ = 0 in F_p, and μ ∈ F_p*, the sum ⟨μα⟩ + ⟨μβ⟩ + ⟨μγ⟩ is congruent to 0 mod p, which means it must equal either p or 2p since the minimum is 3 and maximum is 3p-3. Now I need to figure out when S(μ) = p versus when it equals 2p.
+
+The rank-3 theorem states that for a, b, c ∈ F_p* where no pair sums to 0 and a+b+c ≠ 0, there exists some μ making ⟨μa⟩+⟨μb⟩+⟨μc⟩ < p. But this explicitly excludes the case where a+b+c = 0. Lemma 2 is claiming the opposite: when a+b+c = 0 with no pair summing to 0, we can achieve ⟨μa⟩+⟨μb⟩+⟨μc⟩ = p for some μ. These seem to be complementary results about the two cases the rank-3 theorem doesn't cover.
+
+Let me verify Lemma 2 more carefully. If a+b+c = 0 in F_p and no pair sums to 0, then a ≠ -b, b ≠ -c, and a ≠ -c. Since c = -a-b, the condition a ≠ -c becomes a ≠ a+b, so b ≠ 0. Similarly b ≠ -c gives a ≠ 0. So I'm really just requiring a, b, and -a-b to all be nonzero elements of F_p. and a ≠ -b... wait, that contradicts c = -a-b ∈ F_p*, which requires a+b ≠ 0, i.e., a ≠ -b. So the "no pair sums to 0" condition here just means a ≠ -b AND a ≠ -c = a+b (impossible since that means b=0) AND b ≠ -c = a+b (impossible since that means a=0). So the only condition is a ≠ -b.
+
+Actually, let me reconsider. "No pair sums to 0" means a+b ≠ 0, a+c ≠ 0, and b+c ≠ 0. The first condition a+b ≠ 0 is equivalent to c ≠ 0, which is already given. For a+c ≠ 0, substituting c = -a-b gives -b ≠ 0, so b must be nonzero. Similarly, b+c ≠ 0 gives -a ≠ 0, so a must be nonzero. Since we're already restricting to a,b,c ∈ F_p*, this condition is automatically satisfied for any triple summing to zero.
+
+So Lemma 2 is claiming that for any a,b,c ∈ F_p* with a+b+c = 0, there exists some μ ∈ F_p* satisfying...
+
+Now I'm verifying this with concrete examples. For p=5 with (a,b,c)=(1,2,2), the sum is indeed 5≡0, and μ=1 gives the desired result. Same check works for (1,1,3) in F_5 and (1,2,4) in F_7. I'm partway through checking another case with p=7 and (2,3,2).
+
+I'm realizing that when a+b+c≡0 (mod p) and we pick representatives from {1,...,p-1}, the actual integer sum falls between 3 and 3p-3. For p≥5, the only multiples of p in this range are p and 2p. So if the integer sum equals p, then μ=1 works perfectly. But I need to think through what happens when the sum is 2p instead.
+
+Let me test this with p=5: when (a,b,c) = (3,3,4), the sum is 10=2p, so μ=1 fails. But μ=2 scales everything by 2 mod 5, giving (1,1,3) which sums to 5=p. Similarly for (4,4,2), μ=3 gives (2,2,1) summing to 5=p. Now checking p=7...
+
+For p=7 with (5,5,4), the sum is 14=2p, and μ=2 reduces it to (3,3,1) summing to 7=p. With (6,6,2), I need μ=4 to get (3,3,1) summing to 7=p. Testing (4,5,5) next...
+
+Actually, I'm noticing a pattern: S(μ) + S(-μ) always equals 3p because each coordinate pair contributes p. So if S(μ)=2p, then S(-μ)=p, which means I can always find some μ where the sum equals p. This suggests Lemma 2 might be trivially true.
+
+Let me verify the constraints work out: since μ is nonzero in F_p and p-μ only equals zero if μ=p (which is impossible in F_p), both μ and p-μ are valid. So for any triple summing to zero, I'm guaranteed to achieve weight exactly p—not less than p, but exactly p.
+
+Now I'm looking at potential weaknesses in the general rank induction strategy. The approach projects onto a hyperplane and uses induction on the fibers, but there's an issue: when I group vectors by their weight c and project them down, the resulting non-zero vectors in the lower dimension might not all be non-proportional to each other. Two vectors could share the same weight but become proportional after projection. within a fiber can be proportional, which breaks the inductive hypothesis since it requires non-proportional vectors. This means I'd need more vectors per fiber to satisfy the inductive condition, which could be an obstruction to this approach. But actually, I should reconsider what η really counts—it's about sequences with zero-sum subsequences of specific lengths, not just projective points.
+
+The η bound applies to sequences that can have repetitions, so proportional projections are fine. The key insight is that the seed document's formulation involves multiplicities—at most p-1 copies of each projective direction—which means I'm working with a multiset version of the problem, not requiring distinct projective points.
+
+Looking at the actual setup: we have L = α(r)+1 distinct projective directions, each appearing p-1 times in the sequence, giving total length L(p-1). The goal is to show this contains a zero-sum subsequence of length at most p, and I need to account for how projections within a fiber might collapse multiple directions into proportional elements or combine their multiplicities.
+
+Let me step back and think about whether a concrete counterexample actually exists here.
+
+At rank 4 with p = 7, I need 18 non-proportional nonzero vectors avoiding zero-sum subsequences of weight ≤ 7. The doubled+e₁ construction gives me 17 vectors split across two fibers—8 in fiber 0 and 9 in fiber 1, which achieves the lower bound. Now I'm wondering if I can distribute these across three or more fibers while maintaining the ZSF property. In fiber 0, the projections land in F_7³, and the maximum ZSF set there has 8 vectors. For fiber 1, I need to figure out what the capacity is at p = 7 before I can determine if splitting helps or just fragments the construction. s(C_7³) = η(C_7³) + 6 = 8·6+1+6 = 55 (maximum ZSF sequence length with the "each vector multiplicity at most p-1" constraint, allowing weight up to p). No wait, s is different.
+
+Hmm, I'm confusing myself. Let me think about what it means for the construction.
+
+The doubled+e₁ construction: take a copy of A₈ in fiber 0 (8 vectors) and a translated copy in fiber 1 (8 vectors) plus e₁ = (1,0,0,0). That's 17 vectors.
+
+For a 3-fiber version: I'd put some vectors in fibers 0, 1, 2. The constraint is that no zero-sum of weight ≤ p exists.
+
+A zero-sum across multiple fibers requires the fiber coordinates themselves to sum to 0 mod p. With 3 or more fibers, this constraint becomes looser—there are more ways to satisfy it—which actually makes it harder to avoid zero-sums. This suggests the two-fiber case is the most restrictive and therefore the hardest to construct, which actually supports the theorem rather than contradicting it.
+
+But I'm now worried about the thin fibers obstruction: if I spread 18 vectors across 5 fibers with only 3-4 vectors per fiber, each fiber is too sparse to trigger the induction hypothesis on its own. And cross-fiber zero-sums require specific algebraic alignment of the fiber coordinates, which becomes harder to achieve when vectors are spread thin. vectors from different fibers c₁, c₂, c₃ and coefficients s₁, s₂, s₃ ∈ {1,...,p-1}: s₁c₁ + s₂c₂ + s₃c₃ ≡ 0 (mod p) and s₁+s₂+s₃ ≤ p.
+
+The projections must form a linear dependency: s₁·proj(v₁) + s₂·proj(v₂) + s₃·proj(v₃) = 0 in F_p^{r-1}.
+
+For this to exist, the three projections must be coplanar (in rank 3). With only 3-4 vectors per fiber, the projections might span all of F_p^{r-1}, making collinear triples rare.
+
+Now I'm thinking about whether I can construct 18 vectors across 5+ fibers in F_7^4 with no three collinear and no 4-element zero-sum of weight ≤ 7. In projective geometry terms, this is asking for a cap in PG(3, F_7)—a set of points where no three are collinear. The maximum cap size in PG(3, F_7) is around 50 points, so finding 18 points with this property should be achievable.
+
+But I need to be careful about what "collinear" means here. Three collinear points have a linear dependency, but the weight of that dependency could be anything. What matters for my constraint is whether the dependency has weight ≤ p, which is a stricter condition than just being collinear.
+
+For a dependency (α, β, 1) where v₃ = -αv₁ - βv₂, the weight is ⟨α⟩+⟨β⟩+1. This is ≤ p only if ⟨α⟩+⟨β⟩ ≤ p-1. Since both α and β have weight at least 1, this fails when both have weight greater than (p-1)/2. So collinear triples can have much larger weights—up to 2p-1—and I can rescale the dependency by multiplying through by some μ to get different representations.
+
+The key insight is that for any collinear triple, I can find a scalar multiple where the total weight drops to at most p. If the dependency is non-degenerate (α+β+1 ≠ 0), the rank-3 theorem guarantees a rescaling with weight strictly less than p. If it's degenerate (α+β+1 = 0), then I can always find a rescaling with weight exactly p. Either way, every collinear triple yields a zero-sum dependency with weight ≤ p.
+
+But I need to be careful about pair-degenerate cases where one of the coefficients cancels with another—like when α = -1, making the pair (α, 1) sum to zero. Here the dependency (-1, -β, 1) has a pair that sums to zero, which violates the rank-3 theorem's assumptions. Let me check what weight I actually get in this case by computing the sum ⟨-μ⟩ + ⟨-μβ⟩ + ⟨μ⟩ over all possible μ.
+
+This simplifies to p + ⟨-μβ⟩, which is always at least p+1 regardless of μ. So pair-degenerate collinear triples can't produce a zero-sum with weight ≤ p—that's the real barrier here. ⟨-μβ⟩, ⟨μ⟩) for rescaling by μ.
+
+⟨-μ⟩ = p - ⟨μ⟩ (since -μ ≡ p-μ, and if μ ∈ {1,...,p-1}, then p-μ ∈ {1,...,p-1}).
+
+So weight = (p - ⟨μ⟩) + ⟨-μβ⟩ + ⟨μ⟩ = p + ⟨-μβ⟩ ≥ p + 1. Indeed!
+
+So pair-degenerate triples have weight ≥ p+1, which means the rank-3 theorem doesn't apply to them. The sum-zero trick also fails here since α+β+γ = -β, which is only zero when β = 0, but that's excluded.
+
+Let me organize the three cases for collinear triples: when no pair sums to zero and the coefficients sum to zero, the S(μ)+S(-μ) trick gives weight exactly p; when no pair sums to zero but coefficients don't sum to zero, rank-3 gives weight less than p; and when some pair sums to zero, weight jumps to at least p+1. So the adversary's strategy would be to construct configurations where every collinear triple falls into that third case. pair-degenerate means the dependency has some pair summing to 0. With γ = 1, that's either α = -1, β = -1, or α + β = 0. When α + β = 0, we get v₃ = β(v₁ - v₂), so v₃ is proportional to the difference of the first two vectors. Now I need to carefully track which pairs are degenerate and compute the weight contribution for each case. I've verified that all three cases yield weights at least p+1. Now I'm shifting focus to the core question: can we construct 18 nonzero non-proportional vectors in F_p^4 where every collinear triple is pair-degenerate and no zero-sum with support ≥ 4 has weight ≤ p? Such a configuration would contradict the conjectured bound. The pair-degeneracy condition is quite restrictive geometrically—it means for any three collinear points in projective space, at least one pair of the dependency coefficients must satisfy a specific relationship. to the concept of a "1-intersecting set" or something in finite geometry. Let me think about this more carefully by parameterizing a line in PG(3, F_p) as {sv₁ + tv₂ : (s:t) ∈ PG(1, F_p)} and checking when a triple v₁, v₂, v₃ = αv₁ + βv₂ is pair-degenerate—that is, when the dependency vector (-1, -β, 1) has a pair of coordinates summing to zero.
+
+Working through the algebra, if v₃ = av₁ + bv₂, then the dependency is (a, b, -1), and the pair sums are a+b, a-1, and b-1. So the triple is pair-degenerate exactly when a=1, b=1, or a+b=0, which geometrically means either v₃ - v₁ is proportional to v₂, or v₃ - v₂ is proportional to v₁, or v₃ is proportional to v₁ + v₂.
+
+In other words, a collinear triple is pair-degenerate iff one of the difference vectors is proportional to one of the original vectors—a fairly restrictive but not impossible condition.
+
+Now I'm wondering if I can construct a large set in PG(3, F_p) where every collinear triple satisfies this pair-degeneracy constraint.
+
+Let me test a concrete approach using standard basis vectors and their sums and differences. For instance, taking {e₁, e₂, e₃, e₄, e₁+e₂, e₁-e₂, e₁+e₃, ...}, I can check whether collinear triples like {e₁, e₂, e₁+e₂} are pair-degenerate. The dependency e₁ + e₂ - (e₁+e₂) = 0 has coefficients (1, 1, -1), and examining the pair sums shows that two of them vanish.
+
+I'm seeing that this sum/difference structure inherently produces pair-degenerate triples—the same pattern as the doubled construction. Now I need to examine the 17-vector construction more carefully, looking at how its fibers partition the vectors, starting with fiber 0 which contains A₈ and its elements.
+
+The crucial insight is that A₈ has the property that every collinear triple within it is pair-degenerate, which is precisely why it's extremal—it avoids non-degenerate triples that would yield smaller weight zero-sums. The real question becomes whether I can push to 18 vectors across multiple fibers while preserving this all-pair-degenerate property, but the computational results at p=5 suggest this isn't possible—every candidate 18th vector creates a zero-sum of weight at most 5, with 94 of those cases coming from support-4 rather than support-3.
+
+For those 94 cases, there's no non-degenerate collinear triple to kill the configuration, but there is a 4-element zero-sum instead. The adversary's best strategy would be finding a configuration at p=7 or p=11 where all collinear triples remain pair-degenerate while avoiding any 4-element zero-sum with weight ≤ p. But here's the problem: at larger primes, the weight bound becomes more permissive, not less, so a 4-element zero-sum of weight 4 that works at p=5 still works at p=7 since 4 < 7.
+
+Now I'm wondering whether this holds for different constructions at p=7, or if the real issue is whether the theorem itself is true. The claim is that any 18 nonzero non-proportional vectors in F_p^4 must have a zero-sum of weight ≤ p. Let me try building a potential counterexample by spreading 18 vectors across the fibers defined by the first coordinate to avoid both within-fiber and cross-fiber zero-sums.
+
+With 8 possible fibers (0 through 6 mod 7), I can fit at most 2 vectors per fiber for 16 total, which isn't enough. But with 3 per fiber I get 24 vectors, which works. The key constraint is that non-proportional vectors can't form a support-2 zero-sum, since that would require s₁v₁ = -s₂v₂ for some coefficients.
+
+For support-3 zero-sums, I need to check both within-fiber and cross-fiber dependencies. Within a single fiber, if I keep at most 3 vectors and ensure no three are collinear in the projection space, I avoid within-fiber dependencies. For cross-fiber triples, I need to satisfy both a fiber constraint (the coefficients sum to zero mod 7) and a projection constraint simultaneously, which is much more restrictive.
+
+I'm wondering if 18 vectors without a zero-sum of weight ≤ 7 is actually achievable despite what the theorem suggests. The gap between the lower bound of 17 and the upper bound of 18 is just one vector—maybe it closes. Let me reconsider the doubled+e₁ construction with three fibers instead of two. I had 8 vectors in fiber 0 forming A₈ and 9 in fiber 1, so extending this to a third fiber might reveal where the construction breaks down.
+
+Now I'm trying to add a 18th vector v₁₈ = (2, a, b, c) in fiber 2 and checking whether any support-3 zero-sum involving this vector and two others from the original 17 can be forced. The key constraint is that 2α plus the weighted contributions from the other two vectors must satisfy certain divisibility conditions to avoid creating a zero-sum with weight ≤ p. Now I'm checking when this dependency can actually occur—I need to verify that for every pair of vectors from fiber 0 and fiber 1, the resulting linear combination doesn't equal zero. The constraint becomes checking whether (a,b,c) can ever equal twice the projection from fiber 1 minus the projection from fiber 0.
+
+With 72 forbidden pairs and only 342 nonzero values in F₇³, I'm left with roughly 270 available choices after eliminating these conflicts. Accounting for the additional constraint that (a,b,c) can't be proportional to any of the 17 original projections, I still have around 170 valid options. But now I need to handle another case: when both vectors come from fiber 1, the equation 2α + β + γ ≡ 0 creates additional restrictions that depend on the weight constraint.
+
+For α = 1, I need β + γ ≡ p - 2. Looking at this as integers where β, γ ∈ {1,...,p-1}, the sum β + γ can only equal p - 2 or 2p - 2 to satisfy the congruence. The first case gives weight p - 1, which is acceptable, but the second gives weight 2p - 1, which exceeds the bound. So I'm only avoiding triples of the form (a,b,c) = -β·proj(v_j) - γ·proj(v_k) where β + γ = p - 2 as integers.
+
+Now for α = 2, I need β + γ ≡ p - 4, which gives weight p - 2 when β + γ = p - 4. I'm applying the same avoidance condition but now for scaled versions of these projections.
+
+This is getting unwieldy combinatorially. Let me step back and think about whether the fiber-based induction approach is actually viable. The strategy is to project to a hyperplane, analyze what happens within each fiber, use induction there, then combine the results across fibers. The real problem is that last step—combining information from different fibers. If I have 18 vectors split across three fibers with only 6 in each, that's too few to apply the rank-3 bound within a single fiber, so any zero-sum must necessarily pull from multiple fibers. I need to figure out what obstruction prevents me from combining these cross-fiber constraints.
+
+Actually, rather than keep chasing this combinatorial rabbit hole, let me try attacking the problem at rank 5 instead. At that level, α(5) = 35, and the conjecture predicts η(C_p^5) = 35(p-1)+1. The construction places 17 vectors in one fiber and 18 in another.
+
+The key insight is that fiber 0 with 17 vectors stays below the rank-4 threshold, so no forced zero-sum there. But fiber 1 with 18 vectors is trickier—even if the rank-4 theorem holds, those 18 projections might contain proportional pairs, which would weaken any zero-sum constraint they impose.
+
+Looking at two vectors in fiber 1 with first coordinate 1: they're non-proportional in F_p^5 exactly when their tail coordinates differ. The projections are distinct unless the tails are equal, but even if the tails are proportional with some scalar λ ≠ 1, the full vectors can't be proportional since the first coordinate forces λ = 1. So vectors in the same fiber with first coordinate 1 are always non-proportional.
+
+This means the 18 vectors in fiber 1 project to 18 non-proportional vectors in F_p^4, and by the rank-4 theorem, any zero-sum among these projections has weight at most p. But I need to check whether a zero-sum in the projections lifts back to a zero-sum in F_p^5—specifically, whether the first coordinates (all equal to 1) sum to zero under the coefficients of the zero-sum.
+
+If the projections satisfy s₁·proj(v₁) + ... + s_k·proj(v_k) = 0 with Σs_i ≤ p, then lifting back to F_p^5 gives a first coordinate of Σs_i. For this to be a true zero-sum in F_p^5, I need Σs_i ≡ 0 (mod p), which means Σs_i = p exactly (since the weight is at most p and at least 1). If the weight is strictly less than p, the first coordinate is non-zero, so the lifted vector isn't actually a zero-sum.
+
+The rank-4 theorem only guarantees weight ≤ p, but the inductive step needs weight = p for the single-fiber case to work. The key insight is that the s-constant (which guarantees a zero-sum of length exactly p) relates to the η-constant (which guarantees weight ≤ p) through the formula s(C_p^r) = η(C_p^r) + p - 1. So while η gives me weight ≤ p, the s-constant is what I actually need for the lifting argument.
+
+With 18 projections in F_p^4, each appearing p-1 times, I have exactly 18(p-1) elements total. Since s(C_p^4) = 18(p-1), the s-constant applies perfectly—I can guarantee a zero-sum of weight exactly p, which is what the fiber-1 argument requires.
+
+This is tight: if I only had 17 projections, I'd fall short of the s-constant threshold. So for the 36-vector rank-5 case, at least one fiber needs to contain enough vectors to make the inductive step work.
+
+But what if the vectors are distributed evenly across multiple fibers instead? With 6 vectors per fiber across 6 fibers, each fiber projects to 6 non-proportional points, giving 6(p-1) elements—still below the s(C_p^4) = 18(p-1) threshold needed for a guaranteed zero-sum. The same multi-fiber bottleneck appears at every rank, and it gets worse at higher ranks since the number of fibers stays fixed at p while the average vectors per fiber shrinks. With 36 vectors spread across p = 37 fibers, most fibers contain at most 1 vector, eliminating any within-fiber zero-sum possibility.
+
+Here's the critical issue: when p > 36, I can place each vector in its own fiber, making the fiber-induction approach completely ineffective. Yet the bound should hold for all primes, including those larger than 36. At rank 5, I still need 36 non-proportional vectors with multiplicity p-1 each, giving a total sequence length of 36(p-1), while η(C_p^5) = 35(p-1)+1. The fiber-based induction strategy fundamentally breaks down when p exceeds the rank parameter.
+
+But the theorem must still be true, so there's a different argument at play. For large p, the rank-3 subroutine involving collinear triples becomes dominant—as p grows, nearly all triples are non-degenerate, so any collinear triple yields weight less than p. With 36 vectors in F_p^5, some three must be collinear since the cap size in PG(4, F_p) is at most p² + 1, which exceeds 36 for p ≥ 7.
+
+Wait, that's not quite right. For p ≥ 7, it's actually possible to place 36 points in general position with no three collinear. So the rank-3 argument doesn't force a collinear triple, meaning I'd need support at least 4. I think I've identified the real obstruction: pair-degenerate triples always have weight at least p+1, which is the key constraint the rank-3 theorem addresses for non-degenerate triples.
+
+When p gets large relative to the rank, vectors spread across many fibers with at most one per fiber, so within-fiber induction fails. And for rank 5 with p ≥ 7, the cap construction gives me 36 non-collinear points, which completely blocks the support-3 approach. Within a single fiber, projections are automatically non-proportional, and the s-constant produces weight-exactly-p zero-sums, but only when the fiber contains enough vectors.
+
+The real problem is the multi-fiber case where no single fiber has sufficient vectors AND no collinear triple exists—or all triples are pair-degenerate. This is where the proof breaks down, and it gets harder at higher ranks and larger primes. The post-mortem already flagged the multi-fiber gap, but the obstruction from large primes and cap sizes appears to be new, and the pair-degenerate weight bound deserves attention.
+
+I'm trying to construct a near-miss counterexample to make this concrete. At p = 7 and rank 4, I can take 18 points forming a cap in PG(3, F_7) with no three collinear, each appearing with multiplicity 6, giving 108 total elements.
+
+The bound η(C_7^4) = 103, so 108 exceeds it and the theorem predicts a zero-sum of weight at most 7. But since no three points are collinear, there's no support-3 zero-sum—I need support at least 4. For a support-4 zero-sum with coefficients in {1,...,6} and total weight at most 7, the minimum weight is 4, so I'm looking for a zero-sum with weight between 4 and 7 across four points.
+
+Now I'm considering whether a cap of size 18 in PG(3, F_7) must always contain a 4-term zero-sum (four points summing to zero). This connects to the cap set problem and results like Croot-Lev-Pach and Ellenberg-Gijswijt on sum-free sets. I'm wondering if there might be 18-element sets without any 4-term zero-sum, but then I'd need to rule out zero-sums of higher weights too. For weight 5 at support 4, I'm looking at equations like 2v₁+v₂+v₃+v₄ = 0, which is getting quite complex to analyze systematically.
+
+The real issue is that this combinatorial problem is too intricate to resolve with pure theory right now. Let me step back and identify what I can definitively prove as a lower bound. The key insight is that fiber induction fundamentally breaks down when p exceeds α(r)+1 — the pigeonhole principle shows that with α(r)+2 vectors distributed across at most p+1 fibers, the largest fiber won't be big enough to trigger induction on the next level, which means this approach can't work as a general strategy.
+
+Now I'm checking the arithmetic to confirm this impossibility. The ratio (α(r)+2)/(α(r-1)+1) simplifies to something less than 3 given the recurrence α(r) = 2α(r-1)+1, which means p must be less than 2 — clearly impossible for odd primes. So pigeonhole never actually produces a fiber large enough for the induction to continue, at least for r ≥ 4 where α(r-1) ≥ 2. Let me verify this with concrete values like α(3) = 8 and α(4) = 17.
+
+With those values, the ratio becomes 19/9 ≈ 2.11, forcing p ≤ 1, which is impossible. This means the single-fiber induction approach fundamentally fails. But the two-fiber case somehow works — when we split α(r)+2 vectors across 2 fibers, one fiber must contain at least ⌈(α(r)+2)/2⌉ = α(r-1)+2 vectors, which is enough to continue the argument.
+
+With 3 or more fibers though, the Pigeonhole threshold isn't crossed anymore, so no fiber is guaranteed to have α(r-1)+1 vectors. This reveals the core obstruction: the multi-fiber case genuinely requires a different approach than naive within-fiber induction.
+
+I should verify this carefully though — with many fibers, vectors could still concentrate in a few of them, potentially creating a large fiber anyway. unevenly: e.g., 15 in fiber 0, 1 in fiber 1, 1 in fiber 2, 1 in fiber 3 for 18 total across 4 fibers. Then fiber 0 has 15 > 9 = α(3)+1, so induction gives a zero-sum within fiber 0.
+
+So the adversary scenario is: vectors are SPREAD EVENLY across many fibers. The worst case is approximately α(r)+2 vectors across... how many fibers?
+
+To ensure no fiber has α(r-1)+1 vectors, need each fiber to have ≤ α(r-1) vectors. With f nonempty fibers: f · α(r-1) ≥ α(r)+2 = 2α(r-1)+3, so f ≥ 2 + 3/α(r-1). For α(r-1) ≥ 3, this means at least 3 fibers are needed to stay below the induction threshold per fiber.
+
+But the s-constant argument requires even more vectors per fiber—specifically α(r-1)+2 projections—making that case even harder to handle. The key insight is that when vectors are distributed across three or more fibers with each staying at or below α(r-1), the within-fiber induction approach fundamentally breaks down. Any proof strategy would need to exploit cross-fiber structure rather than relying on individual fiber arguments.
+
+The Pigeonhole principle caps the fiber count at around 2.11, so three fibers already violates this bound. Let me shift focus and look for a concrete structural attack instead of just confirming known barriers.
+
+I'm checking whether Lemma 3 from the post-mortem is stated correctly—it claims that nine non-proportional vectors in a linear form's kernel guarantee a weighted zero-sum of weight at most p exists among those vectors alone, using the fact that nine vectors with multiplicity p-1 each gives enough elements to apply the Davenport constant bound.
+
+The key question is whether nine vectors that are non-proportional in F_p^r stay non-proportional when restricted to the kernel subspace F_p^{r-1}, and they do—non-proportionality is preserved under subspace restriction. So Lemma 3 checks out.
+
+Now I'm moving to examine the Two-Fiber Bound proof to see if that holds up.
+
+The claim is that with α(r)+2 vectors split across 2 fibers, the Pigeonhole Principle forces one fiber to contain at least α(r-1)+2 vectors. This relies on the recurrence α(r) = 2α(r-1)+1, which gives α(r)+2 = 2α(r-1)+3, so half of that rounds up to α(r-1)+2. The next step is checking whether those vectors in the larger fiber can be further constrained.
+
+Now I'm verifying whether the projections of these α(r-1)+2 vectors into F_p^r generate enough elements to exceed the bound η(C_p^r) = α(r)(p-1)+1. The question becomes whether (α(r-1)+2)(p-1) is at least (2α(r-1)+1)(p-1)+1, which would confirm the inductive step for r ≥ 4.
+
+Computing the difference: (α(r-1)+2)(p-1) - (2α(r-1)+1)(p-1) = (1-α(r-1))(p-1), which is negative since α(r-1) ≥ 8 for r ≥ 4. This means the simple pigeonhole argument fails at rank 5 and beyond, contradicting what the briefing claims about the two-fiber bound.
+
+Let me reconsider—the proof must rely on both the η and s bounds, not just pigeonhole. With two fibers F₀ and F_c where |F₀| = a and |F_c| = b summing to α(r)+2, I need to trace through how the inductive bounds actually constrain the growth. We need α(r)+1 = 2α(r-1)+2 vectors in a single fiber to achieve η, but the s-constant actually requires (α(r)+1)(p-1) elements total. With a vectors contributing a(p-1) elements and a+b = 2α(r-1)+3, we're constrained to a ≤ 2α(r-1)+1, which falls short of what we need.
+
+However, if we set a = 2α(r-1)+2 and b = 1, then a(p-1) exactly equals s(C_p^r), giving us a zero-sum of length p. The key insight is that any zero-sum in the projection to F_p^r lifts back to F_p^{r+1} because the vectors in F₀ come from (0, *) entries, so the first coordinate of the lifted sum is automatically zero.
+
+Now I'm checking the boundary cases: if a ≥ 2α(r-1)+2, we get a(p-1) ≥ η(C_p^r), which guarantees a zero-sum of weight at most p in fiber 0 that lifts. But a is constrained by b ≥ 1, so a ≤ 2α(r-1)+2. When a equals this bound, we have exactly η; when a is smaller, we fall short. If a < 2α(r-1)+2, then a ≤ α(r), and I need to figure out what happens with b in this case.
+
+For fiber c, the b vectors project into F_p^r, and any zero-sum of weight at most p in the projection lifts to a vector with c times the sum of coefficients in the first coordinate. For this to vanish in F_p^{r+1}, that sum must be divisible by p, which means the weight must be divisible by p. Since weight ≤ p, this forces weight = p exactly. So I need the s-constant: a zero-sum of weight exactly p, and s(C_p^r) = (2α(r-1)+2)(p-1). I need to check if b times something reaches this threshold.
+
+Now looking at the constraint from fiber 0: I need a(p-1) to be at least η(C_p^r) = (2α(r-1)+1)(p-1)+1, so a ≥ 2α(r-1)+1. Combined with a+b = 2α(r-1)+3, if b ≥ 2α(r-1)+2, then a ≤ 1, which violates this lower bound. So either one fiber dominates and I apply the appropriate bound there, or both fibers stay below their individual thresholds. + 1/(p-1). Since a is integer, a ≥ 2α(r-1)+2.
+
+For fiber c: need b(p-1) ≥ s(C_p^r) = (2α(r-1)+2)(p-1), so b ≥ 2α(r-1)+2.
+
+Since a+b = 2α(r-1)+3: if a ≥ 2α(r-1)+2, then b ≤ 1. If b ≥ 2α(r-1)+2, then a ≤ 1.
+
+So the only cases covered are:
+- a = 2α(r-1)+2, b = 1: fiber 0 has enough for η.
+- a = 2α(r-1)+3, b = 0: only fiber 0, with enough for η.
+- b = 2α(r-1)+2, a = 1: fiber c has enough for s.
+- b = 2α(r-1)+3, a = 0: only fiber c, with enough for s.
+
+But when both a and b fall in the range [2, 2α(r-1)+1], neither fiber individually has enough vectors to apply η or s directly. This suggests the two-fiber bound isn't as straightforward as the simple pigeonhole argument would indicate. The briefing claims this is proved, so maybe the actual proof relies on a different approach beyond just counting vectors in individual fibers.
+
+Let me reconsider the structure. With two fibers F₀ and F_c, I need to think about how vectors from different fibers interact. Vectors in F₀ have the form (0, u_i) and project to nonzero vectors in F_p^r, while vectors in F_c have the form (c, w_j) and also project to nonzero vectors in F_p^r. The key insight might be that even though individual fibers lack sufficient vectors, pairs of vectors from different fibers could exhibit proportionality relationships in the projective space that enable the bound to hold. (c, λ⁻¹u_i) requires 0 = μc (so μ = 0) and u_i = 0. No. So they're NOT proportional in F_p^{r+1}.
+
+So projections from different fibers CAN be proportional. If u_i = λw_j, then u_i and w_j are proportional in F_p^r.
+
+Could the COMBINED set of projections (all u's and w's) have more elements in F_p^r that are pairwise non-proportional? The projections from F₀ are pairwise non-proportional (a of them). Projections from F_c are pairwise non-proportional (b of them). But cross-fiber, some might be proportional.
+
+The combined set of projective points ranges from max(a,b) to at most a + b = 2α(r-1)+3. If there are no cross-fiber proportional pairs, I get exactly 2α(r-1)+3 distinct projective points in F_p^r, each appearing with multiplicity at least p-1 from one fiber, or at least 2(p-1) if both fibers contribute. This gives a total count of at least (2α(r-1)+3)(p-1), which simplifies to (α(r)+2)(p-1) — enough to exceed the bound η(C_p^r)(p-1)+1 for p ≥ 2, so the constraint applies.
+
+But when combining projections from both fibers, a zero-sum constraint emerges: if vectors from both F₀ and F_c participate, the first coordinate becomes c times the sum of F_c coefficients, which must equal 0 mod p, forcing the F_c coefficients to sum to 0 mod p. This additional constraint makes it unclear whether η still guarantees a zero-sum under these conditions.
+
+Now looking at what happens when we ignore the first coordinate—the projections in F_p^r have a zero-sum of weight at most p, and lifting it back gives us a vector with first coordinate c times the sum of F_c coefficients. For this to vanish, those coefficients must sum to 0 mod p, which means either no F_c vectors are used at all, or their total weight equals exactly p.
+
+If we use only F₀ vectors, we need enough of them to form a zero-sum, which requires a ≥ 2α(r-1)+2. If instead we put all weight on F_c vectors with total weight p, we need b ≥ 2α(r-1)+2. But neither condition is satisfied in the case we're examining.
+
+Now looking at mixed zero-sums: if we use both F₀ and F_c vectors, the F_c vectors must sum to p to satisfy the constraint, while F₀ vectors contribute the remaining weight. Since any F₀ vector contributes positive weight, adding even one F₀ vector pushes the total weight above p, violating our weight bound. So mixed zero-sums don't work here—only pure zero-sums of weight exactly p are possible.
+
+But I showed that achieving a pure zero-sum from a single fiber requires that fiber to have at least 2α(r-1)+2 vectors, which contradicts the balanced fiber assumption. So the two-fiber bound argument I've been pursuing doesn't actually work for balanced fiber sizes.
+
+Let me reconsider the original claim: the two-fiber bound states that if all vectors lie in at most 2 hyperplane fibers, then α(r+1) ≤ 2α(r)+1. This must rely on a different argument than the combined projection approach I've been analyzing.
+
+Actually, wait—I'm realizing that α(r+1) = 2α(r)+1 is true by definition, so the claimed bound is automatically satisfied. The statement isn't giving us new information; it's just restating the recursive definition of α.
+
+Let me refocus on what I'm actually trying to prove: for rank r+1, the maximum ZSF set size in the two-fiber case should be at most 2α(r)+1. This means any collection of 2α(r)+2 non-proportional vectors distributed across two fibers must contain a zero-sum subset with weight at most p. I need to work through the algebra more carefully here—I think I was mixing up the rank indices and need to be precise about whether I'm working in rank r or rank r+1. has b vectors projecting to non-proportional nonzero vectors in F_p³. I need to check whether a pure zero-sum exists in either fiber. For fiber 0, I'd need at least 9 vectors to guarantee a zero-sum of weight ≤ p, and for fiber c with weight exactly p, I'd need at least 9 vectors as well. Since a + b = 18, at least one of them must be ≥ 9, which means I can always find the required zero-sum.
+
+Now for rank 5, I'm looking at a much tighter constraint: I need 36 vectors distributed across two fibers, which means at least one fiber must have ≥ 18 vectors. Even if both are exactly 18, I need to verify that 18(p-1) is sufficient to guarantee a zero-sum in the 4-dimensional space, checking whether 18(p-1) ≥ 17(p-1)+1. p-1 ≥ 1 iff p ≥ 2. Yes! ✓
+
+If a = 18 and b = 18: both fibers have ≥ 18 vectors. Fiber 0 directly gives η. Fiber c: 18(p-1) ≥ s(C_p^4) = 18(p-1)? Yes, with equality! So s gives a zero-sum of weight exactly p. ✓
+
+If a = 17, b = 19: a = 17 < 18 needed for η. But b = 19 ≥ 18. So s applies to fiber c. ✓
+
+If a = 19, b = 17: symmetric. ✓
+
+So the two-fiber bound at rank 5 also works. For the general rank r+1 case with 2α(r)+2 vectors split across two fibers: by pigeonhole, at least one fiber must contain α(r)+1 vectors, which is enough to apply either η or s. Now I need to verify that α(r)+1 distinct projective points, each with multiplicity p-1, actually gives enough elements to cover η(C_p^r).
+
+The key insight is that the two-fiber bound is tight and correct. The multi-fiber case is where the gap emerges. Let me identify my strongest results so far.
+
+The pair-degenerate weight bound precisely explains why rank-3 can't handle all collinear triples—the weight is always at least p+1 for these cases. For large p, the cap obstruction kicks in: when p² + 1 ≥ α(r)+2, I can place 18 points in PG(3, F_p) with no three collinear, which completely blocks support-3 configurations. The fiber Pigeonhole ratio (α(r)+2)/(α(r-1)+1) approaches 2 as r grows, meaning with three or more fibers, within-fiber induction never applies. I'm wondering whether I can construct an explicit configuration at p=7 that nearly avoids zero-sums to demonstrate this gap concretely.
+
+Now I'm examining whether the Chevalley-Warning polynomial method can fill these holes. The approach uses a polynomial system to detect zero-sums, with degree at least p-1 in each variable, and CW gives congruences on solution counts modulo p. But that's the fundamental problem—CW only tells me the number of solutions is divisible by p, not that solutions actually exist. With 13 equations in 16 unknowns, the system is underdetermined, so CW alone can't guarantee N > 0. The rank-3 theorem provides existence statements about certain 3-element subsets having zero-sums, but combining existence claims with CW's congruence results is where things get murky.
+
+Reiher's approach worked because he carefully constructed a polynomial system tailored to rank 2, but scaling that construction up to rank 4 and beyond doesn't seem to work cleanly—the degree bounds and variable counts don't cooperate. I'm becoming skeptical that CW is the right tool here.
+
+Let me step back and think about attacking the inductive structure directly. The recursion α(r+1) = 2α(r)+1 comes from a specific construction: take a zero-sum-free set A in F_p^r with |A| = α(r)+1, then form {0} × A ∪ {1} × A ∪ {e₁} in F_p^{r+1}, which yields 2(α(r)+1) + 1 = 2α(r)+3 elements.
+
+But wait, I'm checking the construction more carefully. The doubled-plus-e₁ approach takes two copies of the extremal rank-(r-1) set on parallel hyperplanes and adds e₁. At rank r, this should give 2(α(r-1)+1)+1 = 2α(r-1)+3 vectors total. However, the recursion says α(r)+1 = 2α(r-1)+2, which means 2α(r-1)+3 = α(r)+2—that's one too many vectors, so something's off with how the construction actually achieves the bound.
+
+Looking at the concrete rank 4 example, I see the pattern now: fiber 0 contains α(r-1) vectors while fiber 1 contains α(r-1)+1 vectors, giving a total of 2α(r-1)+1 = α(r) vectors. So the construction doesn't add e₁ as a separate element—it's already incorporated into one of the fibers.
+
+The key insight is that α(r) represents the maximum cardinality of a zero-sum-free set, and adding just one more vector forces a zero-sum relation. This confirms the construction works as intended.
+
+Now I'm ready to write up my findings.
+
+============================================================
+BLOCK 3 (145 chars)
+============================================================
+Let me start my adversary analysis while the literature search runs in the background. I'll focus on finding structural attacks and obstructions.
+
+============================================================
+BLOCK 4 (87 chars)
+============================================================
+Cortex is still down. Let me try once more, then just present findings without storing.
+
+============================================================
+BLOCK 5 (55 chars)
+============================================================
+Let me try to store my findings to Cortex via add_node.
+
+============================================================
+BLOCK 6 (92 chars)
+============================================================
+Cortex is completely down. Let me just present my findings directly and save a local record.
+
+============================================================
+BLOCK 7 (131 chars)
+============================================================
+The literature search agent seems to still be running or the output format is different. Let me check if the agent is still active.
+
+============================================================
+BLOCK 8 (1189 chars)
+============================================================
+The literature search confirms several important things. Let me now synthesize everything into a final adversary report. Key takeaways from the literature:
+
+1. **No published counterexample** to η(C_p^r) = (9·2^{r-3}−1)(p−1)+1. The conjecture stands.
+2. **Cap size in PG(3, F_7) = 50**, confirming my Attack 3: 18 points can easily be placed with no three collinear.
+3. **Davenport constant formula FAILS at rank ≥ 4** — this is for a different invariant (D, not η), but shows the general principle that rank-2/3 patterns don't extend.
+
+
+4. **Girard-Schmid and Ellenberg-Gijswijt results** show that structural theorems break at higher ranks, and their polynomial method bounds on cap sizes could constrain zero-sum-free sets from above, though I need to be careful here since caps and ZSF sets aren't equivalent—a cap specifically requires no three collinear points.
+
+5. The Biswas-Mazumdar failure of the Davenport constant formula at rank ≥ 4 is worth noting, but it's a different constant than η (which has the weight constraint ≤ p), so the failure modes might diverge.
+
+I think the core adversary contribution is already solid, so let me consolidate everything into the final report.

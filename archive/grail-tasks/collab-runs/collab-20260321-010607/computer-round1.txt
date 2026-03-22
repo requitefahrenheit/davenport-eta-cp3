@@ -1,0 +1,77 @@
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/MEMORY.md]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: Glob]
+Let me check Cortex and read key existing computation files.
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/gap_hypothesis_verified.md]
+[TOOL: Glob]
+[TOOL: Glob]
+Let me check the cortex data and recent computation results.
+[READ: /home/jfischer/claude/grail-tasks/cortex-mcp.json]
+[READ: /home/jfischer/claude/grail-tasks/computer_phase2_verify.py]
+[READ: /home/jfischer/claude/grail-tasks/grail_final_complete.py]
+Let me check what's already been computed for p=7 rank 4.
+[READ: /home/jfischer/claude/grail-tasks/verify_r4_p7.py]
+[READ: /home/jfischer/claude/grail-tasks/multi_fiber_search.py]
+[READ: /home/jfischer/claude/grail-tasks/three_fiber_search.py]
+Let me write and run the definitive computation. I'll verify α(4,p)=17 for p=5 and p=7, classify all kills, and analyze linear form fiber structure.
+[WRITE: /home/jfischer/claude/grail-tasks/computer_round1.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 computer_round1.py 2>&1
+
+Major results. Let me run the full s4+ decomposition (all directions, not just first 20) and check cross-fiber patterns.
+[WRITE: /home/jfischer/claude/grail-tasks/computer_round1b.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 computer_round1b.py 2>&1
+
+Critical finding: **ALL support-4 kills are same-fiber, ZERO cross-fiber 4-deps at weight ≤ p.** Let me check the shadow gap structure at weight p-1.
+[WRITE: /home/jfischer/claude/grail-tasks/computer_round1c.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 computer_round1c.py 2>&1
+
+Extraordinary results. Let me save these findings to memory.
+[WRITE: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/alpha4_verification.md]
+[TOOL: Edit]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/MEMORY.md]
+[TOOL: Edit]
+Now here are the definitive results from Round 1.
+
+---
+
+## COMPUTER ROUND 1 — DEFINITIVE FINDINGS
+
+### A. α(4,p) = 17 VERIFIED for p = 5, 7
+
+| | p=5 | p=7 (**NEW**) |
+|---|---|---|
+| S17 ZSF | PASS | PASS |
+| Directions tested | 139/139 killed | 383/383 killed |
+| Support-3 kills | 111 | 204 |
+| Support-4+ kills | 28 | 179 |
+| Survivors | **0** | **0** |
+
+### B. ALL support-4 kills are INTRA-FIBER
+
+Zero cross-fiber 4-dependencies with weight ≤ p exist. Not for 18th-vector kills, not even within S17 itself. This holds for both p=5 and p=7.
+
+- Fiber-0 s4 kills: 2 (p=5), 7 (p=7) — all pattern (0,0,0,0)
+- Fiber-1 s4 kills: 26 (p=5), 172 (p=7) — all pattern (1,1,1,1)
+
+### C. SHADOW SATURATION at weight p-1 (KEY MECHANISM)
+
+**Cumul_{p-1}(S17) = F_p^4** for both p=5 and p=7:
+- p=5: |Cumul_4| = 625 = 5^4
+- p=7: |Cumul_6| = 2401 = 7^4
+
+**Consequence**: For ANY v18, the target (-v18) appears in the shadow at some weight w ≤ p-1. Adding v18 with coefficient 1 gives total weight w+1 ≤ p. This is WHY all directions are killed.
+
+### D. Unique 2-fiber form
+
+(1,0,0,0) is the **ONLY** projective linear form giving ≤2 fibers. S17 is multi-fiber under all other 155 (p=5) or 399 (p=7) forms.
+
+### E. Fiber shadows are DISJOINT at weight < p
+
+|Sh0_w ∩ Sh1_w| = 0 for w = 1, ..., p-1. Full overlap only at weight p.
+
+### Implications for the Proof
+
+The shadow saturation finding suggests a proof strategy: **if one can show that any maximal ZSF set of 17 vectors has cumulative shadow covering F_p^4 at weight p-1, the upper bound follows immediately.** The theorist should investigate whether this is a consequence of the ZSF + non-proportionality conditions plus |S| = α(4)+1.

@@ -1,0 +1,54 @@
+# Research Briefing (GEOMETER thread)
+
+**Goal:** Classify ALL extremal short-zero-sum-free supports in C_p³ up to GL(3,p) equivalence, for p=3 and p=5. An 8-element set A ⊂ F_p³\{0} is extremal if A^{[p-1]} has no short zero-sum. How many GL-orbits of extremal supports exist? What geometric/algebraic property characterizes them? Does the characterization explain why extremal supports exist for p=3,5 but possibly not for p=7?
+
+---
+
+### Round 1  (18:49)
+
+I extracted GL(3,5)-invariants for a verified 8-point “extremal” support in F5^3: the set is an 8‑cap (no three points are collinear in the affine sense), its intersections with 2D linear subspaces through the origin have the multiset {0 seven times, 1 four times, 2 sixteen times, 3 four times}, and its stabilizer in GL(3,5) has order 8, so that one concrete orbit has size 148800/8 = 18600; these facts show real structural constraints (an affine cap together with a specific plane‑intersection signature) that are preserved under GL-equivalence and give a checkable invariant for comparing other candidates, but they do not yet prove that this orbit is unique for p=5, nor have I yet processed the p=3 cases or addressed p=7; the emerging characterization is geometric (cap + tight plane-intersection pattern) and is a promising avenue to explain why extremal supports exist for p=3 and 5, but at this stage the classification and the p=7 question remain unresolved. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.10** | Tokens: 38,301 in / 3,535 out
+
+### Round 2  (18:53)
+
+The worker produced a concrete 8-point candidate in F_3^3 (take the seven nonzero vectors with coordinates in {0,1} plus the vector (-1,-1,-1)) and computed several orbit-type invariants: the set has 3 collinear triples (so it is not a “cap” with no three collinear), its intersections with the 13 planes through the origin have sizes distributed as 3 planes with 1 point, 4 with 2 points, 3 with 3 points and 3 with 4 points, and its stabilizer in GL(3,3) has size 6, so the GL-orbit has size 11232/6 = 1872. The upshot so far is that any geometric characterization of extremal supports for p=3 versus p=5 cannot be the simple “no three collinear” cap condition; the next concrete steps are to test whether the doubled multiset A3^{[2]} actually has no short zero-sum (if not, adjust to a true extremal support) and then enumerate all GL-orbits of genuine extremal supports. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.17** | Tokens: 67,895 in / 5,682 out
+
+### Round 3  (18:55)
+
+I ran an exact dynamic-program check that tests whether the uniform-multiplicity sequence A^{[p-1]} has any short zero-sum (a nonempty subsequence of length ≤ p summing to 0), and used it to vet the proposed examples: the 8-point p=3 candidate (the seven nonzero cube points plus (2,2,2)) fails because it contains an antipodal pair—e.g. (1,1,1) and (2,2,2)=−(1,1,1)—which already gives a 2-term zero-sum in A^{[2]}, so any extremal support in F_3^3 cannot contain x and −x; by contrast the seed p=5 8-point witness passes the same DP check (no short zero-sum of length 1..5), so it remains a valid extremal example. From this step we gained the simple algebraic obstruction “no antipodal pairs,” implemented a reliable certification tool, and set clear next moves (search for an actual p=3 extremal 8-set obeying the antipode rule, compute GL(3,p)-stabilizers and geometric invariants to start enumerating GL-orbits, and look for combinatorial/plane-intersection characterizations that could explain why examples appear for p=3,5 but might fail for larger primes); overall progress is real but partial—working toward classification but not yet there—so vibe check: (yellow).
+
+**Cost so far: $0.22** | Tokens: 102,388 in / 6,899 out
+
+### Round 4  (18:57)
+
+I ran a constrained brute-force search for an 8-point extremal support in F_3^3 (fixing the standard basis and forbidding antipodal pairs) and found an explicit example A = {(1,0,0),(0,1,0),(0,0,1),(0,1,1),(1,0,1),(1,1,2),(1,2,2),(2,1,2)} whose A^{[2]} has no short zero-sum (no nontrivial subsums of length ≤3); geometrically this A is an affine cap in AG(3,3) (no three points collinear) and its intersections with the 13 planes through the origin give the multiset {0^1,2^4,3^8} (notably no plane contains 4 points), so I’ve produced a certified extremal support for p=3 and next will compute its GL(3,3)-stabilizer to get the orbit size and continue a systematic search for other GL-orbits and analogous structures for p=5; overall this is solid progress but the classification task is not yet complete, so vibe: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.28** | Tokens: 142,249 in / 8,680 out
+
+### Round 5  (18:59)
+
+In this round I computed the full GL(3,3)-stabilizer of an explicit 8-point extremal support A in F_3^3 (A listed in the worker output) and found |Stab(A)| = 16, so its GL(3,3)-orbit has size 11232/16 = 702; I rechecked the plane-intersection profile {0^1,2^4,3^8} as a checksum and confirmed consistency with earlier data, and noted we already have at least one other distinct 8-point configuration (the non-extremal antipodal example) with a different stabilizer, so stabilizer/orbit-size and plane-profile look like useful invariants; next I will enumerate all extremal supports in the normalization class containing {e1,e2,e3}, compute plane profiles and stabilizers to decide how many GL-orbits of extremal supports exist for p=3 (and then repeat analogous searches for p=5), and to seek a geometric/algebraic characterization explaining existence for p=3,5 but not p=7. Vibe check: (green) = real progress, (yellow) = working but unclear if productive, (red) = stuck or spinning. Verdict: (green)
+
+**Cost so far: $0.33** | Tokens: 187,429 in / 10,127 out
+
+### Round 6  (19:00)
+
+I exhaustively searched the normalized case for p=3 (taking A to contain a fixed basis e1,e2,e3) and found 18 distinct 8-point supports A that meet the required “extremal” condition (antipodal-free and no short zero-sum in A^{[2]}), and strikingly every one of those 18 shares the same simple geometric fingerprint: when you count how many points of A lie on each plane through the origin, you always get exactly one plane with 0 points, four planes with 2 points, and eight planes with 3 points (no plane ever contains 4 points). That uniform plane-intersection profile is a strong candidate for a geometric/algebraic characterization of extremality at p=3; the next tasks are to check whether those 18 examples are all GL(3,3)-equivalent (one orbit) or split into several orbits, and to perform the analogous enumeration/analysis for p=5 (and then seek a conceptual reason why such supports might fail to exist for p=7). Vibe check: (yellow) = working but still incomplete — clear progress, but key classification and extension steps remain.
+
+**Cost so far: $0.40** | Tokens: 237,888 in / 11,652 out
+
+### Round 7  (19:03)
+
+In this round I ran the GL(3,3)-action on the 18 candidate 8-point supports (each normalized to contain the standard basis) and found they are all equivalent under invertible 3×3 matrices mod 3, so up to GL(3,3) there is exactly one extremal support type for p=3; its full orbit has size 702 (so the stabilizer has size 16), and every representative shares the same geometric “plane-intersection” fingerprint (one plane meets it in 0 points, four planes in 2 points, eight planes in 3 points). This is a concrete, computational confirmation that the p=3 case is completely classified; next is to run the analogous orbit/enumeration for p=5 to see whether p=5 similarly yields a single GL-orbit and whether the cap+plane-profile criterion observed here characterizes all extremals. Vibe check: (green) = real progress.
+
+**Cost so far: $0.47** | Tokens: 294,636 in / 13,630 out
+
+### Round 8  (19:05)
+
+We are trying to list all 8-point subsets A of F_p^3\{0} that are “extremal” (their multiset A repeated p−1 times has no short zero-sum) up to GL(3,p), for p=3 and p=5. In Step 8 I focused on p=5: the known seed extremal set is a cap (no three collinear), has a very specific count of how many points it meets each plane through the origin (seven planes meet it in 0 points, four in 1 point, sixteen in 2 points, four in 3 points), and indeed passes the short-zero-sum test for multiplicity 4; I then randomly sampled 2000 8-sets constrained to contain a fixed basis to see how selective “cap + that plane-profile” is, finding many caps (431/2000) but only 3 matching the plane-profile and none of those were extremal, so the cap+profile pattern is rare but not sufficient. Based on that, I plan to add an algebraic invariant tied to the zero-sum/kernels (for example a restricted-weight kernel witness or an additive-coverage condition like whether small-length subset sums already cover most nonzero vectors) and then run a constrained exhaustive search up to GL-equivalence; the reviewer flagged that the current sampling is exploratory and asked for a committed next proof step or a clear statement of what blocks a full classification—so the immediate concrete move is to implement the kernel-witness test (which is computable) and then perform an exhaustive GL-pruned enumeration of 8-sets that satisfy cap + plane-profile + kernel-witness to decide the actual orbits for p=5 and compare with the completed p=3 case. (yellow)
+
+**Cost so far: $0.55** | Tokens: 357,677 in / 15,348 out
+

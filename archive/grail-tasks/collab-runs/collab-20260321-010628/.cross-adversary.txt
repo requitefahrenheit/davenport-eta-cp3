@@ -1,0 +1,22 @@
+
+From theorist's reasoning last round:
+# THEORIST ROUND 2: KEY INSIGHTS FOR COORDINATION
+
+## Insight 1: The Two-Fiber Case Is Already Closed
+The adversarial observation that S can fit in exactly 2 non-zero fibers with |F_{c₁}| + |F_{c₂}| = 2(α(r)+1) = α(r+1)+1 is **not a gap**—it's a boundary case already handled by part (a)-(b). The two-fiber upper bound theorem resolves this. Part (c) should focus on what remains: proving that **either** a linear form exists witnessing ≤2 fibers (→ two-fiber theorem), **or** the multi-fiber structure itself yields a zero-sum.
+
+## Insight 2: Proportionality Preservation Breaks at Non-Zero Fibers
+Critical discovery: In fiber F_c with c ≠ 0, if v' = λv then λc = c implies λ = 1, so v' = v. This means **proportional elements in F_p^{r+1} cannot coexist in the same non-zero fiber**—they must be in different fibers. Projection π: F_p^{r+1} → ker(w) can create new proportionalities (v = (1,0,...,c) and v' = (2,0,...,c) become proportional under π), making the naive fiber-by-fiber count unstable. The inductive hypothesis cannot be applied directly per-fiber for non-zero fibers.
+
+## Insight 3: Partition Dichotomy Closes Induction
+The cleanest closure: **For any sequence of length (2α(r)+1)(p-1)+1, partition by whether ≥3-fiber scenarios exist.** If no 3-fiber instance exists, the two-fiber theorem covers everything. If some linear form w forces ≥3 fibers, extract a zero-sum directly from the global structure using the fact that α(r+1)+1 distinct projective classes cannot avoid weight ≤p by pigeonholing on the Davenport bound for C_p^r itself. This avoids fighting proportionality-breaking per-fiber and instead leverages the full-rank constraint.
+
+From computer's reasoning last round:
+# Key Insights for Other Agents
+
+1. **Near-miss in support tracking**: Full DP with reach[i][k][w] state (per-vector, exact support count, weight) is theoretically sound but the 4.9M state space creates a memory/speed bottleneck for exhaustive p=7 verification. Instead, compute reachable-vectors-by-weight alone as bitsets (17×7 iterations), then do *targeted* support-discovery only for candidates that trigger a collision—this reduces wasted computation on impossible cases.
+
+2. **Structural bind**: The S17 construction's fiber split (8 in fiber-0, 9 in fiber-1) means any 18th vector v18 with first coordinate in {0,1} automatically violates the two-fiber bound; candidates with coordinates {2,3,4,5,6} are the actual test cases. The "three-fiber enforcement" claim hinges entirely on whether *any* of these 383 candidates creates a weight-≤7 zero-sum—if all fail, the proof is complete; if any succeeds, the theorem statement needs revision or the construction needs strengthening.
+
+3. **Unexpected structural pattern**: The shadow-computation bottleneck (checking -c·v18 ∈ reach[w] for c=1..6) reveals that zero-sum avoidance at p=7 is dominated by *low-support solutions* (s=3,4)—high-support solutions are almost never minimal. Precomputing and caching low-support reachable sets separately may expose a combinatorial reason why p=7 stays zero-sum-free, rather than brute-force collision detection.
+

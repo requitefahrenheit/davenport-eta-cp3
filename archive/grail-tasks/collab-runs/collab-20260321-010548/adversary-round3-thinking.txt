@@ -1,0 +1,279 @@
+
+============================================================
+BLOCK 1 (147 chars)
+============================================================
+Let me start by searching Cortex for what's been found so far, and reading the relevant files to understand the current state of the investigation.
+
+============================================================
+BLOCK 2 (108 chars)
+============================================================
+Let me search Cortex for all relevant entries about the Grail conjecture, fiber balance, and related topics.
+
+============================================================
+BLOCK 3 (37159 chars)
+============================================================
+Let me read the key Cortex entries more carefully, plus the briefing file if needed. I have the preview of the most recent adversary entry. Let me now focus on my Round 3 task: construct or disprove a rank-4, p=5 maximal ZSF set that violates fiber balance, and more broadly, find attacks on the current proof architecture.
+
+Let me review the key insights from previous rounds:
+
+1. **Weight-p Barrier** (proved R2): Any zero-sum within a single nonzero fiber has weight ≡ 0 (mod p), minimum p.
+2. **p=5 rigidity**: At p=5, ALL cross-fiber mechanisms give weight ≥ p.
+
+
+3. **Higher primes allow flexibility**: For p≥7, cross-fiber triples can achieve weight below p, but the modular window argument claiming dense coverage breaks down.
+4. **Weight combination fails at p=5**: I can't combine fiber zero-sums to create lighter structures at this prime.
+
+My directive for Round 3 is to construct or disprove a rank-4, p=5 maximal ZSF set that avoids the fiber balance constraint—if such a set exists, it breaks the inductive bottleneck.
+
+Let me work through this carefully. I'm recalling that α(4) = 17, so the constraint requires either fiber-0 ≥ 18 vectors or nonzero fibers ≥ 19 vectors. The doubled+e₁ construction gives me 16 vectors from doubling the extremal rank-3 set, then I need to verify whether adding e₁ forces the fiber balance or if there's room to escape it.
+
+Looking at the fiber structure: fiber 0 contains the 8 copies (0, v) from the doubling, while fiber 1 contains the 8 copies (1, v) plus e₁ = (1, 0, 0, 0). The key observation is that e₁ has tail (0, 0, 0), which is distinct from all the tails v ∈ A₈ in fiber 1, so the tails in fiber 1 are actually 9 distinct vectors—the 8 from A₈ plus the zero vector.
+
+Now I need to reconsider what the constraint is asking: α(4) = 17 is the size of the ZSF set, so α(4) + 1 = 18 would be the size if we added one more vector. The directive seems to be asking whether I can construct a rank-4, p=5 maximal ZSF set where fiber 0 has fewer than 18 vectors OR the nonzero fibers have fewer than 19 vectors—but I need to parse this more carefully.
+
+Actually, the real question is about the fiber distribution when projecting a maximal ZSF set of size 17 onto the first coordinate. The inductive strategy relies on understanding how these 17 vectors distribute across the five fibers, particularly whether we can avoid having too many vectors concentrated in just one or two fibers.
+
+Let me double-check whether 17 is actually the maximum size for F_5^4 using the formula.
+
+So with 17 non-proportional directions, each with multiplicity 4, I get 68 elements total with no zero-sum subsequence of weight ≤ 5. Adding just one more direction forces a zero-sum to exist, confirming that a maximal ZSF set has exactly 17 directions.
+
+Now I'm wondering whether such a maximal set can be distributed across 3 or more fibers under some projection.
+
+The doubled+e₁ construction I found uses exactly 2 fibers, but that doesn't mean all maximal ZSF sets must be 2-fiber. I need to check if there are other maximal sets with different fiber structures. The computer search showed that swapping elements from the doubled+e₁ construction either destroys the ZSF property or doesn't yield anything new, which suggests this construction might be quite rigid, but I should verify whether genuinely different maximal sets exist. Let me reconsider the core question: can a maximal ZSF set exist where every hyperplane projection forces vectors into 3 or more fibers? The doubled+e₁ construction seems structurally constrained—no matter how I project it, some projection might still yield a 2-fiber distribution, which would suggest the extremal structure itself enforces this property. I'm trying to determine whether this fiber-balance constraint is actually a fundamental theorem or just an artifact of this particular construction. So when I project onto x₂, the fiber structure changes—e₁ lands in fiber 0, while the pairs (0,v) and (1,v) distribute across fibers based on their second components. Now I need to figure out what those 8 vectors in A₈ actually are for the rank-3, p=5 case to understand how they're distributed across these fibers.
+
+Looking at the formula η(C_p³) = 8(p-1)+1, I get α(3)+1 = 9, so α(3) = 8. But the doubled+e₁ construction from α(2) = 4 would give 2·4+1 = 9, which doesn't match. Let me verify this recursion: α(r+1) = 2α(r)+1 should give α(4) = 2·8+1 = 17. +1 = 17. ✓
+
+For rank 3: α(3) = 8. The doubled+e₁ from rank 2: α(2) = 2·α(1)+1 = 2·3+1 = 7? Wait, no. Let me trace back.
+
+α(1) = 1 (one vector in F_p¹)
+α(2) = 2·1+1 = 3 
+α(3) = 2·3+1 = 7? But α(3) = 8!
+
+Hmm, that's inconsistent. Let me re-examine.
+
+The formula α(r)+1 = 9·2^{r-3} works for r ≥ 3, giving me α(3) = 8 and α(4) = 17, but it breaks down for smaller ranks since it produces non-integers. For r = 1 and r = 2, I need to work from the Davenport constant directly—checking that α(1) = 1 satisfies the relation for C_p, and then figuring out what α(2) should be based on the structure of C_p².
+
+Rather than getting tangled in notation, I'll use the recurrence α(r+1) = 2α(r)+1 starting from α(3) = 8, which gives me the right values for higher ranks. For the lower ranks, I need to verify them separately against the actual zero-sum properties of these cyclic groups.
+
+The A₈ set in F_p³ is essentially unique up to isomorphism—it's the doubled+e₁ construction that's been verified to work for p = 5, 7, 11, 13. Rather than getting bogged down in the specifics of how to construct it, I should focus on whether my adversary attacks can actually break the inductive argument.
+
+For Attack 1, the theorist needs to prove that any zero-sum among vectors in a non-zero fiber has weight divisible by p, and moreover that the weight satisfies a specific congruence modulo p based on the fiber coordinate and the number of vectors involved. The weight-p barrier already guarantees divisibility by p, but the stronger claim about the exact congruence modulo p requires checking whether the constraint from the first coordinate—that the sum of coefficients must be divisible by p—actually forces the claimed congruence on the total weight.
+
+Actually, I'm realizing this might be vacuous: if the sum of coefficients is already ≡ 0 (mod p), then multiplying by any constant c just gives 0 ≡ 0 (mod p), so the divisibility lemma doesn't add new information. The real challenge is whether you can construct a zero-sum with weight exactly p, not just divisible by p.
+
+Now I'm moving to Attack 2, which involves examining whether maximal zero-sum-free sets can span multiple fibers simultaneously.
+
+I'm considering a specific construction in F_5^4 where I take the doubled set plus an extra element, creating two fibers under projection. Then I apply a coordinate permutation to transform this into an equivalent configuration, which should reveal whether the multi-fiber structure is actually achievable.
+
+The key insight is that B and B' represent the same ZSF set under relabeling—so if one admits a 2-fiber projection, so does the other. This means I need to think about whether the existence of a 2-fiber projection for some coordinate choice is what matters, rather than checking every possible projection.
+
+For the doubled+e₁ construction, projecting along the doubling direction naturally gives a 2-fiber structure. But the real question is whether there could be a maximal ZSF set with no 2-fiber projection under any hyperplane projection—that would genuinely contradict the 2-fiber theorem.
+
+To test this, I'm considering whether I can construct a 17-vector ZSF set in F₅⁴ that avoids the doubled structure entirely. If such a set exists and provably lacks any 2-fiber projection, that would show the 2-fiber approach is incomplete. The computer results at p=5, r=4 might already be revealing something about whether the doubled+e₁ construction is actually maximal.
+
+The critical question is uniqueness: if the doubled+e₁ construction is the only maximal ZSF set up to linear equivalence, then every maximal set has a 2-fiber projection and the theorem holds. But if other maximal constructions exist, I need to check whether they also admit 2-fiber projections or if some genuinely don't.
+
+Even assuming the induction works and every maximal ZSF set has a 2-fiber projection, there's an arithmetic gap in the lifting step. The inductive hypothesis bounds η(C_p^{r-1}), but when I try to lift to η(C_p^r), the bound I need involves a different coefficient structure that doesn't obviously follow from the recursive formula.
+
+Now I'm working through the projection argument more carefully: when I project n = (2α(r-1)+1)·(p-1)+1 vectors onto a hyperplane via some linear functional, the p fibers get distributed across the image, and I need to track how the multiplicities behave under this projection to ensure the inductive bound carries through. vectors.
+
+For fiber c: let fₖ be the number of directions in fiber c. Then Σfₖ = 2α(r-1)+2.
+
+Within fiber c ≠ 0, the tails of the fₖ vectors are in F_p^{r-1}. If tails are non-proportional, the fₖ tails with multiplicity p-1 give fₖ(p-1) vectors in F_p^{r-1}. By inductive hypothesis, if fₖ(p-1) ≥ α(r-1)(p-1)+1, i.e., fₖ ≥ α(r-1)+1, there's a zero-sum of weight ≤ p in the tails.
+
+A zero-sum among the tails gives me Σaᵢtᵢ = 0 with weight w = Σaᵢ ≤ p. Since vectors in fiber c have the form vᵢ = (c, tᵢ), this means Σaᵢvᵢ = (cw, 0) = cw · e₁. When w = p, I get cp · e₁, which vanishes in characteristic p.
+
+Now I need to handle the case where w < p: the partial sum cw · e₁ is nonzero, so I can't immediately conclude there's a global zero-sum. The key is combining these partial sums from different fibers—if fiber c₁ contributes c₁w₁ · e₁ and fiber c₂ contributes c₂w₂ · e₁, I need their sum to vanish.
+
+But here's the problem: the inductive hypothesis only guarantees *some* zero-sum of weight ≤ p exists in each fiber, not that I can choose the weight freely. So I can't just pick w₁ and w₂ to satisfy c₁w₁ + c₂w₂ ≡ 0 (mod p). This is really about whether fibers can produce zero-sums of sufficiently varied weights—the fiber-weight flexibility problem.
+
+Now I'm hitting a deeper issue: I've been conflating two different thresholds. The inductive hypothesis talks about η, which bounds the weight of *some* zero-sum, but lifting from fibers actually requires the s-constant, which guarantees a zero-sum of *exactly* weight p. These aren't the same—s is strictly larger than η by a factor of (p-1). So when I try to combine zero-sums from different fibers, the weight constraints don't align with what the induction actually provides.
+
+The pigeonhole argument is trickier than I initially thought. I can't just count total directions and divide by fibers—the distribution depends on how the projection maps directions to fibers, which isn't uniform. I need to be more careful about what the pigeonhole principle actually guarantees here. zero fibers c=1,...,p-1 share the remaining n - f₀ directions
+
+For the s-threshold: we need some fiber c ≠ 0 with fₖ ≥ α(r-1)+1. 
+
+If f₀ = α(r-1) (like in doubled+e₁), remaining = 2α(r-1)+2 - α(r-1) = α(r-1)+2 directions in nonzero fibers.
+
+If these spread across p-1 ≥ 4 nonzero fibers (p ≥ 5), pigeonhole gives max fₖ ≥ ⌈(α(r-1)+2)/4⌉.
+
+For r=4: α(3)+2 = 10, spread across 4 fibers gives max ≥ 3, but I need ≥ 9 to satisfy the s-threshold—nowhere close. This means the induction strategy through s-constants in individual fibers breaks down unless almost all directions concentrate in a single nonzero fiber. Yet in doubled+e₁, that's exactly what happens: fiber 1 contains all 9 directions (the 8 copies of A₈ plus e₁), so the s-constant does apply there. The real question is whether every maximal ZSF set must exhibit this concentration property, or if there are other configurations that avoid it.
+
+I'm seeing a circular dependency in the proof approach: to establish the η upper bound at rank r via induction, I need zero-sums of weight exactly p within individual fibers, but achieving that weight exactly p seems to require the very concentration property I'm trying to prove. which is equivalent to the conclusion.
+
+This is a devastating attack on the inductive approach.
+
+Actually wait, is this quite right? The 2-fiber theorem is already proved. The issue is whether the 2-fiber property HOLDS for all maximal ZSF sets. The inductive approach would need to show that IF you have 2α(r-1)+2 directions that are ZSF, then they must be "almost 2-fiber" under some projection.
+
+But this is exactly the multi-fiber case that's open. So the argument IS circular.
+
+The real problem is the causal arrow: the inductive approach tries to use the η(r-1) bound to force within-fiber zero-sums, which then become global zero-sums when the weight equals p. But this only works if the η bound already constrains the fiber structure, which is what we're trying to prove in the first place.
+
+Looking at the specific numbers, η(C_p^{r-1}) gives us α(r-1)(p-1)+1, so a fiber with fₖ ≥ α(r-1)+1 directions yields a zero-sum of weight at most p. The s bound would give exactly weight p but requires more vectors—there's a gap of p-1 vectors between what η guarantees and what s needs.
+
+Now I'm checking whether s(G) = η(G) + p - 1 holds generally, since the translation trick applies to C_p^r specifically. The key difference is that s demands a zero-sum of exactly length p, while η only requires length at most p.
+
+For the fiber condition, I need fₖ(p-1) ≥ s(C_p^{r-1}) - 1, which gives fₖ ≥ α(r-1) + p/(p-1). Since fₖ must be an integer and p/(p-1) > 1 for p ≥ 3, this means fₖ ≥ α(r-1) + 2.
+
+Looking at the doubled+e₁ construction at rank 4, fiber 1 has only 9 directions but needs 10 to trigger the s-constant—so the s-threshold isn't actually reached there. This suggests the approach of using the s-constant within fibers doesn't work even for the known construction.
+
+But wait, I need to account for multiplicity properly. Each of those 9 directions has multiplicity p-1 = 4, giving 36 vectors total in the fiber. Since η(C_5³) = 33, we do get a zero-sum of weight ≤ 5 with 36 vectors. However, for a zero-sum of weight exactly 5, we'd need s(C_5³) = 37 vectors, and we only have 36—so we're just barely short.
+
+The key insight is that a weight-5 zero-sum would give 5·e₁ = 0 in F_5⁴, while anything lighter gives a nonzero partial sum. So the η-threshold guarantees weight ≤ 5, but to force weight exactly 5, we'd need to cross the s-threshold instead.
+
+In the doubled+e₁ construction, fiber 0 has 8 additional directions, but they can't help complete a partial sum from fiber 1 — since fiber 0 vectors have the form (0, t), their sums can only produce (0, Σaᵢtᵢ), which can never equal w·e₁ for w ≠ 0.
+
+So the only way to get a global zero-sum from fiber 1 alone would require weight exactly p, but we've shown the s-threshold isn't reached. This means the zero-sum must come from a different mechanism — either involving vectors from both fibers, or entirely within fiber 0. Let me check what the zero-sum threshold looks like for fiber 0 with its 8 directions in F₅³, each with multiplicity 4.
+
+That gives 32 vectors total, but we need 33 to guarantee a zero-sum. So fiber 0 alone can't produce one — unless the 18th direction we added lands there. If it does, fiber 0 jumps to 9 directions with 36 vectors, crossing the threshold and forcing a zero-sum of weight ≤ 5 within fiber 0, which is automatically global since those vectors have first coordinate 0. If instead the 18th direction goes to fiber 1, we'd have 10 directions there with 40 vectors, and the s-threshold becomes relevant.
+
+But if the 18th direction creates a new fiber entirely, we can't rely on single-fiber arguments anymore — we'd need to combine information across fibers, which breaks the clean inductive structure that works when everything stays within fibers 0 and 1. Fiber 0 can't help with the e₁ component since all its vectors have first coordinate 0. For fiber 2, I'm looking at combinations of the (2, t₁₈) vectors—using j of them gives (2j, j·t₁₈)—and I need w + 2j ≡ 0 (mod 5) while keeping total weight w + j ≤ 5, which means j must equal (-3w) mod 5.
+
+Testing each weight value: w = 1 and w = 3 both satisfy the constraints with j = 2 and j = 1 respectively, but w = 2 and w = 4 fail because the combined weights exceed 5. So this approach only works for half the weight values, and I still need to verify that the tail components cancel out properly.
+
+For the 18th direction to work, I need t₁₈ = -u/j where u is the partial tail sum from the fiber-1 zero-sum. But since the 18th direction is arbitrary, there's no guarantee it has the right tail component—this is where the inductive construction breaks down. I've found a concrete counterexample: 17 directions forming the doubled+e₁ structure across fibers 0 and 1, with the 18th direction in fiber 2, where the fiber-1 zero-sum has weight w = 2 or w = 4, making the tail cancellation impossible.
+
+The real question isn't whether η(C₅⁴) = 69 is true—that's already established—but whether the inductive fiber decomposition proof actually works. The arithmetic gap appears when a new direction creates a third fiber with too few vectors to absorb the required tail sum, so the weight constraint can't be satisfied globally even though other zero-sums might exist outside the fiber structure.
+
+Maybe I should explore whether there's a smarter choice of projection hyperplane that forces the 18th direction into an existing fiber, but that depends on the projection itself and changes the fiber structure for everything else. Let me instead focus on formalizing the most concrete obstruction: the inductive approach requires exact weight p in fibers but only guarantees weight ≤ p, and this structural gap can't be closed within the framework.
+
+When combining partial sums across fibers, the constraint w₁+w₂ ≤ p creates modular arithmetic conditions that become impossible for certain weight values. I should also try to show that fiber-balance isn't actually forced by the ZSF property—there should exist a maximal ZSF set in F_5⁴ with 3 or more fibers under every projection.
+
+Wait, I need to check the problem constraints again. The rules say pure theory only, no computation, so I can't write code to test these ideas. Let me focus entirely on the theoretical arguments instead.
+
+Actually, I'm noticing something odd about the coordinator's directive. It asks for a maximal ZSF set where fiber-0 ≥ α(4)+1 and nonzero fibers ≥ α(4)+2, but α(4) = 17 and the total set size is 17. That would require fiber-0 ≥ 18 and nonzero fibers ≥ 19, which is impossible. I think the directive meant α(r-1) instead of α(r), so the bounds should be fiber-0 ≥ α(3)+1 and nonzero fibers ≥ α(3)+2.
+
+But even with those corrected bounds, I'm getting fiber-0 ≥ 9 and some nonzero fiber ≥ 10, which still sums to at least 19 directions—impossible with only 17 total. The condition appears to be unsatisfiable, which would make the entire inductive approach based on fiber-balance vacuously false. Let me reconsider whether I'm interpreting the condition correctly, maybe it's about the α(r)+1 set itself under projection.
+
+Actually, looking at the α(r)+1 = 18 directions at rank 4 distributed across p = 5 fibers, the pigeonhole principle should give me a tighter constraint on the maximum fiber size.
+
+Let me reconsider: if I want to avoid both triggering conditions—no fiber with ≥ 9 directions and no nonzero fiber with ≥ 10—then the best I can do is spread the 18 directions as evenly as possible, like 4+4+4+3+3. But this uniform distribution is exactly what would break the inductive argument, since neither condition gets satisfied.
+
+So the key insight is that uniform fiber distribution across the 5 fibers defeats the inductive approach entirely.
+
+Now I'm thinking about what the theorist and computer have been saying. The theorist's point about support-4 zero-sums hitting a ceiling at p ≥ 17 suggests the rank-3 lift fails for larger primes. And the computer's observation about multi-fiber requirements seems to be pointing toward why the induction can't work when fibers are balanced.
+
+Let me map out my counterattacks. The theorist proved shadow saturation — any vector in F_p^r can be written as a combination of the maximal ZSF set B with weight at most p-1. But here's the gap: shadow saturation doesn't guarantee we can add one more vector and still find a zero-sum within the η bound. The new vector v gets expressed as a combination of B elements, but that doesn't automatically give us the tight weight constraint needed for the proof. Then Σaᵢbᵢ - v = 0 with weight (Σaᵢ) + 1 ≤ p.
+
+Wait — this IS the proof! If shadow saturation holds for B (the α(r)-element ZSF set), then adding any vector v, I can write v = Σaᵢbᵢ with weight ≤ p-1. The key insight is that bᵢ with coefficients aᵢ plus v with coefficient -1 gives me a zero-sum, but I need to be careful about the signs and how they interact with the zero-sum free condition.
+
+The zero-sum free condition means no Σaᵢbᵢ = 0 with 0 < Σaᵢ ≤ p, where aᵢ ∈ {0,...,p-1}. Shadow saturation tells me that for any nonzero u ∈ F_p^r, I can find coefficients cᵢ ∈ {0,...,p-1} with Σcᵢbᵢ = u and 1 ≤ Σcᵢ ≤ p-1.
+
+When I add the (α(r)+1)-th direction v with multiplicity p-1, I need to find a zero-sum of weight ≤ p among B ∪ {v}. Applying shadow saturation to u = v gives me coefficients where Σcᵢbᵢ = v and Σcᵢ ≤ p-1, so Σcᵢbᵢ - v = 0 is my zero-sum relation. v = v + (p-1)v = pv = 0, so the zero-sum relation Σcᵢbᵢ + (p-1)v = 0 has weight Σcᵢ + (p-1). For this to satisfy the constraint, I need Σcᵢ + (p-1) ≤ p, which means Σcᵢ ≤ 1. But shadow saturation requires Σcᵢ ≥ 1, so Σcᵢ = 1 exactly—this forces v to be proportional to one of the bᵢ vectors.
+
+The problem is that v is supposed to be a genuinely new direction, not proportional to any existing basis vector. If v is non-proportional, then representing it requires Σcᵢ ≥ 2, which pushes the total weight to at least p+1, exceeding the bound of p. So shadow saturation alone doesn't guarantee the η bound for new non-proportional vectors—the weight constraint becomes violated.
+
+Let me reconsider the case where a_v = 1. If we need Σaᵢbᵢ + v = 0, then Σaᵢbᵢ = -v. By shadow saturation on -v, we get coefficients cᵢ with Σcᵢbᵢ = -v and Σcᵢ ≤ p-1, giving total weight Σcᵢ + 1 ≤ p, which works. Each bᵢ has multiplicity p-1, so I need cᵢ ≤ p-1 for each coefficient, which shadow saturation guarantees. If shadow saturation holds for all maximal ZSF sets, then the η upper bound follows—and the theorist proved it universally, so the Grail should be proved. But that seems wrong, so I need to find where the reasoning breaks down.
+
+Shadow saturation says any maximal ZSF set B of size α(r) satisfies Σ_{≤p-1}(B) = F_p^r \ {0}, meaning for any nonzero u, I can write u = Σcᵢbᵢ with coefficients in {0,...,p-1} and total weight between 1 and p-1. Let me verify exactly what the weight constraint is—whether it's strictly bounded by p-1 or just achievable within that range. p-1. No wait — the subscript ≤ p-1 probably refers to the constraint on total weight.
+
+Actually, the standard definition: Σ_k(S) is the set of all sums of exactly k elements from S. And Σ_{≤k}(S) = ∪_{j=1}^k Σ_j(S).
+
+But in our weighted setup: Σ_{≤w}(B) is the set of all Σcᵢbᵢ with Σcᵢ ≤ w and each cᵢ ∈ {0,...,p-1}.
+
+If Σ_{≤p-1}(B) = F_p^r \ {0}, then for any nonzero u (including -v for the new vector v), there's a representation with weight ≤ p-1. This means the zero-sum Σcᵢbᵢ + v = 0 has weight Σcᵢ + 1 ≤ p, which gives us the η upper bound through shadow saturation.
+
+Now I need to verify whether shadow saturation is actually proven. The synthesis claims high confidence with a 5-line proof, but I should check if that proof holds up or if there's a gap in the logic. F_p^r with n = α(r).
+
+For any nonzero u ∈ F_p^r, consider the set B ∪ {u}. This has n+1 = α(r)+1 directions. 
+
+Wait, but u might be proportional to some bᵢ. Let me handle both cases.
+
+Case 1: u is not proportional to any bᵢ. Then B ∪ {u} has α(r)+1 non-proportional directions. By definition of η, with multiplicity p-1 each, I get a total of (α(r)+1)(p-1) elements. Since η = α(r)(p-1)+1, I can verify that (α(r)+1)(p-1) ≥ η whenever p-1 ≥ 1, which always holds. So B ∪ {u} with multiplicity p-1 each contains at least η elements, meaning it has a zero-sum of weight at most p. This zero-sum must involve at least one copy of u, since otherwise it would be a zero-sum within B alone, contradicting that B is zero-sum-free. So there exist coefficients cᵢ...
+
+Actually, I'm now seeing that u can be expressed as a linear combination of the bᵢ. The coefficients dᵢ = -cᵢ/c_u mod p give me Σdᵢbᵢ = u, and I need to figure out what the weight Σdᵢ equals modulo p.
+
+But wait—the dᵢ are field elements, not necessarily small integers. When I compute the weight as actual integers in {0,...,p-1}, it could be anything. This means I've shown u is in the full sumset Σ(B), but that doesn't guarantee it's in the weight-bounded sumset Σ_{≤p-1}(B).
+
+The constraint Σcᵢ + c_u ≤ p gives me Σcᵢ ≤ p-1, but I need the coefficients dᵢ themselves to have bounded weight, and that's where this approach breaks down. So when I construct a case where c_u = 1 and c₁ through c₄ all equal 1, each dᵢ becomes 4 mod 5, giving me a total integer weight of 16 rather than the expected 1 — the modular arithmetic masks what's actually a much larger representation in standard form.
+
+The key insight is that shadow saturation requires the integer sum of coefficients to stay bounded by p-1, not just their sum modulo p. This means for any nonzero element u in F_p^r, I need coefficients from the basis elements and u itself that sum to zero while keeping their integer weights at most p. If I can express u as a combination of the basis elements with bounded integer weight, then the representation works.
+
+But when I try to rescale by dividing through by c_u in the field, the integer coefficients transform in a way that breaks the argument—the modular division doesn't preserve the integer weight bounds I need. So I'm realizing the proof as originally stated has a gap: the zero-sum relation gives me a representation of u with potentially large coefficients after rescaling, which defeats the purpose of the bounded weight condition. I'm realizing the representation works differently—the coefficients cᵢ stay in {0,...,p-1} with integer weight Σcᵢ ≤ p-1, which means -c_u·u actually belongs to a small-weight subset of the span of B, so c_u·u is in the negation of that subset.
+
+But the real issue is that I need u itself to have small weight representation, not just c_u·u. When c_u = 1, I get -u in the small-weight set, but converting back to u requires negating coefficients, which inflates the weight to np - Σcᵢ—that's the opposite of what I need.
+
+So the proof only establishes that some nonzero scalar multiple of u lies in Σ_{≤p-1}(B), not u itself. For shadow saturation to actually work, I'd need every nonzero u to be directly representable with small weight, but what I have is weaker: the image of Σ_{≤p-1}(B) under scalar multiplication covers all nonzero elements.
+
+Now I'm wondering if the argument can be salvaged. The key question is whether I can force the zero-sum to use exactly one copy of u rather than multiple copies. The η(C_p^r) bound gives me a zero-sum with weight at most p, but it doesn't guarantee c_u = 1. If I instead work with B having multiplicity p-1, that might constrain the coefficients differently.
+
+Actually, I see it now—if I include u with multiplicity 1 (just a single copy available), then any coefficient c_u must be either 0 or 1. Since the total size hits exactly η, there must be a zero-sum, and if u weren't in it, I'd have a zero-sum within B itself, contradicting the zero-sum-free property. So c_u is forced to equal 1, giving me the equation Σcᵢbᵢ + u = 0.
+
+From this, the weight constraint Σcᵢ + 1 ≤ p means Σcᵢ ≤ p-1, so -u is a sum of elements from B with weight at most p-1. This means every nonzero vector in F_p^r appears in the set of sums from B with weight ≤ p-1, while that set can't contain 0 itself since B is zero-sum-free.
+
+Actually, I need to be careful here—the zero vector does appear when all coefficients are zero, but that's weight 0. Let me reconsider what exactly I'm defining: sums of elements from B where the coefficients are in {0,...,p-1} and their sum is bounded by some threshold.
+
+The key insight is that ZSF (zero-sum-free) means no nontrivial representation of zero with weight between 1 and p, which automatically rules out any zero-sum with weight up to p-1. So the shadow saturation argument should work: I start with a ZSF set B, and this property ensures that zero only appears trivially in the bounded sums.
+
+Now I'm applying this to show that any element u can be expressed as a negative sum from B with bounded coefficients. By adding u with multiplicity 1 to B (which has multiplicity p-1), the total size hits the η bound, forcing a zero-sum of weight at most p. Since B is ZSF, this zero-sum must involve u, which means u itself can be written as a negative combination of elements from B with coefficients summing to at most p-1. So when I negate the sum, I get u = Σ(p-cᵢ)bᵢ in F_p, which means the total weight is kp - Σcᵢ where k is the number of nonzero terms. For a single term, the weight ranges from 1 to p depending on the coefficient, so it's definitely achievable below p-1.
+
+But with two or more terms, the weight jumps significantly—for k=2 I need c₁+c₂ ≥ p+1 to keep it below p-1, which is possible but constrains the coefficients heavily. The key insight is that when u requires multiple terms in its representation, the negated form's weight becomes much larger than p-1, which actually strengthens the shadow saturation argument.
+
+Let me reconsider step 5 more carefully. If u = -Σcᵢbᵢ, then representing u directly means using coefficients p - cᵢ for each positive cᵢ, giving a total weight of Σ(p - cᵢ) across nonzero terms. When only one coefficient is nonzero, this simplifies nicely, but the situation gets messier with multiple terms. nonzero (say c₁ = c): u = -cb₁ = (p-c)b₁. Weight = p - c. Since c ∈ {1,...,p-1}: weight ∈ {1,...,p-1}. Fine, weight ≤ p-1.
+
+If two cᵢ nonzero (c₁, c₂): u = -(c₁b₁+c₂b₂) = (p-c₁)b₁+(p-c₂)b₂. Weight = 2p-c₁-c₂. Need this ≤ p-1: c₁+c₂ ≥ p+1.
+
+But we know Σcᵢ ≤ p-1 (from step 5). With only two nonzero coefficients, c₁+c₂ ≤ p-1, so the weight becomes 2p-(c₁+c₂) ≥ p+1, which exceeds p-1. This pattern holds for any k ≥ 2 nonzero coefficients—the negated representation always has weight greater than p-1. So the small-weight combinations don't actually span all nonzero vectors; instead, every nonzero vector is the negative of some small-weight combination, meaning Σ_{≤p-1}(B) is only a proper subset of F_p^r.
+
+Wait, I'm second-guessing myself. The shadow saturation proof claims -u ∈ Σ_{≤p-1}(B) for all nonzero u. As u ranges over F_p^r \ {0}, so does -u, which means Σ_{≤p-1}(B) must contain all nonzero vectors. I was confusing the direction—the set of negatives of small-weight combinations equals the set of all nonzero vectors, so Σ_{≤p-1}(B) ⊇ F_p^r \ {0}.
+
+So shadow saturation does hold, and my attempted counterexample doesn't work. Now the question is how this connects to the η upper bound: if any new direction v is already in Σ_{≤p-1}(B), then v itself can be expressed as a small-weight combination of the basis vectors, which gives us the zero-sum we need.
+
+But when I write out the actual weight calculation—expressing v as a sum of basis vectors with coefficients summing to at most p-1, then negating v to close the zero-sum—I'm getting a total weight of around 2(p-1), which doesn't immediately beat the p bound for small primes. I need to check whether this inequality actually works out in our favor. I see the key insight now—the zero-sum from the η bound uses u with coefficient 1, not p-1, which means the weight constraint Σcᵢ + 1 ≤ p is actually achievable. This resolves the contradiction: shadow saturation fails because negating v costs too much, but the direct η bound avoids this problem by keeping u's coefficient small. the remaining weight budget of p-1 goes to the bᵢ. The key: u is included with multiplicity 1 (not p-1!), so its coefficient in the zero-sum is 1, not p-1.
+
+This means: -u = Σcᵢbᵢ with Σcᵢ ≤ p-1. So -u ∈ Σ_{≤p-1}(B). Then u ∈ -Σ_{≤p-1}(B).
+
+But how does this help? We need a zero-sum of weight ≤ p involving u. We have one: Σcᵢbᵢ + u = 0 with weight Σcᵢ + 1 ≤ p. This IS the zero-sum!
+
+So the η bound at rank r is what we're trying to prove in the first place, but the argument for shadow saturation assumes it holds. If we assume the η bound to derive shadow saturation, and then use shadow saturation to prove the η bound, we're going in circles.
+
+The inductive approach has the same issue: to prove η(C_p^r) ≤ α(r)(p-1)+1, we'd need to assume η(C_p^{r-1}) ≤ α(r-1)(p-1)+1 and somehow lift it. But the lifting step itself seems to rely on shadow saturation, which requires the η bound we're trying to prove. α(r-1)(p-1)+1, prove η(C_p^r) ≤ α(r)(p-1)+1.
+
+The shadow saturation of B_r (a maximal ZSF set in F_p^r) would follow from η(C_p^r) — but that's what we're trying to prove!
+
+However, we DO have η(C_p^{r-1}) by inductive hypothesis. So we can prove shadow saturation for sets in F_p^{r-1}. This might help with fiber-level arguments.
+
+But the global shadow saturation in F_p^r requires the global η bound. Circular.
+
+So the correct proof structure would need to use the inductive hypothesis η(C_p^{r-1}) to establish shadow saturation in F_p^{r-1}, then leverage fiber-level shadow saturation to combine across fibers and ultimately prove the global η(C_p^r) bound. The problem is that combining across fibers requires cross-fiber weight arithmetic where I've already found gaps.
+
+I've identified several critical attacks on this approach. Now I need to organize these into a coherent report and also examine what the theorist means by "support-4 zero-sums hit a hard ceiling at p ≥ 17" and what the "Fiber Weight Divisibility Lemma" actually requires — specifically, we showed that any zero-sum within a nonzero fiber has weight divisible by p, but I need to see what the theorist is claiming beyond that.
+
+Now I'm checking whether a zero-sum in a fiber can have weight exactly 2p rather than just p. With three vectors from {0,...,p-1}, we can achieve a sum of 2p when p ≥ 3, so weight 2p is definitely achievable.
+
+But I'm realizing the example I was considering—three copies of the same vector (1,t) with coefficients summing to 2p—doesn't actually satisfy the zero-sum field condition, since it only involves one direction rather than non-proportional vectors. I need to reconsider what the ZSF condition actually requires. So there can't be a zero-sum from a single direction. For two directions, they'd need to be proportional (impossible by assumption) or linearly independent (which forces both coefficients to zero). With three directions in a fiber, the first component gives me a constraint on the sum of coefficients modulo p, and I'm checking what the tail components tell me.
+
+A fiber zero-sum of weight w corresponds to a tail zero-sum where w ≡ 0 (mod p), so the minimum positive weight is p. For weight 2p, I need three nonzero coefficients summing to 2p, which is achievable when p ≥ 3 since the maximum possible sum 3(p-1) is at least 2p.
+
+Now I'm checking whether tails that are zero-sum-free at weight p could still admit a zero-sum at weight 2p. If the tails t₁, t₂, t₃ have no zero-sum of weight ≤ p, a zero-sum at weight 2p would require coefficients a₁, a₂, a₃ ∈ {0,...,p-1} summing to 2p, which forces at least three nonzero terms and creates constraints on what combinations are possible.
+
+The key insight is that even if such weight-2p zero-sums exist among the tails, they don't actually help with the inductive argument—they can't lift to global zero-sums of weight ≤ p since the total weight would exceed p. So for the induction, I only need to worry about zero-sums of weight ≤ p, which the ZSF condition already rules out.
+
+Now I'm ready to lay out my three main approaches for Round 3.
+
+Attack A targets a fundamental circularity: the shadow saturation proof assumes the very η bound for rank r that we're trying to establish, making it a consequence of η rather than a tool for proving it.
+
+Attack B identifies an arithmetic bottleneck in the inductive fiber decomposition. While the η bound produces zero-sums of weight ≤ p in each fiber, only those of weight exactly p can lift to global zero-sums. The s-constant requires α(r-1)+2 directions per fiber, but the pigeonhole principle only guarantees around 4 per fiber on average. The doubled+e₁ construction sidesteps this by strategically concentrating directions across fibers—8 in one, 9 in another—to reach the η threshold.
+
+However, a uniformly distributed 18-direction set defeats this concentration strategy entirely, and the weight-budget constraint when combining partial sums across fibers creates modular impossibilities for half the possible weights.
+
+============================================================
+BLOCK 4 (260 chars)
+============================================================
+OK, Cortex is mostly empty for these specific terms (my earlier search found the R2 entry). Let me now read the relevant existing Cortex entries and then produce my Round 3 report.
+
+Let me now write up my full adversary report, which I'll also store to Cortex.
+
+============================================================
+BLOCK 5 (797 chars)
+============================================================
+Good, my attacks are stored to Cortex. Let me now provide a final summary of the key insights for the coordinator and other agents.
+
+Let me also think about whether there are any additional attacks I should mount, particularly on the computer's and theorist's specific claims from this round.
+
+The theorist's key insight: "Support-4 Zero-Sums Hit a Hard Ceiling at p ≥ 17" — I've generalized this in Attack 5.
+
+The theorist's insight: "Fiber Proportionality Creates a Subtle Obstruction in Inductive Scaling" — I've incorporated this into Attack 2.
+
+
+I've also addressed the computer's claims about fiber multiplicity constraints and the support-size threshold requirements, both covered in my Attack 2 analysis. I think my attacks are comprehensive now, so I'm ready to deliver the final summary.

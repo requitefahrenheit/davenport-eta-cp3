@@ -1,0 +1,618 @@
+
+============================================================
+BLOCK 1 (401 chars)
+============================================================
+The user wants me to act as the COMPUTER agent in a multi-agent research setup focused on proving shadow saturation for ZSF sets. My job is to verify conjectures, run exhaustive checks, compute examples, and find counterexamples using Python code.
+
+Let me start by:
+1. Searching Cortex for prior findings
+2. Reading the briefing document
+3. Computing something definitive
+
+Let me do these in parallel.
+
+============================================================
+BLOCK 2 (137 chars)
+============================================================
+Good, I have the Cortex results and the briefing. Let me read the full Cortex semantic search results to see what's been computed before.
+
+============================================================
+BLOCK 3 (33484 chars)
+============================================================
+Good, I have a solid picture of prior work. Let me now plan my computational contributions. The key findings from Cortex:
+
+1. Shadow saturation verified for the specific doubled+e1 construction at p=5 and p=7
+2. The conjecture is that for ANY maximal ZSF set of size 2α(r)+1, shadow at weight p-1 covers all nonzero vectors
+3. Prior work verified this only for the SPECIFIC construction, not for arbitrary ZSF sets
+4. The uniqueness result says (up to projective equivalence) the doubled+e1 construction is the UNIQUE maximal ZSF set at p=5
+
+
+5. I should computationally verify shadow saturation across different ZSF set sizes—both maximal and non-maximal—to understand whether the saturation property depends on having exactly 2α(r)+1 vectors or if it holds more broadly.
+
+6. Testing at larger primes like p=11 or p=13 would give me more data points to identify patterns.
+
+7. The weight distribution is another angle worth exploring—understanding how many representations each nonzero vector admits could reveal something fundamental about why shadow saturation works.
+
+8. Most critically, I need to test whether random 17-vector sets that aren't constructed via the ZSF method achieve full coverage, since the uniqueness result at p=5 means there's only one maximal ZSF set to check there, but at p=7 there might be multiple candidates to examine.
+
+The computational evidence I've gathered suggests that random non-ZSF sets never reach full coverage, which is a strong indicator that the construction itself is essential to the saturation property. even 20 vectors don't). Shadow saturation is ZSF-specific."
+
+This is crucial. Shadow saturation is specific to ZSF sets. This suggests that the ZSF property (0 not in shadow) forces the shadow to cover everything else.
+
+Let me think about what I should compute:
+
+1. **Precise counting**: For each weight k from 1 to p-1, count the SIZE of the shadow at weight exactly k. Compare this to theoretical bounds.
+
+2. **Chevalley-Warning approach**: Set up the CW polynomial system and compute the congruences. This is the most promising unexplored direction.
+
+3. **Test the conjecture for smaller ZSF sets**: Does a ZSF set of size 16 in F_5^4 have shadow at weight 4 covering all nonzero vectors? Probably not - but how far off is it?
+
+4. **Character-sum computation**: I should compute the exact number of representations of each target vector at each weight using polynomial methods or direct enumeration.
+
+The Chevalley-Warning polynomial approach seems most impactful. Let me reconsider the Shadow Saturation conjecture: for any ZSF set S of size n = 2α(r)+1 in F_p^{r+1}, the weight-(p-1) shadow covers all nonzero vectors. The shadow at weight w consists of all linear combinations where coefficients sum to at most w, with each vector used at most once.
+
+I need to be more careful about the definition. Looking at the problem statement: the shadow includes sums where we pick distinct vectors from S with coefficients in {1,...,p-1} and the coefficients sum to at most p-1. So the shadow at weight w is all such combinations where the coefficient sum is at most w.
+
+Now I'm planning the computational approach: I need to verify the shadow computation is correct (there was apparently a prior bug in the Cortex notes), compute shadow sizes for various ZSF sets, and set up the CW polynomial method. I'll write Python code to build the doubled+e1 construction, compute shadows incrementally by weight, verify the ZSF property, and test shadow saturation. Then I'll extend it to handle multiple primes and analyze the CW congruence.
+
+Writing the implementation...
+
+Actually, let me focus on what's genuinely new here. The prior work already verified shadow saturation for p=5 and p=7, so I should tackle p=11 where F_11^4 has 14640 nonzero vectors and the shadow at weight 10 should saturate. I also want to compute detailed representation counts for each target vector at each weight—that structure could be useful for the CW argument. And I need to set up the actual CW polynomial system, counting the number of coefficient tuples at each weight.
+
+Beyond those, I could test whether shadow saturation holds for other 17-element ZSF sets beyond the doubled+e1 construction, and find the minimum ZSF set size where weight p-1 shadows cover everything. I'll prioritize the p=11 computation, the CW system setup, and the minimum ZSF size question since those are most informative.
+
+For the CW approach, I need to think through the Chevalley-Warning theorem more carefully.
+
+The theorem states that if we have polynomials over F_p with total degree less than the number of variables, the number of common zeros is divisible by p. In our case, I'm setting up variables c_1,...,c_n over F_p and trying to count solutions to the linear constraint Σc_i*v_i = 0 along with a weight constraint Σc_i = w. The c_i values are automatically in {0,...,p-1} when working over F_p, so I need to formulate this as a polynomial system where the degree conditions work out. Now I'm defining a counting function N(t, w) that tracks solutions where the vectors sum to target t and the coefficients sum to w modulo p. The key subtlety is that the actual weight constraint is an integer bound Σ c_i ≤ p-1, not a modular equation, so I need to be careful about how the integer sum relates to its residue class modulo p.
+
+For shadow saturation, I need to verify that for every nonzero target t, there exists at least one solution with integer weight at most p-1. The character sum approach gives me information about N(t, w mod p), which aggregates across all integer weights in that residue class, but I actually need the restricted count. Let me just implement the direct computation to handle this properly.
+
+I'm planning three focused computations: first, I'll build the doubled+e1 construction for p=11 and compute the shadow layer by layer up to weight 10 to check saturation. Second, for p=5, I'll compute representation counts N(t, w) for each target and weight to see what the character sums predict versus what actually happens. Third, I'll search for minimal ZSF subsets at p=5 to find when the shadow at weight 4 becomes complete.
+
+Writing the code now...
+
+For p=11, the construction has 17 vectors total—8 from fiber 0 and 9 from fiber 1 including e1. Since we're looking at shadows with weight w ≤ 10, I need to count coefficient distributions where the sum of coefficients is at most 10 across all 17 vectors. This is much more tractable than enumerating all 11^17 possible tuples.
+
+Using stars and bars, the number of ways to distribute weight w=10 among 17 vectors is C(26,10) ≈ 5.3 million, which is manageable. Now I need to check whether any of these coefficient vectors actually produce a target vector in the shadow.
+
+With around 14,640 nonzero targets, enumerating all 5 million tuples to see which targets they hit seems inefficient. A better approach is to use dynamic programming and build the shadow incrementally by processing vectors one at a time, tracking which targets can be reached and what coefficient sums are needed.
+
+For each vector, I'll add coefficients from 0 to p-1, building up states that represent (target vector, total weight used). Since the target is in F_p^4 and weight ranges from 0 to p-1, the state space is p^5—for p=5, that's just 3,125 states, which is very manageable.
+
+Now I'm checking the computational complexity across different prime values. For p=7, I get about 2 million operations total, and p=11 gives around 1.9 million operations per vector—all well within feasible limits.
+
+The DP approach handles the constraint that each vector is used at most once naturally, since I process vectors sequentially and a coefficient of 0 means that vector isn't included. I'm going to implement this now, tracking which target vectors are achievable and at what weights, though I might optimize the state representation to just store the minimum weight needed for each target rather than tracking all possible weights. Actually, I'm realizing the greedy approach has a flaw—processing vectors sequentially means I might record a suboptimal minimum weight for a target, then miss better paths that combine multiple vectors later. I need to use a proper shortest-path algorithm like Dijkstra's instead, where I explore all possible combinations and always expand from the lowest weight first. I need to think about the state representation more carefully. Since I'm tracking which (target, weight) pairs are reachable, I can use a 2D boolean array where each target in F_p^4 maps to an index, and I track which weights up to p-1 are achievable for that target. This avoids storing the full p^5 state space explicitly. For the shadow saturation problem, I really just need to know which targets are reachable at any weight, so I can optimize further by tracking reachability per target rather than per (target, weight) pair. I can update the minimum weight for each target by considering whether to include the current vector with some coefficient, or skip it entirely—the new weight is either the previous minimum or the minimum from any previous target plus the coefficient cost. - Use v_{i+1} with coefficient c: minimum weight to reach (t' - c*v_{i+1}) using {v_1,...,v_i}, plus c
+
+And we take the minimum over all these options.
+
+Wait, but this isn't correct. The minimum weight to reach t using {v_1,...,v_i} might involve a specific subset of those vectors. Adding v_{i+1} with coefficient c to reach t + c*v_{i+1} is fine. But the minimum weight to reach t using {v_1,...,v_i} might use all vectors including some that we'd also need for another path. Since each vector is used at most once, this is fine - the DP processes vectors one at a time and each decision is binary (use or don't use).
+
+Yes, the DP is correct. At each step, we decide the coefficient for the current vector (0 = don't use, 1,...,p-1 = use with that coefficient). The state after step i encodes the cumulative (target, weight) pair, and we take the minimum weight for each target.
+
+I need to track both a boolean array for fast saturation checking and detailed weight counts for the research goal. For p=11, the target space has 11^4 = 14641 elements, and with weights 0 to 10, the full state space is manageable at around 161,000 states. I'll use numpy for efficiency and write a function that processes each vector, updating the DP table with all possible coefficients.
+
+Writing the DP implementation... Implementing the saturation check algorithm... I'm analyzing the computational complexity here—the inner loop over all p^dim targets per coefficient is manageable at around 42 million operations total, but the repeated encoding and decoding in `add_vectors_encoded` is inefficient. I should precompute a lookup table for vector additions in encoded space to avoid the decode-add-encode overhead on each iteration. each vector vi, precompute the encoded values of c*vi for c = 1,...,p-1. Then the transition is:
+
+for each c in {1,...,p-1}:
+  shift = encode(c * vi)
+  for each target t:
+    new_target = "t + shift in F_p^dim"
+    
+The problem is that "t + shift in F_p^dim" is not the same as t + shift as integers (because of carries in base-p encoding).
+
+I think the cleanest approach is to precompute a lookup table `add_table[t][shift]` for all t and relevant shifts. But that's p^dim * (p-1) * n entries, which for p=11 is 14641 * 10 * 17 ≈ 2.5M. That's fine.
+
+Actually, I'll just compute the addition in F_p^dim directly using tuples and a dictionary to map them to indices, or use numpy arrays for component-wise modular addition. For small primes like p ≤ 13, the state space is manageable—at most 13^4 = 28561 targets. I can represent the reachable set as a dictionary mapping target tuples to their minimum weight.
+
+Implementing DP over vectors...
+
+Building the reachable set... I'm verifying the algorithm is correct—each target state is reached without using vi, so adding vi with coefficient c means using it exactly once with that coefficient. Multiple coefficients for the same target might produce the same new state, but we just keep the minimum weight, which is fine. For p=11, this could mean around 2.5 million iterations of tuple arithmetic, which might take 10-30 seconds in Python.
+
+For p=13, it scales to about 5.8 million iterations, still manageable. Now I'm going to write out the full computation including ZSF verification, layer-by-layer shadow growth, and a comparison with non-ZSF results.
+
+Actually, I need to reconsider the DP logic more carefully—the reachable set grows as we process each vector, so some targets might only become reachable later in the process, but that's expected behavior for this sequential approach.
+
+The key insight is that when I copy reachable to new_reachable and extend it with the current vector, I'm correctly tracking both the states that don't use this vector and the new states that do. The minimum weight for each target is sufficient to determine reachability within the weight bound, so if min_weight[t] ≤ p-1, then t is reachable.
+
+Writing the full computation... shadow.
+
+But I also want layer sizes. Let me also track, for each target, the exact set of achievable weights. Or at least, count how many new targets become reachable at each weight.
+
+For the layer analysis, I'll do a separate computation that tracks the full set of achievable weights. For each target, maintain a set of weights.
+
+Actually, for the layer computation I should think about it differently. Let me compute:
+- shadow_k = set of targets reachable at weight exactly k (with some subset of vectors)
+- cumulative_k = union of shadow_0 through shadow_k
+
+But "reachable at weight exactly k" is tricky because different subsets of vectors can reach the same target at different weights.
+
+Let me just track: for each target, the set of weights at which it's reachable. The "new at weight k" count is the number of targets whose minimum reachable weight is exactly k.
+
+Now I'm implementing this properly with a function that builds the doubled+e1 construction for F_p^dim, starting with the fiber vectors...
+
+Building the construction... Building the DP algorithm... Still writing the verification logic...
+
+Actually, I'm realizing there's a flaw in my DP approach—it naturally excludes weight 0 since each coefficient is at least 1, so the zero vector at weight 0 is always there by default. What I really need to check is whether zero is reachable at any positive weight, which would violate the zero-sum-free property.
+
+The issue is that my current DP only tracks the minimum weight to reach each vector, so if zero is reachable at multiple weights, I'd miss the positive ones. I need to instead track all achievable weights for the zero target specifically.
+
+Rewriting the verification function to track all weights for the zero vector... Writing the ZSF verification logic...
+
+The approach builds up reachable sums incrementally by processing each vector and combining it with previously found targets, but the set can explode to p^dim elements—for p=11 that's already 2.5 million operations just iterating through combinations.
+
+Now I'm realizing the definition of zero-sum-free might be more nuanced than I initially thought. The constraint isn't just about avoiding any zero-sum subset, but specifically about the weight of the coefficients—I need to clarify whether we're looking for subsequences where the sum of coefficients stays bounded by p-1 or if there's a different constraint at play here. Or is ZSF just "no zero-sum subsequence at all"?
+
+Looking at the problem statement: "0 is NOT in the shadow at any weight" — the shadow at weight w is {Σ c_i v_i : c_i ∈ {0,...,p-1}, Σ c_i ≤ w, not all zero}. So ZSF means 0 is not in the shadow at ANY weight. Since the maximum weight is n(p-1), ZSF means: no non-empty subset with coefficients in {1,...,p-1} sums to zero, regardless of weight.
+
+Wait, but that can't be right for the doubled+e1 construction with 17 vectors. With 17 vectors and coefficients up to p-1, there are tons of ways to form zero sums... Actually no, that's the whole point. The construction IS zero-sum-free: there's no way to choose coefficients from {0,...,p-1} (not all zero) such that the sum equals zero. For p=5 with 17 vectors, that's a remarkable property — none of the 5^17 - 1 non-zero coefficient combinations produce zero.
+
+So for the ZSF check, I should track reachable targets without any weight constraint. But for computing the shadow itself, I need to respect the weight limit of p-1. Let me compute the shadow at weight p-1 for p = 5, 7, 11, 13.
+
+Now I need to verify the ZSF property, check layer-by-layer growth, test random ZSF sets at p=7, and find the minimum ZSF size for saturation at p=5. I'll write a comprehensive script that handles all of this.
+
+One thing to clarify: for the shadow computation with the weight constraint, I'm using a min-weight DP that tracks reachable targets. The zero target starts at weight 0, but that's fine because I only care about whether nonzero targets are reachable at weight ≤ p-1 for the saturation check. For the ZSF verification, I'll use a separate approach that checks reachability without the weight constraint.
+
+Writing comprehensive analysis script... Building the fiber sets...
+
+Now I'm defining helper functions to work with tuples modulo p—one for reducing values, another for adding tuples element-wise, and a third for scalar multiplication. Then I'm setting up a dynamic programming function to compute shadow layers by tracking the minimum weight needed to reach each target vector and counting how many new targets appear at each weight level.
+
+Building the DP algorithm... Writing verification and main loop... Continuing to analyze the shadow computation results, I'm checking the coverage across different weight levels and determining whether all targets are saturated. If there are uncovered targets, I'm identifying which ones weren't reached by the shadow computation.
+
+Now I'm realizing there's a computational bottleneck with larger prime values—for p=11, the reachable set could grow quite large, and iterating through all vectors and coefficients against that set becomes expensive.
+
+The key insight is that the weight constraint in the shadow computation actually helps keep things tractable by limiting how many vectors can be active simultaneously, whereas the ZSF check has no such constraint and the reachable set can expand much more freely, though it's still bounded by the field size itself. the set reaches that size, it can't grow further. The issue is the inner loop: for each of 17 vectors, iterate over up to 14641 elements × 10 coefficients = 146410 operations, each involving tuple arithmetic. Total: 17 × 146410 = ~2.5M operations. That's fast.
+
+For p=13: 28561 × 12 × 17 = ~5.8M. Still fast.
+
+OK let me also think about whether the ZSF verification is even correct for the doubled+e1 construction at larger p. The construction is zero-sum-free because it achieves η = 17(p-1)+1, meaning a sequence of 17 copies of each vector (each appearing p-1 times) has no zero-sum subsequence. Wait, that's the Davenport constant interpretation.
+
+Actually, let me re-read. The η function measures the smallest n where every sequence of n elements from C_p^{r+1} contains a zero-sum subsequence of length at most p. The construction achieves length η - 1 = (2α(r)+1)(p-1) by repeating each vector in S exactly p-1 times, with no such subsequence existing. A zero-sum subsequence here means selecting some copies of vectors—at most p-1 copies of each—that sum to zero with total count ≤ p, which translates to finding coefficients c_i ∈ {0,...,p-1} (not all zero) satisfying a zero-sum condition.
+
+I need to clarify: the construction avoids zero-sum subsequences of length ≤ p by carefully choosing the set S and repeating each element p-1 times. The verification checks that no combination of these repeated vectors, when summed with coefficients bounded by p-1, yields zero. it appears p-1 times), sum is zero.
+
+If we choose c_i copies of vector v_i, then Σ c_i ≤ p and Σ c_i v_i = 0, with c_i ∈ {0,...,p-1}. The ZSF property for the set S means: there's no such choice with 0 < Σ c_i ≤ p.
+
+Since we're working in F_p^{r+1} where p is the characteristic, Σ c_i v_i = 0 with c_i as integers mapped to F_p just means the F_p-linear combination is zero. And Σ c_i ≤ p means the integer sum of the lifts (each in {0,...,p-1}) is at most p.
+
+So the ZSF condition here is that zero doesn't appear in the shadow at weight p—meaning there's no non-trivial way to combine these vectors with coefficients summing to at most p that yields zero modulo p. This is a very strong condition — the group generated by S with coefficients in {0,...,p-1} shouldn't contain zero except trivially. But wait, if S spans F_p^{r+1}, then any vector including 0 can be written as a non-trivial linear combination, so ZSF must have a weight constraint. Let me reconsider what ZSF actually means here — it seems to refer to sets that don't contain a non-trivial zero-sum within some bounded weight range.
+
+So the shadow at weight w is the set of all weighted sums with coefficients in {0,...,p-1} and total weight at most w, excluding the all-zero case. ZSF means 0 doesn't appear in the shadow at weight p-1, which makes sense because the η construction has no zero-sum of weight less than p. This constraint is consistent with the construction's properties.
+
+Now, if shadow saturation holds—meaning the shadow at weight p-1 covers all nonzero vectors—then for any new vector x, its negation -x must be expressible as a weighted sum of the existing vectors with total weight at most p-1. Adding x itself with coefficient 1 to this representation would then give a zero-sum of weight at most p, which is exactly what η measures.
+
+For the computation itself, I need to track the shadow at each weight w, which consists of all achievable sums using coefficients from {0,...,p-1} with total weight at most w. The zero-sum-free condition means 0 must not appear in the shadow at any weight up to p-1. The critical question is determining the maximum weight threshold where 0 needs to be absent to guarantee the ZSF property.
+
+In the η construction, there's no zero-sum of length in the range [1, p], which translates to a constraint on the weight. When I select c_i copies of vector v_i, the length is the total number of copies Σ c_i, and the sum is Σ c_i v_i. The η property specifically prevents zero-sums within a certain length range, which I need to connect to the weight-based shadow computation. I'm realizing that weight and length are equivalent in this multiset sequence—choosing c_i copies of each vector v_i gives a subsequence of length Σ c_i, which is exactly the weight. So the zero-sum condition is really about preventing zero-sum subsequences of weight up to p, and the shadow at weight p-1 must avoid 0, while weight p might contain it.
+
+Let me check the p=5 case: the doubled+e1 construction should have no zero-sum at any weight from 1 to 5, and adding an 18th vector is what creates a zero-sum at weight p. According to the formula η(C_p³) = 8(p−1)+1, that gives 69 for p=5 with r=4, meaning a sequence of length 68 has no zero-sum of length in the range [1, p].
+
+The key property is that these 17 vectors, each appearing p-1 times, form a sequence where no non-trivial combination with coefficients in {0,...,p-1} sums to zero when the total coefficient count stays between 1 and p-1. For the shadow at weight p-1, this means 0 is excluded since there's no zero-sum at that weight, but I need to check whether a zero-sum could exist at weight p itself.
+
+At weight p, we'd need exactly p copies distributed among the vectors with coefficients at most p-1 each. The construction guarantees no zero-sum exists at any weight up to p, so 0 is also absent from the weight-p shadow. However, once we introduce the 18th vector, some combination involving it and a few others must sum to zero with total weight at most p, which is what forces the shadow saturation property to hold.
+
+For the actual computation, I need to check two things: first, compute the shadow at weight p-1 to find all nonzero vectors reachable with coefficient sum at most p-1, and second, verify that 0 doesn't appear in the weight-p shadow by confirming no zero-sum of weight at most p exists. I need to implement the actual checks: verifying the zero-sum-free condition by ensuring no coefficients in {0,...,p-1} sum to zero with total weight ≤ p, and checking that all nonzero vectors appear in the shadow at weight p-1. For efficiency with larger p values, I'm concerned the dynamic programming state space might get unwieldy, so I'll need to be strategic about how I compute this.
+
+Optimizing the representation...
+
+I need to encode the 4-tuples as integers using base-p encoding, then set up a 2D boolean array to track which (target, weight) pairs are reachable. For each vector, I'll iterate through coefficients and update the reachable states by adding the scaled vector to existing targets, but I'll need a precomputed addition table since adding encoded integers doesn't directly correspond to field addition.
+
+A full p^4 × p^4 addition table is too memory-intensive, so instead I'll precompute shift mappings—for each possible scalar multiple of each vector, I'll store a lookup table that maps any encoded target to its result after adding that shift. This uses roughly 2.5M entries for p=11, which is much more practical.
+
+Writing the precomputation function... Still writing the DP logic... I'm verifying the indexing logic: for each source target where the condition holds, I map to the destination target using the shift array and compute the new weight, then use `np.minimum.at` to update the minimum weights at those destinations. This should work correctly even with duplicate destinations since the function takes the element-wise minimum. Let me test this approach... uffered operation. If multiple source targets map to the same destination target, the result depends on the order. But since we're taking the minimum, the order doesn't matter — we want the minimum over all arriving weights.
+
+Actually, `np.minimum.at` performs unbuffered operations, so when there are duplicate indices like `np.minimum.at(a, [1,1], [3,2])`, it applies the operation sequentially: first a[1] = min(a[1], 3), then a[1] = min(a[1], 2), giving us the correct result of min(original_a[1], 2). This works perfectly for what I need.
+
+Now I need to finalize the code and handle the ZSF check — I should compute the shadow at weight p and verify that 0 isn't reachable at any weight up to p.
+
+Actually, for shadow saturation I need to check weight p-1, and for the ZSF condition I need to verify 0 doesn't appear in the shadow at weight p. So I'll compute both: the shadow up to weight p-1 to confirm saturation, and extend to weight p to verify the zero-sum-free property.
+
+The DP approach handles this by adjusting the max_weight parameter — I can run it once for p-1 and once for p. Let me write out the complete implementation and also test whether shadow saturation holds for smaller ZSF subsets in the doubled+e1 construction at p=5.
+
+Writing comprehensive verification script... Writing the helper functions... I'm storing each coefficient's shift array with its vector, then moving on to the shadow computation function which uses dynamic programming to find the minimum weight needed to reach each encoded target, initializing with zero weight at the origin.
+
+Now I'm iterating through each vector's precomputed shifts, skipping any that are masked out, and for each coefficient I'm finding which current states can afford the cost, then updating the minimum weights to reach the new target states using vectorized operations.
+
+For the main function, I'm setting up a test harness that constructs the doubled basis vectors for different prime field sizes, prints out the vector details, precomputes all the shift tables, and is about to run the shadow computation.
+
+Now I'm computing the shadow at weight p-1 and analyzing the layer structure by counting how many encodings fall into each weight category, then printing cumulative statistics. Still writing analysis code...
+
+I'm realizing the precompute_shifts function is inefficient for larger p values since it loops through all p^dim targets in pure Python, which gets slow quickly. I should vectorize this computation to speed things up.
+
+Building the vectorized shift computation... Finishing the vectorized shift computation...
+
+Now I'm thinking about what additional experiments would be valuable beyond the existing Cortex results. I should extend the verification to larger primes like p=11 and p=13, then focus on counting the actual number of representations for each target at different weights rather than just checking existence—that could reveal patterns relevant to coding theory. I also want to explore how many vectors are minimally needed to achieve saturation, which would be more impactful than searching for alternative maximal sets. For the representation counting, I need to modify the dynamic programming approach to track counts instead of just boolean flags.
+
+Modifying the DP to count representations... Still writing the counting logic...
+
+Actually, I see the issue now—I was double-counting by including both the "don't use" and "use with coefficient" cases. The correct DP should track how many coefficient vectors produce each target and weight sum: after processing the first i vectors, count[t][w] represents the number of ways to get target t (mod p) with coefficients summing to w. The transition for the next vector involves iterating through all possible coefficients and accumulating contributions from previous states.
+
+Writing the counting function... Writing the dynamic programming loop...
+
+Now I'm estimating the computational complexity for different values of p — for p=5 it's manageable at around 200K operations, but p=11 jumps to roughly 27 million operations which could take a few seconds. The `np.add.at` function handling duplicate indices is likely the bottleneck, though it should still be acceptable performance-wise. After computing the counts, I need to analyze the results by checking which targets have zero counts at each weight modulo p, and then aggregate the total representations across all weights.
+
+I'm now thinking about what the Cauchy-Davenport theorem tells us about the count congruences. For a fixed target and weight, I'm counting solutions to the system where coefficients sum to the target and their count sums to the weight, all modulo p. The key question is what constraints the CW theorem imposes on these counts, particularly for the zero-sum case where the counts should follow a specific pattern. F_p, {0,...,p-1} IS F_p.
+
+The issue is the weight constraint. Σ c_i = w (mod p) is a single linear equation. Combined with Σ c_i v_i = t (r+1 = 4 equations for dim 4), we have 5 linear equations in 17 variables.
+
+CW applies to polynomial systems. For a system of linear equations (degree 1 each), CW says: if the number of equations (5) is less than the number of variables (17), then N ≡ 0 (mod p). But this counts solutions over F_p^n to the polynomial system.
+
+Wait, CW requires Σ deg(f_i) < n. With 5 linear equations (each degree 1), Σ deg = 5 < 17 = n. So CW says N ≡ 0 (mod p) for any target (t, w).
+
+But actually, N is just the number of solutions to a linear system, which is either p^12 (if consistent) or 0 (if inconsistent), depending on whether the 5×17 coefficient matrix has full rank. For the shadow problem, the equations are the four coordinate constraints plus the weight equation, and as long as the vectors are linearly independent, the matrix has rank 5, giving p^12 solutions whenever the system is consistent.
+
+So CW is satisfied trivially: p^12 ≡ 0 (mod p). This doesn't help us. I need the weighted CW or a more refined approach that counts solutions at specific weights as integers, not modulo p. The weighted version would use higher-degree polynomials to isolate solutions at a particular weight w.
+
+The challenge is that working mod p conflates integer weights w, w+p, w+2p, etc. But for shadow saturation, I need to distinguish between integer weights ≤ p-1 and those ≥ p. Since the coefficients c_i are in {0,...,p-1}, the integer weight Σ c_i ranges from 0 to 17(p-1). The weighted CW counts all solutions across all integer weights, but I specifically need the restricted count where the integer weight stays ≤ p-1 to be positive for each nonzero target.
+
+I'm shifting focus to the computational side now. I'll write a script to compute shadow saturation for p = 5, 7, 11 (leaving p = 13 for later since it's heavier), along with full representation counts at each weight, critical vector analysis, and minimum subset sizes for saturation. I'll also track CW-relevant computations for each target and mod-p weight class.
+
+Writing the computation script... Now I'm checking the memory requirements for p=11 — the count array is manageable at around 1.3MB, the shift table precomputation fits in about 100MB, and the decode table is only a couple hundred KB, so everything should run fine. I'll write out the full script now, starting with the precompute_shifts function that decodes all targets, applies the shift vector, and re-encodes them.
+
+Writing the precomputation logic... Writing the comprehensive analysis script...
+
+============================================================
+BLOCK 4 (198 chars)
+============================================================
+No numpy. Let me rewrite using pure Python with dictionaries and lists. I'll need to be more careful about performance but should still work for p=5 and p=7. For p=11 it might be slow but let's try.
+
+============================================================
+BLOCK 5 (5203 chars)
+============================================================
+Excellent results! Let me analyze what we've found:
+
+1. **Shadow Saturation VERIFIED at p=5, 7, 11** - all three primes show complete coverage at weight p-1.
+
+2. **ZSF check shows w=0** - this is a bug! The ZSF check should show that 0 is only reachable at weight 0 (the trivial empty sum), not at any positive weight. The code reports "NO (w=0)" because min_weight[0] = 0, which is the trivial case. I need to fix the ZSF check to exclude the trivial case.
+   
+3. **Critical vector analysis**: Every vector is essential for saturation at both p=5 and p=7 - removing any single one creates gaps in coverage. This confirms all 17 vectors are necessary.
+
+4. **Minimum size = 17**: At p=5, this is the smallest set that maintains saturation.
+
+5. **Layer growth pattern**: The first few weights produce identical counts across p=5, 7, and 11 (17, 87, 259), which suggests the pattern holds consistently at low weights before the primes' different structures start affecting the distribution.
+
+6. **Representation counts**: Looking at how many ways each element can be represented - p=5 ranges from 1 to 46 with an average of 9.6, while p=7 ranges from 1 to 360 with an average of 42.1, showing the distribution becomes increasingly non-uniform as p grows.
+
+Now I'm debugging the ZSF check - the issue is that my code was checking if the minimum weight exceeds p, but the minimum weight is always 0 from the trivial empty sum, so I need to verify whether 0 itself is representable.
+
+I need a separate DP that specifically tracks whether 0 is reachable at any positive weight, rather than relying on the minimum weight calculation which will always return 0 for the trivial case.
+
+So I'll maintain a boolean array tracking which targets are reachable using at least one non-zero coefficient. For each vector, I can either use it with a non-zero multiplier directly, or add it to targets that are already positively reachable. Zero-sum-free means 0 never becomes positively reachable this way.
+
+But I also need to enforce the weight constraint for the η-style ZSF, where no zero-sum can have length ≤ p.
+
+For the weight-bounded version, I need to find the minimum positive weight at which 0 becomes reachable. I'll use a separate DP tracking the smallest positive weight for each target, treating 0 specially so it doesn't get initialized to 0 itself. Then I can compute the second-smallest weight at which 0 is reachable by preventing the trivial zero-weight solution.
+
+Implementing the DP now... the existing min-weight DP to get the minimum weight for reaching 0, but that only gives me the trivial zero-weight path. What I really need is to check if there are any positive-weight representations of 0 by running a representation count DP instead, which tracks how many ways each target can be reached at each weight. Looking at the test output, the zero-target representation counts show that 0 is only reachable at weight 0 (count of 1) with no positive-weight paths, confirming the zero-sum-free property holds up to the given bound. Writing the ZSF check function... I'm returning the minimum positive weight needed to reach zero, but I'm realizing there's a flaw in how I'm handling the transitions—the "from trivial" case should only trigger once per vector at the start, not repeatedly as I extend existing paths. Let me reconsider how the DP should actually process vectors sequentially and distinguish between paths that use a given vector versus those that skip it entirely.
+
+For each vector k+1, I need to track the minimum weight to reach any target using at least one positive coefficient across vectors 1 through k+1. When I either skip the vector or use it with some positive coefficient c, I'm either keeping the reachable targets from before, or extending them by adding c times the new vector to existing targets, plus handling the case where I start fresh from zero with just this vector.
+
+Writing the DP function... Still writing the algorithm...
+
+I'm also noticing that the output already confirms the zero-target representation counts at each weight—showing [1, 0, 0, 0, 0] for p=5 and [1, 0, 0, 0, 0, 0, 0] for p=7 up to weight p-1, which validates the zero-sum-free property at those bounds.
+
+Now I need to extend the verification to weight p itself by running the rep count DP with max_weight = p. The really exciting part is that p=11 shows shadow saturation holds there too—this is a new computational confirmation beyond the known cases of p=5 and p=7. Looking at the layer structure at p=11, I can see how the counts diverge from p=7 starting at weight 4, with 581 representations compared to the earlier pattern.
+
+The bell-shaped growth peaks around weight 8 with over 3000 new targets, then tapers off toward weight 10. My plan is to fix the ZSF check, compute rep counts for p=11 to verify the weight-p case, and check ZSF across all primes at their respective weights. I'm also curious about what makes certain targets uncovered when vectors are removed. The main concern is runtime—with dictionaries potentially holding thousands of entries at each weight and 11 weights to process, the computation could get expensive, so I should estimate the cost first before diving in.
+
+============================================================
+BLOCK 6 (8480 chars)
+============================================================
+This is extremely informative. Let me summarize the key findings:
+
+**FINDING 1: ZSF verified with precision**
+- p=5: No zero-sum at weight ≤ 5 (= p). First zero-sum at weight 6 (= p+1).
+- p=7: No zero-sum at weight ≤ 7 (= p). First zero-sum at weight 8 (= p+1).
+- p=11: No zero-sum at weight ≤ 11 (= p). First zero-sum at weight 12 (= p+1).
+
+
+- The pattern holds consistently: the construction avoids zero-sums up to weight p and the first one emerges at exactly p+1.
+
+**FINDING 2: Shadow already covers everything at weight p-1, nothing new at weight p**
+- p=5: Weight 4 shadow covers all 624 nonzero. Weight 5 adds 0 new targets.
+- p=7: Weight 6 shadow covers all 2400 nonzero. Weight 7 adds 0 new targets.
+- The shadow saturates at weight p-1, so weight p contributes no additional coverage.
+
+**FINDING 3: Layer growth stabilizes at higher p**
+- Weights 1-2 are constant across all p: 17 and 87.
+- Weight 3 stabilizes for p ≥ 7 at 259, but p=5 gives 243.
+- Weight 4 shows p-dependence: p=5 has 277, p=7 has 561, while p=11 and p=13 both reach 581.
+- For p ≥ 11, the layer counts at low weights stabilize because the integer sums stay below p before any wraparound occurs.
+
+At weight w, the maximum coefficient sum is w itself, and each coefficient is bounded by p-1. When w ≤ p-1, individual coefficients don't experience mod-p effects, though vector coordinates can still wrap. For weight 1, there's only a single coefficient of 1 across all p, giving 17 targets. Weight 2 involves pairs of coefficients summing to 2, and collisions between distinct targets only happen at lower p values. The stabilization at p ≥ 11 for weight 4 means the first four layers become identical across these larger primes.
+
+When I remove a fiber-0 generator like v0 through v3, I get 9 gaps, but removing a fiber-0 secondary (v4 through v7) or e1 (v16) yields only 6 gaps. These gaps follow a precise structure—when I remove v[0] = (0,1,0,0) at p=5, the resulting gaps all feature large values in the second coordinate, suggesting the gaps are tightly constrained by which vector was removed.
+
+Looking at the specific gap targets, I see they fall into clear categories: some require the removed vector as a multiple (like (0,4,0,0) needing four copies of (0,1,0,0)), while others are fiber-0 targets that depend heavily on large coefficients of the removed vector. This pattern explains why removing a vector with a large coefficient in a particular coordinate creates gaps concentrated in that same coordinate region. Looking at the gaps when removing this vector at different weights, I see a consistent pattern: the unreachable targets all require that specific vector with a large coefficient. What's striking is that the first zero-sum actually appears at weight p+1, not p—the η-construction is preventing zero-sums slightly more aggressively than necessary, which makes sense since it's a maximal zero-sum-free set. the same as weight p-1, so no new targets emerge. This construction feels remarkably tight—the shadow saturates exactly at weight p-1, the zero-sum form appears at weight p+1, and everything locks together perfectly.
+
+I should document these findings and then push deeper: verify whether this shadow saturation pattern holds for larger primes like p=13, explore if there's an algebraic characterization of these gaps, and consider using the CW polynomial method to count representations more systematically. The core insight for the proof is that the shadow reaches its maximum coverage at weight p-1 while the zero-sum form keeps 0 out of reach through weight p—this tightness seems fundamental to why the construction works. and actually ≤ p+1-1 = p. The first zero-sum appears at weight p+1, all vectors are critical, and size 17 is minimal for saturation.
+
+For the proof, I need to show that ANY ZSF set of size 17 has shadow saturation, not just the construction we tested. Let me examine the gap structure more carefully—when I remove v[4] = (0,1,1,0) at p=5, I notice that (0,4,4,0) is exactly 4 times that vector modulo 5, meaning removing it blocks access to its scalar multiples. The other gaps like (0,2,4,2) are similarly unreachable at weight ≤ 4 without this vector, which suggests the gap analysis already captures the key constraint.
+
+Looking at the p=7 case, when v[4] is removed the gaps show a clear pattern: coordinates 2 and 3 (which correspond to v[4]'s nonzero positions) consistently take on large values that sum to p-1. This structural constraint on the gaps seems to be what makes certain targets fundamentally hard to reach without that vector. 2 is always 4 or 6, and coord 3 is always 0, 2, or 4. And coord1 + coord2 always ≡ 0 (mod 2)? Let me check: (0,2,6,4): 2+6=8, (0,4,6,2): 4+6=10, (0,6,6,0): 6+6=12. These have coord1+coord2 even. And the fiber is coord0 in {0,...,5}.
+
+Actually, I notice that for removing v[4] = (0,1,1,0), all gap targets have coord[2] + coord[3] ≡ 0 (mod p)? Let me check: (0,2,6,4): 6+4 = 10 ≡ 3 (mod 7). No.
+
+Let me look at this differently. The gap targets at p=7 for removing v[4]=(0,1,1,0) seem to follow a pattern where coord1 ranges over {2,4,6}, coord2 is fixed at 6, and coord3 equals 6-coord1. This pattern repeats for each fiber value, though some fibers have fewer targets. It looks like coord1 and coord2 are constrained while coord3 is determined by their difference.
+
+Now I'm seeing that for v[4] = (0,1,1,0), the scalar multiples c*v[4] = (0,c,c,0) for c=1,...,p-1 might be generating this structure, suggesting there's an underlying algebraic pattern to how these gaps are formed.
+
+This gap analysis is revealing but I should stay focused on what actually matters for the proof. Let me shift to computing the shadow saturation at p=13, examining the full representation count distribution at p=5, and checking the generating functions for each target to see if there are useful patterns emerging.
+
+Actually, the most valuable thing I can do right now is test whether shadow saturation holds for random ZSF sets at p=7—the construction is unique at p=5, but p=7 might have other maximal sets of size 17, and verifying saturation across multiple constructions would be strong evidence. The problem is that PG(3, F_7) has 400 points, making C(400,17) ≈ 10^30 combinations impossible to check exhaustively. I could try a greedy approach instead—randomly seed a set and grow it while preserving the ZSF property to see if I can reach size 17 again.
+
+If I find an alternative ZSF set at p=7 that's structurally different from the doubled+e1 construction but still exhibits shadow saturation, that would be compelling. I'm not sure the construction is actually unique at p=7 like it is at p=5. Let me write code to check shadow saturation at p=13 first since that's quick, then attempt random greedy construction to hunt for alternative ZSF sets at p=7. The core insight driving all this is that shadow saturation happens precisely because of the ZSF property—when 0 is excluded from the shadow, all the weight concentrates on nonzero targets, and with 17 vectors in the set, the geometry forces this saturation at weight p-1. So the 5984 non-trivial coefficient vectors distribute across 624 nonzero targets, giving that 9.6 mean we observed. The key insight for the proof is that the ZSF condition—forcing 0 to have no positive-weight representations—creates a constraint that pushes every other target to have at least one representation, which I can establish through a pigeonhole argument using the total count of coefficient vectors at weights up to p-1.
+
+Now I'm trying to understand the distribution more precisely by looking at the "shadow density" at each weight—how many new targets appear relative to how many new coefficient vectors we add—and comparing that to what we'd expect if the mapping were random.
+
+For coefficient vectors at weight exactly w, I need to count solutions to c₁ + ... + c₁₇ = w where each cᵢ is between 0 and p-1. When w ≤ p-1, the upper bound doesn't constrain us, so this is just the standard stars-and-bars count: C(w+16, 16). But I'm realizing I need to be careful about what I'm actually counting—these are coefficient vectors, not necessarily new targets, since some might map to targets we've already covered.
+
+Rather than getting bogged down in the combinatorial details, I should focus on what matters most: verifying the shadow structure at p=13 and searching for alternative maximal ZSF sets at p=7. Let me save my current progress and run those computations.
+
+============================================================
+BLOCK 7 (11220 chars)
+============================================================
+The p=13 shadow saturation is verified! And the random ZSF search at p=7 didn't find any alternative maximal ZSF sets of size 17 in 20 trials (the greedy approach likely only reaches size 15-16).
+
+Let me note the key findings:
+
+1. **p=13 SATURATES**: Shadow at weight 12 covers all 28560 nonzero vectors in F_13^4.
+2. **Layer counts for p=13**: w=1:17, w=2:87, w=3:259, w=4:581, w=5:1101, w=6:1867... The first 5 layers match p=11 exactly (17, 87, 259, 581, 1101). Layer 6 diverges: 1839 at p=11 vs 1867 at p=13.
+
+
+3. **No alternative ZSF sets found at p=7**: Greedy construction couldn't reach size 17.
+
+I'm seeing a clear pattern here—the layer counts stabilize across different primes at lower weights, with p=11 and p=13 matching perfectly through weight 5, while p=7 and p=5 show earlier divergence. This suggests that once p is large enough relative to the weight, the layer structure becomes independent of the prime.
+
+Now I need to focus on the stabilized layer counts for large p, which represent the actual number of distinct integer vectors before any modular reduction. The crucial insight is that for sufficiently large primes, the sum of all layer sizes across weights 0 through p-1 should equal p^4 - 1, accounting for every nonzero vector in the space.
+
+The computational evidence from p = 5, 7, 11, 13 strongly supports this holds universally, not just asymptotically. To make progress on the proof, I should explore the Chevalley-Warning polynomial approach, which offers a systematic way to establish these congruence relations. But first, I want to understand the sumset growth pattern—how the shadow of achievable vectors expands as we increase the weight constraint, starting from just the zero vector and progressively including scalar multiples of the basis vectors.
+
+Now I'm looking at the growth rates of these sumsets across different primes. The Plünnecke-Ruzsa theory tells us that when sumsets grow slowly relative to their size, it constrains the structure significantly. Looking at the numerical data for p = 5, the sequence of sumset sizes shows the growth pattern I need to analyze. Looking at the shadow size progression more carefully, the cumulative counts through weight 5 stabilize across different primes at 1, 18, 105, 364, 945, 2046, but then diverge at weight 6 depending on the prime. I need to figure out what the asymptotic counts are as p grows large, particularly to see when the shadow finally covers the entire space. I'm seeing the pattern now—the third differences are constant at 48, which means I can predict the next layer size. Following the arithmetic sequence, the next second difference should be 246, making the first difference 766, and therefore the next layer size 1867, which matches what I'm seeing at p=13.
+
+But when I try to extend this further, the prediction diverges from the actual data—I get 2927 but the real value is 2895. Let me look at the actual layer sizes from p=13 to see if there's a different pattern I'm missing.
+
+Looking at the differences between consecutive weights, the first differences show a clear progression, and the second differences are mostly constant at around 48 until weight 6, where things start to break down. This suggests that the polynomial behavior holds for smaller weights, but once we hit weight 6 and beyond, modular arithmetic effects from p=13 begin to distort the pattern. The third differences confirm this—they're consistently 48 through weight 5, then drop to 16 at weight 6, indicating where the generic polynomial formula stops being reliable.
+
+I'm checking whether the layer sizes stabilize as p increases. At p=11, weight 6 gives 1839, but at p=13 it jumps to 1867, so we haven't reached the truly generic limit yet. To understand the actual pattern, I need to figure out what the layer count would be for generic vectors in general position, where we're just counting distinct integer sums without any modular reduction.
+
+The key constraint here is that our 17 vectors only span a 4-dimensional space over F_p, which creates algebraic dependencies that affect how many distinct sums we can form. But rather than getting lost in this analysis, I should focus on what matters most: I've now verified that shadow saturation holds across all four primes I've tested (5, 7, 11, and 13), which is compelling evidence. Next, I want to test whether this property holds for random ZSF sets that weren't constructed using my specific method, since the greedy search at p=7 couldn't even reach size 17.
+
+A more direct approach would be to take my construction, systematically remove one vector at a time, and find all possible replacements that preserve the ZSF property. Then I can check whether shadow saturation still holds for each of these modified sets. At p=5 the construction is unique—any swap that maintains ZSF just returns the same set—but at p=7 there might be genuine alternatives to test.
+
+For p=7 specifically, I'm looking at roughly 384 candidate vectors to try as replacements, and verifying ZSF for each one takes about 0.01 seconds, so the whole search should finish in a few seconds. The real question is whether shadow saturation holds universally across all ZSF sets of the right size, not just my particular construction. At p=5 uniqueness settles this automatically, but at p=7 and beyond I'd need to either prove uniqueness or exhaustively verify all possibilities.
+
+The computational evidence suggests a few angles for a general proof: the shadow expands dramatically as we increase weight, covering most targets by the midpoint and everything by weight p-1, which hints at a Plünnecke-Ruzsa type argument. The ZSF constraint itself acts like a displacement force that prevents the shadow from clustering near zero. And the fact that all 17 vectors are essential with no slack suggests the coverage pattern is fundamentally tight.
+
+But the real question is whether shadow saturation holds for *any* maximal ZSF set, not just our specific construction. If I can show that for any ZSF set of size 17, the shadow at weight p-1 must cover all nonzero vectors, then adding an 18th vector would necessarily create a zero-sum at weight ≤ p. Let me test this by checking whether single-vector swaps preserve shadow saturation at p=7. At p=5 the construction is unique and all 624 nonzero vectors get covered at weight 4, so any 18th vector creates a zero-sum at weight ≤ 5—this confirms shadow saturation works there. For p=7, if I can establish uniqueness of the construction, the same argument would apply, but I need a general proof strategy that works across all p ≥ 5, not just computational verification. The Chevalley-Warning polynomial analysis seems like the right direction to formalize this. The basic CW theorem tells us that if the sum of polynomial degrees is less than the number of variables, the solution count is divisible by p. Here with 5 equations in 17 unknowns, we get p^12 solutions regardless of the target, which trivially satisfies the divisibility condition. For the weighted approach that Reiher uses, I need to define a weighted sum over all points in the field space.
+
+The indicator product Π_j (1 - f_j(c)^{p-1}) equals 1 exactly when c solves all equations and 0 otherwise, letting us count solutions with additional structure. Each linear equation contributes degree p-1 to this indicator, so 5 equations give total degree 5(p-1). Adding a weight polynomial of degree d means the overall degree becomes 5(p-1) + d, and for the weighted CW to work, this needs to stay below 17(p-1) to ensure the counting argument applies in the (p-1)-dimensional effective variable space.
+
+Over F_p, Fermat's little theorem constrains polynomial degrees—any polynomial is equivalent to one of degree at most p-1 in each variable. The CW bound fundamentally compares the sum of degrees against the number of variables, so I need to be precise about what degrees matter here.
+
+For the Kemnitz-style approach, I'm shifting focus to compute the exact generating function for the shadow. For each target sum t, I'm defining a generating function that tracks how many 17-tuples from F_p sum to t while also satisfying a weight constraint, encoding both the target and the weight as exponents.
+
+Over F_p with independent linear equations, the distribution across weight classes should be uniform—each weight class contains exactly p^11 solutions. But this counts all solutions in F_p^17, including those with arbitrarily large integer weight. The real constraint is restricting to integer weight at most p-1, which is what the dynamic programming approach captures, and extracting algebraic structure from those restricted counts is the harder problem.
+
+Now I'm checking the combinatorial count: the total number of coefficient vectors with entries in {0,...,4} and sum at most 4 should equal the sum of binomial coefficients, which gives 5985. Looking at the rep count output, the distribution across weights matches exactly—1 solution at weight 0 (the zero target), then 17, 153, 969, 4845 for weights 1 through 4.
+
+This means all 5985 coefficient vectors map to distinct targets across the 625 possible values, with the zero target receiving exactly one representation (the trivial solution) and the remaining 624 nonzero targets sharing the other 5984 vectors roughly evenly at about 9.6 reps each. The key insight is whether any nonzero target can actually be reached by multiple distinct coefficient vectors. The minimum being 1 at both p=5 and p=7 suggests these are the bottleneck targets—barely representable. I need to identify which targets achieve exactly one representation and examine their structure. Let me write code to find these minimal targets and also compute the total coefficient vectors at each weight using the binomial formula, then compare against how many targets actually get hit. and weight 4. The "targets_hit" count at weight 4 includes such targets. So 624 - 619 = 5 targets have NO weight-4 representation. But they're covered at lower weights.
+
+This reveals something interesting: there are targets that are "weight-exclusive" — only reachable at specific weights. Understanding which targets are hard to reach could inform the proof. Let me plan my next steps: identify targets with exactly one representation across all weights, check if they have any algebraic structure, and find targets that only appear at a single weight. I should also verify whether shadow saturation holds for arbitrary non-construction ZSF sets at p=7.
+
+Even though greedy search doesn't find size-17 ZSF sets, I can check the shadow property for smaller ZSF sets of size 16 or 15 found by greedy. If these still have good coverage, it suggests the property is robust, though the conjecture specifically requires |S| = 2α(r)+1 = 17 for saturation.
+
+The most impactful next step is computing representation counts at p=11, identifying barely-reachable targets across all primes, and looking for patterns. I'm particularly interested in the coefficient vectors that produce targets with exactly one representation at p=5 — these unique representations might reveal something structural about which targets are hardest to reach.
+
+Writing a focused script to extract this...
+
+============================================================
+BLOCK 8 (10270 chars)
+============================================================
+The script mostly worked — just a minor error at the very end with `math.comb` (Python version too old). Let me fix that and also store the major findings. But the core results are already printed.
+
+Key findings from the deep analysis:
+
+**BARELY-REACHABLE TARGETS (exactly 1 representation)**:
+
+p=5: 44 targets with exactly 1 rep.
+p=7: 62 targets with exactly 1 rep.
+
+**The structure is crystal clear:**
+
+At p=5, the barely-reachable targets are:
+1. **Multiples of e1**: (c, 0, 0, 0) for c = 1, 2, 3, 4. Each is reached as c * v[16] = c * (1,0,0,0).
+
+
+2. **High scalar multiples of construction vectors**: For each vector v[i] with i = 0,...,16, the target (p-1)*v[i] is barely reachable (via coefficient p-1 on that single vector), like (0, 4, 0, 0) = 4*v[0].
+
+3. **Cross-fiber versions**: For each fiber-0 "high multiple" target, I can extend it across fibers by adding multiples of v[16], though I need to verify the exact coefficient combinations work out. At p=5, this gives me 44 barely-reachable targets total, with 3 of them at fiber 0.
+
+The remaining 41 targets all have weight 4, breaking into several categories: the three pure 4x basis vectors, then 4x versions of other basis combinations like v[3] through v[7], and additional targets involving higher fiber indices. I'm checking the coefficient search results more carefully—it found exact weight-4 representations for targets like (1,0,0,0) using single vectors, and I'm now tracing through what combinations of v[0], v[8], and v[16] would actually produce (1,4,0,0) at that weight constraint. I found that (1,4,0,0) can be reached with exactly one combination: 1*v[8] + 3*v[0], which has weight 4. I'm also checking other combinations like 3*v[8] + 1*v[0] to get (3,4,0,0), and confirming that (4,4,0,0) is reachable as 4*v[8].
+
+Now I'm verifying (2,4,0,0) through 2*v[8] + 2*v[0], and the analysis confirms this is barely reachable with only one way to reach it. I'm starting to see the pattern: barely-reachable targets are those that can only be expressed as a specific pairing of two parallel vectors from different fibers, where the coefficients sum to p-1.
+
+At p=7, I'm finding 62 barely-reachable targets following the same structural pattern. The key insight is that these targets are precisely the ones that become unreachable when any single vector is removed—they're the gaps in coverage that depend critically on specific vectors. When I remove v[0], for instance, targets like 4*v[0] disappear from the reachable set, revealing which targets are uniquely dependent on that vector. So the gap list when removing v[0] contains nine targets, but only four of them—(0,4,0,0), (1,4,0,0), (2,4,0,0), (3,4,0,0)—actually appear in the barely-reachable set. The remaining five targets have totals greater than 1, so they don't qualify.
+
+What's interesting is that the gap targets form a superset of the barely-reachable ones involving v[0]. The gap list includes targets with multiple representations, but crucially, every single representation of those targets uses v[0]. This is a meaningful distinction—the barely-reachable targets are the most vulnerable, but the gap targets capture something broader: any target where v[0] is essential to all possible ways of reaching it.
+
+Now I need to figure out what to compute next. The key insight would be to either characterize the barely-reachable targets algebraically—they look like they might be high scalar multiples or specific linear combinations—and prove that any ZSF set of size 17 must cover them, or pivot to using the polynomial method to count weight distributions.
+
+Actually, the sumset approach seems more tractable. If I can establish that the iterated sumset of scaled vectors grows multiplicatively at each step, then showing |S_w| ≥ min(p^4, |S_{w-1}| * growth_factor) inductively would guarantee full coverage by weight p-1. The growth rates I'm seeing are consistent across different primes: around 18, 5.8, 3 for the early steps, which suggests a reliable pattern to work with. Looking at the growth rates across weight transitions—at weight 1 we jump from 18 to 105 targets, a factor of 5.8, which is much steeper than the linear growth I was considering. The pattern suggests the shadow expands polynomially in early stages before saturation effects kick in, so I should model this as coverage approaching (w/p)^4 of the total p^4 target space.
+
+But checking against actual data reveals the model is too simplistic—by weight p-2, the coverage is already substantial: 55.6% for p=5, 73.2% for p=7, and 85.9% for p=11, which means we're hitting saturation much faster than a uniform distribution would predict.
+
+The final weight step p-1 then sweeps up the remaining targets—277 for p=5, 643 for p=7, 2071 for p=11, and 3229 for p=13—which represent 44%, 27%, 14%, and 11% of the total respectively. Since the ZSF condition ensures 0 stays outside the shadow, all this final mass concentrates on nonzero targets, which is the crucial observation for proving complete coverage.
+
+Now I'm checking whether the coefficient vectors at weight p-1 actually account for all the remaining targets. With n=17 vectors, there are C(p+14, 16) such vectors at this final weight, and for p=5 that gives 4845 vectors mapping to nonzero targets—which matches the data I'm seeing.
+
+The distribution is sparse though: 4845 vectors spread across 619 nonzero targets means some targets get hit multiple times while others might not be covered at all. A pure counting argument won't settle whether every target gets at least one hit, so I need to understand what algebraic structure actually guarantees the coverage.
+
+Let me refocus on what's most useful to compute next. I've already verified shadow saturation across multiple primes and done the structural analysis, so I should concentrate on the barely-reachable targets and what determines whether they're actually hit.
+
+Now I'm going to fix the script error to get accurate coefficient vector counts, save the key findings, and then tackle the stabilized layer sequence. I've noticed that layer counts stabilize across primes at weights 1-5, giving me 17, 87, 259, 581, and 1101 respectively. I want to compute a few more stabilized values at larger primes and see if there's a pattern or closed form.
+
+Looking at the cumulative sums, I'm getting 1, 18, 105, 364, 945, 2046 for weights 0 through 5. I notice 18 matches C(18,1), but 105 doesn't fit C(18,2), so I need to reconsider the structure. The cumulative sum S(w) represents the total number of distinct vectors I can form as non-negative integer combinations of 17 basis vectors in general position in Z^4, where the sum of coefficients stays at most w.
+
+Since these 17 vectors span the lattice Z^4, the count of achievable integer points follows the geometry of their zonotope—specifically, how many lattice points fall within the weight-w shadow. The exact counts depend on the specific structure of my doubled+e1 construction rather than a simple combinatorial formula. I'm seeing a big discrepancy—if all 153 weight-2 vectors were distinct from each other and from lower weights, I'd expect 153 new points, but I'm only getting 87, which means 66 of them must be colliding with existing lattice points. Let me figure out which weight-2 combinations are actually hitting the same targets. ums collide with each other or with weight-1 sums?
+
+Collisions at weight 2 include:
+1. 2*v_i = v_j for some i, j (a weight-2 sum equals a weight-1 sum)
+2. v_i + v_j = v_k for some i,j,k (a weight-2 pairwise sum equals a weight-1 sum)
+3. v_i + v_j = v_k + v_l or v_i + v_j = 2*v_k (collisions among weight-2 sums)
+4. 2*v_i = 2*v_j (impossible for distinct v_i, v_j)
+
+For our specific vectors (over Z, before mod p):
+- 2*(1,0,0,0) = (2,0,0,0). Is this equal to any v_j? No, (2,0,0,0) is not in the set.
+- 2*(0,1,0,0) = (0,2,0,0). Not in the set.
+- etc.
+
+So collisions of type 1 (2*v_i = v_j) are unlikely unless the vectors have special structure.
+
+Now checking type 2 collisions where two vectors sum to a third: v[0] + v[1] = (0,1,0,0) + (0,0,1,0) = (0,1,1,0) = v[4]. That's a collision right there. And v[0] + v[2] = (0,1,0,0) + (0,0,0,1) = (0,1...
+
+I'm noticing these pairwise sums are creating collisions with the weight-1 vectors, which reduces the effective count. Rather than continue this manual analysis, I should verify shadow saturation directly for a random ZSF set at p=7 using a more systematic search approach.
+
+The greedy method didn't yield size-17 sets, but applying random projective transformations to the construction might work. Though any GL transform of the construction will trivially satisfy shadow saturation since it's invariant under such transformations. What I really need is to find a ZSF set that isn't a GL transform of the construction, or develop a structural argument showing why shadow saturation must hold for any ZSF set of the right size. The computations suggest the ZSF condition forces all shadow mass toward nonzero targets, and since 17 vectors span the full space, there's likely a fundamental constraint at play.
+
+Let me focus on something concrete: examining the shadow at weight p-2 to understand which targets are only covered at the final weight p-1. Looking at the data across different primes, I'm seeing a clear pattern where a significant fraction of targets—44% at p=5, 27% at p=7, and 14% at p=11—are first covered at weight p-1, suggesting these "last-minute" targets have a specific structural role.
+
+The barely-reachable targets (those with exactly one representation) follow a similar decreasing trend: 7% at p=5 down to 2.6% at p=7, indicating that larger primes have much more redundant coverage. For p=5, these minimal targets appear to have a simple form like (c, 0, ..., 0), which might be key to understanding the proof structure. The barely-reachable targets at weight p-1 are precisely those requiring a coefficient of p-1 on at least one vector, possibly paired with another vector at coefficient 1 to adjust the fiber coordinate. Rather than pursuing the theoretical proof structure right now, I should finish the computational analysis—fix the coefficient counting error, store the results, and then examine how the barely-reachable targets intersect with the gap structure.
+
+============================================================
+BLOCK 9 (7113 chars)
+============================================================
+This is outstanding. Let me summarize the key findings:
+
+**1. Barely-reachable targets are ALL 2-vector combinations at weight ≤ p-1**
+
+At both p=5 and p=7: 100% of barely-reachable targets can be expressed using at most 2 vectors from the construction. Specifically:
+- 17/44 (p=5) and 17/62 (p=7) are (p-1)-scalings of a single vector
+- 41/44 (p=5) and 57/62 (p=7) are pair combinations a*vi + b*vj with a+b = p-1
+
+
+- The remaining 3 (p=5) and 5 (p=7) are multiples of e1: (c, 0, 0, 0) for c = 1,...,p-2
+
+**2. The exceptions are always multiples of e1**
+
+The targets that don't fit the pair-combination pattern at weight p-1 are precisely the axis-aligned vectors along the first coordinate: (1,0,0,0) through (p-2,0,0,0) at each prime. These are still 2-vector combinations, just with a different structure.
+
+**3. Coefficient vector ratio explodes at high weights**
+
+The explosion in coefficient vectors relative to new targets is dramatic—at p=5 we see 4845 coefficient vectors producing just 277 new targets, and this ratio balloons to 2564.8 at p=11, suggesting the combinatorial space grows far faster than the actual reachable targets.
+
+**4. Gap targets: 4 barely-reachable + multi-rep targets**
+
+When I remove any vector, exactly 4 gap targets become barely-reachable (they depend solely on that vector), while the remaining gap targets have multiple representations that all happen to use the removed vector. The multi-rep patterns differ between generator vectors and secondary vectors, showing a consistent structure of [2, 2, 3, 5, 5] for generators.
+
+**5. The coefficient vector count grows MUCH faster than the target space**
+
+The number of coefficient vectors at weight ≤ p-1 follows C(p+16, 17) - 1, which grows roughly as p^17/17!. Looking at specific values, the ratio of vectors to targets explodes: at p=5 it's about 9.6, but by p=13 it jumps to over 1800. This exponential growth in the coefficient space relative to the target space is what enables saturation—there are simply far too many vectors for the targets to avoid being covered.
+
+This massive over-counting actually suggests a probabilistic angle: with roughly p^13 coefficient vectors per target on average, the likelihood that any target remains uncovered drops exponentially as p grows. For the CW approach specifically, each weight class modulo p admits p^12 solutions to the linear system, which provides a structured way to count coverage across the restricted weight classes. doesn't quite add up. Let me reconsider the distribution: the p^17 coefficient vectors map uniformly to p^5 target-weight pairs, giving p^12 solutions per pair. When I restrict to integer weight ≤ p-1, I get C(p+16, 17) vectors spread across the weight classes modulo p, but the constraint complicates the accounting.
+
+Actually, the empirical pattern is clearer: the barely-reachable targets are all covered by sums of at most 2 vectors at weight p-1, accounting for 44 targets. The remaining 580 targets require 3 or more vectors to represent.
+
+So the proof should establish that single vectors at weights 1 through p-1 hit roughly 17(p-1) targets, then show that two-vector sums fill in the extreme targets, while three-or-more-vector combinations cover everything else. The ZSF condition keeps 0 off the table, directing all capacity toward nonzero targets.
+
+For single vectors: scaling each of the 17 basis vectors by coefficients 1 through p-1 gives at most 17(p-1) distinct targets—68 for p=5, 102 for p=7. Now I need to analyze what the two-vector sums contribute when the total weight stays below p. For p=7, that's 782 out of 2400 targets, or about 33% coverage—clearly insufficient on its own. The key insight is that barely-reachable targets are exclusively 2-vector sums, while 3+ vector combinations have multiple representations and are over-covered. This means the real challenge lies in proving specific 2-vector pairs work, not in handling the redundant higher-vector cases.
+
+The extremal targets—those requiring very specific 2-vector combinations—are the bottleneck. If I can show these are always covered, the rest follows from the over-counting. For 2-vector sums with a+b ≤ p-1, the hardest cases are the (p-1)-scalings of individual vectors and the (a, p-1-a) pairings, and the computation confirms all these are reachable.
+
+Now I want to examine the collision structure at weight 2 more closely to understand why we're seeing 87 new targets there. weight 2, but there are C(17,2) + 17 = 153 weight-2 coefficient vectors. So 153 - 87 = 66 collisions (some weight-2 sums coincide with other weight-2 or weight-1 sums).
+
+Understanding these collisions could help characterize the construction's geometry.
+
+Actually wait: the 87 is the number of NEW targets at weight 2 (not covered at weight 1). But some weight-2 sums might equal weight-1 targets. Total weight-2 sums (including those equaling weight-1 targets) is some number ≤ 153. Let me compute: at weight 2, the rep count is 153 (from the rep count output: w=2: sum_reps=153, targets=99). So 153 reps distributed over 99 targets. Of these 99 targets, 87 are new at weight 2 and 12 overlap with weight 1.
+
+Now I'm checking whether any weight-2 sums actually equal weight-1 targets—that would require v_i + v_j = v_k or 2*v_i = v_j. Looking at the construction, I can see v[0] + v[1] = v[4] and v[0] + v[2] = v[5], so there are definitely collisions with weight-1 vectors. I'm also checking cases like v[8] + v[9] to see if they produce vectors already in the basis. ] = (1,1,1,0)? No.
+
+Let me just count from the data: at weight 2, 99 targets are hit (from the rep count). Of the 17 weight-1 targets, how many are also hit at weight 2? The difference between 99 and 87 is 12: 12 targets hit at weight 2 were already hit at weight 1.
+
+So 12 weight-1 targets are also hit at weight 2. That means 12 of the 17 construction vectors can be expressed as a sum of two other construction vectors (at integer weight 2). Or as 2*v_i for some other v_i.
+
+For our specific construction at p→∞ (over Z):
+v[0] + v[1] = (0,1,1,0) = v[4], and v[0] + v[2] = (0,1,0,1) = v[5]. Both are hit at weight 2. When I check v[4] + v[5] = (0,2,1,1), it's not a construction vector over Z, but over F_5 it becomes the negative of v[3]—a different projective point that's not in our construction since we're using non-proportional vectors. I should probably stop chasing this tangent; the collision analysis itself is the interesting part.
+
+I need to wrap up and save these findings. The key results are that shadow saturation holds at p = 5, 7, 11, and 13 (with 11 and 13 being new), the first zero-sum always appears at weight p+1, all 17 vectors are critical for saturation, layer growth is independent of p at low weights, and the barely-reachable targets are exactly the 2-vector combinations below weight p.
+
+Now I'm seeing that the coefficient vector space grows polynomially as p^13 / 17! while the target space is only p^4, creating massive redundancy in how we can reach targets. When I remove individual vectors, I get 4 barely-reachable gaps plus the remaining multi-representation targets.
+
+============================================================
+BLOCK 10 (8259 chars)
+============================================================
+Now let me provide a comprehensive summary of all findings from this round of computation.
+
+Let me also think about whether there's one more high-value computation I should do. I think the most impactful remaining computation would be to understand the representation structure modular-arithmetically. Specifically:
+
+For the CW approach, the key quantity is:
+N_restricted(t) = #{c ∈ {0,...,p-1}^17 : Σ c_i v_i = t mod p, Σ c_i ≤ p-1}
+
+And we know:
+N_total(t, w mod p) = p^12 for all consistent (t, w mod p)
+
+
+Now I'm breaking down the restricted count by exact integer weights. The key insight is that N_exact(t, w) counts only those coefficient vectors where the sum equals exactly w as integers, not just modulo p. This is fundamentally different from N_total, which aggregates across all integer weights congruent to w modulo p.
+
+For our setup with 17 vectors and coefficients bounded by p-1, the possible integer weights span from 0 to 17(p-1), and weights congruent to w mod p form the sequence w, w+p, w+2p, and so on. So N_total(t, w mod p) is actually the sum of N_exact values across all these weight classes. To isolate N_exact(t, w) for w in the range 0 to p-1, I'd need to invert this relationship, which suggests a Möbius-type inversion over the weight classes—though that gets messy quickly.
+
+Let me step back and consider whether the polynomial method offers a more direct path forward.
+
+Now I'm looking at the representation counts modulo p from the actual output data. For p=5, the counts are [99, 162, 131, 113, 119], and for p=7 they're [209, 237, 412, 263, 368, 354, 557]. These empirical numbers might reveal patterns that a closed-form approach is missing.
+
+What's striking is that when I sum all the representation counts, I get a total of 5984 for p=5, which is congruent to -1 modulo 5, and 100946 for p=7, which is also congruent to -1 modulo 7. This consistent pattern of the total being -1 modulo p across different primes suggests there's something deeper going on with the structure of these representations. I'm applying Lucas' theorem to verify the pattern for both primes. For p=5, C(21,17) breaks down as C(4,3)·C(1,2) which gives 4·0=0 mod 5, confirming that total reps ≡ -1 mod 5 after excluding the zero vector. For p=7, I'm working through C(23,17) similarly. So C(p+16, 17) ≡ 0 (mod p) for p = 5, 7, and 11 as well—I'm verifying this using Lucas' theorem by breaking down the binomial coefficients in base p, and in each case one of the digit-wise binomial coefficients equals zero, confirming the pattern holds. So for p ≥ 17, the total coefficient vectors follow C(p+16, 17) ≡ 1 mod p by Lucas' theorem. The zero target gets one trivial representation from the all-zeros vector, so the nonzero target representations equal the total coefficient vectors minus 2, giving us -1 mod p across all cases.
+
+Now I'm verifying this with specific examples: for p = 5, C(21,17) = 5985 ≡ 0 mod 5, so nonzero reps ≡ -1 ≡ 4 mod 5, which matches the observed 5984 mod 5 = 4. For p = 7, I'm checking C(23,17) = 100947 and computing its residue modulo 7.
+
+For larger primes p ≥ 17, the binomial coefficient C(p+16,17) ≡ 1 mod p, meaning nonzero reps ≡ 0 mod p. The key insight is that for p ≤ 13, the total nonzero target reps is always ≡ -1 mod p, which forces the targets to have different residue distributions—they can't all be congruent to 0 modulo p. By the pigeonhole principle, if all 624 nonzero targets (when p = 5) had reps ≡ 0 mod 5, the total would also be ≡ 0 mod 5, contradicting our result.
+
+Now I'm reconsidering what the Cauchy-Davenport theorem actually tells us about individual targets. For a fixed target t and weight constraint w modulo p, the number of solutions to the sum equation with the weight constraint is p^12 across all possible coefficient choices—this follows because we have a rank-5 linear system in 17 variables where every target is achievable. But I need to figure out what happens when we restrict to the specific weight classes we care about.
+
+The key insight is that the restricted count—where we're looking at integer weights w ≤ p-1 rather than all integers congruent to w mod p—requires a different approach. The Grynkiewicz weighted version of Cauchy-Davenport uses polynomial methods to pin down specific weight values rather than residue classes.
+
+Actually, the crucial observation is that C(p+16, 17) ≡ 0 (mod p) for the range 5 ≤ p ≤ 13, which means the total count of shadow coefficient vectors is divisible by p. Since the zero target accounts for exactly one representation, this divisibility property might constrain how the remaining representations distribute.
+
+Now I'm thinking about whether each target could have a constant number of representations modulo p. If that were true, the total would be (p^4 - 1) times that constant, and I could use the divisibility constraint to solve for what that constant must be.
+
+Let me verify this against the actual data for p=5. Looking at the distribution of representations modulo 5, I see all residues appearing, not just one—so the targets definitely don't all have the same residue count modulo p.
+
+I should try a different angle here.  Maybe the pattern emerges when I isolate a specific weight, like exactly p-1. At weight 4 for p=5, I have 4845 total reps spread across 619 nonzero targets, which averages to about 7.8 per target. But I haven't actually computed the modulo-5 distribution for just those weight-4 counts. The residue breakdown I have is for all weights combined.
+
+Let me think about what happens at weight p-1 specifically—particularly how many coefficient vectors map to the zero target.
+
+By the zero-sum-free property, none of the C(p+15, 16) coefficient vectors at weight exactly p-1 should map to zero. For p=5, that's 4845 vectors all hitting nonzero targets; for p=7, it's 74613. When I apply the Cayley-Wagner theorem to weight p-1 specifically, constraining the coefficient sum to be congruent to p-1 modulo p, the count of solutions for any target becomes p^12.
+
+Now I need to think about this differently. The real quantity I'm after is the number of compositions of p-1 into 17 non-negative parts (each bounded by p-1) that produce a given target modulo p, and summing over all targets should give me the total count of such compositions.
+
+Using a symmetry argument assuming the vectors are in general position over F_p, I can estimate the average distribution across targets. For p=5, this works out to roughly 7.75 per target on average, and since the zero target is impossible by the zero-sum-free property, the average shifts slightly to 7.76 for nonzero targets. For p=7, the averages are around 31.08 per nonzero target. The key question becomes whether any nonzero target could have a count significantly different from this average.
+
+The computational evidence suggests all nonzero targets achieve at least one representation at some weight up to p-1, despite the average leaving theoretical room for some to have zero. This points toward a proof strategy: showing that every nonzero target must have N(t, w) ≥ 1 for at least some weight w ≤ p-1, possibly by first establishing that 1- and 2-vector sums cover all targets at weights within this range. cover the "extremal" targets.
+Step 2: Show that higher-vector sums fill in the rest.For step 1, the key is the structure of pairs from the ZSF set. For 17 vectors in F_p^4 (rank 4), there are C(17,2) = 136 pairs. Each pair spans a 2-dimensional subspace (generically). The union of all pairwise sums covers a significant portion of F_p^4.
+
+For step 2, the exponential growth of coefficient vectors ensures coverage. With C(p+15,16) ≈ p^16/16! coefficient vectors at weight p-1, and only p^4 targets, each target gets an average of p^12/16! representations. For p ≥ 5, this is > 1 for most targets.
+
+But proving min ≥ 1 requires more than just relying on averages—I'd need to show that the expected number of uncovered targets across all possible ZSF configurations is less than 1, which would guarantee at least one valid configuration exists. The challenge is that this needs to hold for every ZSF configuration, not just demonstrate the existence of a single one.
+
+I think I've extracted what I can from this computational approach for now.
+
+============================================================
+BLOCK 11 (2921 chars)
+============================================================
+This is very revealing. Let me highlight the key findings:
+
+**1. Lucas Theorem Congruence**: C(p+16, 17) ≡ 0 (mod p) for all p ≠ 17 (among primes ≥ 5). For p=17: C(33, 17) ≡ 1 (mod 17). This means total nonzero reps ≡ -1 (mod p) for p ≠ 17.
+
+**2. Weight-specific congruences**: C(w+16, 16) mod p shows a clear pattern:
+
+
+When w+16 reaches or exceeds p, Lucas' theorem kicks in and forces the binomial coefficient to zero. Let me work through the base-p decomposition more carefully—for p=5, I need to express 16 in base 5 to understand how the digits interact with different values of w. = 3*7 + 0. C(21,16) ≡ C(3,2)*C(0,2) = 3*0 = 0 mod 7.
+At w=6: w+16 = 22 = 3*7 + 1. C(22,16) ≡ C(3,2)*C(1,2) = 3*0 = 0 mod 7.
+
+So whenever w ≥ p - 17, the binomial coefficient C(w+16, 16) becomes divisible by p, meaning the coefficient vectors at those weights have zero count modulo p. Now I'm checking what the random model predicts for expected misses.
+
+At p=5, a uniform random distribution would miss about 0.27 targets on average, but the actual construction achieves zero misses. For p ≥ 7, the expected misses drop to negligible levels (10^-11 or less), so the counting argument alone becomes overwhelming — missing any target becomes essentially impossible. This reveals the real bottleneck: p=5 has a thin margin where the counting advantage is modest, while larger primes have such massive over-counting that the result is trivial from a probabilistic standpoint.
+
+For a complete proof, I could use the uniform model to handle p ≥ 7 directly, but p=5 requires either explicit verification or a tighter structural argument. The challenge is that the actual distribution of target representations isn't uniform — some targets appear once while others appear 46 times — so the uniform model is just an approximation. The fact that the minimum is exactly 1 at p=5 suggests we're right at the edge of feasibility, which means a proof strategy might be to show the uniform model gives expected misses less than 1 for all p ≥ 5, then handle p=5 as a special case with more careful analysis.
+
+For p=5 specifically, I could apply the second-moment method to bound the variance in representation counts across targets, which would let me use concentration inequalities to argue that the minimum can't be zero. Looking at the actual distribution from the computation, the mean is 9.6 representations per target, but the variance is substantial given the range from 1 to 46, so I need to calculate that variance precisely from the histogram data to see if the concentration is tight enough.
+
+I think I've gathered enough computational evidence for now. The key insight emerging is that for large p the exponential over-counting of representations makes universal coverage inevitable, while for p=5 the ZSF structure appears to provide just enough coverage despite the tighter margins. The proof should leverage this two-regime behavior.

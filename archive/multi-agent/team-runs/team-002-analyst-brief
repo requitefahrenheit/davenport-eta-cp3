@@ -1,0 +1,54 @@
+# Research Briefing (ANALYST thread)
+
+**Goal:** Compute η(C_7³) or bracket it within ±1. The conjectured value is 49 = 8(6)+1. The standard {0,1}³ construction gives η ≥ 43 (length 42 = 7×6). For p=5, the true value is η = 33 = 8(4)+1, achieved by 8 elements × mult 4. Does the same pattern hold for p=7 (8 elements × mult 6 = 48)? Find the longest short-zero-sum-free sequence in C_7³ and verify it. If you can show η(C_7³) ≠ 49, this disproves the conjecture η = 8(p-1)+1.
+
+---
+
+### Round 1  (18:09)
+
+I checked the standard candidate in the group C_7^3: take A = {0,1}^3 \ {0} (seven nonzero vectors) each repeated 6 times (multiplicity 6 = p−1), so the sequence has length 42; using an exact bounded-multiplicity dynamic-programming enumeration of achievable k-term sums I verified that for every k = 1,…,7 the zero vector is not attainable, so this sequence is indeed “short-zero-sum-free” and gives the rigorous lower bound η(C_7^3) ≥ 43; the DP also produced the sizes of the k-sum sets (growing up to 322 of 343 possible group elements for k=7), which is useful telemetry for further search. This is solid progress toward the original question, but it does not yet resolve whether η(C_7^3) = 49 (the conjectured 8·6+1) or is smaller — the next step is to try adding one or more elements (respecting multiplicity ≤6) to the 42-long construction or otherwise prove an upper bound; status: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.04** | Tokens: 17,544 in / 1,261 out
+
+### Round 2  (18:10)
+
+Goal was to pin down η(C_7^3) (the maximum length of a sequence in the 3-dimensional 7-cyclic group with no nonempty zero-sum subsequence of length ≤7); the usual candidate is 42 from the {0,1}^3\{0} support with each element repeated 6 times, and the conjectured extremal pattern would give 48 (8 distinct elements × multiplicity 6) so η = 49. In this round I exhaustively tested the immediate “one-step” extension of the standard 42-term construction: using an exact dynamic-programming computation of all achievable sums with exactly k terms for k≤7, I checked every group element not already in the support and found that adding any single copy of any such element always creates a short zero-sum, so the 42-term construction is one-step maximal (no single extra element can be adjoined without violating the short-zero-sum-free condition). This is concrete progress because it rules out the simplest way to reach length 43 from the standard witness, but it does not yet address other supports or multiplicity patterns (in particular the 8×6 pattern remains to be searched or ruled out), so the main question about η(C_7^3) is still open. (yellow)
+
+**Cost so far: $0.09** | Tokens: 39,663 in / 2,906 out
+
+### Round 3  (18:12)
+
+I found an explicit 48-term sequence in C_7^3 made from 8 distinct vectors, each repeated 6 times, and an exact bounded-length dynamic-program check shows it has no nonempty zero-sum subsequence of length 1–7, so it is short-zero-sum-free; consequently η(C_7^3) ≥ 49, which matches the natural “8·(p−1)+1” lower-bound pattern conjectured for p=7. The support was produced by transporting a known 8-point pattern (from the p=5 case) via random invertible linear maps over F_7 and then verified by DP; this improves on the simpler {0,1}^3 construction (which only gives length 42) and confirms the 8×multiplicity-6 construction exists for p=7. What remains is the harder upper-bound step: prove every sequence of length 49 forces a short zero-sum (equivalently rule out any short-zero-sum-free sequence of length 49, likely by analyzing possible supports of size 9 with multiplicities ≤6), so we have a tight lower bound but not yet an exact equality. (green)
+
+**Cost so far: $0.13** | Tokens: 66,849 in / 4,530 out
+
+### Round 4  (18:14)
+
+You produced a promising but incomplete mid-step toward deciding η(C_7^3): the worker found an 8-point support A in (Z/7)^3 intended as a 48-term candidate (8 distinct vectors each with multiplicity 6) and computed several quick “telemetry” facts about it — A spans the space, contains no three collinear points, has no subset of ≤7 distinct points summing to zero, and has fairly even coordinate projections — and from that distilled practical heuristic filters (avoid collinear triples, require full rank, ban small 0/1 zero-sums, avoid heavy coordinate concentration) and a short “minimal-certifier” idea to rapidly reject bad supports; however they stopped short of the critical verification steps (proving that the multiset A with multiplicity 6 is actually short-zero-sum-free, ruling out any short zero-sum formed using multiplicities, or showing a 49th element cannot be adjoined), so nothing rigorous about η(C_7^3) has been settled yet. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.20** | Tokens: 100,387 in / 6,756 out
+
+### Round 5  (18:16)
+
+We aimed to decide whether η(C_7^3) equals the conjectured 49 or can be pushed below/above it; I found an explicit 48-term short-zero-sum-free sequence S = A^{[6]} (eight distinct vectors A ⊂ C_7^3, each repeated 6 times) and computed the exact k-sum layers: every group element occurs as a sum of ≤6 terms from A (the union U_6 equals the whole group) but 0 never appears among exact sums of 1–7 terms, so S truly has no short zero-sum and is “maximal” in the sense that adding any single extra element (new or an extra copy) immediately produces a short zero-sum; the single concrete thing I will now try is to prove a uniqueness/rigidity statement (up to affine automorphism) that any 48-term short-zero-sum-free sequence in C_7^3 must be of this form — if that uniqueness can be proved then no 49-term counterexample can exist and η(C_7^3)=49, while failure to prove it would guide searches for alternative 48/49 constructions. (yellow)
+
+**Cost so far: $0.27** | Tokens: 140,409 in / 8,360 out
+
+### Round 6  (18:19)
+
+We made a concrete, useful advance toward your η(C_7^3) goal: starting from the explicit 48-term candidate built from 8 distinct elements each taken 6 times, I proved a simple general lemma — if the collection of all sums of subsequences of length ≤6 already equals the whole group, then appending any extra element necessarily creates a short zero-sum (of length ≤7) — and I verified that this 48-term witness indeed has that “≤6-sums = whole group” property, both by argument and exhaustive computation, so no 49th element can be appended to that particular sequence; in short, the found 48-term sequence is provably one-step maximal and computationally confirmed to admit no extension. This is real progress (it rules out the naive extension of this specific construction to 49), but it does not yet settle η(C_7^3) globally because I still need to show every possible 48-term short-zero-sum-free sequence shares that coverage property (or otherwise rule out any 49-term sequence), so next I’ll try to prove a structural rigidity theorem for all 48-term sequences or exhaustively classify supports; overall status: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.34** | Tokens: 186,486 in / 9,868 out
+
+### Round 7  (18:21)
+
+Goal was to decide η(C_7^3) (conjectured 49 = 8·6+1) by searching for the longest sequence with no zero-sum of length ≤6; I implemented a DP/predecessor search on the 343-group elements and exhaustively tested the natural 8-point support A with multiplicity 6 (length 48). Result: the 48-term candidate passes the short-zero-sum-free test and is very rigid — every nonzero group element is reachable as a sum of ≤6 terms from S and the distribution of minimal lengths for nonzero targets is (1..6) → (8,26,56,94,108,50), and crucially for each support element a the shortest representation of −a uses exactly 6 terms (so combining that with a yields a 7-term zero-sum). In short, the 8×6 construction is a valid extremal witness and has a tight “distance 6” certificate around each support point; next I will try to turn that rigidity into an upper bound (show every length‑49 sequence must contain a short zero-sum) or otherwise find a longer counterexample. (yellow)
+
+**Cost so far: $0.40** | Tokens: 238,410 in / 11,573 out
+
+### Round 8  (18:23)
+
+We were trying to pin down the Davenport constant η for the 3-dimensional vector space over the 7-element field (C_7^3), specifically whether the conjectured value 49 = 8·6+1 holds or can be beaten; the standard {0,1}^3 construction only gave η ≥ 43, and the question was whether an 8-point support taken with multiplicity 6 (an obvious candidate for 48 = 8·6) really produces a sequence with no short zero-sum. In this round I exhaustively checked the natural finite certificate: for the chosen 8-point support A ⊂ F_7^3 I enumerated every possible coefficient vector with entries 0..6 whose total weight is ≤7 (about 6.4k cases) and verified that no nontrivial linear relation ∑ c_i a_i = 0 occurs, which is exactly the forbidden “bounded-weight kernel” condition that certifies A with multiplicity 6 is short-zero-sum-free; in short, we now have a solid certificate that η(C_7^3) ≥ 48 (i.e. the 48-term candidate is valid). The remaining task is to rule out any 49-term short-zero-sum-free sequence (equivalently to show every 9-point support must admit a ≤7-weight relation), which I plan to attack next with symmetry/orbit reductions and pruning based on the bounded-weight-kernel lemma, but that has not yet been completed. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.51** | Tokens: 316,592 in / 13,149 out
+

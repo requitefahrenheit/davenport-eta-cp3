@@ -1,0 +1,48 @@
+# Research Briefing (CRITIC thread)
+
+**Goal:** Prove that η(C_p³) = 8(p−1) + 1 for all primes p ≥ 3, or find a counterexample. Computational evidence: η(C_3³) = 17 = 8(2)+1 and η(C_5³) = 33 = 8(4)+1 (both verified). IMPORTANT: prior work showed that naive projection/averaging approaches fail at a Θ(p) scaling barrier — any proof must use structural choice of projection or a completely different technique. The conjecture may be FALSE for p ≥ 7 (no extremal 8-point support found in random search for p=7). Primary deliverable is a PROOF for general p, or a proof that the conjecture fails.
+
+---
+
+### Round 1  (17:52)
+
+Goal was to settle whether the zero-sum constant for C_p^3 is 8(p−1)+1 for every prime p≥3 or to find a counterexample; because naive averaging/projection methods are known to fail at a Θ(p) barrier, the worker focused on structural constraints any extremal 8-point support would have to satisfy. They proved a crisp necessary condition: if the 8 support points admit any nontrivial linear dependence whose coefficients (reduced to 0,…,p−1) sum to ≤ p, then that dependence produces a short zero-sum in the sequence of each point repeated p−1 times, so such low-weight kernel vectors are forbidden for an extremal support. As a sanity check they took the known p=5 witness pattern, reduced it modulo other primes and computed the minimal weight of a nontrivial combination for p=5,7,11; in each case the first relation encountered was the trivial “p copies of one point” relation (weight p), so this pattern does not fail the obvious low-weight test at p=7 and any obstruction must be subtler than a short dependence on few points. Next steps are to search for additional structural obstructions of the same spirit (or a constructive family of 8-point supports) that rule out or produce extremal examples for larger p; progress is real but inconclusive so far. (yellow)
+
+**Cost so far: $0.05** | Tokens: 17,960 in / 1,829 out
+
+### Round 2  (17:54)
+
+This round repackaged the extremal question into a crisp algebraic invariant: for any 3×8 matrix M whose columns are the 8 support points, define mu(M) to be the smallest total weight of a nonzero vector in ker(M) with entries in {0,...,p−1}; the 8-point uniform-multiplicity sequence is short-zero-sum-free exactly when mu(M) ≥ p+1, so the whole problem reduces to showing mu(M) ≤ p for every rank‑3 M or finding an M with mu(M) ≥ p+1. The worker checked the known p=5 witness pattern reduced mod 7 and found no nontrivial short relation other than the trivial “p copies of one column,” so that particular geometry doesn’t immediately produce a p=7 counterexample. The evaluator rightly asked for a new, concrete move rather than another reformulation; one specific next attempt I will try is a structural projection strategy: pick a linear functional φ : F_p^3 → F_p and show there must exist some φ for which the 8 projected values have a restricted multiplicity pattern (few distinct values or a large repeated class), then apply 1‑dimensional zero‑sum results (Cauchy–Davenport/EGZ/Olson-type bounds) to force a short zero-sum in the projection and lift that back to a low‑weight kernel vector for M, thereby proving mu(M) ≤ p; I will work next to make that selection/counting argument rigorous. Vibe check: (yellow) = making concrete moves but not yet a clear path to a full proof or counterexample.
+
+**Cost so far: $0.10** | Tokens: 41,400 in / 3,527 out
+
+### Round 3  (17:57)
+
+We tried to falsify the conjectured formula η(C_p^3)=8(p−1)+1 by hunting for an “extremal” 8-point support in F_7^3 that would force every nontrivial zero-sum relation to use at least 8 terms; implementing a dynamic-programming test for short zero-sums and sampling 200 random 8-sets gave no examples — the best sample still admitted a zero-sum using only 6 terms, so random supports look far from satisfying the required rigidity. This is useful negative evidence (and reminds us the problem is much tighter at p=7 than at p=3 or 5, which do match the conjecture), but it is not a proof that no extremal support exists; the next concrete moves are to stop uniform sampling and either (a) run a symmetry-reduced exhaustive/targeted search (fixing points by GL(3,7) action and enforcing “general position” constraints) or (b) prove a structural lemma that forces a short relation (e.g. show any 8-point multiset in F_p^3 admits a weight ≤p relation under such constraints). The current work has clarified the landscape but hasn’t committed to a decisive lemma or full search yet, so status: (yellow).
+
+**Cost so far: $0.14** | Tokens: 70,044 in / 4,977 out
+
+### Round 4  (17:59)
+
+Goal: decide whether the invariant η(C_p^3) equals 8(p−1)+1 for all primes p≥3 or find a counterexample. Work so far: small primes match the formula (p=3,5 checked), but standard projection/averaging methods are known to hit a linear-in-p barrier so a different, structural idea is needed; a worker tried a focused computational approach at p=7 by normalizing 8-point sets up to GL(3,7) (fixing three basis points) and sampling 500 distinct normalized supports to see how long the shortest zero-sum can be forced to avoid small lengths. Results: most random 8-sets admit very short zero-sums (length 3–5 typically), only one sample pushed the first attainable zero-sum up to length 7 and none avoided zero-sums of length ≤7 (so no extremal 8-point support was found); the blocker is a clear conceptual gap—a uniform algebraic/combinatorial lemma that guarantees a nonnegative coefficient solution of total weight ≤p to the 3×8 linear system is missing. The next concrete step proposed is to extract and study the explicit length-7 relation from the best sample to hunt for an invariant that can be promoted to a general proof that every 8-set fails to be extremal for p=7 (and hopefully for all p≥7), but that extraction/lemma has not yet been executed. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.20** | Tokens: 103,789 in / 6,557 out
+
+### Round 5  (18:01)
+
+We tried to decide whether the conjectured formula η(C_p^3)=8(p−1)+1 holds for all primes p≥3 or fails for some p≥7; after confirming the conjecture for p=3 and p=5, a targeted search at p=7 produced an explicit 8-point configuration in F_7^3 that already admits a nontrivial "zero-sum" combination whose coefficients are small positive integers summing to 7, i.e. a length‑7 relation rather than the prohibited ≥8; concretely the combination 3·a2+2·a4+1·a6+1·a8 = 0 (mod 7) shows a 4-point affine dependence with coefficient sum p, so this sample cannot be an extremal 8-point support and suggests the conjecture may fail for p≥7. This gives a clear structural target: prove (or disprove) a lemma that any 8 points in F_p^3 contain a 4-point subset with a bounded positive-coefficient relation summing to ≤p (a sort of finite-field Carathéodory statement), because such a lemma would rule out extremal 8-point supports and thus refute the conjecture; the finding is concrete and actionable but so far limited to examples and a proposed route to a general proof, so overall progress is real but not yet decisive. (yellow)
+
+**Cost so far: $0.27** | Tokens: 142,828 in / 8,075 out
+
+### Round 6  (18:03)
+
+We tried to make progress on the p=7 case of the conjecture by doing a symmetry-reduced exhaustive search for an 8-point subset of F_7^3 with no short zero-sum: we fixed three points to the standard basis using GL(3,7) symmetry and further reduced scaling by taking projective representatives, leaving about 54 candidate directions and roughly 3.16 million 5-point choices to check — a size that is feasible if each instance can be tested very quickly. The concrete obstacle discovered is that the current Python set-based dynamic test for “is there a zero-sum of length ≤7?” is far too slow and timed out; the clear fix is to implement a 343-state bitset DP (one bit per group element) so each instance can be updated by fast bit-shifts and tested in microseconds. We haven’t yet completed that bitset implementation or run the full sweep, so this round bought us a precise, actionable plan (and confidence the search is viable in principle) but no definitive existence/nonexistence result for p=7 yet. (vibe: yellow)
+
+**Cost so far: $0.33** | Tokens: 187,484 in / 9,612 out
+
+### Round 7  (18:06)
+
+We tried to advance the question of whether η(C_p^3) = 8(p−1)+1 for all primes p≥3 by pushing a symmetry-reduced exhaustive search at p=7, but the run timed out repeatedly: the implementation spent almost all time in a Python routine that permuted 343-bit bitsets by iterating their set bits, making the dynamic program (over the ~C(54,5) slice) far too slow. The key technical insight from this round is a concrete and likely effective fix: view the 343 coordinates as a 7×7×7 grid and store each state as 49 seven-bit chunks (one per x,y pair); then translations decompose into a 7-bit cyclic rotation (cheap via a 128-entry lookup) plus a fixed 49-position chunk permutation, so each translate becomes ~49 table lookups and assignments instead of per-set-bit loops. I laid out the exact data layout, precomputations, and DP update rule and plan to re-run the full slice with early exits; however, the environment aborted the attempt before completion, so no new mathematical conclusion was reached yet. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.40** | Tokens: 238,131 in / 11,595 out
+

@@ -1,0 +1,80 @@
+# SYNTHESIS REPORT — Session 5, Round 2
+
+## STATUS
+**U1 (Two-Fiber Forcing) is definitively FALSE at p=5 with 324 confirmed counterexamples; however, the modified conjecture U1' (line structure constraint) survives with theoretical proof of Grail preservation via Fiber-Flexible Shadow Saturation, but p=7 computational verification and non-tail-replacement CE search remain incomplete.**
+
+---
+
+## CONVERGENCE/ESCALATION
+
+### ✅ HIGH CONFIDENCE: U1 IS FALSE
+- **THEORIST, COMPUTER, ADVERSARY** all independently verified via Cortex search, enumeration, and brute-force that counterexamples exist and are genuinely strongly ZSF.
+- **All counterexamples share identical tail projection** (A₈ ∪ {0}, 9 parallel lines), suggesting U1' is the true structural constraint.
+
+### ✅ HIGH CONFIDENCE: U1' PRESERVES GRAIL
+- **THEORIST** provided complete proof of **Fiber-Flexible Shadow Saturation Theorem**: shadow saturation at weight p-1 is independent of fiber assignments when tail projection is fixed.
+- This means U1' (geometric line constraint, not fiber forcing) suffices for the proof chain.
+
+### ⚠️ POSSIBLE FALSE CONJECTURE: "ALL p=7 COUNTEREXAMPLES ARE TAIL-REPLACEMENT VARIANTS"
+- **COMPUTER** claimed "ALL 25 coefficient pairs work for every drop pair at p=7" but script output incomplete.
+- **ADVERSARY** initiated search for non-tail-replacement CEs but did not report final results.
+- **Risk:** If non-tail-replacement CEs exist at p=7, they would challenge U1' itself and potentially the Grail.
+
+### ⚠️ INCOMPLETE: GRAIL VERIFICATION AT p=7
+- **COMPUTER** has p=7 CE enumeration running but no final GRAIL closure report.
+- **ADVERSARY** running non-swap detection but results not yet consolidated.
+- **Risk:** Without verifying that every p=7 CE is maximality-complete (adding any 18th forces zero-sum), the Grail claim at p=7 is unvalidated.
+
+---
+
+## CROSS-POLLINATION
+
+### From THEORIST → COMPUTER/ADVERSARY
+**"Tail-projection invariance is the key; fiber counts are secondary."**
+- THEORIST's Fiber-Flexible theorem shows fiber flexibility works *because* tail projections are fixed.
+- **Implication for COMPUTER:** When enumerating p=7 CEs, filter by tail-projection first; CEs with different tails (8+ parallel lines) would invalidate U1' and require deeper structural analysis.
+- **Implication for ADVERSARY:** Non-tail-replacement searches should specifically target CEs with ≥10 distinct tail values; if none exist, the tail-projection structure is indeed the invariant.
+
+### From COMPUTER → THEORIST/ADVERSARY
+**"DP reachability pruning is efficient but must be cross-validated; enumerating coefficient vectors exhaustively is computationally cheap by comparison."**
+- Both agents' verification methods agreed on the 7 counterexamples, but the p=7 script incompleteness suggests bottleneck is in *reporting*, not computation.
+- **Implication for THEORIST:** The mathematical structure may admit a combinatorial shortcut (e.g., all p=7 CEs are provably tail-replacement by symmetry argument) rather than full enumeration.
+- **Implication for ADVERSARY:** If double-swap and window-attack scripts ran to completion (unclear from log), they likely found no new patterns; focus should shift to proving *non-existence* of alternative structures.
+
+### From ADVERSARY → THEORIST/COMPUTER
+**"Verification fragility: multiple independent confirmations (DP, brute-force, fresh enumeration) all converge on the same 7 configs; this suggests the space is tightly constrained, not missing outliers."**
+- The fact that three independent searches all identified the *same* counterexamples suggests they are likely *all* counterexamples, not a sample.
+- **Implication for THEORIST:** Conjecture: *At p=5, the set of strongly ZSF 17-sets of fiber type (8,7,2) is exactly the same-tail-swap orbit of doubled(A₈) + e₁.* This would require proving uniqueness, not just existence.
+- **Implication for COMPUTER:** Instead of searching for new CEs, verify this uniqueness claim by confirming 324 is exactly the orbit size.
+
+---
+
+## DIRECTIVES
+
+### 📋 THEORIST
+**Prove or refute: "The set of all strongly ZSF 17-sets at p=5 with tail-projection A₈ ∪ {0} is precisely the same-tail-swap orbit of doubled(A₈) + e₁, with cardinality 324."**
+- *Rationale:* COMPUTER and ADVERSARY's convergence on exactly 324 CEs suggests this might be a complete characterization. Use symmetry arguments (permutation of A₈ coordinates, fiber automorphisms) to argue uniqueness without exhaustive enumeration.
+- *Dependency on other agents:* If COMPUTER confirms 324 matches the orbit size exactly, this becomes very high confidence.
+
+---
+
+### 📋 COMPUTER
+**Complete and report: (1) Exact count of strongly ZSF 17-sets at p=7 (tail-replacement vs. other), (2) For each p=7 CE, verify GRAIL closure (adding any 18th vector yields weight-p zero-sum), (3) Confirm the formula: #(CEs at p=7) = orbit-size-formula derived from THEORIST's symmetry proof.**
+- *Rationale:* p=7 is the next frontier after p=5; full enumeration is computationally feasible with DP but must be completed and consolidated into a single report.
+- *Dependency on other agents:* Wait for THEORIST's uniqueness proof to guide the search structure; use ADVERSARY's non-swap detection results to identify any deviant CEs.
+
+---
+
+### 📋 ADVERSARY
+**Execute final push: (1) Complete non-tail-replacement CE search at p=5 and p=7 (target: find any CE with ≥10 distinct tail values or confirm none exist), (2) Run window-attack and double-swap scripts to completion and extract summary (how many candidate 18-vectors evade GRAIL closure?), (3) If no deviants found, write a concise summary: "U1' with tail-projection invariant is a plausible complete characterization; false-conjecture risk is low."**
+- *Rationale:* ADVERSARY's role is to find failure modes; completing these targeted attacks will either break U1' or give high confidence it holds.
+- *Dependency on other agents:* THEORIST's Fiber-Flexible theorem provides theoretical cover; use it to guide search heuristics (if a deviant is found, it must have tail properties that defeat saturation via the theorem's case analysis).
+
+---
+
+## NEXT CHECKPOINT
+**Reconvene after (estimated 2 hours):**
+1. COMPUTER reports final p=7 enumeration + GRAIL closure counts.
+2. ADVERSARY reports non-swap search results + double-swap/window summary.
+3. THEORIST reports uniqueness conjecture proof (if achievable) or identifies obstruction.
+4. **Decision point:** If all three agents report no deviants and p=7 GRAIL closure holds, escalate to p=11 verification and large-prime sumset completeness.

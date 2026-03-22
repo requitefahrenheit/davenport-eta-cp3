@@ -1,0 +1,571 @@
+
+============================================================
+BLOCK 1 (137 chars)
+============================================================
+Let me start by searching Cortex for existing results and reading the briefing materials, then formulate a proof strategy for this round.
+
+============================================================
+BLOCK 2 (160 chars)
+============================================================
+Let me start by searching Cortex for existing results, reading the briefing document, and checking what's already been established. Let me do these in parallel.
+
+============================================================
+BLOCK 3 (127 chars)
+============================================================
+Good, I have the briefing. Now let me search for any existing Cortex-like storage or previous results in the project directory.
+
+============================================================
+BLOCK 4 (103 chars)
+============================================================
+Let me also read the most recent theorist report and some of the task files to understand where we are.
+
+============================================================
+BLOCK 5 (131 chars)
+============================================================
+Now I have a thorough understanding of the state. Let me also look at the most recent round's results and any other relevant files.
+
+============================================================
+BLOCK 6 (142 chars)
+============================================================
+Now I have a comprehensive picture. Let me also check what's in the adversary reports for the latest session to understand what they've found.
+
+============================================================
+BLOCK 7 (86074 chars)
+============================================================
+Now I have a very thorough picture of the state of the problem. Let me now search for the latest works on weighted zero-sum problems in the literature.
+
+Let me synthesize what I know:
+
+## Current State
+
+### Proved:
+1. η(C_p³) = 8(p-1)+1 (Lean-verified, base case)
+2. Lower bound η(C_p^r) ≥ (9·2^{r-3}-1)(p-1)+1 for all r ≥ 3
+3. Two-fiber upper bound: if vectors sit in ≤ 2 fibers of a hyperplane projection, done
+
+
+4. Window Structure Theorem for A₈ and Gap Hypothesis for A₈ verified computationally through p=53, with off-L targets covered by explicit constructions and L-gap characterized
+
+### Critical Gaps (from adversary):
+1. **8-tail bound for p ≥ 17**: The lift argument from rank-3 zero-sums fails because support-4 zero-sums can only achieve 16 distinct first-coordinate targets, which isn't enough to cover all targets when p ≥ 17.
+
+2. **Shadow saturation universality**: Only established for A₈, not across all GL classes of strongly ZSF 8-sets.
+
+3. **Self-consistent orbit coverage** for j > (p+1)/2 and no clear inductive path for handling general rank.
+
+### Key Insights from Computer/Adversary:
+Support-4 zero-sums dominate the kill mechanism as p grows, accounting for over 70% of kills at p ≥ 11, with support-5 appearing rarely at higher primes. All kills have weight at most p, typically exactly p. The computational data shows 200 maximal ZSF 8-sets at p=5 distributed across 5 GL classes beyond just A₈, and multi-fiber configurations appear to be extremely rare or absent.
+
+For Round 2, I'm focusing on two main approaches: the Weight Flexibility Theorem from goal.md, which would establish that α(r)+1 non-proportional vectors always yield at least (p+1)/2 achievable zero-sum weights and unlock the inductive step via Cauchy-Davenport, and fixing the 8-tail bound where the adversary showed the lift fails at p ≥ 17 due to insufficient achievable first-coordinate values in support-4 zero-sums.
+
+Now I'm tackling the inductive step directly: given 2α(r)+2 nonzero non-proportional vectors in F_p^{r+1}, I'll project them down to F_p^r and use the inductive hypothesis to find a zero-sum with enough weight flexibility to lift back up.
+
+The key insight is that if any fiber under the projection has enough vectors, the inductive bound gives me a zero-sum immediately. Otherwise, the vectors are spread thin across fibers, which forces a different structure I can exploit. wait. Let me think about this more carefully. The vectors are in F_p^{r+1}. We project onto F_p via a coordinate, getting fiber structure. But the vectors in a fiber are in the hyperplane {w = c}, which is isomorphic to F_p^r. So vectors in fiber c project to F_p^r as their tail (last r coordinates).
+
+For the inductive η bound: if a fiber has ≥ α(r)+1 non-proportional vectors (as elements of F_p^r), then η(C_p^r) guarantees a zero-sum of weight ≤ p.
+
+Now, if two vectors in the same fiber are proportional in F_p^{r+1}, they must be equal—unless we're in fiber 0, where proportionality in F_p^{r+1} is equivalent to proportionality in F_p^r. For any fiber c ≠ 0, the tail vectors are all distinct, so non-proportionality in F_p^{r+1} forces non-proportionality of the tails.
+
+But here's the issue: the tails might be proportional in F_p^r even if the full vectors are non-proportional in F_p^{r+1}. If t_j = λ t_i for some λ ∈ F_p*, then I can't directly apply η to the tails.
+
+Actually, there's a cleaner way to handle this. I can normalize each vector (c, t_i) with c ≠ 0 to the form (1, t_i/c), which puts all vectors in a fiber into a standard form. Now the normalized tails are guaranteed to be pairwise non-proportional if the original fiber-c tails were.
+
+But wait—I need to reconsider whether scaling individual vectors preserves the zero-sum constraint. Scaling changes the coefficients needed, so this approach might not directly apply. Let me shift perspective and think about the copies-pool formulation instead: we have 17(p-1) copies of our 17 vectors and need a zero-sum subsequence of length at most p. This connects to the Harborth constant for C_p^4, though that measures something slightly different.
+
+I'm exploring a perturbation method now. The idea is that if we have enough non-proportional vectors with multiplicity p-1 each, and we find any zero-sum with weight w, we should be able to construct zero-sums at nearby weights by adjusting coefficients. If I increase one coefficient by 1, I introduce a nonzero vector term that I'd need to cancel out using the remaining copies. to find δ_i with Σ δ_i v_i = -v_j and Σ δ_i = 0.
+- This is r+1 equations in n-1 unknowns.
+- For n > r+2, the system is underdetermined and generically has solutions.
+
+But the constraint δ_i + s_i ∈ {0,...,p-1} for all i is what makes this non-trivial.
+
+Now I'm thinking about the set of coefficient vectors c = (c_1, ..., c_n) where c_i ∈ {0, ..., p-1} and Σ c_i v_i = 0. This forms a lattice polytope—the intersection of the affine subspace defined by the vector equation with the box [0,p-1]^n. The weight function Σ c_i is linear on this polytope, so it maps to an interval [w_min, w_max]. The key question is whether every integer weight in this interval is actually achieved by some point in the polytope.
+
+For the lemma about achievable zero-sum weights, I need to be careful about the modular arithmetic. The vectors live in F_p^r and the coefficients are in {0, ..., p-1}, with the zero-sum condition Σ c_i v_i = 0 taken modulo p. The polytope structure gets complicated by this modular constraint, so I'm reconsidering whether the standard convexity argument applies directly.
+
+Let me reframe this: I have n vectors in (Z/pZ)^r, and I'm looking at all tuples of coefficients from {0, ..., p-1} that sum to zero modulo p. The weight is just the integer sum of coefficients, which ranges from 0 to n(p-1). The real question is which integer weights are actually achievable by some zero-sum tuple, and whether they form a contiguous interval.
+
+The solution set forms a subgroup of (Z/pZ)^n with dimension n - r (since the vectors span the full space). When I restrict the weight function to this solution set, it either maps everything to the same residue class mod p, or it surjects onto all of Z/pZ. In the surjective case, each residue class contains exactly p^{n-r-1} solutions.
+
+Now I'm realizing the surjectivity doesn't immediately guarantee a solution of weight in {1, ..., p}—it only guarantees solutions at every residue class mod p, which could all be outside that range. Let me reconsider the constraint more carefully. I see the issue now—I can only control the weight modulo p, not the actual integer weight, which makes it hard to construct a zero-sum of a specific weight like p. Let me shift to a perturbation strategy instead. If I have a zero-sum with coefficients c_i ∈ {0,...,p-1} and total weight w, I can try to modify it to get weight w-1 by finding some index j where I can decrease c_j while preserving the zero-sum property.
+
+The key is that after decreasing c_j by 1, I need a correction vector d_i that satisfies Σ d_i v_i = v_j with Σ d_i = 0, and the adjusted coefficients c_i' + d_i must stay within the valid range [0, p-1]. Since we have more variables than constraints when n > r+2, the system is underdetermined, but the box constraints on the coefficients create a real bottleneck.
+
+Reframing this: I'm essentially asking whether if a zero-sum of weight w exists, can I always find one of weight w-1? This reduces to whether achievable weights form a continuous interval, which they don't—a single vector v only has zero-sums at weight p (using coefficient p), not at smaller weights.
+
+So the perturbation argument fails for small cases, but the real question is whether having α(r)+1 ≥ 9 vectors gives enough flexibility to guarantee weight coverage.
+
+Let me focus on proving that with at least 9 non-proportional vectors in F_p^r (where r ≥ 3), each with multiplicity p-1, I can achieve zero-sums across a range of weights, ideally covering {1, ..., p} or at least half of that interval.
+
+The key insight is using the Davenport constant: with n ≥ r+1 non-proportional vectors each repeated p-1 times, the total sequence length exceeds D(C_p^r) = r(p-1)+1, which guarantees the existence of zero-sum subsequences. Now I need to show this gives me weight flexibility.
+
+The η constant is what I really need here—it tells me the minimum number of distinct directions required so that every sequence of length n(p-1) contains a zero-sum subsequence of weight in [1, p]. If n = α(r)+1 distinct directions with p-1 copies each, the total length is (α(r)+1)(p-1), and I should be able to extract zero-sums with controlled weights.
+
+But I'm catching myself in a circular argument—I can't assume η(C_p^r) ≤ α(r)(p-1)+1 to prove it. This needs to come from induction on the rank, not from the current step.
+
+Let me set up the induction properly. The base case for rank 3 gives η(C_p³) = 8(p-1)+1. Then I assume the bound holds for rank r, and use that to prove it for rank r+1. For the inductive step, I need to show that any sequence of length (2α(r)+1)(p-1)+1 from C_p^{r+1} contains a zero-sum subsequence of length at most p.
+
+I'm reformulating this as: given 2α(r)+2 nonzero non-proportional vectors in F_p^{r+1}, each appearing p-1 times, I need to find a zero-sum of weight ≤ p. I'll use a linear form to partition the vectors into fibers. If any fiber contains enough non-proportional vectors, the inductive hypothesis applies directly. Otherwise, I'm bounding how many distinct projections can appear in each fiber.
+
+For fiber 0, the vectors have a special form that limits their non-proportional projections to at most α(r). For nonzero fibers, the structure is different—the tails must be distinct, but I need to count how many are actually non-proportional as elements of F_p^r to apply the inductive bound.
+
+Now I'm realizing there's a subtlety with zero tails: a vector like (c, 0) can only appear once per fiber c since the full vectors must be non-proportional, but when I look at whether different fibers can share the zero tail, I need to check if (c, 0) and (c', 0) are proportional in F_p^{r+1}.
+
+Actually, they are proportional—(c, 0) = (c/c')(c', 0)—so there's only one vector with a zero tail across all fibers. For nonzero tails, the constraint is different: two vectors (c, t) and (c', t') are proportional iff there exists some scalar μ where both coordinates scale by μ, meaning they must share the same projective tail [t]. So for each projective direction of the tail, there's at most one vector in the set, but I need to reconsider what this actually implies about the structure. non-proportional vectors. Two vectors v₁ = (c₁, t₁) and v₂ = (c₂, t₂) are proportional iff ∃μ: (c₂, t₂) = μ(c₁, t₁). If c₁ = 0: then c₂ = 0 and t₂ = μt₁, so proportionality in F_p^{r+1} is the same as proportionality of tails. If c₁ ≠ 0 and c₂ ≠ 0: then μ = c₂/c₁ and t₂ = (c₂/c₁)t₁. So v₁ and v₂ are proportional iff t₂ = (c₂/c₁)t₁.
+
+For vectors in different nonzero fibers, I can define a "projective tail" [t/c] in the projective space PG(r-1, F_p) for each vector (c, t) with c ≠ 0. Two such vectors are non-proportional exactly when their projective tails differ. This means the total number of distinct projective tails across all nonzero fibers is bounded by |S| minus the size of the zero fiber.
+
+Now let me set up the induction cleanly. I have 2α(r)+2 non-proportional nonzero vectors in F_p^{r+1}, and I'm projecting them onto F_p via the first coordinate to get fibers F₀, ..., F_{p-1} with sizes n_c summing to n = 2α(r)+2. Each vector in fiber F_c has the form (c, t) where t ∈ F_p^r, and two vectors are non-proportional when their tails satisfy the appropriate condition.
+
+In fiber 0, the vectors (0, t) are non-proportional in F_p^{r+1} exactly when their tails are non-proportional in F_p^r. For nonzero fibers c ≠ 0, the vectors (c, t_i) have distinct tails t_i, but these tails don't need to be non-proportional as vectors in F_p^r — the key constraint is that at most one vector across all fibers can have a zero tail, since that would give a scalar multiple of the standard basis vector e₁. **Key question:** How many non-proportional tails can fiber c have?
+
+If fiber c has vectors (c, t₁), ..., (c, t_m) with pairwise distinct t_i, how many of the t_i can be pairwise non-proportional? All of them, potentially. But also, some could be proportional. For instance, (c, t) and (c, 2t) are non-proportional in F_p^{r+1} (since (c, 2t) ≠ λ(c, t) for any λ — well, λ=1 gives (c, t) ≠ (c, 2t), and λ=2 gives (2c, 2t) ≠ (c, 2t) since c ≠ 0). So yes, a single fiber can have proportional tails.
+
+This means in a single fiber c ≠ 0, we might have m vectors with only m/2 non-proportional tails in the worst case where every tail appears with its proportional pair. But when applying the rank-r inductive hypothesis to the tails, proportional tails don't count separately. So I need to count the projective classes of tails more carefully: in fiber c, the tails t₁, ..., t_m are pairwise distinct, and I'm asking how many projective classes of tails exist, where each class contains at most p-1 tails.
+
+Now I'm thinking about how to apply the inductive hypothesis. The η bound says that among α(r)(p-1)+1 elements of F_p^r counted with multiplicity, there's a zero-sum subsequence of length ≤ p. Each tail t_i contributes p-1 copies from the original problem, so I need to figure out how many distinct tails I need to guarantee a zero-sum subsequence.
+
+Within a single fiber c, I have n_c vectors producing n_c tails, but only k_c of these are pairwise non-proportional. Since each non-proportional tail can appear with multiplicity up to p-1, if k_c ≥ α(r)+1, I can directly apply the inductive hypothesis to get a zero-sum subsequence.
+
+But if k_c ≤ α(r) for every fiber, then I need to combine information across multiple fibers. The challenge is that the same projective tail might appear in different fibers, so I need to be careful about how I count the total number of distinct non-proportional tails.
+
+When two pairs (c₁, t₁) and (c₂, t₂) have proportional tails t₁ = λt₂, they're only non-proportional as vectors in F_p^{r+1} if the first coordinates don't scale the same way—that is, if c₂ ≠ λc₁. This means the same projective tail direction can pair with different fiber elements, which complicates the counting. Let me shift to a cleaner framework using the s-function.
+
+The s constant captures the minimum number of vectors needed to guarantee a zero-sum subsequence of exactly length p. By the translation trick, if I have s(C_p^{r+1}) vectors, at least one yields a zero-sum of length at most p. For the inductive step, s(C_p^{r+1}) = η(C_p^{r+1}) + p - 1 = (2α(r)+2)(p-1)+1.
+
+Rather than chase all these dependencies, I should focus on proving one concrete result cleanly—specifically, that any strongly ZSF 8-set achieves universal shadow saturation at rank 3.
+
+The claim is: for any strongly ZSF 8-set B ⊂ F_p³, every nonzero vector in F_p³ is representable as a zero-sum from B at weight at most p-1. This matters because if it holds for all such sets, not just A₈, then the 18-vector argument works regardless of which ZSF set the tails form. The η bound tells me that among any 9 non-proportional nonzero vectors in F_p³, there exists a zero-sum of weight at most p. So given B strongly ZSF and any nonzero v outside B, I can use this to derive the desired representation. B ∪ {-v} (or B ∪ {v} if v is not proportional to any b_i, or use -v). Wait, we need 9 non-proportional vectors. If v ∝ some b_i, say v = λb_i, then...
+
+Actually, let me use the η definition directly. η(C_p³) = 8(p-1)+1 means: among 8(p-1)+1 elements of F_p³ (counted with multiplicity), there's a zero-sum subsequence of length ≤ p. 
+
+Take B = {b₁,...,b₈} strongly ZSF, and v nonzero, not proportional to any b_i. Consider the multiset: b₁^{p-1}, ..., b₈^{p-1}, (-v)^1. This has exactly η(C_p³) elements, so by definition there must exist a zero-sum subsequence of length at most p. If this subsequence only uses elements from B, we'd contradict the strong ZSF property, so it must include -v. This forces v to be expressible as a sum of at most p-1 elements from B, meaning v ∈ Σ_{≤p-1}(B).
+
+For the case where v = λb_i with λ ∈ F_p* \ {1}, I need to construct a similar multiset to force v into the shadow.
+
+Taking 8(p-1)+1 elements where I use each of the 8 directions with multiplicity p-1, then add -λb_i (which is proportional to b_i), the multiset has direction b_i appearing p times total while the other 7 directions appear p-1 times each. The key is that any zero-sum using this multiset either stays within the 8 directions (contradicting the zero-sum-free property) or must use -λb_i, which forces v = λb_i into the shadow. in the same direction as b_i. So the multiset has 7 directions with multiplicity p-1 and 1 direction (b_i) with multiplicity p. The η bound still applies: among 8(p-1)+1 elements, there's a zero-sum of length ≤ p.
+
+The zero-sum: Σ s_j b_j + t(-λb_i) = 0. This gives: (s_i - tλ)b_i + Σ_{j≠i} s_j b_j = 0.
+
+If t = 0: zero-sum within B, contradicts ZSF.
+If t = 1: (s_i - λ)b_i + Σ_{j≠i} s_j b_j = 0 with Σ s_j + 1 ≤ p. When I reduce s_i' = s_i - λ modulo p, I need to be careful about what "weight" means here—the coefficient of b_i in the zero-sum can actually range from 0 to p since b_i appears p times in the multiset (the original copies plus the one from -λb_i). formulation, we have individual copies. The length of the subsequence is the total number of copies used. Using c copies of b_i (from the p available) and t copies of (-λb_i) (from the 1 available), the total contribution in the b_i direction is c·b_i + t·(-λb_i) = (c-tλ)b_i.
+
+The length is Σ_{j≠i} s_j + c + t, and we need this ≤ p.
+
+If the zero-sum uses t = 1: contribution = (c-λ)b_i + Σ_{j≠i} s_j b_j = 0. Weight = Σ s_j + c + 1 ≤ p.
+
+So Σ s_j b_j = (λ-c)b_i with weight Σ s_j + c + 1 ≤ p. When λ-c ≠ 0, this means (λ-c)b_i appears in the shadow of B at weight at most p-1, using coefficients on the other basis vectors plus c copies of b_i. But if c = λ in Z/pZ, then the other basis vectors alone sum to zero with weight Σ s_j, which is smaller.
+
+Since B is strongly ZSF (no zero-sum of weight ≤ p), and B\{b_i} is a subset of B, it's also ZSF. So all coefficients s_j must be zero. The zero-sum has weight c + 1 = λ + 1.
+
+But wait—this zero-sum is just λ copies of b_i plus one copy of (-λb_i) equaling zero, which is trivial and doesn't actually help us construct v = λb_i as a sum of elements from B. I need to reconsider the approach when v...
+
+When v is proportional to some b_i, the η argument only produces a trivial zero-sum, so I should ask directly: is v = λb_i actually in Σ_{≤p-1}(B)? This would require coefficients s_j ∈ {0,...,p-1} where Σ s_j b_j = λb_i and the total weight is between 1 and p-1. Rearranging gives (s_i - λ)b_i + Σ_{j≠i} s_j b_j = 0, and I need to determine what constraints this places on the coefficients.
+
+If s_i ≠ λ (mod p), then I have a nontrivial linear dependence among the b_j's, which means there's a zero-sum with weight Σ s_j. Since B is zero-sum-free, this weight must exceed p, but the shadow condition requires it to be at most p-1—a contradiction. So this case is impossible. If instead s_i = λ, then Σ_{j≠i} s_j b_j = 0, and since B\{b_i} is also zero-sum-free, all those coefficients must vanish, giving me the trivial representation v = λb_i with weight exactly λ.
+
+This means λb_i lies in Σ_λ(B), which is contained in Σ_{≤p-1}(B) since λ is between 1 and p-1. Now I can conclude: any nonzero v either isn't proportional to any single b_i (in which case the η argument puts it in Σ_{≤p-1}(B)) or equals λb_i for some λ (in which case it's trivially in Σ_{≤p-1}(B)). Therefore, for any strongly zero-sum-free 8-set B in F_p³, the set of all vectors with weight at most p-1 is exactly the entire nonzero space.
+
+This is remarkable because it establishes universal shadow saturation purely from the cardinality argument—no need for the Window Theorem, Gap Hypothesis, or any particular structure of B. Let me verify the proportional case once more: if v = λb_i with λ ∈ {1,...,p-1}, I can express v as a weighted sum using coefficient λ on b_i and 0 on the rest, giving weight λ ≤ p-1. For the non-proportional case, when v isn't proportional to any b_i, I add -v with multiplicity 1 to the multiset B^{p-1}, which gives a total of 8(p-1)+1 = η(C_p³) elements, forcing a zero-sum by the pigeonhole principle.
+
+Now I'm checking whether -v could be proportional to some b_i even when v itself isn't. If -v = μb_i, then v = (p-μ)b_i, which contradicts the assumption that v is non-proportional to any b_i. So -v also avoids proportionality to all elements in B, which keeps the argument clean.
+
+Let me verify that the definitions of strong ZSF and η align properly: B being strongly ZSF means the multiset with each element repeated p-1 times contains no non-empty subsequence of length ≤ p summing to zero, and I need to make sure this matches how η is defined for the group.
+
+Now I'm seeing that when I add -v to this multiset, I get exactly η(C_p³) elements total, which guarantees a zero-sum subsequence of length ≤ p exists. This subsequence either uses only the b_i elements (contradicting strong ZSF) or must involve -v, which would give me the relation I need.
+
+If the subsequence includes -v, then the remaining b_i elements sum to v with total weight between 1 and p-1, placing v directly in the bounded sumset. This completes the proof that any strongly ZSF 8-set in F_p³ must have universal shadow saturation, without needing any special structure beyond the ZSF property itself. Let me also note: the "three-line argument" that the adversary attacked was essentially this same argument! The adversary said it was wrong because "we get s₉v ∈ shadow, not v." But my version is different: I add -v (not v) to the multiset, so I directly get v = Σ c_i b_i. No rescaling needed!
+
+Wait, let me re-read the adversary's attack (Attack 2):
+
+"For nonzero v not proportional to any a_i ∈ A₈: add -v to get 9 non-proportional vectors. The η bound gives a zero-sum:
+Σ s_i a_i + s₉(-v) = 0, Σs_i + s₉ ≤ p
+So Σ s_i a_i = s₉v, giving s₉v ∈ Σ_{≤p-s₉}(A₈) ⊆ Σ_{≤p-1}(A₈).
+But we want v, not s₉v."
+
+I see the issue now — the adversary applies the η bound to 9 directions each with multiplicity p-1, so the zero-sum coefficients satisfy s_i ∈ {0,...,p-1}, meaning s₉ can range from 1 to p-1. But in my approach, I'm only adding -v with multiplicity 1, so the coefficient t is either 0 or 1, and if t = 1 then I get v directly without any scaling factor.
+
+The key insight is that using just 1 copy of -v (not p-1 copies) forces t ∈ {0, 1}, which means when t = 1 I recover v exactly. This sidesteps the adversary's objection entirely.
+
+Now I need to verify whether this argument actually requires η(C_p³) = 8(p-1) + 1 specifically. The multiset has 8(p-1) + 1 elements total, so I need to check if that's the right bound.
+
+The multiset consists of 8 "old" directions with multiplicity p-1 each, plus 1 "new" direction with multiplicity 1. Since all 9 directions are non-proportional and the total is exactly 8(p-1) + 1 = 8p - 7, which matches η(C_p³), the η bound guarantees a zero-sum subsequence of length at most p. This is the clean proof of universal shadow saturation.
+
+Now I'm wondering if I can leverage this to prove the Grail conjecture. The key insight is that for any strongly ZSF set B of size α(r), every nonzero vector v either isn't proportional to any element of B—in which case v lies in the sumset of at most p-1 elements from B—or v is proportional to some b ∈ B, meaning v itself is in the sumset. This means the union of all these sumsets covers the entire space.
+
+For the inductive step moving from rank r to rank r+1, I need to establish the bound on η(C_p^{r+1}). The previous attempts relied on showing that maximal ZSF sets have a doubled structure with two fibers plus possibly an extra element, then using shadow saturation to eliminate the (α(r+1)+1)-th vector. But that approach has issues—it's not truly inductive and requires already knowing the structure of the rank-r extremal set.
+
+Let me try a more direct inductive argument instead.
+
+I'm setting up the problem with n = 2α(r)+2 non-proportional nonzero vectors in F_p^{r+1}, projecting onto F_p, and assuming no single fiber contains ≥ α(r)+1 non-proportional vectors (otherwise induction applies immediately). The goal is to find a zero-sum with weight ≤ p.
+
+The key idea is to combine zero-sums from different fibers. For each nonzero fiber c, I'm tracking the tails T_c ⊂ F_p^r—the vectors that appear when we strip off the c-coordinate. I need to count both the total number of vectors in each fiber (n_c) and how many of those tails are non-proportional (k_c), since vectors in fiber c have the form (c, t) and their contributions depend on this structure.
+
+Now I'm analyzing what happens when we consider the multiplicities: each vector (c, t_i) appears with multiplicity p-1 in the original multiset, so each tail t_i effectively appears p-1 times within fiber c. If k_c ≥ α(r)+1, I can apply the inductive bound directly to the tails in that fiber.
+
+Since we have at least (α(r)+1)(p-1) tail elements total, which exceeds η(C_p^r), the inductive hypothesis guarantees a zero-sum combination of these tails with weight at most p. This zero-sum of tails within fiber c is what I need to construct next.
+
+When I lift this zero-sum to F_p^{r+1}, the first coordinate becomes c times the sum of coefficients, while the second coordinate is zero. For this to be a zero-sum modulo p, the coefficient sum must be divisible by p. Since the coefficient sum is positive and at most p, it must equal exactly p—giving me a zero-sum of weight exactly p in the fiber, which satisfies the bound I need.
+
+Now I'm checking whether the inductive bound on η actually guarantees I can find such a zero-sum of weight exactly p, not just weight at most p. The constant s(C_p^r) relates to η(C_p^r) plus p-1, so if I have enough non-proportional tails, I should be able to construct the right configuration. So when fiber c has at least α(r)+2 vectors, we get n_c(p-1) copies, which exceeds the Davenport constant s(C_p^r) = (α(r)+1)(p-1)+1, guaranteeing a zero-sum subsequence of exactly length p.
+
+But I need to reconsider whether I'm counting non-proportional tails correctly—the s bound applies to any sequence of sufficient length regardless of structure, so I should verify whether k_c ≥ α(r)+2 is the right condition here. , the s bound applies to arbitrary sequences, not just those from non-proportional directions. So if fiber c has n_c vectors, the sequence of tails (each with multiplicity p-1) has length n_c(p-1). If n_c(p-1) ≥ s(C_p^r) = (α(r)+1)(p-1)+1, i.e., n_c ≥ α(r)+1 + 1/(p-1), i.e., n_c ≥ α(r)+2, then we get a zero-sum of length exactly p among the tails, giving a zero-sum of weight p in F_p^{r+1}. ✓
+
+But n_c ≥ α(r)+2 requires many vectors in a single fiber. We assumed each fiber has ≤ α(r) non-proportional directions, though a fiber could contain more vectors overall if some tails are repeated. The key insight is that even with few distinct directions, n_c could be large enough to trigger the bound—vectors in fiber c ≠ 0 are always non-proportional to each other in F_p^{r+1} since they share the same first coordinate. fibers. The total number of vectors across all p fibers is 2α(r)+2, and if each fiber contains at most α(r)+1 vectors, then p(α(r)+1) ≥ 2α(r)+2, which means p ≥ 2—always satisfied. So counting fibers alone won't give us a contradiction. Instead, I need to look at how zero-sum weights can be achieved across different fibers. For each fiber c, I'm tracking W_c as the set of possible zero-sum weights that can be formed from the tails in that fiber.
+
+When a zero-sum of tails at weight w in fiber c lifts to the higher dimension, it becomes a zero-sum in F_p^{r+1} only if w ≡ 0 (mod p), meaning w must be 0 or p. The trivial case w = 0 doesn't help, so I need w = p to appear in W_c. Now I'm considering what happens when I combine zero-sums from different fibers—if fiber c₁ has a tail zero-sum at weight w₁ and fiber c₂ has one at weight w₂, their combined contribution might create new constraints.
+
+When I combine these, the first coordinate becomes c₁w₁ + c₂w₂, the tails cancel to 0, and the total weight is w₁ + w₂. For this to form a zero-sum in F_p^{r+1}, I need c₁w₁ + c₂w₂ ≡ 0 (mod p), and to stay within the weight bound, w₁ + w₂ ≤ p. So the question becomes whether I can find weights w₁ ∈ W_{c₁} and w₂ ∈ W_{c₂} satisfying both the modular constraint and the weight constraint simultaneously.
+
+But I'm realizing this approach only captures zero-sums within individual fibers. Mixed zero-sums—those that combine vectors from different fibers—could be much more powerful. In a mixed zero-sum, I'd have Σ s_i (c_i, t_i) = 0 where the c_i values vary across terms. This gives me two constraints: the tail equation Σ s_i t_i = 0 in F_p^r and the first-coordinate equation Σ s_i c_i ≡ 0 (mod p), with total weight Σ s_i. Let me reconsider this from a different angle.
+
+I want to find a zero-sum of weight at most p among my 2α(r)+2 vectors. The Davenport constant for C_p^{r+1} is (r+1)(p-1)+1, and with 2α(r)+2 non-proportional directions each appearing p-1 times, I have (2α(r)+2)(p-1) total vectors. For this to exceed the Davenport constant, I need 2α(r)+2 ≥ r+2, which simplifies to α(r) ≥ r/2.
+
+Since α(r) = 9·2^{r-3}-1 ≥ 8 for r ≥ 3, this condition holds, so the Davenport constant guarantees many zero-sums exist—but they could all have large weight. Let me explore the exchange approach from Grynkiewicz instead, and then examine what the Weight Flexibility Theorem tells me about whether I can construct zero-sums with controlled weight.
+
+For a more direct path: if I have n ≥ 2r+1 non-proportional vectors in F_p^r, I should be able to show that the set of achievable zero-sum weights contains an arithmetic progression of substantial length.
+
+The zero-sums themselves form a subgroup isomorphic to (Z/pZ)^{n-r}, and I can use the weight function as a linear map from this group to Z/pZ. If this map isn't trivial on the zero-sum subgroup, then its image covers all of Z/pZ, which gives me strong constraints on which weights are achievable. Now I'm trying to pin down the minimum integer weight for each residue class modulo p. For a given residue w₀, the actual weights form an arithmetic sequence w₀, w₀+p, w₀+2p, and so on. Let me focus on Case 2 first where all zero-sums have weight divisible by p, since that constraint might be more restrictive than Case 1.
+
+In Case 2, the all-ones vector lies in the row space of M over Z/pZ, which means there's some vector y where every v_i has inner product 1 with y. This is a strong geometric constraint—all n vectors must lie in a single hyperplane defined by ⟨y, x⟩ = 1.
+
+Now I'm checking whether this is even possible for n = 2α(r)+2. An affine hyperplane in F_p^r contains p^{r-1} points, and I need to count how many projective classes this represents. Each line through the origin either misses the hyperplane entirely or intersects it at exactly one point, so the number of projective points on the hyperplane is p^{r-1} - 1 divided by p - 1, which gives (p^{r-1} - 1)/(p - 1).
+
+Wait, let me reconsider. If I'm looking at the hyperplane {⟨y,x⟩ = 1}, it contains p^{r-1} affine points, and each projective point not in ker(y) corresponds to exactly one such point after scaling. So there are p^{r-1} non-proportional vectors satisfying the constraint.
+
+For all 2α(r)+2 vectors to fit in this hyperplane, I need 2α(r)+2 ≤ p^{r-1}. Substituting α(r) = 9·2^{r-3} - 1, this becomes 9·2^{r-2} ≤ p^{r-1}, which is a constraint on p depending on r.
+
+Let me check specific cases: for p = 5, r = 3, I get 18 ≤ 25, which works. For p = 5, r = 4, I get 36 ≤ 125, also satisfied. So Case 2 is indeed possible.
+
+But here's the key issue: in Case 2, every zero-sum has weight divisible by p, so the minimum nonzero weight is at least p. The real question becomes whether weight exactly p is achievable—that is, whether there exists a nonzero vector c ∈ {0,...,p-1}^n with Mc ≡ 0 and Σc_i = p.
+
+Now I'm wondering if the minimum could be 2p instead. When I have r+1 vectors forming a basis, the kernel is one-dimensional, generated by some c with weight w₀. If w₀ is divisible by p, then multiples of c give weights that are multiples of w₀, but scaling doesn't work cleanly modulo p—the sum of coordinates doesn't scale the way I'd need it to.
+
+Let me refocus on what I can actually establish for this round. The most valuable results would be proving universal shadow saturation cleanly, making progress on the inductive upper bound for η(C_p^{r+1}), and understanding what weights are achievable. I think I have a solid proof for universal shadow saturation already, so let me formalize that statement and see if I can push the inductive argument forward.
+
+For the universal shadow saturation theorem, I'm assuming η(C_p^r) equals α(r)(p-1)+1, and I have a strongly zero-sum-free set B with α(r) elements. The key claim is that all non-zero vectors in F_p^r can be represented as weighted sums of elements from B using coefficients between 0 and p-1, where the total weight is positive but at most p-1. Now I'm working through the proof by cases, starting with an arbitrary non-zero vector v.
+
+When v isn't proportional to any b_i, I'm considering the multiset formed by taking p-1 copies of each element in B together with -v. This gives exactly η(C_p^r) elements total, and since -v is also not proportional to any b_i, the defining property of η guarantees a non-trivial zero-sum subsequence of length at most p. This subsequence must involve -v with some coefficient t ∈ {0,1}, and I'm analyzing what happens when t = 0 versus t = 1 to derive the desired representation.
+
+If t = 1, then v expresses as a sum of elements from B with coefficients summing between 1 and p-1, placing v in Σ_{≤p-1}(B). When v is instead proportional to some b_j with multiplier λ ∈ {1,...,p-1}, it directly belongs to Σ_λ(B).
+
+The crucial observation is that this argument generalizes completely—it doesn't rely on any particular properties of B beyond being strongly ZSF with the right cardinality. The corollary then extends this: every nonzero vector in F_p^r, when scaled by any factor in {1,...,p-1}, lands in the shadow Σ_{≤p-1}(B), meaning the entire nonzero space gets covered.
+
+This settles the adversarial attacks from before. Now I'm moving to the inductive step itself: given 2α(r)+2 non-proportional nonzero vectors in F_p^{r+1}, I need to find a zero-sum with weight at most p. The strategy is to project along the first coordinate, creating fibers for each value in F_p, then analyze what happens when some fiber contains enough non-proportional tail directions.
+
+For the zero fiber, the vectors are purely in the tail space, so the inductive hypothesis gives me a zero-sum directly. But for nonzero fibers, I'm running into a subtlety: the tail vectors aren't necessarily non-proportional in the lower-dimensional space even though the full vectors are non-proportional in F_p^{r+1}, so I need to be more careful about applying the inductive bound. bound, we need non-proportional elements.
+
+Hmm, this is the issue raised by the earlier analysis. Vectors in fiber $c$ with tails $t$ and $\lambda t$ are both present and non-proportional in $F_p^{r+1}$, but proportional in $F_p^r$. They're essentially using the same "direction" in $F_p^r$.
+
+For the η bound, we work with sequences (not sets of directions). The sequence from fiber $c$ is: $t_1, t_1, ..., t_1, t_2, t_2, ..., t_2, ...$ where each $t_i$ appears $p-1$ times. If some $t_i$ and $t_j$ are proportional, they effectively contribute $2(p-1)$ copies of the same projective direction.
+
+But the η bound applies universally to any sequence—it doesn't care about proportionality structure. So if the sequence from fiber $c$ has length $n_c(p-1)$ and this exceeds $η(C_p^r) = α(r)(p-1)+1$, then it must contain a zero-sum subsequence of length in $[1, p]$. This means I just need $n_c ≥ α(r)+1$.
+
+The key insight: even if some tails are proportional, the η bound still guarantees a zero-sum. The proportionality doesn't weaken the bound—it just means we're "wasting" some of the sequence length on redundant directions. But we still get the zero-sum.
+
+So the condition $n_c ≥ α(r)+1$ is sufficient, regardless of whether the tails in fiber $c$ are proportional or not.
+
+Now I'm switching to the case where all fibers have at most $α(r)$ vectors. The total is $2α(r)+2$ vectors distributed across fibers with capacity $α(r)$ each, so we need at least 3 nonempty fibers. This constraint on the fiber structure is what I'll use next—the shadow saturation argument applies inductively to each fiber, but since we have multiple fibers, I need to combine their shadows carefully.
+
+Let me reconsider using the Gao-Thangadurai approach instead. The key relationship is that $s_{\leq p}(C_p^r) = η(C_p^r)$ by definition, and I can work with the copies-pool of size $N = (2α(r)+2)(p-1)$ to find a zero-sum subsequence of length at most $p$.
+
+Now checking whether $N$ exceeds the Davenport constant for $C_p^{r+1}$: I need $(2α(r)+2)(p-1) \geq (2α(r)+1)(p-1)+1$, which simplifies to $p-1 \geq 1$, so this checks out. But wait—I'm realizing this approach is circular since I'd be using the η bound for $C_p^{r+1}$ to prove the very bound I'm trying to establish.
+
+Let me pivot to a fiber-based inductive strategy instead. The idea is to take a sequence of $(2α(r)+1)(p-1)+1$ elements from $C_p^{r+1} \setminus \{0\}$ and use the inductive hypothesis on $C_p^r$ to extract a zero-sum subsequence of length at most $p$.
+
+Now I'm thinking about how these elements distribute across projective directions. With $(2α(r)+1)(p-1)+1$ total elements, if each direction can appear at most $p-1$ times, I'd need at least $2α(r)+2$ distinct directions. But actually, there's no inherent bound on how many times a single direction can repeat in the sequence—I need to be more careful about what constraints the pigeonhole principle actually gives me here.
+
+For the η problem, I'm working with multisets from $G \setminus \{0\}$ where $G = C_p^{r+1}$, and I need to distinguish between group elements that are genuinely equal as tuples versus those that are proportional in the projective sense. Two elements are the same group element only if they're identical tuples, but proportionality in $\mathbb{F}_p^*$ is a different equivalence relation entirely.
+
+A zero-sum-free sequence of maximal length $\eta(G)-1$ should follow the pattern predicted by the conjecture, which gives $(2\alpha(r)+1)(p-1)$ for $C_p^{r+1}$.
+
+Now I'm reconsidering the structure through a copies-pool approach: I take a set of $2\alpha(r)+2$ nonzero non-proportional vectors in $F_p^{r+1}$ and create a multiset where each vector appears $p-1$ times, giving $n(p-1)$ total copies. A zero-sum is then formed by selecting copies from this pool.
+
+The key insight is that I need to show any weight $w \leq p$ is achievable by choosing a subsequence of $w$ elements from the copies pool that sums to zero. Rather than applying the inductive hypothesis directly to tail projections, I should decompose the problem more carefully by examining how the $2\alpha(r)+2$ vectors distribute across the fibers.
+
+Looking at the first coordinates of these vectors as a multiset in $F_p$, I can separate the constraint into two parts: the first-coordinate equation $\sum s_i c_i \equiv 0 \pmod{p}$ and the tail equation $\sum s_i t_i = 0$ in $F_p^r$. This decomposition should let me handle the weight flexibility more directly.
+
+Actually, let me pivot to proving the Weight Flexibility Theorem directly from the goal.
+
+md statement. The claim is that for $n \geq r+2$ non-proportional nonzero vectors in $F_p^r$, the set of achievable zero-sum weights has at least $(p+1)/2$ elements in the range $[1, n(p-1)]$.
+
+But I'm realizing the base case doesn't immediately guarantee this—knowing there's a zero-sum of weight at most $p$ doesn't tell us about the distribution of weights across many different values. The Window Structure gives us detailed weight information for specific configurations like $A_8$, but I need to understand what holds more generally for arbitrary 9-vector sets.
+
+Let me reconsider what the base case actually establishes. For 9 non-proportional vectors in $F_p^3$, the η bound guarantees a zero-sum of weight at most $p$. But there's also the $s$ constant—for groups of the form $C_p^r$, we have $s(C_p^r) = \eta(C_p^r) + p - 1$. So $s(C_p^3) = 8(p-1) + 1 + (p-1) = 9(p-1) + 1$, meaning we'd need $9(p-1) + 1$ copies to guarantee a zero-sum of length exactly $p$. Since we only have 9 vectors, which is less than $9(p-1) + 1$, the $s$ bound doesn't quite apply here. I'm going back to the universal shadow saturation approach—that's where the real progress is. If any ZSF set of size α(r) in F_p^r has every nonzero vector in its weight-≤p-1 shadow, then for the inductive step with 2α(r)+2 vectors in F_p^{r+1}, I can project to fibers and use this property: if the fiber at 0 is a strongly ZSF set of size α(r), then universal shadow saturation guarantees every vector outside that fiber appears in the shadow.
+
+But trying to construct a zero-sum using just F₀ and one vector from a nonzero fiber fails—the first coordinate forces a contradiction. I need to involve multiple vectors from different nonzero fibers to make this work.
+
+When I combine vectors from fibers c₁ and c₂ with coefficients, along with elements from F₀, I get three constraints: the first coordinates must sum to zero mod p, the tails must sum to zero, and the total weight stays bounded by p. Let me explore whether the Cauchy-Davenport theorem can help here by looking at how these fiber groups interact.
+
+If I have two fiber groups with enough vectors to apply the inductive bound, each produces zero-sums at various weights. Within a single fiber c_j, the lifted vectors have first coordinate c_j times some weight w_j and zero tail, so they're only zero-sums when c_j w_j ≡ 0 mod p, which forces w_j = p. But when I combine two fibers c₁ and c₂, I need c₁w₁ + c₂w₂ ≡ 0 mod p with weight w₁ + w₂, which opens up more possibilities.
+
+The key insight is that if the weight sets W₁ and W₂ are large enough—specifically if |W₁| + |W₂| ≥ p + 1—then by Cauchy-Davenport, the sumset c₁W₁ + c₂W₂ covers all of F_p, guaranteeing that 0 appears in this sumset and giving me the zero-sum I need.
+
+Now looking at what happens without this flexibility: each nonzero fiber c_j has at least one zero-sum weight, but it must be w = p (since cw ≡ 0 mod p forces w = p for c ≠ 0). If I combine two such weights from different fibers, I get 2p, which exceeds p and doesn't help. The way forward is to mix partial contributions—using a non-complete zero-sum from one fiber and combining it with another to create the balance I need.
+
+The real insight is that I don't need complete zero-sums within individual fibers. Instead, I should look at cross-fiber combinations where elements from multiple fibers contribute to a single zero-sum. For each fiber c, the tails form a set, and I can consider weighted sums of those tails for different weight values. A zero-sum that crosses fibers would use elements from multiple fibers simultaneously, with the constraint that the total sum equals zero.
+
+For this to work, I need two conditions to hold: the first coordinates must sum to zero modulo p (where each fiber c contributes a weight W_c), and the tail components must also sum to zero. Each fiber contributes a weighted sum of its tails—call this σ_c—and these contributions across all fibers must combine to give zero.
+
+Now let me focus on the simplest nontrivial case with just two active fibers at different coordinates c₁ and c₂, where I need their tail contributions to cancel: σ₁ + σ₂ = 0, subject to the weight and coordinate constraints. So $W_2$ is determined by $W_1$ through the modular constraint, and the bound on their sum limits which values of $W_1$ are actually feasible. For each valid choice, I need to check whether the sumsets can intersect in the required way, but the growth rates of these sets under Cauchy-Davenport bounds make this increasingly intricate. Let me step back and try to isolate a cleaner statement I can actually establish rigorously.
+
+I'm formulating a lifted shadow saturation result: if a set of non-proportional vectors in the higher-dimensional space has a special structure—specifically, a fiber-0 ZSF base where some vectors lie in a hyperplane and their projections form a strongly ZSF set—then the full set cannot be strongly ZSF. But this is really just recovering the two-fiber case, which I've already handled. I should reconsider the broader strategy here.
+
+The key insight is that universal shadow saturation tells us something powerful: for any strongly ZSF set of size $\alpha(r)$ in the base field, the union of all weighted sums up to weight $p-1$ covers the entire nonzero space. This means every nonzero target can be represented as a weighted sum with coefficients bounded by $p-1$. I can define a shadow weight function that tracks the minimum weight needed to reach each target, and this function is bounded above by $p-1$ everywhere.
+
+Now I'm establishing basic properties of this weight function. For any basis element $b_j$, the minimum weight to reach it is exactly 1 since we can just use that element alone. For scalar multiples $\lambda b_j$, the weight is at most $\lambda$ since we can use coefficient $\lambda$ on the single element, though I need to think more carefully about whether this is tight or if smaller weights might also work. I'm trying to work out whether this gives a proper zero-sum relation with weight bounded by p, but the notation with representatives in {0,...,p-1} and sign adjustments is making this messier than I'd like. Let me step back and think about what the key property of B actually is.
+
+Since B is zero-sum-free, any linear dependence among the basis elements with coefficients in that range and bounded total weight is ruled out. So if λb_j equals a sum of the other basis elements, I can rearrange to get a relation among the b_i with i ≠ j, and the zero-sum-free property constrains what's possible—either the coefficients sum to more than p, or they're all zero. I'm working through the case where $c_j \geq \lambda$, setting up coefficients in the range $\{0,...,p-1\}$ with weight $w - \lambda$. But this leads to a contradiction: if the minimum weight representation of $\lambda b_j$ were less than $\lambda$, then $w < \lambda$, which would force $c_j < \lambda$, contradicting our assumption.
+
+Now examining the opposite case where $c_j < \lambda$: the coefficient becomes negative in $\mathbb{Z}$, so I need to adjust it modulo $p$ to stay in the valid range, giving weight $w - \lambda + p$. For this to satisfy the zero-sum-free condition, I need $w > \lambda$, which means the minimum weight must exceed $\lambda$.
+
+But if $w^* \leq \lambda$ and $c_j < \lambda$, then the derived zero-sum would have weight at most $p$, violating the ZSF property. This forces $c_j \geq \lambda$ in any optimal representation, so $c_j = \lambda$ with all other coefficients zero, giving $w^*(\lambda b_j) = \lambda$.
+
+This holds for every scaling factor $\lambda \in \{1,...,p-1\}$ and every basis element, so the shadow weight function on these scaled lines is exactly the scaling factor itself.
+
+For targets not proportional to any basis element, shadow saturation bounds them by $p-1$, though I can't pin down exact values without more structure like the Window Theorem.
+
+The most concrete result I can establish is the universal shadow saturation property, and I should focus on proving that rigorously while exploring what else follows from it.
+
+Now I'm turning to the adversary's 8-tail bound attack—the issue is that at $p \geq 17$, a support-4 zero-sum among 9 arc-forming points only produces $2^4 = 16$ achievable first-coordinate values, which falls short. My approach is to apply shadow saturation instead: if the 9 tail vectors in $\mathbb{F}_p^3$ aren't zero-sum-free, meaning they contain an internal zero-sum, then I can use that structure to strengthen the argument.
+
+The crux of the adversary's critique is that the proof's lift step—going from a zero-sum of weight $\leq p$ in the tail space back to $\mathbb{F}_p^4$—requires solving a first-coordinate equation $\sum s_i c_i \equiv 0 \pmod{p}$, and this constraint can fail when the $c_i$ values don't span enough of $\mathbb{F}_p$. The vectors have fixed first coordinates, and the coefficients from the tail zero-sum are already determined, so their sum Σ s_i c_i is a fixed value that may not equal zero. If it doesn't, I need to modify the zero-sum by adding extra copies of the standard basis vector e₁ to adjust the first coordinate sum to zero.
+
+When e₁ isn't available, I instead perturb the coefficients themselves while preserving the tail zero-sum constraint and total weight, which gives me freedom to shift the first coordinate by any amount in F_p.
+
+The constraint system has r+1 equations in k unknowns, so for k > r+1 there's a (k-r-1)-dimensional solution space. The linear map from perturbations to first-coordinate changes is surjective onto F_p unless the coefficient vector lies in a specific forbidden subspace. But I also need to respect the box constraints—each perturbed coefficient must stay in {0,...,p-1}—which is the real obstacle here.
+
+For the doubled+e₁ construction specifically, vectors from fiber 0 contribute 0 to the coefficient vector while fiber 1 vectors contribute 1, so the sum of coefficients equals the number of fiber-1 vectors used. This determines what adjustments are actually achievable within the box constraints.
+
+The adversary's real problem emerges when the 17-set has 9 distinct tails but no zero-tail vector—forcing all first coordinates to be nonzero. The perturbation strategy then requires the tail-weight system's solution space to have a component aligned with the coefficient direction, which fails when the tails are sufficiently mixed.
+
+For generic vectors, this alignment doesn't happen and the perturbation works. But if the first coordinate happens to be an affine function of the tail—say c_i = a · t_i + b—then the first-coordinate sum becomes determined by the weight alone: Σ s_i c_i = bw. This means the constraint collapses to requiring w = 0 for the sum to vanish.
+
+Actually, let me step back and focus on what I can rigorously establish. I can cleanly prove universal shadow saturation for any strongly ZSF α(r)-set using the η bound, and I can use multiplicity-1 arguments to fix the adversary's attack on the three-line argument.
+
+The shadow saturation result doesn't actually depend on the specific structure of the set B, which resolves the universality concern. For the weight distribution question, when I have n ≥ r+1 non-proportional vectors, the achievable zero-sum weights either cover all residues modulo p or concentrate in a single residue class depending on structural constraints.
+
+Now I'm working on the inductive step—trying to establish an upper bound for the two-fiber case when n = 2α(r)+2 non-proportional vectors in F_p^{r+1} admit a linear form.
+
+The key insight is that if fiber 0 has at least α(r) vectors, I can either apply the inductive hypothesis directly if there are enough non-proportional projections, or use shadow saturation to show that any other vector's coordinate lies in the achievable zero-sum set of the fiber-0 projections, which forces a zero-sum of bounded weight.
+
+But I'm running into an issue: shadow saturation gives me representations for the tail coordinate, but I still need the first coordinate to cancel out. Let me pivot to the standard two-fiber approach instead, where I bound the sizes of both fiber 0 and fiber c separately and use their interaction to force a zero-sum.
+
+Now I'm checking the case where both fibers are at their maximum allowed sizes. If fiber 0 has α(r) vectors and fiber c has α(r)+2 vectors, then the total count in fiber c exceeds the threshold needed to guarantee s(C_p^r) copies of the configuration. The key is verifying that this bound holds for p ≥ 5 by comparing the growth rates. = α(r)+1 and the rest distributed across 2+ fibers? Then n₀ = α(r)+1 ≥ α(r)+1, so n₀(p-1) = (α(r)+1)(p-1) ≥ α(r)(p-1)+4 > η. The η bound gives a zero-sum at weight ≤ p. Since fiber 0, first coordinate = 0. Weight ≤ p. ✓
+
+And if n₀ = α(r), remaining n - n₀ = α(r)+2 vectors in nonzero fibers. If all in one fiber c: n_c = α(r)+2. As above, s constant gives weight-p zero-sum. ✓
+
+If in two fibers c₁, c₂ with n₁+
+
+n₂ = α(r)+2 and n₁, n₂ ≤ α(r)+1. Then max(n₁, n₂) ≥ ⌈(α(r)+2)/2⌉, but this doesn't quite give me enough leverage on η or s within a single nonzero fiber.
+
+The multi-fiber case is tricky, so let me pivot to what I can actually establish cleanly — the Universal Shadow Saturation — and lay that out precisely before exploring what it implies.
+
+Actually, let me reconsider the Weight Flexibility Theorem instead.
+
+**Setup:** B = {b₁,...,b_m} strongly ZSF in F_p^r, m = α(r).
+
+**Claim:** |W(B)| ≥ (p-1)/2, where W(B) = {w : ∃ zero-sum of weight w using elements outside B}.
+
+Wait, that's backwards — B is ZSF, so there are no zero-sums of weight ≤ p from B itself.
+
+Let me reframe what weight flexibility actually means here. For each nonzero v ∈ F_p^r, I'll look at W_v = {w ∈ {1,...,p-1} : v ∈ Σ_w(B)}, the set of weights at which v appears in the shadow. Shadow saturation guarantees W_v is nonempty for all v ≠ 0, but the stronger claim is that |W_v| ≥ (p+1)/2 for every nonzero v. At rank 3 with B = A₈, the Window Theorem pins down exactly what happens.
+
+Now I'm working out which weights realize each target on the invariant line. For a point (0,j,j) where j falls in the range [⌈w/2⌉, 2⌊w/2⌋], I can invert the window condition to find that the achievable weights are [2⌈j/2⌉, 2j]. The Window Theorem tells me (0,j,j) ∈ Σ_w(A₈) precisely when ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋, so W_{(0,j,j)} consists of all w satisfying this inequality.
+
+Let me unpack the bounds: the lower bound ⌈w/2⌉ ≤ j is equivalent to w ≤ 2j, while the upper bound j ≤ 2⌊w/2⌋ means j ≤ w when w is even and j ≤ w-1 when w is odd. So I need to find the set of valid weights w ∈ {1,...,p-1} that satisfy both constraints simultaneously. w ∈ [j, 2j], giving roughly j valid weights. But testing j = 1 specifically, I find W = {2} with only one valid weight, which falls far short of the (p+1)/2 threshold the theorem claims. This counterexample shows the Weight Flexibility Theorem doesn't hold.
+
+Wait, I'm confusing myself—the theorem is actually about zero-sum weights across all nonzero vectors, not shadow weights for individual targets. Let me reconsider what the theorem is really claiming with those α(r)+1 vectors and their multiplicities. A₈ is zero-sum-free, so any zero-sum from the 9 vectors must use v with some nonzero coefficient s. This means v participates in every zero-sum, and the total weight becomes w' + s where w' is the minimum weight needed to represent -sv in A₈, constrained by w' ≤ p - s. I'm now tracking how the minimum weight for each possible value of -sv determines the overall zero-sum weights.
+
+For the concrete example with v = (0,1,1) in F₅³, I'm checking what weights are achievable by examining -sv for each coefficient s and determining the minimum representation weight from A₈. I'm checking whether w = 4 satisfies the constraint for s = 2, and it does—the inequality 2 ≤ 3 ≤ 4 holds. But then I need 4 ≤ p - 2 = 3, which fails, so s = 2 doesn't work. Wait, let me reconsider: at p = 5, the shadow uses coefficients up to 4, and for the tuple (0,3,3) at w = 4, the bounds check out and 4 ≤ p, so this might actually be valid.
+
+Now I'm testing whether (0,3,3) can be achieved at smaller weights. For w = 2 and w = 3, the upper bound constraint fails—3 exceeds what's allowed—so (0,3,3) isn't achievable at those weights.
+
+For the vector (0,1,1) at p=5, I'm finding that only w = 5 produces a valid zero-sum weight, giving just a single weight value instead of the expected three or more. This suggests the Weight Flexibility Theorem might actually be false for this configuration—even with an optimally chosen 9th vector, I'm only getting one weight when the theorem claims we should get at least three.
+
+But wait, I need to reconsider what the theorem is actually claiming. Reading it more carefully, it states that for ANY set of 9 non-proportional vectors, the achievable weights should satisfy |W| ≥ (p+1)/2. My counterexample with A₈ plus (0,1,1) at p=5 gives W = {5}, which is just one weight—directly contradicting the theorem's requirement.
+
+Let me verify this is correct by checking whether there are other zero-sum weights achievable with these 9 vectors and their multiplicities, since with 36 total copies and various coefficient combinations, there might be additional weights I'm missing. When c₉ = 2, I need (0,3,3) from A₈ with coefficient sum at most 3, but checking the window constraints shows this isn't achievable for any weight value. Now I'm checking the case where c₉ = 3.
+
+For c₉ = 3, I need (0,2,2) with coefficient sum at most 2, and the window analysis with j = 2 works when w = 2, giving a total weight of 5 — the same as the c₉ = 1 case. When c₉ = 4, I need (0,1,1) with sum at most 1, but the window constraint fails at j = 1. So it looks like only c₉ = 1 and c₉ = 3 produce valid solutions, both with weight 5, while c₉ = 2 and c₉ = 4 don't work. I'm realizing the window analysis might have broader implications here.
+
+Actually, wait — the window constraints only apply to targets that lie on the line L = {(0,j,j)}. Since all my targets (0,4,4), (0,3,3), (0,2,2), (0,1,1) are indeed on L, the analysis holds. With v₉ = (0,1,1), the only achievable zero-sum weight is 5, so the Weight Flexibility Theorem breaks down here. Let me try a different ninth vector instead, like v₉ = (1,0,0), and see if that opens up more possibilities.
+
+Now I'm checking whether off-L targets with nonzero x-coordinates can be represented. For c₉ = 1, I need (4,0,0) from A₈; for c₉ = 2, I need (3,0,0); for c₉ = 3, I need (2,0,0); and for c₉ = 4, I need (1,0,0). Looking at the fiber construction, (1,0,0) actually appears as an element of A₈, so that constraint is satisfiable. Weight: 1+4 = 5.
+
+So all these zero-sums have weight exactly 5, which equals p. The set W has size 1. But I'm wondering if this is always true—does every ninth vector v₉ force zero-sums to have weight p? Let me try constructing a case where A₈ ∪ {v₉} admits zero-sums with different weights. Actually, this might be structural: since A₈ is a zero-sum-free set up to weight p, its shadow covers all nonzero elements of F_p³. So for any target involving v₉, the achievable weights are constrained by what the shadow can reach.
+
+For a zero-sum with v₉ at coefficient s, I need the shadow to hit −sv₉ at some weight w^*. The total weight becomes w^* + s, and for this to stay below p, I need w^* ≤ p − s. The question is whether w^*(sv₉) + s can be strictly less than p for some choice of s.
+
+Since w^*(v₉) ≥ 1 by definition, the minimum total is at least 2. When s = 1, the shadow weight for −v₉ is at most p − 1 by the saturation property, giving a total of at most p. But I'm wondering if w^*(−v₉) is always exactly p − 1, which would force the total to equal p. From the window analysis, targets on the line L can have shadow weights as small as 2 when j is close to p − 1, while targets off L follow a different pattern from the gap hypothesis.
+
+Now I'm checking whether off-L targets can be achieved at weights lower than p − 1. The shadow saturation tells me they're in the cumulative shadow up to weight p − 1, but that doesn't mean p − 1 is the minimum. Looking at a concrete example: (1,0,0) is already in A₈ with weight 1, so w^*((1,0,0)) = 1. Its negation (4,0,0) has weight 4 since it equals 4 times the basis element b₁, giving a total of 5.
+
+For -(2·v₉) = (3,0,0), the weight is 3 with s = 2, also totaling 5. I'm noticing a pattern: whenever v₉ is proportional to some basis element b in A₈, the total weight seems to equal p. This makes sense because w^*(λb) = λ, so for s copies of v₉ = μb, the target becomes -sμb with weight ⟨p - sμ⟩, and adding s gives ⟨p - sμ⟩ + s, which appears to stay bounded by p.
+
+Now I'm checking the boundary cases more carefully. When sμ ≤ p - 1, the total equals exactly p. But when sμ exceeds p - 1 modulo p, the representative ⟨p - sμ⟩ wraps around, giving p - sμ + s = p - s(μ - 1), which is strictly less than p whenever μ ≠ 1.
+
+Let me verify with a concrete example: taking p = 5, μ = 2, s = 1, the target is -2 ≡ 3 mod 5, so w*(3b₁) = 3 and the total weight is 4, which is indeed less than 5. This means both weights 4 and 5 are achievable, confirming |W| ≥ 2.
+
+Now checking other values of s: when s = 2, the target becomes b₁ with weight 1, giving total weight 3 which satisfies the constraint. For s = 3, the weight jumps to 7, exceeding p = 5, so this case fails. Similarly, s = 4 gives weight 6, also too large.
+
+I'm realizing that the target might have alternative representations beyond just multiples of b₁—for instance, (3,0,0) could potentially decompose differently—but I proved earlier that multiples of basis vectors have unique minimal weights, so those alternatives won't help reduce the total. combination of multiple A₈ elements at weight < 3.
+
+Can (3,0,0) = c₁b₁ + c₂b₂ + ... with Σc_i < 3 and c_i ∈ {0,...,4}? 
+
+b₁ = (1,0,0), b₂ = (0,1,0), b₃ = (0,0,1), b₄ = (4,1,1), b₅ = (1,1,0), b₆ = (1,0,1), b₇ = (4,2,1), b₈ = (4,1,2).
+
+These are the tail vectors from Fiber 0, which consists of 8 vectors in F_p^4 with first coordinate 0, and the remaining coordinates give me these basis elements when working in F_p^3.
+
+Now I'm checking if (3,0,0) can be expressed as a linear combination of these tail vectors with total coefficient sum less than 3. At weight 2, I'd need either one vector with coefficient 2 or two vectors with coefficient 1 each. Doubling any single tail vector doesn't give (3,0,0), and checking pairs of vectors systematically—like b₁ + b₅ or b₁ + b₆—none of them sum to (3,0,0).
+
+At weight 1, I'd need a single vector equal to (3,0,0), which doesn't exist. So the minimum weight is 3, achieved by taking 3b₁, confirming w^* = 3.
+
+Now for v₉ = 2b₁ = (2,0,0) at p = 5, the achievable zero-sum weights with A₈ ∪ {v₉} are {3, 4, 5}, giving |W| = 3 = (p+1)/2. This suggests the Weight Flexibility Theorem might hold for certain choices of the 9th vector. Let me reconsider my earlier counterexample with v₉ = (0,1,1) — it might not actually be a counterexample after all. Checking the cases: when s = 1, the target is (0,4,4) with w^* = 4 for a total of 5, and when s = 2, the target becomes (0,3,3) with a window starting at j = 3.
+
+For the vector (0,3,3), I need to verify whether w^* is actually 4 or if it can be achieved at lower weight. At w = 3, the constraints ⌈3/2⌉ ≤ 3 and 3 ≤ 2⌊3/2⌋ fail, so w = 3 doesn't work. Checking w = 4: the lower bound ⌈4/2⌉ = 2 satisfies 2 ≤ 3, and I need to verify the upper bound condition.
+
+The Window theorem gives a complete characterization—(0,j,j) is in Σ_w(A₈) if and only if ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋, which applies to all representations targeting (0,j,j), not just those on the line L. L-targets. The Window Theorem only characterizes targets on L itself, not off-L combinations, so it gives me a complete answer: (0,3,3) has weight 4 in A₈, making the zero-sum with v₉ at weight 6 total, which exceeds the bound of 5. Now checking s = 3 with target (0,2,2): the window at w = 2 includes j = 2, so this target is achievable.
+
+For s = 3, the minimum weight is 2, giving a total of 5. At s = 4 with target (0,1,1), the window again allows w = 2, but the total weight becomes 6, which violates the constraint. So across all valid cases with v₉ = (0,1,1), I'm only getting W = {5}, which means the Weight Flexibility Theorem fails at p = 5.
+
+This is a critical issue—the approach outlined in goal.md breaks down here. However, I'm realizing that having only weight p achievable isn't necessarily fatal. The real problem is that a zero-sum at weight p in the fiber needs its first coordinate to cancel when lifting back to F_p^{r+1}, and I need to think through whether that's actually possible given the constraints.
+
+Actually, I'm seeing something important: if a fiber c produces a zero-sum of tails at weight p, then lifting it gives (cp, 0) = (0, 0) in F_p^{r+1} since cp ≡ 0 (mod p). So the question becomes much simpler—does every fiber actually achieve a zero-sum of tails at weight exactly p? For fiber c with n_c vectors, the tail multiset has n_c(p-1) elements, and I need to check whether this is large enough to guarantee such a zero-sum exists.
+
+The bound s(C_p^r) = α(r)(p-1) + p tells me that n_c ≥ α(r) + 2 is sufficient for p ≥ 5, but if all fibers satisfy n_c ≤ α(r) + 1, then no single fiber has enough vectors to apply this bound directly. I need to think about what happens when I sum across all fibers instead.
+
+With total sum 2α(r) + 2 and each n_c bounded by α(r) + 1, I must have at least two nonempty fibers. If some fiber has exactly n_c = α(r) + 1, its tail multiset contains (α(r) + 1)(p-1) elements exceeding η(C_p^r) = α(r)(p-1) + 1, so the η bound gives a zero-sum of weight at most p. But I need weight exactly p for the lift to work in nonzero fibers—if the weight is less than p and the fiber is c ≠ 0, the first coordinate of the lift becomes cw ≢ 0, which breaks the zero-sum property.
+
+So from any nonzero fiber, I must have w = p exactly, yet the η bound only guarantees w ≤ p. The question is whether I can force w = p, and that seems to require additional structure I haven't pinned down yet.
+
+Looking at the copy count: with n_c = α(r)+1, I get (α(r)+1)(p-1) copies total, which falls exactly one short of the s(C_p^r) bound. This is the critical gap—I have enough copies to guarantee a zero-sum of length at most p by the η bound, but not enough to guarantee one of length exactly p by the s bound. That's precisely where the argument breaks down.
+
+So my strategy pivots: if fiber 0 contains at least α(r)+1 vectors, the η bound applies there directly and gives me a zero-sum of weight ≤ p, which lifts successfully to (0,0). But if fiber 0 has at most α(r) vectors, then the nonzero fibers must contain at least α(r)+2 vectors, and I need to handle that case differently.
+
+When all those extra vectors land in a single nonzero fiber c, I get n_c ≥ α(r)+2, which triggers the s bound and guarantees a zero-sum of weight exactly p that lifts. But if they're scattered across multiple nonzero fibers, each containing at most α(r)+1 vectors, the problem becomes trickier—I need to figure out whether I can combine partial zero-sums from different fibers to construct something of weight ≤ p overall.
+
+One possibility is to leverage a zero-sum from fiber 0 (if it has any vectors) together with vectors from a nonzero fiber, though I need to think through the details more carefully.
+
+Let me set up the structure: fiber 0 has n_0 vectors with their tails forming a set, and fiber c has n_c vectors with their own tail set. A cross-fiber zero-sum draws from multiple fibers simultaneously, and its total weight is bounded by the sum of the coefficients. The first coordinate constraint requires the weighted sum of fiber indices to vanish modulo p, while the tail components must also sum to zero.
+
+For a zero-sum spanning just fibers 0 and c, the weight equation becomes W_0 + c·W_c ≡ 0 (mod p), and the tail contributions from each fiber must cancel: the sum of scaled tails from fiber 0 equals the negative of the sum from fiber c.
+
+Now I need to check when these tail sums can actually meet—specifically, when there exist weights W_0 and W_c satisfying the modular constraint such that some value in the tail set of fiber 0 matches the negation of a value in the tail set of fiber c. If T_0 is a zero-sum-free set of the right size, shadow saturation tells me that the reachable tail sums cover everything except zero, so I can always find a W_0 that produces any nonzero target.
+
+For the fiber c side, I'll pick a single nonzero element from T_c and assign it coefficient 1, making the tail sum just that element itself with weight 1. Then I need the negation of this element to appear in some tail sum of T_0 at a weight W_0 where W_0 ≡ -c (mod p) and W_0 ≤ p-1. Shadow saturation again guarantees this is possible.
+
+But here's the issue: shadow saturation only tells me the negation exists somewhere in the tail sums of T_0 with weight at most p-1, not necessarily at the specific weight W_0 = p-c that I need. The constraint that W_0 + 1 ≤ p is satisfied when c ≥ 1, which holds since c is nonzero, but I still need to pin down whether the element actually appears at exactly that weight.
+
+If the shadow gives me -t at some weight W* that doesn't match p-c, I could try perturbing the representation to the right weight, but that's difficult in general. Alternatively, I might use a different coefficient s_{c,1} on the element t itself to make the weight work out.
+
+By varying s across {1,...,p-1}, the required weight W_0 = ⟨-cs⟩ sweeps through all possible weights {1,...,p-1} since multiplication by c is a bijection on F_p*. This means I should be able to find some s where the weight constraint is satisfied and -st lands in the right representation. Let me set up a cleaner parametrization: for each $s \in \{1,...,p-1\}$, I define $\tau(s) = -st$ as the target element and $\omega(s) = p - cs \bmod p$ as the required weight. As $s$ varies, $\tau(s)$ cycles through all nonzero multiples of $t$ while $\omega(s)$ simultaneously cycles through all weights in $\{1,...,p-1\}$, so I need to find at least one $s$ where $\tau(s)$ appears in the weight-$\omega(s)$ representation set from $T_0$.
+
+The key issue is that $t$ comes from fiber $c$ while $T_0$ contains only tails from fiber 0, so $\tau(s) = -st$ won't be proportional to any element of $T_0$ unless $t$ itself has a special relationship to $T_0$.
+
+In Case 1, where $t$ has no proportionality to any $b_j \in T_0$, the shadow saturation property tells me that $\tau(s)$ still belongs to $\Sigma_{\leq p-1}(T_0)$, meaning its minimum weight $w^*(\tau(s))$ falls somewhere in $\{1,...,p-1\}$. Now I need to verify that this minimum weight actually equals $\omega(s)$ for the appropriate choice of $s$, or more broadly, that $\tau(s)$ lands in the right weight class $\Sigma_{\omega(s)}(T_0)$.
+
+Since $T_0$ is strongly ZSF, the achievable weights for any target form a discrete subset of $\{1,...,p-1\}$—the minimum weight $w^*$ guarantees achievability at that level, but whether the target is achievable at other weights depends entirely on $T_0$'s structure. For $T_0 = A_8$ specifically, the Window Theorem gives me explicit ranges: targets on the invariant line achieve weights in $[2\lceil j/2 \rceil, 2j]$, while off-line targets hit weight $p-1$ and possibly others. For a general $T_0$ without the Window Theorem, I only have the minimum weight guarantee and no systematic way to determine the full spectrum of achievable weights.
+
+The key is that as $s$ varies over nonzero elements, the pairs $(\tau(s), \omega(s))$ trace out all of $(F_p^r \setminus \{0\}) \times \{1,...,p-1\}$ where $\tau(s) = -st$ and $\omega(s) = p - cs \bmod p$. For a target to be achievable, at least one of these $p-1$ pairs must land in the set of achievable pairs—and shadow saturation constrains which pairs are actually achievable.
+
+The issue is that there's no guarantee the required parametric curve intersects the achievable set unless the achievable set has enough density. So instead of relying on a single tail vector from fiber $c$, I should consider using multiple tail vectors from that fiber simultaneously, combining their contributions to expand what's achievable.
+
+If I take any element $\sigma_c$ from the sumset $\Sigma_{W_c}(T_c)$, then I need its negative to appear in $\Sigma_{W_0}(T_0)$ where $W_0 = p - cW_c \bmod p$. The key insight is that $\Sigma_{W_c}(T_c)$ can grow quite large—potentially spanning all of $F_p^r$ for sufficiently large $W_c$—which gives me much more flexibility in finding achievable pairs.
+
+Now I'm working through the modular arithmetic constraint more carefully. For a fixed $W_c$, there's a unique $W_0$ satisfying $W_0 \equiv -cW_c \pmod{p}$ with $1 \leq W_0 \leq p-1$. The additional constraint $W_0 + W_c \leq p$ then restricts which values of $W_c$ are actually viable.
+
+Let me check if this works for small cases: when $W_c = 1$, I get $W_0 = p - c$, giving a total of $p - c + 1$, which satisfies the bound as long as $c \geq 1$.
+
+For $W_c = p-1$, the calculation gives $W_0 = c$, so the total becomes $c + p - 1$, which only works when $c = 1$.
+
+More generally, each choice of $W_c$ determines a specific $W_0$, and I need to verify that the shadow sets actually intersect. Since $T_0$ is shadow-saturated, its shadow covers all nonzero elements up to a certain threshold, which should give me enough flexibility to find valid intersections.
+
+But here's the real issue: shadow saturation guarantees the target is reachable somewhere, just not necessarily at the exact weight I need. This weight mismatch is what's blocking the general argument.
+
+Looking at what I can actually prove cleanly, I have two main results. First, under the η bound, any strongly ZSF set has complete shadow saturation—this follows from a straightforward argument without the rescaling complications. Second, the Weight Flexibility Theorem as originally stated doesn't hold at $p = 5$, which means the approach needs refinement.
+
+For the inductive step, I can make progress when fibers are large enough—either when a non-zero fiber has at least $\alpha(r)+2$ vectors or when fiber 0 has at least $\alpha(r)+1$. The remaining challenge is combining vectors across fibers when both are constrained to near-minimal sizes, since shadow saturation alone doesn't pin down which weight the representation uses.
+
+This brings me to the exact-weight shadow question: for a strongly ZSF set of size $\alpha(r)$, how many weight-$w$ sums does it actually produce? At rank 3 for $A_8$, I can compute this exactly using the Window Theorem, but for general sets I need a lower bound that accounts for both the combinatorial growth of sums and the structural constraints from the ZSF property.
+
+Let me reconsider this more carefully using sumset theory. The key insight is that $\Sigma_w(B)$ consists of all weighted sums where coefficients from $\{0, ..., p-1\}$ sum to exactly $w$. If I adjoin 0 to $B$ and think of this as taking $w$ elements from the expanded set with repetition allowed, I can apply iterated sumset bounds to get a handle on the size.
+
+For the one-dimensional case, Cauchy-Davenport gives tight control: the sumset grows by at least $\min(p, |A| + |B| - 1)$. But in higher dimensions over $\mathbb{F}_p^r$, Kneser's theorem is more refined—it says $|A + B| \geq |A| + |B| - |H|$ where $H$ is the stabilizer subgroup of $A + B$. Since subgroups in $\mathbb{F}_p^r$ are exactly the vector subspaces, if $A$ and $B$ avoid being trapped in any proper subspace, the bound becomes much stronger.
+
+Now I'm applying this to construct $B'$ by adjoining zero to $B$, which gives me control over iterated sumsets. As I scale up to $wB'$ for large enough $w$, the sumset eventually fills the entire space $\mathbb{F}_p^r$, and I can pin down exactly when this happens based on the size of $\alpha(r)$.
+
+But actually, the shadow saturation bound $w^*(t) \leq p-1$ is far stronger for practical purposes—it's exponentially better than what I'm getting from the sumset growth argument when $r \geq 3$. Let me shift focus to understanding the exact-weight sumsets instead, where I track which elements appear with a specific number of representations.
+
+For weight 1, I just get $B$ itself with size $\alpha(r)$. At weight 2, I'm looking at pairs of basis elements and their sums, which gives roughly $\alpha(r)^2/2$ elements before collisions. By the time the weight reaches around $\sqrt{p^r}$, birthday-type saturation kicks in and the sumset fills all of $F_p^r$. But the constraint I actually care about is much more restrictive—I need the sumset at weights that align with the cross-fiber first-coordinate condition, which is a very specific structural requirement.
+
+Now I should consolidate what I've found and write up the main results cleanly.
+
+I've identified four key findings: a universal shadow saturation result that resolves the adversarial attacks from before, evidence that the weight flexibility approach doesn't work as originally stated, the precise obstruction in the inductive step coming from cross-fiber constraints, and a reformulation around whether I can guarantee weight $\leq p$ zero-sums when vectors span at least 3 fibers. Let me explore whether there's a way to bypass this bottleneck by applying the $\eta$ bound at a lower rank across the entire set of vectors in $F_p^{r+1}$ rather than working fiber-by-fiber.
+
+The sequence has length $(2\alpha(r)+2)(p-1)$, which vastly exceeds the Davenport constant $(r+1)(p-1)+1$ for $F_p^{r+1}$ since $\alpha(r) = 9 \cdot 2^{r-3} - 1$ grows exponentially and dominates $r+1$ for $r \geq 4$. This abundance of copies—roughly $\frac{2\alpha(r)+2}{r+1}$ times the Davenport number—guarantees an enormous number of zero-sums exist in the sequence, so the real challenge is whether at least one has weight $\leq p$.
+
+I can extract at least $\frac{2\alpha(r)+2}{r+1} - 1$ disjoint zero-sum subsequences from this sequence, but the counting argument fails: the average weight per subsequence would be $\frac{(2\alpha(r)+2)(p-1)}{k}$, which is far too large. I need to shift to a structural approach instead—specifically, using weighted Chevalley-Warning to analyze the polynomial system where the sum of weighted elements equals zero in $F_p^r$.
+
+The issue is that the weight constraint $\sum x_i \leq p$ isn't naturally polynomial over $F_p$, so I can't directly apply Chevalley-Warning. But the classical result tells me that solutions to $\sum x_i v_i = 0$ with $x_i \in F_p$ form a subspace of dimension $n-r$ with $p^{n-r}$ total solutions, and I need to understand how their weights distribute. {0, 1, ..., n(p-1)\}$. We want to show SOME solution has weight in $\{1,...,p\}$ (i.e., weight ≤ p, nonzero).
+
+Weight 0: only the zero solution. Count: 1.
+Weight ≡ 0 mod p: $p^{n-r-1}$ solutions (if the weight functional is nonzero on the kernel, which it usually is).
+
+Solutions of weight exactly $kp$ (in $\{kp\}$): roughly $p^{n-r-1} / C$ for each $k$, where $C$ accounts for the number of solutions in each weight class.
+
+We need: the number of solutions of weight in $\{1,...,p\}$ is > 0.
+
+There are $p^{n-r}$ total solutions. At weight 0 there's just the trivial one, and most solutions cluster around typical weight $\sim n(p-1)/2$. So solutions with weight at most $p$ should be roughly $p^{n-r} \cdot 2/n$, which is substantial when $n-r$ is large. This is heuristic though—making it rigorous requires controlling the weight distribution carefully.
+
+I'm setting up a generating function approach where I count solutions to the system $Mx = 0$ with a specific weight constraint. The Gauss sum calculations are getting too intricate to pursue productively right now, so I should focus on what I can actually prove rigorously. Let me shift to exploring a projection-based approach at general rank instead. The key observation is that when I have 2α(r)+2 vectors in F_p^{r+1}, projecting them onto F_p^r gives me a collection of projections—some possibly zero or proportional—and I need to count how many genuinely distinct projective directions emerge from this.
+
+Since the number of non-proportional projections exceeds α(r), I can invoke the η bound on these projected tails to find a zero-sum relation among them with bounded weight. Lifting this relation back to the original vectors gives me a constraint equation on the first coordinates, which provides one linear restriction on the adversary's perturbation space—a space that should have dimension at least k - r - 1 depending on the support structure.
+
+Now I'm reconsidering the mechanics more carefully. The zero-sum of tails has bounded weight, and I want to adjust the coefficients while preserving both the tail zero-sum and the total weight. The perturbation directions form a kernel defined by the tail matrix and the weight constraint, and I need to understand how much freedom this gives me to satisfy the first-coordinate condition.
+
+The key insight is that if the kernel has positive dimension and the first-coordinate functional isn't orthogonal to it, I can find adjustments within the box constraints—the volume of feasible perturbations scales with the dimension of the kernel and the box size. the box [0,p-1]^k is actually the complete set of representatives for Z/pZ^k, so every kernel element maps to exactly one point in the box. Since we're working modulo p, the constraint that c_i = s_i + d_i stays in {0,...,p-1} is automatically satisfied—these are just the standard representatives of Z/pZ.
+
+Now I'm checking whether the weight changes when we apply this perturbation. The sum Σ(s_i + d_i) equals w plus Σ d_i, and since we required Σ d_i ≡ 0 (mod p), the total weight stays congruent to w modulo p. But I need to be careful about the actual integer weight, which depends on how we represent these elements.
+
+When we add d_i to s_i and reduce modulo p, the representative in {0,...,p-1} might not equal the integer sum s_i + d_i. For instance, if s_i = 3, d_i = 4, and p = 5, then s_i + d_i = 7 ≡ 2 (mod 5), so the new coefficient is 2, but the integer sum was 7. This means the weight can actually shift by the number of carries that occur during the reduction. So the perturbation does affect the integer weight, and I need to account for this carefully. The weight changes by a multiple of p due to the modular arithmetic, and since the perturbations sum to zero mod p, the total weight shift is also a multiple of p. This means if the original weight is w, the perturbed weight becomes w + kp for some integer k, so I need w + kp ≤ p to satisfy the constraint.
+
+Now I'm realizing the key tension: the perturbation lets me change the first-coordinate sum to whatever I want, but it also shifts the weight by multiples of p. If k = 0, the weight stays at w, which works if w ≤ p. But for k ≠ 0, the weight jumps to w ± p or higher, which might violate the bound. The real question is whether I can keep the perturbations small enough—ideally with each d_i in a range like {-(p-1)/2, ..., (p-1)/2}—to avoid wrapping around and changing the weight unexpectedly.
+
+The issue is that even with small perturbations, about half the coordinates will wrap modulo p, causing the weight to grow uncontrollably. But here's the key insight: I don't have to accept the first perturbation I find. Instead, I can search over all perturbations in the kernel that achieve the desired first-coordinate sum and pick the one that minimizes the resulting weight.
+
+The challenge is that minimizing the weight function over a subgroup is generally hard to compute. The function Σ ⟨x_i⟩ ranges from 0 to k(p-1) with average k(p-1)/2, and while I can bound the minimum over a subgroup, the bound isn't tight enough to guarantee a small weight.
+
+Let me try a different angle. Instead of working with the weight function directly, I'll apply the η bound to all the tail vectors. I have n = 2α(r)+2 non-proportional vectors in F_p^{r+1}, which means n tail vectors t_1,...,t_n in F_p^r. The key question is how many of these tails are actually non-proportional. If two vectors share the same projective tail direction but are non-proportional overall, their first coordinates must differ in a specific way.
+
+For each projective tail class [t], the vectors with tails proportional to t can have at most p+1 distinct projective classes when we look at their (c, μ) coordinates. This means the number of distinct projective tails is at least ⌈n/(p+1)⌉. With n = 2α(r)+2 and the bounds on α(r) for r ≥ 4 and p ≥ 5, I get at least 6 projective tails, which should give me enough structure to derive a contradiction.
+
+But wait—6 is much smaller than α(r), so the η bound on tails (which requires α(r)+1 non-proportional tails) won't directly apply unless most of these tails are actually non-proportional. Let me reconsider when two vectors have proportional tails. Two vectors (c₁, t) and (c₂, λt) are proportional in F_p^{r+1} only if c₂ = λc₁, so for them to be non-proportional, c₂ must fail this condition.
+
+Now, how many vectors can share the same projective tail [t]? Each vector has the form (c_i, μ_i t) where the pairs (c_i, μ_i) represent distinct projective classes. Since these pairs live in PG(1, F_p), there are at most p+1 of them. With n = 2α(r)+2 vectors total, I need at least ⌈(2α(r)+2)/(p+1)⌉ distinct projective tails.
+
+For the η bound to work on the tails, I need α(r)+1 non-proportional tails. Setting up the inequality ⌈(2α(r)+2)/(p+1)⌉ ≥ α(r)+1 and simplifying, I get α(r)(1-p) ≥ p-1, which means α(r) ≤ -1. That's impossible, so this approach can't guarantee what I'm trying to prove.
+
+Since the counting argument alone won't give me enough non-proportional tails, I need to show structurally that most tails actually are non-proportional. The direct η-on-tails strategy fails without that structural insight.
+
+I've explored this enough. Now I'm going to write up a clean proof of Universal Shadow Saturation, analyze what it means for the overall proof chain, pinpoint exactly where the inductive step breaks down, and state the key lemma that would fix it. I should also verify my main claims computationally.
+
+============================================================
+BLOCK 8 (356 chars)
+============================================================
+Good. The literature search confirms that the eta constant and s constant are well-studied, but I don't see any recent breakthrough that directly helps with our specific problem. Let me now focus on writing up the proofs.
+
+Let me also look at one more specific reference that might be relevant - Grynkiewicz's work on the s constant for higher-rank groups.
+
+============================================================
+BLOCK 9 (485 chars)
+============================================================
+Good. Now let me consolidate my findings and write the theorem proofs. Let me also verify my key claims computationally by sending verification requests.
+
+The main new results I can prove:
+
+1. **Universal Shadow Saturation** (the clean 5-line proof)
+2. **Weight Flexibility Failure** (counterexample)
+3. **Perturbation Theorem for Zero-Sum Weights** (weight changes by multiples of p)
+4. **Precise Bottleneck Analysis** for the inductive step
+
+Let me write this all up as a report now.

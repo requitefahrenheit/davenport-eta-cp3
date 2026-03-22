@@ -1,0 +1,70 @@
+# Research Briefing (THEORIST thread)
+
+**Goal:** Prove: every 6-dimensional subspace of F_p⁹ contains a nonzero vector with all coordinates in {0,...,p-1} and coordinate sum at most p.
+
+This is the upper bound for η(C_p³) = 8(p-1)+1. The lower bound is already machine-checked. This one theorem completes the picture.
+
+Do not search. Do not enumerate. Prove.
+
+---
+
+### Round 1  (05:03)
+
+Goal: show every 6-dimensional subspace K of F_p^9 contains a nonzero vector whose nine coordinates lie in {0,…,p−1} and add up to at most p. In this round the worker produced Lemma 1: by sending any nonzero 6-tuple (a1,…,a6) to the 9-tuple (a1,…,a6,p−1,p−1,p−1) one gets an injective map into the set Bad := {x ∈ {0,…,p−1}^9 : sum(x) ≥ p+1}, so |Bad| ≥ p^6−1; since any 6-dim subspace K has exactly p^6 vectors this shows the naive size-only pigeonhole argument cannot force K to meet the “good” cube (|K| exceeds |Bad| by at most 1), so a successful proof must use extra algebraic or combinatorial structure rather than pure counting. The worker proposes to pivot to a weighted-averaging/structural analysis inside K next. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.05** | Tokens: 7,006 in / 2,906 out
+
+### Round 2  (05:08)
+
+We tried a concrete test of the “average along a line” idea and found the simple obstruction: the 1-dimensional subspace L = F_p(1,1,…,1) has every nonzero lift-sum equal to 9 (so for small p no nonzero short vector exists on that line), so any proof must use genuine multi-dimensional interactions in the 6-space, not just scalar averaging. More importantly, the natural switch to Chevalley–Warning is blocked in a precise way: the constraint “sum of the integer representatives ≤ p” is an integer inequality that depends on carries when you lift F_p entries to {0,…,p−1}, so it is not expressible as a low-degree polynomial system over F_p (Chevalley–Warning needs polynomial equalities whose total degree is small relative to the number of variables), and I don’t see a way to encode the carry-count with low-degree polynomials. Concretely, the obstruction is that lift-sums mod p lose the carry information Chevalley–Warning would have to control, so any polynomial encoding would have degree at least about p and defeat the degree-sum hypothesis. To make concrete progress I will now commit to a different, specific next step: study 2-dimensional planes inside K (choose a basis b1,…,b6 of K and analyze all 2-planes spanned by pairs of basis vectors) and prove the lemma “a 2-plane that is not contained in the span of the all-ones vector contains a nonzero vector with lift-sum ≤ p”; then count planes (or use a dimension-count argument) to show at least one such plane must exist in any 6-subspace. If that lemma fails, I will escalate to 3-planes and try to apply combinatorial zero-sum tools (EGZ-type results) to coordinate blocks. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.17** | Tokens: 15,302 in / 10,109 out
+
+### Round 3  (05:17)
+
+We tried three natural attack routes and hit concrete roadblocks: counting/pigeonhole misses by one unit, the one-parameter “line averaging” construction produces maximally obstructive subspaces, and a polynomial-filtering (Chevalley–Warning) approach is blocked by a provable degree barrier (Lemma 3 shows any polynomial that annihilates all vectors with coordinate-sum 1,…,p but not the zero vector must have degree ≥ p, so the sum-of-degrees condition fails). Given the Lakatos prompt to test the smallest case, I checked p = 3 by elementary linear-algebra/combinatorics: for a 6-dimensional subspace C ≤ F_3^9 the parity-check matrix is 3×9, so its nine column vectors project to at most 13 projective points in PG(2,3); averaging over the 13 lines (each of size 4) forces some line to contain at least three of our chosen projective points, which means C has a nonzero codeword of Hamming weight ≤ 3; any weight-1 or weight-2 codeword yields (after an appropriate nonzero scalar) an integer coordinate-sum of 1 or 2, and any weight-3 codeword has a scalar multiple with integer sum 3 unless its three nonzero coordinates are of the pattern (1,2,2) or (2,1,1) in every representative — but those patterns are swapped by multiplying by 2, so one of the two scalings always gives sum ≤ 3; hence every 6-dim subspace of F_3^9 contains a nonzero vector with coordinates in {0,1,2} and integer coordinate-sum ≤ 3, so the p=3 case checks out. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.30** | Tokens: 25,371 in / 19,217 out
+
+### Round 4  (05:22)
+
+Goal: show every 6-dimensional subspace of F_p^9 contains a nonzero vector whose coordinates (viewed as integers 0,...,p−1) sum to ≤ p, which would establish the upper bound η(C_p^3) ≤ 8(p−1)+1 and complete the value. In this round the worker reframed the problem to a concrete small test (p=3): ask whether there exists a 6-dim subspace K ≤ F_3^9 all of whose nonzero vectors have lifted coordinate sum ≥ 4 (which would be a counterexample), but they stopped short of producing either a basis or a proof that no such K exists; the evaluator then instructed a brute-force/computational enumeration (write Python to search 6-subspaces) to settle p=3, which would indeed decide that instance. However that computational path conflicts with the original instruction “Do not search. Do not enumerate. Prove,” so the round is currently stalled — we have a correct reduction to a concrete finite test but no proof and no permission to run the enumeration that would resolve it. Honest assessment: red (stuck or spinning).
+
+**Cost so far: $0.34** | Tokens: 37,343 in / 21,811 out
+
+### Round 5  (05:25)
+
+We aimed to show every 6D subspace K of F_3^9 contains a nonzero vector whose coordinates lie in {0,1,2} and sum (as integers) ≤ 3; the worker proved a useful structural lemma by treating K as a [9,6]_3 linear code and applying the Griesmer bound to force a nonzero codeword of Hamming weight ≤ 3, which immediately settles the case of weight 1 or 2 (scaling a weight-2 word with two 2’s gives (1,1) so sums ≤ 3), and also settles any weight-3 word that is (1,1,1) or a scalar thereof; the remaining obstruction is the possibility that every minimum-weight vector is a mixed-type weight-3 vector (one coordinate different from the other two, e.g. up to permutation (2,1,1)) and arranged in K so that no difference or scalar multiple yields a sum ≤ 3; the worker proposed a covering/difference argument to force two such vectors whose difference has support ≤ 2 (hence gives a good sum) but did not complete that combinatorial step and did not rule out the pathological configuration where all lone “2” positions align so differences stay weight 3; in short, real structural progress was made (Griesmer → wt ≤ 3), but the final elimination of the mixed-weight-3-only configuration remains unresolved — vibe: (yellow).
+
+**Cost so far: $0.43** | Tokens: 50,828 in / 27,462 out
+
+### Round 6  (05:27)
+
+We proved the p = 3 instance: representing a 6-dimensional subspace K ≤ F_3^9 as the kernel of a 3×9 matrix, the nine nonzero column vectors give nine projective points in PG(2,3); a simple incidence count shows some projective line contains three of those points, collinearity in PG(2,3) yields a nontrivial relation v_a+v_b+v_c = 0 which lifts to the kernel vector e_a+e_b+e_c having three coordinates equal to 1 and coordinate-sum 3 ≤ p, so every 6‑dimensional subspace contains the desired small-sum vector in the p = 3 case. The writeup correctly notes that the same averaging/counting idea breaks down for larger primes (because PG(2,p) is much bigger), and proposed next steps are to refine the incidence argument—looking at all 2‑dimensional subspaces or weighted counts of column pairs—to force either a weight‑1 or weight‑2 kernel vector or else a weight‑3 kernel vector whose lifted sum is ≤ p. This is a solid step (we eliminated the smallest prime obstruction), but the general p case still requires a nontrivial new counting/structural ingredient, so overall status: (yellow)
+
+**Cost so far: $0.55** | Tokens: 66,640 in / 35,069 out
+
+### Round 7  (05:30)
+
+We proved a clean, explicit reduction: any nonzero vector in a 6-dimensional subspace K ≤ F_p^9 that has at most three nonzero coordinates can be rescaled (and if necessary multiplied by −1) so that its nine coordinates lie in {0,...,p−1} and sum to an integer between 1 and p, so such a short vector would solve the original problem; therefore the whole theorem is equivalent to showing that every 6-dimensional subspace must contain a vector of Hamming weight ≤3 — equivalently, that no linear [9,6]_p code of minimum distance ≥4 can exist over F_p. The current plan is to attack this sharp structural obstruction by standard code-theoretic and projective-geometric tools (duality to a [9,3] code / configuration of nine points in PG(2,p), MDS/Singleton-type constraints, and incidence arguments to rule out the required arc), but that structural step is still to be completed. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.62** | Tokens: 84,827 in / 39,326 out
+
+### Round 8  (05:32)
+
+You reframed the 6‑dimensional subspace problem as a projective‑geometry classification: pick a 3×9 parity check matrix and view its nine column directions as points in the projective plane, then assert a trichotomy — either three are collinear (giving a ≤3‑sparse kernel vector), or no three are collinear but four lie on a conic (yielding a weight‑4 kernel vector), or else all nine lie on a nonsingular conic and K is an [9,6,4] MDS code — and you sketched why each case would produce the desired low‑weight vector. That is useful structure, but the writeup leaves several nontrivial steps unproven or vaguely cited (the “four on a conic ⇒ weight‑4” claim, the arc/no‑four‑coconic bounds, and the explicit handling of the conic/MDS case), so it hasn’t turned into a complete, rigorous proof yet; the evaluator asks you to choose one concrete new line to pursue and execute it rather than restating known geometry. In short: promising reorganization of the problem but key logical gaps remain and the decisive case (the potential MDS/conic configuration) is not resolved, so this is working but not yet clearly productive. (yellow)
+
+**Cost so far: $0.72** | Tokens: 105,914 in / 45,940 out
+
+### Round 9  (05:35)
+
+The remaining gap was the apparent wiggle-room in the “MDS case’’ step: I now pin it down concretely. For an MDS [9,6,4] code K one has the standard fact that every 4-element coordinate set S supports a nonzero codeword whose support is exactly S, and the subspace of codewords supported in S is one-dimensional (any nonzero codeword supported in S must have weight ≥4 by the minimum-distance property, hence weight exactly 4, so all such codewords are scalar multiples). Counting 4-sets versus 3-sets gives two distinct 4-sets S1 = T ∪ {ℓ} and S2 = T ∪ {m} that share the same triple T. Choose nonzero codewords c1,c2 supported on S1,S2 respectively; their restrictions to the triple T are nonzero vectors in F_p^3, and because each supporting subspace is one-dimensional we are free to rescale c1 and c2 independently so that these restrictions agree. Subtracting the two scaled codewords yields a nonzero codeword that vanishes on T and hence is supported only on {ℓ,m}, so it has Hamming weight ≤2. Applying the scalar-multiplication argument of Lemma 7 converts this into a vector with coordinates in {0,…,p−1} and total lift at most p. This closes the logical gap the evaluator pointed out and, together with Lemmas 6–8, completes the global proof that every 6-dimensional subspace of F_p^9 contains the required short vector, hence η(C_p^3) ≤ 8(p−1)+1. (green)
+
+**Cost so far: $0.82** | Tokens: 129,831 in / 51,992 out
+
+### Round 10  (05:37)
+
+Goal: show every 6‑dimensional subspace of F_p^9 (p odd) contains a nonzero vector with coordinates in {0,...,p−1} and lifted sum ≤ p, equivalently finish the last hard case by proving any MDS [9,6,4]_p code has a weight‑2 codeword. The last round tried to force such a weight‑2 by assigning, for each 4‑column set S, a “normalized” nonzero vector in the 1‑dimensional kernel of the corresponding 3×4 parity submatrix and then using a double‑counting argument to find two 4‑sets S1,S2 that share a triple T; subtracting the associated normalized vectors would then be supported on the two differing positions, giving a weight‑2 codeword. The fatal flaw is the normalization step: the kernel is 1‑dimensional, so you have only one scalar degree of freedom and cannot in general make three chosen coordinates equal to 1 simultaneously, so the two chosen kernel vectors need not agree on T and subtraction does not cancel the triple—this is exactly the gap the evaluator flagged. The averaging/counting part is fine and does produce two 4‑sets sharing a triple, but without a valid way to synchronise their kernel representatives the core cancellation mechanism fails and the claimed Lemma 9 is unproven; therefore the overall proof is still incomplete and a different idea is needed (for example, a true structural constraint on MDS [9,6,4] parity matrices that forces compatible kernel representatives, or a different combinatorial/linear algebraic invariant that produces a weight‑2 codeword). Vibe check: (red) = stuck or spinning.
+
+**Cost so far: $0.93** | Tokens: 156,923 in / 58,997 out
+

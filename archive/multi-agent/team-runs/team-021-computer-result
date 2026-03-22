@@ -1,0 +1,19 @@
+# Research Result
+
+**Goal:** Prove: every 6-dimensional subspace of F_p⁹ contains a nonzero vector with all coordinates in {0,...,p-1} and coordinate sum at most p.
+
+This is the upper bound for η(C_p³) = 8(p-1)+1. The lower bound is already machine-checked. This one theorem completes the picture.
+
+Do not search. Do not enumerate. Prove.
+**Arch:** gpt
+**Turns:** 6
+**Cost:** $1.1099
+
+## Log
+
+
+[Turn 1] Worker produced a concrete counting lemma: the “Bad” set in \( \mathbb F_p^9\) has size \(>p^6\), so pure cardinality/pigeonhole cannot exclude a 6-subspace lying inside it. They also ran an exact DP convolution computation for small primes \(p=3,5,7,11,13\) confirming the complement size is enormous and certainly not \(<p^6\). Approaches tried: (1) counting/pigeonhole — fails decisively (Bad is much larger than a 6-subspace). Lakatos threshold not reached (only one approach has failed so far; margin is not a tight “off by 1” type).
+[Turn 2] Turn 2 proposes a “sparse support” lemma (aiming for a 2-sparse nonzero vector in any 6-subspace) but the attempted proof doesn’t advance beyond noting that simple incidence/dimension counting is too weak. The output then pivots to a Chevalley–Warning plan without executing it, and the computations only sample random subspaces showing min support 2 (suggestive but not a lemma/obstruction). Approaches tried: (2) sparse-support via incidence counting — stalled; plus preliminary computational probing (no theorem extracted). Lakatos threshold not reached (only one real failure + one stall; no consistent tight-margin breakdown yet).
+[Turn 3] Turn 3 makes concrete progress identifying a genuine degree obstruction to a naive Chevalley–Warning encoding: total degree \(2p-1\) exceeds 9 for \(p\ge5\), so that package cannot work. However, the follow-up computation meanders (min-weight experiments on random vectors) without extracting a structural lemma and contains inconsistent “None/1000000000” placeholders, indicating the computational question isn’t precisely posed yet. Approaches tried: (3) Chevalley–Warning polynomial method — explicit attempt fails due to degree barrier (for \(p\ge5\)); additional ad hoc numeric probing doesn’t yet support a new theorem. Lakatos threshold not reached (two clear failures with different margins/causes; no tight repeated off-by-constant pattern yet).
+[Turn 4] Worker produced a concrete computational obstruction: for p=5 and p=7 they found explicit 6D subspaces of \(\mathbb F_p^9\) with minimum nonzero support 3, refuting the attempted global claim \(\sigma(K)\le 2\). This is a real counterexample to Approach (2) and also indicates any proof must handle support-3 vectors (not just 1–2 sparse). Approaches tried: (1) counting fails; (2) “always 2-sparse” is false (now disproved by computation); (3) naive Chevalley–Warning encoding fails by degree barrier. Lakatos threshold not reached for the main target theorem (only a sub-lemma was falsified); no repeated tight-margin failures on the main conjecture yet.
+[Turn 5] Worker introduced a substantive new structural lemma for small primes via coding theory: viewing a 6-subspace of \(\mathbb F_p^9\) as a \([9,6,d]\) code, Singleton gives \(d\le4\), and the MDS length bound \(n\le p+1\) excludes \(d=4\) for \(p\le7\), forcing a 3-sparse vector and (they claim) a scaling argument to get lifted sum in \([1,p]\). They also ran a randomized computational sanity check for \(p=3,5\) finding no counterexample subspaces in samples. Approaches: (4) coding-theoretic/MDS obstruction yields progress (handles \(p\le7\)); earlier approaches (1)-(3) remain as logged. Lakatos threshold still not reached for the main theorem: now there is partial proof progress rather than repeated near-miss failures.

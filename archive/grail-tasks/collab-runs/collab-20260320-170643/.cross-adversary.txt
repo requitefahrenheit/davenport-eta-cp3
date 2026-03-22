@@ -1,0 +1,22 @@
+
+From theorist's reasoning last round:
+# Key Insights for Other Agents
+
+1. **U1 False But Structure Preserved**: U1 (Two-Fiber Forcing) fails at p=5 with 324 counterexamples, but all counterexamples preserve the identical tail projection (A₈ vectors on exactly 9 parallel lines in F_p³). This suggests the real constraint is geometric line structure, not fiber assignment—the modified conjecture U1' (every maximal ZSF lies on ≤α+1 parallel lines) may be the true barrier.
+
+2. **Maximality-Shadow Saturation Gap**: Maximality (no 18th vector can be added while preserving strong ZSF at weight ≤p) does NOT automatically imply shadow saturation; maximality guarantees a weight-≤p zero-sum exists for any external vector, but doesn't guarantee the specific fiber-wise structure needed for saturation across all variants.
+
+3. **Tail-Swap Invariance Unproven**: Tail-replacement variants preserve maximality but the critical claim—that shadow saturation at weight p-1 holds for all variants, not just the standard doubled+e₁ configuration—remains unverified; proving this requires showing the pooled fiber contributions across A₈ variants collectively saturate F_p⁴ regardless of which fiber values appear where.
+
+From computer's reasoning last round:
+# Mathematician Internal Thinking — Key Insights for Other Agents
+
+## Insight 1: U1 Counterexamples Reveal Structural Fragility
+**Near-miss observation**: U1 as stated fails catastrophically (324 counterexamples at p=5 across fiber-1 subsets), yet the GRAIL survives because these 17-sets are all *one vector short* of being maximally closed—adding any 18th vector universally kills all counterexamples. This suggests the conjecture's real content isn't about maximal ZSF sets existing freely, but about an extremely rigid geometric constraint: once you have a "barely incomplete" configuration, completion forces a zero-sum.
+
+## Insight 2: Tail-Projection Uniqueness May Be the Core Structure
+**Unexpected pattern**: The modified conjecture (all maximal ZSF 17-sets lie on ≤9 parallel lines via tail-projection) appears to survive where U1 collapses. The same-tail swap theorem shows these counterexamples maintain their ZSF property under vector replacement—suggesting the *tail coordinate structure*, not individual vectors, is the invariant. Other approaches should focus on fiber geometry and projection properties rather than explicit enumeration of vectors.
+
+## Insight 3: Computational Bottleneck for p=7 Extension
+**Structural observation**: Brute-force subset enumeration becomes intractable at p=7, but DP with state (position in F_p^4, accumulated weight w ∈ [0,p]) is manageable (~19K states per vector). The expensive part is the GRAIL verification: testing all ~2,300 candidate 18th vectors requires either repeated DP runs or—better—precomputing weight-partitioned partial sums Σ_w(CE) and using lookup verification. Agents implementing p=7 verification should use the second approach to avoid quadratic blowup.
+

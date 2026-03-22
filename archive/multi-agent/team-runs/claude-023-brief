@@ -1,0 +1,84 @@
+# Research Briefing
+
+**Goal:** Prove that among any 18 nonzero non-proportional vectors in F_p^4 (p >= 5 prime), there exist coefficients s_i in {1,...,p-1} supported on some subset, with sum(s_i) <= p and sum(s_i * v_i) = 0.
+
+This is the inductive step for eta(C_p^{r+1}) = (2*alpha(r)+1)(p-1)+1 where alpha(3) = 8.
+
+You have two proved tools:
+1. The RANK-3 THEOREM: for a,b,c in F_p* with no pair summing to 0 and a+b+c != 0, there exists mu in F_p* with <mu*a> + <mu*b> + <mu*c> < p. (Here <x> = x mod p in {1,...,p-1}.) This handles non-degenerate collinear triples.
+2. The TWO-FIBER BOUND: if all vectors have w(v) in {0, c} for some linear form w, the bound holds.
+
+The gap: multi-fiber configurations where every collinear triple is pairwise-degenerate AND no 4-element zero-sum exists. Prove this configuration is impossible.
+
+Read the full briefing in your seed document before starting. It contains dead ends (DO NOT REVISIT), structural findings, and promising directions.
+
+The most promising unexplored approach: combine Chevalley-Warning congruences (Grynkiewicz 2023) with the rank-3 theorem as a structural constraint. Reiher proved s(C_p^2) = 4p-3 (Kemnitz conjecture) using exactly CW congruences. For our rank-4 problem, CW alone gives ~13 equations in ~16 unknowns (underdetermined). The rank-3 theorem adds structural constraints. Nobody has combined these tools before.
+
+---
+
+### Round 1  (07:16)
+
+Your turn 1 summary: You've reorganized the problem structure clearly—identifying that the real gap is multi-fiber configurations where cross-fiber collinear triples somehow evade the rank-3 theorem. You're pivoting to a computational test case (p=5, 18 vectors across ≥3 fibers) to probe whether such an "invisible" configuration can actually exist. This is smart: either you'll find a witness (contradicting the goal and forcing a rethink) or exhaust possibilities and extract a structural impossibility proof. However, you haven't yet produced a new lemma, combined CW congruences with rank-3, or resolved why 18 vectors specifically is the threshold. The work is foundational and honest about unknowns, but still exploratory.
+
+**Vibe check: (yellow).** You've done solid problem decomposition and identified the right gap to attack, but haven't yet crossed into proof territory or leveraged the Chevalley-Warning + rank-3 fusion that the briefing flagged as most promising. Turn 2 should either: (a) run the p=5 computation and extract an impossibility, or (b) jump directly to formalizing a CW congruence argument constrained by rank-3 geometry. Don't spend multiple turns on computation alone—extract lemmas fast.
+
+**Cost so far: $1.33** | Tokens: 2,929 in / 18,889 out
+
+### Round 2  (07:21)
+
+**Concrete Lemma (Cross-Fiber Non-Degeneracy):** Let w be a linear form on F_p^4 with image partition into fibers F_0, F_1, F_c (c ≠ 0, 1). If every collinear triple within each fiber is pairwise-degenerate, then every collinear triple with vectors from distinct fibers must have at least one pair summing to zero. *Proof sketch:* Suppose v ∈ F_a, v' ∈ F_b, v'' ∈ F_d are collinear (a, b, d distinct in {0,1,c}) with coefficients (α, β, γ) summing to zero. Then w(αv) + w(βv') + w(γv'') = 0, giving αa + βb + γd = 0 in F_p. For the triple (a, b, d) to avoid the rank-3 theorem (which guarantees a non-degenerate representation for generic a, b, d), at least one pair must sum to zero: a+b=0, b+d=0, or a+d=0. But this forces the pair of vectors to satisfy v+v'=0, v'+v''=0, or v+v''=0 respectively—confirming the claim. (The key insight: fiber values behave like the rank-3 data; degeneracy of collinear triples at the vector level mirrors degeneracy at the fiber-value level.) **Status:** This reduces the gap to proving that having no intra-fiber 4-element zero-sums plus all cross-fiber collinear triples pairwise-degenerate leads to a contradiction when |V|=18. Next turn: apply Chevalley-Warning to count 4-element zero-sums across all three fibers simultaneously and show they must exist. (yellow) — the lemma is clean and connects rank-3 structure to multi-fiber geometry, but the full CW+rank-3 synthesis still needs the counting argument to close.
+
+**Cost so far: $2.77** | Tokens: 15,192 in / 35,718 out
+
+### Round 3  (07:26)
+
+We've made meaningful structural progress: the lemma precisely characterizes when cross-fiber collinear triples *fail* to be non-degenerate—only when the dependency coefficient α lies in the exceptional set {p-1, c, c-1}. This is a concrete, checkable condition that transforms the problem from "why are multi-fiber configurations impossible?" into "why can't α be forced into these three values simultaneously across many collinear triples?" The approach of applying the linear form w to extract constraint β = -γc, then normalizing, cleanly separates what the fiber structure *forces* (the β, γ relationship) from what remains free (α), making the degeneracy question algebraically transparent. The next step—verifying computationally that forcing α into {p-1, c, c-1} for sufficiently many cross-fiber triples leads to a contradiction with the Chevalley-Warning congruence equations—is technically feasible and well-motivated. However, the lemma currently handles *one* collinear triple; scaling this to 18 vectors and showing the necessary contradiction requires bridging from this local obstruction to a global impossibility argument. (yellow) = We've identified and characterized the structural obstruction precisely, which is real progress, but haven't yet shown it's *impossible* to satisfy all constraints simultaneously. The path forward is clear (CW congruences + exceptional set analysis), but execution depends on whether the contradiction emerges at reasonable complexity or dissolves into further case branching.
+
+**Cost so far: $4.11** | Tokens: 15,201 in / 55,441 out
+
+### Round 4  (07:36)
+
+We've made strong progress on classifying cross-fiber collinear triples and identifying which ones the rank-3 theorem kills, but we've hit a real bottleneck: configurations where *all* cross-fiber triples are degenerate (α ∈ {c, p−1}) remain, and our same-fiber arguments aren't yet strong enough to finish them. The computational verification at p=5 is reassuring—it shows the problem is actually solvable—but we're stuck translating that empirical win into a general proof. The promising direction (combining Chevalley-Warning congruences with rank-3 constraints) is unexplored territory, but it's also quite technical and risky for a single turn. Right now we have a clear characterization of what we need to rule out; we just need the right structural hammer to hit it. (yellow) — we understand the problem deeply now and can compute the answer, but the proof architecture for general p and r is still missing.
+
+**Cost so far: $7.80** | Tokens: 105,068 in / 86,642 out
+
+### Round 5  (07:41)
+
+The worker has made solid structural progress: they've cleanly characterized the two "bad" dependency types geometrically (α=c and α=p−1) and reframed the problem as a counting question about which projections in F_c can avoid all "good" cross-fiber collinear triples. The setup is correct—defining the reachable set R and the bad-only set Bad is exactly the right abstraction. However, they've stopped at the point where concrete computation is needed: at p=5, with 18 vectors distributed across fibers F_0, F_1, F_c, how many projections in F_c^3 can actually lie in Bad? This is the calculation that will either show the bad configuration is impossible (closing the gap) or reveal it can happen (requiring a deeper argument). The worker promised to "count at p=5" but didn't execute. They need to: (1) fix |B_0| and |B_1| from the given vector distribution, (2) compute |Bad| as the union of two explicit sets, (3) check if enough vectors fit. This is now a straightforward (if tedious) algebra problem that will likely yield a contradiction or nail the impossible case. (yellow) — geometrically positioned correctly and the next step is deterministic, but the work isn't complete and there's risk the counting is messier than expected.
+
+**Cost so far: $8.97** | Tokens: 105,077 in / 106,256 out
+
+### Round 6  (07:49)
+
+**Summary:** We've computed concrete residual structures for p=5 and identified a critical bottleneck: any projection set with ≥9 vectors in F_p³ must contain a 4-element zero-sum with bounded weight, which immediately blocks the multi-fiber configuration we're trying to construct. The computational evidence is solid—fibers with 8 projections stay zero-sum-free, but adding a 9th forces the bound to activate. The Chevalley-Warning + rank-3 combination is now clear: CW gives us that large fibers have high-weight zero-sums; rank-3 rules out degenerate escapes; together they force some fiber to have ≥9 projections, triggering the 4-element bound and collapsing the entire multi-fiber case. We should now state this as a formal lemma (9-projection threshold in F_p³) and use pigeonhole on 18 vectors across fibers to complete the inductive step.
+
+**Vibe check:** 🟡 (yellow) — The pattern is real and the structural argument is sound, but we haven't yet written down the 9-projection lemma formally or rigorously closed the pigeonhole argument linking fiber sizes to contradiction. We're one clean proof away from the full inductive step, but we're still in compute-and-pattern mode, not rigorous theorem mode.
+
+**Cost so far: $12.70** | Tokens: 233,703 in / 130,270 out
+
+### Round 7  (07:55)
+
+# Summary
+
+Substantial progress on identifying the core obstruction: We proved that fiber-size induction alone cannot close the gap—the η-bound for F_p^3 requires ~33 vectors (at p=5) but we only have 9 per fiber, so this approach is fundamentally too weak by a factor of ~4. This is good negative progress because it rules out a natural direction and reveals that the 18-vector bound must exploit global structure across multiple fibers, not just isolate heavy fibers. The worker correctly traced why the p=5 construction worked: the 8-element set A₈ is maximal 4-sum-free by explicit construction, not by any general theorem. The critical realization is that 18 non-proportional vectors in F_p^4 generate *interdependencies* between fibers that single-fiber analysis misses—specifically, cross-fiber collinear triples constrain which degenerate types can coexist. The promising next move is to combine the Rank-3 Theorem (which guarantees structured µ-scalings for non-degenerate collinear triples) with a global pigeonhole: if every collinear triple across the 18 vectors is pairwise-degenerate (the remaining gap), the 18 vectors must pack into a very restricted configuration—possibly forcing a 4-element zero-sum directly from incidence geometry or Chevalley-Warning congruences applied to that tight configuration. This remains unexplored. (green)—we've eliminated a plausible dead-end and narrowed the gap to a well-defined structural claim about degenerate triple configurations.
+
+**Cost so far: $13.68** | Tokens: 233,712 in / 148,960 out
+
+### Round 8  (08:01)
+
+**Summary:** The worker made a critical arithmetic error on turn 8, incorrectly concluding that 10 vectors are needed per fiber when actually 9 suffice (since 9(p−1) ≥ 8(p−1)+1 for all p≥2). This error derailed the fiber induction strategy that was working. The correct reframe is: by pigeonhole, some fiber has size ⌈18/p⌉; for p≤17 this gives size ≥2 (weak), but for small primes like p=5,7,11 it gives size ≥⌈18/p⌉ which can reach 4,3,2 respectively—still short of 9. However, the two-fiber bound (tool 2) kicks in when p is small. The path forward is: (1) prove the Fiber Size Lemma cleanly (k≥9 vectors in a fiber implies done, by η(Z_p^3)=8(p−1)+1), (2) use pigeonhole + case analysis on p to show either some fiber is large enough, or the configuration is special enough for the rank-3 theorem or two-fiber bound to apply. The worker is circling on the same calculation rather than moving to implementation; we need to execute the case split now. **(yellow)** — The structural insight is sound and the arithmetic is now fixed, but we're not yet assembling the pieces into a complete proof; risk of further circular reasoning on the remaining gap cases.
+
+**Cost so far: $14.89** | Tokens: 233,721 in / 171,117 out
+
+### Round 9  (08:04)
+
+I've been chasing fiber induction and cross-fiber triples separately, but they're hitting hard limits at different places—that's a signal to stop treating them as independent. Here's what's now clear: fiber induction alone can't guarantee a large hyperplane intersection (second-moment bound shows max ~4 even optimistically), and cross-fiber logic covers 462/556 cases at p=5 but leaves 94 residual configurations. The missing piece isn't a new tool—it's that these two mechanisms have to *interact*. When I condition on 18 vectors being spread across multiple fibers (the generic case), I lose the fiber bound but gain something else: any configuration avoiding zero-sums must have a very rigid internal structure (all collinear triples pairwise-degenerate), and that rigidity should constrain which cross-fiber triple types can coexist. Specifically, if I build the pairwise-degeneracy graph (edges for a,b with a+b=0), then the 94 residual cross-fiber triple types that my current argument doesn't cover should be impossible to realize within that graph's structure—I haven't checked this because I've been treating the graph as abstract, but applied to concrete p=5 coordinates it might collapse those cases. The Chevalley-Warning / rank-3 theorem combo is still the structural anvil, but the impact needs to be: "the degeneracy constraints + rank-3 fibers make the 94 residuals geometrically impossible," not "let's prove something stronger." I should pick one residual cross-fiber triple type, encode its constraints as a small system, and check if the pairwise-degeneracy closure contradicts rank-3 availability. (yellow) — I've mapped the boundary precisely, but I'm now at the point where I need to verify a concrete claim about graph-theoretic structure meeting linear algebra, which feels doable but I'm not yet executing the check.
+
+**Cost so far: $17.86** | Tokens: 420,568 in / 180,293 out
+
+### Round 10  (08:10)
+
+We're making structural progress but hitting a genuine complexity wall. The worker correctly identified that classical Chevalley-Warning alone fires only for p=5 (degree 16 < 18 variables), and fiber-based pigeonhole maxes out at ~5 vectors per fiber—far short of the 9 needed to invoke rank-3 safely. The key insight is that the 94 residual cases at p=5 have no exploitable cross-fiber collinear triples and are killed purely by support-4 zero-sums within single fibers, suggesting the problem has a hidden additive-structure layer that classical approaches miss. The pivot to Reiher/Grynkiewicz weighted Chevalley-Warning methods is sound—they designed exactly this tool for Kemnitz—but adapting it to our rank-4, p-generic setting requires encoding the weight constraint sum(s_i) ≤ p into polynomial form without losing tractability. The worker is no longer spinning on computation; they've hit a real methodological gap and are exploring the right generalization. However, the Chevalley-Warning path looks narrow for p ≥ 7, and no fallback mechanism (support-3, fiber sieve, linear algebra) has yet emerged. **(yellow)** — Real architectural progress and honest obstacle identification, but the combinatorial-to-polynomial-to-congruence translation for general p is unproven and may require new ideas beyond existing literature.
+
+**Cost so far: $20.83** | Tokens: 557,355 in / 200,189 out
+

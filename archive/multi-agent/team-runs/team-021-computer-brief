@@ -1,0 +1,40 @@
+# Research Briefing (COMPUTER thread)
+
+**Goal:** Prove: every 6-dimensional subspace of F_p⁹ contains a nonzero vector with all coordinates in {0,...,p-1} and coordinate sum at most p.
+
+This is the upper bound for η(C_p³) = 8(p-1)+1. The lower bound is already machine-checked. This one theorem completes the picture.
+
+Do not search. Do not enumerate. Prove.
+
+---
+
+### Round 1  (05:06)
+
+This round established a clear negative result: the worker proved that the set of “bad” vectors in F_p^9 (those that, when lifted to  integer representatives 0,…,p−1, either sum to 0 or to at least p+1) has size exceeding p^6, and small-computer convolution checks for sample primes corroborate that the complement is far too small for a pure counting/pigeonhole argument to work; in other words, mere cardinality cannot force every 6-dimensional subspace to contain a good vector, so the counting approach is dead. The natural consequence is to drop brute counting and exploit linear structure: the next step is to analyze how the 6 linear constraints that define a 6-subspace interact with the lifted-coordinate-sum (the “weight” function) and use algebraic/structural restrictions (rather than size) to force a low-weight nonzero vector. The worker intends to pursue dependencies among coordinates and how they limit possible lifted sums; that direction is promising but unproven yet. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.07** | Tokens: 20,554 in / 3,189 out
+
+### Round 2  (05:14)
+
+The worker tried to reduce the problem to showing that every 6-dimensional subspace K of F_p^9 contains a nonzero vector with support size ≤2 (because such a vector can be rescaled to have coordinate-sum ≤p), but a straightforward dimension/counting argument on 2- or 3-coordinate coordinate-subspaces fails: it simply doesn't force any short-supported vector and so gets stuck. They then proposed switching to an algebraic approach (polynomial method / Chevalley–Warning), aiming to encode the vanishing of most coordinates together with the three linear equations defining K and to keep total degree below the warning threshold so a nontrivial zero with many zeros in coordinates must exist; however that plan was not carried out and no explicit polynomial construction or degree check was given. The evaluator judged the current state as “spinning” and asked for a committed next step rather than more exploratory remarks. Overall, a clear obstruction was identified and a plausible new tool was proposed, but no concrete, verified execution exists yet. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.50** | Tokens: 139,849 in / 22,060 out
+
+### Round 3  (05:21)
+
+You tried to force a sparse (support 1 or 2) vector in a given 6‑dimensional subspace K ≤ F_p^9 by a Chevalley–Warning polynomial package: use the three linear equations L1=L2=L3=0 together with S(x)=Σ x_i^{p−1} (which counts nonzeros mod p) and the single polynomial F=(S−1)(S−2) to force S=1 or 2. The key obstruction turned up cleanly: S has degree p−1, so F has degree 2(p−1), and the sum of degrees is 3 + 2(p−1) = 2p+1, which must be <9 for Chevalley–Warning to guarantee a nontrivial solution — that only holds for p≤3, so the package fails already at p=5 (and even at p=4), not because of a bookkeeping slip but because the sparsity constraint inherently costs high degree. You noted the obvious alternatives (encode sparsity with much lower degree, or feed fewer linear equations into the system) and began exploring dropping one linear equation, but that still leaves the same fundamental degree barrier for p≥5; the attempted numeric probing didn’t yet yield a structural counterexample or a new lemma. In short, the polynomial-encoding route in its present form is blocked by an unavoidable degree count, so we need a different idea (combinatorial/structural lemmas about 6‑planes in F_p^9 or a more subtle algebraic encoding) to finish the proof. (yellow)
+
+**Cost so far: $0.74** | Tokens: 210,272 in / 30,037 out
+
+### Round 4  (05:23)
+
+In this round the worker tested and overturned a previously proposed shortcut: they used an exhaustive computer check to produce explicit 6-dimensional subspaces of F_p^9 for p = 5 and p = 7 in which every nonzero vector has support at least 3, thereby disproving the claim that every 6D subspace must contain a nonzero vector supported on ≤2 coordinates; this kills any proof route that relied on a universal σ(K) ≤ 2 bound. The consequence is clear and useful: any valid proof of the target statement must confront 3-sparse vectors (or else use finer arithmetic structure) rather than relying on extreme sparsity, and the worker proposes next to analyze the distribution of the three nonzero coordinate values and the linear relations among them to try to scale one to have coordinate-sum ≤ p. The main theorem remains unproved, but the group has eliminated an impossible approach and outlined a concrete new direction focused on weight spectra of 3-support vectors. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.80** | Tokens: 246,525 in / 32,025 out
+
+### Round 5  (05:26)
+
+This turn made concrete progress: the worker proved the theorem for small primes p ≤ 7 by recasting any 6-dimensional subspace of F_p^9 as a length-9, dimension-6 linear code and invoking the Singleton bound (so any nonzero codeword has support size ≤4) together with the classical MDS length bound (an MDS [9,6,4] code would force p ≥ 8), which rules out the problematic 4-support-only case when p ≤ 7; hence every such subspace has a nonzero vector supported on ≤3 coordinates, and after scaling one gets a representative whose coordinate sum (viewed in {0,…,p−1}) is between 1 and p, as required. The worker also ran some randomized sanity checks for small p and sketched the next target: handle primes p ≥ 11 where [9,6,4] MDS codes may exist by studying 4-support codewords and showing suitable linear combinations force a lifted sum ≤ p. This is solid partial progress but the hard MDS case remains unresolved, so overall status: (yellow).
+
+**Cost so far: $0.92** | Tokens: 289,463 in / 36,573 out
+

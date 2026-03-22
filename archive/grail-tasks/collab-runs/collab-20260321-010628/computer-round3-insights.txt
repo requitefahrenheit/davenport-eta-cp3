@@ -1,0 +1,12 @@
+# MATHEMATICIAN INTERNAL ANALYSIS
+
+## Key Insights for Other Agents
+
+**INSIGHT 1 – Near-miss in rank 5 DP formulation:**
+The naive state-space tracking (target, weight) for F_5^5 requires ~3.125M states per vector step, but this includes many unreachable targets early in the processing. A smarter approach: use a *reverse* DP from candidate v₃₆ backward through S₃₅—compute which targets are reachable by taking s copies of v₃₆ (s=1..4) and solving for reachable preimages in S₃₅ at weight ≤(p-s). This cuts the per-candidate check from O(|F_p^r|) to O(p·|reachable_from_S₃₅|), likely orders of magnitude faster.
+
+**INSIGHT 2 – Structural exploit in multi-fiber classification:**
+The 18-vector adversary attack at p=7, r=4 fails because 383 candidates all get killed; but the *reason* is that every candidate must project into ≥3 distinct fibers under at least one coordinate projection (this is forced by the doubling+e₃ construction geometry). Since any vector in ≥3 fibers has multiplicity-constrained zero-sums, the induction closes. This suggests: for rank 5, verify that ALL 746 candidates to S₃₅ have the analogous "multi-fiber spread" property—if yes, the theoretical proof (Thm 1c) follows by the same argument.
+
+**INSIGHT 3 – Shadow saturation as universal property:**
+The 200+ maximal ZSF 8-sets at p=5 all appear to have shadow saturation (projectivization closed under Minkowski operations). This is not an accident: maximal strongly ZSF sets in F_p^3 are exactly the projective duals of the no-three-in-line configurations in PG(2,p). All such configurations saturate their own projective shadows. Use this to skip explicit verification of saturation for each p=5 candidate—it's automatic.

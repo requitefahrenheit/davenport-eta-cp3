@@ -1,0 +1,93 @@
+
+============================================================
+BLOCK 1 (331 chars)
+============================================================
+The user wants me to act as an ADVERSARY in a mathematical research context. My job is to:
+
+1. Search Cortex for claimed results to attack
+2. Read the briefing document
+3. Try to find counterexamples, disprove lemmas, find boundaries where things break
+
+Let me start by reading the briefing and searching Cortex for prior findings.
+
+============================================================
+BLOCK 2 (152 chars)
+============================================================
+OK, so there's no Cortex directory yet. Let me search more specifically for cortex and also look at the recent team results to find claims I can attack.
+
+============================================================
+BLOCK 3 (123 chars)
+============================================================
+Let me read the most recent team results (team-028, team-027, team-025) and the claude-023 result to find claims to attack.
+
+============================================================
+BLOCK 4 (1985 chars)
+============================================================
+Now I have a good picture. Let me read a few more recent results to find specific claims I can attack, then start computing counterexamples.
+
+Key claims to attack from what I've read:
+
+1. **Shadow Saturation claim** (from the research goal): "for any ZSF set S of 2α(r)+1 nonzero non-proportional vectors in F_p^{r+1} (p >= 5), the weight-(p-1) shadow covers all of F_p^{r+1} \ {0}."
+
+2. **team-028-theorist** claims a parity contradiction ruling out k(λ)=1 for all λ when p≡3 mod 4.
+   
+3. **team-027** found a counterexample at p=11 to a min-weight inequality that was later patched to a weaker bound.
+
+4. **claude-023 Turn 8** had an off-by-one error in the fiber induction threshold, claiming k≥10 when k≥9 actually suffices.
+
+5. **Lemma 3 from post-mortem** ("Fiber Induction"): If |F₀| ≥ 9...
+
+Now I'm looking at the fiber induction lemma more carefully — if we have enough nonzero non-proportional vectors in the kernel of a linear form, we can extract a weighted zero-sum from F₀ itself using the bound on η(C_p³) applied to the copies pool construction.
+
+6. **Claim**: All 17 vectors are critical — removing any one creates gaps in the shadow.
+
+7. **Shadow saturation for p=7**: I should verify this computationally.
+
+8. **The CW degree claim**: CW only fires at p=5 where the degree 4(p-1)=16 stays below 18 variables.
+
+The main targets are shadow saturation itself — I need to find a ZSF set where the shadow doesn't actually cover everything — and then work through the implications.
+
+Writing computational verification code... at p=5, weight-4 shadow needs to cover all 624 nonzero vectors, but we only have 68 elements in the copies pool to work with. The ZSF constraint is actually quite restrictive—it forces the vectors to spread out rather than cluster, which makes it harder to construct a counterexample where the shadow fails to saturate. Let me focus on computationally verifying whether the shadow actually covers everything at p=5.
+
+Writing verification code...
+
+============================================================
+BLOCK 5 (5945 chars)
+============================================================
+Now I have a thorough understanding of the research state. Let me identify the most promising targets for adversarial attack:
+
+**Primary Targets:**
+
+1. **Shadow Saturation** - The main claim. Verified only for the specific 17-vector construction at p=5 and p=7. Has anyone tested OTHER ZSF sets? I should try to construct a different ZSF set of 17 non-proportional vectors and check if its shadow still covers everything.
+
+2. **Lemma 3 (Fiber Induction)** from the post-mortem: "If |F₀| ≥ 9 nonzero non-proportional vectors in the kernel of a linear form w, then a weighted zero-sum of weight ≤ p exists among F₀ alone." But claude-023 Turn 7 says this FAILS because η(C_p³) = 8(p-1)+1 = 33 for p=5, and having only 9 vectors with multiplicity 1 each gives only 9 copies,  not 33. So the lemma as stated is wrong unless "copies pool" means each vector has multiplicity p-1, which would give 9*(p-1) = 36 > 33 copies — I need to verify this interpretation carefully.
+
+3. **The "17 all critical" claim** - "All 17 vectors are critical — remove any one and the shadow develops gaps." This might be false for some ZSF sets.
+
+4. **team-027 claim**: min([u]+[v], [u^{-1}]+[vu^{-1}], [v^{-1}]+[uv^{-1}])
+
+≤ p-1 was supposedly verified at p=5,7,11,13,17,19 with zero failures, but I found a counterexample at p=11 with (u,v)=(5,7) — that's a direct contradiction with the problem statement.
+
+5. **team-028 claim**: k(λ)≡1 for all λ is impossible when p≡3 mod 4, and I should verify the parity argument here.
+
+The Lemma 3 claim from the post-mortem appears to be stated incorrectly — it references the η(C_p³) = 8(p-1)+1 bound applied to the copies pool construction, but with 9 vectors in a 3-dimensional subspace, the copies pool should have 9(p-1) elements, which contradicts the stated bound.
+
+Let me verify this directly: for p=5, we get 9·4 = 36 ≥ 33 = 8·4+1, so the inequality holds. More generally, 9(p-1) ≥ 8(p-1)+1 simplifies to p ≥ 2, which is always true. So Lemma 3 actually does check out — but then why did claude-023 claim it fails in Turn 7?
+
+Let me reconsider what's happening here. The η constant tells us that any 8(p-1)+1 elements from C_p³ contain a zero-sum with weight ≤ p. Since our copies pool has size 9(p-1), which exceeds this threshold, we're guaranteed a zero-sum. But here's the subtlety: the pool contains p-1 copies each of 9 vectors, not 9(p-1) distinct elements. When we select k_i copies of vector v_i, we're choosing multiplicities that sum to zero in the group. I see the issue now—the Fiber Size Lemma was actually sound, and I was second-guessing myself unnecessarily. With at least 9 non-proportional vectors in the 3-dimensional fiber F₀, the pool of 9(p-1) copies exceeds the Erdős-Ginzburg-Ziv bound η(C_p^3) = 8(p-1)+1, so a zero-sum subsequence of weight ≤ p definitely exists. Now I need to verify whether the same argument holds for non-zero fibers F_c where c ≠ 0. we need s(C_p^3) = η(C_p^3) + p - 1 = 9(p-1) elements to guarantee a zero-sum of weight ≡ 0 mod p and weight ≤ 2p (or something like that?). Actually no, the s constant is for weight exactly p, not weight ≤ p. Let me think more carefully.
+
+Actually, s(C_p^r) is the smallest N such that any sequence of N elements in (Z/pZ)^r has a non-empty subsequence with zero sum and weight exactly p. And s(C_p^r) = η(C_p^r) + p - 1.
+
+For the fiber F_c (c ≠ 0): if we project away the first coordinate, we get vectors in F_p^3 with the property that each has first coordinate c. A zero-sum Σ k_i v_i = 0 with v_i in F_c forces Σ k_i ≡ 0 mod p, which means Σ k_i must be a positive multiple of p. Since each k_i ∈ {1,...,p-1}, the smallest possibility is Σ k_i = p, so we need s(C_p^3) = 9(p-1) copies to guarantee this, giving |F_c| ≥ 9(p-1).
+
+But wait, let me recalculate s(C_p^3). We have s(C_p^3) = η(C_p^3) + p - 1 = 8(p-1) + 1 + p - 1 = 9p - 8. And if |F_c| ≥ 10, then 10(p-1) = 10p - 10 ≥ 9p - 8 for p ≥ 2, so this works.
+
+Now for the fiber structure: fiber 0 needs at least 9 vectors to guarantee a weight ≤ p zero-sum, while nonzero fibers need at least 10 vectors for a weight = p zero-sum. The issue is that with only 17 vectors distributed across multiple fibers, pigeonhole principle doesn't guarantee any single fiber reaches these thresholds—we'd get at most 5-6 vectors per fiber if spread across 3 fibers, and the second-moment bound gives even less. So fiber induction alone won't close this gap.
+
+The real strategy is to attack Shadow Saturation directly. I'm going to write code that enumerates ZSF sets of 17 non-proportional vectors in F_5^4, computes their weight-4 shadows, and checks whether any ZSF set fails to achieve full shadow coverage of F_5^4 \ {0}. If I can find even one counterexample where the shadow doesn't cover everything, the whole approach falls apart. I also need to investigate the team-027 contradiction—they claim the rank-3 theorem was verified with zero failures across p = 5,7,11,13,17,19, yet they found a counterexample at (p,u,v) = (11,5,7).
+
+Actually, I'm realizing the confusion: the rank-3 theorem is about three variables a,b,c in F_p* with no pair summing to zero and a+b+c ≠ 0, guaranteeing some μ exists where the sum of three bracket terms stays below p. But team-027 was testing a different two-variable claim entirely—something about min([u]+[v], [u^{-1}]+[vu^{-1}], [v^{-1}]+[uv^{-1}]) ≤ p-1 for u,v in a specific range with certain constraints. These aren't the same theorem at all.
+
+So I need to refocus my approach. I should test shadow saturation across all 17-vector ZSF sets rather than just the canonical one, and separately verify the rank-3 theorem computationally by checking the three-term bracket sum condition for all valid triples a,b,c in F_p*.
+
+I also want to explore whether larger ZSF sets exist that would make shadow saturation vacuous, and determine if 17 vectors is actually the tight bound or if fewer suffice. Let me start implementing these computational checks.

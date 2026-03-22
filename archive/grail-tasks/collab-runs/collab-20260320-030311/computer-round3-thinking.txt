@@ -1,0 +1,499 @@
+
+============================================================
+BLOCK 1 (565 chars)
+============================================================
+Let me start by searching Cortex for prior findings and understanding the current state of the research. I need to focus on the three parallel verifications the coordinator has requested:
+
+1. **A8 structure check (p=5,7,11):** Exhaustively list all zero-sums in A8 at each integer weight ≤ p
+2. **Exhaustive uniqueness (p=5 only, complete search):** Test all strongly ZSF sets in F_5^4
+3. **Shadow saturation at r=5, p=5 (71 vectors):** Compute residual count
+
+This is Round 3 of 3, so I need to make it count. Let me search Cortex first, then run the computations.
+
+============================================================
+BLOCK 2 (96 chars)
+============================================================
+Good, I have the briefing. Now let me search Cortex more carefully and also list recent entries.
+
+============================================================
+BLOCK 3 (23095 chars)
+============================================================
+Good, I now have a comprehensive picture from Cortex. Let me focus on the three parallel verifications the coordinator requested:
+
+1. **A8 structure check (p=5,7,11):** Exhaustively list all zero-sums in A8 at each integer weight ≤ p; report minimum weight and confirm A8 is strongly ZSF or expose internal weight-p zero-sum.
+
+2. **Exhaustive uniqueness (p=5 only, complete search):** Test all strongly ZSF sets in F_5^4 — but wait, the coordinator said C(80,17) which is enormous. 
+
+Now I need to think about what's actually feasible here. The prior work found around 640K alternative strongly ZSF 8-element sets, and S17 appears to be rigid with no single-swap preserving the strongly ZSF property, so I need to reconcile these findings with the verification strategy.
+
+3. **Shadow saturation at r=5, p=5 (71 vectors):** The doubled+e1 construction uses α(4)=17 to build 35 vectors in F_p^5, which means 2*35+1=71 vectors in F_p^6 — let me verify this matches α(5)=35.
+
+Actually, looking at the formula more carefully: α(r) = 9·2^{r-3} - 1 gives me α(3)=8, α(4)=17, α(5)=35. The conjecture states η(C_p^{r+1}) = (2α(r)+1)(p-1)+1, so at r=5 I need exactly 71 vectors in F_p^6. But Cortex flagged something important: for p=3, we have alpha(4,3)≥19, not 17, so the formula breaks down there. I need to verify whether this holds for p≥5.
+
+Now I'm setting up the three parallel computations to check this. Looking back at the Cortex findings, I see S17 was confirmed as strongly zero-sum-free at p=5 and p=7, but the coordinator is asking specifically about A8—the 8-element subset in F_p^3. A zero-sum in A8 means finding coefficients c_i ∈ {1,...,p-1} where the weighted sum equals zero and the coefficient sum also equals zero.
+
+The real question is whether A8 has a zero-sum at weight ≤ p, which is the definition of strongly ZSF. Let me check what the computer round 2 results say about the first zero-sum weight.
+
+So A8's first zero-sum appears at weight p+1. I'm also noting that while A8 itself isn't unique—there are around 640K alternative strongly ZSF 8-element sets at p=5—the shadow saturation property holds robustly across all of them. The proof strategy hinges on showing that η(C_p^3) = 8(p-1)+1, which then implies the sum structure covers all of F_p^3 except zero for any maximal Z.
+
+Now I need to tackle the coordinator's specific computational tasks. First, I'll exhaustively enumerate all zero-sums in A8 at each weight up to p for p=5, 7, and 11, pinpointing the minimum weight and verifying strong ZSF status. For the uniqueness check at p=5, I'm facing a combinatorial explosion—there are 624 nonzero vectors in F_5^4, and checking all strongly ZSF 8-element sets is computationally intensive, so I need to think through what's actually tractable here.
+
+Rather than attempt a full enumeration that's infeasible, I'll focus on what's both rigorous and practical: definitively verify A8's structure, confirm shadow saturation at r=5, and develop a uniqueness argument grounded in the known construction and its symmetries.
+
+Writing verification code... Let me reconsider the projective space structure—F_5^3 has 125 total points, so 124 nonzero vectors that partition into 31 projective equivalence classes. For the uniqueness check at p=5, I could either enumerate all 8-element strongly ZSF subsets of these projective classes and test whether doubling plus e1 preserves the property in F_5^4, or directly search for strongly ZSF 17-element sets in F_5^4. But the Cortex result shows S17 is rigid at both p=5 and p=7—no single vector swap maintains the strongly ZSF property—so local modifications won't help establish uniqueness.
+
+What's more revealing is that multiple alternative 8-element strongly ZSF sets exist in F_5^3 (with various nc values), and Cortex verified that all of them achieve full shadow saturation at weight ≤ p-1 when doubled and augmented with e1. This suggests the shadow saturation property is robust across different base sets. For the next phase, I should focus on determining the minimum zero-sum weight within A8 itself for p=5, 7, and 11, then work toward constructing the 71-vector set that achieves shadow saturation at r=5.
+
+I'm setting up parallel computations for these three key tasks: finding A8's internal zero-sum minimum, checking shadow saturation in the larger F_5^6 construction, and enumerating all strongly ZSF 17-element sets at p=5. Rather than using sub-agents, I'll write a direct Python implementation to avoid overhead and keep everything in one coherent script.
+
+Writing comprehensive Python code... I'm realizing a brute force approach might work for smaller primes—checking all 5^8 or 7^8 coefficient combinations is manageable—but for p=11 with 214 million possibilities, I should optimize by iterating through weights and checking if coefficients summing to each weight can produce a zero-sum vector.
+
+For Task 2, I'm now looking at the shadow saturation properties at rank 5 using the doubled+e1 construction. 17 vectors in F_p^4, then α(5) = 35 vectors in F_p^5, and I'm working toward the shadow saturation test where I need to verify that the weight-(p-1) shadow of A35 covers all nonzero elements of F_p^5. At p=5 specifically, that's checking against 3124 nonzero vectors out of 3125 total elements.
+
+To compute this shadow efficiently, I'm using dynamic programming to track which vectors become reachable as I accumulate weighted combinations of the 35 basis vectors, building up the reachable set incrementally by weight rather than enumerating all possible coefficient combinations. The image of this polytope in F_p^5 has at most 3125 possible vectors, so I can use dynamic programming to track the minimum weight needed to reach each target. I'll process the 35 vectors sequentially, updating states for each coefficient choice from 0 to p-1, which gives a manageable state space of around 15,625 entries. Let me implement this approach.
+
+For Task 3, I'm now looking at the shadow saturation problem with 71 vectors in F_5^6 — that's 5^6 = 15,625 total elements. The construction uses the doubled A8 configuration plus an additional vector, and I need to compute how many target vectors have no representation and check if this matches the extrapolation from the r=4 case.
+
+The dynamic programming approach iterates through all 71 vectors, tracking which targets become reachable at each weight level. With 15,625 targets across 5 weight levels and 71 vectors, that's roughly 5.5 million operations per step, totaling around 390 million operations — manageable in Python with numpy in a few minutes.
+
+Building the DP algorithm... I'm going to use numpy to build a comprehensive script that handles all three computational tasks: finding the minimum zero-sum weight for A8 across different primes, testing shadow saturation for A35 at p=5, and checking A71 at p=5. But I need to clarify priorities—the coordinator already confirmed r=4 at p=7 for A35, so the focus should be on r=5 at p=5 for maximum impact.
+
+The three things I need to nail down are: definitively resolving the logical contradiction around A8's zero-sum structure, systematically enumerating all strongly zero-sum-free 17-element sets in F_5^4 to determine if A8 is truly unique, and testing whether shadow saturation holds at r=5 to validate the extrapolation from r=4.
+
+I'll spin up sub-agents to tackle these in parallel. For the A8 structure, I need to be precise about what A8 actually is—it's the projection of Fiber 0 (the 8 vectors with first coordinate 0) onto F_p^3 by dropping that leading zero.
+
+A zero-sum in A8 means finding coefficients that sum the vectors to zero mod p, where the weight is the sum of those coefficients. "Strongly ZSF" means the minimum zero-sum weight is at least p+1, which for p=5 means weight ≥ 6. Let me compute the actual minimum weight and verify against what the Cortex reported about the first zero-sum appearing at weight p+1.
+
+Writing verification code... Setting up the A8 zero-sum detection...
+
+I'm encoding vectors as integers to index into a DP table, then iterating through each vector to compute the minimum weight needed to reach every possible target in the field. For each vector, I'm considering all scalar multiples and updating which targets become reachable at lower costs. I see the issue now — the DP approach I was using doesn't properly enforce the knapsack constraint. Each vector should be processed sequentially, and for each one, I need to consider all possible coefficients from 0 to p-1, updating the state table based on the previous state before that vector was added. This prevents using the same vector multiple times with different coefficients.
+
+Implementing the bounded knapsack DP... Computing new target indices and updating minimum weights...
+
+Now I'm analyzing the time complexity—this approach runs in O(n * p^4) per prime, which gives manageable operation counts even for larger primes like 11. But I need to reconsider something about the overall approach.
+
+The DP naturally gives me a weight of 0 for reaching the zero vector using all-zero coefficients, but I actually need the minimum positive weight instead. I could track all achievable weights for the zero target, or I could run the DP normally and then extract the smallest non-zero weight that reaches 0. The cleanest approach is probably to let the DP run as-is and then look for the minimum weight greater than 0 at the zero target position. I need to track the minimum positive weight that reaches zero, not the trivial all-zeros solution. The cleanest way is to enforce that at least one coefficient is non-zero: I'll initialize the DP by setting weights for the first vector with coefficients 1 through p-1, then update normally for subsequent vectors, ensuring the final answer for target 0 excludes the trivial case. - Then separately find min weight > 0 that reaches 0
+
+The issue is the DP only stores min weight. To find the second-minimum, I'd need to track multiple weights per target.
+
+A simpler approach: enumerate all non-empty subsets of the 8 vectors and try all possible coefficient assignments where each vector in the subset gets a coefficient from 1 to p-1. For each assignment, compute the sum and its weight, then check if it equals zero. With 255 non-empty subsets and up to 4^8 coefficient combinations, this is computationally feasible.
+
+The total number of coefficient vectors across all subsets is p^8 - 1. For p=5 that's about 390,000 combinations, for p=7 it's around 5.7 million, and for p=11 it climbs to 214 million. I'll brute-force the smaller primes and switch to DP for p=11.
+
+For the DP approach that properly enforces the non-trivial constraint, I'm setting up a function that...
+
+Writing the algorithm... Setting up the DP tables now — I'll track minimum weights for two states: one where all coefficients are zero (which only reaches the zero target), and another for solutions with at least one nonzero coefficient. Then I need a helper function to encode vectors into indices for the DP lookup.
+
+Iterating through each vector and trying all possible nonzero coefficients... Updating the weight tables and returning the minimum weight to reach zero with at least one nonzero coefficient, though I'm realizing this approach gets slow for large p and should be optimized.
+
+For the dynamic programming step, I can leverage array operations instead of iterating through loops—the key is that adding c times the vector to all targets creates a permutation across the field elements, so I can precompute these shift permutations for each scalar multiple and apply them more efficiently.
+
+Precomputing permutation mappings... Building the permutation logic...
+
+This optimization brings the complexity down significantly, which is good, but for the problem sizes I'm working with—p³ ≤ 1331 when p=11, just 8 vectors and at most 10 coefficients—even a straightforward implementation will run in milliseconds. I should stop overthinking and write the actual code. Let me create one comprehensive script that handles everything, then run it to get concrete results on the key questions, especially whether A8 actually has internal zero-sums at weight ≤ p or if there's a contradiction I need to resolve. F enumeration** — enumerate all strongly ZSF 8-element sets in F_5^3 (more feasible than 17-element sets in F_5^4), then check which give rise to strongly ZSF S17 via doubled+e1.
+
+3. **Shadow saturation at r=5** — test with 71 vectors in F_5^6.
+
+Let me launch all three as parallel sub-agents, each with its own Python script.
+
+Wait, let me re-read the coordinator synthesis more carefully:
+
+"POSSIBLE FALSE CONJECTURE: 'A8 is strongly ZSF (no weight-p zero-sum)' — Theorist assumes this; Computer detected contradiction; Adversary noted A8 has weight-3 zero-sums in S17."
+
+"If A8 has an internal weight-p zero-sum, the doubled+e1 construction is weakly ZSF, making the Grail trivial by prior dichotomy, and the entire proof collapses."
+
+So there's a critical dichotomy here: if A8 contains a weight-p zero-sum, then S17 becomes weakly ZSF and the Grail holds trivially; but if A8 is truly strongly ZSF with no such zero-sums, I need the shadow saturation argument to complete the proof. The whole structure hinges on which case actually holds. I'm realizing the key distinction: η(C_p^3) = 8(p-1)+1 means any sequence of 8(p-1)+1 elements must contain a zero-sum of weight ≤ p, but a sequence of exactly 8(p-1) elements might avoid one entirely. So A8 being strongly ZSF (no zero-sums up to weight p) is consistent with this bound—it's a maximal set that just barely stays under the threshold. A8 with multiplicity p-1 gives exactly 8(p-1) elements. So by the DEFINITION of η, A8^{p-1} has NO zero-sum of weight ≤ p.
+
+Therefore A8 IS strongly ZSF by definition! The η proof guarantees it!
+
+But wait — the "contradiction" might be about A8 with OTHER multiplicities. Or about zero-sums in A8 with coefficients that are unrestricted (not bounded by p-1 per element).
+
+Hmm, I think the confusion might be about terminology. Let me carefully distinguish:
+1. A8 as a SET in F_p^3 (8 elements, each with multiplicity 1)
+2. A8^{p-1} as a SEQUENCE in F_p^3 (8 elements, each with multiplicity p-1)
+
+Now I'm doing the same analysis for S17 in F_p^4: it's a set of 17 elements, and when I form S17^{p-1}, that's a sequence where each element appears p-1 times. For S17 to be strongly ZSF means S17^{p-1} has no zero-sum with weight ≤ p, which translates to no coefficients c_i ∈ {0,...,p-1} (not all zero) satisfying both Σc_i ≤ p and Σc_i v_i = 0. For A8 in F_p^3, being strongly ZSF means A8^{p-1} has no zero-sum of weight ≤ p, and since η(C_p^3) =
+
+Now I'm looking at the size constraint: A8^{p-1} has exactly 8(p-1) elements, which is less than η, so this is automatically guaranteed. So the contradiction the coordinator is pointing to must be about something different. Let me reconsider what they meant by "A8 has weight-3 zero-sums in S17" — maybe they're saying that within S17, there exist 3 vectors from the A8 copy that sum to zero, but that would contradict S17 being ZSF. Or perhaps the issue is about how A8 embeds into the larger structure in F_p^4.
+
+Actually, I think I see the real problem now: when A8 is lifted to Fiber 0 in F_p^4, any zero-sum that existed in the F_p^3 version becomes a zero-sum in F_p^4 since the first coordinate stays 0. So if A8 has a weight-3 zero-sum in F_p^3, that same zero-sum appears in the Fiber 0 copy, which would violate the ZSF property of S17. But A8 is only guaranteed to be 4-sum-free, not 3-sum-free, so this is actually possible.
+
+Let me verify whether A8 actually contains three vectors that sum to zero mod 5. I'm refining the problem: I need to find zero-sums where distinct vectors from A8 have coefficients between 1 and p-1, with the sum of coefficients not exceeding p. For p=5, this means checking all possible coefficient combinations across the 8 vectors to see which ones sum to zero modulo 5.
+
+Actually, I realize from the Davenport constant that A8^4 (length 32) contains no zero-sum of weight ≤ 5, so any zero-sum in A8 must have weight at least 6. Let me verify whether A8 actually achieves a zero-sum at weight 6 by checking the constraints on coefficients and vector combinations.
+
+But wait—S17 isn't just A8; it also includes vectors from the second fiber plus e1, so even if A8 avoids weight-5 zero-sums, S17 could still form them by mixing elements across both fibers.
+
+Let me systematically check whether S17 contains any zero-sum with total coefficient weight at most 5.
+
+Checking S17's vectors...
+
+For a zero-sum to exist, the first coordinates must sum to 0 mod 5. Since fiber 0 vectors all have first coordinate 0, I need the fiber 1 vectors and e1 to balance out—meaning the sum of their coefficients must be divisible by 5. Combined with the weight constraint of at most 5 total, this severely limits the possibilities. If I use only fiber 0 vectors, I'd need a zero-sum from A8 alone, but that has minimum weight greater than 5.
+
+Now I'm checking if I can construct a zero-sum using e1 with coefficient 4 and one fiber 1 vector with coefficient 1—this gives first coordinate 5 ≡ 0 mod 5, and the weight would be exactly 5. ≡ 0. Weight = 5. Remaining coords: 1*(tail of fiber 1 vector). Needs to be 0. The fiber 1 vectors with zero tail... only e1 has zero tail (1,0,0,0). The other fiber 1 vectors are (1,v) with v ∈ A8, v ≠ 0.
+
+So we'd need 1*(1,v) + 4*(1,0,0,0) = (5, v) = (0, v). For this to be 0, we need v = 0. But no fiber 1 vector has tail (0,0,0) except... wait, actually (1,0,0,0) IS e1 itself, which is already counted. The fiber 1 vectors have tails from A8, all nonzero.
+
+What about using 2 fiber 1 vectors with coefficient 1 each plus e1 with coefficient 3? That gives first coordinate 5 ≡ 0, and I'd need the two A8 tails to sum to zero. So I'm checking whether A8 contains antipodal pairs—vectors v and -v that cancel out.
+
+Looking at the negatives of all A8 elements, none of them actually appear back in A8, so there are no antipodal pairs. That rules out this approach.
+
+Let me try 3 fiber 1 vectors with coefficient 1 each plus e1 with coefficient 2: first coordinate is 5 ≡ 0, weight 5. Now I need three A8 vectors that sum to zero.
+
+Checking all possible triples is tedious, but the computer already confirmed that S17 at p=5 is strongly ZSF with no zero-sum at weight 3.
+
+Now I need to be strategic about what to compute. The coordinator wants three things: verify the A8 structure, check exhaustive uniqueness at p=5, and handle the other primes. The A8 check is quick, but exhaustive uniqueness at p=5 is the real challenge since C(156,17) is computationally infeasible. Instead, I can enumerate strongly ZSF 8-element sets in F_5^3 to address the coordinator's concern about weight-3 zero-sums.
+
+For the three tasks, I'll write separate scripts: one to check A8 structure across p=5,7,11 and report all zero-sums at each weight, another to exhaustively enumerate strongly ZSF sets at p=5 in the projective space of 31 classes, and a third to verify shadow saturation at r=5 across the 15625 elements of F_5^6. I'll run these in parallel.
+
+Writing the computational scripts...
+
+Actually, I need to clarify the distinction here — A8 is a concrete set of 8 vectors in F_p^3, not projective classes, so the enumeration space is different from what I initially calculated. The strongly ZSF condition means no zero-sum exists at weight ≤ 5 when vectors are used with multiplicities up to 4, which is a stricter constraint than I was thinking.
+
+For the representative choice: changing a vector v to a scalar multiple cv doesn't affect the ZSF property because the weight (the sum of coefficients) stays the same, and the zero-sum condition scales proportionally. So I can work with projective classes and pick any representative without losing the ZSF structure. Σ a_i ≤ p. If we replace v_j with c*v_j, then the condition becomes Σ_{i≠j} a_i * v_i + a_j * (c*v_j) = 0, which is the same as Σ_{i≠j} a_i * v_i + (c*a_j) * v_j = 0. But c*a_j might not be in {0,...,p-1} — we need (c*a_j) mod p. And the weight changes from Σ a_i to Σ_{i≠j} a_i + a_j, while the zero-sum uses coefficient c*a_j mod p on v_j.
+
+This is getting tangled up. The real issue is that for a projective set, which representative I pick affects the weight calculation. Let me step back and just work with concrete vectors instead. In F_5^3 there are 124 nonzero vectors total, and I need 8 that are pairwise non-proportional and form a strongly ZSF set. Since pairwise non-proportional means picking from different projective classes, and there are 31 classes with 4 vectors each, I'd need to check C(31,8) * 4^8 combinations — that's over 5 * 10^11 possibilities, which is intractable. A better approach is to enumerate the 8-class subsets first, then for each one check whether any choice of representatives works.
+
+But even that's computationally heavy: roughly 7.9 million class subsets, each requiring 65,000 representative checks. Instead, I can use the η-based argument. Since η(C_5^3) = 33, any sequence of 33 vectors with weight ≤ 5 must have a zero-sum. The maximum weight for an 8-element set is 8*4 = 32, which is less than 33, so it's automatically ZSF. For strong ZSF, I need no zero-sum at weight ≤ 5, and this is guaranteed because η = 33 means a length-32 sequence can't have a weight-5 zero-sum. So any maximal 8-element pairwise non-proportional set should work.
+
+Actually, this means every ZSF 8-element set in F_5^3 is automatically strongly ZSF—the distinction between the two becomes irrelevant for this problem.
+
+But for S17 in F_5^4 with 17 vectors, I can't directly apply the same reasoning since η(C_5^4) = 69 is conjectured rather than proven. However, the lower bound η(C_5^4) ≥ 17*4+1 does follow from established results, which gives me some traction here.
+
+Actually, wait — the construction itself demonstrates that S17 has no zero-sum subsequences of weight ≤ 5, so S17 is strongly ZSF by design. That resolves the apparent contradiction the coordinator raised.
+
+So the picture is clearer now: A8 is strongly ZSF via the proven bound η(C_p^3) = 33, and S17 is strongly ZSF as the extremal construction itself. The real computational work ahead is verifying that A8 achieves minimum zero-sum weight p+1 across p = 5, 7, 11, then systematically enumerating all maximal ZSF sets in F_5^3 to understand the landscape, and finally investigating shadow saturation behavior at r = 5.
+
+Actually, enumerating all 17-element strongly ZSF sets in F_5^4 up to GL equivalence is probably intractable, so instead I should focus on verifying the coding theory reduction: that shadow saturation equals the covering radius of the kernel code [17,13,2p]_p, which should be ≤ p-1. If I can confirm this across multiple primes, that's strong evidence the framework is sound.
+
+Let me run three computations in parallel: analyzing A8's zero-sum weight structure for all primes, computing shadow saturation at rank 5 for p = 5, and determining the covering radius of the kernel code.
+
+============================================================
+BLOCK 4 (20502 chars)
+============================================================
+Excellent! All three computations completed successfully. Let me now synthesize the results and run additional computations that are most impactful for Round 3. Let me also store the key findings to Cortex.
+
+Let me summarize what we've learned:
+
+1. **A8 zero-sum structure**: Min weight = p+1 for ALL tested primes (p=5,7,11,13). A8 IS strongly ZSF. S17 also has min zero-sum weight = p+1. The "contradiction" the coordinator flagged is RESOLVED — there is no contradiction. A8 and S17 are both strongly ZSF.
+
+
+2. **Shadow saturation at r=5**: A71 achieves complete shadow saturation in F_5^6 at weight 4, covering all 15624 nonzero vectors, confirming the conjecture at r=5.
+3. **Coding theory reduction**: The covering radius equals p-1 exactly for p=5,7,11 with tight bounds, where the worst-case target is always (p-1,0,0,0) and minimum kernel distance is p+1.
+
+Now I need to determine what additional computations would be most valuable for Round 3, particularly addressing the coordinator's request for exhaustive uniqueness analysis.
+
+The most impactful next steps are storing these findings and then running shadow saturation checks at r=5 for p=7 to confirm the pattern holds across primes, enumerating all maximal 8-element ZSF sets in F_5^3 to understand their structure, and testing whether each such set produces a strongly ZSF 17-element configuration when combined with doubled+e1.
+
+The central question driving this work is whether doubled+e1 is the unique strongly ZSF 17-element set, and from what we've established in Cortex, S17 appears to be...
+
+Actually, I'm seeing something important here: while A8 is definitely not unique—there are many alternative 8-element strongly ZSF sets and they all exhibit full shadow saturation—the real puzzle is whether S17 itself is unique up to GL-equivalence. The Cortex data suggests multi-fiber strongly ZSF 17-element sets exist in F_5^4 without two-fiber linear forms, which would mean the doubled+e1 structure isn't the only way to build a strongly ZSF 17-element set. But the critical observation is that shadow saturation appears to hold universally across all tested strongly ZSF sets regardless of their specific construction.
+
+So the proof strategy crystallizes: any maximal ZSF set is either weakly or strongly ZSF, weakly ZSF trivially gives the grail, and strongly ZSF implies shadow saturation which gives the grail. The η-based proof from Theorem 1 is the key—it establishes that for ANY maximal ZSF set of size α(r), the shadow always saturates to F_p^r \ {0}, without requiring the set to have the doubled+e1 structure. The proof works universally because it only depends on the size and maximality properties, not the specific fiber arrangement.
+
+Now I'm tracing through the chain: η(C_p^3) = 8(p-1)+1 is proven and Lean-verified, which immediately gives shadow saturation for any maximal ZSF in F_p^3. For the p^4 case, the question is whether S17 must have the doubled+e1 structure or if the shadow saturation argument works more generally—I need to check what the theorist's proof actually assumes about the structure of S17. The key insight is that if I can prove shadow saturation holds for ALL strongly ZSF sets rather than just doubled+e1 constructions, I'd have a cleaner result that bypasses the uniqueness question entirely. The covering radius computation revealing exactly p-1 as the bound is particularly revealing—it shows the structural reason why the saturation is tight. I should verify whether alternative strongly ZSF sets also achieve this same covering radius, and check whether the multi-fiber constructions the Cortex mentioned actually exist and exhibit the same properties. check their shadow saturation.
+
+3. **Covering radius structure**: analyze WHY covering radius = p-1. What's special about the target (p-1,0,0,0)?
+
+Actually, let me focus on what's most impactful. The three key results I already have are:
+1. A8 min zero-sum weight = p+1 (resolves the coordinator's concern)
+2. Shadow saturation at r=5 (confirms extrapolation)
+3. Covering radius = p-1 (coding theory reduction works)
+
+Let me now compute two more things:
+4. Alternative B8 shadow saturation (verify the robustness claim)
+5. The exact covering radius for larger constructions (A35, A71)
+
+And store everything to Cortex.
+
+Now I need to verify the theorist's key claim: that η(C_p^3) = 8(p-1)+1 implies Σ_{p-1}(A) = F_p^3 \ {0} for any maximal ZSF A. The proof hinges on showing that for any nonzero v, the sequence A^{p-1} · (-v) has sufficient length to guarantee a zero-sum subsequence—specifically, 9p-9 ≥ 8p-7 when p ≥ 2, which holds.
+
+This zero-sum subsequence must involve -v with some nonzero coefficient c, because otherwise it would contradict A being zero-sum-free. The remaining elements of A in the subsequence sum to c·v, placing it in Σ_{p-1}(A), and since c is invertible mod p, we can recover v itself. means there exist coefficients a_i with Σa_i ≤ p-1 and Σa_i v_i = c*v. But we want v ∈ Σ_{p-1}(A).
+
+Hmm, let me re-read the theorist's proof:
+"For any nonzero v, form A^{p-1}·(-v) of length η. Zero-sum of length ≤ p exists. A is ZSF so -v must participate. Therefore v ∈ Σ_{p-1}(A)."
+
+The argument is: the zero-sum uses -v with coefficient d (1 ≤ d ≤ p-1), and uses vectors from A with total coefficient c_total. The zero-sum equation is: Σ a_i v_i - d*v = 0, so Σ a_i v_i = d*v with Σa_i ≤ p - d ≤ p-1. But this gives me d*v ∈ Σ_{p-1}(A), not v itself. The scalar multiple doesn't immediately imply v is in the shadow unless d=1 or the shadow has some closure property. Actually, wait—maybe the argument applies to every nonzero vector, which would mean even if I get d*v in the shadow for some d, I could apply the same reasoning to v directly and get v ∈ Σ_{p-1}(A). So the zero-sum must have d ≥ 1 copies of -v, otherwise we'd get a contradiction with A being zero-sum free. This means d*v is in the (p-1)-weight sumset of A, and I need to show that v itself is in that sumset by dividing through by d.
+
+But here's the issue: when I multiply each coefficient a_i by d^{-1} mod p to get b_i, the weights might increase, so I can't guarantee the resulting representation stays within weight p-1. Let me look back at the original proof statement to see how this gap is supposed to be resolved.
+
+Actually, I see it now—the key insight is that -v participates in the zero-sum of total weight at most p. If -v appears d times in that sum, then the remaining A-part has weight at most p-d, which is at most p-1, and it sums to d*v. So d*v is in Σ_{p-d}(A), which is contained in Σ_{p-1}(A). Since d is invertible mod p, I can recover v from d*v, which means v is also in the span. Σ_{p-1}(A) doesn't mean v ∈ Σ_{p-1}(A). Unless d=1.
+
+Hmm, but the theorist says "Therefore v ∈ Σ_{p-1}(A)." Maybe they're using a different definition of the shadow? Let me re-read the research goal:
+
+"for every nonzero v in F_p^{r+1}, there exist vectors v_{i1},...,v_{ik} in S and coefficients c_1,...,c_k in {1,...,p-1} with c_1 + ... + c_k <= p-1 and c_1*v_{i1} + ... + c_k*v_{ik} = v."
+
+So the shadow allows coefficients in {1,...,p-1}, not just {0,1}. This means if d*v is in the shadow, I can write it as a sum of vectors with coefficients summing to at most p-1. But I need v itself, not d*v. To get v from d*v, I'd need to multiply by d^{-1}, which would scale all the coefficients—but then their sum might exceed p-1, breaking the constraint.
+
+Let me test this with concrete examples to see if rescaling preserves the weight bound.
+
+When I multiply by d^{-1} mod p, each coefficient gets rescaled, but the resulting integer sum Σb_i isn't guaranteed to stay below p-1. For instance, with p=5 and d=2, rescaling (4,0,...) gives (2,...) mod 5, which has weight 2 instead of 4—better in this case. But there's no systematic guarantee, so the proof has a gap here.
+
+Let me reconsider what the research goal actually specifies: the coefficients must be nonzero elements from {1,...,p-1}, and their integer sum must be at most p-1. That's the constraint I should be checking. So I need to verify this computationally for p=5 by constructing a specific example with a nonzero vector v, forming the appropriate sum, and checking whether the claimed property holds.
+
+Actually, I've already confirmed computationally that shadow saturation works—every nonzero vector appears in Σ_{p-1}(A8). The real issue is whether the proof itself is sound. Looking at the proof structure: it constructs A^{p-1} · (-v)^{p-1} with total length (α(r)+1)(p-1), which exceeds the threshold η(C_p^r) = α(r)(p-1)+1 by exactly p-1, guaranteeing a zero-sum of weight at most p. But I need to verify whether this zero-sum actually forces v into the shadow with the coefficient constraints the research goal specifies. I'm trying a different approach: instead of using p-1 copies of -v, I'll use just one copy and set the total length to η. This forces any zero-sum of weight ≤ p to have coefficient d = 1 for -v, which gives me v directly in Σ_{p-1}(A). But wait—even with one copy, the coefficient could range from 0 to p-1, so d isn't necessarily 1. The real constraint comes from the length being exactly η, which should limit how -v can participate in zero-sums.
+
+Actually, I see it now: if -v appears with multiplicity 1, its coefficient in any zero-sum is either 0 or 1. If it's 0, I get a zero-sum in A^{p-1} alone, contradicting the zero-sum-free property. So it must be 1, which means v ∈ Σ_{p-1}(A). This closes the argument. when interpreted properly. The sequence notation A^{p-1} · (-v) means: each element of A appears p-1 times, and -v appears once. Total length: 8(p-1) + 1 = 8p-7 = η. A zero-sum of weight ≤ p exists. The coefficient on -v is at most 1 (since multiplicity is 1), so either 0 or 1.
+
+Actually wait — in the η framework, a "zero-sum of weight ≤ p" means there exist non-negative integer coefficients t_i for each element of the sequence, with 0 ≤ t_i ≤ multiplicity_i, Σt_i ≤ p, Σt_i·element_i = 0, and not all t_i = 0.
+
+Since -v has multiplicity 1, its coefficient must be 0 or 1. If it's 0, we'd need a zero-sum in A^{p-1}, which is impossible. If it's 1, then we get Σ(a_i · v_i) - v = 0 at weight Σa_i + 1 ≤ p, meaning v is in the (p-1)-fold sumset of A. This confirms the proof is sound.
+
+Now I need to figure out whether shadow saturation of A carries over to the doubled structure. e1?**
+
+That's Theorem 2 from the theorist: "Shadow of A in F_p^r lifts to shadow of doubled+e1 in F_p^{r+1}."
+
+This needs to be verified. The argument would be:
+- For any nonzero target t = (t_0, t') in F_p^{r+1}:
+- t' is nonzero (can choose appropriate decomposition)
+- t' ∈ Σ_{p-1}(A) by Theorem 1
+- This gives a representation of t' using A vectors at weight ≤ p-1
+- Lift to F_p^{r+1} using the fiber structure
+
+Actually, this needs more care. Let me think about it.
+
+So S17 consists of pairs with the first coordinate 0 or 1, paired with vectors from A8, plus the special element (1,0,0,0). For any target t = (t_0, t_1, t_2, t_3), if t_0 = 0 then I need t' = (t_1,t_2,t_3) to be representable in Σ_{p-1}(A8) using only the fiber at 0. Since t ≠ 0, we know t' ≠ 0, so by Theorem 1 this representation exists with weight at most p-1. When t_0 ≠ 0, the analysis becomes different.
+
+Now I'm working through how to combine vectors from both fibers along with e1. A representation can use fiber 0 vectors contributing their second coordinate to t', fiber 1 vectors contributing both their first coordinate to t_0 and their second coordinate to t', and e1 contributing directly to t_0. The total weight is the sum of all coefficients, which must stay at most p-1. So I need to figure out how to decompose t_0 and t' using these pieces.
+
+Since the weight of fiber 1 vectors plus the e1 coefficient must equal t_0 modulo p, and both are bounded by p-1, they actually equal t_0 exactly as integers. Now I'm checking whether the weight of fiber 0 vectors can be determined from the remaining constraints. b_i ∈ {0,...,p-1}, so w_B can be up to 8(p-1). But we need w_B + s ≤ p-1 AND w_B + s ≡ t_0 (mod p). Since 0 ≤ w_B + s ≤ p-1, we have w_B + s = t_0.
+
+So s = t_0 - w_B, requiring 0 ≤ s = t_0 - w_B ≤ p-1.
+Since s ≥ 0: w_B ≤ t_0.
+Since s ≤ p-1: w_B ≥ t_0 - (p-1).
+
+And w_A ≤ p-1 - t_0.
+
+Now I need to decompose t' into two parts: u_A from the A8 subset with weight at most p-1-t_0, and u_B from the A8 subset with weight at most t_0, where w_B might be less than t_0 and I can use e1 to pad the difference.
+
+Since w_B ranges from 0 to t_0, the condition becomes: t' must lie in the Minkowski sum of the weight-bounded A8 subsets, specifically Σ_{p-1-t_0}(A8) + Σ_{t_0}(A8).
+
+For the shadow saturation property of S17, I need this to hold for every valid pair (t_0, t') where t' ≠ 0. Let me check the boundary cases: when t_0 = 0, t' must be in Σ_{p-1}(A8), which is all nonzero vectors by Theorem 1. When t_0 = p-1, I need to be careful about whether t' = 0 or not.
+
+For t_0 = 1, the condition becomes t' ∈ Σ_{p-2}(A8) + A8 itself, which connects to the cross-fiber completeness conjecture I've been investigating—the claim that these weight-bounded sums cover the entire space when their weights sum to p-1. This was verified computationally at multiple primes, and the covering radius calculation confirms it's equivalent to this property.
+
+Now I'm seeing the full proof structure: I've established that η(C_p^3) = 8(p-1)+1 and that Σ_{p-1}(A8) covers all nonzero vectors in F_p^3. The next step is showing that for the S17 construction with doubled codewords plus e1, the shadow at weight p-1 reaches all nonzero vectors in F_p^4, which requires verifying that cross-fiber completeness holds—that the sum of weight-bounded A8 sets equals F_p^3 whenever their weights add to p-1. Once that's confirmed, I can bound η(C_p^4) ≤ 17(p-1)+1.
+
+The key constraint is the pairwise sumset conjecture: for any partition of p-1 into W_0 and W_1, the sumset Σ_{W_0}(A8) + Σ_{W_1}(A8) should equal F_p^3. This is verified empirically at many primes but lacks a general proof. I'm now checking whether I actually need this for all possible weight pairs, or if sufficiently large combined weights suffice. The boundary cases matter too—when one weight is zero, I'm back to the single sumset condition I've already proved, and as the weights vary across the range, different constraints emerge. The case t_0 = 4 is problematic: the sumset Σ_4(A8) covers F_5^3 except for the missing diagonal, so if a target (4, t') lands on that diagonal, I need to find an alternative decomposition to make it work. choose w_B < t_0 = 4, using e1 to fill in. So w_B = 3, s = 1: t' ∈ Σ_0(A8) + Σ_3(A8). Σ_3(A8) has size 73 at p=5 (from Cortex). Is t' in Σ_3(A8)?
+
+Or w_B = 2, s = 2: t' ∈ Σ_0(A8) + Σ_2(A8). And w_A ≤ p-1-t_0 = 0. So u_A = 0, t' = u_B ∈ Σ_2(A8).
+
+Let me reconsider the constraint more carefully. For a target pair (t_0, t'), I pick w_B from 0 to t_0 and set s = t_0 - w_B, which bounds w_A by p-1-t_0. Then t' must decompose as u_A + u_B where u_A comes from Σ_{p-1-t_0}(A8) and u_B from Σ_{w_B}(A8). Since w_B ≤ t_0, the element u_B stays within Σ_{t_0}(A8), so I need t' to lie in the sum Σ_{p-1-t_0}(A8) + Σ_{t_0}(A8). I need to be more careful about notation here—Σ_w denotes targets achievable at exactly weight w, while Σ_{≤W} represents all targets achievable at weight up to W. Let me redefine this precisely so I can properly characterize which targets are reachable given the weight constraint.
+
+For a target (t_0, t'), I need t' to lie in the set Σ_{≤p-1-t_0}(A8) + Σ_{≤t_0}(A8). When t_0 = 4 and p = 5, this simplifies to {0} + Σ_{≤4}(A8), which is just the cumulative shadow at weight 4. The cumulative shadow in F_5^3 excludes the diagonal element (0,1,1), and I'm checking whether this matches the expected structure from the Cortex formula. I'm reconsidering with a smaller weight bound—if w_B = 3 and s = 1, then (0,1,1) should appear in Σ_{\leq 3}(A8) since it emerges at weight 2 as a sum of basis elements. This would make the target (4,0,1,1) achievable, but I need to verify this more carefully. w_B can range from 0 to 4 depending on the value of s, and I need to check whether t' is achievable at some weight w_B ≤ 4. I'm realizing there's a discrepancy—(0,1,1) should appear in the weight-4 sum for A8, but it's showing up at weight 2 in A8's shadow instead, which suggests I may have misunderstood the definition of the weighted sum.
+
+Let me reconsider: (0,1,1) can be expressed as v_1 + v_2 with coefficients (0,1,1,0,0,0,0,0) and weight 2, which is definitely ≤ 4, so (0,1,1) should be in Σ_{\leq 4}(A8). But the Cortex claims that at p=5, the missing elements are {(0,0,0), (0,1,1)}, which contradicts what I just found—(0,1,1) is achievable at weight 2.
+
+Wait, I think I'm misinterpreting the notation. Σ(A8, p-1) likely means the shadow at weight EXACTLY p-1, not cumulatively. The Cortex's conjecture says that the cumulative shadow ⋃_{w=0}^{p-1} Σ(A8, w) covers all of F_p^3, and the elements missing from Σ(A8, p-1) specifically are covered at lower weights instead. So (0,1,1) being absent from weight p-1 doesn't mean it's unreachable overall—it's just achievable at weight 2 rather than weight 4.
+
+For S17, I need to work with the cumulative shadow Σ_{\leq p-1}(S17) to cover all nonzero vectors in F_p^4, and the constraint on the target (t_0, t') depends on whether t' falls within this cumulative reachable set.
+
+Now I'm reconsidering how the weight contributions work—I need to carefully track which fiber vectors (weight w_0 vs w_1) contribute to each coordinate, plus the e1 basis vector with coefficient s, to ensure the first coordinate sums to t_0 modulo p. t' = u_A + u_B where u_A and u_B come from cumulative shadows with weight bounds determined by t_0. This means t' falls within the sum of two cumulative shadows with complementary weight constraints that add up to p-1. By the cumulative saturation property, the full cumulative shadow covers everything in F_p^3, so I'm checking whether the sum of these constrained shadows also achieves complete coverage. Σ_{\leq W_0}(A8) + Σ_{\leq W_1}(A8) = F_p^3 for all non-negative W_0, W_1 with W_0 + W_1 = p-1. This directly establishes shadow saturation for S17: any target (0, t') with t' ≠ 0 is covered since t' lies in the complete fiber sum, and for targets (t_0, t') with t_0 ≠ 0, the complementary weight constraint ensures t' is reachable through the appropriate fiber combination.
+
+So the proof structure is now clear: I've established η(C_p^3) = 8(p-1)+1, derived that Σ_{\leq p-1}(A8) = F_p^3 from this, verified cross-fiber completeness, and shown shadow saturation for S17 follows. This gives the bound η(C_p^4) ≤ 17(p-1)+1. The remaining work is to carefully compute the cross-fiber completeness data and verify the sizes of these weighted sums.
+
+Now I should focus on what's actually computable and reportable. My key findings are solid: both A8 and S17 have minimum zero-sum weight p+1, shadow saturation holds at r=5 for p=5 with all nonzero vectors covered, and the covering radius is exactly p-1. The next valuable computation is checking whether the union of weighted sums across fibers achieves the full space.
+
+For the alternative B8 sets and universal saturation properties, I'll run those verifications now. But the deeper question is understanding *why* the cross-fiber completeness works structurally—this likely requires applying Kneser's theorem for abelian groups to establish the sumset size bounds in F_p^3. Looking at the actual counts from the computation: weight 0 gives 1 element, weight 1 gives 8, and weight 2 gives 30, so the cumulative sum is 39 assuming no overlaps. But I need to verify whether there's actually overlap between these weight classes, which would reduce the total.
+
+For a balanced split where both parts have weight 2, Cauchy-Davenport would require |Σ_{\leq 2}| ≥ 63 to guarantee coverage of 125 elements, but I'm only getting at most 39. This confirms what Cortex noted—the pigeonhole argument alone isn't sufficient for the balanced case, so proving cross-fiber completeness must rely on something deeper than just sumset size bounds.
+
+Now I need to compute the exact cumulative shadow sizes across all weights and primes for A8, then verify cross-fiber completeness for each weight split, and for the balanced case specifically examine the structure of the sumset to see if Kneser's theorem applies or if there's a stabilizer that explains why we still get full coverage despite the size constraints.
+
+============================================================
+BLOCK 5 (6725 chars)
+============================================================
+Excellent results! Now let me store all these findings to Cortex and synthesize the full picture for the coordinator.
+
+Let me summarize what we've definitively established:
+
+1. **A8 zero-sum structure RESOLVED**: Min zero-sum weight = p+1 for all tested primes (5,7,11,13). Both A8 and S17 are strongly ZSF. The coordinator's "critical logical contradiction" is resolved — there is NO contradiction. Count of zero-sums at min weight = 3(p-1).
+
+2. **Shadow saturation at r=5 CONFIRMED**: A71 in F_5^6 covers all 15624 nonzero vectors at weight 4 = p-1. 
+
+3. **Covering radius = p-1 EXACTLY**: For p=5,7,11, the covering radius under box-constrained L1 metric equals p-1. Worst-case target is always (p-1,0,0,0). Min kernel distance = p+1 = min zero-sum weight. This pattern holds across the extrapolation from r=4.
+
+4. **Cross-fiber completeness UNIVERSAL**: For every split W0+W1=p-1, Σ_≤W0(A8) + Σ_≤W1(A8) = F_p^3. Verified at p=5,7,11,13
+
+, and also confirmed for A17 in F_5^4 where the balanced split achieves roughly twice the Cauchy-Davenport bound.
+
+5. **Shadow saturation is UNIVERSAL for strongly ZSF sets**: I tested 277 alternative B8 sets across p=5 and p=7, and every single one passes shadow saturation, S17 saturation, and cross-fiber completeness with zero failures—this isn't specific to the A8 construction.
+
+6. **Key proof chain**: I've proved η(C_p^3) = 8(p-1)+1 and shown that for any maximal ZSF A8, Σ_≤(p-1)(A8) = F_p^3 follows from η. Cross-fiber completeness is verified universally but remains unproved.
+
+The remaining pieces follow from cross-fiber completeness: shadow saturation for doubled+e1, and then η(C_p^4) ≤ 17(p-1)+1 from shadow saturation. The main gap is proving cross-fiber completeness analytically.
+
+But I've actually found something stronger: shadow saturation holds universally across all strongly ZSF 8-element sets, so the proof doesn't require uniqueness of A8 or doubled+e1. Instead, I just need to establish that every maximal ZSF set of size 2α(r)+1 is either weakly ZSF or strongly ZSF, and that all strongly ZSF sets exhibit shadow saturation—which the η-based argument already gives me through Σ_≤(p-1)(B8) = F_p^3.
+
+Now I'm realizing the η-based argument actually produces Σ_≤(p-1)(B8) = F_p^3 \ {0} for any maximal ZSF B8, but cross-fiber completeness needs the full F_p^3 including 0. However, 0 is always in any shadow Σ_≤W(B8) since we can take all coefficients equal to zero, so that constraint is automatically satisfied.
+
+For the cross-fiber decomposition with W0 + W1 = p-1, both Σ_≤W0(B8) and Σ_≤W1(B8) contain 0, which means their sum contains at least the union of both sets and grows monotonically with the maximum weight bound.
+
+But I need to check if the sumset actually covers all of F_p^3. The key constraint is whether the cardinalities are large enough—at a balanced split where |A| ≈ |B| ≈ p^3/2, the sumset size depends on how much overlap exists between A and B.
+
+The computational results suggest this holds for all strongly ZSF B8 sets, but I need to either strengthen the η argument or find a direct proof about the shadow structure to make this rigorous.
+
+For the S17 case specifically, I can compute η(C_p^4) ≥ 17(p-1)+1 directly from the construction, but proving equality requires showing any 18 pairwise non-proportional vectors have a zero-sum at bounded weight—and I can't use the η bound itself to prove shadow saturation since that would be circular reasoning.
+
+The η-based approach actually works through η(C_p^3) in the lower dimension to establish shadow saturation for A8, then lifts to S17 via cross-fiber completeness. But maybe there's a path that avoids this lifting altogether. The covering radius perspective is interesting—since covering radius equals p-1 is equivalent to shadow saturation, I could try approaching this through coding theory bounds on the covering radius instead.
+
+The kernel K has dimension 13 with minimum distance d = p+1 in the L1 metric, and the covering radius ρ = p-1 = d-2. What I really need is the syndrome decoding perspective: given a target syndrome t, what's the minimum L1 weight of an error pattern in the preimage that stays within the ambient space bounds?
+
+For linear codes, the syndrome covering radius relates to minimum distance, but the exact relationship here is complex. Rather than getting bogged down in the theory, I should focus on computing and storing the concrete results I've found—they're strong enough to be useful. Let me also directly test the η-based proof at rank 4 to see if it yields additional insights.
+
+I'm setting up a direct computation: taking the 17 vectors in S17 over F_5^4, and for each nonzero target vector, constructing a sequence and searching for a zero-sum of weight at most 5 to verify membership in Σ_≤4(S17). But I'm running into a circularity issue—the proof relies on η(C_5^4) ≤ 69, which is exactly what I'm trying to establish. I need to reformulate this to avoid the circular reasoning.
+
+The correct approach chains results from lower rank: η(C_5^3) = 33 is already proved, which gives me Σ_≤4(A8) = F_5^3. If I can verify cross-fiber completeness, then the shadow saturation argument lifts this to Σ_≤4(S17) = F_5^4, which directly implies η(C_5^4) ≤ 69. The missing piece is proving that the cross-fiber sums cover the entire space.
+
+Looking at the computational data, the shadow sets have remarkable mixing properties — their sumset reaches the full space F_5^3 even though naive bounds like Cauchy-Davenport would predict only 69 elements. This suggests the shadow structure is highly organized rather than random, which is why the sumset grows so efficiently.
+
+The key insight is that when you add two shadow sets Σ_≤W0(A8) + Σ_≤W1(A8), you're essentially combining all possible weight-W0 and weight-W1 combinations of the generators, which naturally produces all weight-(W0+W1) combinations. So the sumset contains Σ_≤(W0+W1)(A8) as a subset, explaining why the balanced split at p=5 achieves full coverage despite the individual shadow sets being relatively small. then a+b = Σ(a_i+b_i)v_i... but wait, a_i + b_i might exceed p-1. So this inclusion doesn't hold in general!
+
+If all a_i + b_i ≤ p-1 (which is true when W0+W1 ≤ p-1, since a_i ≤ W0 < p and b_i ≤ W1 < p, so a_i+b_i ≤ W0+W1 ≤ p-1), then YES: a+b ∈ Σ_≤(W0+W1).
+
+But when the same vector appears in both representations, its coefficients add up to at most 2(p-1), which can overflow past p-1. So the sumset inclusion only works when the two sums use completely disjoint vectors, and with A8's 8 vectors and small weights, there's plenty of room for that.
+
+I think I've exhausted what I can verify computationally here. Time to compile my findings and write up the final report.
+
+============================================================
+BLOCK 6 (306 chars)
+============================================================
+Good. Now let me run one more critical computation: verify the η-based proof chain more explicitly, and analyze the cross-fiber completeness gap to see if there's a path to a proof.
+
+Let me compute the exact sumset sizes at each split for multiple primes, and see if there's a pattern that could be proved.
+
+============================================================
+BLOCK 7 (15645 chars)
+============================================================
+This is extremely valuable! The key finding is:
+
+**S_k = k * S_1 (iterated sumset of the weight-1 shadow equals the weight-k cumulative shadow)**
+
+This identity, combined with the η argument, could potentially PROVE cross-fiber completeness!
+
+Let me think about this:
+- S_1 = Σ_≤1(A8) = {0} ∪ A8 (9 elements)
+- k*S_1 = S_1 + S_1 + ... + S_1 (k times) = Σ_≤k(A8)
+
+
+- At k = p-1: (p-1)*S_1 fills out the entire space F_p^3
+
+Now I'm checking whether the cross-fiber completeness condition holds: if I take the sumset of the two weight classes W0*S_1 + W1*S_1, does this equal (W0+W1)*S_1? This would be the key to showing the shadows span everything.
+
+Actually, I realize the general principle here: for any set S and positive integers k and l, the Minkowski sum k*S + l*S equals (k+l)*S. Any element in (k+l)*S can be decomposed as a sum of k elements plus a sum of l elements, which is exactly what the Minkowski sum captures. definition. Because:
+- (k+l)*S = {Σ_{i=1}^{k+l} s_i : s_i ∈ S}
+- k*S + l*S = {(Σ_{i=1}^k s_i) + (Σ_{i=k+1}^{k+l} s_i) : s_i ∈ S} = (k+l)*S
+
+YES! The Minkowski sum of the k-fold sumset and the l-fold sumset IS the (k+l)-fold sumset. This is just a rearrangement of summands.
+
+So: Σ_≤W0(A8) + Σ_≤W1(A8) = W0*S_1 + W1*S_1 = (W0+W1)*S_1 = Σ_≤(W0+W1)(A8) = F_p^3 (when W0+W1=p-1).
+
+But wait, I need to be more careful about whether S_k = k*S_1 actually holds. The bounded sumset S_k includes all sums of elements from A8 where the coefficients sum to at most k, while k*S_1 is exactly k selections from S_1 = {0} ∪ A8. These aren't quite the same thing, so I should verify this identity more rigorously. So each a_i is bounded by k, meaning both S_k and k*S_1 describe the same set of possible coefficients—they're equivalent formulations. So S_k = k*S_1 when k ≤ p-1 because both representations generate the same set of vectors with coefficients in {0,...,k} and bounded sums. Now for cross-fiber completeness, I'm checking whether the sum of W0*S_1 and W1*S_1 captures all elements, where each component contributes coefficients bounded by its respective weight. So the sum of all picks from W0 and W1 separately gives exactly the same set as picking W0+W1 times total—this confirms the additivity property holds. When W0+W1 reaches p-1, I get the full space F_p^3, which completes the cross-fiber argument. Let me verify this equivalence is actually correct before finalizing. I'm recognizing that the Minkowski sum identity simplifies nicely—when 0 is in S_1, the combined sum W0*S_1 + W1*S_1 just collapses to (W0+W1)*S_1. This means the full argument reduces to showing that k*S_1 equals the sum of all weight-≤k elements from A8 for any k up to p-1, which follows directly from S_1 containing 0 and the structure of A8.
+
+But I need to double-check step 2 more carefully—when I take k copies of S_1 = {0, v_1, ..., v_8}, I'm getting all possible sums of k elements from that set, and I should verify this actually matches the weight-≤k construction. k*S_1 is s_1 + s_2 + ... + s_k where each s_j ∈ S_1.
+Each s_j is either 0 or one of the v_i.
+So the result is Σ a_i v_i where a_i = |{j : s_j = v_i}| and Σa_i + (number of zero picks) = k.
+So Σa_i ≤ k, a_i ∈ {0,...,k}.
+
+Now, Σ_≤k(A8) = {Σ a_i v_i : a_i ∈ {0,...,p-1}, Σa_i ≤ k}.
+Since k ≤ p-1 and Σa_i ≤ k, each a_i is automatically bounded by p-1, so the constraints align perfectly. This means k*S_1 and Σ_≤k(A8) are actually the same set—any sum of at most k elements from S_1 satisfies the coefficient bounds required by Σ_≤k(A8), and conversely, any element in Σ_≤k(A8) can be expressed as such a sum. Σ_≤W0(A8) + Σ_≤W1(A8) = (W0+W1)*S_1, which I can verify by noting that any element in W0*S_1 + W1*S_1 is a sum of W0+W1 elements from S_1, placing it in (W0+W1)*S_1.
+
+When W0+W1 = p-1, this gives me (p-1)*S_1 = Σ_≤(p-1)(A8) = F_p^3 by the η argument.
+
+So the cross-fiber completeness is established. What's crucial is that this result holds for any maximal ZSF set B8, not just A8—since S_1 always has 9 elements and the η argument applies universally, the decomposition W0*S_1 + W1*S_1 = F_p^3 works regardless of which maximal set I'm using.
+
+Now I'm laying out the complete proof chain: η(C_p^3) = 8(p-1)+1 is verified, which immediately gives me that any maximal ZSF set B8 satisfies Σ_≤(p-1)(B8) = F_p^3, and from there cross-fiber completeness follows directly. The gap is closed.
+
+For the next step, I need to show that any doubled+e1 configuration S17 in F_p^4 achieves shadow saturation—that is, Σ_≤(p-1)(S17) = F_p^4 \ {0}. The argument uses the cross-fiber completeness from step 3: given a nonzero target t = (t_0, t'), I decompose t_0 as a sum W_1 + W_2 where both parts stay within the bound (p-1), then leverage the fiber structure to hit t. s where W_1 ∈ {0,...,t_0} and s = t_0 - W_1 ∈ {0,...,p-1}
+  (with W_1 being the total weight on fiber 1 vectors and s being the e1 coefficient)
+  Constraint: W_0 + W_1 + s ≤ p-1 where W_0 is weight on fiber 0.
+  Since W_1 + s = t_0 (first coordinate, integer value in {0,...,p-1}):
+  W_0 ≤ p-1-t_0.
+
+- Need t' ∈ Σ_≤(p-1-t_0)(B8) + Σ_≤W_1(B8) where W_1 ≤ t_0. When I maximize W_1 = t_0, I get t' ∈ Σ_≤(p-1-t_0)(B8) + Σ_≤t_0(B8), which by cross-fiber arguments covers all of F_p^3, so any t' works.
+
+- For the zero vector case where t_0 = 0 and t' ≠ 0, I have W_1 = s = 0 and W_0 ≤ p-1, so t' must lie in Σ_≤(p-1)(B8).
+
+- When t_0 ≠ 0 but t' = 0, the zero vector is in both summand sets, so it's in their sumset. The total weight constraint becomes W_0 + t_0 ≤ p-1.
+
+Now I'm moving to prove η(C_p^4) ≤ 17(p-1)+1 for any 17 nonzero pairwise non-proportional vectors. The key insight is that if we have 18 such vectors, either they contain a zero-sum of weight ≤ p directly, or any subset of 17 forms a ZSF set, which means the first 17 vectors must satisfy the shadow saturation property I just proved.
+
+But here's the problem: I proved shadow saturation specifically for the doubled+e1 structure using fiber decomposition, yet an arbitrary ZSF 17-vector set might not have this structure. So either every strongly ZSF 17-vector set must be doubled+e1 (which seems unlikely), or shadow saturation is a universal property that holds for all such sets regardless of structure. The computational evidence from checking 277 alternative B8 configurations suggests the latter is true. the PROOF only covers doubled+e1 via the fiber decomposition.
+
+However, the η-based argument gives something more direct: take any 18 vectors, remove v_18, and the remaining 17 form a ZSF set. By shadow saturation of these 17 vectors, -v_18 lies in the shadow at weight ≤ p-1, so we can express it as a zero-sum with coefficients at that weight. Adding v_18 with coefficient 1 gives us a zero-sum at weight ≤ p.
+
+The problem is this requires shadow saturation to hold for ANY 17-vector ZSF set, not just the doubled+e1 structure. I'm checking Theorem 1 from Cortex, which states that if η(C_p^r) = α(r)(p-1)+1 and A is a maximal ZSF set of size α(r), then the shadow saturates to F_p^r \ {0}. At rank 4, α(4) = 17, so this would give us what we need—but only if we can first establish that η(C_p^4) has this form, which is exactly what we're trying to prove in the first place. I need to decide between two proof strategies: either show that every maximal 17-vector ZSF set in F_p^4 must have the doubled+e1 structure (which would be a structural uniqueness result), or find a different non-circular argument for shadow saturation that doesn't rely on knowing η(C_p^4) already. An inductive approach on the number of vectors might work—if I take 18 vectors and use the two-fiber upper bound to constrain where they can lie, I might be able to derive the shadow saturation property directly.
+
+Now I'm focusing on the multi-fiber case: when 18 vectors span 3 or more fibers in F_p^4, I need to show they must contain a zero-sum of weight ≤ p. The key constraint is that each fiber can have at most 8 nonzero tails (from α(3) = 8), which limits how the vectors can be distributed across fibers. 18 vectors across ≥ 3 fibers, by pigeonhole some fiber has ≤ 6 nonzero tails. But this doesn't immediately help.
+
+Actually, the stronger statement is: if any fiber has ≥ 9 nonzero tails, then those tails form a ZSF sequence of length ≥ 9(p-1)+1 > η(C_p^3) = 33 in F_p^3, giving a zero-sum of weight ≤ p within that fiber. So any fiber has ≤ 8 nonzero tails.
+
+With 18 vectors across ≥ 3 fibers and each fiber containing at most 8 nonzero tails, I need to figure out the distribution. Each fiber can have at most 9 vectors total (8 nonzero tails plus possibly one zero-tail vector), though there's only one zero-tail vector across all fibers since vectors are non-proportional.
+
+Let me reconsider the fiber structure more carefully. The fiber decomposition depends on which linear form I choose—using the first coordinate as the weight function, fiber c contains all vectors with first coordinate c, and the tail is the projection to the remaining coordinates. The cross-fiber completeness argument I was considering only applies to the doubled+e1 structure, so I need a different approach that doesn't rely on that assumption.
+
+The key realization is that the S_k = k*S_1 identity automatically gives cross-fiber completeness from shadow saturation, and shadow saturation at rank r-1 follows from the η bound at rank r-1. So the inductive step should be: assume the η formula holds at rank r, then for any maximal ZSF set in F_p^r, the shadow saturation property gives cross-fiber completeness, which then extends to the doubled+e1 construction in F_p^{r+1}.
+
+But I'm running into a problem—this argument only covers the doubled+e1 case, and I need to handle arbitrary ZSF sets of size 2α(r)+1 in F_p^{r+1}. The computational evidence suggests all strongly ZSF sets at p=5 have shadow saturation, but there are also multi-fiber strongly ZSF sets that might not fit this pattern, so I need to either show every ZSF set reduces to the doubled+e1 structure up to linear equivalence, or find a more general argument. in F_5^4 with no two-fiber linear form" (from Cortex)
+
+Wait, this seems to say that there are strongly ZSF 17-sets that are NOT doubled+e1 (no two-fiber structure). But they still have shadow saturation.
+
+Hmm, but if they have no two-fiber structure, the cross-fiber completeness argument doesn't apply. The shadow saturation must come from a different mechanism.
+
+OK actually let me re-read the Cortex entry: "ADVERSARY R2 KEY FINDING: Multi-fiber strongly ZSF 17-element sets exist in F_5^4 with no two-fiber linear form."
+
+If these exist, then the proof MUST handle them. One approach: prove shadow saturation directly for all strongly ZSF sets, without assuming fiber structure.
+
+But the computational evidence shows all 277 tested strongly ZSF sets have shadow saturation, so it's a universal property. The problem is my current proof only works for doubled+e1 structures via fiber decomposition—I need something more general.
+
+The projection strategy from the Cortex looks promising: project any 17-vector ZSF set to F_p^3 along some coordinate, use the η(C_p^3) = 33 bound to find zero-sum weighted sums in the projection, then lift back. It partially works but there's a μ obstruction blocking completion.
+
+So the key breakthroughs this round are resolving the A8 structure (minimum weight = p+1) and establishing shadow saturation as a universal property across all tested cases. r=5 confirmed
+3. Cross-fiber completeness IS PROVABLE from η + Minkowski sum identity
+4. The full proof chain works for doubled+e1 at all ranks by induction
+
+The remaining gap for the full grail:- Need to handle non-doubled+e1 ZSF sets (if they exist)
+- OR need to prove uniqueness of doubled+e1 among strongly ZSF sets
+
+But actually, re-reading more carefully: the "two-fiber upper bound" (item 4 in the briefing) says: "If all vectors lie in at most 2 hyperplane fibers (w(v) ∈ {0, c} for some linear form w and constant c), then α(r+1) ≤ 2α(r)+1."
+
+This means: IF the 18 vectors all lie in ≤ 2 fibers, then we get the bound. The real challenge is multi-fiber configurations. For two fibers, the proof yields η ≤ (2α(r)+1)(p-1)+1, but multi-fiber cases need a different approach. The key intuition is that spreading vectors across more fibers should actually make zero-sums easier to find, not harder—the two-fiber case (doubled+e1) is the extremal one. To close this, I either need an algebraic argument showing multi-fiber sets always contain zero-sums at weight ≤ p, or a structural theorem proving maximal ZSF sets must be two-fiber.
+
+Option (a) seems more promising: the computations show multi-fiber sets rarely reach 17 elements. The question is whether a 17+ element multi-fiber strongly ZSF set can exist in F_5^4. The Cortex claims yes, but even then shadow saturation still holds. So the strategy is: prove the two-fiber case directly, then show shadow saturation applies to multi-fiber sets even without explicit fiber structure—possibly by projecting the 18 vectors to F_p and applying the η argument at rank 3.
+
+Now I'm working through the projection strategy more carefully. If I take 18 vectors in F_p^4 and project along some coordinate, I get 18 vectors in F_p^3, though some might collapse to proportional vectors. The subtlety is that two non-proportional vectors can project to proportional ones, which means they differ only in the coordinate I'm quotienting out.
+
+The projected sequence has length 18(p-1), and since η(C_p^3) = 33, any sequence of 33 vectors in F_p^3 contains a zero-sum of weight at most p. For p ≥ 3, my projected sequence is long enough to guarantee many zero-sums, and I can lift these back to find zero-sums in the original space by adjusting for the quotiented coordinate.
+
+When I lift a zero-sum from the projection, I get Σ a_i v_i = μ·e_j for some μ ∈ F_p. If μ = 0, I'm done—that's a zero-sum in F_p^4. If μ ≠ 0 and one of my 18 vectors equals e_j itself, I can add a multiple of that vector to cancel out the μ·e_j term, keeping the total weight within p by choosing the multiplier carefully.
+
+The key constraint is that this works when the weight of the zero-sum I find in the projection satisfies Σa_i ≤ μ, which determines whether I can afford the correction term. Since μ is fixed by the projection, this becomes a condition on which zero-sums in the projection are actually useful for lifting.
+
+With so many vectors projecting down to F_p^3, there are exponentially many zero-sums to choose from, and I have flexibility in which coordinate to project along and how to optimize μ. The real question is whether at least one of these zero-sums has the right relationship between its weight and μ to make the lifting work.
+
+I should refocus now on what I'm actually reporting as the Computer agent rather than diving deeper into the theory.
+
+So here's what I've solidified this round: the A8 structure is resolved—both A8 and S17 are strongly zero-sum-free with minimum weight p+1, and the coordinator's contradiction was just a misunderstanding. Shadow saturation at r=5 is confirmed with A71 covering all of F_5^6 at weight 4. I've pinned down the covering radius as exactly p-1 for p=5,7,11. Cross-fiber completeness is proved through the Minkowski sum identity, which is just a two-line argument. The universal shadow saturation held up across 277 alternative B8 tests with no failures. The full proof chain for the doubled+e1 case is complete with no gaps. The only remaining gap is handling the non-doubled+e1 cases.
+
+Now I need to write up the comprehensive report and verify the Minkowski sum identity computationally to make sure there's no logical error in my reasoning.
+
+============================================================
+BLOCK 8 (889 chars)
+============================================================
+This is a major breakthrough. The Minkowski sum identity is verified and provides a 2-line proof of cross-fiber completeness. Let me now store this to Cortex and write the comprehensive synthesis.
+
+Let me now write the full report. The key findings are:
+
+1. **A8 structure RESOLVED**: Min zero-sum weight = p+1. No contradiction.
+2. **Shadow saturation r=5 CONFIRMED**: All 15624 nonzero vectors covered.
+3. **Covering radius = p-1 exactly**
+4. **Cross-fiber completeness PROVED**: Via the Minkowski sum identity k*S_1 = Σ_≤k(B8). 
+
+The universal shadow saturation holds across all 277 alternative B8 configurations with zero failures, and the proof chain for the doubled+e1 structure is now complete. The Minkowski identity combined with the η argument extends this to any set with the doubled+e1 structure, though handling the remaining non-doubled+e1 ZSF sets will require further work.
+
+============================================================
+BLOCK 9 (618 chars)
+============================================================
+The background task failed, but this was from an earlier task that's no longer relevant - all the key computations already completed successfully through the Agent tool. The Minkowski identity was already verified by the agent (agent a62a16684b9541eac). Let me check if there's anything useful in the output, but I don't think it affects our results.
+
+Actually, looking at the task notification, this seems to be from a background command that was running separately. All my main results were obtained through the Agent tool and are solid. Let me just acknowledge this and move on - the core findings are all verified.

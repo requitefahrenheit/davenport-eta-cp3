@@ -1,0 +1,44 @@
+# Research Result
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+**Arch:** gpt
+**Turns:** 10
+**Cost:** $1.0981
+
+## Log
+
+
+[Turn 1] Worker produced a working exact DP checker for short zero-sums (length ≤7) in \(C_7^3\), validated by running 10 random 8-supports with uniform multiplicity 6 (total length 48), all of which contained a short zero-sum. This is concrete progress: a reliable computational engine is in place for broader screening. Approaches tried so far: (1) computational DP testing; no proof attempts yet; no Lakatos threshold.
+[Turn 2] Worker expanded the DP into a pipeline with cap and antipodal-free filters and gathered statistics on 5000 random 8-sets: many pass the filters but none pass the DP short-zero-sum-free test. This is still purely computational evidence with no new lemma/obstruction articulated; the next plan is a massive deterministic enumeration (≈1.96e9 cases) without a guiding structural claim. Approaches tried: (1) computation only; no failures across multiple independent proof approaches yet, so no Lakatos challenge.
+[Turn 3] Worker reframed with a concrete structural conjecture (H7): every 8-point cap that is antipodal-free in \(AG(3,7)\) has minimum kernel weight \(\le 7\), which would rule out extremal 8-supports at multiplicity 6. They implemented modular nullspace computation and a bounded search over kernel combinations, and found in 20 random 8-sets the min kernel weight was always ≤7. Approaches: (1) DP search, (2) kernel-weight structural obstruction; no repeated near-miss margins across multiple failed proof approaches yet; no Lakatos threshold.
+[Turn 4] Worker found and verified a specific 8-support \(A_8\) in \(C_7^3\) (multiplicity 6 each) that is cap, antipodal-free, and passes the DP (no zero-sum subsequence of length ≤7). This also refutes their prior structural hypothesis H7 by exhibiting min kernel weight exactly 8 (the threshold), explaining why random caps failed (they typically have kernel weight ≤7). Approaches so far: (1) DP computational search, (2) kernel-weight obstruction (now shown not universal); no Lakatos threshold (not multiple near-miss proof failures, rather a corrected conjecture via counterexample).
+[Turn 5] Worker attempted to characterize the special support via plane-intersection profiles and kernel weight, but got bogged down: the plane enumeration is incorrect/duplicated (57 instead of the known 57 2D subspaces? and profile counts inconsistent), so the “rarity” conclusion is not yet well-founded. They did confirm \(A_8\) has min kernel weight 8, and found no profile matches in 2000 random filtered samples, but the profile test is currently unreliable due to the plane-list bug. Approaches: (1) DP; (2) kernel-weight; (3) plane-profile invariant (currently blocked by incorrect enumeration); no Lakatos threshold.
+[Turn 6] Worker clarified the correct count of origin-passing planes in \( \mathbb{F}_7^3\) is 57 and recomputed the \(A_8\) plane-intersection profile as (0:17,1:20,2:16,3:4). However, they contradicted themselves in code/comments by still asserting 49 planes, hit assertion errors, and ended with the same plane count 57 as before—no new lemma or enumeration result yet. Approaches remain: (1) DP, (2) kernel-weight, (3) plane-profile invariant; plane enumeration is now conceptually fixed but execution still wobbly; no Lakatos threshold.
+[Turn 7] Worker made real progress by implementing a constrained backtracking/enumeration (fixing a basis) and actually found a second 8-cap that is antipodal-free, matches the same plane-profile as \(A_8\), and attains min kernel weight 8. This is a new construction/obstruction: non-uniqueness of the extremal-support orbit. Approaches tried: (1) DP, (2) kernel-weight, (3) plane-profile + partial enumeration; no Lakatos threshold.
+[Turn 8] Worker corrected a key mistake: the previously found “second support” fails the actual DP test and contains short zero-sums (lengths 3, 6, 7), so it is not extremal. This identifies a precise obstruction: kernel weight 8 + cap + antipodal + plane profile are not sufficient; DP is still required. Approaches: (1) DP, (2) kernel-weight, (3) plane-profile; enumeration approach remains viable; no Lakatos threshold.
+[Turn 9] Worker implemented a concrete GL₃(7)-canonicalization/fingerprinting routine for 8-sets by mapping independent triples to the standard basis and taking the lexicographically minimal image; verified it on the known extremal support \(A_8\) to produce a stable canonical representative. This is genuine progress enabling orbit counting during exhaustive DP-filtered enumeration. Approaches: (1) DP, (2) kernel-weight, (3) plane-profile, (4) GL-canonicalization for classification; no Lakatos threshold.
+[Turn 10] Worker attempted to integrate canonicalization with a backtracking search plus successive filters ending in DP, but the run failed immediately due to a trivial NameError (G undefined), so no new mathematical/computational result was produced this turn. The process is stalled at execution/engineering rather than advancing the research question (uniqueness/orbit count). Approaches unchanged; no Lakatos threshold.

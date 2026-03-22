@@ -1,0 +1,23 @@
+# Research Result
+
+**Goal:** Prove: for a,b,c in F_p* with no pair summing to 0 mod p and a+b+c != 0 mod p,
+the wrap count k(lambda) = floor(([la]+[lb]+[lc])/p) is NOT identically 1.
+
+Equivalently: f(lambda) = [la]+[lb]+[lc] < p for some lambda in F_p*.
+
+By the involution f(l)+f(-l)=3p and sum(k)=p-1: this is equivalent to showing
+k=2 for some lambda (then -lambda gives k=0, f <= p-1).
+
+Verified for p = 5,7,11,13,17,19. Zero exceptions.
+**Arch:** gpt
+**Turns:** 5
+**Cost:** $0.5225
+
+## Log
+
+
+[Turn 1] The worker produced concrete computational counterexamples: for primes \(p\ge 11\) found \((u,v)\) such that \(u+v\ge p+1\) and the two “inverted/rescaled” representative sums also exceed \(p\), indicating the target property fails in these cases. They also checked a related “\(k=1\) for all scalings” condition and found it false (explicit \(\lambda=5\) giving sum \(10\) for \(p=11,(1,5,7)\)), and found a triple \((1,1,10)\) violating a claimed “exactly one pair sum \(\ge p\)” rule. Approaches tried so far: 1 (direct computation); Lakatos threshold not reached yet, but evidence strongly suggests the conjecture/lemma under investigation is false as stated.
+[Turn 2] The worker proved a basic carry lemma for two-term addition in least residues (standard, not advancing the specific obstruction/counterexample found in turn 1) and added a small printout of inverses mod \(p\) without extracting structure. Approaches tried: still essentially 1 (computation + elementary bookkeeping); no new lemma connected to the failing conjecture or a corrected statement. Lakatos threshold not reached, but progress toward resolving the conjecture has stalled this turn.
+[Turn 3] The worker established a sharp lemma about inverses on the upper half: the minimum lifted inverse over residues with lift ≥(p+1)/2 equals 2, uniquely attained at a=(p+1)/2. They also computed (and implicitly identified) the maximum lifted inverse in that set as p−1, attained at a=p−1, and numerically confirmed the unique element with inverse 2 is (p+1)/2 across many primes. Approaches tried: 2 (computation-guided structural lemma in addition to raw counterexample search); Lakatos threshold not reached.
+[Turn 4] The worker introduced a standard three-term carry decomposition and then shifted into counting statistics about pairwise overflows vs total carry, with multiple tables but no clear connection to the earlier explicit counterexamples or a corrected conjecture. This is more bookkeeping/computation than theorem progress; no new obstruction, corrected bound, or decisive lemma was extracted from the counts. Approaches tried: 2; Lakatos threshold not reached, but the work is drifting away from resolving the (apparently false) main statement.
+[Turn 5] This turn derived correct closed forms for counts of ordered three-term carry patterns and verified them computationally for small primes. However, it still did not reconnect these counts to the original (already seemingly false) conjecture or propose a corrected bound/statement; it’s extended bookkeeping without a payoff. Approaches tried: 2; Lakatos threshold not reached, but the project goal is currently undefined relative to the counterexamples, so further work is unproductive.

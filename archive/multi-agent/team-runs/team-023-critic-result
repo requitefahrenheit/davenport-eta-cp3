@@ -1,0 +1,26 @@
+# Research Result
+
+**Goal:** Prove two lemmas that complete eta(C_p^3) = 8(p-1)+1:
+
+1. NO UNIVERSAL BALANCE: For any 9 distinct elements of F_p (p >= 11), some 4-element subset has no balanced pair-sum.
+
+2. CASE A: When phi is nonzero on the kernel K, some coset K_r contains a vector in the cube {0,...,p-1}^9 with coordinate sum r.
+
+The rest of the proof is DONE (see seed). These are the last two gaps.
+The proof structure, the conic geometry, the averaging argument, the Segre theorem application -- all complete.
+Just close these two gaps.
+**Arch:** gpt
+**Turns:** 9
+**Cost:** $0.4997
+
+## Log
+
+
+[Turn 1] The worker ran random and brute-force searches for “universal balanced” 9-subsets in Z/pZ for p=11 and p=13 and found none, plus a quick optimization showing a maximum value 54 for a separate combinatorial sum. No lemma/structural argument was produced; this is mostly computational checking without extracting an invariant or obstruction. Approaches tried: (1) random sampling, (2) brute-force search, (3) unrelated optimization; no systematic proof progress yet, so no Lakatos threshold reached.
+[Turn 2] The worker produced a concrete structural lemma: on the parabola embedding \(v(x)=(1,x,x^2)\subset\mathbb R^3\), the equation \(v(s)+v(t)=v(u)+v(v)\) forces \(\{s,t\}=\{u,v\}\). This is genuine progress: a uniqueness-of-sum (Sidon-type) property with an algebraic proof, plus a small sanity-check computation. Approaches so far: (1) random sampling in \(\mathbb Z/p\), (2) brute force in \(\mathbb Z/p\), (3) now a structural/algebraic lemma in \(\mathbb R\); no repeated near-miss failures, so no Lakatos challenge threshold.
+[Turn 3] The worker derived an explicit inverse (“decoding formula”) for the pair-encoding \((S_1,S_2)=(x+y,x^2+y^2)\), reconstructing \(\{x,y\}\) via \(P=(S_1^2-S_2)/2\) and the quadratic \(t^2-S_1 t+P=0\). They also connected it to the previous parabola-sum injectivity and debugged a numerical check (initial mismatch due to rounding/tolerance, then fixed). Approaches now include two algebraic lemmas plus computation as sanity; no repeated near-miss failures, no Lakatos trigger.
+[Turn 4] The worker extended the parabola Sidon/injectivity lemma to any field of characteristic ≠ 2 (in particular all odd prime fields), with a clean proof via equal sum and equal product, and supported it with exhaustive finite-field computation for p=3,5,7,11,13. This is substantive progress and directly addresses the modular setting. Approaches tried: (1) random sampling mod p, (2) brute-force subset search mod p, (3) algebra over ℝ, (4) algebra over finite fields + exhaustive verification; no global repeated failure margin, so no Lakatos challenge.
+[Turn 5] The worker integrated the finite-field Sidon lemma into the kernel/coset framework by defining an explicit coset-valued pair-encoding map \(\Phi_r\), proving injectivity in each coset \(K_r\), and giving a constant-time decoding procedure via the quadratic with \(S_1,S_2\) and \(2^{-1}\bmod p\). This is a clear synthesis step tying earlier lemmas to the project’s stated “Case A” requirement, including a storage/complexity remark. Total approaches: computational searches + three algebraic lemmas culminating in a construction; no Lakatos global-failure pattern.
+[Turn 6] The worker added a “no double-double balance” lemma: a kernel relation with coefficients \((+\lambda,+\lambda,-\lambda,-\lambda)\) among distinct parabola points would imply \(v(a)+v(b)=v(c)+v(d)\), which is impossible by the established Sidon property; they also exhaustively checked small primes. This is a meaningful obstruction-removal step for their kernel/coset argument. Approaches remain algebraic with computational sanity checks; no pattern of repeated near-miss failures, so no Lakatos challenge.
+[Turn 7] This turn introduced a correct averaging/pigeonhole lemma about finding a coset with small intersection with a finite set \(W\). But the “Application to Case A” misuses it: finding a coset with \(|K_r\cap W|\le 1\) does not imply you can store *all* pair-encodings inside a single coset; it implies the opposite (most cosets have few points of \(W\)). So the integration step is logically blocked by a mistaken inference about coset capacity. Approaches so far remain productive (multiple lemmas), but this is a process failure: a key application claim is inconsistent with the stated bound; no Lakatos pattern.
+[Turn 8] The worker tried to fix the earlier coset-capacity mistake by arguing that collisions across cosets create a forbidden (+,+,−,−) kernel vector. But the step “same coset ⇒ difference in K ⇒ yields a kernel relation among v(a),v(b),v(c),v(d)” is not justified from the given setup: Δ being in ker(L) does not automatically mean each 3-vector block corresponds to a relation among the four parabola points, nor that the parameters are distinct, nor that λ=1 matches the earlier lemma’s hypotheses. The argument is still at the level of narrative rather than a committed, checkable algebraic step linking “collision in quotient” to an actual 4-term dependence in the ambient structure. No Lakatos trigger; the blockage is a missing explicit mapping from coset collisions to the claimed kernel relation.

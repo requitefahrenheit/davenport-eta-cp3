@@ -1,0 +1,526 @@
+
+============================================================
+BLOCK 1 (123 chars)
+============================================================
+Let me start by searching Cortex for relevant prior computations and reading the key files to understand the current state.
+
+============================================================
+BLOCK 2 (329 chars)
+============================================================
+Now let me read the key files to understand the current state before starting computations. I need to read:
+1. u1_analysis.md - the comprehensive writeup
+2. The cross-files from the latest session
+3. COMPUTATIONAL_FINDINGS_R1.md
+
+Let me also read the adversary's recent findings about the 24 counterexamples and the swap theorem.
+
+============================================================
+BLOCK 3 (3913 chars)
+============================================================
+Now I have a clear picture. Let me understand the COMPUTER's directive for Round 3:
+
+**TASK**: Validate ADVERSARY's swap-generation DP by hand-tracing p=5, single swap case.
+
+The key question is: are the adversary's "U1 counterexamples" (3-fiber strongly ZSF 17-sets) real or artifacts?
+
+From the adversary's report, they found 7 counterexamples at p=5. These are sets where one vector from doubled+e₁ is replaced with the same tail in a different fiber, and the resulting set is still strongly ZSF but uses 3 fibers under ALL 156 projective linear forms.
+ 
+So the critical issue is whether those single-swap configurations actually maintain min_fibers = 3 across every linear form, or if some form (like the one that broke the 5-fiber config) can reduce them to 2 fibers. I need to pick one of their reported strongly ZSF 8-sets and systematically check it against all linear forms to verify whether it's genuinely a counterexample or a false positive. 3. Compare DP result
+
+Wait, the coordinator's synthesis says something different from what I read. Let me re-read the synthesis more carefully.
+
+Actually, the synthesis asks me to:
+1. Validate ADVERSARY's swap-generation DP by hand-tracing p=5, single swap case
+2. Take one strongly ZSF 8-set from ADVERSARY's output
+3. Implement brute-force zero-sum evaluation and compare
+
+But looking at the adversary's findings, the counterexamples are 17-sets (not 8-sets). The "8-set" might refer to the base A₈ used in the construction.
+
+Let me think about what needs to be done computationally:
+
+1. **Validate the U1 counterexamples**: Take one of the 7 counterexamples (e.g., position 9 swap: replace (1,0,1,0) with (2,0,1,0)), verify it's strongly ZSF via brute-force enumeration (not DP), and verify its minimum fiber count under all linear forms.
+
+2. **Verify window structure at p=29, 31, 37** (from part B of the research goal)
+
+3. **Verify sumset completeness at p=29, 31** (from part B)
+
+4. **Check (8,7,2) distribution** (from part B)
+
+5. **Check whether non-A₈ strongly ZSF 8-sets exist** (from part B)
+
+Since this is Round 3 of 3, I need to prioritize the most impactful verification. The coordinator's primary focus is validating ADVERSARY's swap-generation DP through hand-tracing at p=5, then building a comprehensive verification script that checks the counterexamples against brute-force evaluation and confirms the structural properties across the specified primes. , single swap case.**
+
+This means I need to:
+1. Take one counterexample (e.g., pos=9: replace (1,0,1,0) with (2,0,1,0))
+2. Build the full 17-vector set
+3. Enumerate ALL possible zero-sums at weight ≤ 5 (p=5) using brute force
+4. Verify the set is strongly ZSF
+5. Check minimum fiber count under all linear forms
+
+Let me also do the other computational tasks in parallel. Let me write multiple scripts.
+
+First, let me understand the doubled+e₁ construction at p=5 in F_5^4.
+
+A₈ in F_p^3 consists of 8 vectors. The doubled+e₁ construction creates 17 vectors in F_p^4:
+- 8 vectors (0, a) for a ∈ A₈ (fiber 0)
+- 8 vectors (1, a) for a ∈ A₈ (fiber 1)  
+- 1 vector e₁ = (1, 0, 0, 0) (fiber 1)
+
+So the 17 vectors are in fibers 0 and 1 (under projection to first coordinate). Now I need to verify the exact definition of A₈ and check the adversary's counterexample more carefully, starting with position 1 where (0,0,1,0) gets replaced. I'm realizing the fiber numbering is getting confusing, so let me just write a Python script that constructs A₈ properly, builds the doubled+e₁ configuration, generates each counterexample, and verifies them against the existing scripts to nail down the exact construction. I need to look up the exact definition of A₈ from the documentation rather than guessing. The constraint equations from u1_analysis.md show how the coordinates relate to each other, so I'm working through what those constraints tell me about the structure of each vector in the set.
+
+============================================================
+BLOCK 4 (15004 chars)
+============================================================
+Good, now I have the A₈ construction:
+```python
+A8 = [
+    (1, 0, 0), (0, 1, 0), (0, 0, 1), (p-1, 1, 1),
+    (1, 1, 0), (1, 0, 1), (p-1, 2, 1), (p-1, 1, 2),
+]
+```
+
+And the doubled+e₁ construction in F_p^4:
+- Fiber 0: (0, a) for a in A₈
+
+
+- Fiber 1: (1, a) for a in A₈
+- Plus e₁ = (1, 0, 0, 0)
+
+So I'm listing out all 17 vectors by combining the two fibers with the A₈ elements and adding the basis vector.
+
+For p=5 where p-1=4, I'm writing out the concrete coordinates for each fiber...
+
+Listing the vectors explicitly...
+
+Now I'm checking the adversary's counterexamples—specific positions where changing just the first coordinate shifts an element from one fiber to another, like position 1 moving from fiber 0 to fiber 3, or position 9 shifting from fiber 1 to fiber 2.
+
+I need to write a verification script that checks whether the system is strongly ZSF by testing if any non-trivial linear combination of the 17 elements can equal zero.
+
+For the fiber check, I'll compute how each linear form w maps the vectors to fiber values, then find which form minimizes the number of distinct fibers—this determines the minimum fiber count needed.
+
+Now I'm organizing the verification into three separate scripts: one to validate the adversary's counterexamples directly, another to check the window structure properties at those larger primes, and a third to verify sumset completeness. Let me write these out systematically.
+
+For the first script, I'll use dynamic programming to check if the 17 vectors form a zero-sum-free set at p=5. The state space tracks the weight (number of vectors used) and the resulting sum, which gives at most 6 × 625 = 3750 states—very manageable. For each vector, I'll expand states by trying coefficients from 0 up to the remaining capacity.
+
+For the window verification at p=29, 31, 37, I'm computing the DP for the 8-element set in F_p^3, which has roughly 28 × 24389 states at p=29...
+
+At p=37, the state space grows to about 1.8M states, and with 8 vectors each trying up to 37 coefficients, that's around 533M operations—slow but workable. The key insight is that the DP processes vectors sequentially, expanding each (weight, vector) pair by trying all possible coefficients for the current vector. The number of distinct reachable vectors after processing i vectors could theoretically reach p^3, but in practice it's much smaller due to the weight constraint. vectors). So the state space is bounded by (p-1) × p^3 per step, and we do 8 steps. For p=37: 36 × 50653 × 8 × 37 ≈ 540M operations. This is on the edge but should be OK in a few minutes.
+
+Actually, the key optimization is that the states are a SET, so we don't track duplicates. The maximum number of distinct (weight, vector) pairs after all 8 vectors is at most (p-1) × p^3, which for p=37 is 36 × 50653 ≈ 1.8M. For each state, each vector tries 37 coefficients, giving at most 37 × 1.8M ≈ 67M additions per step, 8 steps total ≈ 536M. This should take maybe 5-10 minutes in Python, though Python sets of tuples might be slow enough that I should consider using numpy or bitset approaches instead.
+
+For the window structure, I only care about the restriction to the line L = {(0,j,j) : j ∈ F_p*}, but I need the full DP to correctly compute which elements of L are reachable at each weight, since intermediate sums can be off L. I could track just the reachable (weight, j) pairs on L, but that won't work because intermediate sums are arbitrary vectors in F_p^3, not restricted to L. So I need to run the full DP.
+
+Let me use an array-based approach: for each weight, maintain a boolean array of size p^3 indicating which vectors are reachable. For p=29, that's 29^3 = 24389 booleans per weight, 28 weights total, about 683K booleans per step. With 8 steps and 28 coefficients per step, that's roughly 153M operations, which should be fast enough.
+
+Actually, let me reconsider the DP formulation. The state after processing vectors a₀ through a_{i-1} tracks which (weight, vector) pairs are reachable. For each new vector aᵢ and coefficient c, I update the weight by c and the vector by c·aᵢ (mod p), then mark the new state as reachable.
+
+I'll use a 2D boolean array indexed by weight and encoded vector, where the vector encoding maps F_p^3 to integers 0 through p^3-1. For each reachable state and each valid coefficient, I compute the new weight and vector, then mark that as reachable in the next iteration. The total transitions are bounded by the number of reachable states times the number of coefficients.
+
+For p=29, the state space is roughly 29^4 ≈ 707K states, and with up to 29 coefficients per state across 8 vectors, that's around 164M transitions—too slow in Python with sets. I'll switch to using arrays instead, where reach[w] stores the set of encoded vectors reachable at each weight w.
+
+Building the DP with precomputed multiples...
+
+Actually, the existing verification script already handles the window checking, so let me see if I can reuse that.
+
+I should focus on what the coordinator actually wants: validating the adversary's swap-generation DP by hand-tracing through the p=5 case with a single swap. Since p=5 is small enough that the ZSF check runs instantly, I can write a comprehensive script that both brute-force validates the counterexamples at p=5 and verifies the window property at p=37.
+
+Let me just start writing the definitive computation script...
+
+Writing validation code... Defining swap positions...
+
+Now I need to verify the indexing against the standard 17-vector construction to make sure each position maps correctly to the right fiber coordinates. Continuing through fiber 1, I see the same pattern repeating with positions 8 through 15, where each position maps to the corresponding tail values a₀ through a₇, just with the fiber index shifted to 1.
+
+Position 16 gives me e₁, which matches the adversary's numbering scheme.
+
+Now I'm setting up a brute-force verification to check that each counterexample set is strongly ZSF using dynamic programming. I'll track states as (weight, sum_vector) pairs where weight ranges from 0 to 5 and sum_vector lives in F₅⁴, giving me a manageable state space of around 3750 states. For each of the 17 vectors, I'll try coefficients from 0 up to min(4, 5-weight), which should be computationally fast.
+
+For finding the minimum fiber count, I need to enumerate all 156 projective linear forms, compute their fiber values across all 17 vectors, count the distinct fibers, and track the minimum.
+
+I'm going to split this into parallel scripts: one for quickly validating the adversary's 7 counterexamples at p=5, another for the slower window structure checks at p=29, 31, 37 and sumset verification at p=29, 31, plus a check for whether non-A₈ sets are strongly ZSF.
+
+For the brute force validation, I need to implement this completely from scratch without relying on their code. I'm also adding the (8,7,2) distribution check—enumerating all pairs of extra vectors outside fibers 0 and 1, then testing whether combining 7 vectors from A₈ in fiber 0, 7 from fiber 1, plus these two extra vectors and e₁ forms a strongly ZSF set.
+
+Let me write these scripts now. in a third. But our standard construction is 8 in fiber 0, 9 in fiber 1 (counting e₁). The (8,7,2) distribution would be different.
+
+Actually, re-reading the coordinator's synthesis: "COMPUTER found ZERO strongly ZSF sets in 162,864 (8,7,2) exhaustive pairs at p=5." This was from Round 1/2. So this was already done.
+
+The coordinator's main directive for me is:
+**TASK: Validate ADVERSARY's swap-generation DP by hand-tracing p=5, single swap case.**
+
+Let me focus on this. I'll write a completely independent brute-force implementation and check:
+1. Each of the 7 counterexamples is strongly ZSF
+2. Each has min_fibers ≥ 3 under all projective linear forms
+3. Shadow saturation for each
+
+I should also handle the extended computations from part B of the research goal. Let me write the code now to make this thorough and definitive.
+
+One more thing: the coordinator says "enumerate all 2^8-1 non-empty subsets, check closure under sum." But that's for the 8-vector ZSF check on the base set. For the 17-vector check, the brute-force is different — it's about weighted sums, not just subset sums. "Strongly ZSF" means: no coefficients c₁,...,cₙ ∈ {0,...,p-1} with 1 ≤ Σcᵢ ≤ p and Σcᵢvᵢ ≡ 0 (mod p). Writing validation code... is what the DP approach computes. The "brute force" means trying all coefficient vectors. For 17 vectors with coefficients in {0,...,4} and weight sum ≤ 5, the brute force is 5^17 ≈ 7.6 billion — way too many. So DP is the only feasible approach.
+
+But I can verify the DP is correct by comparing it against explicit enumeration for small cases (e.g., 4 vectors at p=5).
+
+Actually, the coordinator says "implement brute-force zero-sum evaluation (enumerate all 2^8-1 non-empty subsets, check closure under sum)." I think they're confused about the formulation. For our problem, we don't just check non-empty subsets (which would be the unweighted case). We check weighted zero-sums.
+
+For p=5 with 17 vectors, checking all possible coefficient combinations would require examining 5^17 ≈ 7.6 × 10^11 cases, which is computationally infeasible. The DP approach is the only practical solution, but I can validate it by testing against small subsets, implementing it independently, and verifying known properties like whether the standard construction is strongly ZSF. Let me set up a comprehensive verification framework.
+
+Now I need to address the coordinator's three questions: validating ADVERSARY's swap-generated 3-fiber sets, checking the fiber signatures of the 24 twisted counterexamples, and determining whether U1 holds universally or depends on A₈ uniqueness. For question 2, I need to clarify what "24 twisted counterexamples" refers to — the adversary found 7 in this session, but the coordinator's synthesis mentions 24 from a different context.
+
+My most impactful approach would be to independently validate the 7 counterexamples, determine their fiber signatures, and verify the key properties at specific primes. Enumerating all strongly ZSF 17-sets at p=5 in F_5^4 isn't feasible given the combinatorial explosion...
+
+So I'll focus on three concrete scripts: first, a brute-force validator using independent dynamic programming to cross-check the adversary's counterexamples and compute fiber signatures across all projective forms; second, verification of the window and sumset properties at p=29, 31, 37; and third, a search for non-A₈ strongly ZSF 8-sets at p=5 if time permits.
+
+Writing validation code... The state space is manageable at 3750 total states, and with 17 vectors each expanding by up to 5 coefficients, we're looking at roughly 318,750 operations—very efficient. Now I'm implementing the DP algorithm, but I should also account for the case where the set isn't actually strongly zero-sum-free; if the algorithm finds a (w, 0) state with weight between 1 and p, that would indicate a zero-sum combination exists, which would contradict the claim.
+
+Writing the DP implementation... I'm realizing the backtracking approach consumes too much memory, and since I only need to determine if the set is strongly zero-sum-free rather than extract a witness, I can simplify the algorithm significantly. Let me refactor to just track reachable states without storing parent pointers.
+
+Simplifying the algorithm... Finishing the loop logic to iterate through coefficient values and update reachable states, then checking if the zero vector appears at any positive weight to determine if the system has a solution. The encoding approach is efficient for the given parameters, though I should verify the encoding scheme handles the modular arithmetic correctly. Building the reachability check...
+
+Now I'm computing the minimum fiber count by generating all possible projective linear forms, then for each form I'm calculating how many vectors map to the same fiber value to find which form minimizes the fiber count.
+
+I'm thinking through the implementation strategy—whether to write everything in one comprehensive script or split it into separate scripts that can run in parallel, since the window verification at large primes is computationally expensive.
+
+But actually, the coordinator's priority is clear: I need to independently verify the adversary's 7 counterexamples by hand-tracing through the swap-generation DP at p=5 to determine if their "all single swaps are 3-fiber-forced ZSF" claim is genuine or an artifact. That's the critical test for whether U1 is actually false.
+
+Beyond that, I should also check the fiber signatures of the 24 twisted counterexamples to see if they match what the adversary reported.
+
+Looking at the adversary's 7 counterexamples, most cluster into two signature types: (9,7,1) for pos1 and pos2, and (8,8,1) for the remaining five examples. I need to verify these signatures hold under the first coordinate projection and understand what this tells us about the structure of these counterexamples.
+
+The critical question is whether any linear form can reduce these sets to just 2 fibers. If the adversary's claim that the minimum fiber count is 3 across all projective linear forms is correct, then these wouldn't be valid U1 counterexamples—since U1 requires that every strongly ZSF set of size 17 in F_p^4 must fit into at most 2 hyperplane fibers. I need to carefully re-examine what U1 actually asserts and check whether these examples genuinely violate it. I need to verify this pattern by writing a script to check it. Looking at the single-swap counterexamples more carefully, they all follow the same structure: take the standard 17-set and swap one vector to a different fiber while keeping its tail the same. Under the first coordinate, this creates exactly 3 fibers, but I should check whether other linear forms might compress this down to 2 fibers. Let me trace through a specific example like pos9, where I replace (1,0,1,0) with (2,0,1,0), giving me 8 vectors with first coordinate 0, 8 with first coordinate 1, and 1 with first coordinate 2—so under the form (1,0,0,0) I get three distinct fiber values.
+
+Now I'm checking what happens under the second coordinate instead. I need to compute the fiber values for all 17 vectors under w = (0,1,0,0) and see if they collapse to just 2 fibers. I'm realizing that swapping pos9 doesn't change the fiber structure under w = (0,1,0,0) — it still gives 3 fibers, same as the standard construction. But the standard construction achieves 2 fibers under w = (1,0,0,0), so the key insight is that U1 is really about whether a 2-fiber form exists at all.
+
+For the pos9 swap variant, w = (1,0,0,0) produces 3 fibers instead of 2, so I need to check if any other form can achieve 2 fibers for this variant. The adversary's claim is that no such form exists — that's the critical finding to verify. Rather than continue by hand, I should just write a script to check all 156 projective forms for p=5 with 17 vectors.
+
+============================================================
+BLOCK 5 (5899 chars)
+============================================================
+The validation results are DEFINITIVE and STRIKING:
+
+1. **All 7 adversary counterexamples VALIDATED**: Every single one is independently confirmed as strongly ZSF with min_fibers = 3. The adversary's DP was correct.
+
+2. **MASSIVE EXTENSION**: The exhaustive single-swap analysis found **51 ZSF single swaps** at p=5, ALL with min_fibers ≥ 3, ZERO with min_fibers = 2. The adversary only reported 7 — the full picture is much more complete.
+
+3. **UNIVERSAL PATTERN**: 
+
+
+The math checks out perfectly — positions 0-7 with fiber 0 can swap to fibers 2, 3, or 4 (avoiding fiber 1 since that vector already exists), giving 24 swaps. Positions 8-15 with fiber 1 have their own set of alternatives, and the pattern continues through all 17 positions, yielding exactly 51 total swaps where every single one maintains min_fibers = 3.
+
+What's striking is that this means all 51 of these same-tail swaps from the doubled construction produce genuine strongly ZSF counterexamples to U1.
+
+Shadow saturation appears to be universal across all tested counterexamples—every single one achieves the maximum 624/624, which suggests the GRAIL construction is robust. And there's a curious pattern emerging: the minimum form is consistently (0,0,0,1) across all 51 swaps, meaning the projection onto the fourth coordinate always yields the smallest fiber count of 3. I'm trying to understand why this particular coordinate is special by looking at how the A₈ tails map under this projection. Looking at the fiber structure under the form (0,0,0,1), I'm realizing that the standard construction itself already produces three distinct fibers based on the 4th coordinates—not just the doubled version. The tails generate 4th coordinates of 0, 1, and 2 across both copies, which means the fiber count is actually 3 even without the doubling construction.
+
+The swap mechanism is turning out to be far more systematic than I initially thought. Every single swap from the doubled+e₁ construction at p=5 preserves the zero-sum-free property while forcing a 3-fiber structure, suggesting this isn't an isolated phenomenon but rather the typical behavior. And the most significant finding is that U1 is definitively false—there are 51 genuine counterexamples at p=5 where no 2-fiber form exists, confirming what the adversary claimed. Let me wait for the window and sumset computations to complete so I can synthesize all of this into a full report.
+
+What's becoming clear is that shadow saturation holds across all these counterexamples, which means the GRAIL proof might not actually depend on U1 at all—it could work directly from shadow saturation instead. The minimum fiber count form consistently appears as (0,0,0,1) across all 51 swaps, which hints at something structural in how the 4th coordinate of A₈ projects. Now I need to check what the window computation reveals, and then I should also test whether this pattern holds at p=7. vector replacements in A₈ that preserve ZSF at p=5. Let me check if the exhaustive search was included...
+
+Looking at the script output, it seems Step 5 was the last thing printed. The bonus search for non-A₈ 8-sets at p=5 was in the window script, not the validation script. That's running in the background.
+
+Let me now think about what additional computation to run while waiting. I should check p=7 to see if same-tail swaps also yield U1 counterexamples, and verify whether the ZSF property truly depends only on the tail multiset rather than the fiber distribution.
+
+The exhaustive sweep suggests a powerful pattern: every same-tail swap preserves strong ZSF. This points to a tail invariance theorem—that replacing any vector with a different fiber value but same tail keeps the set strongly ZSF, as long as we avoid creating proportional vectors. But I need to be careful here, since swapping into fiber 0 could create duplicates that violate the proportionality constraint. ₁ (position 16). So for positions 0-7, swapping to fiber 1 would create duplicates since those same-tail vectors already exist there—the proportionality check catches this. The key insight is that for any of the 17 vectors in doubled+e₁, we can replace its fiber with any non-current, non-conflicting value while preserving ZSF, and all such swaps produce 3-fiber-forced sets. Let me check if this pattern holds at p=7 as well.
+
+I should also test whether double swaps—changing two vectors simultaneously—can create 2-fiber sets or if they're also forced to have 3+ fibers. Before running those checks, let me think about what the min_form always being (0,0,0,1) reveals: under this form, the standard construction already uses 3 fibers for the 4th coordinate, so the optimal form for collapsing to 2 fibers would be (1,0,0,0). When we swap one vector away from {0,1}, no alternative form can bring it back to 2 fibers.
+
+This suggests the standard construction is minimally 2-fiber—it achieves 2 fibers under exactly one projective form, (1,0,0,0), while all others yield 3+ fibers. A single swap destroys that unique 2-fiber form. Let me verify how many forms actually give exactly 2 fibers for the standard construction by checking the detailed breakdown.
+
+From the pos9 analysis, I see 9 forms with 3 fibers, 20 with 4, and 127 with 5, totaling 156. Since the standard construction has min_fibers = 2 with form (1,0,0,0), there must be forms giving 2 fibers, but I haven't printed the explicit fiber counts yet—I'll need a follow-up script for that.
+
+The coordinator's core question is whether ADVERSARY's swap-generated 3-fiber sets are genuine or artifacts. They're absolutely real—I've confirmed this independently with fresh code, and the phenomenon is far more extensive than reported: all 51 possible same-tail single swaps at p=5 produce legitimate U1 counterexamples. Let me check the background task and then write up the findings, and I'm curious whether this pattern holds at p=7 as well.
+
+============================================================
+BLOCK 6 (3932 chars)
+============================================================
+Excellent! The p=7 results confirm the same pattern:
+
+1. **Standard construction at p=7**: Only ONE 2-fiber form exists: (1,0,0,0). Out of 400 projective forms, only 1 gives 2 fibers!
+   - Fiber count distribution: {2: 1, 3: 8, 4: 18, 5: 49, 6: 96, 7: 228}
+
+2. **ALL single swaps at p=7 are ZSF with min_fibers ≥ 3**: 25/25 sampled, 0 non-ZSF, 0 with min_fibers = 2.
+   
+This reveals something fundamental: the standard construction achieves 2 fibers through exactly one projective form, and any single swap destroys that property entirely—no other form can replicate it. This makes constructing U1 counterexamples straightforward.
+
+I'm seeing a deeper structural principle here: when we modify any vector in the doubled+e₁ construction by changing its fiber value while preserving its tail and avoiding proportionality issues, the result maintains strong ZSF properties. The key is that this property doesn't depend on the specific fiber values themselves, but rather on the underlying tail structure.
+
+Let me verify this more rigorously by examining what happens when we swap one vector's fiber coordinate. A zero-sum at weight w requires the coefficients and vectors to satisfy certain constraints, and I need to check whether changing just the fiber coordinate of one vector can create new zero-sums that weren't possible before. The first coordinate constraint for the swapped set requires accounting for the modified fiber value at position i, but this perturbation can't simultaneously satisfy both the tail sum condition and the first coordinate sum—the original set's zero-sum-free property ensures that coefficient vectors satisfying the tail constraint will still fail the first coordinate check, and adjusting a single fiber value doesn't bridge that gap. I'm realizing the key insight: for the original set to be zero-sum-free, the original sum must be nonzero for all weight-w coefficient vectors. The question becomes whether that nonzero sum can equal c_i(f_i - f'_i) for some coefficient choice, which would make the swapped set also zero-sum-free. Since the original sum can range over various values in F_p^4 as we vary the coefficients, I need to check if it can specifically hit the difference vector c_i(f_i - f'_i).
+
+The computational evidence shows all swaps preserve the zero-sum-free property, but the underlying reason is subtle. I suspect the strongly zero-sum-free property for the doubled set with e₁ is really about how the tail coordinates form an A₈ structure—the maximal zero-sum-free set in F_p^3. The fiber information in the first coordinate is secondary; the tail constraints are what actually prevent zero-sums, so varying the fiber values shouldn't create new paths to zero. But this can't be universally true—certain fiber assignments would definitely break the property, like swapping vectors to create proportional pairs that trivially sum to zero.
+
+Among non-proportional swaps though, zero-sum-free always seems to hold, which I'm calling the "Tail Invariance" property. When I look at double swaps—moving two vectors simultaneously—the adversary's data shows all 128 tested cases at p=5 preserve zero-sum-free, consistent with tail invariance. Even the extreme case of spreading the construction across all five fibers at p=5 remains zero-sum-free, though it only achieves min_fibers = 2 under the (1,4,4,4) form. So single swaps maintain zero-sum-free but break the U1 property by keeping min_fibers ≥ 3.
+
+Multi-swaps also preserve zero-sum-free while allowing min_fibers to drop to 2, which means U1 isn't actually broken since a valid 2-fiber form exists. What's striking is that the standard construction appears to be the unique 2-fiber configuration up to linear form choice, any single perturbation destroys this 2-fiber property, yet the grail survives across all these configurations because shadow saturation holds universally. Now I need to verify the background computation.
+
+============================================================
+BLOCK 7 (23453 chars)
+============================================================
+The background computation is still running (stuck on the sumset completeness check for p=29, which requires computing Minkowski sums of potentially large sets). The sumset check is O(|Σ_k| × |Σ_l|) for each pair (k,l), which at p=29 can be huge: |Σ_14| ≈ 12000, so a single pair check is ~144M operations. And there are O(p²) ≈ 800 pairs. Total: ~115B operations. This might be too slow.
+
+Let me check if it's still running...
+
+But regardless, I already have the key results:
+
+
+- Window and shadow saturation both confirmed at p=29
+- p=31 and p=37 still pending
+
+Now I'm looking at the deeper structural patterns. At p=5 I've exhaustively verified that all 51 same-tail single swaps generate strongly ZSF sets with minimum fiber counts of at least 3 and perfect shadow saturation. For p=7, I've sampled 25 positions and confirmed the same property holds across all tested cases.
+
+The standard construction shows exactly one two-fiber projective form at p=7, though I need to verify whether p=5 has the same structure. Looking back at the double swap analysis, the adversary already confirmed that all 128 tested pairs preserve the strongly ZSF property, and the 5-fiber configuration achieves a minimum fiber count of 2 under the (1,4,4,4) form—so multi-swaps don't break the fundamental structure.
+
+The real insight here is that multi-swaps can actually create two-fiber sets where single swaps cannot, which is a crucial structural distinction. I should write a focused computation to enumerate exactly which multi-swap configurations from the doubled+e₁ construction yield two-fiber forms, then verify the p=5 standard construction's unique two-fiber form to complete the analysis.
+
+But enumerating all possibilities is computationally infeasible—at p=5 with 17 positions, we're looking at roughly 17 billion configurations. Instead, I need to focus on what the coordinator is really asking: whether U1 holds universally or depends on A₈ uniqueness. The answer is definitive—U1 is false universally, so the proof strategy must shift away from U1 and toward proving the projection property U1' using rank and codimension methods instead.
+
+Now I'm checking the fiber signatures of those 24 counterexamples the coordinator mentioned. Looking at the validation data, the signatures vary depending on which positions are swapped: the early position swaps give (9,7,1), while the later ones and position 16 both yield (8,8,1).
+
+But here's what's interesting—these signatures are computed under the standard coordinate projection, not under the form that actually minimizes fiber count. When I look at the minimum-fiber form (0,0,0,1) at p=5, the fiber distribution is completely different: {0:7, 1:8, 2:2}. So the categorization changes depending on which projection I'm using.
+
+I should finalize my report now, and I want to make sure I'm also accounting for the tail invariance property that's emerging from this analysis.
+
+The key observation is that for the doubled+e₁ construction, the strongly ZSF property depends only on the multiset of tails and whether the fiber coordinates can balance out—changing a vector's first coordinate while preserving its tail and avoiding proportionality conflicts doesn't break the ZSF condition. This means the entire structure is determined by the tail distribution and the non-proportionality constraints between full vectors, which is a much cleaner characterization than I initially thought.
+
+Now I'm reconsidering the zero-sum structure more carefully. A zero-sum at weight w requires the fiber coordinates to sum to zero modulo p, the tails to sum to zero modulo p, and the coefficients to sum to exactly w. For the original set with fibers in {0,1}, I need to think through how these constraints interact.
+
+When I swap a vector from fiber 0 to a different fiber f', the first coordinate constraint becomes more flexible—instead of just requiring the weight on fiber-1 vectors to be 0 or p, I now have additional solutions depending on what f' is and how the swapped vector's coefficient relates to the other weights.
+
+Yet experimentally, no new zero-sums appear, which suggests the tail constraint is doing the real work here. The tail structure is so constrained that even with this extra flexibility in the first coordinate, weighted combinations still can't sum to zero. But wait—the 8 fiber-0 tails form A₈, which is zero-sum-free, and the full set of 17 tails has each A₈ appearing twice (from fibers 0 and 1) plus the zero tail from e₁. I need to think through why this particular tail configuration prevents zero-sums even when the first-coordinate constraint loosens.
+
+When I look at a weighted combination of these 17 tails, the two copies of each A₈ tail combine their coefficients, reducing the problem to whether (c₁+c₉)t₁ + (c₂+c₁₀)t₂ + ... + (c₈+c₁₆)t₈ can equal zero. So the tail constraint becomes a zero-sum condition on the A₈ tails with combined coefficients.
+
+For the original set, the first-coordinate constraint forces the sum of all fiber-1 coefficients to be either 0 or p. If they're all zero, then the effective coefficients are just the fiber-0 coefficients themselves, and I need Σ cᵢ tᵢ = 0 at weight Σ cᵢ.
+
+Since A₈ is zero-sum-free at weight ≤ p, this case yields no solutions. In the second case, all fiber-0 coefficients vanish and the fiber-1 coefficients sum to p. The effective coefficients become the fiber-1 ones, and I need Σ c_{i+8} tᵢ = 0 where the eight A₈ coefficients plus c₁₇ total p, with the tail constraint determining which combinations work. or only at weight ≤ p-1? Looking at the three_fiber_search.py output, the ZSF check covers weights 1 through p, so A₈ is indeed zero-sum-free across that entire range. This means case 2 has no solution regardless of whether c₁₇ is zero or nonzero. But wait — I'm realizing the fiber structure must matter somehow, because there are mixed cases where both fiber-0 and fiber-1 coefficients are nonzero, and I need to think through what happens there.
+
+When both fibers are active, the combined coefficients dᵢ = cᵢ + c_{i+8} can reach up to 2(p-1), pushing the effective weight higher. But the first coordinate constraint Σ_{fiber 1} cⱼ ≡ 0 (mod p) restricts the fiber-1 weight to be 0 or p modulo p. At total weight ≤ p, this forces either fiber-1 weight = 0 (collapsing to case 1) or fiber-1 weight = p, which would require the total weight to equal p exactly.
+
+Actually, I need to be more careful here. The first-coordinate constraint isn't just about the fiber-1 weight—it's specifically Σ fᵢ cᵢ where the indicator fᵢ selects positions 8-16, so the constraint is really about c₈ + c₉ + ... + c₁₆ ≡ 0 (mod p).
+
+Given that the total weight is bounded by p and each coefficient is at most p-1, the fiber-1 weight can't exceed p. Since it also needs to be divisible by p, it must be either 0 or exactly p. If it's 0, then all the fiber-1 coefficients vanish.
+
+When the fiber-1 weight equals p, the fiber-0 weight must be 0 (since total weight ≤ p), forcing all fiber-0 coefficients to vanish as well. This leaves only the fiber-1 contributions as effective coefficients, and the tail constraint becomes a condition on just the A₈ part of the sum, excluding the c₁₆ term since it multiplies a zero tail.
+
+The effective tail weight then equals p minus c₁₆, which is at most p. Since A₈ is zero-sum-free at weight ≤ p regardless of whether c₁₆ is zero or positive, no valid solution exists in this case either. The original set is therefore zero-sum-free because the fiber constraint forces the problem to decouple into scenarios where A₈ alone must be zero-sum-free, which it is.
+
+Now I'm examining what happens when I swap the set by replacing each position i with a modified pair involving a new first coordinate f' and the original tail tᵢ. The first-coordinate constraint shifts to account for the difference between the new and original first coordinates weighted by the coefficients.
+
+After the swap, positions 0 through 7 (excluding i) have first coordinate 0, position i has first coordinate f', and positions 8 through 16 have first coordinate 1. The sum of first coordinates becomes f' times cᵢ plus the sum of coefficients from positions 8 to 16, which must equal 0 modulo p. Since f' ranges over {2,3,4} at p=5, I need to check whether this constraint can be satisfied.
+
+If f' = 2 and cᵢ = 1, then the sum from positions 8-16 must equal 3 modulo 5. With a total weight budget of 5, I could distribute it as cᵢ = 1, some coefficients in positions 0-7 equal 1, and the remaining sum equal 3—so the first-coordinate constraint no longer forces all nonzero coefficients onto a single fiber. Both fibers can contribute simultaneously.
+
+Yet empirically, zero-sums still don't appear, which suggests there's another constraint at play.
+
+The tail constraint Σ dᵢ tᵢ = 0 is what's actually preventing them. The effective coefficients dᵢ fuse together the contributions from both fibers—specifically, dᵢ = cᵢ + c_{i+8} for positions 0 through 7—and the total effective weight becomes the sum of all these fused coefficients.
+
+But I'm realizing there's a critical issue: each dᵢ can actually reach 2(p-1), not just p-1, since we're adding two coefficients that each max out at p-1. This means the bound on the effective weight is tighter than I initially thought, and I need to reconsider whether the constraint is actually strong enough to prevent zero-sums. I need to reconsider the structure after the swap—position i moves from fiber 0 to fiber f', which means fiber 0 now has 7 vectors (positions 0-7 except i), fiber f' has 1 vector (position i), and fiber 1 has 9 vectors (positions 8-16). The total weight is still bounded by p, but I need to carefully track how the coefficients distribute across these fibers.
+
+For the tail constraint, the swapped vector contributes c_i·t_i while the fiber-1 copies contribute their respective tail values, and these must sum to zero. The key insight is that the effective coefficient for each A₈ element combines the original coefficient with its fiber-1 counterpart: d_k = c_k + c_{k+8} for most positions, and d_i = c_i + c_{i+8} to account for the swapped vector's interaction with its copy.
+
+The crucial difference emerges in the first coordinate constraint: before the swap, we needed c₈+...+c₁₆ ≡ 0 (mod p), but now the swapped vector introduces an additional term f'·c_i, so the constraint becomes f'·c_i + c₈+...+c₁₆ ≡ 0 (mod p).
+
+This constraint severely limits which coefficient vectors are valid—it forces either all coefficients from one fiber to be zero or the other, meaning each effective coefficient d_i is bounded by p, which is the key restriction that prevents the attack from working.
+
+For the swapped set, though, the constraint becomes much more permissive. The first coordinate can take on various values modulo p depending on the choice of coefficients, allowing both fibers to contribute simultaneously. This means the effective coefficients d_i = c_i + c_{i+8} could potentially exceed p-1, which is where the vulnerability emerges.
+
+Let me clarify the mechanics: when position i is swapped, the fiber-0 copy disappears but the fiber-f' copy still contributes to the tail computation via c_i · t_i. Meanwhile, the fiber-1 copy at position i+8 remains and also contributes c_{i+8} · t_i to the tail, so the effective coefficient is the sum of both contributions.
+
+The key difference from the original proof is that in the swapped configuration, the individual coefficient d_i = c_i + c_{i+8} can reach 2(p-1) instead of being bounded by p-1, which breaks the constraint that previously relied on at least one of the two being zero. The effective weight calculation becomes more complex because I need to account for how W₀ and W₁_A₈ combine under this new configuration.
+
+Let me refocus on what actually matters: the zero-sum condition depends on the tail coordinates, and since the swapped set has identical tails to the original, the coefficient vectors satisfying the tail constraint are the same. The real distinction is in the first-coordinate constraint, where the original set requires W₁ ≡ 0 (mod p), but I need to work out what this becomes for the swapped configuration. to ZSF.
+
+The ZSF property of doubled+e₁ actually comes entirely from the A₈ tail structure, making the fiber decomposition irrelevant. This suggests that ANY assignment of first coordinates to the 17 tails should be ZSF as long as vectors remain non-proportional — which is exactly what the experiments confirm.
+
+So I'm arriving at a tail invariance theorem: a set of 17 vectors in F_p^4 with tails forming A₈ ∪ A₈ ∪ {0} is strongly ZSF if and only if no two vectors are proportional, regardless of first coordinates. But I'm catching myself here — this can't be entirely correct, and I need to think through what's actually constraining the system.
+
+The weight constraint is the missing piece. The ZSF condition requires weight ≤ p, but when both copies of an A₈ element have nonzero coefficients, the effective weight can balloon to 16(p-1), far exceeding p. The actual weight Σ c_j stays bounded by p, so there's a real interaction between the weight constraint and the fiber structure that I initially overlooked. The effective weight relates to the actual weight through the coefficient c₁₆, which is the key to understanding how these constraints actually couple together.
+
+Let me reconsider the doubled set more carefully. The effective coefficients d_i = c_i + c_{i+8} can exceed p-1, but what matters for the tail sum in F_p is d_i mod p. The tail constraint becomes Σ (d_i mod p) · t_i = 0 in F_p^3, and this is where the modular reduction actually affects whether a configuration satisfies the zero-sum condition. the actual constraint is: Σ dᵢ · tᵢ = 0 in F_p^3, which is the same as Σ (dᵢ mod p) · tᵢ = 0 since we're working in F_p.
+
+So the tail constraint depends only on dᵢ mod p. Now, dᵢ = cᵢ + c_{i+8} ∈ {0,...,2(p-1)}, and dᵢ mod p equals dᵢ when dᵢ < p, or dᵢ - p when dᵢ ≥ p.
+
+The effective weight from the modular reduction differs from the actual weight. The actual weight is Σ cⱼ ≤ p, so I need to find values (d₀,...,d₇, c₁₆) where each dᵢ decomposes as cᵢ + c_{i+8}, the sum stays bounded by p, and the modular constraint Σ (dᵢ mod p) tᵢ = 0 holds in F_p. The first-coordinate constraint: f_original · c_swapped_term + Σ_{fiber 1} c_j ≡ 0 (mod p). Since each dᵢ ≤ 2(p-1) and their sum is bounded by p, at most one dᵢ can exceed p-1, and if it does, all others must be zero. When some dᵢ falls in the range [p, 2(p-1)], its residue modulo p lies in {0, 1, ..., p-2}, and the constraint forces c₁₆ = 0, leaving (dᵢ mod p) · tᵢ = 0 in F_p^3, which means dᵢ mod p must be zero since tᵢ is nonzero.
+
+So dᵢ = p exactly, and since the weight sum Σ c_j must be between 1 and p, setting dᵢ = p with all other d_j = 0 and c₁₆ = 0 gives Σ c_j = p, which satisfies the weight constraint. This means cᵢ and c_{i+8} must sum to p, and the tail contribution becomes (p mod p) times something, which is zero.
+
+Now I need to check the first coordinate constraint. With only cᵢ and c_{i+8} nonzero, the first coordinate sum becomes cᵢ(f_i - f_{i+8}) plus a multiple of p, so modulo p it's just cᵢ(f_i - f_{i+8}). For this to equal zero, I need either cᵢ = 0 or f_i ≡ f_{i+8} (mod p).
+
+Looking at the original set where f_i = 0 and f_{i+8} = 1, I get -cᵢ ≡ 0 (mod p), which forces cᵢ = 0. But then c_{i+8} = p, and since the maximum coefficient is p-1, this is impossible. So this configuration doesn't work.
+
+Actually, I'm realizing the constraint is tighter than I thought—the maximum sum dᵢ = cᵢ + c_{i+8} can be is 2(p-1), not p, so I need to reconsider what values of cᵢ and c_{i+8} could give dᵢ = p.
+
+For the swapped set, the first coordinate becomes f' · cᵢ + c_{i+8} ≡ 0 (mod p), and with cᵢ + c_{i+8} = p, I can substitute to get a constraint on f'.  Since f' ≠ 1 by construction and cᵢ ≠ 0 to avoid the earlier contradiction, the expression (f'-1) · cᵢ can't equal zero, so no zero-sum exists for the swapped set either.
+
+Now I'm shifting to the case where all dᵢ < p, so the tail constraint becomes a sum of values in {0,...,p-1}.
+
+The effective weight constraint Σ dᵢ ≤ p matches exactly the ZSF condition for A₈, which is known to fail—so no zero-sum can exist here either.
+
+Even though Σ dᵢ could theoretically reach p (since each dᵢ < p and the total is bounded by p), A₈'s zero-sum-free property at weight ≤ p rules this out.
+
+Now I'm moving into the formal proof that this tail invariance holds across the doubled+e₁ construction in F_p^4, regardless of which fiber assignment is used as long as it satisfies the non-proportionality constraint.
+
+For any zero-sum at weight w ≤ p, the coefficients must satisfy the tail constraint through the A₈ elements, where the effective weights dᵢ = cᵢ + c_{i+8} can range up to 2(p-1). The key case is when all dᵢ stay below p, which forces them to behave like elements of A₈ itself. So if d_k = p and c₁₆ = 0, then c_k and c_{k+8} must both be at least 1 and sum to p. Looking at the first-coordinate constraint, this simplifies to requiring c_k(f_k - f_{k+8}) ≡ 0 (mod p), which means either c_k = 0 (contradiction) or f_k must equal f_{k+8}.
+
+But that's impossible—in the original construction, positions k and k+8 share the same tail t_k but have different fiber assignments (f_k = 0 versus f_{k+8} = 1). Two vectors with the same tail but different fiber values can't be proportional, so they can't both exist in a valid reassignment. f_k ≠ f_{k+8} is preserved under any swap since proportional vectors would require the same fiber, which we explicitly avoid. This means c_k(f_k - f_{k+8}) ≠ 0 always, violating the first-coordinate constraint, so Case 2 is impossible. I've now established that any fiber assignment respecting the tail structure and keeping same-tail vectors in different fibers makes the set strongly ZSF.
+
+This is actually a theorem grounded in the fundamental property that A₈ is strongly ZSF in F_p^3, combined with the weight bound from Σ dᵢ + c₁₆ ≤ p. For U1, this result reveals that fiber structure alone can't determine ZSF—U1 would need constraints beyond what ZSF provides, which aligns with the counterexamples showing U1 is false. Now I'm considering what this means for the GRAIL and whether any 18-vector set in F_p^4 must satisfy certain properties.
+
+The shadow saturation argument shows that if S is a strongly ZSF 17-set, then the weight-bounded sums cover everything except zero, so any 18th vector completes a zero-sum. The Tail Invariance Theorem establishes that all 17-sets with the doubled A₈ structure plus a zero tail are ZSF regardless of how fibers are assigned, and computationally these all exhibit shadow saturation. So the GRAIL strategy becomes proving two things: that all ZSF 17-sets must have this doubled A₈ structure, and that all such sets achieve shadow saturation.
+
+But actually, I'm realizing the GRAIL doesn't require shadow saturation across all ZSF 17-sets—it just needs to show no ZSF 18-set can exist. The key insight is that any 18-set containing a ZSF 17-subset should fail the ZSF property when the 18th vector is added, and I'm working through the logic of how that constraint propagates.
+
+The argument hinges on shadow saturation for all ZSF 17-sets, which means the Tail Invariance Theorem combined with the shadow saturation computation should cover all doubled A₈ sets. But there's a gap: some ZSF 17-sets might not be doubled A₈ sets, and that's where U2 becomes essential to close the proof.
+
+I should shift back to the computational work and write this up properly, though I want to first establish the Tail Invariance Theorem with more rigor and clarity.
+
+Now I'm formalizing the theorem: given the 8 vectors from A₈ and 16 fiber values where opposite fibers differ, the resulting 17-element set in F_p^4 is strongly ZSF. The proof starts by assuming a nontrivial zero-sum and deriving a contradiction...
+
+For any such zero-sum, the tail components combine to give a weighted zero-sum of A₈. I'm introducing auxiliary weights dᵢ as the sum of coefficients at positions i and i+8, then analyzing what happens when all these auxiliary weights stay bounded by p-1. Since A₈ itself is strongly ZSF at weight ≤ p, this forces all the auxiliary weights to vanish, which means...
+
+Actually, let me reconsider the case structure here. If some auxiliary weight exceeds p, then given the constraint on total coefficient sum, exactly one of them equals p while the rest vanish, and the tail equation becomes a single term d_k · t_k = 0 in the extension field.
+
+For the first coordinate, I need to verify the sum f_k · c_k + f_{k+8} · c_{k+8} ≡ 0 (mod p) leads to a contradiction. With c_k + c_{k+8} = p and both positive, I can rewrite this as c_k(f_k - f_{k+8}) modulo p, which is nonzero since the field elements differ and c_k is in the valid range.
+
+This gives me the contradiction I need. But let me reconsider Case 1 more carefully—the zero-sum-free property of A₈ means that for any coefficients in {0,...,p-1} with total weight between 1 and p, the weighted sum of basis elements can't be zero. So if I have Σ dᵢ tᵢ = 0 with weight D ≤ p, then D must equal 0, which contradicts the ZSF condition that requires weight at least 1.
+
+So all the dᵢ coefficients vanish, which forces all cⱼ = 0 for j = 0,...,15 and c₁₆ = 0 as well. The total weight is 0, which is less than 1 as required. Now I'm checking whether D ≤ Σ cⱼ actually holds—expanding D = Σ dᵢ in terms of the cⱼ values shows that D = w - c₁₆, where w is the total weight. So D = w - c₁₆ ≤ w ≤ p. ✓
+
+And in Case 1, D = w - c₁₆. If D = 0, then w = c₁₆ and all other cⱼ = 0. The first-coordinate constraint becomes c₁₆ · 1 = c₁₆ ≡ 0 (mod p). So c₁₆ = 0, w = 0. Contradiction.
+
+Wait, but D = 0 means all dᵢ = 0, so all cⱼ = 0 for j = 0,...,15. Then the only nonzero coefficient is c₁₆. The full sum is c₁₆ · e₁ = (c₁₆, 0, 0, 0). For this to be zero, we need c₁₆ = 0. So total weight = 0. ✓
+
+When D ≥ 1, the A₈ ZSF condition applies and forces Σ dᵢ tᵢ ≠ 0, which contradicts our requirement. So the proof holds, and the 51 counterexamples at p=5 and 25 at p=7 are indeed genuine instances of this phenomenon.
+
+The Tail Invariance Theorem explains why same-tail swaps preserve ZSF across all primes p ≥ 5, not just the ones we tested. This means U1 is false universally, and the resulting sets consistently have min_fibers ≥ 3. Now I'm wondering whether I can prove the min_fibers ≥ 3 property analytically rather than just computationally, starting from how the standard construction's form changes after a single swap. I need to check whether removing a vector from the original 17-set could create new 2-fiber forms for the remaining 16 vectors. For a form w to work on the 16-subset, the original doubled+e₁ vectors would need to collapse to just 2 fiber values under w, and the swapped vector would have to land in one of those same values. Since (1,0,0,0) was the unique 2-fiber form for the full set, it's not obvious whether the 16-subset admits other 2-fiber forms.
+
+But the computational results are clear: across all single swaps tested at p=5 and p=7, the minimum fiber count stays at 3. So rather than chase down the theoretical possibility further, I should report what the computation actually found and present the Tail Invariance Theorem as the main analytical result. Now I need to write up the full report and verify the window computation is complete.
+
+============================================================
+BLOCK 8 (250 chars)
+============================================================
+The results are looking great. Let me check if the tail invariance verification is complete by checking the full output again in a moment. Let me also check the window computation.
+
+Actually, the p=11 stress test might still be running. Let me check.
+
+============================================================
+BLOCK 9 (4253 chars)
+============================================================
+Both background tasks are still running. The sumset computation at p=29 is the bottleneck (Minkowski sums of large sets). Let me check if the tail invariance stress test at p=11 is still running or if it completed.
+
+The window computation also seems to be stuck on the sumset check at p=29. The Minkowski sum Σ_k + Σ_l requires computing all pairwise sums, which is O(|Σ_k| × |Σ_l|). For k=14 at p=29, |Σ_14| ≈ 12000, so a single pair check is 12000² = 144M additions. With ~400 pairs, total ~57B operations. This will take very long in Python.
+
+
+I could optimize this by checking the two inclusion directions separately—the reverse direction Σ_k + Σ_l ⊆ Σ_{k+l} is automatically satisfied by definition, so I only need to verify the forward direction, which might be faster to compute. So when I combine these two shadows with the Minkowski sum, the effective coefficients can go up to 2(p-1), which is larger than the standard bound of p-1 for Σ_{k+l}. This means the Minkowski sum is actually a subset of a larger shadow space, and only when k+l ≤ p do the constraints align properly. each dᵢ ≤ p-1 (which is guaranteed when Σ dᵢ ≤ p and there are 8 terms), then the "effective" shadow equals the standard shadow. So Σ_k + Σ_l ⊆ Σ_{k+l} when k+l ≤ p-1 (more precisely, when k+l ≤ p and no dᵢ exceeds p-1).
+
+Hmm, but dᵢ = cᵢ + c_{i+8} can reach 2(p-1) when cᵢ = c_{i+8} = p-1. With 8 terms, Σ dᵢ = k+l and some dᵢ could exceed p-1 if k+l > p-1.
+
+Actually, if Σ dᵢ = k+l ≤ p-1, then each individual dᵢ must also be at most p-1 since they're all non-negative. This means for k+l ≤ p-1, I have Σ_k + Σ_l = Σ_{k+l}. The reverse inclusion—showing that any weight k+l vector decomposes into a weight-k part plus a weight-l part—is like establishing a decomposition property.
+
+For p=29, the direct computation is too slow, so I'll report the window result and note that verifying the sumset equality is still pending. Let me try a faster approach: instead of computing the full Minkowski sum, I can check each vector in Σ_{k+l} individually to see if it decomposes as a + b with a ∈ Σ_k and b ∈ Σ_l. If I store Σ_l as a set, then for each a ∈ Σ_k, I just check whether v - a is in that set.
+
+This reduces the complexity to O(|Σ_{k+l}| × |Σ_k|) lookups, which is faster than the full Minkowski sum approach. I only need to verify the reverse inclusion Σ_{k+l} ⊆ Σ_k + Σ_l, since the forward direction should follow from the structure of the problem.
+
+Actually, let me reconsider—the forward inclusion Σ_k + Σ_l ⊆ Σ_{k+l} is straightforward: if I take any element from weight k and any from weight l, their sum naturally lands at weight k+l because the coefficients just add together, staying within the valid range as long as k+l ≤ p-1.
+
+The reverse direction is what matters: I need to verify that every element in Σ_{k+l} can actually be written as a sum of something from Σ_k and something from Σ_l. For each candidate v, I'd check whether there exists some a ∈ Σ_k where v - a lands in Σ_l. Since the smaller shadow set will be faster to iterate through, I should pick whichever of k or l gives fewer elements and use that as my basis for the decomposition check.
+
+Now I'm realizing the computational cost is still significant, but I can leverage what's already been done—the sumset property was already confirmed up to p = 23 in the previous session, so extending to p = 29 and 31 is just a continuation. The more important finding here is the Tail Invariance Theorem. Rather than wait for background computations to finish, I should compile the report with what I have: the adversary validation confirming all 7 counterexamples, the exhaustive verification that all 51 same-tail single swaps preserve ZSF at p = 5 with sufficient fiber counts, and the p = 7 extension showing 25 out of 25 sampled swaps also hold.
+
+The Tail Invariance Theorem is analytically proven and computationally verified—it shows that fiber assignment doesn't affect ZSF in the doubled A₈ construction. At p = 7, there's exactly one two-fiber form in the standard construction, and any swap destroys it. The window structure checks out at p = 29 with perfect shadow saturation, and the random fiber stress tests across p = 5 and p = 7 with 200 trials each produced zero failures.
+
+============================================================
+BLOCK 10 (6342 chars)
+============================================================
+Let me also check the remaining background computations and see if the window check at p=31 and p=37 are done.
+
+Actually, let me also think about a computation I should run: checking whether the standard construction has exactly 1 two-fiber form at p=5. I showed this for p=7 but not p=5. Let me check the validation output...
+
+From the validation output at p=5:
+- Standard construction: min_fibers = 2, form = (1,0,0,0), tested 156 forms
+- For pos9: 3 fibers: 9 forms, 4 fibers: 20 forms, 5 fibers: 127 forms. Total: 156.
+
+
+- So the standard construction should have a fiber distribution across 2, 3, 4, and 5 fibers that sums to 156. I need to compute how many of those are exactly 2-fiber forms. I already have the p=7 result showing {2:1, 3:8, 4:18, 5:49}, so let me calculate the corresponding distribution for p=5.
+
+At p=5, the standard construction has 8 vectors with coordinate 0 equal to 0 and 9 vectors with coordinate 0 equal to 1. The form (1,0,0,0) produces exactly 2 fibers by separating these two groups. For any other form not proportional to (1,0,0,0), I need to check how the fiber values distribute across the two groups based on the remaining coordinates. Since A₈ contains the standard basis vectors, a nontrivial linear functional would map them to distinct values b, c, d. This means all 8 elements of A₈ can't map to the same value under any such functional, so achieving exactly 2 fibers is impossible unless the form is proportional to (1,0,0,0). I'm seeing that when b = c = d = v, the functional maps A₈ to two distinct values {v, 2v} for any nonzero v, and the fiber-1 copies shift these by some offset a.
+
+For the full image to have exactly 2 fibers, the sets {v, 2v}, {a+v, a+2v}, and {a} must combine to give only 2 distinct values total. This forces a to equal either v or 2v, and the shifted set {a+v, a+2v} must stay within {v, 2v}. Testing a = v leads to 3v needing to equal v or 2v, which creates a contradiction unless v = 0.
+
+When a = 2v, I get {3v, 4v} which also can't fit into {v, 2v} without v = 0. So this form doesn't work either. Now I'm checking what happens when the functional takes only a single value, which requires b = c = d = 0, giving the form (a, 0, 0, 0) or projectively (1, 0, 0, 0).
+
+Under this form, fiber-0 maps to 0 and fiber-1 maps to a, giving exactly 2 fibers {0, 1}. This appears to be the unique 2-fiber form, which I can verify analytically. But I should actually check all possible functionals, not just the (a, v, v, v) case. The A₈ functional depends on (b, c, d), so I need to determine which choices of (b, c, d) make it take at most 2 values. Looking at the 8 values the functional produces...
+
+Now I'm checking what happens when b = c = d = α. The functional outputs α in several positions and 2α in others, giving me the set {α, 2α}.
+
+For this to work with only two distinct values, I need β = 2α, which works as long as α ≠ 0.
+
+When I try b = α, c = α, d = β instead, I get a much larger set of values including 2α, α+β, and 2β. For this to stay within {α, β}, I'd need 2α = α, which forces α = 0. But then the values collapse to {0, β, 2β}, and I still can't keep it down to just 2 distinct values.
+
+If I try 2α = β instead, then α+β = 3α, which would need to equal either α or 2α—both lead to α = 0, a contradiction. So this configuration produces more than 2 values, and any other mixed assignment of b, c, d from {α, β} will have the same problem.
+
+This means the only way to get ≤ 2 values for A₈ is when b = c = d, giving exactly {v, 2v}.
+
+Now checking the case where b = c = d = 0: all A₈ values collapse to 0, so there's just one value, and the form (a,0,0,0) gives 2 fibers total. This confirms that (1,0,0,0) is the unique 2-fiber form, and I can verify this analytically by showing the A₈ functional with parameters (b,c,d) maps to at most one distinct value. value iff (b,c,d) = (0,0,0). The A₈ functional maps to exactly 2 values when (b,c,d) is proportional to (1,1,1), yielding {v, 2v}. For the form (a,v,v,v) with v ≠ 0, the full 17-set produces {v, 2v, a+v, a+2v, a}, which can only have ≤ 2 distinct values if {a, a+v, a+2v} ⊆ {v, 2v}—but this is impossible for any a and nonzero v. So the only case left is (b,c,d) = (0,0,0), giving (1,0,0,0), which has 2 fibers. Let me double-check step 2 though: when b = c = d = v for v ≠ 0, I get exactly 2 values {v, 2v} as long as p ≠ 3 (since for p ≥ 5, we have v ≠ 2v). I should verify there aren't other (b,c,d) configurations that also yield exactly 2 values. cases and they give > 2 values. But I should check ALL 3-tuples more carefully. Let me enumerate: we need 8 values to all lie in a 2-element set {α, β}. The 8 values are: b, c, d, -b+c+d, b+c, b+d, -b+2c+d, -b+c+2d. From the first three, b, c, d ∈ {α, β}, giving 2³ = 8 possible assignments. Most lead to > 2 values, but let me work through them systematically.
+
+When b=c=d=α, I get {α, 2α}, which works if α ≠ 0 and p ≠ 3. For b=α, c=α, d=β, the set expands to {α, β, 2α, α+β, 2β}. To keep this to ≤ 2 values, I need 2α, α+β, and 2β all in {α, β}. If 2α=α then α=0, or if 2α=β, I can check whether α=0 leads to a valid case. I'm checking the case where b=α, c=β, d=α, which gives me the set {α, β, α+β, 2α, 2β}, but this fails the same constraint that α+β, 2α, 2β must all be in {α, β}. Now testing b=β, c=α, d=α, which treats the first coordinate differently in A₈'s structure, and I'm computing the resulting values to see if this configuration works. Continuing through case 4, which also fails because the resulting set contains too many elements. Moving on to cases 5, 6, and 7—each produces sets with more than two elements, so they all fail to satisfy the constraint.
+
+Case 8 with (β,β,β) works perfectly, giving just {β, 2β}, which mirrors case 1 when we swap α and β. This confirms that the only way to get two or fewer values is when b=c=d, meaning the linear functional must be proportional to (1,1,1), either producing the two-element set {v, 2v} or the trivial case where all coefficients are zero.
+
+So (1,0,0,0) is the unique form that achieves exactly 2 fibers for the full 17-element set, and any single swap destroys this property by introducing a third fiber value—which explains why U1 counterexamples are unavoidable. This is a solid result worth including in the report, so let me check on those background computations.
+
+============================================================
+BLOCK 11 (1173 chars)
+============================================================
+All key results confirmed:
+
+1. **Unique 2-fiber form**: At ALL primes p = 5, 7, 11, 13, the functional (1,1,1) is the UNIQUE projective functional giving exactly 2 A₈ values. All other functionals give 3+ values. Since the 17-set has first coordinates from the fiber assignment, the only form that can give 2 fibers is (1,0,0,0) (the form that ignores the A₈ tails entirely).
+
+2. **Shadow saturation with random fibers**: 100 tests each at p=5,7, zero failures. Shadow saturation is INDEPENDENT of fiber assignment.
+   
+Now I need to check on the tail invariance stress test running at p=11, and also see where the window computation stands. I should update the report with the analytical proof showing that (1,1,1) is the unique projective functional mapping A₈ to at most 2 values, producing {v, 2v} where v is the normalization constant, and that even with this functional the full 17-set cannot achieve 2 fibers.
+
+This means (1,0,0,0) emerges as the unique 2-fiber form, and I've verified through 200 random tests at p=5,7 that shadow saturation is fiber-independent with zero failures. Let me finalize the report and check if the background computations have finished.
+
+============================================================
+BLOCK 12 (1411 chars)
+============================================================
+Both background tasks are still running. The p=11 stress test is slow (p=11 with 17 vectors means larger state space). And the window computation is stuck on the sumset check at p=29.
+
+Let me kill the sumset computation since it's too slow, and focus on the p=31 and p=37 window checks. Actually, I can't kill background tasks. Let me just proceed with what I have.
+
+Let me now update the report with the analytical findings and then store to Cortex.
+
+Actually, let me write one final verification: the analytical proof that (1,0,0,0) is the unique 2-fiber form. I've verified computationally that (1,1,1) is the only projective functional with ≤ 2 A₈ values. 
+
+Now I'm checking whether the form (a, v, v, v) can actually produce 2 fibers. Working through the algebra: when (b,c,d) = (v,v,v), the A₈ values collapse to {v, 2v}, which forces the fiber structure to include {v, 2v, a+v, a+2v, a}. For this to fit into just 2 distinct values, I need all five of these elements to collapse into a single 2-element set, which creates an immediate contradiction.
+
+If a = v, then a+v = 2v and a+2v = 3v, requiring 3v to equal either v or 2v—both lead to v = 0. If a = 2v, then a+v = 3v and a+2v = 4v, which similarly can't fit into {v, 2v} for any nonzero v. This exhausts all possibilities, so the form (a, v, v, v) definitively cannot achieve 2 fibers. The only form that works is (1, 0, 0, 0), completing the proof.
+
+============================================================
+BLOCK 13 (484 chars)
+============================================================
+Let me now store the key findings to the Cortex memory system, and also check if the background computations have completed.
+
+Actually, let me first check if there's a Cortex system in the project. The research goal says "Store computational findings to Cortex. Search Cortex first to see what's been computed." Let me check what Cortex means in this context - it might be the memory system at `~/.claude/projects/`.
+
+Let me store the critical findings and then give the final output.
+
+============================================================
+BLOCK 14 (452 chars)
+============================================================
+The p=11 stress test is still running. The memory directory exists but has no memory files - just conversation logs. Let me store the findings to the memory system and write the final output.
+
+Actually, I see the memory directory has session files but no MEMORY.md. Let me create the memory files.
+
+Let me now write the final summary output. The background tasks are running but I have all critical results.
+
+Let me write the Cortex memory entries now.
+
+============================================================
+BLOCK 15 (503 chars)
+============================================================
+Excellent! The window computation completed more than I thought:
+
+1. **Window at p=29**: CONFIRMED, 0/28 violations. Shadow saturation 24388/24388.
+2. **Sumset at p=29**: CONFIRMED, 0 violations in 378 pairs!
+3. **Window at p=31**: CONFIRMED, 0/30 violations. Shadow saturation 29790/29790.
+4. **Sumset at p=31**: Started but timed out (killed with exit code 143).
+5. **p=37**: Not reached.
+
+So the window is confirmed at p=29 AND p=31! Sumset confirmed at p=29. This is great. Let me update the report.

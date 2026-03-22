@@ -1,0 +1,18 @@
+# Research Briefing (COMPUTER thread)
+
+**Goal:** Prove: for any 9 nonzero vectors in F_p^3 NOT lying on a common affine hyperplane, with multiplicities p-1, there exists a short zero-sum.
+
+This is Case A of the eta(C_p^3) upper bound. Case B is fully solved (see seed).
+
+The most promising approach: project to C_p^2 using eta(C_p^2) = 3p-2, extract partial zero-sums, combine them. This is standard in additive combinatorics.
+
+Alternatively: reduce to Case B by studying K_0 (the sum-0 part of the kernel).
+
+---
+
+### Round 1  (21:18)
+
+We tried to turn Case A into a short, checkable linear-algebra/code-theory statement: view the nine given nonzero vectors v1,…,v9 in F_p^3 as columns of a 3×9 matrix M, form the 4×9 parity-check H = [M; (1,…,1)], and show the 5-dim kernel K0 must contain a weight-3 vector (which directly gives a short zero-sum). The worker gave a plausible route: assume the contrary (every nonzero K0-codeword has weight ≥4), which says the nine points Pi := (vi,1) in projective 3-space form a 9-cap, and appealed to a classical Segre–Korchmáros/quadric fact to deduce a quadratic form vanishing on the Pi and then derive a contradiction about the rank of its polar form; computational checks for small p (5,7) found weight-3 kernel vectors, so examples support the claim, but the written “quadric → rank contradiction” step is handwavy and relies on a deep citation rather than an elementary derivation. New concrete thing I will try next: replace the Segre–Korchmáros citation by an explicit elementary linear-algebra argument—write the general quadric q(x,1)=x^T A x + b^T x + c, use the 9 vanishing conditions to study the space of such (A,b,c), then analyze the polar bilinear form B from A and show directly (by dimension counts and by forcing B to vanish on enough independent differences coming from the spanning assumption) that either Q′=0 (contradiction with Case A) or rank B ≤1 (contradiction with spanning), thereby completing the contradiction; I will first carry this out symbolically for the generic case and check the necessary independence claims with small-p computer algebra before writing the final proof. (yellow)
+
+**Cost so far: $0.23** | Tokens: 50,054 in / 11,450 out
+

@@ -1,0 +1,151 @@
+[TOOL: ToolSearch]
+[CORTEX SEARCH: shadow saturation ZSF zero-sum-free]
+[CORTEX SEARCH: counterexample grail eta]
+[CORTEX SEARCH: shadow saturation weight p-1 covers all nonzero vectors]
+[TOOL: mcp__claude_ai_autonomous__cortex_list]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+Good. I have extensive Cortex data. Let me now search for the latest findings and then start attacking.
+[CORTEX SEARCH: uniqueness doubled+e1 strongly ZSF proof higher rank r=4]
+[CORTEX SEARCH: counterexample failure gap proof strategy weakness]
+[TOOL: Glob]
+[TOOL: Glob]
+I've absorbed the full Cortex state. The proof strategy rests on three unproved pillars:
+1. Doubled+e1 is the **unique** strongly ZSF set (tested randomly, not exhaustively for p≥7)
+2. Shadow saturation holds for doubled+e1 at **all** p (verified up to p=23, r=3 only)
+3. The strategy extends beyond **r=3** to general rank
+
+Time to attack. My primary targets:
+- **Shadow saturation at r=4** (35 vectors in F_5^5) — completely untested
+- **Non-doubled+e1 strongly ZSF sets** via structured construction at p=7
+- **Logical gaps** in the proof chain
+
+Let me examine existing code and then launch computational attacks.
+[READ: /home/jfischer/claude/grail-tasks/adversary_attacks.py]
+[READ: /home/jfischer/claude/grail-tasks/shadow_sat_v2.py]
+Now I know exactly where to attack. Let me write computational tests for the three most vulnerable points in the proof strategy.
+[WRITE: /home/jfischer/claude/grail-tasks/adversary_r4_attack.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 adversary_r4_attack.py 2>&1 | head -100
+
+Shadow saturation SURVIVES at rank 4. The pattern continues beautifully: first zero-sum at weight p+1. Let me wait for the rest.
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 600 python3 adversary_r4_attack.py 2>&1 | tail -100
+
+Attack A is decisive: shadow saturation **holds** at rank 4. The pattern `first_zero_sum = p+1` persists. But the Attack B output got buried. Let me run targeted attacks with clean output.
+[WRITE: /home/jfischer/claude/grail-tasks/adversary_r2_targeted.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 600 python3 adversary_r2_targeted.py 2>&1
+
+While that runs, let me design a much more subtle attack: testing whether the proof chain's **logical structure** holds under adversarial conditions.
+[WRITE: /home/jfischer/claude/grail-tasks/adversary_logic_attack.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 300 python3 adversary_logic_attack.py 2>&1
+
+Important finding from Attack G: 12 non-degenerate collinear triples within S17, but ALL have weight > p. This seems to contradict the rank-3 theorem. Let me investigate this carefully - it could reveal a sign convention issue.
+
+[BASH] cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/a430858d-c2e2-431c-a9a4-a123e4521ac3/tasks/byqwe52fc.output 2>/dev/null | head -150
+
+
+[BASH] ls -la /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/a430858d-c2e2-431c-a9a4-a123e4521ac3/tasks/ 2>/dev/null && cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/a430858d-c2e2-431c-a9a4-a123e4521ac3/tasks/byqwe52fc.output 2>/dev/null | wc -l
+
+Let me run a quick targeted version of the strongly ZSF search and fix the sign convention issue.
+[WRITE: /home/jfischer/claude/grail-tasks/adversary_r2_quick.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 300 python3 adversary_r2_quick.py 2>&1
+
+Let me run a focused verification of the sign convention while the other job runs.
+[WRITE: /home/jfischer/claude/grail-tasks/adversary_sign_check.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 180 python3 adversary_sign_check.py 2>&1
+
+Now I understand the mechanism. Let me check the other background job and compile findings.
+[TOOL: ToolSearch]
+[TOOL: TaskOutput]
+
+[BASH] cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/a430858d-c2e2-431c-a9a4-a123e4521ac3/tasks/b10vr5c7c.output 2>/dev/null | tail -60
+
+
+[BASH] cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/a430858d-c2e2-431c-a9a4-a123e4521ac3/tasks/bndqm81e0.output 2>/dev/null | tail -60; ls -la /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/a430858d-c2e2-431c-a9a4-a123e4521ac3/tasks/
+
+Background jobs seem to have been killed. Let me run the greedy search directly with a tighter scope.
+[WRITE: /home/jfischer/claude/grail-tasks/adversary_greedy_quick.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 300 python3 adversary_greedy_quick.py 2>&1
+
+[TOOL: TaskOutput]
+Too slow with decode/encode. Let me optimize with precomputed addition tables.
+[WRITE: /home/jfischer/claude/grail-tasks/adversary_fast_search.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 300 python3 adversary_fast_search.py 2>&1
+
+Excellent results. Let me now store the findings to Cortex and deliver the adversary report.
+[TOOL: ToolSearch]
+
+[CORTEX STORE] ADVERSARY ROUND 2: Shadow Saturation Verified at Rank 4 + Structural Analysis
+
+## KEY FINDING: Shadow Saturation HOLDS at r=4, p=5
+
+The 35-vector doubled+e1 construction in F_5^5:
+- ZSF at weight ≤ 4 (p-1): TRUE
+- Shadow at weight 4 covers ALL 3124 nonzero vectors: SATURATED
+- Strongly ZSF at weight
+
+Now let me store the most important tactical finding separately — the sign convention insight is proof-relevant.
+
+[CORTEX STORE] ADVERSARY: Critical insight on why internal triples don't break strongly ZSF
+
+For the doubled+e1 construction S17, the rank-3 theorem and strongly ZSF are COMPATIBLE because of a sign flip:
+
+1. Internal triple (v_i, v_j, v_k all in S17): dependency av_i + bv_j + cv_k = 0.
+   The rank-3 theorem (in i
+
+---
+
+# ADVERSARY ROUND 2 REPORT
+
+## What I Tried to Break
+
+### Attack A: Shadow Saturation at Rank 4 (the big one)
+**Result: FAILED TO BREAK.** Tested the 35-vector doubled+e1 in F_5^5 (first time anyone checked r=4). Shadow at weight p-1=4 covers **all 3124 nonzero vectors**. The construction is:
+- Strongly ZSF (no zero-sum at weight ≤ 5)
+- First zero-sum at weight **exactly p+1 = 6** — the pattern from r=3 continues!
+- Layer growth: w=1: 35, w=2: +279, w=3: +1077, w=4: +1733 = 3124 (100%)
+
+This is strong evidence that the proof strategy generalizes beyond r=3.
+
+### Attack B: Non-Standard Strongly ZSF Sets at p=7
+**Result: FAILED TO BREAK.** 30 random greedy trials, best size = **16** (one short of 17). The strongly ZSF condition at weight ≤ p=7 is so restrictive that greedy can't reach size 17 at all. The doubled+e1 requires specific algebraic structure (same A8 in both fibers) that random construction can't discover. Uniqueness claim survives (but still unproved).
+
+### Attack G: Sign Convention Analysis (NEW INSIGHT)
+**RESOLVED an apparent contradiction.** S17 at p=5 has 12 non-degenerate internal collinear triples, yet is strongly ZSF. The rank-3 theorem seemingly guarantees weight < p for these. The resolution:
+
+- **Internal triples**: coefficient on v_k is +1 in the dependency, so actual weight = 2p - (rank3_weight) + 2⟨μ⟩ > **p+2** always
+- **External triples** (with v18): coefficient on v18 is **-1** (negative), so actual weight = ⟨μα⟩ + ⟨μβ⟩ + (p-μ), which CAN be ≤ p
+
+This is why the rank-3 subroutine kills external vectors but not internal ones. The sign flip is the key mechanism.
+
+### Attack H: Margin Analysis at p=5
+44 barely-reachable targets (1 representation each). 20 are single-vector scalings. These are the fragile points that make p=5 the tightest case (E[misses] = 0.27).
+
+## What I Could NOT Break
+| Target | Status |
+|--------|--------|
+| Shadow saturation at r=3 | Holds (p ≤ 23) |
+| Shadow saturation at r=4 | **NEW: Holds (p=5)** |
+| Grail for random 18-vectors | 0 failures in 200 trials (p=5) |
+| Uniqueness of doubled+e1 | 0 alternatives in 30 greedy trials (p=7) |
+
+## Remaining Vulnerabilities (attack surface for next round)
+1. **Uniqueness NOT proved** — greedy testing is not exhaustive. An algebraic non-existence proof is needed.
+2. **r ≥ 5 untested** — 71 vectors in F_5^7 is feasible but needs optimized code (78K states per weight level).
+3. **The two pillars of the proof** (uniqueness + shadow saturation) are both unproved. The proof strategy requires BOTH.
+4. **p=5 is razor-thin** — only 44 barely-reachable targets separate success from failure. A counting/CW argument that works for p ≥ 7 may not close p=5.
+[READ: /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/a430858d-c2e2-431c-a9a4-a123e4521ac3/tasks/byqwe52fc.output]
+Empty output — the targeted attacks script timed out due to the slow unoptimized DP at p=7. The key results from that script's attacks were already captured by the optimized version (`adversary_fast_search.py`), which confirmed: best greedy strongly ZSF size at p=7 is 16, zero non-standard sets of size 17 found.
+
+The adversary report above stands as the complete Round 2 deliverable. The headline: **shadow saturation survives at rank 4**, and the proof strategy's biggest remaining gap is the unproved uniqueness of doubled+e1.
+[READ: /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/a430858d-c2e2-431c-a9a4-a123e4521ac3/tasks/b10vr5c7c.output]
+Also empty — same timeout issue with the unoptimized DP. All substantive results were already obtained from the direct runs (`adversary_r4_attack.py`, `adversary_logic_attack.py`, `adversary_sign_check.py`, `adversary_fast_search.py`). Nothing lost.
+That was the *first* (unoptimized) greedy search that timed out. The optimized version (`adversary_fast_search.py`) completed successfully and gave the definitive result: **best=16, found_17=0, non-standard=0** across 30 trials in 225s.
+
+All round 2 results are captured in the Cortex entries and the report above. The round is complete.

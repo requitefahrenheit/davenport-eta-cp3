@@ -1,0 +1,78 @@
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/MEMORY.md]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: Glob]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/gap_hypothesis_verified.md]
+[TOOL: Agent]
+[TOOL: Glob]
+
+[BASH] find /home/jfischer/claude/grail-tasks -type f -name "*.py" -printf "%T@ %p\n" | sort -rn | head -30
+
+[READ: /home/jfischer/claude/grail-tasks/computer_phase2_verify.py]
+[READ: /home/jfischer/claude/grail-tasks/grail_computations.py]
+[READ: /home/jfischer/claude/grail-tasks/multi_fiber_search.py]
+[READ: /home/jfischer/claude/grail-tasks/multi_fiber_search2.py]
+[READ: /home/jfischer/claude/grail-tasks/three_fiber_search.py]
+[READ: /home/jfischer/claude/grail-tasks/three_fiber_analysis.py]
+[READ: /home/jfischer/claude/grail-tasks/three_fiber_deep_analysis.py]
+[READ: /home/jfischer/claude/grail-tasks/cross_fiber_completeness.py]
+[READ: /home/jfischer/claude/grail-tasks/cw_check.py]
+
+[BASH] wc -l /home/jfischer/claude/grail-tasks/grail_computations.py
+
+[READ: /home/jfischer/claude/grail-tasks/grail_computations.py]
+Let me search Cortex and read the briefing, then run a definitive computation.
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/computer_r1_alpha4_verify.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 computer_r1_alpha4_verify.py 2>&1
+
+Results are in. Now let me run the critical extension to p=11 and also analyze the support-4 zero-sum structure more deeply.
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/computer_r1_p11.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 computer_r1_p11.py 2>&1
+
+Remarkable — at p=11, 8 candidates require support-5. Let me investigate these and extend to p=13.
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/computer_r1_support5_analysis.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 computer_r1_support5_analysis.py 2>&1
+
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/376fedde-7e28-4392-b757-85e9a4dadbfc/tool-results/bwpeg9s0b.txt]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/376fedde-7e28-4392-b757-85e9a4dadbfc/tool-results/bwpeg9s0b.txt]
+Excellent data. Let me now save the comprehensive findings to memory.
+[WRITE: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/alpha4_maximality_verified.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/MEMORY.md]
+[TOOL: Edit]
+## COMPUTER Report: Round 1 Definitive Computations
+
+### Primary Result: doubled+e1 is MAXIMAL ZSF for p = 5, 7, 11, 13
+
+All four primes verified. Adding any 18th projective point to the 17-vector construction creates a weight-≤p zero-sum. Zero counterexamples across 4,332 total candidate tests.
+
+### The Trend Table
+
+```
+  p  |PG(3,Fp)|  cands   s3         s4          s5         max
+  5     156      139    111 (79.9%) 28 (20.1%)   0          4
+  7     400      383    204 (53.3%) 179 (46.7%)  0          4
+ 11    1464     1447    408 (28.2%) 1031 (71.3%) 8 (0.6%)   5
+ 13    2380     2363    514 (21.8%) 1833 (77.5%) 16 (0.7%)  5
+```
+
+### Three Critical Discoveries
+
+**1. Support-5 first appears at p=11.** Eight candidates require support-5 zero-sums. These have:
+- **ZERO** collinear triples with construction vectors (not in any 2D subspace spanned by construction pairs)
+- ~59 dependent quadruples, but **NONE** with weight-≤p positive kernel vectors
+- Support-5 kills ALL have weight exactly p = 11
+- They come in 4 symmetric pairs under coordinate swap: (1,0,3,8)↔(1,0,8,3), etc.
+
+**2. Support-3 kill rate is strictly decreasing:** 79.9% → 53.3% → 28.2% → 21.8%. Matches the non-degeneracy formula. The rank-3 theorem handles an ever-shrinking fraction at larger primes.
+
+**3. Weight concentrates at w = p:** 92-95% of ALL kills have weight exactly p. The bound is maximally tight.
+
+### Implications for the Proof Strategy
+
+- **Cannot rely on support-3 alone.** The rank-3 subroutine becomes minority at p ≥ 11.
+- **Cannot rely on support ≤ 4.** Support-5 is genuinely needed at p ≥ 11.
+- **Must handle arbitrary support.** The maximum support likely grows (slowly) with p.
+- **Weight is always exactly p** for the killing zero-sum. The "copies pool" formulation (find a length-≤p zero-sum subsequence) is the right framework.
+- **The inductive approach must be support-agnostic**: any proof by induction on rank must produce zero-sums without constraining support size.

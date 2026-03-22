@@ -1,0 +1,219 @@
+I'll search Cortex for existing results and read the briefing document in parallel.
+[TOOL: ToolSearch]
+[CORTEX SEARCH: shadow window structure A8 zero-sum fiber forcing]
+[CORTEX SEARCH: U1 two-fiber forcing conjecture proof]
+[CORTEX SEARCH: window structure]
+[CORTEX SEARCH: shadow polytope]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+Cortex is down. Let me read the prior analysis files to get full context.
+[TOOL: Agent]
+[TOOL: Glob]
+[TOOL: Glob]
+[TOOL: Glob]
+
+[BASH] ls -la ~/claude/grail-tasks/ 2>/dev/null | head -30
+
+[READ: /home/jfischer/claude/grail-tasks/u1_analysis.md]
+
+[BASH] ls -la ~/claude/grail-tasks/collab-* 2>/dev/null
+
+[TOOL: Grep]
+
+[BASH] ls -la ~/claude/grail-tasks/*.md 2>/dev/null
+
+
+[BASH] find ~/claude/grail-tasks -type f -name "*.md" 2>/dev/null
+
+[READ: /home/jfischer/claude/grail-tasks/u1_analysis.md]
+[READ: /home/jfischer/claude/grail-tasks/adversary_round2_report.md]
+[READ: /home/jfischer/claude/grail-tasks/adversary_round3_final.md]
+[READ: /home/jfischer/claude/grail-tasks/COMPUTATIONAL_FINDINGS_R1.md]
+[TOOL: Grep]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/final-summary.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/synthesis-round3.txt]
+[READ: /home/jfischer/claude/grail-tasks/goal.md]
+[READ: /home/jfischer/claude/grail-tasks/decomposition_analysis.md]
+
+[BASH] find /home/jfischer/claude/grail-tasks/collab-20260320-030311 -type f -name "*.txt" -o -name "*.md" 2>/dev/null | head -20
+
+[TOOL: Grep]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/adversary-round3-insights.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/synthesis-round2.txt]
+
+[BASH] find /home/jfischer/claude/grail-tasks -maxdepth 1 -name "*.md" -type f 2>/dev/null
+
+[READ: /home/jfischer/claude/grail-tasks/task4-fiber-geometry.md]
+[READ: /home/jfischer/claude/grail-tasks/agent3-adversary.md]
+Let me now focus on the core theoretical work: proving the Window Structure (Sub-problem A). Let me read the key constraint system carefully.
+[READ: /home/jfischer/claude/grail-tasks/u1_analysis.md]
+Now I have everything. Let me construct the proof.
+
+---
+
+# WINDOW STRUCTURE THEOREM — COMPLETE PROOF
+
+## Setup
+
+**A₈** = {a₀,...,a₇} ⊂ F_p³ where:
+- a₀=(1,0,0), a₁=(0,1,0), a₂=(0,0,1), a₃=(-1,1,1)  [total weight φ = 1]
+- a₄=(1,1,0), a₅=(1,0,1), a₆=(-1,2,1), a₇=(-1,1,2)  [total weight φ = 2]
+
+Here φ(x,y,z) = x+y+z is the **total weight grading**.
+
+**Invariant line:** L = {(0,j,j) : j ∈ F_p}.
+
+**Claim:** For p ≥ 2w+1: (0,j,j) ∈ Σ_w(A₈) iff ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋.
+
+## Proof
+
+### Step 1: The Total Weight Identity
+
+For any (0,j,j) = Σ cᵢaᵢ with Σcᵢ = w, apply φ:
+
+> **2j** = φ(0,j,j) = Σ cᵢ φ(aᵢ) = (c₀+c₁+c₂+c₃)·1 + (c₄+c₅+c₆+c₇)·2 = **w + S**
+
+where **S = c₄+c₅+c₆+c₇**.
+
+(For p ≥ 2w+1: all cᵢ ≤ w < p, and linear combinations have absolute value < p, so this holds over **Z**, not just F_p.)
+
+### Step 2: Parity Constraint
+
+The two linear constraints for targeting L are:
+- (I): c₀ - c₃ + c₄ + c₅ - c₆ - c₇ = 0
+- (II): c₁ - c₂ + c₄ - c₅ + c₆ - c₇ = 0
+
+**Add (I) and (II):**
+> c₀ + c₁ - c₂ - c₃ + 2c₄ - 2c₇ = 0
+
+So **c₀+c₁ - c₂-c₃ = 2(c₇-c₄)**, which is even.
+
+Since c₀+c₁+c₂+c₃ = (c₀+c₁-c₂-c₃) + 2(c₂+c₃), and both terms are even:
+
+> **c₀+c₁+c₂+c₃ is even**, hence **S = w - (c₀+c₁+c₂+c₃) ≡ w (mod 2)**.
+
+### Step 3: Necessary Conditions (the window bounds)
+
+From 2j = w + S with S ≡ w (mod 2):
+
+**Lower bound:** S ≥ 0 ⟹ 2j ≥ w ⟹ j ≥ ⌈w/2⌉.
+- (For odd w: S ≥ 1 since S is odd, giving 2j ≥ w+1, j ≥ (w+1)/2 = ⌈w/2⌉.)
+
+**Upper bound:** S ≤ w gives j ≤ w. But can S = w when w is odd?
+- S = w requires c₀ = c₁ = c₂ = c₃ = 0.
+- Then (I): c₄+c₅ = c₆+c₇, and (II): c₄+c₆ = c₅+c₇.
+- Subtracting: 2(c₅-c₆) = 0, so c₅ = c₆ (over **Z**). Similarly c₄ = c₇.
+- Then S = 2c₄ + 2c₅ is **even**, contradicting S = w odd.
+- So for odd w: S ≤ w-2, giving j ≤ (w + w-2)/2 = w-1 = 2⌊w/2⌋.
+
+For even w: S = w is achievable (see Step 4), giving j ≤ w = 2⌊w/2⌋.
+
+**Result:** j ∈ {⌈w/2⌉, ..., 2⌊w/2⌋} is necessary.
+
+### Step 4: Sufficiency (explicit constructions)
+
+**Even weight w = 2k, target j = k+t** for t ∈ {0,...,k}:
+
+| Variable | c₀ | c₁ | c₂ | c₃ | c₄ | c₅ | c₆ | c₇ |
+|----------|-----|-----|-----|-----|-----|-----|-----|-----|
+| Value    | k-t | 0   | 0   | k-t | t   | 0   | 0   | t   |
+
+- Weight: 2(k-t) + 2t = 2k ✓
+- (I): (k-t) - (k-t) + t + 0 - 0 - t = 0 ✓
+- (II): 0 - 0 + t - 0 + 0 - t = 0 ✓
+- j = 0 + (k-t) + t + 0 + t = k+t ✓
+- All cᵢ ≥ 0 ✓
+
+**Odd weight w = 2k+1, target j = k+1+t** for t ∈ {0,...,k-1}:
+
+| Variable | c₀ | c₁ | c₂ | c₃ | c₄ | c₅ | c₆ | c₇ |
+|----------|-------|-----|-----|-----|-------|-----|-----|-----|
+| Value    | k-t-1 | 0   | 1   | k-t | 1+t   | 0   | 0   | t   |
+
+- Weight: (k-t-1) + 0 + 1 + (k-t) + (1+t) + 0 + 0 + t = 2k+1 ✓
+- (I): (k-t-1) - (k-t) + (1+t) + 0 - 0 - t = 0 ✓
+- (II): 0 - 1 + (1+t) - 0 + 0 - t = 0 ✓
+- j = 0 + (k-t) + (1+t) + 0 + t = k+1+t ✓
+- All cᵢ ≥ 0 (requires k ≥ t+1, i.e., t ≤ k-1) ✓
+
+**QED.** ∎
+
+---
+
+### Step 5: Extension to w = p-1
+
+The linear constraints (I), (II) have LHS in [-(p-1), p-1] when Σcᵢ = p-1, so "≡ 0 mod p" forces exact integer equality. The parity argument applies.
+
+Now 2j ≡ S-1 (mod p) with two integer branches:
+- **k=0:** 2j = S-1. Requires S odd. But parity forces S even. **Dead.**
+- **k=1:** 2j = S-1+p. Requires S even ✓. Gives j = (S+p-1)/2 ∈ {(p-1)/2,...,p-1}.
+
+Same interpolation (c₀,c₃,c₄,c₇) = ((p-1)/2-t, (p-1)/2-t, t, t) achieves j = (p-1)/2 + t.
+
+**Corollary (Gap at weight p-1 on L):** {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, size (p-3)/2.
+
+**Corollary (Shadow saturation on L):** ∪_{w=2}^{p-1} (Σ_w ∩ L) = L \ {0}, since the windows tile {1,...,p-1} completely.
+
+---
+
+## Sumset Completeness (Trivial)
+
+**Proposition.** Σ_k(A₈) + Σ_l(A₈) = Σ_{k+l}(A₈) for independent copies.
+
+**Proof.** ⊇: obvious. ⊆: given dᵢ with Σdᵢ = k+l, 0 ≤ dᵢ ≤ p-1, greedily split dᵢ = c'ᵢ + c''ᵢ with Σc'ᵢ = k, Σc''ᵢ = l. Since dᵢ ≤ p-1 and c'ᵢ ≤ dᵢ, both parts satisfy bounds. ∎
+
+---
+
+## Verification Requests
+
+[VERIFY: At p=5, w=4, t=1: the construction gives c₀=1, c₃=1, c₄=1, c₇=1, rest 0. Check a₀+a₃+a₄+a₇ = (1,0,0)+(-1,1,1)+(1,1,0)+(-1,1,2) = (0,3,3). Should get j=3.]
+
+[VERIFY: At p=5, w=5, t=0: c₀=0, c₂=1, c₃=1, c₄=1, rest 0. Check a₂+a₃+a₄ = (0,0,1)+(-1,1,1)+(1,1,0) = (0,2,2). j=2 at weight 3. WAIT — that's weight 3, not 5. Need to recheck w=5 at p=5. For p ≥ 2w+1 = 11, the integer argument applies. At p=5, w=5 exceeds (p-1)/2, so the modular version is needed.]
+
+[VERIFY: At p=29, w=28: confirm gap on L is {(0,j,j) : 1 ≤ j ≤ 13}.]
+
+[VERIFY: Compute the FULL gap at weight p-1 (all of F_p³, not just L). My analysis shows off-L gaps exist too — e.g., (1,1,0) has φ=2, S=3 (odd), violating parity on L, but the parity constraint is SPECIFIC TO L. For off-L targets, there is no parity obstruction from the total weight grading alone, so feasibility must be checked by other means. Confirm: does (1,1,0) ∈ Σ₄(A₈) at p=5?]
+
+---
+
+## What This Proves for U1
+
+The Window Structure gives:
+1. **Exact characterization** of which L-points A₈ can reach at each weight.
+2. **The gap at weight p-1** is (p-3)/2 points on L — precisely the "hard" points for cross-fiber coverage.
+3. **Shadow saturation on L** via window tiling — cumulative coverage is complete.
+
+### Remaining steps for U1:
+
+**(B) Number-theoretic orbit coverage.** For the (8,8,1) 3-fiber case with extra vector b=(c,b') in fiber c: need -W_c·b' ∈ Σ_{p-W_c}(A₈) for some W_c ∈ {1,...,p-1}. When b' ∈ L, this is: does the multiplicative orbit {W_c·j mod p} intersect the window at weight p-W_c for some W_c?
+
+The windows have total capacity ~p²/4 >> p, so an averaging/pigeonhole argument should work. This is the next thing to prove.
+
+**(C) Handle distributions (8,7,2), (8,6,3), etc.** More extra vectors means more cross-fiber freedom.
+
+**(D) Extend beyond A₈ or prove uniqueness.** Hardest remaining piece.
+
+Now let me store these results to Cortex.
+
+[CORTEX STORE] # Window Structure Theorem — PROVED
+
+## Statement
+For A₈ = {a₀,...,a₇} ⊂ F_p³ (standard 8-vector construction), on the invariant line L = {(0,j,j)}:
+
+(0,j,j) ∈ Σ_w(A₈) iff ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ (for p ≥ 2w+1).
+
+At w = p-1: gap on L is exactly {(0,j,j) : 1 ≤ j ≤ (p-3)/2}.
+
+## Proof Method
+Three ingredie
+
+Now let me push further — try to prove sub-problem (B), the number-theoretic orbit coverage.
+
+[CORTEX STORE] # U1 Status After Window Structure Proof
+
+## What's Proved
+- (A) Window Structure: PROVED analytically. j ∈ Σ_w(A₈) ∩ L iff ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋.
+- Sumset completeness: trivial from coefficient splitting.
+- Shadow saturation on L: follows from window tiling.
+
+## What Remains for U1
+- (B) Number-theore

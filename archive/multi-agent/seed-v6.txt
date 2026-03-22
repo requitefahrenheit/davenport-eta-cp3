@@ -1,0 +1,154 @@
+# THE LAST LEMMA
+
+Everything else is proved. The ENTIRE proof of η(C_p³) = 8(p−1)+1
+reduces to ONE lemma about triples in F_p.
+
+---
+
+## SETUP
+
+For a,b,c ∈ F_p* and λ ∈ F_p*, define:
+  f(λ) = [λa] + [λb] + [λc]
+where [x] is the representative of x in {1,...,p−1}.
+
+Define the wrap count: k(λ) = (f(λ) - [λ(a+b+c)]) / p.
+Since f ≡ λ(a+b+c) mod p: k is always a non-negative integer.
+
+## THREE PROVEN FACTS
+
+**Fact 1 (Involution).** f(λ) + f(−λ) = 3p for all λ.
+Proof: [x] + [p−x] = p for all x ∈ {1,...,p−1}. QED.
+
+Consequence: #{k=0} = #{k=2}. Call this m.
+
+**Fact 2 (Average).** Σ_λ k(λ) = p−1.
+Proof: Σ f(λ) = 3 · p(p−1)/2 and Σ[λs] = p(p−1)/2. QED.
+
+Consequence: #{k=1} = p−1−2m. And 0 ≤ m ≤ (p−1)/2.
+
+**Fact 3 (Antipodal → m=0).** If a+b ≡ 0 mod p:
+[λa]+[λb] = p for all λ. So f = p+[λc] ∈ {p+1,...,2p−1}.
+Thus k = 1 for all λ, so m = 0. QED.
+
+## COMPUTATIONALLY VERIFIED (p = 5,7,11,13,17,19):
+
+m = 0 IFF some pair sums to 0 mod p.
+
+Equivalently: m ≥ 1 (some k=0 exists) IFF no pair sums to 0.
+
+Zero exceptions across six primes.
+
+## THE LEMMA TO PROVE
+
+**Lemma.** If k(λ) = 1 for all λ ∈ F_p* (i.e., m=0),
+then some pair among {a,b,c} sums to 0 mod p.
+
+Contrapositive: if no pair sums to 0, then k ≠ 1 for some λ,
+which (by Facts 1–2) forces k=0 for some λ, giving f ≤ p−1.
+
+---
+
+## WHAT k≡1 MEANS
+
+k(λ) = 1 for all λ means: f(λ) = [λs] + p for all λ.
+So f(λ) ∈ {p+1, ..., 2p−1} for all λ.
+
+For the pairwise carry c₁₂(λ) = ⌊([λa]+[λb])/p⌋:
+- If a+b ≢ 0: #{c₁₂=1} = (p−1)/2 and #{c₁₂=0} = (p−1)/2.
+  (Proof: involution λ ↔ −λ swaps c₁₂=0 and c₁₂=1.
+  And [λa]+[λb] ≠ p since a+b ≢ 0.)
+- If a+b ≡ 0: c₁₂ = 1 always.
+
+From k = c₁₂ + c' = 1 (where c' is the carry from adding
+[λ(a+b)] and [λc]): the carries are complementary.
+So c' = 1 − c₁₂.
+
+This means: the set where [λa]+[λb] < p is EXACTLY the set
+where [λ(a+b)]+[λc] ≥ p.
+
+## CONSTRAINTS FROM k≡1
+
+At λ = a⁻¹: f = 1+[b/a]+[c/a] = [s/a]+p.
+So [b/a]+[c/a] = [s/a]+p−1 = [(s−a)/a]+p−1... wait.
+[s/a] = [(a+b+c)/a] = [1+b/a+c/a mod p].
+So [b/a]+[c/a] ≡ [s/a]−1 mod p (since [1]+[b/a]+[c/a] ≡ s/a).
+And [b/a]+[c/a] = [s/a]+p−1 (integer equation from f = [s/a]+p).
+Wait: f = 1+[b/a]+[c/a] = [s/a]+p. So [b/a]+[c/a] = [s/a]+p−1.
+Since [s/a] ∈ {1,...,p−1}: [b/a]+[c/a] ∈ {p,...,2p−2}.
+
+At λ = −a⁻¹: f = (p−1)+(p−[b/a])+(p−[c/a]) = 3p−1−[b/a]−[c/a]
+= 3p−1−([s/a]+p−1) = 2p−[s/a]. And f should = [(−s/a)]+p = (p−[s/a])+p = 2p−[s/a]. ✔
+
+If b+c ≢ 0 mod p: [b/a]+[c/a] ≠ p (since residue is (b+c)/a ≠ 0).
+So [b/a]+[c/a] ∈ {p+1,...,2p−2}.
+This means both [b/a] and [c/a] are ≥ 2.
+
+Similarly from the (b,c)+a decomposition: [a/c]+[b/c] ∈ {p+1,...,2p−2}
+when a+b ≢ 0.
+
+## KEY QUESTION
+
+Can [b/a]+[c/a] ∈ {p+1,...,2p−2} AND [a/b]+[c/b] ∈ {p+1,...,2p−2}
+AND [a/c]+[b/c] ∈ {p+1,...,2p−2} simultaneously, for a,b,c with
+no pair summing to 0?
+
+If YES for some (a,b,c): then k≡1 is possible without antipodal pair.
+If NO: the lemma is proved.
+
+Numerically it's NO (verified for 6 primes). Prove it.
+
+## APPROACHES
+
+### Approach 1: Product constraint.
+Let u = b/a, v = c/a (both in F_p \ {0, −1, 1−v, ...}).
+[u]+[v] ≥ p+1 AND [u⁻¹]+[vu⁻¹] ≥ p+1 AND [v⁻¹]+[uv⁻¹] ≥ p+1.
+
+The first gives [u],[v] ≥ 2 and [u]+[v] ≥ p+1.
+So both are in the "upper half" {(p+3)/2,...,p−1}.
+(If [u] ≤ (p−1)/2: [v] ≥ p+1−(p−1)/2 = (p+3)/2. That's fine.)
+
+Actually: [u]+[v] ≥ p+1 means max([u],[v]) ≥ (p+2)/2.
+
+The second: [u⁻¹]+[v/u] ≥ p+1. Since v/u = c/b:
+[a/b]+[c/b] ≥ p+1.
+
+The third: [v⁻¹]+[u/v] ≥ p+1. Since u/v = b/c:
+[a/c]+[b/c] ≥ p+1.
+
+So ALL THREE pairs of quotients have large sums.
+
+### Approach 2: Use u·u⁻¹ = 1+kp.
+If [u] is large (say ≥ (p+1)/2): [u⁻¹] = (1+kp)/[u] for the smallest k.
+k=1 gives [u⁻¹] = (p+1)/[u]. When [u]=(p+1)/2: [u⁻¹]=2.
+When [u]=(p+3)/2: might need k=2,3,...
+But generically [u⁻¹] is O(p/[u]), which is small when [u] is large.
+Use this to bound [u⁻¹]+[vu⁻¹].
+
+### Approach 3: Pigeonhole on the three constraints.
+Three constraints each force two quotients to be large. But the six
+quotients (u, v, u⁻¹, vu⁻¹, v⁻¹, uv⁻¹) are not independent.
+Find an algebraic relation that leads to contradiction.
+
+### Approach 4: Explicit computation for small cases.
+For p=5: [u]+[v] ≥ 6 with u,v ∈ {2,3}. So {u,v}={3,3} (sum=6). 
+But [3⁻¹]+[3·3⁻¹] = [2]+[2] = 4 < 6. Contradiction!
+So p=5 case is proved by exhaustion of one case.
+Generalize this argument.
+
+---
+
+## DEAD ENDS
+
+1. Three-inversion lemma (min of 3 sums ≤ p−1): FALSE at p=11.
+2. Projection to C_p² + weighted subset-sum: stuck for 30 rounds.
+3. Chevalley–Warning: degree barrier.
+4. Individual triple scaling: some triples have no good λ among
+   the three inversions, but ALWAYS have one among all p−1.
+
+## RULES
+
+1. Every turn: lemma + proof, or precise obstruction.
+2. Computation only to verify specific conjectures.
+3. The p=5 argument in Approach 4 might generalize. Try it.
+4. The constraint "all six quotient-pair sums ≥ p+1" is very rigid.
+   Exploit this rigidity.

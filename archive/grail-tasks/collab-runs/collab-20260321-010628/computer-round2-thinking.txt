@@ -1,0 +1,499 @@
+
+============================================================
+BLOCK 1 (147 chars)
+============================================================
+Let me start by searching Cortex for existing computational results, then read the briefing document and plan my computational work for this round.
+
+============================================================
+BLOCK 2 (164 chars)
+============================================================
+Cortex search has issues but list returned a large result. Let me read the Cortex list output file to see what's been computed, and also read the briefing document.
+
+============================================================
+BLOCK 3 (120 chars)
+============================================================
+Good, I have the briefing. Now let me read the Cortex list to see what's been computed before. Let me read it in chunks.
+
+============================================================
+BLOCK 4 (968 chars)
+============================================================
+Good, I can see there's significant prior work in Cortex. The key findings from prior sessions:
+
+1. Gap Hypothesis proved analytically
+2. U1 proof chain complete (conditional)
+3. Doubled structure provably forced (no-tripled-tails theorem)
+4. 8-tail bound computationally proven at p=5,7
+
+My directive for this round is:
+- Run **exhaustive p=7 case verification** on the small-small Case 3 regime (both fibers size ≤ α(r)+1) to determine whether the bound η(C_p^4) = 103 is prime-independent or requires explicit p=7 computation.
+
+
+- Now I need to partition the 18-vectors by their 2-fiber projections and check whether the fiber span claim holds universally at p=7, which will tell me if the proof generalizes beyond p=5. The core question is whether adding an 18th vector to the 17-vector construction always produces a zero-sum of weight ≤ p, and how multi-fiber configurations behave at p=7.
+
+Let me review the existing p=5 code and adapt it for this verification.
+
+============================================================
+BLOCK 5 (116 chars)
+============================================================
+Let me look at the existing verify_r4_p7.py and computer_phase2_verify.py files to see what's already been computed.
+
+============================================================
+BLOCK 6 (50049 chars)
+============================================================
+Good, I have the constructions. Now let me write and run the definitive p=7 exhaustive verification. The key task:
+
+1. Build the 17-vector construction S17 in F_7^4 (8 in fiber 0, 9 in fiber 1).
+2. Enumerate ALL candidate 18th vectors v18 (nonzero, non-proportional to any of the 17).
+3. For each v18, check if {S17 ∪ {v18}} has a zero-sum of weight ≤ p=7.
+4. Report: how many candidates, how many killed by support-3, support-4, support-5, etc.
+
+
+5. Analyze fiber structure of kills.
+
+Now I'm computing the candidate space: F_7^4 has 2400 nonzero vectors, which projects down to 400 projective points after accounting for the 6 scalar multiples of each. Subtracting the 17 points already in S17 leaves 383 candidate projective points to test.
+
+For each candidate 18th vector, I need to verify it doesn't create a zero-sum of weight ≤ 7 when combined with S17. Since S17 is already zero-sum-free at this weight, any problematic zero-sum must involve the new vector with some coefficient from 1 to p-1, paired with coefficients from the original 17 vectors.
+
+This means for each possible coefficient of v18, I need to check whether the negated target can be expressed using the 17 vectors within the remaining weight budget. I can precompute which vectors are reachable at each weight level from S17, then for each candidate and each coefficient value, check if the corresponding target appears in the achievable set.
+
+For p=7, this is manageable—the field has 2401 elements and I'm tracking reachability across 17 vectors with weights from 0 to 6. Now I'll implement the dynamic programming approach where I build up the set of reachable vectors at each weight incrementally.
+
+Building the DP table... I need to be more careful about the weight constraint—the total weight is w + c, and since we need w + c ≤ p, that means w ≤ p - c. So I should check if the target (-c * v18) mod p appears in the cumulative reach up to weight p - c, and I'll iterate c from 1 to p-1.
+
+Now let me write code to verify this exhaustively. I'll precompute the reachable sets by weight as bitsets since F_7^4 only has 2401 elements, then for each candidate 18th vector, I'll check whether adding it creates a zero-sum subset by testing all possible values of c.
+
+For the support analysis, I need to track not just which targets are reachable at each weight, but also how many nonzero coefficients are used to reach them. So I'll compute reach[k][w] to store targets reachable with exactly k nonzero coefficients summing to weight w. A zero-sum involving v18 would use v18 itself plus s-1 vectors from S17, giving total support s.
+
+The support tracking makes the DP more expensive, so maybe I should first do a basic reachability check to see if any zero-sum exists at all, then do a targeted secondary search to find the minimum support. For p=7, the state space is manageable: 17 vectors, weights 0 to 6, and 2401 possible targets in F_7^4, which gives roughly 17 × 7 × 2401 × 7 operations for the basic DP without support tracking.
+
+Actually, I can afford to track support directly. I'll define the DP state as reach[i][k][w], representing all targets reachable using exactly k vectors with nonzero coefficients from the first i vectors, with total weight w. The transition adds either the skip option or includes contributions from the previous support level with each possible coefficient choice.
+
+The state space is manageable at around 4.9M entries, and I can optimize by only maintaining the cumulative reach array and updating it incrementally rather than storing per-index information. Let me implement this efficiently by computing reach[w] as a bitset of F_7^4 elements.
+
+In phase 2, I'll check each candidate v18 with coefficients 1 through 6 to see if the negated multiple exists in the union of reachable sets up to the appropriate weight threshold. For candidates that don't work, I'll search for minimum support solutions by testing support 3 first, then 4, then 5, trying all coefficient combinations from the 17 vectors that sum to the required target.
+
+Now I'm thinking through the fiber structure—each vector in F_7^4 has a first coordinate that determines its fiber label, and S17 splits into 8 vectors in fiber 0 and 9 in fiber 1. The candidate v18 could land in any fiber from 0 to 6, which affects how it interacts with the existing set. Let me write a comprehensive verification script that handles all of this systematically. So if the 18th vector has first coordinate 0 or 1, it stays within 2 fibers but would violate the zero-sum-free property, while coordinates 2-6 push it into 3+ fibers. I need to write a verification script that checks every possible 18-vector addition to S17, and then validate whether any 18-vector ZSF set actually spans 3+ fibers under some linear form—which would either confirm or refute the theorem's claim that no such set exists.
+
+For p=7 in F_7^4, there are 2400 nonzero vectors total, giving 400 projective points, and S17 occupies 17 of them, leaving 383 candidates for the 18th vector. I need to test each one to see if adding it creates a zero-sum of weight ≤ 7, which would necessarily involve the 18th vector since S17 is already zero-sum-free.
+
+The key insight is that this becomes a shadow computation problem: for each candidate v18, I'm checking whether -c*v18 lies in the shadow of S17 at weight ≤ 7-c for some coefficient c. I'll implement a dynamic programming approach similar to knapsack to compute the shadow efficiently, tracking which vectors can be represented as weighted sums of S17 elements within the weight constraint. Setting up the knapsack DP... I'm realizing the weight indexing needs to account for v18's coefficient separately—since v18 uses coefficient c from 1 to p-1, the remaining budget for the other 17 vectors is p-c, which means I need reach[w] for w from 0 to p-1. I'm switching to a numpy boolean array representation where each reach[w] is a binary array of size p^4, which will be more efficient than using sets for larger p values.
+
+Building the reachability computation... I see the issue with encoding—addition in the vector space doesn't map cleanly to integer operations. I could build a full addition table for all encoded pairs, but that's expensive. A better approach is to precompute permutations: for each scalar multiple c*v, I create a mapping that tells me how to transform any encoded vector by adding c*v to it. Since I only need these permutations for the specific multiples of v that appear, I can compute them on demand rather than storing everything upfront.
+
+Building the permutation lookup... Building the S17 fiber sets and precomputing all the permutation arrays for each vector and scalar multiple, then setting up the dynamic programming framework to track reachable states.
+
+Now I'm iterating through each vector in S17, computing new reachable targets by applying the precomputed permutations at each weight level.
+
+After building the reachability matrix, I'm computing cumulative reachability to track which targets can be reached at any weight up to w. Then I'm normalizing the S17 vectors to their projective form by scaling each one so its first nonzero coordinate equals 1, which will help me identify which candidates are proportional to existing vectors.
+
+Now I'm iterating through all projective points and checking which ones are "killed" — meaning they can be expressed as a negative multiple of some reachable vector. For each candidate, I'm testing whether -c times that vector is reachable within the weight budget, and if so, I'm recording statistics about the fiber.
+
+But I'm realizing there's a fundamental issue with how I'm handling the permutation in the DP. The shift operation should permute the boolean array correctly, and I need to think through whether I'm applying the inverse permutation properly when updating reachability.
+
+Let me work through the logic: when I shift by a vector, I'm essentially moving each reachable element to a new position. So if I have reachable positions in the old array, I need to map them to their new positions using the permutation. The direct approach is cleaner—for each currently reachable position, I compute where it maps to after adding the shift vector, then mark that new position as reachable in the updated array.
+
+Implementing this with numpy indexing should work: I find all true positions in the current reachability array, apply the permutation to those indices, and set those new positions to true in the next array. I'm realizing that multiple old indices can map to the same new position, which is fine since we're just setting values to True. Rather than tracking individual indices, I can use the permutation array directly as a fancy index operation. If I precompute the inverse permutation that subtracts the offset, I can shift the entire reachable set in one numpy operation: `shifted = old[sub_cv_perm]`, then merge it with `new_reach[nw] |= shifted`. This is much cleaner and faster than looping.
+
+Setting up the implementation... I'm realizing I can simplify this by just precomputing the subtract permutation directly. Since I'm working in F_p^4 with base-p encoding, I can compute each coordinate independently. Let me estimate the computational cost: with 7 weight levels, 2401 possible targets, 17 vectors, and 7 coefficient values to try at each step, that's roughly 17 × 7 × 7 × 2401 operations, which should run in seconds even at p=7.
+
+Now I'm implementing the full script. The DP approach treats each vector as an item in a bounded knapsack problem—I process vectors one at a time, and after handling vector v_i, the reach table contains all targets achievable using vectors v_1 through v_i with each one assigned a coefficient from {0,...,p-1}. Once I've processed all 17 vectors, reach[w] will hold exactly the targets reachable with total weight w.
+
+For each candidate v_18, I check if there's a coefficient c in {1,...,6} where (-c*v_18 mod p) appears in the union of reach tables up to weight p-c. Since the total weight must stay ≤ p and v_18 already contributes at least 1 to the weight, the remaining budget for the first 17 vectors is at most p-1, which fits within my reach computation. S17 vectors can use at most p - 1 = 6 in total. And since each vector's coefficient is at most p - 1 = 6, the maximum total for all S17 vectors at weight ≤ 6 means at most 1 vector with nonzero coefficient (at weight ≤ 6), or 2 vectors with coefficients summing to ≤ 6, or 3 vectors with coefficients summing to ≤ 6, etc.
+
+Wait, but the DP is capped at weight p-1 = 6, which might miss some reachable targets. For example, if we use 3 vectors with coefficients 2, 2, 2, that's weight 6, which is fine. But we'd never exceed weight 6 anyway since that's the maximum allowed.
+
+So the DP is correct — I only need to track reachable weights from 0 to p-1.
+
+Now for the support analysis, I want to find the minimum support of the zero-sum that eliminates each candidate. I'll do a separate search after the DP, checking support sizes 2, 3, 4, ... until I find the minimum for each killed candidate.
+
+Support-2 is impossible since that would require v18 to be proportional to some v_i, which we've already excluded. For support-3, I need v18 with coefficient c_18 and two S17 vectors v_i, v_j with coefficients c_i, c_j that sum to zero.
+
+I can enumerate all pairs from S17 and try all coefficient combinations where c_18 + c_i + c_j ≤ 6, checking if the linear combination equals zero. For support-4, I'd check all triples from S17, which is more expensive but still manageable. feasible for 383 candidates.
+
+Actually, let me think about this differently. For the support-3 check at p=7:
+- We have v18, v_i, v_j.
+- The relation is c_18 * v18 + c_i * v_i + c_j * v_j ≡ 0 (mod 7), with c_18, c_i, c_j ∈ {1,...,6} and c_18 + c_i + c_j ≤ 7.
+- Since c_18 + c_i + c_j ≤ 7 and each is ≥ 1, we have c_18 + c_i + c_j ∈ {3,4,5,6,7}.
+
+There are quite a few possible coefficient distributions to check. Let me systematically go through the cases where c_18 ranges from 1 to 5, since the other two coefficients must sum to at least 2. I need to find the scaling factor λ that makes all three coefficients fall within the valid range {1,...,6} while keeping their sum at most 7. The approach depends on whether these vectors are linearly independent or dependent—if they span a 3D subspace, the solution space is one-dimensional and I can parameterize it by a single free coefficient.
+
+Rather than continuing with this theoretical analysis, I'm going to implement a direct exhaustive computation: first computing reachability for the shadow using dynamic programming, then enumerating candidates and checking which ones can be killed, and for each killed candidate determining the minimum support needed by testing support-3 configurations first via the rank-3 subroutine before moving to support-4. I'll also track which fiber each candidate belongs to under the x_0 projection.
+
+Writing the Python implementation... Writing utility functions... Continuing with the S17 construction...
+
+I'm completing the second fiber with the remaining points, then combining both fibers into the full set. Now I'm verifying that all 17 vectors are valid elements in the 4-dimensional field and normalizing them to projective points to confirm we have exactly 17 distinct projective representatives.
+
+Next I'm enumerating all possible projective points in the field space and identifying which ones aren't already in S17—these become the candidates for the 18th vector. Then I'm moving into the shadow computation phase using dynamic programming to explore how the S17 set behaves under certain operations.
+
+Now I'm precomputing subtraction permutations...
+
+After that setup, I'm running the dynamic programming phase where I iterate through each vector, updating reachable states by considering all possible coefficients to add.
+
+Now I'm computing cumulative reachability across weights and collecting statistics on shadow sizes at each weight level, then printing out the timing and results before moving into the verification phase.
+
+For phase 2, I'm iterating through all candidate vectors and checking whether each one can be killed by finding a zero-sum combination with vectors from the shadow set, tracking which candidates get eliminated and organizing the kills by their fiber and weight. Still writing analysis code... Still writing the brute force search... The brute force approach for support-3 isn't quite working out. I need to reconsider the linear algebra here—for a support-3 kill, I'm looking at a system of 4 equations in 3 unknowns over F_p, which means the solution space is either empty or forms a 1-dimensional affine subspace. The key insight is whether these three vectors are linearly dependent.
+
+If they are dependent, there's a unique dependency relation (up to scalar), and I need to find a scalar multiple where all coefficients land in {1,...,p-1} with sum ≤ p. If they're independent, there's no dependency to find, so no support-3 kill exists for that triple.
+
+Writing dependency detection code... Checking all coefficient combinations to find a linear dependence, trying coefficients with the third vector set to 1, then falling back to checking if just the first two vectors are dependent.
+
+The brute force approach is manageable since we're only iterating through p² combinations, and with p=7 that's just 49 checks. But I need to think about what happens when we find a dependency—since any scalar multiple of a valid triple also represents the same dependency, I should identify all valid scalings where the coefficients stay in the range {1,...,p-1} and their sum doesn't exceed p.
+
+For a support-3 zero-sum to work, all three coefficients must be nonzero mod p. Once that's satisfied, any scaling μ ∈ {1,...,p-1} will keep the coefficients nonzero as well, so I just need to check that the scaled sum doesn't exceed p. I see the key issue now—the weight of a dependency depends on which representative I choose from the equivalence class modulo p, since each coefficient must be in {0, 1, ..., p-1} as integers. So I need to check all possible scalings of each dependency triple to find which one minimizes weight, then verify it satisfies the constraint. My approach will be to run the full shadow DP first, then for each candidate triple, systematically test all scalar multiples to find the valid representation.
+
+Now I'm extending the DP to track minimum support alongside weight and target—this lets me record the fewest nonzero coefficients needed to reach any given state, which I'll use to analyze the structure of killed candidates.
+
+Setting up the DP table...
+
+Now I'm iterating through each element, updating the minimum support needed to reach each target value at each weight constraint by considering how adding the current element shifts the target positions and increases support when needed. Updating the minimum support values by taking the element-wise minimum of the new combined costs and existing values, then moving to the next vector in the sequence. I'm also handling the zero-contribution case separately and checking that overflow won't be an issue since the maximum possible value stays well within bounds.
+
+Writing the complete script...
+
+Now I'm checking the math on the p=5 case. At p=5 with dimension 4, there are 625 elements in F_5^4, which gives 624 nonzero elements and 156 projective points after accounting for equivalence classes. That means 139 candidates remain after removing the 17 points in S17, but the briefing mentions 607 possible 18th vectors—so I need to reread what that actually refers to. the briefing: "α(4, 5) = 17 = 2·8 + 1. All 607 possible 18th vectors tested."
+
+But (5^4 - 1)/(5-1) = 624/4 = 156 projective points. 156 - 17 = 139. 
+
+Where does 607 come from? Let me work through this. If I'm counting nonzero vectors excluding those proportional to the 17 already in S17, that's 625 - 1 (zero vector) - 68 (the 17 classes × 4 elements each) = 556, which still doesn't match. Maybe the 607 count includes something different, or perhaps the construction at p=5 works differently than I'm assuming. Let me reconsider what vectors are actually being tested here. _5^4 has:
+- Fiber 0: (0,1,0,0), (0,0,1,0), (0,0,0,1), (0,4,1,1), (0,1,1,0), (0,1,0,1), (0,4,2,1), (0,4,1,2)
+- Fiber 1: (1,1,0,0), (1,0,1,0), (1,0,0,1), (1,4,1,1), (1,1,1,0), (1,1,0,1), (1,4,2,1), (1,4,1,2), (1,0,0,0)
+
+That's 8 + 9 = 17 vectors. Their projective representatives are 17 distinct points.
+
+So there are 624 nonzero vectors total, which gives 156 projective points. That leaves 139 candidate points beyond the 17 we already have. The briefing mentions 607 possible 18th vectors, which matches 624 - 17, suggesting they tested all nonzero vectors except those in S17 rather than just projective representatives. That's redundant since proportional vectors would create the same weight-2 zero-sum issue, but maybe they're counting something else entirely.
+
+For p=7, I have 2400 nonzero vectors giving 400 projective points, so 383 candidates after excluding the 17 known ones. I'll focus on the projective representatives since that's the cleaner approach.
+
+My plan is to build S17 for p=7, enumerate all 383 candidate projective points, run dynamic programming to track minimum support across S17, check which candidates get killed and compute their minimum support values, then do fiber analysis and compare with p=5 results. I should also verify my code works correctly by running it on p=5 first.
+
+Let me think through the DP state more carefully—min_sup[w][t] after processing vectors up to some index represents the minimum number of vectors from that prefix with nonzero coefficient in the linear combination that sums to target t.
+
+When checking a candidate v18 with coefficient c, I need to find the target t = (-c * v18) mod p in the S17 shadow, constrain the weight to w ≤ p - c, and then the total zero-sum support is 1 plus the minimum over all valid weights. I'll compute the minimum support for each coefficient c and take the overall minimum.
+
+Writing the comprehensive script...
+
+Now I'm thinking about memory constraints—the min_sup array is manageable at around 34 KB. Before diving into the full implementation, I should verify that S17 itself is zero-sum-free at weight ≤ p by checking that the zero vector doesn't appear in any shadow at weights 1 through 6. This is a basic sanity check to ensure the problem setup is correct. I need to compute reach values up through weight 7 for the S17-only zero-sum check, but when checking candidates with v18, the weight constraint from S17 vectors is at most 6. For the full S17 zero-sum feasibility check, I need to verify weights up to 7. I'm going to stop overthinking and just implement this. I'll set up a dynamic programming approach that tracks the minimum number of nonzero coefficients needed to reach each target at each weight level, then use that to verify the ZSF property and check all candidate vectors.
+
+Writing the implementation... Still writing verification script... I'm validating that the set has exactly 17 elements and checking their projective equivalence classes, then enumerating all candidate points by decoding and normalizing them. After filtering out the known points, I'm sorting the candidates and starting to precompute subtraction permutations for each element in the set.
+
+Building permutation tables... Still writing the DP loop...
+
+Now I'm moving into the candidate analysis phase, checking each potential vector against the constraint system by computing negatives and examining support values across different weight ranges. Printing out the results of the analysis, including how many candidates were killed versus survived, then breaking down the kills by which fiber they came from and what support values were needed to eliminate them. Now I'm analyzing the weight distribution of the kills to understand the pattern better.
+
+But wait—I'm realizing there might be a flaw in my logic. When I normalize v18 so its first nonzero coordinate becomes 1 to check if it's killed, then multiply it by -c to get a counterexample, the scaling might not preserve the property I'm checking for.
+
+Actually, let me think through this more carefully. The zero-sum equation involves v18 with some coefficient c_18, and the key constraint is that the total weight stays within bounds. If I use a different representative of the same projective class—say, scaling v18 by some factor λ—the equation structure changes because now I'd need c_18 * λ * v18 instead, which affects the coefficient itself. So I need to be more careful about whether the killing property is truly invariant across different representatives of the same projective point. I see that different representatives of the same projective class can have different weights, which means I can't just check one representative per class—I need to account for how the coefficients change under scaling. Let me reconsider what the problem is actually asking: given these 2α(r)+2 nonzero non-proportional vectors, I need to prove a zero-sum exists, but the weight constraint depends on which specific representatives I'm working with. exist coefficients s_1, ..., s_k ∈ {1, ..., p-1} with s_1*v_1 + ... + s_k*v_k = 0 and s_1 + ... + s_k ≤ p."
+
+So the vectors are specific (not just projective classes), and the coefficients are in {1,...,p-1}. The weight constraint is s_1 + ... + s_k ≤ p, where k is the support size.
+
+But the choice of representative matters! Given a projective point [v], if we choose representative v or 2v, we get different weight behaviors.
+
+However, the construction S17 uses SPECIFIC representatives. The 18th vector is also specific. So the exhaustive check should try all possible 18th vectors (not just projective representatives), or at least all possible ways to choose the 18th projective point with its representative.
+
+Actually, I'm realizing the claim is much broader than just S17. The statement is that ANY 18 nonzero non-proportional vectors in F_p^4 must have a zero-sum with weight ≤ p, regardless of which representatives we pick. So I need to verify this holds for all possible 18th vectors and all possible representative choices.
+
+For the computational check, I'm testing whether adding any 18th vector to S17 creates a zero-sum of weight ≤ p. This is a necessary condition for the general claim—it shows S17 can't be extended to 18 ZSF vectors. When I add a specific 18th vector, if it's proportional to one in S17, the problem changes. But the key insight is that scalar multiples of the same vector give different zero-sum weights, so I need to check whether at least one representative of each projective class has a zero-sum. i * v_i = 0. The new coefficient of v18 is c_18 * inv(λ) mod p, which is still in {1,...,p-1}. But the new weight is (c_18 * inv(λ) mod p) + Σ c_i, which might be different from the original weight c_18 + Σ c_i.
+
+So the two problems ARE different. But the claim is that BOTH have a zero-sum of weight ≤ p (possibly different zero-sums).
+
+For computational verification, I should check all nonzero non-proportional vectors, not just projective representatives. The pairwise non-proportionality constraint means I need to exclude vectors proportional to any of the 17 vectors in S17. That leaves roughly 2298 candidates to check at p=7, which is still computationally manageable. Though I need to be careful about the counting—excluding proportional vectors means removing 17 * (p-2) = 85 vectors from the total, not the full 102 I initially calculated. the proportional ones NOT already in S17).
+
+Wait, let me think again. S17 has 17 vectors. For each vector v in S17, the proportional vectors are λ*v for λ ∈ {1,...,p-1}, which is p-1 = 6 vectors including v itself. So the vectors to exclude are:
+- The 17 vectors in S17 (they're already in the set)
+- The 17 * (p-2) = 17 * 5 = 85 vectors proportional to S17 but not in S17
+
+Total excluded from nonzero: 17 + 85 = 102 = 17 * 6 = 17 * (p-1).
+Candidates: 2400 - 102 = 2298.
+
+But since the S17 vectors are pairwise non-proportional by assumption, their proportionality classes don't overlap, so I'm excluding exactly 17 * 6 = 102 vectors total, leaving 2298 candidates. For p=5 though, I get 624 - 68 = 556 candidates, but the briefing says 607—which is just 624 - 17, meaning they only excluded the S17 vectors themselves, not their proportional multiples. That makes sense because adding any proportional multiple of an S17 vector would immediately create a weight-2 zero-sum.
+
+For consistency with that approach and since it's computationally feasible, I'll check all 2383 nonzero non-S17 vectors, knowing the 85 proportional ones will trivially fail while the 2298 non-proportional ones are the interesting cases to verify. candidates and the DP done, the check for each candidate is just p-1 = 6 lookups in the cum_reach array. So it's 2383 * 6 = ~14K lookups. Trivial.
+
+For the min-support DP, the check per candidate is p-1 candidates × p weight levels = 6 × 8 = 48 lookups. Still trivial.
+
+OK let me write the complete script. I'll check all 2383 candidates for p=7 and all 607 for p=5. But I'll separate them into "proportional kills" and "non-proportional kills" in the output.
+
+Actually, you know what, let me just do the projective approach for the main analysis (383 candidates for p=7, 139 for p=5) and note the proportional kills separately. This keeps the output clean and focuses on the interesting cases.
+
+Wait, I need to reconcile this with the p=5 prior result. They reported 607 candidates with 513 support-3 kills and 94 support-4 kills, which adds up to 607 total. That means they counted all non-S17 nonzero vectors, not just projective ones. Let me verify: 5^4 - 1 - 17 = 607, so they excluded only the 17 S17 vectors. Now I need to figure out how the proportional kills break down within those 607. I'm realizing the proportional vectors might create support-2 zero-sums through a different mechanism—if v18 equals λ times some vector in S17, the resulting zero-sum has weight p - λ + 1, which falls in the support-2 range. But their count of 607 doesn't match my calculation of 556 non-proportional vectors, so either their definition of "non-proportional" is stricter than I'm assuming, or I'm missing something about how they're counting. I should probably just move forward without getting stuck on this discrepancy.
+
+Let me focus on my own computation using projective representatives for cleaner analysis. I've verified the counts: 383 candidates for p=7 and 139 for p=5, both matching the formula (p^4-1)/(p-1) minus the 17 proportional vectors. Now I need to write and run the script to check these systematically.
+
+There's one more subtlety I should think through—the DP approach I'm using tracks minimum support at each step, but since it processes vectors sequentially, the min_sup values might not capture the true minimum across all possible orderings. of nonzero coefficients from vectors processed so far. Once all 17 vectors are processed, min_sup[w][t] gives the global minimum over all coefficient assignments.
+
+Let me verify this is right by tracing through a few steps: starting with min_sup[0][0] = 0, after processing the first vector I get min_sup[c][c*v_0] = 1 for each nonzero coefficient c, and after adding the second vector the table correctly tracks the minimum number of vectors with nonzero coefficients for each sum. This is essentially a 0-1 knapsack variant where each vector can be used with coefficients 0 through p-1, and I'm confident the approach is sound.
+
+Now I should implement this and also check a few edge cases—whether any of the 17 vectors could be proportional to each other (they shouldn't be by construction) and verify the zero vector isn't included. Looking at the fiber structure for p=7, I can see the vectors are being generated correctly. I've verified that the vectors aren't proportional to each other by construction, so now I'm ready to implement this. I'm estimating the precomputation will involve around 119 permutations of 2401 vectors each, which should take a few seconds to run through the encoding and decoding operations.
+
+For the dynamic programming phase, I'm looking at roughly 17 iterations with 56 inner loops per iteration operating on vectorized numpy arrays—that should complete in under a second. I'll optimize the termination check by using `np.min()` instead of `np.all()` to avoid unnecessary slowdowns.
+
+Writing the verification script... Writing the verification functions... Still writing the verification code... Building the permutation lookup tables...
+
+Now I'm setting up the dynamic programming phase to find minimum support across the 17 vectors, initializing the state array and beginning to iterate through each vector to update reachable states. Still writing DP logic... Still writing candidate checking... Still writing the analysis loop... Generating diagnostic output... Now I'm running the exhaustive search for both primes and then comparing the results side by side, printing out how many candidates were killed versus how many survived for each prime, along with the breakdown by support and fiber type. If both searches eliminate all candidates, that would verify the conjecture.
+
+I'm thinking through the computational complexity here—precomputing permutations for p=7 will generate around 286K entries with multiple operations per entry, which could take 10-30 seconds in Python, though I could speed this up with numpy broadcasting. The DP phase itself involves millions of array elements, but since each step operates on the full 2401-element array at once, the actual runtime should be manageable.
+
+Now I'm optimizing the permutation precomputation using numpy...
+
+Building lookup tables with numpy... Finishing the vectorized computation for the subarray, then checking memory constraints—the storage is manageable at around 1.1 MB for the main array and 38 KB for the DP state. Now I'll write out the complete script.
+
+Actually, I need to verify that S17 itself satisfies the zero-sum-free property at weight p=7—meaning the zero vector shouldn't be reachable. Let me reconsider the construction: S17 is (doubled A8) plus e1, and the s-constant calculation gives 109 for p=7, which relates to the η-constant and what sequences are actually achievable.
+
+The key distinction is that S17 has 17 distinct vectors with no repetition, whereas the η-constant applies to sequences with repetitions allowed. For S17 to be zero-sum-free at weight p=7, there should be no nontrivial weighted combination using coefficients from {0,...,6} with total weight at most 7 that sums to zero mod 7.
+
+With at most 7 vectors chosen from 17, there are roughly 19K possible combinations to check. I'll use dynamic programming to track all achievable vector sums at each weight level—if zero never appears at weights 1 through 7, then S17 is confirmed to be zero-sum-free.
+
+Writing the computation script... to double-check the indexing—the subtraction permutation array sub[idx][c] contains the adjusted target indices, and when I apply it to ms[w], numpy's fancy indexing retrieves the correct minimum support values for each target state, which then get updated with the delta cost. This approach avoids explicit loops and should be efficient.
+
+Now I'm checking edge cases with the INF sentinel value—when a state is unreachable (support = INF), adding delta to it still produces INF, so the minimum operation correctly preserves unreachable states. For reachable states near the INF boundary, like support = 199 with delta = 1, the result is 200, which equals INF, so those states correctly become unreachable.
+
+I also need to verify that when c = 0 (no shift), the identity permutation is being used correctly, so ms[w][sub[idx][0]] properly maps to ms[w] itself.
+
+Now I'm thinking through the fiber structure at p=7 more carefully. The fibers 0 and 1 are the existing ones where S17 already has vectors, while fibers 2-6 are new. This distinction matters for analyzing the two-fiber case, and I want to extract which support sizes eliminate candidates in the new fibers—that's the critical piece for the theorist's Theorem 1 part (c).
+
+Let me write out the script with this case analysis built in.
+
+Writing the computation script...
+
+I should also track how many killed candidates need support ≥ 5 at p=7 versus p=5, since the theorist mentioned support-3 dominates at p=5. At p=5, the maximum total weight is 5, so support-3 requires minimum weight 3, support-4 requires minimum weight 4, and support-5 requires exactly weight 5—anything larger is impossible. At p=7, I have more flexibility with the weight constraints, so the support distribution will look quite different.
+
+At p=7, support-7 is actually achievable with each coefficient equal to 1, giving a simple zero-sum of 7 vectors. Now I'll implement the script to capture all these cases and their support distributions.
+
+I'm concerned about runtime though—precomputing permutations for 17 vectors across 7 coefficients with 2401 coordinate transformations should be manageable with numpy broadcasting, and the DP itself runs for 17 iterations...
+
+Analyzing the complexity: each iteration initializes an 8 × 2401 array and processes weights from 0 to p, checking reachability and updating new weights through fancy indexing and minimum operations on 2401-element arrays. That's roughly 56 operations per iteration across 17 iterations, totaling around 1 millisecond. The real bottleneck is the permutation precomputation phase...
+
+Now I'm looking at the permutation costs: 119 total permutation computations, each involving 4 coordinate transformations on 2401-element arrays, which comes to about 476 vectorized operations overall—also around 1 millisecond. So the entire computation should complete well under a second, with I/O and candidate enumeration being the dominant factors.
+
+Let me verify this approach actually works for candidates from new fibers by tracing through a concrete example.
+
+Taking v18 = (2, 0, 0, 0) at p=7 in fiber 2 (a new fiber), I need to check if there exists some c18 in {1,...,6} where the negated and scaled vector lands in the shadow of S17 at an appropriate weight. Computing -c18 * (2,0,0,0) mod 7 for each coefficient: c18=1 gives (5,0,0,0), c18=2 gives (3,0,0,0), and c18=3 gives (1,0,0,0)—which is actually v17 itself. Since (1,0,0,0) appears in S17, I need to check whether it's reachable at weight ≤ 4 from the remaining vectors in S17, though the shadow technically includes all 17 vectors and their combinations. for each v_i. In particular, 1*(1,0,0,0) = (1,0,0,0) is in reach[1]. So reach[1] contains enc((1,0,0,0)). Then for c18=3: target = (1,0,0,0), budget = 7-3 = 4, and (1,0,0,0) is in cum_reach[4] (since it's in reach[1]). So the zero-sum is 3*(2,0,0,0) + 1*(1,0,0,0) = (6,0,0,0) + (1,0,0,0) = (0,0,0,0). Weight = 3+1 = 4 ≤ 7. Support = 2.
+
+But wait, (2,0,0,0) is proportional to (1,0,0,0) which is in S17, so this candidate gets excluded. When I normalize (2,0,0,0) at p=7, the first nonzero coordinate is 2 with inverse 4 mod 7, giving (1,0,0,0)—which is indeed in S17. The proportionality check correctly filters this out.
+
+Now let me examine a genuinely non-proportional candidate like v18 = (2,1,0,0). Normalizing this gives (1,4,0,0) after multiplying by the inverse of 2. I see the core tension now: the fiber decomposition is tied to the specific representative vector, not its projective equivalence class. Adding (2,1,0,0) creates a 3-fiber configuration in the original set, but normalizing it to (1,4,0,0) would collapse it back to a 2-fiber configuration—and that choice of representative fundamentally changes the structure I'm analyzing.
+
+When I check a projective class by scaling its normalized form through all nonzero coefficients, I'm technically examining all representatives, so I'll catch any zero-sum that exists. But the fiber structure of the resulting zero-sum depends on which representative actually participates, and that's where the ambiguity lies—the zero-sum's fiber classification isn't invariant across representatives.
+
+The cleanest solution is to track the specific coefficient and representative that produces the minimum-support zero-sum for each killed class, then derive the fiber information from that actual representative rather than the normalized one. - actual_fiber = first coordinate of actual_v18
+- This determines the fiber structure of the 18-vector set
+
+Wait, but the 18-vector set is {S17 ∪ {actual_v18}}. The fiber of actual_v18 determines whether we're in the 2-fiber or multi-fiber case.
+
+Actually, this is getting complicated. Let me simplify: since S17 has vectors in fibers 0 and 1 only (under x_0), and we're adding one vector v18:
+- If v18 ∈ fiber 0 or fiber 1: the set stays 2-fiber
+- If v18 ∈ fiber 2,3,4,5,6: the set becomes 3-fiber
+
+But v18 is a SPECIFIC vector (not a projective class). Different representatives of the same projective class have different fibers, so for each projective class I need to test all possible scalar multiples. When v18[0] is nonzero, scaling by different λ ∈ F_p^* gives representatives across all nonzero fibers, meaning I'm effectively covering all possible fiber assignments through the exhaustive check. I see that testing normalized representatives with all scalar multiples c18 ∈ {1,...,p-1} is equivalent to testing all possible 18th vectors, since a zero-sum with coefficient c18 on the scaled vector is the same as a zero-sum with coefficient 1 on the original vector scaled by c18. Let me clarify the weight calculation: for the set {S17 ∪ {c18 * v18_norm}}, a zero-sum has the form c18 * v18_norm + Σ c_i * v_i = 0 with total weight c18 + Σ c_i ≤ p.
+
+This confirms that using projective representatives preserves both the existence of zero-sums and their support structure, so I can safely work with normalized vectors for the kill check and support analysis. Now I need to compute the fiber of each representative to complete the analysis.
+
+For each killed projective class, I'll track the minimum support and the corresponding coefficient c18, then determine the fiber structure by checking whether the normalized form's first coordinate is zero or nonzero—if it's zero, all representatives stay in fiber 0 (giving a 2-fiber configuration), but if it's nonzero, representatives span multiple fibers. So the real question is whether every representative of a projective class with first coordinate 1 gets eliminated—checking (1, a, b, c) in a 2-fiber config, then (2, 2a, 2b, 2c) in a 3-fiber config, all the way up to (6, 6a, 6b, 6c). Since I'm verifying all c18 values from 1 to 6, each one corresponds to killing a different representative, which means yes, they all get eliminated.
+
+Now I'm realizing the distinction: when I write the zero-sum as c18 * v18_norm + Σ c_i * v_i = 0, the v18_norm is the normalized form with first coordinate 0 or 1, but the actual claim needs to hold for any specific representative v18 like (3, a, b, c) where the zero-sum would have coefficient 1 on that vector instead.
+
+Rather than getting bogged down in the normalization details, I should just compute directly: for each nonzero vector v not proportional to S17, I'll check whether a zero-sum exists with v appearing in it, and track the fiber structure for each candidate. For p=7, testing all 2298 nonzero non-proportional vectors is computationally feasible and gives me the complete picture without needing to reason through the projective equivalences separately. with c ∈ {1,...,6} and c + Σ c_i ≤ 7?
+
+Wait, that's the same question but with v as the actual 18th vector and c as its coefficient. The weight is c + Σ c_i ≤ p = 7.
+
+Hmm, I think the cleanest formulation is: for a fixed 18th vector v18, the zero-sum uses v18 with coefficient ≥ 1 and some S17 vectors with their coefficients. The total weight (sum of all coefficients) ≤ p.
+
+So I need -c*v18 to be in the shadow of S17 at weight ≤ p - c. For the projective approach, if v18 = λ * w where w is normalized, then -c*v18 = -cλ*w, and letting c' = cλ mod p gives -c*v18 = -c'*w in F_p^4. The tricky part is that the weight constraint involves c, not c', so I need to account for how c = c' * inv(λ) affects the total weight unless inv(λ) = 1.
+
+Since different representatives give different weight constraints, the projective approach doesn't directly apply here. I'll just iterate through all 2298 non-proportional vectors individually, and for each one test all possible coefficients c ∈ {1,...,6} to see if -c*v18 is reachable in the S17 shadow within the weight budget of 7 - c.
+
+Actually, there's a simpler way to think about this: I can just check all 2400 nonzero vectors in F_7^4 and test whether S17 ∪ {v} contains a zero-sum of weight ≤ p, which naturally handles proportional vectors (they're killed) and vectors already in S17 (they're redundant).
+
+Building the exclusion set...
+
+Now I'm filtering to get the candidates that aren't proportional to any S17 vector, then checking the counts against what the briefing reported. For p=5, I'm getting 556 candidates after excluding proportional vectors, but the briefing shows 607—which suggests they only excluded the 17 S17 vectors themselves, not their scalar multiples.
+
+Looking at the breakdown in the report, 513 support-3 kills plus 94 support-4 kills equals exactly 607, meaning all candidates were accounted for with no support-2 kills reported. This is puzzling because the 51 proportional vectors should have been trivially killed with support-2, so either those weren't included in the count or they were killed differently than expected.
+
+Let me verify whether support-2 zero-sums are actually valid for proportional vectors. For a vector that's a scalar multiple of an S17 vector, the support-2 zero-sum would combine the two with coefficients that sum to p, giving a weight between 2 and p-1, which is always valid. So support-2 kills should definitely work for these proportional cases.
+
+Looking at the numbers more carefully: 607 total candidates tested, all killed, with 513 by support-3 and 94 by support-4. That accounts for all 607. But if roughly 51 of those are proportional vectors with support-2 zero-sums, then either the report is counting support-2 kills within those numbers, or there's something else going on with how the breakdown was computed.
+
+Rather than trying to reverse-engineer their exact methodology, I should just write a clean script to compute everything from scratch and see what I get.
+
+Writing the computation script... Writing the verification code... Building the DP table... Completing the cumulative minimum calculation, then checking if S17 is zero-sum-free at p=7 and planning to run the full analysis script to answer key questions about vector support distribution, fiber structure, and differences between cases.
+
+For the actual vector approach, I need to classify each candidate by its fiber type: vectors with first coordinate 0 or 1 create 2-fiber configurations, while those with coordinates 2 through p-1 create 3-fiber configurations. Since different projective representatives have different first coordinates, I'm working with actual vectors rather than equivalence classes, testing each one with coefficient 1 to see if it gets killed.
+
+For vectors that aren't killed at c=1, I should check higher coefficients c=2,...,p-1, where the weight constraint becomes tighter as c increases. The key insight is that the minimum support zero-sum might require a coefficient greater than 1, so I need to verify whether the full 18-vector set actually satisfies the required weight bounds. I should classify each killed vector as either 2-fiber or 3-fiber based on its first coordinate, and record the minimum support needed across all coefficient choices. Since all vectors in a projective class share the same killing status, I can work with equivalence classes rather than individual vectors—but I still need to track which fiber each class belongs to, which depends on the normalized representative's first coordinate. I'm working through how each representative maps to fibers based on its first coordinate—when the normalized form starts with 1, the six representatives (scaled by λ=1 through 6) land in fibers 1 through 6 respectively, giving one candidate in the 2-fiber configuration and five in 3-fiber configurations.
+
+When the normalized form starts with 0 instead, all six representatives stay in fiber 0, so they all contribute to the 2-fiber count. Now I'm tallying up the total candidates by fiber type across all projective classes.
+
+Looking at the S17 vectors, there are 8 with first coordinate 0 (these form fiber-0 projective classes) and 9 with first coordinate 1 (these form fiber-1 projective classes).
+
+Now I'm calculating the total projective points in the space: (7^4 - 1)/6 = 400. For fiber-0 specifically, the nonzero vectors of the form (0, a, b, c) give 342 points, which should yield 57 projective classes when divided by p-1. But I'm realizing I need to reconsider how projective equivalence works here—each projective class contains multiple scalar multiples of a vector, so I should be more careful about the counting.
+
+Actually, let me recalculate: fiber-0 projective classes are (p^3 - 1)/(p - 1) = 57, and fiber-1 classes with normalized form (1, a, b, c) give p^3 = 343 classes, totaling 400. After removing the 8 fiber-0 and 9 fiber-1 classes in S17, I'm left with 49 and 334 classes respectively, for 383 non-S17 projective classes. Now I need to count the candidate vectors from these non-S17 classes.
+
+From the 49 fiber-0 classes, each generates 6 vectors all staying in fiber 0, giving 294 total. From the 334 fiber-1 classes, each generates 6 vectors: one stays in fiber 1, and the other five distribute across fibers 2-6, giving 334 in fiber 1 and 1670 spread across fibers 2-6. This means I have 628 candidates that stay within the first two fibers and 1670 that reach into fibers 2-6.
+
+The killing mechanism differs between these groups: the 2-fiber candidates can be eliminated through intra-fiber zero-sums using support-3 or support-4 structures, while the 3-fiber candidates require cross-fiber zero-sums to be killed. This distinction is crucial for the proof structure.
+
+Now I'm ready to implement the script and test it. For p=7, the permutation precomputation should take around 1-2 seconds with roughly 476 operations on 2401-element arrays, and the DP phase with about 952 operations should run in roughly half a second.
+
+The candidate verification step with 13,788 lookups should complete in under a second, bringing the total runtime to a few seconds. For p=5, everything runs even faster—under 2 seconds total. I'll run both p=5 and p=7, plus p=11 as an additional validation check.
+
+For p=11, the numbers get larger: permutation operations on 14,641 arrays take around 5 seconds, the DP phase about 3 seconds, and the candidate checks involve roughly 144,700 lookups across 1,447 non-proportional candidates. The whole thing might take 30-60 seconds, which is still reasonable. Though I'm noticing the permutation step could be the bottleneck here.
+
+I've already got a vectorized numpy approach that computes the coordinate transformations efficiently across all N elements at once—subtracting, modding, and summing in a tight loop. With 187 permutations and 14,641 elements per permutation, that's around 2,244 numpy operations total, each one fast enough that the whole phase should complete in a few seconds.
+
+Memory-wise, the sub array storing all 187 permutations comes to about 10.7 MB, which is manageable. The DP arrays themselves are relatively small at around 704 KB total. So I can safely run all three prime values—p=5, 7, and 11—without hitting any constraints. The memory usage looks manageable across the board. Now I'm going to write out a test script to validate this approach with a few different parameter values—p=5, p=7, and p=11—to see how it performs.
+
+============================================================
+BLOCK 7 (3799 chars)
+============================================================
+Excellent! All three primes verified cleanly. Let me now analyze the key findings:
+
+1. **S17 is ZSF at all primes**: Verified for p=5, 7, 11.
+2. **All candidates killed**: 556/556 at p=5, 2298/2298 at p=7, 14470/14470 at p=11.
+3. **Support distribution trends**:
+   - Support-3 dominance decreases: 83.1% → 65.2% → 40.5% as p grows
+   - Support-4 becomes dominant at p=11 (59.2%)
+   - Support-5 emerges at p=7 with just 4 cases, then jumps to 46 cases at p=11, while maximum support caps at 5
+
+4. **Shadow structure**: At weight p, the shadow covers all nonzero vectors minus 1 (at p=7: 2389/2400 at w=6, then 2400/2400 at w=7). The critical observation is that at weight p=7, every single nonzero vector gets absorbed into the shadow, meaning the shadow achieves complete coverage.
+
+5. **2-fiber vs 3-fiber dynamics**: Both fiber types are fully eliminated, with nearly identical support distributions, suggesting the killing mechanism operates uniformly regardless of fiber type.
+
+6. **Fiber 0 vs Fiber 1 asymmetry**: Fiber 0 shows dramatically higher support-3 rates (90% at p=7) compared to Fiber 1 (49% at p=7), which makes sense because fiber 0 already contains 8 vectors from A8, creating more pathways for support-3 zero-sums.
+
+Now I want to dig into what's driving these patterns. I need to identify which fiber those 4 support-5 cases belong to at p=7, and understand what's happening with the shadow at weight p-1 where we're just shy of full coverage at 2389 out of 2400 targets.
+
+Looking at the shadow data more carefully, I see there's a consistent gap pattern: at p=5 we have 5 unreachable vectors at weight 4, and at p=7 there are 11 vectors that can't be reached until weight 7. I want to understand whether this gap phenomenon is independent of the prime or if it scales with p, and whether the support-5 kills are concentrated in a particular fiber. Looking at the gap sizes 5, 11, 29 more carefully—they're each equal to p itself, but let me verify: at p=5 the gap is 5, at p=7 it's 11, at p=11 it's 29. The differences between consecutive gaps are 6 and 18, which have a ratio of 3, suggesting maybe a quadratic pattern like (p²-1)/something. Let me try a few formulas for the gap. For p=5, I get 5; for p=7, I get 13 instead of 11. Neither formula works cleanly. I should step back and directly identify what vectors are actually unreachable at weight p-1 from the S17 set, then compare against the Gap Hypothesis which describes unreachable vectors in a different algebraic context.
+
+Looking at the shadow sizes across different primes, I notice something striking: the counts at weights 0, 1, and 2 stay constant at 1, 17, and 99 regardless of whether p is 5, 7, or 11. The pattern breaks at weight 3, where the counts start varying with p.
+
+For weight 2, I can see why this independence holds—the coefficients are constrained to either {2} for a single vector or {1,1} for pairs of vectors. Since we're working with 17 basis vectors and the collision behavior at this weight doesn't depend on the prime field structure, the count remains invariant across different primes.
+
+But at weight 3 and beyond, the modular arithmetic starts mattering. When p=5, some of the weight-3 sums wrap around under mod 5 reduction, creating collisions that don't occur for larger primes like p≥7. This explains why p=5 gives 328 distinct targets while p≥7 gives 344. The pattern continues at weight 4, where p=7 and p=11 diverge because the coefficient combinations at that weight interact differently with each prime's modular structure.
+
+Rather than getting bogged down in the shadow analysis, I should focus on the main result and verify it more broadly. Let me also compute the results for p=13 to strengthen the pattern, and then identify which gap vectors are unreachable at weight p-1.
+
+============================================================
+BLOCK 8 (6912 chars)
+============================================================
+Excellent results! Let me analyze the key findings:
+
+1. **Gap analysis bug**: My gap calculation was wrong - I included the zero vector in the count, giving -1. But the actual data from the shadow table is clear:
+   - p=5: gap at w=4 is 624-619 = 5
+   - p=7: gap at w=6 is 2400-2389 = 11
+   - p=11: gap at w=10 is 14640-14611 = 29
+   - p=13: gap at w=12 is 28560-28519 = 41
+   
+Now I'm noticing these gap values—5, 11, 29, 41—are all prime numbers themselves. Let me see if there's a relationship to p: the first gap equals p, the second is p+4, and the third looks like 3p-4. I need to figure out what formula connects these gaps to the prime parameter.
+
+Looking at the differences between consecutive gaps (6, 18, 12) doesn't reveal anything obvious, so let me reconsider how the shadow sizes are actually computed at each weight threshold. I'm testing whether the gap relates to p^2 minus some value. The pattern shows 5 = 25-20, 11 = 49-38, 29 = 121-92, 41 = 169-128, but the subtracted values (20, 38, 92, 128) don't follow an obvious formula yet.
+
+Now I'm noticing that when I add 1 to each gap, I get 6, 12, 30, 42, which factor as 6×1, 6×2, 6×5, 6×7—and those multipliers are exactly the primes I started with, though 1 isn't prime. Let me explore whether there's a pattern hiding in these factorizations. Looking at the prime factorizations, I notice gap+1 follows the pattern 6·{1, 2, 5, 7}, but the multipliers don't map cleanly to the primes themselves—the relationship breaks down when I try to express them as simple functions of p.
+
+Let me test a few formulas: (p-3)/2 gives the right gaps for p=5 and p=7 but fails at p=11, and (p-1)/2 doesn't work either. I think I need to step back and reconsider the structure—maybe the gap isn't determined by a simple formula but rather by counting which nonzero vectors fall outside the union of all the subspaces.
+
+Looking at my code more carefully, I realize there's a subtle issue with how I'm counting reachable vectors. The zero vector gets marked as reachable with distance 0, so when I compute the gap, I need to account for that properly—the gap should be the total number of vectors minus the reachable count, which gives me the right formula.
+
+But now I'm seeing a discrepancy: the shadow table shows 2389 targets at exactly weight 6, yet my cumulative count at weight 6 should include all vectors reachable at weights 0 through 6. The problem is that the same target can be reachable at multiple different weights, so I can't just sum the counts—I need to take the union of reachable sets across all weights, which is what my cumulative calculation is doing with the minimum operation. I see the confusion now—the gap values I calculated are based on single-weight counts from the shadow table, not cumulative reachability. Since every nonzero element is reachable at some weight ≤ p-1, the actual gap is zero, but the shadow table's individual weight counts create the illusion of gaps that don't reflect the true cumulative picture. I see the confusion now—those counts at each weight are the exact counts, not cumulative. So at w=4 for p=7, there are 875 targets reachable at exactly weight 4, but the cumulative total through w=4 would include everything from w=0 through w=4 combined. Let me recalculate what the actual cumulative numbers should be.
+
+If the sets were disjoint, I'd just add them up: 1+17+99+344+875 = 1336. But targets can be reachable at multiple weights, so there's overlap and the true cumulative is smaller. What my code actually computes shows that by weight ≤ 6 (which is p-1), all 2401 elements are reachable—meaning there's no gap in cumulative coverage at all. So that "gap" column in the table is misleading; it's showing the count at exactly weight p-1, not the actual gap in reachability.
+
+This is a striking result: the S17 shadow is completely filled cumulatively by weight p-1. Every nonzero vector in F_p^4 can be reached from S17 with some weight w ≤ p-1, which means adding any v18 with coefficient 1 gives a zero-sum of total weight at most p. That's exactly what the claim alpha(4,p) = 17 requires.
+
+But I need to be careful—this only applies to this specific S17 and v18. Different 17-vector zero-sum-free sets might have different shadows. Though actually, the exhaustive check I ran earlier (eliminating all other candidates) is the stronger evidence here. The shadow completeness is really just a consequence of that.
+
+Looking at the "exact weight" gap more carefully, those numbers like 5, 11, 29, 41 tell me how many nonzero vectors skip exactly weight p-1 but get covered at some earlier weight instead. Let me trace through the p=5 case: at w=4 I see 619 reachable vectors out of 624 nonzero total, so 5 vectors are missing at exactly that weight—but they must appear earlier in the cumulative shadow.
+
+The key insight is that at weight p itself, every nonzero vector becomes reachable at exactly that weight, which makes sense given the flexibility of choosing coefficients from {0,...,p-1} across 17 vectors. So the "exact weight p" count always equals N-1, the full nonzero set.
+
+Now I'm shifting focus to the gap analysis—specifically tracking vectors unreachable at weight p-1 but reachable at smaller weights. I'm also noticing a pattern in the gap sizes at exact weight p-1: they seem to follow a formula like p or 3p-10, though I need to verify this across more values. Let me refine the code and store these results along with the support distribution analysis by fiber type. are (p-1)^2/(p-1) * something... let me try: 
+5 = (5-1)! / ... no.
+Actually: 5 = 5, 11 = 7+4, 29 = 11+18, 41 = 13+28.
+Excess over p: 0, 4, 18, 28.
+Hmm: 0, 4, 18, 28. Differences: 4, 14, 10.
+
+Or look at the NOT-reachable count at w=p-1 as a fraction of total:
+p=5: 5/624 = 0.80%
+p=7: 11/2400 = 0.46%
+p=11: 29/14640 = 0.20%
+p=13: 41/28560 = 0.14%
+
+The percentages are clearly decreasing, but this pattern doesn't seem to lead anywhere useful for the proof. What really matters is documenting the exhaustive verification results and the structural patterns I've found.
+
+The key insight is what happens at p=7 and p=11: S17 is zero-sum-free, every 18th vector gets eliminated, and the kill mechanisms shift dramatically—support-3 kills dominate at smaller primes but drop from 83% down to 40%, while support-4 kills rise from 17% to 59%. Support-5 kills emerge at p=7 with just 4 cases all using the same mechanism, then expand to 46 cases at p=11.
+
+The shadow reaches completion at cumulative weight p-1 for all tested primes, and those 4 support-5 cases at p=7 all share the same structure: v18 in the 3-fiber, c18=1, S17 weight 6, total weight 7=p, with all 4 vectors from S17 coming from fiber 0.
+
+Now I need to run the exhaustive verification for p=13 to complete the picture—I computed the shadow earlier but didn't finish the full candidate check, and there was a bug in the gap analysis that I need to fix.
+
+============================================================
+BLOCK 9 (8162 chars)
+============================================================
+This is very rich data. Let me summarize the key findings:
+
+1. **p=13 VERIFIED**: 28356/28356 candidates killed. No counterexamples.
+2. **Shadow completeness**: ALL nonzero vectors are reachable at weight ≤ p-1 for ALL primes tested (5, 7, 11, 13). This is a very strong property.
+3. **Fiber span**: S17 achieves minimum 2 fibers under ONLY ONE linear form: w = (1,0,0,0) (the first coordinate). Under all other forms, S17 spans ≥ 3 fibers. So Theorem 1(c) is structurally valid: S17's 2-fiber structure is specific to the x_0 projection.
+
+
+4. **Support trend across primes**: As p increases from 5 to 13, support-3 drops from 83% to 32% while support-4 climbs from 17% to 67%, showing that larger primes rely increasingly on 4-element supports to eliminate candidates.
+5. **The CRITICAL insight**: The shadow of S17 is COMPLETE at weight p-1, which means every nonzero vector in the space is reachable through the killing mechanism at this weight threshold. So the zero-sum has weight at most p, which directly proves alpha(4,p) = 17 for any 17-vector ZSF set with shadow completeness. The real challenge is whether we can actually establish that shadow completeness property—it's asking whether 17 seed vectors can cover all p^4 - 1 nonzero vectors using only weight p-1. Looking at the fiber span statistics for p=7, I'm finding that only a tiny fraction of projective linear forms yield the 2-fiber structure needed for S17.
+
+Now I'm checking whether shadow completeness is unique to S17 or holds more broadly, since the proof needs to work for any 17-vector ZSF set. From earlier work, the ZSF 17-set appears to be essentially unique—it's the doubled A8 plus e1 construction—so this might not be an issue for p ≥ 7.
+
+Though I should note the uniqueness claim is only computationally verified at p=5 and p=7, not yet proved analytically. Before I write up the summary and store everything, I want to check one more thing: how the support-3 fraction behaves across different primes. It's dropping significantly (83% down to 32%), and I need to know if it's converging to zero or stabilizing, since that affects how the general proof handles higher support cases. Let me look at the support-3 rates specifically for 3-fiber candidates across the primes I've tested.
+
+Looking at the data, the support-3 fraction is clearly declining as p grows—from 82.8% at p=5 down to 37.6% at p=11 and 29.4% at p=13. The 2-fiber candidates show the same trend, just slower. This means support-4 becomes the dominant mechanism at larger primes, which is a critical structural insight for how the general proof needs to be organized.
+
+The shadow completeness at weight p-1 is the key computational certificate here—it directly confirms that alpha(4,p)=17 and suggests that proving shadow completeness analytically would complete the inductive step. Let me verify this claim by checking the gap analysis across these primes: at p=5, p=7, and p=11, there are zero gap vectors at weight p-1, meaning all nonzero vectors are reachable at weights up to p-1.
+
+This pattern holds for p=13 as well, which means the S17 shadow at weight p-1 covers everything—any nonzero vector in F_p^4 can be expressed as a sum of at most 17 vectors from S17 with total weight at most p-1. This is remarkable because it directly implies that adding an 18th vector would create a zero-sum dependency, confirming that 17 is indeed the maximum size. Rearranging gives 1*v18 + Σ c_i v_i = 0, where the total weight is 1 + Σ c_i ≤ p, and since v18 isn't proportional to any S17 vector, all vectors in the support are non-proportional to each other. This means shadow completeness at weight p-1 directly implies alpha(4,p) = 17 for S17, though there's a subtle issue I need to work through.
+
+The key insight is that v18 is an arbitrary representative, so if it were proportional to some S17 vector, we'd get a trivial pair with weight p. The nontrivial case—which is what matters—is when v18 isn't proportional to anything in S17. For the general proof with any 18-vector set, I'd need to show that every 17-vector ZSF set has shadow completeness at weight p-1, and since these sets are essentially unique up to the doubled A8 + e1 structure, proving it for S17 would extend to the general case.
+
+The proof strategy would chain together: uniqueness of 17-vector ZSF sets in F_p^4 (computationally verified but needs an analytical argument), shadow completeness of S17 at weight p-1, and then the conclusion that alpha(4,p) = 17. For the inductive step to higher ranks, I'd need the same pattern—uniqueness of α(r)-vector ZSF sets and their shadow completeness properties. This is a solid framework but hinges entirely on proving uniqueness, which remains open in the general case.
+
+But I'm wondering if there's a way around the uniqueness requirement. Shadow completeness is actually much weaker than uniqueness—maybe I can prove that ANY 17-vector ZSF set achieves shadow completeness at weight p-1, without needing to show all such sets are isomorphic to S17. The shadow grows combinatorially as we increase the weight, and while generic vectors would grow roughly like C(17+w-1, w), ZSF sets have structural constraints that might force faster coverage. The critical constraint is that ZSF sets have no linear dependencies, which could be the key to proving shadow completeness holds for all of them. with coefficients summing to ≤ p. This constrains the shadow: zero is NOT in the shadow at weight 1,...,p. But it doesn't directly constrain the GROWTH of the shadow.
+
+Actually, let me think about it differently. The shadow is the set of all F_p-linear combinations of S17 vectors with bounded total coefficient. In the "generic" case, the shadow at weight w has size roughly (w+1)^{17} / (17!) for small w (ignoring mod p effects). For w=p-1=6 at p=7, this would be ~7^{17}/17! ≈ 2.3e14/3.6e14 ≈ 0.6. So the "generic" shadow at weight p-1 might not cover everything!
+
+But S17 is special: it has structure (two copies of A8 + e1) that accelerates the shadow growth. The exact computation confirms it does cover everything, which suggests shadow completeness isn't guaranteed—it really depends on the specific structure of the ZSF set. This might mean uniqueness is actually essential for the proof.
+
+Let me store these results and write up the summary. I should also verify whether shadow completeness holds for subsets of S17, like the 8-vector A8 in F_p^3. According to the Gap Hypothesis, A8 doesn't achieve shadow completeness at weight p-1; there's a gap of (p-3)/2 uncovered vectors of the form (0,j,j).
+
+But S17 with its 17 vectors does achieve completeness. The extra 9 vectors from fiber 1 plus e1 fill in exactly those gaps that A8 left behind. This makes sense: S17 is essentially doubled A8 plus e1, and the cross-fiber coverage from doubling eliminates the gaps.
+
+For an inductive argument, I'd need to check whether the pattern holds: if S_{2α(r)+1} = doubled(S_{α(r)}) + e_1 in F_p^{r+1}, does its shadow become complete at weight p-1? That's the key question for scaling this up.
+
+I have enough data now to document this and write the summary. One more valuable computation would be finding the minimum weight at which shadow completeness first appears.
+
+Looking at the cumulative coverage across all tested primes, the threshold appears to be W* = p-1 consistently. But I should verify whether this is tight—whether there actually exist vectors that require weight exactly p-1 to reach, or if completeness happens earlier for all of them.
+
+Examining the shadow data more carefully, I can see that at weight p-2, the cumulative count falls short of the full space, but adding weight p-1 vectors closes the gap completely. This confirms that some vectors genuinely require the maximum weight p-1 to be reachable. The question now is which specific vectors these are—the ones that lie in the difference between what's reachable at weight p-1 versus weight p-2.
+
+Rather than continue drilling into individual cases, I have enough evidence to write up the main findings. Let me compute the cumulative shadow sizes across all weights to get a clearer picture of how the reachable space grows.
+
+============================================================
+BLOCK 10 (3275 chars)
+============================================================
+Incredible data! Let me analyze the key structural findings from the cumulative shadow:
+
+1. **Shadow saturation at w = p-1 for ALL primes**: Confirmed for p=5,7,11,13.
+
+2. **Vectors needing weight exactly p-1**: The structure is very clear!
+   - For p≥7: fibers 0 through p-2 each have the SAME count (50 at p=7, 74 at p=11, 86 at p=13)   - Fiber p-1 has a MUCH larger count (343 at p=7, 1331 at p=11, 2197 at p=13)
+   - The fiber p-1 count equals p³ exactly, and at p=5 this pattern holds too with fiber 4 containing 125 = 5³ vectors.
+
+3. **The fiber p-1 gap vectors follow a precise structure**: All p³ vectors in the highest fiber have first coordinate p-1, taking the form (p-1, a, b, c) where the remaining coordinates range freely.
+
+Now I'm working through why reaching fiber p-1 requires a specific combination of coefficients—the fiber 0 vectors contribute nothing to the first coordinate, while fiber 1 vectors like (1,0,0,0) contribute their coefficients directly, and I need to verify how these sum to exactly p-1 modulo p. So the total weight constraint across all 17 vectors is at most p-2, and since fiber-0 vectors don't contribute to the first coordinate, the first coordinate equals the sum of coefficients for fiber-1 vectors, which is bounded by p-2. This means reaching first coordinate p-1 is impossible at weight ≤ p-2, so every vector in fiber p-1 must have weight exactly p-1. Now I'm looking at the structure of fibers 0 through p-2, where each contains a small number of vectors that appear only at higher weights.
+
+These "late" vectors are scattered across the reachable fibers but require high weight because their last three coordinates are positioned far from what the shadow can easily reach. Let me verify the pattern by checking how these counts distribute: the number of late vectors per fiber times the number of reachable fibers, plus the contribution from fiber p-1, consistently matches the total count across different primes.
+
+Now I'm looking at the per-fiber counts—38, 50, 74, 86—and their differences to see if there's an underlying formula, then trying to characterize exactly which vectors in each fiber need weight p-1 by checking reachability conditions from the initial set. IS reachable at weight p-1.
+
+For the first coordinate: reaching fiber f requires Σ_{i in fiber 1} c_i ≡ f (mod p), with total weight ≤ p-2. Since Σ_{fiber 1} c_i ≤ p-2, we can reach f ∈ {0, 1, ..., p-2} directly.
+
+For the last 3 coordinates: we need to reach (a, b, c) using the available vectors in fiber 0 (with any coefficients) and fiber 1 (with coefficients constrained by the first-coord requirement). This is a complex constraint.
+
+The per-fiber count pattern (38, 50, 74, 86) suggests something close to p^2, though the exact formula isn't obvious. For p=7 I get 50 = p^2 + 1, but this doesn't generalize cleanly to the other primes. Let me dig into the actual gap vectors at p=7 to understand what's happening with the weight-6 cases in fiber 0. I'm verifying that the cumulative shadow sizes at weights 0 through 2 are indeed independent of the prime—weight 0 always has 0 nonzero vectors, weight 1 contributes exactly 17 new targets from the S17 basis, and weight 2 reaches 104 cumulative across all primes p≥5. Now I'll store these results.

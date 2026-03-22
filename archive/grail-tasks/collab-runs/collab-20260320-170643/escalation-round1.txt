@@ -1,0 +1,51 @@
+# CONVERGENCE AND CONTRADICTION ANALYSIS
+
+## CONVERGENCE
+
+**CLAIM: The Window Structure formula is analytically provable**
+- **THEORIST** reported: Complete proof construction showing lower bound j ≥ ⌈w/2⌉ from 2j ≥ w constraint, upper bound j ≤ 2⌊w/2⌋ from integrality, with explicit achievability.
+- **COMPUTER** reported: "MAJOR RESULT: The Window Structure is PROVED analytically!" Verified computationally for p ≤ 47, with DP matching formula exactly.
+
+**[HIGH CONFIDENCE]** Window Structure (Sub-problem A) has been analytically proven and computationally verified across multiple prime values. The formula ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ is established.
+
+---
+
+**CLAIM: Sumset completeness holds trivially**
+- **COMPUTER** stated: "SUMSET COMPLETENESS IS TRIVIALLY TRUE: For ANY set S in F_p^d and j+k ≤ p-1, Σ_j(S) + Σ_k(S) = Σ_{j+k}(S)" with proof via coefficient splitting and overflow argument.
+- **ADVERSARY** implicitly tested this (attempted sumset_full.py) but reported testing was incomplete/ongoing.
+
+**[HIGH CONFIDENCE]** Sumset completeness is theoretically sound and eliminates Task 4.
+
+---
+
+## SHARED FAILURE
+
+**OBSTRUCTION: Window structure unbroken at small primes**
+- **COMPUTER** reported: "Window structure: UNBROKEN at all primes p=5..23. Gap at weight p-1 matches prediction exactly."
+- **ADVERSARY** reported: "Window structure: UNBROKEN at all primes p=5..23."
+
+**[POSSIBLE FALSE CONJECTURE]** The window structure formula appears robust even under systematic adversarial search. No counterexample found at p ≤ 23.
+
+---
+
+**OBSTRUCTION: 3-fiber U1 unbroken at p=5**
+- **COMPUTER** stated: "3-fiber U1: UNBROKEN at p=5. All 93 (8,8,1) configs have zero-sums."
+- **ADVERSARY** stated: "Two (8,7,2) survivors at p=5. But my check was incomplete..."
+
+**[NEEDS RESOLUTION]** ADVERSARY found potential counterexample configs at p=5 but acknowledged incomplete verification (only tested extra vectors individually, not full DP). COMPUTER reported universal containment. The (8,7,2) survivors require full DP verification to resolve whether they genuinely avoid zero-sums.
+
+---
+
+## CONTRADICTION
+
+**ISSUE: Sumset completeness verification status**
+- **COMPUTER** declared sumset completeness proven theoretically and eliminated Task 4 as "trivially true."
+- **ADVERSARY** attempted computational verification (adversary_sumset_full.py) but reported results incomplete, suggesting the claim still needs empirical validation on full F_p^3 (not restricted to line L).
+
+**[NEEDS RESOLUTION]** Is sumset completeness empirically verified or still theoretical? COMPUTER's proof appears sound but ADVERSARY's incomplete test suggests verification was not yet finished.
+
+---
+
+## SUMMARY
+
+| Finding |

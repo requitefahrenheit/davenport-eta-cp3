@@ -1,0 +1,641 @@
+
+============================================================
+BLOCK 1 (139 chars)
+============================================================
+Let me start by searching Cortex for relevant prior computations and reading the key files to understand the current state of the research.
+
+============================================================
+BLOCK 2 (2268 chars)
+============================================================
+Now I have a clear picture of the state of affairs. Let me understand what COMPUTER needs to do in Round 3:
+
+From the Coordinator's directives:
+1. Complete and report exact count of strongly ZSF 17-sets at p=7 (tail-replacement vs. other)
+2. For each p=7 CE, verify GRAIL closure (adding any 18th vector yields weight-p zero-sum)
+3. Confirm the formula: #(CEs at p=7) = orbit-size-formula
+
+From the Adversary's R3 final report, key open questions:
+1. Does the window hold at larger p for non-A₈ classes? Verified only at p=5. Need p=7,11
+
+
+2. Is the kernel weight gap universal?
+3. Window formula verification at p=29, 31, 37
+
+So my actual priorities are verifying the window structure across p = 29, 31, 37, checking whether the (8,7,2) distribution pattern holds at p = 5 and 7, testing if the window structure extends to other maximal ZSF sets beyond A₈, and confirming that sumset completeness holds at the larger primes.
+
+Since this is my final round, I need to focus on what's most definitive: exhaustively enumerate all strongly ZSF 17-sets at p=7 that arise from same-tail swaps and verify GRAIL closure for each, confirm the window formula works at p=29, 31, 37 for the A₈ class, test whether non-A₈ classes follow the same window pattern at p=7, and determine if the kernel weight gap is truly universal across all these cases.
+
+Writing comprehensive Python scripts to systematically work through these verification tasks... Let me write a comprehensive computation script.
+
+Actually, let me think about what's most valuable. The key open questions from the synthesis:
+
+1. **p=7 CE enumeration + GRAIL closure** - This is the #1 priority
+2. **Non-tail-replacement CE search** - Important for U1' validation
+3. **Window formula at large primes** - Already verified through p=23 for A₈; extending to p=29,31,37
+4. **Non-A₈ window at p=7** - Important for universality
+
+Let me structure my computations carefully. I'll write Python scripts and run them.
+
+First, let me understand the A₈ construction. A₈ is a set of 8 vectors in F_p^3, and the standard 17-set construction uses doubled(A₈) + e₁ in F_p^4—this gives 8 vectors in fiber 0, 8 vectors in fiber 1, and the element e₁ = (1,0,0,0). I need to check the existing scripts to see exactly how A₈ is defined.
+
+============================================================
+BLOCK 3 (48874 chars)
+============================================================
+Good, I have a clear picture now. Let me design the definitive computations for Round 3. I need to:
+
+1. **p=7 Complete CE Enumeration**: Enumerate ALL same-tail swap variants at p=7, check each for strongly ZSF, count fiber signatures, verify GRAIL closure
+2. **Window formula at p=29, 31, 37**: Extend verification to larger primes
+3. **Non-A₈ window at p=7**: Find non-A₈ strongly ZSF 8-sets at p=7 and check window on all lines
+4. **Kernel weight gap**: Check if minimum nonzero kernel weight = p+1 for all strongly ZSF 17-sets
+
+
+5. **(8,7,2) distribution check**: Verify if any (8,7,2) config at p=5,7 is strongly ZSF
+
+I'll organize these as separate parallel scripts, prioritizing the most impactful ones: the full p=7 enumeration with GRAIL closure and orbit counting, the window formula verification at p=29 and p=31 (skipping p=37 since shadow computation gets expensive), and the non-A₈ ZSF 8-sets search.
+
+Then I need to add the strong ZSF check for (8,7,2) at p=5 and p=7, plus verify sumset completeness at p=29. For feasibility, shadow computation on 8 vectors in F_p^3 should work fine—at p=29 that's 24,389 states with manageable DP, and even p=37 with 50,653 states is reasonable. The p=7 enumeration with same-tail swaps across 17 vectors is where I need to watch the complexity.
+
+For the same-tail swap strategy at p=7, I'm looking at replacing each vector's fiber value while keeping its tail fixed. With 6 possible fiber values and 16 A₈ vectors, that's 5 alternative swaps per vector, giving roughly 80 single-swap candidates. The 17th vector e₁ can shift to (c,0,0,0) for c ∈ {2,...,6}, adding 5 more variants. I need to clarify exactly what "same-tail swap" means—it's replacing a vector (f, t₁, t₂, t₃) with a different fiber value while preserving the tail coordinates. and replace it with (f', t₁, t₂, t₃) where f' ≠ f. But f' must not create a proportionality with another vector. Actually, the strong ZSF check is the verification step.
+
+Let me also consider: at p=7, the A₈ set in F_7^3 is:
+A₈ = [(1,0,0), (0,1,0), (0,0,1), (6,1,1), (1,1,0), (1,0,1), (6,2,1), (6,1,2)]
+
+The doubled+e₁ construction: 8 vectors with first coord 0, 8 with first coord 1, plus e₁=(1,0,0,0).
+
+For same-tail swaps: I can take any of the 16 A₈-copied vectors and change its first coordinate to something in {0,1,...,6} different from what it currently is, as long as I maintain the nonzero and no-proportionality conditions that define strong ZSF—which means no zero-sum with weight ≤ p using coefficients in {0,...,p-1}.
+
+Now I need to focus on what matters most: getting the exact count of strongly ZSF 17-sets at p=7 that arise from same-tail swaps, and then checking GRAIL closure by verifying that adding any 18th vector to each candidate set forces a weight-≤-p zero-sum.
+
+I also need to handle the window formula at p=29, 31, 37 and search for non-A₈ GL classes at p=7. So I'll write three scripts: one for the p=7 same-tail swap enumeration with GRAIL closure and fiber signatures, one for the window formula and sumset completeness at p=29 and 31, and one for finding non-A₈ ZSF 8-sets at p=7 and checking window universality.
+
+Writing the scripts now...
+
+Constructing the A₈ set for p=7 with the standard definition, then lifting it to F_7^4 by adding a fiber coordinate...
+
+Now I'm working through the same-tail swap operations: for each of the 16 vectors I've constructed, I can modify the first coordinate to any value in {0,...,6} except its current one. This gives 6 options for fiber-0 vectors, 6 options for fiber-1 vectors, and 5 options for e₁ (excluding the zero vector). But I need to be careful about proportionality—if any two vectors become scalar multiples of each other after these swaps, they'd violate the independence requirement. I'm working through the constraint more carefully—when two identical vectors form a zero-sum, the coefficients must sum to zero mod p, giving a minimum weight of exactly p. But the strong ZSF condition excludes all zero-sums with weight between 1 and p inclusive, so even weight p is forbidden. weight ≤ p" means sum of coefficients ≤ p. The condition is that the set is "strongly zero-sum free" at weight ≤ p.
+
+Actually, I think the condition is: for any coefficients c₁,...,cₙ ∈ {0,...,p-1} with 1 ≤ Σcᵢ ≤ p, we have Σcᵢvᵢ ≠ 0 mod p.
+
+So for two identical vectors v, v: c₁v + c₂v = (c₁+c₂)v = 0 requires c₁+c₂ ≡ 0 mod p. With c₁, c₂ ∈ {1,...,p-1} (both nonzero since they're in support), minimum is c₁ = 1, c₂ = p-1, weight = p. So yes, weight-p zero-sum exists for identical vectors.
+
+This means identical vectors are forbidden since the strongly ZSF condition requires no zero-sums at weight ≤ p. But in the doubled+e₁ construction, the 16 vectors include pairs like (0,1,0,0) and (1,1,0,0) that share the same tail but differ in their fiber values—these aren't identical. For same-tail swaps where I change one vector's fiber value, I need to ensure the new vector is nonzero and satisfies the constraints.
+
+I'll implement this carefully: for each of the 17 vectors, try all p-1 alternative fiber values, verify the new vector isn't zero and doesn't duplicate an existing one, then run the DP check. At p=7 with 17 vectors, the DP has 2401 states across 8 weight levels, which is computationally fast. I should also search for non-swap counterexamples—configurations not derived from same-tail swaps of the standard doubled+e₁ construction, since the coordinator specifically asked about those.
+
+Now I'm realizing the scope: I need to check whether any 3-fiber strongly ZSF 17-sets exist outside the doubled+B+e₁ family obtained by same-tail swaps. That's a much larger search space. The adversary already found 4 GL classes of ZSF 8-sets at p=5, each giving a doubled+B+e₁ construction, but the question is whether any 17-sets fall outside this pattern.
+
+Given computational constraints, I'll focus on what's tractable: complete enumeration of same-tail swaps at p=7 with GRAIL closure verification, a window search at p=29, 31, 37, and examining non-A₈ ZSF 8-sets at p=7 along with their doubled+B+e₁ constructions and shadow saturation behavior.
+
+For the p=7 swap script, I need to be careful about efficiency. With 17 vectors in F_7^4, each can undergo about 5 fiber changes, giving roughly 85 single swaps. Each DP check runs through 8 weight levels across 2401 states per vector, which is manageable. The GRAIL closure step is the bottleneck—for each candidate set, I'd need to test whether adding any of the 2400 nonzero vectors outside the set creates a weight-≤-7 zero-sum, which gets expensive quickly.
+
+The key optimization is caching the DP state for the 17-set, then for each candidate 18th vector, I just extend the DP once rather than recomputing from scratch. I check whether adding that vector to any existing state produces zero at some weight between 1 and p, which is a straightforward lookup across the cached states.
+
+Now I need to prioritize what to verify: confirming the 324 CE count at p=5, checking whether all p=7 CEs are same-tail swaps, testing the GRAIL closure claim that every CE blocks all possible 18th vectors, and extending the window formula verification to p=29, 31, and 37. Let me write the comprehensive script to tackle these.
+
+For p=5, I'm trying to reconcile the 324 CE figure with the adversary report's 51 single same-tail swaps—the larger number might come from multi-swaps or from counting across all GL conjugacy classes rather than just the single-swap cases.
+
+Looking at the structure: the standard A₈ configuration gives 52 variants (1 standard + 51 swaps), but then there are additional ZSF 8-sets at higher dependency levels (14 found at dep=5, 18 at dep=6, 24 at dep=7), and each of these generates its own doubled+B+e₁ construction with its own set of same-tail swap variants.
+
+But wait—the coordinator's conjecture specifically mentions fiber type (8,7,2), while the adversary's counterexamples have fiber types (8,8,1) and (9,7,1). That's a discrepancy I need to resolve, since the 324 cardinality claim might be referring to a different set of configurations than what was actually found.
+
+Let me refocus on what I can actually verify. I'll run three concrete computations: first, exhaustively generate all strongly ZSF 17-sets from doubled(A₈) plus any ZSF 8-set B using single same-tail swaps at p=5, then classify them by GL class and fiber signature; second, repeat this at p=7; and third, test the window formula at p=29 and 31.
+
+The real gaps are whether p=7 shows the same universal structure as p=5, whether the window formula holds at larger primes, and whether (8,7,2) configurations can actually be strongly ZSF. I'll prioritize computing the p=7 picture completely and testing the window formula, then investigate the (8,7,2) case.
+
+Writing efficient scripts to handle this...
+
+Actually, the brute force approach won't work—searching through C(342,8) ≈ 2.7×10^16 possible 8-sets in F_7^3 is computationally infeasible. The adversary must have used a tree search with aggressive pruning to make this tractable.
+
+I'll build the set incrementally, checking for zero-sums at each step and discarding branches that violate the ZSF constraint. At p=7 with α=8, I need 8 vectors where no subset sums to zero at weight ≤ 7. The pruning kicks in hard early on—most candidates get eliminated because they'd create forbidden zero-sums with vectors already in the set.
+
+The full tree search to depth 8 might still be computationally expensive at p=7 though. Given that p=5 already timed out with 124 vectors and only 31 projective points, p=7's 342 vectors could make exhaustive enumeration impractical. I should probably shift focus to verifying the window formula structure at larger primes, which is the real mathematical insight, and then tackle p=7 using the same-tail swap approach with the alternating group.
+
+For p=7, I can instantiate A₈ directly with the specific coordinates, substituting 6 for p-1 in the formula.
+
+Now I'm planning a comprehensive script that will enumerate all same-tail swaps of the doubled A₈ set plus e₁, verify GRAIL closure for each candidate, and test the window formula across all projective lines. I should also run the window check at p=29 to gather more evidence.
+
+The main gaps I need to address are whether the window formula holds universally beyond p=23, whether shadow saturation is truly universal at p=7, and confirming GRAIL closure for the p=7 case.
+
+Writing computational scripts... For the doubled+A₈+e₁ construction, I need to verify that adding any 18th vector creates a weight-≤-p zero-sum—that's the GRAIL closure property. So I'm planning two computational approaches: first, a script to enumerate same-tail swap variants at p=7 and check whether each is strongly zero-sum-free with weight ≤ p, compute its fiber signature under coordinate 0, and test GRAIL closure by checking if every vector outside the set would create a forbidden zero-sum when added. Second, I'll compute the window formula at larger primes like p=29 and 31 to evaluate the A₈ configuration in F_p^3.
+
+Now I'm estimating the runtime for the shadow computation. At p=29 with 8 vectors in dimension 3, the DP approach tracks states across F_29^3 (about 24k elements), extending them for each vector and coefficient—roughly 20 million operations per vector, so 160 million total, which should finish in seconds. At p=31 the cost climbs to around 480 million operations, maybe 30 seconds, and p=37 gets even larger.
+
+I'll stick with p=29 and p=31 to keep things tractable. Though I should be more careful about the actual state space—the DP maintains reachable vectors at each weight level, and while the theoretical maximum is 24k states per weight, in practice it's much smaller since we're only tracking what's actually reachable. Memory-wise, with 29 weight levels and bounded reachable states, this should be manageable.
+
+The real bottleneck is the inner loop: for each vector, weight level, and reachable state, I'm trying all possible coefficients up to the remaining weight budget. The state sets start small but grow exponentially as I add more vectors—by the time I've processed 5-6 vectors, many combinations become reachable and the sets balloon, though they'll eventually saturate.
+
+For p=29 with 8 vectors in F_29^3, the shadow should saturate the full space minus the origin fairly quickly, around w=14 based on the window formula. This should be computationally manageable.
+
+Now I'm thinking about what would give the most definitive results: I need to count strongly ZSF 17-sets at p=7 (distinguishing same-tail swaps from other configurations), verify GRAIL closure for each p=7 configuration, and confirm the orbit-size formula. I'll start by enumerating all single same-tail swaps at p=7 and testing each one, then verify GRAIL closure for the configurations that emerge.
+
+The most impactful next step is extending the window formula computation to p=29 and p=31 to push the frontier further. I'll write three parallel scripts to handle this: one for complete p=7 swap enumeration with GRAIL closure verification, another for the window formula at the larger primes, and a third for orbit-size analysis.
+
+Writing the computational scripts... I'm working through the most efficient approach for checking GRAIL closure: first run dynamic programming on the 17-set to compute reachable weight states, then for each candidate vector, check if adding it would create a zero-sum by testing whether the negated multiples of that vector appear in the precomputed states. ≤ 6 and w + c ≤ 7.
+
+So the algorithm is: for each coefficient c from 1 to 6, I compute the target vector as (-c*v) mod 7, then check whether that target appears in any of the reachable states at weights w where w + c stays within the bound of 7.
+
+Now I'm implementing this efficiently to compute the full GRAIL closure of all constraint equations at p=7.
+
+Writing the analysis script... I'm setting up verification scripts for the window formula at specific primes and checking whether certain fiber distributions can achieve strong zero-sum-free properties, along with counting the multi-swap configurations to validate the expected count. to 16 swaps, that's exponential in complexity. Let me reconsider the structure: for p=5, I have 17 vectors total, and each same-tail swap reassigns a vector's fiber coordinate. The combinatorial space explodes quickly—C(17,k) × (p-1)^k possibilities for k-fold swaps, but many create duplicates. I should focus on the actual fiber assignment space instead: each of the 16 A₈ vectors can live in either fiber 0 or 1, giving me a more tractable counting problem.
+
+Actually, thinking about this more carefully: each of the 8 A₈ tails appears twice, and I'm reassigning which fiber each copy occupies, while e₁ can take any fiber except 0. That's p^16 × (p-1) total configurations at p=5, which is around 6 × 10^11—far too large to brute force. But there might be structural constraints I'm missing that drastically reduce the valid configurations.
+
+Most reconfiguration attempts won't preserve the same tails, and the adversary's findings suggest that different-tail swaps consistently break the ZSF property. So I should focus on same-tail swaps. For single swaps, each of the 16 tail-copied vectors can switch to one of p-2 other fiber values, plus e₁ can switch to one of p-2 others—that's 51 possibilities at p=5, and the adversary confirmed all 51 are strongly ZSF. Double swaps expand to around 1224 candidates at p=5, though many will either duplicate or violate ZSF.
+
+The adversary's data shows that all 2048 cross-tail double swaps maintain ZSF, while none of the 49512 multiset-breaking double swaps survive. This means multiset-preserving swaps—where the collection of tail values stays the same—are the key. For the doubled+A₈+e₁ structure, the tails form a multiset with each A₈ vector appearing twice plus a single 0, and a valid reassignment just shuffles which fibers get paired with which tails while keeping that multiset intact. The real constraint is preventing duplicate vectors, which happens when two vectors share both the same tail and the same fiber.
+
+In the standard setup, each A₈ tail appears in exactly two fibers (0 and 1), and swapping fibers—say moving one copy of t₁ from fiber 0 to fiber 2 and the other from fiber 1 to fiber 3—keeps them distinct. So the space of valid assignments is choosing 2 distinct fibers from {0,...,p-1} for each of the 8 A₈ tails, where ordered pairs like (a,b) and (b,a) represent different assignments even though they're the same unordered pair.
+
+Actually, wait—the two copies of each tail are indistinguishable except by their fiber location, so swapping fibers (a,b) versus (b,a) gives the same multiset {(a,t), (b,t)}. That means I should count unordered pairs instead. For p=5, that's C(5,2) = 10 choices per tail, giving 10^8 total assignments across all 8 tails, though e₁ with its (0,0) tail needs separate handling.
+
+Now I'm realizing the adversary's statement about "2048 cross-tail double swaps" is specifically about swaps affecting different tails, and I need to figure out which of these configurations are actually strongly ZSF.
+
+The key insight is that the Tail Invariance Theorem tells me the ZSF property depends only on the tail multiset—so any swap that preserves the tail multiset (same-tail swaps) keeps the property intact, but swaps that change which tails appear break it. Since all 2048 cross-tail swaps tested were strongly ZSF while all multiset-breaking swaps failed, this confirms that fiber reassignments alone preserve strong ZSF as long as the tail structure stays the same. For the 17-sets derived from A₈ at p=5, I can independently choose 2 distinct fibers from {0,1,2,3,4} for each of the 8 tails (10 ways each) and pick a nonzero fiber for e₁ (4 ways), giving 10^8 × 4 configurations total.
+
+Now I'm realizing the 400 million count seems too high—the coordinator specifically mentions 324 confirmed counterexamples, which are strongly ZSF 17-sets using 3 or more fibers, contradicting the U1 conjecture. Let me reconsider what the actual constraint is here. uses exactly 2 fibers (0 and 1), so it's NOT a counterexample to U1. The CEs are configurations that use 3+ fibers.
+
+But if the Tail Invariance Theorem says all fiber assignments with distinct fibers per tail are strongly ZSF, then ANY assignment that uses 3+ distinct fiber values is a CE to U1.
+
+How many such assignments use ≤ 2 fibers? We need ALL fiber values to come from a set of size 2. Say the fibers used are {a,b}. Then each tail gets fibers from {a,b}, and e₁ gets fiber from {a,b} ∩ {1,...,4}.
+
+For fibers {0,1}: each tail gets the pair {0,1}, e₁ gets fiber 1, giving exactly 1 configuration. For any other fiber pair {a,b} where a ≠ b and both are in {0,...,4}, there are C(5,2) = 10 possible choices, and for each pair, every tail gets {a,b} while e₁ gets a fiber from their intersection.
+
+When 0 is in the pair, e₁ has only 1 choice (the nonzero element). When 0 isn't in the pair, e₁ has 2 choices. So the 4 pairs containing 0 each give 1 configuration, and the 6 pairs not containing 0 each give 2 configurations, for a total of 4 + 12 = 16 configurations using at most 2 fibers.
+
+Now I need to count configurations using 3+ fibers. The total number of fiber assignments is 5^9 (each of 9 edges gets a fiber from {0,...,4}). Subtracting the 1-fiber and 2-fiber cases gives the count of 3+-fiber assignments.
+
+For 1-fiber assignments, all 9 edges get the same fiber, so there are 5 such assignments. For 2-fiber assignments, I just calculated 16. So the number of 3+-fiber assignments is 5^9 - 5 - 16.
+
+Let me compute 5^9: 5^2 = 25, 5^3 = 125, 5^4 = 625, 5^5 = 3125, 5^6 = 15625, 5^7 = 78125, 5^8 = 390625, 5^9 = 1953125.
+
+So the number of CEs to U1 is 1953125 - 5 - 16 = 1953104.
+
+Now I need to verify this makes sense. The Tail Invariance Theorem says that if all tails have distinct fibers, the assignment is strongly ZSF. So CEs to U1 are exactly those where NOT all tails have distinct fibers. But wait, that's not the same as using 3+ fibers...
+
+Let me reconsider. The theorem says: if all 8 tails have distinct fibers, then the assignment is strongly ZSF. So a CE to U1 is an assignment where NOT all 8 tails have distinct fibers. That means at least 2 tails share the same fiber.
+
+But I was counting assignments by the number of distinct fibers used overall. That's different. An assignment could use 5 distinct fibers overall but still have 2 tails sharing a fiber.
+
+So I need to count assignments where at least 2 of the 8 tails share a fiber. The complement is assignments where all 8 tails have distinct fibers.
+
+For all 8 tails to have distinct fibers, they must use 8 distinct values from {0,...,4}. But there are only 5 values, so this is impossible. Therefore, every assignment has at least 2 tails sharing a fiber, so every assignment is a CE to U1.
+
+Wait, that can't be right either. Let me re-read the theorem statement...
+
+Actually, I think I misunderstood. Let me reconsider what "distinct fibers" means. Maybe it means the 8 tails get 8 distinct fiber values, which is impossible since there are only 5 fibers. So the theorem's hypothesis is never satisfied, making it vacuously true.
+
+But that seems odd. Let me think about what the theorem is really saying. Maybe "distinct fibers" means something else, like each tail gets a different fiber value from the others. If there are only 5 fibers and 8 tails, then by pigeonhole, at least 2 tails must share a fiber. So the hypothesis is indeed never satisfied.
+
+This suggests the theorem is vacuously true, and every assignment is a CE to U1. But that seems too strong. Let me reconsider the problem setup...
+
+Actually, maybe the theorem is stated differently. Let me assume it says: if the 8 tails use at least 8 distinct fibers, then the assignment is strongly ZSF. But since there are only 5 fibers, this is impossible, so the theorem is vacuous.
+
+Alternatively, maybe the theorem says: if the 8 tails use all 5 fibers (i.e., each fiber is used by at least one tail), then the assignment is strongly ZSF. In that case, CEs to U1 are assignments that don't use all 5 fibers, i.e., assignments that use at most 4 distinct fibers.
+
+Let me count those. The number of assignments using at most 4 
+
+distinct fibers is the number of surjections from 9 edges to a subset of size at most 4 of {0,...,4}.
+
+Actually, I think I'm overcomplicating this. Let me just accept that the total count is 1953104 and move on.
+
+Wait, I realize I should double-check my logic on the fiber assignment count. Each tail has C(5,2) = 10 unordered pairs of edges. For each pair, I assign two distinct fibers from {0,1,2,3,4}. That's P(5,2) = 20 choices per pair. With 8 tails, that's 20^8 = 25,600,000,000 total assignments.
+
+But I need each tail to have distinct first coordinates. For a given tail, if I pick fibers (a,b) and (c,d) for two different pairs, I need a ≠ c. The number of ways to assign fibers to 10 pairs such that all first coordinates are distinct... hmm, this is getting complicated.
+
+Actually, maybe I should just write code to enumerate and count directly rather than trying to derive a formula. at p=29, 31
+
+Actually, let me think more carefully about what "same-tail swap" means in practice.
+
+The standard config at p=5:
+Fiber 0: (0,1,0,0), (0,0,1,0), (0,0,0,1), (0,4,1,1), (0,1,1,0), (0,1,0,1), (0,4,2,1), (0,4,1,2) — 8 vectors
+Fiber 1: (1,1,0,0), (1,0,1,0), (1,0,0,1), (1,4,1,1), (1,1,1,0), (1,1,0,1), (1,4,2,1), (1,4,1,2) — 8 vectors
+
+Now I'm recounting with e₁ = (1,0,0,0) included in fiber 1, giving me a distribution of (8,9) across the two fibers. Under U1's definition with at most 2 hyperplane fibers, this qualifies as 2 fibers. A same-tail single swap would involve swapping vectors while preserving their tail structure.
+
+If I swap one of the 8 fiber-0 vectors by changing its first coordinate from 0 to some value c ∈ {1,2,3,4}, it moves to fiber c. When c=1, it merges with fiber 1 (leaving fiber 0 with 7 vectors and fiber 1 with 10). For c ∈ {2,3,4}, it creates a new fiber entirely, leaving fiber 0 with 7 vectors, fiber 1 with 9, and a singleton fiber c.
+
+Similarly, swapping one of the 8 fiber-1 A₈ vectors by changing its first coordinate from 1 to c ∈ {0,2,3,4} either moves it to fiber 0 (giving fiber 0 nine vectors and fiber 1 eight) or creates a new fiber for c ∈ {2,3,4}.
+
+Now I'm counting these by distribution type: moving a fiber-0 vector to fiber 1 gives the (7,10) distribution, while moving it to any of the three new fibers gives (7,9,1) — that's 24 cases total. For the fiber-1 vectors, moving to fiber 0 creates a different distribution, and I need to continue tracking the fiber-1 to new fiber cases. The fiber distributions match the adversary's counts perfectly—27 configurations with (8,8,1) and 24 with (9,7,1)—confirming that (8,7,2) can't be achieved with a single swap. Now I'm exploring whether a double swap can produce (8,7,2) by moving two vectors strategically between fibers. from fiber 0 and 1 from fiber 1 to the same new fiber: (7,8,2). Which sorted is (8,7,2).
+- Or moving 1 from fiber 0 to fiber 1 and 1 from fiber 1 to new c: (7,10,...) minus 1 from fiber 1 = (7,9,1)... no, let me think more carefully.
+
+Actually for (8,7,2):
+Starting from (8,9) on fibers {0,1}:
+- Move 2 from fiber 1 to fiber c: (8, 7, 2). ✓ Two fiber-1 vectors move to same new fiber.
+  Count: C(9,2) × 3 = 36 × 3 = 108 (but one of the 9 is e₁, and 8 are A₈ vectors)
+  Actually C(9,2) counts pairs among the 9 fiber-1 vectors. But we need to be more careful: we're changing the fiber of each to some c. For both to go to the same fiber c, we need c ∈ {2,3,4}: 3 choices. Pairs of fiber-1 vectors: C(9,2) = 36. But wait, can we move e₁? Yes, e₁ = (1,0,0,0) can go to (c,0,0,0) for c ≠ 0. Total: 36 × 3 = 108 candidates.
+
+But these are "2-swaps to the same new fiber", not all of which are same-tail. I need to distinguish between what counts as a valid same-tail configuration.
+
+A same-tail swap means each vector keeps its tail and only changes fiber. For the (8,7,2) distribution, I can either move 2 fiber-1 vectors to the same new fiber (giving 108 ways), or move 1 fiber-0 and 1 fiber-1 vector to the same new fiber. For the second case, the fiber-0 vector can go to any of {1,2,3,4}, and the fiber-1 vector must go to the same fiber. to fiber c ∈ {0,2,3,4}
+  - Both to same c: c must be in {2,3,4} (since fiber-0 vector can't stay at 0 and fiber-1 can't stay at 1)
+  Wait, fiber-0 vector goes from 0 to c (c≠0), fiber-1 vector goes from 1 to c (c≠1). Both to same c: c ∈ {2,3,4}.
+  Result: fiber 0 loses 1 (→7), fiber 1 loses 1 (→8), fiber c gains 2 (→2). Distribution: (7,8,2).
+  Count: 8 × 9 × 3 = 216. 
+
+Hmm wait, sorted it's (8,7,2)
+
+So the total comes to 108 + 216 = 324 configurations. This matches the coordinator's count. Let me break down what's happening: moving two fiber-1 vectors to the same new fiber gives 36 pairs times 3 choices for the destination, yielding 108. Then moving one vector from fiber 0 and one from fiber 1 to the same new fiber c ∈ {2,3,4} gives another 216 configurations, for a total of 324 double-swap arrangements that result in distribution (8,7,2).
+
+Now I need to verify whether all 324 of these are strongly ZSF. The Tail Invariance Theorem says they should be, as long as each pair of same-tail vectors stays in distinct fibers. In Case 1, when I move two fiber-1 vectors with different tails, each tail's copies remain spread across different fibers, so no duplicates form. But if those two vectors share the same tail, they'd both end up in fiber c, which would create duplicates and violate the ZSF property.
+
+However, looking at the actual fiber-1 vectors: the 8 A₈ vectors each have distinct tails, and e₁ has tail (0,0,0) which doesn't appear in A₈. So all 9 fiber-1 vectors have distinct tails, meaning I can never move two vectors with the same tail from fiber 1.
+
+In Case 1, when I move 2 fiber-1 vectors with distinct tails to fiber c, their other copies stay in fiber 0, so each tail ends up split between fiber 0 and c. The remaining 7 fiber-1 vectors keep their tails split between fiber 0 and 1. In Case 2, I'm moving one vector from fiber 0 and one from fiber 1 to fiber c. If their tails are different, each tail gets split between two distinct fibers. If the tails are the same, then moving the fiber-0 copy to c while the fiber-1 copy also goes to c would put both copies in the same fiber, which violates the constraint.
+
+So in Case 2, the tails must be different. The fiber-0 vectors have tails from {t₁,...,t₈}, while fiber-1 vectors have tails from {t₁,...,t₈,(0,0,0)}. I need to pick a fiber-0 vector with tail t_a and a fiber-1 vector with tail t_b where t_a ≠ t_b, which excludes the case where t_b equals t_a.
+
+For each of the 8 fiber-0 vectors, I can pair it with 8 of the 9 fiber-1 vectors (excluding the one sharing the same tail), giving 8 × 8 × 3 = 192 valid pairs. But that puts my total at 300, not 324, so something's off with my counting.
+
+Let me reconsider whether Case 2 should also account for moving a fiber-0 vector to fiber 1 while simultaneously moving a fiber-1 vector to a different fiber c, which might change the distribution differently.
+
+Actually, I'm questioning my assumption about the same-tail exclusion in Case 2. If both vectors have the same tail and I move them to fiber c, I'd create duplicate vectors in the configuration, which violates the set property. But I need to think about whether the "strongly ZSF" condition even applies to multisets or if it requires distinct vectors.
+
+Looking at this more carefully: if two vectors are identical, say v₁ = v₂, then I can construct a zero-sum using v₁ + (p-1)v₂ = 0 with total weight p. This means any configuration with duplicate vectors automatically fails the strongly ZSF requirement, so the same-tail exclusion is indeed necessary to avoid creating duplicates.
+
+This brings my valid Case 2 count to 192, making the total for (8,7,2) configurations without duplicates equal to 300. But I'm realizing there might be additional constraints I haven't fully accounted for yet.
+
+In Case 1, I'm moving two fiber-1 vectors to a new fiber c. Since all nine fiber-1 vectors have distinct tails, the two I move can't share a tail. And since c is a new fiber, there are no existing vectors there to conflict with. The moved vectors also can't match fiber-0 vectors since those have fiber 0, not c. So Case 1 seems clean.
+
+For Case 2, I need to verify that moved vectors don't accidentally duplicate anything else. A moved vector (c, t_a) could only match another moved vector if they share the same tail, which I've already excluded. And it can't match a fiber-0 vector since the fiber component differs.
+
+So my count of 300 holds. Now I'm checking if there are other configurations that yield the (8,7,2) distribution. In Case 3, I'd move one fiber-0 vector and one fiber-1 vector to the same new fiber c, leaving fiber 0 with 7 vectors, fiber 1 with 8 vectors, and fiber c with 2 vectors.
+
+The tails don't collide since the fiber-0 vector has a nonzero tail from A₈ while e₁'s tail is (0,0,0), giving me 8 × 3 = 24 configurations. Case 4 doesn't work because moving two fiber-0 vectors gives (6,9,2) when sorted, which isn't what I need. Let me continue checking the remaining cases. Looking at whether these cases overlap with my earlier ones—Case 5 is actually a subset of Case 1 since it's just moving two fiber-1 vectors (one being e₁ and one being an A₈ copy) to the same fiber, which falls within Case 1's C(9,2) × 3 framework. Similarly, Case 3 is contained in Case 2 when the fiber-1 vector happens to be e₁. So I need to avoid double-counting these overlaps in my final tally.
+
+For Case 2, let me be more precise about the counting: I pick one fiber-0 vector with some tail t_a (8 choices), then pair it with a fiber-1 vector whose tail differs from t_a. That fiber-1 vector can be any of the 7 A₈ copies with the remaining tails, or e₁ with tail (0,0,0), giving me 8 total choices for the second vector.
+
+Then I choose which fiber c gets the remaining 2 vectors (3 choices). This gives 8 × 8 × 3 = 192 pairs.
+
+Adding both cases: 108 + 192 = 300 total pairs. But wait—I should verify whether (8,7,2) can be achieved in other ways beyond just redistributing from the standard (8,9) configuration. I'm checking whether moving vectors to existing fibers or using multiple new fibers could also produce the (8,7,2) distribution, but neither approach works—moving to fiber 0 gives a 2-fiber solution, and splitting across two new fibers creates a 4-fiber solution. So Cases 1 and 2 are the only valid paths, totaling 300, which doesn't match the coordinator's 324.
+
+Rather than continue wrestling with the combinatorics by hand, I should just write code to compute this directly. My plan is to build two scripts: one that enumerates all same-tail single and double swaps for p=5 and p=7, checks the strongly ZSF condition for each, classifies by fiber distribution, and counts the (8,7,2) configurations to verify GRAIL closure; and another that computes shadows for A₈ at p=29 and p=31 to verify the window formula on the specific set L.
+
+For the double-swap enumeration, I'll iterate over all pairs of vectors and try all valid fiber reassignments for each, being careful to avoid duplicates.
+
+At p=5, that's roughly 2,176 candidates to check, and at p=7 around 4,896—both manageable since each DP verification runs in milliseconds. Adding single swaps (68 at p=5, 102 at p=7), the full enumeration should complete in under a minute.
+
+For the GRAIL closure check at p=7, I need to test whether adding any 18th vector produces a weight-≤-7 zero-sum configuration.
+
+Writing the implementation... Writing the fiber analysis script... Still writing the algorithm... Still writing the closure check... I'm realizing the DP tracks states up to weight p, so after processing all 17 vectors, states[w] contains all reachable sums at exactly weight w. For the GRAIL check with c ∈ [1, p-1] and s ∈ states[w], the constraint w + c ≤ p means w can range from 0 to p-1. But I also need to handle the edge case where the new vector has coefficient 0—meaning the zero-sum comes entirely from the original 17 vectors.
+
+Since the 17-set is strongly zero-sum-free, there's no such zero-sum, so I only need cases where the new vector participates with c ≥ 1. For the actual check, I'm looking for target = (-c*v) mod p in states[w], where w ranges from 0 to p-c. The tricky part is states[0] = {zero}, so when w=0, the target must be zero, which would require c*v ≡ 0 (mod p)—but since c ∈ [1, p-1] and p is prime, this means v = 0, which isn't possible.
+
+Now I'm restructuring the DP function to return either the states if the set is strongly ZSF, or failure information if it's not. I'm setting up the DP to iterate through vectors and build up reachable states...
+
+Writing the DP function... Now I'm analyzing the computational complexity at p=7: with up to 2401 states per weight level and roughly 2400 candidate vectors to check, each requiring about 42 lookups, I'm looking at around 100K total operations—very manageable. For the swap enumeration, I need to generate single and double swaps, filter duplicates, and run the DP on each one. There's a subtlety in how the DP processes vectors sequentially and tracks weights up to p.
+
+Let me reconsider the state tracking: starting with just the zero vector, each new vector gets combined with existing states through coefficients 0 to p-1, and I only keep weights up to p. The key insight is that after processing several vectors, each weight level contains all possible zero-sum combinations found so far, and I'm checking whether any new combination hits exactly zero.
+
+Now I'm ready to implement the full solution.
+
+For the shadow computation, I'm building a dynamic programming approach that tracks all reachable vectors at each weight level from 0 to p-1, iterating through the basis vectors and accumulating all possible linear combinations with coefficients in the range 0 to p-1.
+
+Now I'm thinking through the complexity at p=29 — after processing each basis vector, the number of states at each weight grows, and I need to estimate whether this stays manageable for the full computation in F_p^3. c₁*v₁ + c₂*v₂ : c₁+c₂ = w, 0 ≤ c₁,c₂ ≤ 28}. For w ≤ 28: min(w+1, 29) values of c₁. |states[w]| ≤ w+1.
+- After 3 vectors: |states[w]| ≤ C(w+2, 2) or 29^3 = 24389 (saturated).
+- ...
+- After 8 vectors: likely saturated for w ≥ some threshold.
+
+The DP complexity: for each of 8 vectors, for each weight w = 0..28, for each state in states[w], for each coefficient c = 0..28. The dominant cost is when states[w] reaches saturation at around 24389 states. That gives roughly 29 weights × 24389 states × 29 coefficients per vector, or about 20.5M operations per vector, totaling around 164M operations across all 8 vectors—which could take 5-10 minutes in Python depending on the overhead of tuple operations and set management.
+
+I should consider optimizations. Using numpy or bit arrays might help, though Python's hash-based sets are already fairly efficient. Another option is to represent the state space as boolean arrays indexed by coordinates in F_p^3, which could be more memory-efficient and faster for lookups.
+
+Implementing this with a flat dictionary or indexed representation... I'm precomputing scalar multiples of each basis vector to avoid redundant calculations, then iterating through existing states and extending them by adding scaled versions of the current basis vector, tracking the weight as I go. The encoding scheme is getting unwieldy though, so I'm reconsidering the approach.
+
+Actually, using tuples directly with Python sets would be simpler and should still be fast enough even at p=29. Or I could represent each reachable state set as a boolean array indexed by the encoded position, which would be more memory-efficient.
+
+Building numpy-based implementation... Still writing the state transition logic... Still writing the optimization... Still working through the indexing logic... Computing the inverse permutation...
+
+The inverse permutation maps each index to where it came from under the original transformation, so I can use subtraction instead of computing an explicit inverse. For each offset `c`, I subtract `c*v` from the decoded coordinates modulo `p` to get the source index, then use that to scatter the states correctly with `new_states[w+c] |= states[w][inv_perms[c]]`.
+
+Let me verify the logic: if `decode(j) - c*v` is in the original set `Σ_w`, then `decode(j)` must be in `Σ_{w+c}` after adding the vector with coefficient `c`, which confirms the update is correct.
+
+Implementing the loop...
+
+Now I'm estimating the computational complexity: with 8 vectors and roughly O(p²) pairs of (w, c) values, each operation taking O(p³) time for the array operations, I'm looking at around 4 × p⁵ total operations. For p=29 that's roughly 80 million operations, which should run in seconds with numpy's vectorization. Even at p=31 with 115 million operations it stays manageable, though p=37 starts pushing the limits.
+
+Memory-wise, I need p⁴ booleans for the state arrays—at p=29 that's about 700KB, and at p=37 it's around 2MB, so that's not a constraint. The temporary doubling of memory for new_states is still fine.
+
+Now I'm ready to write out the actual implementation scripts, starting with the smaller cases where I don't need numpy's optimization since the state spaces are small enough to handle directly.
+
+Writing the scripts...
+
+Actually, I need to be careful about what constitutes a valid same-tail swap—I'm changing a vector's first coordinate while keeping its last three, but the new vector can't already exist in the set. For double swaps, both modified vectors need to be distinct from each other and from everything else in the resulting 17-set, which adds complexity to the enumeration.
+
+Writing enumeration code... Finishing the validation check, then deduplicating results across all swap counts since different reordering paths can reach the same configuration. The complexity looks manageable—for p=7 and k=2, that's around 6,600 candidates to evaluate—but I'm generating a lot of redundant configurations that need filtering out. The deduplication step handles this. For the double swap case, I'm only iterating over configurations where at least one fiber actually changes, which avoids redundant work. I realize different swap sequences can produce the same result, but deduplication by the sorted vector tuple catches that.
+
+So I'll generate all valid configurations up to 2 changes and deduplicate, then run DP on each unique set. For p=7 with k=2, that's roughly 6,600 candidates before deduplication, probably fewer after. Each DP takes milliseconds, so the total runtime should be manageable.
+
+I need to be careful about what "exactly k swaps" means—I should require all k fibers to actually change, not just attempt k changes. It's cleaner to enumerate all distinct vector sets reachable by changing at most max_swaps fibers, then classify each by how many vectors actually changed, whether it's strongly ZSF, and the fiber distribution.
+
+Now I'm thinking about whether I should verify the Tail Invariance Theorem by checking all possible fiber assignments, not just k ≤ 2. For p=5, the number of distinct valid configurations with the same tail multiset and no duplicates is determined by how many ways I can assign fibers to the repeated tails—each tail appearing twice gets 2 distinct fibers from {0,...,4}, which gives a combinatorial count I should compute.
+
+Looking at the numbers, for p=5 I get around 400 million configurations, and for p=7 it's nearly 40 billion—both far too many to enumerate exhaustively. So I'll focus on the k ≤ 2 case for a definitive analysis and use random sampling for larger k values.
+
+I'm going to restructure this into three focused scripts, starting with a definitive p=7 analysis that enumerates all k ≤ 2 cases.
+
+Writing computational scripts... Still writing the analysis script... I'm implementing a function that checks whether adding any new vector to the set would create a weight-bounded zero-sum combination, then enumerating all possible vectors in the finite field to test which ones would fail this property. Now I'm checking the standard configuration by computing fiber distributions and running the GRAIL closure algorithm to see if there are any failure vectors that break the zero-sum-free property, which would indicate a fundamental issue with this approach.
+
+Moving on to enumerate all possible single-element swaps in the base configuration, I'm iterating through each vector and trying different fiber values to generate new candidate configurations, filtering out duplicates and invalid cases to build a comprehensive set of k=1 variants.
+
+Now I'm evaluating each candidate configuration by checking whether it satisfies the zero-sum fiber constraint, computing its fiber distribution, and counting the number of distinct fibers, then storing all this metadata along with the swap details for later analysis and categorizing them into zero-sum and non-zero-sum groups.
+
+I'm printing out summary statistics on these configurations, breaking down the zero-sum ones by their fiber distributions and fiber counts to understand the landscape of valid solutions.
+
+Now I'm testing GRAIL closure on all the zero-sum k=1 configurations to see how many pass the closure property and how many fail, tracking which ones have surviving vectors that violate the condition.
+
+I'm realizing the k=2 enumeration at p=7 would generate thousands of candidates and take significant time to check, so I should focus on the most impactful analyses first—getting solid results on k=1 with GRAIL closure, then selectively checking k=2 configurations that matter most.
+
+Let me organize this into concrete scripts: one for comprehensive p=7 analysis covering single and double swaps with ZSF checks and fiber distributions, another for GRAIL closure on the standard config and promising k=1 candidates, and a third to validate the tail invariance hypothesis through random higher-k sampling.
+
+Now I'm estimating runtime—Script 1 should finish in about 2 minutes with the DP checks and vector lookups, while Script 2 at the larger primes will take longer depending on the sumset completeness verification.
+
+For the k=2 enumeration, I need to be careful about deduplication since different swap sequences can produce the same final configuration, and I need to properly account for how many distinct (i,j,f_i',f_j') tuples map to each unique set of vectors.
+
+The cleanest approach is to enumerate all distinct 17-sets obtainable by changing at most 2 vectors' fibers, then exclude the original configuration and any k=1 cases—this gives exactly the k=2 configs I'm looking for.
+
+Writing enumeration logic... Still writing enumeration logic... DP check for each (~2ms at p=7): total ~10 seconds. Manageable.
+
+For deduplication: different (i,j,fi,fj) tuples might give the same config if:
+- (i,j,fi,fj) and (j,i,fj,fi) give the same set — but since i < j, we don't have this issue.
+- Two different pairs (i,j) and (i',j') give the same resulting set — this is possible if, say, we swap vectors i,j and the resulting set equals one from swapping i',j'. This is unlikely but possible.
+
+The frozenset deduplication handles this.
+
+OK let me actually write the code now. I'll create 3 scripts and run them in parallel.
+
+Writing the GRAIL closure check function... I'm refining the weight constraints for the GRAIL check—since the existing DP covers weights 0 to p, I need c in [1, p-1] and w in [1, p-c] to avoid the trivial case where w=0 only contains the zero vector. This tightens the search space and confirms the lookup count remains manageable.
+
+Now I'm finalizing the implementation scripts, particularly Script 2 which uses numpy to handle the shadow computation efficiently at larger p values by encoding vectors as indices. I'm also working through the sumset completeness verification to ensure that Σ_k + Σ_l correctly equals Σ_{k+l} across all weight combinations, which at p=29 means checking sets with up to 29 elements each.
+
+The key optimization is representing the sumset computation as a boolean convolution over the field, where I can compute the indicator array for Σ_k + Σ_l by checking which elements in F_p^3 can be expressed as sums of elements from each set. Implementing the shift operation with numpy rolling...
+
+The approach iterates over each element in Σ_k, reshapes Σ_l into 3D, applies circular shifts along each axis, and ORs the result back into a flattened array—this gives O(|Σ_k| × p³) complexity, which at p=29 could take 30-60 seconds. But I'm wondering if there's a faster way using the Minkowski sum structure directly instead. , the most efficient approach for boolean sumsets in F_p^3: use 3D boolean arrays and the "shifting" approach. This iterates over elements of Σ_k, and if |Σ_k| ≈ p^3, that's p^3 iterations of p^3-sized numpy operations totaling p^6 operations—at p=29, roughly 594 million boolean operations, which should take 10-30 seconds.
+
+I can optimize this by precomputing all shifts, or better yet, leverage FFT-based convolution. Converting the boolean sets to integers and computing 3D circular convolution via FFT, then checking where the result exceeds zero, would be much faster.
+
+Setting up FFT-based convolution... Implementing the FFT-based circular convolution to compute the Minkowski sum efficiently in O(p³ log p) time, which should handle p=29 with ease. Now I need to write out the complete solution and verify my approach against what the coordinator is asking for.
+
+Let me make sure I'm addressing all three requirements: counting the strongly ZSF 17-sets at p=7 with the tail-replacement distinction, verifying GRAIL closure for each p=7 configuration element, and confirming the orbit-size formula matches the symmetry analysis.
+
+Now I need to tackle the broader verification tasks—checking window structure across p=29, 31, and 37, validating the (8,7,2) distribution at p=5 and 7, confirming whether windows hold for non-A₈ maximal ZSF sets, and verifying sumset completeness at the larger primes. I'll organize this into three separate scripts to handle each verification systematically. Writing Script 1 code... I'm optimizing the DP state representation by encoding vectors as integers instead of tuples, which will speed up set membership testing significantly. With this encoding scheme, I can precompute all vectors and use fast integer set operations. Now I'm ready to write out the implementation scripts to handle the p=7 analysis with k=1 and k=2 swaps, ZSF checks, fiber classification, and GRAIL closure computation.
+
+Writing the analysis scripts...
+
+============================================================
+BLOCK 4 (5104 chars)
+============================================================
+Both scripts are running. While they execute, let me check for early output to see if there are any issues. Let me also prepare additional analysis that complements these computations.
+
+Let me check on the progress of the scripts periodically. Actually, I should wait for notifications rather than polling. But let me check if there are any early outputs.
+
+Actually, I was told not to poll - I'll be notified when they complete. Let me use the waiting time productively by doing some additional analysis.
+
+Let me think about what additional computations would be valuable:
+
+1. **Kernel weight gap**: For the doubled+A₈+e₁ at p=5,7, compute the minimum nonzero kernel weight. The "kernel" here is the set of coefficient vectors that give zero-sum. The minimum weight of such a kernel vector is related to the minimum distance of the associated code.
+   
+For a strongly ZSF set, there are no kernel vectors at weight ≤ p, so the minimum kernel weight must exceed p. The real question is whether it's exactly p+1.
+
+2. **Non-A₈ ZSF 8-sets at p=7**: This would require an expensive tree search, so I'll defer it for now.
+
+3. **The (8,7,2) counting**: My earlier analysis suggested 300 rather than 324, so I should verify this computationally once the p=5 script finishes.
+
+Let me wait for the script notifications to complete. While they run, I'm thinking through the theoretical framework: tail invariance determines ZSF independent of fiber assignment, the window formula holds universally across GL classes, and shadow saturation has been verified across all tested configurations. My computations should establish exact orbit counts at p=5 and p=7, confirm GRAIL closure at p=7 for the first time beyond p=5, and extend the window formula verification to p=29 and p=31.
+
+Now I'm reconsidering the (8,7,2) count discrepancy—my calculation gave 300 but the coordinator mentioned 324. The difference seems to hinge on whether Case 2 includes the same-tail exclusion; without it, the count reaches 324, but applying the exclusion brings it down to 300. I'm wondering if there are additional configurations I'm overlooking, like moving e₁ to a different fiber while sending another vector elsewhere.
+
+Actually, thinking through this more carefully: the only way to achieve exactly the (8,7,2) distribution with 3 fibers is through Cases 1 and 2, since moving vectors to separate new fibers would create a 4-fiber configuration instead. So my count of 300 should hold if Tail Invariance is valid and all those configurations are strongly ZSF.
+
+But I need to verify whether all k=2 same-tail switches...
+
+Actually, I'm realizing there might be a computational bottleneck in my DP approach. When processing vectors one at a time and updating states for each coefficient, the number of reachable (weight, vector-sum) pairs can explode exponentially—potentially up to p^4 states per weight level. At p=7, that's roughly 2401 states per weight across 8 weights and 17 vectors, which means the complexity could become prohibitive when iterating through each vector and its coefficients.
+
+The real problem is that I'm trying to enumerate around 5000 configurations and run the DP check on each one, but at p=7 where each check takes several seconds, this scales to hours of computation. I need to reconsider whether there's a way to optimize the DP itself or reduce the number of configurations I'm checking. - Initially: 1 state at weight 0
+- After 1 vector: up to 7 states (weights 0-6), each with 1 vector
+- After 2 vectors: up to 7 weights × ~7 states = ~49 state entries
+- ...
+- After k vectors: states grow, but are bounded by p^4 = 2401 per weight
+
+The total states across all weights after all 17 vectors: bounded by p × p^4 = p^5 = 16807. But in practice, much smaller for intermediate stages.
+
+Let me estimate the actual DP time for a single 17-set at p=7:
+- Vector 1: 1 state × 7 weights × 6 coefficients = 42 operations
+- Vector 2: ~7 states × 7 weights × 6 coefficients = 294 operations
+- Vector 3: ~30 states per weight × 7 weights × 6 coefficients = 1260
+- By vector 10, states per weight likely saturate around 2401, then each subsequent vector costs roughly 100K operations, totaling about 800K for vectors 10-17.
+
+Overall that's around 1M tuple operations, and with Python's overhead for tuple creation and hash set lookups, I'm looking at 1-5 seconds per DP check. For 5000 configs, that's 4+ hours—way too slow.
+
+I need to optimize. Early termination helps: if I find a zero-sum immediately, I can stop. For non-ZSF configs this is fast, but for ZSF configs I'd need to exhaust the search, which is the bottleneck.
+
+At p=5, the DP is much faster—around 0.1 seconds per config—so 5000 configs would take about 8 minutes, which is feasible. At p=7, it's not.
+
+So my strategy: run full k=2 enumeration at p=5, but at p=7 only do k=1 enumeration, which is much smaller.
+
+For p=7 k=2, I could sample 200 configs instead of enumerating all of them, which would take about 10 minutes—still manageable but tight.
+
+Let me check what's actually running in the background and see where the output files stand.
+
+============================================================
+BLOCK 5 (426 chars)
+============================================================
+Good, Script 1 is making progress. p=5 k=1 swaps are done: ALL 51 are ZSF, ALL pass GRAIL closure. Now working on k=2 at p=5.
+
+Script 2 seems to have a task ID issue. Let me check it with the right ID. Actually, let me check the tasks list.
+
+Wait, the second one says "No task found with ID: b2lywqtt3". That's odd. Let me check if it's still running or failed.
+
+Let me check using bash to see if the process is still running.
+
+============================================================
+BLOCK 6 (116 chars)
+============================================================
+Excellent! The window script has completed! Let me get the full output to see the results for p=29 and p=31 as well.
+
+============================================================
+BLOCK 7 (2370 chars)
+============================================================
+Excellent! The window script is COMPLETE with stunning results:
+- p=29, 31, 37: ALL pass window formula, sumset completeness, shadow saturation
+- The gap at weight p-1 matches the predicted {(0,j,j) : 1 ≤ j ≤ (p-3)/2} EXACTLY
+- Window holds in BOTH safe and extended regimes
+- L = {(0,1,1)} is the UNIQUE projective line where window holds
+- Sumset completeness Σ_k + Σ_l = Σ_{k+l} holds exactly at all three primes
+
+
+- The p=5 analysis is also looking strong: all k=1 and k=2 swaps are ZSF, all k=1 CEs pass GRAIL closure, and the (8,7,2) count came in at 300 rather than the conjectured 324. I'm waiting on the k=2 GRAIL verification for p=5 and the p=7 analysis to complete, but the pattern is holding up remarkably well.
+
+The results across p=29, 31, and 37 are confirming everything: the window formula, sumset completeness, shadow saturation, and gap structure all match predictions exactly. Tail Invariance is holding at p=5 with all 1225 k=2 swaps being ZSF, and the GRAIL closure checks are passing consistently.
+
+I'm noticing the (8,7,2) count came out to 300, not 324—the coordinator's count was off because they didn't exclude same-tail pairs in Case 2. Now I'm waiting on the p=7 analysis, though the p=5 k=2 GRAIL sample should run quickly.
+
+Looking more closely at the p=5 output, I'm seeing something striking: the shadow sizes are identical across all the primes I've tested in the safe regime (w=0 through 14), which suggests this p-independence property is real. The sequence 1, 8, 30, 77... holds consistently regardless of which prime I'm examining.
+
+The gap analysis is also confirming a clean pattern—at the boundary w=p-1, the gap always contains exactly (p-3)/2 vectors, and they're all concentrated on that single line L={(0,j,j)}, which matches the theoretical prediction perfectly.
+
+Now I'm seeing something striking: the shadow sizes stay completely constant across p=29, 31, and 37 all the way up to w=14, but then at w=15 they diverge—p=29 jumps to 6227 while both p=31 and p=37 reach 6231, suggesting the safe regime boundary is right around w=15 for p=29.
+
+Checking further confirms this pattern: at w=16, p=31 and p=37 differ (7509 vs 7513), which makes sense since w=16 exceeds the safe threshold for p=31 but stays within it for p=37. This is compelling evidence that the shadow size is genuinely p-independent within the safe regime.
+
+============================================================
+BLOCK 8 (2458 chars)
+============================================================
+Good, the p=5 k=2 GRAIL check is done (50/50 pass). Now it's running the Tail Invariance stress test (500 random fiber assignments). This might take a while because each DP check takes ~0.05 seconds, so 500 × 0.05 = 25 seconds.
+
+After that, it'll do the orbit size analysis for p=5, then move to p=7.
+
+The p=7 analysis will take much longer because:
+- k=1 swaps: ~85 configs × ~3s each = ~250 seconds
+- k=2 swaps: ~5000 configs × ~3s each = ~15000 seconds (too long!)
+
+
+The k=2 case at p=7 might actually be faster than that worst-case estimate though—early termination should kick in for non-ZSF configs, and at p=7 with 17 vectors in F_7^4's 2401 states, the DP might process things more efficiently than I initially calculated. 0-6, ~7 states total
+- After 2 vectors: weights 0-6, ~30 states total (many combinations)
+- ...
+- After ~10 vectors: states per weight likely ~100-1000
+
+The state space is bounded by p^4 = 2401, though the shadows don't fully saturate until later. For 17 vectors at weight ≤ 7, I'm tracking which coefficient vectors are reachable through the DP rather than enumerating all possibilities. The bottleneck is the inner loop: for each vector and weight level, I iterate through reachable states and coefficients, costing |states[w]| × p operations per vector per weight. After processing around 8 vectors that span F_p^3, the state sets should cover a significant portion of F_p^4, and by vector 10, the intermediate states for weights 3-5 might reach 500-1000 entries. Across all weights and vectors, I'm estimating roughly 10^6 total operations, which translates to about 1-5 seconds per DP check in Python given the tuple-set operations involved. For k=1 at p=7 with 102 configs, that's around 300 seconds total.
+
+For k=2 at p=7, the 4896 configs would take roughly 4 hours, which exceeds the timeout. The script should complete p=5 entirely and p=7 k=1, but p=7 k=2 will likely time out. Looking more closely at the enumerate_k2_swaps function, at p=7 I'm iterating through 136 vector pairs, and for each pair I'm trying 6 options per vector (all values except the base coefficient), giving 136 × 6 × 6 = 4896 total candidates to check. So the real bottleneck is the DP check at p=7, which will be roughly 10 times slower than at p=5 given the increased complexity. I should wait to see if the script actually reaches p=7 or gets stuck on the k=2 enumeration, and be ready to kill it and run a more focused analysis if needed.
+
+============================================================
+BLOCK 9 (134 chars)
+============================================================
+Perfect p-independence in the safe regime. Let me now check on the fiber analysis script. It's probably doing the p=5 random sampling.
+
+============================================================
+BLOCK 10 (495 chars)
+============================================================
+The script crashed on `from math import comb` — this is likely an older Python version that doesn't have `math.comb`. Let me fix this and re-run, focusing on p=7 with a leaner approach. Also, I now have all the p=5 results.
+
+Let me write a targeted p=7 script that:
+1. Skips the expensive k=2 enumeration (or limits it)
+2. Uses a simple binomial coefficient implementation
+3. Focuses on k=1 swaps + GRAIL closure + random sampling
+
+And also fix the orbit size calculation to not use `math.comb`.
+
+============================================================
+BLOCK 11 (4115 chars)
+============================================================
+While waiting for the p=7 script, let me also compute the shadow size sequence to look for a formula. The shadow sizes at p=29, 31, 37 are identical in the safe regime:
+
+w=0: 1, w=1: 8, w=2: 30, w=3: 77, w=4: 159, w=5: 286, w=6: 468, w=7: 715, w=8: 1037, w=9: 1444, w=10: 1946, w=11: 2553, w=12: 3275, w=13: 4122, w=14: 5104, w=15: 6231, w=16: 7513, w=17: 8960, w=18: 10582
+
+
+Now I'm looking at the first differences to see if there's a pattern that might reveal a closed form. The differences themselves are increasing, so let me check if the second differences show something more regular.
+
+Looking at those second differences, they're increasing by 10 each time—that's a constant third difference. This means the original sequence follows a cubic polynomial, which should let me derive an explicit formula for |Σ_w(A₈)|.
+
+Setting up the cubic form |Σ_w| = aw³ + bw² + cw + d and plugging in the known values at w = 0, 1, 2, 3 gives me a system of equations. I can solve this by finding d = 1 from the first value, then using the remaining equations to isolate the other coefficients.
+
+When I work through the algebra, I'm getting non-integer results, which suggests I should reconsider my approach. Looking at the finite differences more carefully—the third differences are constant at 10, confirming this is indeed cubic—I think using Newton's forward difference formula will be cleaner than solving the system directly.
+
+Expanding the formula with the binomial coefficients and combining like terms to collect coefficients for each power of w...
+
+Let me verify this works by testing w=1, which should give 8 based on the original problem setup.
+
+At w=2 and w=3, I'm checking that the polynomial evaluates correctly—getting 30 and 77 respectively, which matches what I expect.
+
+Now I need to simplify the expression for the sum, factoring out the common denominator to get a cleaner form.
+
+Verifying the simplified formula (10w³ + 15w² + 17w + 6) / 6 across several values of w to make sure it's correct.
+
+Now I'm checking whether this polynomial can be factored by testing potential rational roots, but so far the values at w = -1, -2, and -3 aren't giving me zeros.
+
+Let me try rewriting this in a different form—maybe as a sum of binomial coefficients, since the structure looks like it could relate to combinatorial expressions like C(w+3,3). Now I'm solving for the coefficients by substituting back into the polynomial equation—working through each power of w to find that a = 10, b = -5, c = 2, and d = 1, which gives me the final formula in terms of binomial coefficients.
+
+Let me verify this works at w = 0, but I'm getting 8 instead of the expected 1, so something's wrong with my setup. I need to recalculate the formula from scratch.
+
+Looking at the sequence 1, 8, 30, 77, 159, I'll compute the forward differences systematically: the first differences are 7, 22, 47, 82, and the second differences are 15, 25, 35, with third differences showing 10, 10. This suggests a cubic polynomial, so I should use Newton's forward difference formula to reconstruct the coefficients properly. I'm verifying the formula works across several values, and it checks out perfectly. Now I can express this more elegantly—the cubic term simplifies to 5w(w-1)(w-2)/3, and I'm wondering if there's a deeper pattern connecting these coefficients.
+
+Looking at where 1, 7, 15, and 10 come from: the 1 is just the zero vector, the 7 represents the nonzero single-vector sums, and I'm noticing that 15 equals C(6,2) while 10 might relate to C(5,2)—there's likely a combinatorial structure here tied to the structure of A₈ itself.
+
+The formula |Σ_w| = 1 + 7C(w,1) + 15C(w,2) + 10C(w,3) is a degree-3 polynomial in w, which makes sense since A₈ lives in a 3-dimensional space, so the shadow set's growth should be bounded by that dimension.
+
+Looking at the leading coefficient, the 10C(w,3) term dominates with growth rate roughly 5w³/3. Since the ambient space has size p³, saturation kicks in around w ≈ 0.84p. Let me verify this quantitatively and add it to the report, then check on how the p=7 computation is progressing.
+
+============================================================
+BLOCK 12 (245 chars)
+============================================================
+Excellent! The shadow size formula |Σ_w(A₈)| = 1 + 7C(w,1) + 15C(w,2) + 10C(w,3) holds exactly for all w in the safe regime (w ≤ (p-1)/2). This is a NEW DISCOVERY — a closed-form formula for the shadow sizes.
+
+Now let me check on the p=7 script.
+
+============================================================
+BLOCK 13 (1361 chars)
+============================================================
+The p=7 script is making great progress:
+- Standard config: strongly ZSF ✓, GRAIL HOLDS ✓
+- All 85 k=1 swaps: ALL ZSF ✓, ALL pass GRAIL ✓
+- Fiber distributions: (8,8,1): 45, (9,7,1): 40
+- Now checking (8,7,2) configs: 500 found, running ZSF checks
+
+The k=1 results are very clean:
+- p=5: 51 k=1 swaps (27 + 24), all ZSF, all pass GRAIL
+
+
+- p=7: 85 k=1 swaps (45 + 40), all ZSF, all pass GRAIL
+
+Let me verify the counts are consistent with the fiber structure—the p=5 case breaks down as 24 + 24 + 3 from the different fiber contributions with no overlaps from single swaps on distinct vectors, and p=7 follows the same pattern with 8 vectors across 5 non-trivial fibers for each group. I found 500 configurations total, which matches my expected count from two cases: pairs of vectors from fiber 1 going to the same new fiber (180 ways), plus mixed pairs with one from fiber 0 and one from fiber 1 (320 ways). Now I'm working out the general formula for the (8,7,2) count across different primes.
+
+The pattern holds: for any prime p, the number of same-tail configurations is 100(p-2), which checks out at p=5 giving 300 and p=7 giving 500. The coordinator's count of 324 appears to be...
+
+incorrect. Now I'm waiting for the verification at p=7 to finish running—with 500 configurations to check at roughly 0.3 seconds each, that should take around 2.5 minutes.
+
+============================================================
+BLOCK 14 (4529 chars)
+============================================================
+All computations are complete! Let me now compile the definitive report. Here are the key results:
+
+**p=5 Results:**
+- Standard config: strongly ZSF ✓, GRAIL HOLDS ✓
+- k=1 swaps: ALL 51 strongly ZSF, ALL pass GRAIL (51/51)
+  - (8,8,1): 27, (9,7,1): 24
+- k=2 swaps: ALL 1225 strongly ZSF, ALL pass GRAIL (50/50 sample)
+  - (8,7,2): 300 configs, ALL ZSF
+  - (8,7,1,1): 624, (9,6,2): 84, (9,6,1,1): 168, (8,8,1): 24, (9,7,1): 24, (9,8): 1
+- Tail invariance holds across 500 random configurations, and the total count of same-tail configurations reaches 400 million.
+
+**p=7 Results:**
+- Standard config: strongly ZSF ✓, GRAIL HOLDS ✓
+- k=
+
+1 swaps: all 85 configurations are strongly ZSF and pass GRAIL
+  - (8,8,1): 45, (9,7,1): 40
+- k=2 (8,7,2): all 500 strongly ZSF
+- Tail invariance: 200/200 random configs ZSF
+- Total same-tail configs: C(7,2)^8 × 6 ≈ 226 billion
+
+**Window Formula (p=29, 31, 37):**
+- The formula holds exactly at all three primes, with L = {(0,1,1)} as the unique projective line where the window property is satisfied, and zero violations in the extended regime beyond the safe zone.
+
+**Sumset Completeness and Shadow Size:**
+The sumset property Σ_k + Σ_l = Σ_{k+l} holds exactly across all tested primes, and I've derived a formula for shadow size that's independent of p in the safe regime and verified it exactly for all w ≤ (p-1)/2.
+
+**Counting (8,7,2) Configurations:**
+The count at p=5 is 300 (not 324), at p=7 it's 500, and the general pattern follows 100(p-2) for same-tail configurations. For k=1 swaps, the formula is 17(p-2), which breaks down as 8(p-2) from fiber-0, 8(p-2) from fiber-1, and (p-2) from e₁—this checks out at both p=5 and p=7.
+
+Now I'm recounting the fiber transitions more carefully. Fiber-0 vectors can move to any of the p-1 non-zero fibers, fiber-1 vectors have p-1 choices as well, and e₁ has p-2 choices. But I need to separate out which of these create 3+-fiber configurations versus 2-fiber ones, since some transitions land in existing fibers rather than creating new ones. I'm realizing my script is only counting 3-fiber configurations as k=1 CEs, but I should also have 2-fiber ones where vectors swap between fibers 0 and 1. Let me trace through: when a fiber-0 vector moves to fiber-1 or vice versa, the resulting config stays within those two fibers. That's 8 swaps each direction, but the e₁ case is invalid since it maps to the zero vector, which my script filters out anyway. fiber-0→fiber-1 and fiber-1→fiber-0 swaps: these would create configs with only fibers 0 and 1. There are 8 + 8 = 16 such configs. But my script only shows 51 configs total, all 3-fiber. Where did the 16 2-fiber configs go?
+
+Looking at my script: it does enumerate ALL swaps including 2-fiber ones. But the script classifies by n_fibers. Let me re-read the output:
+
+"Unique k=1 configs: 51"
+"ZSF: 51, NOT ZSF: 0"
+"3-fiber: 51"
+
+So there are only 51 unique k=1 configs? Let me count:
+- Fiber-0 → fiber 1: 8 swaps. But wait, moving (0, t_a) to (1, t_a) creates a vector that's already in the set since (1, t_a) is already in fiber 1. So len(set(new_vecs)) < n, and this is filtered out!
+
+The duplicate check is catching these swaps. Moving a fiber-0 vector to fiber 1 creates a duplicate with the existing fiber-1 copy of the same tail, so all those swaps are invalid. Similarly, moving a fiber-1 A₈ vector to fiber 0 creates a duplicate, and moving e₁ to fiber 0 creates the zero vector. The only valid single swaps are to a new fiber (not 0 or 1).
+
+So the formula is 17(p-2), which checks out: at p=5 I get 51, at p=7 I get 85. All of these create 3-fiber configs.
+
+For the (8,7,2) formula at general p, I'm breaking it into two cases: moving 2 vectors from fiber 1 to the same new fiber gives 36(p-2) configs, and moving 1 from fiber 0 plus 1 from fiber 1 with different tails to the same new fiber gives 64(p-2) configs, for a total of 100(p-2). This matches my test values of 300 at p=5 and 500 at p=7.
+
+Now I'm compiling the results and noting that at p=7, the state space grows from 1 to 2400 across weights 0-7, nearly saturating the full space of F_7^4 minus the zero vector, which means the 17-set's weight-7 shadow covers essentially all of F_7^4 \ {0}.
+
+The shadow saturation on the tail space F_7^3 reaches 342 out of 343 possible states, and crucially, GRAIL closure verification at p=7 passes completely with zero failures across both standard tests and all 85 k=1 constraint equations—this is the first full verification at this prime.
+
+Let me write up the final report now.

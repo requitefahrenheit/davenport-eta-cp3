@@ -1,0 +1,647 @@
+
+============================================================
+BLOCK 1 (579 chars)
+============================================================
+Let me analyze the situation carefully. I'm the THEORIST in Round 2 of 3. Let me first search Cortex for relevant prior results, then read the briefing material, and understand what I need to do.
+
+The key directives for me are:
+1. Reconcile the Projection Decoupling Obstruction with the 54 multi-fiber ZSF sets at p=5
+2. Address the ADVERSARY's challenges (8-tail confusion, p≥11 orbit coverage)
+3. Refine the obstruction statement
+
+Let me search Cortex first, then think deeply about the mathematics.
+
+Let me start by searching for relevant prior work and reading the briefing.
+
+============================================================
+BLOCK 2 (70 chars)
+============================================================
+Let me search Cortex for prior results and read the briefing material.
+
+============================================================
+BLOCK 3 (390 chars)
+============================================================
+It seems the Cortex tools aren't available as deferred tools. Let me check the available deferred tools list again - I see `mcp__claude_ai_dev__dev_search`, `mcp__claude_ai_dev__dev_read_file`, etc. but no cortex tools. Let me look for the briefing file and any existing work, then focus on pure theory.
+
+Let me read the briefing and search for any prior theoretical work in the repository.
+
+============================================================
+BLOCK 4 (182 chars)
+============================================================
+Let me read the most recent theorist outputs and the cross-theorist notes to understand what's been done, then read the most recent round 1 theorist output from this current session.
+
+============================================================
+BLOCK 5 (581 chars)
+============================================================
+Now I have good context. Let me also read the most recent round 1 theorist output from the current collaboration session, and the cross-theorist notes for the current session.
+
+Let me identify the current session. Looking at the timestamps, the most recent sessions are from 20260321. Let me check which one is the current session by looking at what files exist.
+
+Actually, I'm in the current round 2 of a session. The synthesis mentions Round 2 of 3. Let me check what the current session directory is.
+
+Let me look at the latest collaboration directory to find my round 1 output.
+
+============================================================
+BLOCK 6 (223 chars)
+============================================================
+Now I have comprehensive context. Let me analyze what's been done and what I need to do in Round 2. Let me also read the adversary-round2 output from the current session, since the synthesis references adversary challenges.
+
+============================================================
+BLOCK 7 (100061 chars)
+============================================================
+Excellent. Now I have a comprehensive picture. Let me synthesize everything and formulate my Round 2 theorist report. Let me think about what's been established and what needs to happen.
+
+**What's established:**
+1. α(r) = 9·2^{r-3} - 1 for r ≥ 3
+2. η(C_p^3) = 8(p-1)+1 (both bounds, Lean-verified)
+3. Lower bound η(C_p^r) ≥ (α(r))(p-1)+1 for all r
+4. Two-fiber upper bound handles the case where all vectors sit in ≤ 2 fibers
+
+
+5. The complete inductive reduction framework collapses everything to condition (MF_r), and I have the fiber threshold lemmas plus the window structure for A₈ that I worked out before
+6. Multi-fiber ZSF sets definitely exist—I confirmed 54 of them at p=5
+7. The support-4 weight minimization approach is a dead end
+
+**What the adversary killed:**
+The naive fiber induction strategy doesn't work for multi-fiber cases, the uniqueness argument fell apart, and the cross-fiber approach is blocked.
+
+**What's still viable:**
+The polynomial method using Chevalley-Warning or Nullstellensatz, the cap-set and Fox-Sauermann connection, or something I haven't thought of yet.
+
+**My focus now:**
+I need to reconcile why the projection decoupling obstruction exists alongside those 54 multi-fiber ZSF sets, handle the adversary's points about 8-tail confusion and p≥11 orbit coverage, and really push the polynomial method forward.
+
+The polynomial method angle is promising—I can use Chevalley-Warning to count zero-sum subsequences with weight bounded by p, starting with some set S.
+
+Now I'm setting up the polynomial system: for each coordinate j, I need the sum of selected vectors to vanish, and I'm adding a constraint on the total weight—though I need to be careful about whether I'm enforcing weight exactly p, divisible by p, or something else entirely. Hmm, let me think about this more carefully.
+
+The η-constant problem: given the sequence S with multiplicity p-1 for each vector, find a nonempty subsequence with sum zero and length at most p (or equivalently, weight ≤ p when each vector can be used with multiplicity 1 to p-1).
+
+So we're looking for (s₁, ..., sₙ) with sᵢ ∈ {0, 1, ..., p-1}, not all zero, such that:
+- Σᵢ sᵢ vᵢ = 0 (in F_p^{r+1})
+- 1 ≤ Σᵢ sᵢ ≤ p (weight bound)
+
+The Chevalley-Warning theorem tells us that if we have polynomials over F_p with total degree less than the number of variables, the number of common zeros is divisible by p. Here I have n variables s₁, ..., sₙ ∈ F_p and r+1 linear equations from the zero-sum constraint, but encoding the weight restriction polynomially is tricky since it's not a simple algebraic condition.
+
+Looking at the degree condition: with n = α(r)+2 variables and r+1 linear equations (total degree r+1), the CW condition r+1 < n becomes r+1 < α(r)+2. For r ≥ 3, this is easily satisfied since α(r) grows exponentially while r+1 grows linearly. So CW guarantees that the number of solutions to the linear system is divisible by p.
+
+Now the challenge is that these solutions can have arbitrary weight — I need to enforce that the nonzero coefficients sum to exactly p. One approach is to add a weight constraint like (Σsᵢ)^{p-1} = 1, which forces Σsᵢ ≠ 0 mod p. This adds degree p-1 to the system, giving total degree (r+1) + (p-1). For r = 3 and p = 5, that's 8 < 10, so the degree bound still holds.
+
+But wait — this constraint only ensures the weight is nonzero mod p, not that it's exactly in the range {1, ..., p}. I need to think about what the actual constraint should be: the coefficients sᵢ represent how many copies of each vector to include, so they're naturally in {0, 1, ..., p-1}, and their sum should land in {1, ..., p}. I'm realizing the weight constraint becomes trivial when interpreted over F_p—essentially any nonzero coefficient vector satisfies it. Let me reconsider this using a polynomial approach instead, which might give me a cleaner way to handle the constraint.
+
+Now I'm recalling Reiher's proof of the Kemnitz conjecture, which establishes that 4p-3 elements from Z_p^2 always contain a zero-sum subsequence of length p. His approach uses a carefully constructed polynomial that encodes both the coordinate sums and the total sum, though I need to pin down the exact form he used. 4p-3 = 4(p-1)+1 points in Z_p^2. He wanted to find p of them that sum to zero.
+
+The key polynomial: P(x₁,...,x_n) where xᵢ ∈ {0,1} (indicating whether the i-th point is chosen). The constraints:
+- Σxᵢ = p (choose exactly p points — but this is length p, not weight p)
+- Σxᵢ a_i = 0 in Z_p^2
+
+Wait, this is the s-constant problem, not the η-constant problem. The s-constant asks for zero-sum subsequences of exact length p, while η asks for nonempty zero-sum subsequences.
+
+For our problem, we're looking at the η-constant, which is about weighted zero-sums. The connection is that η(G) = s(G) - p + 1, so proving η(C_p^{r+1}) ≤ (2α(r)+1)(p-1)+1 reduces to showing s(C_p^{r+1}) ≤ (2α(r)+2)(p-1)+1. I need to clarify the definitions more carefully. The s-constant guarantees a zero-sum subsequence of length exactly p in any sequence of length ≥ s(G), while η captures the minimum length needed to force a zero-sum of length ≤ p when working with nonzero elements. The relationship s(G) = η(G) + p - 1 connects these, though I'm realizing the reasoning needs more precision about how removing elements affects the guarantees.
+
+Rather than getting stuck on the exact proof details, I should pivot toward the slice rank method, which offers a more powerful approach to these problems.
+
+The breakthrough from Croot-Lev-Pach and later Ellenberg-Gijswijt used polynomial methods to bound AP-free sets in F_3^n, and Fox-Sauermann extended this to weighted sum problems. The core insight is that sum-free subsets of F_p^n have size at most C^n for some constant C < p, giving exponential bounds.
+
+For my problem, I'm wondering if I can apply slice rank to bound α(r)+1 when I have non-proportional vectors with no zero-sum of weight ≤ p. The challenge is that I'm working with a multiset of multiplicity p-1 rather than a simple subset of F_p^r, so the connection isn't straightforward.
+
+More importantly, my exponential growth α(r) = 9·2^{r-3} - 1 is actually larger than what cap set bounds would give—the cap set bound for F_3^n is roughly (2.756...)^n, which is exponential but with base less than 3. Since my bound grows as 2^r and 2 < p for all primes p ≥ 3, this is consistent with a slice-rank-type argument, though I'd need to work out the specific mechanism. The Fox-Sauermann paper on Erdős-Ginzburg-Ziv constants does use cap set bounds, so there might be a connection there worth exploring. to prove things about EGZ constants! Let me think about what they proved.
+
+From the abstract/summary: they relate the zero-sum problem to AP-free sets. Specifically, they show that η(C_p^n) can be bounded using the 3-AP-free number of F_p^n.
+
+Wait, Fox and Sauermann proved that s(C_p^n) ≤ (p-1)·af(F_p^n) + p, where af(F_p^n) is the maximum size of a set in F_p^n with no 3-term AP. Since af(F_p^n) = O(c_p^n) with c_p < p, this gives s(C_p^n) = O(c_p^n).
+
+Now I'm comparing this to our conjecture. For p = 3, the Ellenberg-Gijswijt bound on 3-AP-free sets gives s(C_3^r) ≤ 2·(2.756)^r + 3, but our formula predicts s(C_3^r) = 9·2^{r-2} + 1, which is much smaller—for instance, at r = 3 we get 19. So there's a significant gap between what the Fox-Sauermann approach yields and what we're conjecturing.
+
+This suggests the general bound isn't tight enough for this specific structure. Maybe I can refine the inductive argument by exploiting the group structure more carefully.
+
+For the inductive step from rank r to r+1, the extremal construction doubles the previous set and adds one vector, giving 2α(r)+1. To prove the upper bound, I need to show that 2α(r)+2 vectors in F_p^{r+1} must contain a zero-sum with weight at most p. The two-fiber case is settled, so the challenge is handling the case where vectors spread across more than two fibers—this is where iterated projection might help.
+
+Instead of projecting along a single linear form, I'm projecting by a codimension-2 subspace to get a map into F_p^2. This partitions the vectors into p² fiber classes. By the Erdős-Ginzburg-Ziv theorem at rank 2 (Reiher's result), any 4p-3 vectors in F_p^2 contain a zero-sum of length p. The issue is that 2α(r)+2 grows much faster than 4p-3, so I need to be careful about how the zero-sum structure in the image lifts back to the original space.
+
+When I project the 2α(r)+2 vectors to F_p^2, collisions can occur—multiple vectors map to the same point if their difference lies in the kernel, a codimension-2 subspace. Each of the 2α(r)+2 vectors appears with multiplicity p-1, giving a total sequence of length (2α(r)+2)(p-1) in the image. The question is whether this sequence, distributed across F_p^2, is large enough to guarantee a zero-sum subset of the right size.
+
+Since the sequence has length (2α(r)+2)(p-1) and we need at least 4p-3 to apply the zero-sum theorem for F_p^2, the condition becomes 2α(r)+2 ≥ 5, which holds easily for r ≥ 3. So there definitely exists a zero-sum subsequence in F_p^2—a set of coefficients s_i ∈ {0,...,p-1} with Σs_i = p and Σs_i π(v_i) = 0. The challenge is that this doesn't immediately guarantee Σs_i v_i = 0 in F_p^{r+1}, since the projection loses information.
+
+What we get instead is a vector u = Σs_i v_i that lands in the kernel of π, which is isomorphic to F_p^{r-1}, and this vector has weight exactly p. If u happens to be zero, we're done. But if u ≠ 0, we have a nonzero residual in the kernel that we need to eliminate. The naive approach of finding another rank-2 zero-sum with residual -u and combining them would double the weight to 2p, which exceeds our bound.
+
+So I'm shifting perspective: instead of trying to cancel residuals after the fact, I need to find a rank-2 zero-sum that produces zero residual from the start. By the Cauchy-Davenport bound, there are many rank-2 zero-sum subsequences—far more than we'd expect—so the question becomes whether at least one of them lifts to a full zero-sum in the original space. This is really a lifting problem: among all the solutions to the projected equation Σs_i π(v_i) = 0 with Σs_i = p, can we find one where Σs_i v_i = 0 as well?
+
+Over F_p, the system of r+1 linear equations in 2α(r)+2 variables has a solution space of dimension at least n - (r+1), giving p^{n-r-1} total solutions. The challenge is that we need Σs_i = p as an actual integer constraint with s_i ∈ {0,...,p-1}, not just modulo p.
+
+When I add the constraint Σs_i ≡ 0 (mod p), this becomes a linear equation over F_p, so the system now has r+2 equations in n variables, yielding p^{n-r-2} solutions. For r = 3, this gives n = 18, so I'm looking at p^{18-3-2} = p^{13} solutions to the full system.
+
+But here's the key issue: over F_p, the constraint Σs_i = 0 doesn't distinguish between integer sums of 0, p, 2p, and so on. So these p^{13} solutions are distributed across different weight classes. The trivial solution (all zeros) accounts for weight 0, and I'm specifically interested in the weight-p solutions where the integer sum equals p exactly. If I can establish how these solutions distribute across weight classes, I can isolate the count for weight p. that the weight-0 class has ≤ p^{n-r-2} - 1 members (i.e., just the trivial solution)... well actually the weight-0 class includes all solutions with Σs_i = 0 as integers, meaning all s_i = 0. So it's just 1 solution. The remaining p^{n-r-2} - 1 solutions have Σs_i = kp for some k ≥ 1.
+
+Now the question: can ALL of these solutions have k ≥ 2, i.e., weight ≥ 2p?
+
+For r = 3, p = 5, n = 18: the solution space has 5^{13} ≈ 1.2 billion solutions. The weight-0 class has 1. The remaining have weight kp with k ≥ 1. Each s_i ranges from 0 to 4, so the maximum possible weight is 72, which is about 14.4p. The weight distribution spans k values from 1 to 14.
+
+The key question is whether the weight-p class—solutions where Σs_i = 5 and the vectors sum to zero—could be empty. If it is, then every nontrivial solution would have weight at least 2p, meaning the coefficient sum is always at least 10. This would imply that any F_p-linear dependence among these vectors requires a minimum coefficient sum.
+
+But this is precisely what a zero-sum-free set achieves, and we know from verified results that no 18-vector set can be zero-sum-free at weight p. So the weight-p class must be nonempty for any configuration of 18 vectors. The challenge is finding a tool that can actually prove this nonemptiness rather than just relying on the impossibility of zero-sum-free sets.
+
+I should try applying the Ax-Katz or Chevalley-Warning approach, but adapted to account for the weight constraint.
+
+Let me set up the polynomial system more carefully. I'm working with variables in F_p representing coefficients from 0 to p-1, with the zero-sum constraints as degree-1 equations and the weight-p condition requiring both the sum to be 0 mod p and bounded by p as integers.
+
+The tricky part is encoding the weight constraint polynomially—I need the sum of the variables to equal exactly p as integers, which means the support size and their actual sum must both satisfy specific bounds. I'm considering using indicator variables via the Fermat trick to mark which variables are nonzero, then enforcing that their count and sum match the weight-p requirement, though this approach has some complications I'm still working through.
+
+Let me pivot to a different tool entirely: Alon's Combinatorial Nullstellensatz, which gives a criterion for when a polynomial takes a nonzero value on a product set based on its degree and the leading coefficient.
+
+The contrapositive is what matters for zero-sum problems—if a polynomial vanishes everywhere on a product set, its leading monomial coefficient must be zero, which then constrains the algebraic structure. For the Erdős-Ginzburg-Ziv theorem specifically, I'd construct a polynomial like the (p-1)-th power of the weighted sum and use the fact that if no p elements sum to zero, this polynomial shouldn't vanish on the restricted domain, forcing a coefficient contradiction.
+
+The issue is that encoding the weight constraint cleanly into the Nullstellensatz framework feels forced. So let me step back and look at what the data is actually telling me: across all 54 multi-fiber zero-sum-free sets at p=5, every single one is 3-fiber, meaning they're minimal with respect to linear forms.
+
+I'm trying to formalize a structural claim: any 3-spread set of 2α(r)+2 non-proportional vectors in F_p^{r+1} must contain a collinear triple where the three vectors come from different fibers under some projection. But I need to be precise about what "collinear in projection" means—if three vectors from distinct fibers have projections that are linearly dependent, then there's a nontrivial relation among the original vectors themselves.
+
+The key constraint is that if a₁v₁ + a₂v₂ + a₃v₃ = 0 with coefficients satisfying a₁c₁ + a₂c₂ + a₃c₃ ≡ 0 mod p (where c₁, c₂, c₃ are the fiber labels), then the weight a₁+a₂+a₃ of this relation should be bounded by p. For a triple specifically, the rank-3 argument guarantees we can rescale to achieve this weight bound, though I'm checking whether the weight minimization principle actually holds here. for 4 elements but works for 3).
+
+Wait, yes! The R1 Proposition 5 showed that for n = 3, the minimum weight over all μ is exactly p (it's always achievable). The failure is for n ≥ 4.
+
+So: **if three vectors from three different fibers are collinearly dependent (in the projection), they give a zero-sum of weight exactly p.**
+
+No wait, collinear in the FULL space, not just in projection. Let me reconsider.
+
+If v₁, v₂, v₃ are three vectors (from wherever) with a₁v₁ + a₂v₂ + a₃v₃ = 0 (a linear dependence over F_p), then the coefficients (a₁, a₂, a₃) form a zero-sum with weight a₁+a₂+a₃. When that sum is zero mod p, I can always find some μ that makes ⟨μa₁⟩ + ⟨μa₂⟩ + ⟨μa₃⟩ = p by the rank-1 argument. But I need to figure out what happens when the coefficients don't sum to zero mod p. happens?
+
+For a linear dependence a₁v₁ + a₂v₂ + a₃v₃ = 0 with not all aᵢ = 0:
+- If some aᵢ = 0, say a₃ = 0: then a₁v₁ + a₂v₂ = 0, so v₁ and v₂ are proportional. But we assume non-proportional, so all aᵢ ≠ 0.
+- So (a₁, a₂, a₃) ∈ (F_p*)³ with a₁v₁ + a₂v₂ + a₃v₃ = 0.
+
+Now I need to look at what happens when I apply μ to this relation—the weight becomes ⟨μa₁⟩ + ⟨μa₂⟩ + ⟨μa₃⟩. There's a crucial constraint here: when three nonzero field elements sum to zero mod p, their bracket sum is always either p or 2(p-1).
+
+Let me verify this more carefully. With a, b, c ∈ {1,...,p-1} and a+b+c ≡ 0 mod p, the actual integer sum a+b+c must be either p or 2p, since it's divisible by p and bounded between 3 and 3(p-1).
+
+When the sum equals p, the weight works out perfectly. But when it equals 2p, that's problematic—so I'm exploring whether rescaling by some μ ∈ F_p* can fix this, since multiplying the triple by μ preserves the congruence while potentially changing the integer sum.
+
+The key insight is that for any valid triple, the map sending μ to the integer sum of the rescaled triple only outputs p or 2p. If I can show that at least one μ produces p rather than all of them producing 2p, then I'm done. The argument hinges on showing that if every μ gave 2p, each component would have to exceed p/2 simultaneously, which leads to a contradiction. I'm testing specific values for μ. When μ = 1, the sum a + b + c falls in the range {p, 2p}, and when μ = p-1 (equivalent to -1 mod p), I'm computing how the residues transform under this multiplication.
+
+The key insight is that for any collinear triple, I can always choose either μ = 1 or μ = p-1 to produce a weight of exactly p, which completes the proof.
+
+Now I'm shifting focus to a different question: whether every set of 2α(r)+2 non-proportional vectors in F_p^{r+1} must contain a collinear triple. This connects to the cap problem in projective geometry—finding the maximum size of a set with no three collinear points. I'm looking at known bounds, particularly the Ellenberg-Gijswijt result from 2016 on caps in finite fields.
+
+For our specific problem, I need to verify whether the cap size in F_p^{r+1} stays below 9·2^{r-2}. Let me test this with p = 3 to see if the theoretical bounds actually support this inequality.
+
+When I check r = 3, the Ellenberg-Gijswijt bound gives cap sizes around 57.7 in F_3^4, but I only have 18 vectors to work with. Since 18 is well below the maximum cap size, it's entirely possible to have 18 vectors in F_3^4 with no collinear triple at all. This means the cap approach won't directly guarantee a collinear triple exists in my set—the exponential growth of the cap bound in r undermines the strategy.
+
+The real issue is that the 2α(r)+2 vectors aren't arbitrary; they come with multiplicity p-1 and I'm looking for weighted zero-sums, not just collinear triples. The cap obstruction only blocks one mechanism for creating zero-sums, but there are others involving support 4, 5, and higher. The data shows that many vectors get eliminated through these higher-support mechanisms rather than collinear triples alone—94 out of 607 cases at p=5 fall into this category.
+
+I need to step back and think about what I can actually prove here.
+
+The Coordinator wants me to reconcile the Projection Decoupling Obstruction with those 54 multi-fiber ZSF sets. Let me clarify what the obstruction says: vectors in a fiber fall exactly one term short of triggering a zero-sum within that fiber, which blocks the induction. My fiber threshold theorem tells me that non-kernel fibers with ≥ α(r)+2 vectors produce a zero-sum, so ZSF sets are capped at α(r)+1 vectors per non-kernel fiber. With 2α(r)+2 total vectors distributed across at least 3 fibers, the kernel fiber can hold at most 2 vectors.
+
+Now I'm thinking about the kernel fiber bound: it can support up to α(r)(p-1)+1 non-proportional vectors before forcing a zero-sum. So as long as the kernel fiber stays at ≤ α(r) vectors, the set remains ZSF even within the kernel. For the 54 multi-fiber ZSF sets at p=5 (each containing 17 vectors in F_5^4 that are genuinely multi-fiber across all linear forms), the Coordinator is asking me to determine the fiber multiplicities under the optimal linear form for each set.
+
+With α(3) = 8 for rank 3, the constraints are tight: the kernel fiber can hold at most 8 vectors before violating the zero-sum condition, each non-kernel fiber is capped at 9 vectors by the Fiber Threshold, and the total must sum to 17 with at least 3 fibers appearing under every linear form. The "doubled+e₁" construction achieves n₀ = 8 in the kernel fiber and n₁ = 8 in fiber 1, with the remaining vectors distributed elsewhere, though I need to verify the exact count for fiber 1 including the e₁ element itself. Now I'm working out the constraints for a 3-fiber distribution: with the kernel capped at 8 vectors and each non-kernel fiber at most 9, the two non-kernel fibers must sum to at least 9 to reach the total of 17, giving me a range of viable configurations where n_a + n_b spans from 9 up to 17.
+
+Looking at concrete examples, I can construct valid distributions like (8, 8, 1) where the kernel has 8 vectors and the non-kernel fibers split as 8 and 1, or (0, 9, 8) with no kernel vectors at all—all of these satisfy the constraints.
+
+The projection decoupling obstruction then imposes an additional constraint: for any non-kernel fiber with at most α(r)+1 vectors, the projection sequence within that fiber is bounded by length (α(r)+1)(p-1) = s, which limits how many vectors can actually fit while maintaining the zero-sum-free property.
+
+The key tension is that η(C_p^r) - 1 falls exactly one short of the s-constant, so I can't guarantee a zero-sum of length p within a single fiber, but I can guarantee shorter zero-sums depending on whether the fiber has enough vectors relative to the η bound.
+
+Now I'm checking whether the zero-sum I find actually works globally: the first coordinate of any zero-sum in the fiber gets multiplied by c, so I need the total weight to be divisible by p for the whole thing to vanish mod p. Since the zero-sum has weight at most p, it must have weight exactly p. p. ✓ (It can't be 0 since it's nonempty.)
+
+Wait, that's a crucial point. Let me re-examine.
+
+Within fiber F_c (c ≠ 0), all vectors have first coordinate c. A weighted sum Σs_i v_i with v_i ∈ F_c has first coordinate c·Σs_i. For this to be 0 mod p (zero in the first coordinate), we need Σs_i ≡ 0 mod p, i.e., weight divisible by p. The minimum positive weight is p.
+
+So a zero-sum of the full vectors in F_p^{r+1} using only vectors from F_c must have weight ≡ 0 mod p. Within the fiber, the projected vectors live in F_p^r, and a zero-sum of the projections doesn't require this weight constraint. But when we lift back to the full vectors, the first coordinate becomes c·(weight), which is only zero if the weight is divisible by p. Here's the problem: the η bound guarantees zero-sums of weight at most p among the projections, but if that weight is strictly less than p, lifting it gives a nonzero first coordinate, so we don't actually get a full zero-sum.
+
+That's why we need the s-constant instead. The s bound guarantees a zero-sum of weight exactly p among the projections, which lifts to a genuine zero-sum in the full space. But this requires a stronger condition: n_c(p-1) ≥ s(C_p^r), which translates to n_c ≥ α(r)+2. That extra vector per fiber is the price of guaranteeing weight exactly p rather than at most p.
+
+So the 54 multi-fiber ZSF sets exemplify this obstruction perfectly—each non-kernel fiber stays just below the s-constant threshold with at most α(r)+1 vectors, preventing the closure of zero-sums to weight p, while the η-constant can still trigger within fibers to produce shorter zero-sums.
+
+When we introduce an 18th vector, pushing the total to 2α(r)+2, the critical question becomes whether this addition allows some fiber to finally breach the s-constant threshold or enables cross-fiber combinations that collectively achieve weight ≤ p.
+
+In the doubled+e₁ construction, fiber 0 has 8 vectors and fiber 1 has 9. Adding to fiber 1 pushes it to 10, triggering the s-constant and producing a zero-sum. Adding to fiber 0 instead reaches 9 vectors, which activates the η-constant within that fiber—and since fiber 0 is the kernel, the first coordinate is automatically zero, so any weight works, giving us a full zero-sum. For a 3-fiber configuration, the 18th vector's placement determines the outcome: if it lands in a fiber already at 9, that fiber hits 10 and the s-constant applies; otherwise, we need to check whether the distribution still avoids triggering either threshold.
+
+The tricky case emerges when the 18th vector goes into a small fiber that stays below α(r)+1 while the kernel also remains below α(r)+1—like a (7, 9, 1, 1) distribution. Here no single fiber reaches the s-constant threshold and the kernel has only 7 vectors, so I need a cross-fiber argument to force a zero-sum, which is where the challenge lies.
+
+I'm now working on a specific theorem for the 3-fiber case. The idea is that if we have at least 3 nonempty non-kernel fibers under some projection, then the three representative vectors must contain a collinear triple, which guarantees a zero-sum of weight p. The proof hinges on whether the three projections of these representatives are collinearly dependent in the lower-dimensional space.
+
+But I'm realizing the logic isn't straightforward—collinear dependence of the projections doesn't automatically imply collinear dependence of the original vectors. I need to be more careful about the relationship between the fiber structure and the geometry in the full space. Let me reconsider by writing out the vectors explicitly: if v₁, v₂, v₃ have coordinates (c₁, u₁), (c₂, u₂), (c₃, u₃) where the c_i are the fiber labels and u_i are the projections, then I need to determine when these three vectors lie in a 2-dimensional subspace.
+
+For collinear dependence, I need a nontrivial linear combination av₁ + bv₂ + cv₃ = 0, which splits into two constraints: one on the fiber coordinates and one on the projections. The fiber constraint ac₁ + bc₂ + cc₃ = 0 with distinct nonzero c_i values gives me a 2-dimensional solution space for the coefficients (a, b, c), leaving p² - 1 nontrivial possibilities.
+
+Now I'm checking whether the projection constraint au₁ + bu₂ + cu₃ = 0 can be satisfied within this 2-dimensional space. I'll parameterize by fixing (a, b) and solving for c from the fiber equation, then substituting into the projection constraint to see what additional restrictions this imposes.
+
+After substitution, the condition reduces to checking whether two derived vectors w₁ and w₂ are proportional—this is the key criterion for collinear dependence.
+
+With many vectors sampled from each fiber, I'm now considering the probability that at least one pair of adjusted projections becomes proportional. If fiber F_{c₁} contains n₁ vectors and fiber F_{c₂} contains n₂ vectors, I need to find whether some adjusted projection from the first fiber is a scalar multiple of some adjusted projection from the second, accounting for the possibility that one might be zero.
+
+Treating each pair as a random draw from F_p^r, the probability that two vectors are proportional is roughly 1/p^{r-1}, so I'd expect around n₁ · n₂ / p^{r-1} matching pairs. For rank 4 (r = 3) over F_5, this gives n₁ · n₂ / 25 expected matches—barely one match when n₁ = n₂ = 5, but around 2.56 matches when both are 8. This suggests that with enough vectors per fiber, finding proportional pairs becomes plausible.
+
+But the empirical data contradicts this: the 54 multi-fiber ZSF sets at p = 5 show no collinear triples across fibers, which means this heuristic doesn't guarantee such alignments actually occur. So I need to shift tactics entirely and look at how weights distribute within each fiber instead.
+
+If the kernel fiber F_0 contains n₀ non-proportional vectors, their projections span some region in F_p^r, and as I vary the weight w of linear combinations, the achievable sums Σ_w(F_0) expand. The question is whether having enough vectors in F_0 forces the union of all low-weight sums to cover most of F_p^r, which would make collinear triples unavoidable.
+
+Let me shift to something more concrete—I want to prove the upper bound for r = 4 when the set is 3-spread, using the dimensional constraints and shadow saturation results from before.
+
+For any linear form, I can bound how many vectors fall into each fiber: at most 2 in degree-1 fibers, at most 4 in degree-2, at most 9 in degree-3, and at most 8 in the kernel fiber. The kernel bound is particularly useful—if the kernel contains more than α(3)+1 non-proportional vectors with distinct projections, then the η-based zero-sum argument applies within that kernel, giving me a zero-sum automatically.
+
+Now I'm working through the constraints on a zero-sum-free set: the kernel can have at most 8 vectors, each non-kernel fiber at most 9, and there must be at least 3 fibers total, capping the set at 18 vectors. When I distribute 18 vectors across at least 3 fibers under any linear form, the kernel gets at most 8, forcing at least 10 vectors into non-kernel fibers spread across at least 2 of them. If any non-kernel fiber reaches 10 vectors, the s-constant tool produces a zero-sum of weight exactly p.
+
+The key insight is that while the 3-spread condition requires at least 3 fibers for every linear form, I can strategically choose which linear form to analyze. Different linear forms decompose the set differently, and I can think of this geometrically: the 18 points in projective 3-space get partitioned by hyperplanes defined by different linear forms, where the kernel is the intersection with that hyperplane and fibers are the cosets.
+
+Now I'm using a counting argument on the Grassmannian—there are p³+p²+p+1 hyperplanes total, and each point lies on p²+p+1 of them. By averaging, a random hyperplane contains about 18/(p+1) points from S, which suggests most hyperplanes don't capture many points.
+
+For p=5 specifically, this works out to roughly 3.58 points per hyperplane on average, so the maximum must be higher. If I can find even one hyperplane containing at least 9 points from S, that's enough to trigger the η bound using that hyperplane as the kernel.
+
+The real question is whether it's possible for all hyperplanes to contain at most 8 points from S. If that's the case, then with 18 total points and a kernel of at most 8, I'd have at least 10 points outside the kernel distributed across at least 2 fibers. This connects to the projective geometry concept of k-arcs—sets of points where no hyperplane contains more than k of them—and I'm trying to determine what the upper bound is for such configurations in PG(3, p).
+
+Let me shift to a double-counting approach using incidences. With 18 points in F_p^4, I need to think about how many hyperplanes pass through pairs of points. Two independent vectors span a 2-dimensional subspace, and any hyperplane containing both must contain this entire 2-dimensional subspace.
+
+The number of 3-dimensional subspaces containing a fixed 2-dimensional subspace works out to p+1. So through any two independent points, exactly p+1 hyperplanes pass. This means when I sum |S ∩ H| over all hyperplanes H, I get 18 · (p²+p+1). Now I'm setting up the second moment calculation to bound how the points distribute across hyperplanes.
+
+For the second moment, I need to count pairs of points in S that lie on the same hyperplane. Each non-proportional pair of vectors determines p+1 hyperplanes, but I need to be careful about what I'm counting—whether I'm working affinely or projectively, and how proportionality affects the pair count. Let me shift to thinking about this projectively in PG(3,p) to avoid the affine-projective confusion.
+
+In projective 3-space over F_p, my 18 non-proportional vectors correspond to 18 distinct points. A hyperplane is a PG(2,p) subspace containing p²+p+1 points. The key counts are: there are p²+p+1 hyperplanes through any given point, and p+1 hyperplanes through any two independent points. Now I'm computing the sum Σ_H |S ∩ H| by counting how many times each point in S appears across all hyperplanes—each of the 18 points lies in exactly p²+p+1 hyperplanes, giving a total of 18(p²+p+1).
+
+For pairs of points, I'm summing C(|S ∩ H|, 2) over all hyperplanes. Any two independent points lie together on exactly p+1 hyperplanes, so this sum equals C(18,2)·(p+1) = 153(p+1). For triples, the count depends on whether they're collinear: triples in general position span a PG(2,p) and lie on exactly 1 hyperplane, while collinear triples lie on p+1 hyperplanes. This is getting complicated, so let me focus on proving a cleaner result about 3-spread weight-p closure.
+
+I want to establish that for r ≥ 3 and p ≥ 5, if we have 2α(r)+2 non-proportional vectors that are 3-spread (meaning every hyperplane misses at least one fiber class), then they must contain a zero-sum with weight at most p. The two-fiber case is already handled, so I need to tackle the 3-spread case directly using the numerical constraints.
+
+Let me try applying a pigeonhole argument: if S is 3-spread with |S| = 2α(r)+2, then some hyperplane H must contain at least ⌈(2α(r)+2)/(p+1)⌉ vectors from S. But I'm realizing the 3-spread condition doesn't directly constrain individual hyperplane sizes—it only guarantees that every linear form hits at least 3 fiber classes. I need to think more carefully about what this structural constraint actually implies for the distribution of vectors across hyperplanes. the p fiber values. This means: no single coset of ker(w) contains all of S, and no two cosets contain all of S.
+
+Equivalently (projectively): no hyperplane and its complement partition S into ≤ 2 classes.
+
+**A different approach:** The 3-spread condition is VERY restrictive. Let me exploit it by choosing a "good" linear form.
+
+**Claim:** In a 3-spread set S of 2α(r)+2 vectors, there exist three vectors v₁, v₂, v₃ ∈ S that are pairwise in different fibers for SOME linear form, AND their projections to the kernel are such that the cross-fiber collinear triple exists.
+
+Hmm, this is too vague. Let me be more precise.
+
+Actually, let me step back and think about what structural constraint the 3-spread condition imposes.
+
+So a 3-spread set is precisely one that avoids being contained in any union of 2 affine hyperplanes. An affine hyperplane is a coset of a linear hyperplane, and the union of 2 parallel ones captures the 2-fiber case. The contrapositive is that S is NOT 3-spread exactly when some linear form w and constants c₁, c₂ exist such that S fits entirely in {w = c₁} ∪ {w = c₂}.
+
+OK, I think the deepest result I can prove for this round is the following:
+
+### MAIN THEOREM: Weight-Budget Exhaustion via Dual Fibers
+
+**Theorem (Dual Fiber Argument**
+
+Now I'm setting up the main theorem for rank 4, stating that a 3-spread set of 18 non-proportional nonzero vectors in F_p^4 contains a weighted zero-sum of weight at most p, given the η bound. I'm starting the proof by choosing a linear form w₁ that maximizes the kernel size, then splitting into cases based on how many vectors land in the kernel versus the non-kernel fibers.
+
+For the case where the non-kernel has at least 10 vectors spread across multiple fibers, I'm introducing a second independent linear form w₂ to create a finer decomposition. Since S is 3-spread with respect to w₂ as well, this gives me at least 3 fibers under the second form. The two linear forms together define a 2-dimensional projection that partitions the space into a grid of fibers, which should help me locate a weighted zero-sum by analyzing the distribution across this refined structure. The joint distribution constraints are that row sums match the w₁-fiber counts and column sums match the w₂-fiber counts. I'm realizing the direct combinatorial approach isn't leading anywhere productive, so let me pivot to the polynomial method instead—specifically using Chevalley-Warning to establish that weight-p zero-sums must exist in this system.
+
+I'm setting up variables s₁, ..., s_n in F_p where n = 2α(r)+2, with vectors v₁, ..., v_n in F_p^{r+1}. The constraints are that the weighted sum of vectors equals zero and the total weight is divisible by p, giving me r+2 polynomial equations of degree 1. Since n grows much faster than r, the Chevalley-Warning condition is satisfied, guaranteeing that the number of solutions is divisible by p. Because the trivial solution exists, there must be at least p solutions total, which means a nontrivial weight-p zero-sum is guaranteed to exist.
+
+Now I need to distinguish between solutions by their integer weight. The weight-0 case is just the trivial solution where all s_i = 0. For other weights, I'm looking at whether a subset of vectors can sum to zero with weight that's a multiple of p—like 2p or higher—versus exactly p. The key insight is that over F_p, every solution satisfies the divisibility constraint, but the actual integer weight (counting the s_i values as integers from 0 to p-1) can range from 0 up to n(p-1), taking only multiples of p.
+
+So I have N - 1 nontrivial solutions total, and I want to guarantee at least one has weight exactly p rather than 2p or higher. The strategy is to bound how many solutions can have weight ≥ 2p—if that count is less than N - 1, then some solution must have weight p. I could try a counting argument or apply the Cauchy-Witt theorem again, but there's a cleaner approach: instead of working with all subsequences, I can restrict attention to subsequences of size at most p, which naturally caps the weight.
+
+Now I'm considering how to formalize this. One option is to introduce indicator variables that track which elements are nonzero, then impose a constraint on the support size, but that's awkward to encode. A better path is to fix a specific subset of the vectors and apply the Erdős-Ginzburg-Ziv theorem or the s-constant argument within that subset. Actually, the core insight is even more direct: I have n = 2α(r) + 2 non-proportional vectors in F_p^{r+1}, and the s-constant argument gives me exactly what I need.
+
+The s-constant for C_p^{r+1} tells me the minimum sequence length that guarantees a zero-sum subsequence of length exactly p. I'm trying to show that this constant equals (α(r+1) + 1)(p-1) + 1, which is one more than (2α(r) + 2)(p-1). So my sequence of length (2α(r) + 2)(p-1) falls just short of forcing such a subsequence—it's below the threshold. the s-constant.
+
+Hmm wait, that can't be right. Let me recalculate.
+
+η(C_p^{r+1}) = α(r+1)(p-1)+1 = (2α(r)+1)(p-1)+1 (what we want to prove).
+s(C_p^{r+1}) = η(C_p^{r+1}) + p-1 = (2α(r)+1)(p-1)+1 + p-1 = (2α(r)+2)(p-1)+1.
+
+Our sequence has n = 2α(r)+2 vectors, each with multiplicity p-1, so total length = (2α(r)+2)(p-1).
+
+s(C_p^{r+1}) = (2α(r)+2)(p-1)+1.
+
+So the sequence is one element short of the s-constant, but that's actually fine—I don't need a zero-sum of length p, just length at most p. The η-constant is what matters here, and checking the inequality: (2α(r)+2)(p-1) ≥ (2α(r)+1)(p-1)+1 simplifies to p-1 ≥ 1, which holds for p ≥ 3.
+
+Wait, but I'm trying to prove what η equals in the first place. I can't just assume η has this value to verify the sequence length exceeds it. The real issue is that my sequence length (2α(r)+2)(p-1) gives me a weaker bound on η than what I'm aiming for—it shows η ≤ (2α(r)+2)(p-1), which is off by p-2 from the target bound.
+
+Let me reconsider the setup: I have 2α(r)+2 non-proportional vectors, each appearing p-1 times, and I'm looking for any zero-sum with length at most p. A zero-sum of length ≤ p means coefficients in {0,...,p-1} summing to at most p total, and over F_p this sum can be any residue class.
+
+The key insight is distinguishing between integer sums that are ≤ p versus those exceeding p. For weight 1, a single vector would need to be zero, which contradicts our setup. For weight 2, I need to check whether two vectors can sum to zero.
+
+If we have two distinct vectors v_i and v_j with coefficients summing to zero, that means v_j = -v_i in F_p, making them proportional—but our vectors are non-proportional by assumption. A single vector with coefficient 2 would require 2v_i = 0, which only happens if v_i = 0. So weight 2 gives no zero-sums either.
+
+Now checking weight 3 with three vectors...
+
+For a collinear triple v_i + v_j + v_k = 0, rescaling always produces weight exactly p, not 3. But I could also have a different dependency like 2v_i + v_j = 0 with weight 2. The key question is whether we're looking at the unrescaled triple itself or allowing different coefficient choices that might give a zero-sum with smaller weight.
+
+For any dependency a₁v₁ + a₂v₂ + a₃v₃ = 0, the weight is the sum of the coefficients' representatives in {1,...,p-1}, which is either p or 2p. If it's 2p, I can rescale by μ = p-1 to bring it down to p. So every collinear triple yields a zero-sum of weight p.
+
+Now for four vectors in a dependency, the weight could be p, 2p, or 3p, which opens up more possibilities.
+
+The real question becomes: in any 3-spread set of 18 non-proportional vectors in F_p^4, must there exist either a collinear triple or a 4-vector dependency with weight at most p?
+
+The 54 multi-fiber ZSF sets of size 17 avoid both collinear triples and low-weight dependencies entirely. When I add an 18th vector, I need either a collinear triple involving it or a higher-support dependency. The computer search found that 513 out of 607 candidates for the 18th vector satisfy this constraint.
+
+The computational results show that support-3 (collinear triples) eliminates 513 candidates, while support-4 handles the remaining 94 — suggesting that when a collinear triple doesn't form, a 4-vector dependency with bounded weight typically does. For a 4-vector dependency in F_p^4, the four vectors must span a 3-dimensional subspace, and the dependency coefficients can be weighted by any scalar μ to minimize the total weight. I'm exploring whether there's always some choice of μ that keeps this weight at most p when no collinear triple exists.
+
+The key insight is that for the dependency to have weight 2p regardless of μ, the coefficients must form a complete residue system of F_p* — and for p=5, the tuple (1,2,3,4) is the only one with this property. This means for p=5, any 4-vector dependency will have some μ where the weight is at most p, which would guarantee support-4 always succeeds when support-3 fails.
+
+Now I'm reconsidering whether the coefficients in a minimal dependency actually need to be distinct — they could repeat, which would change the structure of what dependencies are possible.
+
+For a 4-vector dependency over F₅, once I normalize the first coefficient to 1, I need to find valid choices for the remaining three coefficients from the nonzero elements. The weight constraint becomes a₂ + a₃ + a₄ ≤ 4, which severely limits the possibilities since each coefficient is at least 1.
+
+Now I'm checking what happens when I scale the entire dependency by some μ ≠ 1 in F₅*. The weight condition generalizes to requiring the sum of the scaled coefficients to stay at most 5, and I need to determine which scalings preserve this bound. I need to reconsider what I'm checking here. The zero-sum condition applies in the vector space F_p^{r+1}, not just to the coefficients themselves—I was mixing up the constraint. Let me clarify: if vectors v₁, v₂, v₃, v₄ have a dependency with coefficients a₁, a₂, a₃, a₄, then the actual condition is that their weighted sum equals zero as vectors, not that the coefficients sum to zero. For each dependency relation, I need to test all nonzero scalars μ in F_p to find which one minimizes the weight, and that minimum value w* is what I'm after. For the specific case of (1,2,3,4) at p=5, I'm computing what that minimum weight turns out to be. For (1,1,2,3), the sum is 7 ≡ 2 mod 5, which exceeds 5 when μ=1. I need to check whether the weighted sum Σ⟨μaᵢ⟩ can stay below p by using the modular constraint—since each term must be congruent to μaᵢ mod 5, the total is constrained to 2μ mod 5, meaning the actual sum is 2μ + 5k for some k ≥ 0, with a minimum of at least 4 when each component is at least 1. Σ ≡ 2μ mod 5. For μ=1: Σ ≡ 2, min Σ = 7 (=2+5). For μ=4: Σ ≡ 8 ≡ 3, min Σ = 8 (=3+5). Hmm, can we get Σ = 2? That would require each ⟨μaᵢ⟩ ≤ 1 ... but ⟨μaᵢ⟩ ≥ 1, so Σ ≥ 4. With Σ ≡ 2 mod 5, minimum Σ is 7. For Σ ≡ 3: min 8. For Σ ≡ 4: min 4 if achievable, but checking μ = 2 gives ⟨2·1⟩=2, ⟨2·1⟩=2, ⟨2·2⟩=4, ⟨2·3⟩=1, so Σ = 9 ≡ 4 mod 5. For Σ ≡ 0 mod 5, I need to find which μ satisfies 2μ ≡ 0.
+
+Since μ must be in F₅*, there's no solution for the ≡ 0 case. So for the dependency (1,1,2,3), the minimum weight across all rescalings is 7, which exceeds 5. This particular dependency can't be rescaled down to weight ≤ 5. But whether (1,1,2,3) even appears as a dependency depends on the actual geometry of the vectors—not all coefficient tuples arise. The real question is whether some 4-vector dependencies can be rescaled to weight p while others cannot.
+
+Let me step back and think about this differently. The R1 report proved the Complete Inductive Reduction for most cases, leaving only the 3-spread sets of 2α(r)+2 vectors unresolved. The CW polynomial method seemed most promising for tackling this remaining case. Let me try to formalize how the CW approach would work: given a set of non-proportional, nonzero vectors in F_p^{r+1}, I need to show that some linear combination with bounded coefficients sums to zero.
+
+I'm constructing an auxiliary polynomial that evaluates to 1 precisely when a coefficient vector produces a zero-sum, then counting how many such solutions exist by summing this polynomial over all possible coefficient choices.
+
+Now I'm introducing a weight function that further restricts to solutions where the sum of coefficients is divisible by p, which means the total weight falls into the set {0, p, 2p, ...}. The combined polynomial Q(s) · W(s) has degree (r+2)(p-1), and by the Chevalley-Warning theorem, if this degree is smaller than the number of variables n, then the count N must be divisible by p.
+
+Since the trivial solution always satisfies both constraints, we know N ≥ p, giving us at least p-1 nontrivial solutions. But checking the specific case where r = 3 and p = 5 with n = 18, the degree bound (r+2)(p-1) = 20 exceeds n, so the theorem doesn't guarantee divisibility by p here. I need to reconsider the approach—perhaps using Fermat's little theorem to reduce the polynomial degrees and make the theorem applicable. so any polynomial can be reduced to have degree ≤ p-1 in each variable. After reduction, the actual degree might be lower.
+
+The "reduced degree" of Q·W: each variable sᵢ appears with degree at most p-1 (after reduction). The total degree in the CW theorem is the sum of degrees of the original polynomial system, not the reduced polynomial.
+
+Actually, CW works with the original polynomials f₁, ..., f_k with Σdeg(fᵢ) < n. The polynomials are:
+- f_j(s) = Σᵢ sᵢ vᵢⱼ for j = 1, ..., r+1 (degree 1 each)
+- f_{r+2}(s) = Σᵢ sᵢ (degree 1)
+
+The total degree is r+2, and I need to verify this is less than n = 2α(r)+2. For r ≥ 3, α(r) ≥ 8 gives n ≥ 18, which is definitely larger than 5. So the Chevalley-Warning theorem applies to this system, guaranteeing that the number of solutions is divisible by p. Since the trivial solution exists, there must be at least p solutions overall, meaning there are at least p-1 nontrivial solutions to Σsᵢ vᵢ = 0.
+
+Now the question is whether among these p-1 nontrivial solutions, at least one has weight exactly p. Each solution has total weight kp for some positive integer k, and for n = 18, p = 5, the possible values are k ∈ {1, ..., 14}. I need to determine if there's necessarily a solution with k = 1.
+
+The issue is that counting arguments alone don't guarantee this — all p-1 solutions could theoretically have k ≥ 2. But I can strengthen the argument using the Ax-Katz theorem, which gives p-adic divisibility constraints on the number of solutions based on the degrees of the polynomials in the system.
+
+For r = 3, the theorem tells me that p^13 divides the total number of solutions, so there are roughly 5^13 nontrivial solutions distributed across the weight classes. Even with this many solutions spread across 14 weight classes, I need to show that at least one must have k = 1.
+
+Actually, I can use a symmetry argument to prove weight-p solutions must exist. The key insight is that the solution space forms a linear subspace of F_p^n with dimension n - (r+2), and I can analyze the structure of solutions within this space to show that weight-p solutions are forced to exist.
+
+For the specific case with r = 3 and n = 18, the solution space has dimension 13, containing p^13 elements. Now I'm examining how the weight function behaves under scalar multiplication—for any nonzero solution s, multiplying by different field elements λ produces solutions with varying weights, and this structure should force at least one solution to have weight exactly p. NOT in general equal to λ·w(s). The function w is nonlinear (due to the modular reduction ⟨·⟩). But we can analyze the orbit {w(λs) : λ ∈ F_p*}.
+
+For s with exactly one nonzero coordinate: s = (0,...,0,a,0,...,0) with a ∈ F_p*. w(s) = a, w(λs) = ⟨λa⟩. As λ ranges over F_p*, ⟨λa⟩ ranges over all of {1,...,p-1}. The integer weight w(λs) = ⟨λa⟩, which takes all values in {1,...,p-1}. But Σsᵢ = a ≡ 0 mod p requires a = 0, which is a contradiction, so single-coordinate solutions can't exist in V.
+
+For two nonzero coordinates, the zero-sum constraint forces b = -a, and the orthogonality condition then requires v_i = v_j, violating the non-proportionality assumption. So two-coordinate solutions are ruled out as well.
+
+For three or more nonzero coordinates, the weight is at least 3.
+
+Now I'm analyzing what happens when w(s) = kp for some positive integer k. If k = 1, then w(s) = p, which means the support (number of nonzero coordinates) must be between 3 and p. The weight is bounded above by m(p-1) where m is the support size.
+
+For the case where w = p specifically, the support ranges from 3 to p. But I'm realizing this approach isn't leading anywhere obvious—I need to think about this differently. Let me try a counting argument instead: among all the elements in V, which has dimension 13 for our parameters, I want to show that at least one element has weight exactly p using a dimension or cardinality argument.
+
+Suppose for contradiction that every nonzero element of V has weight at least 2p. Then I can define a "small neighborhood" U of vectors in F_p^n with total weight at most p, and count how many such vectors exist—this should give me a contradiction with the dimension of V.
+
+Now I'm computing |U| using a combinatorial argument: I need to count vectors (s₁,...,s_n) where each coordinate is in {0,...,p-1} and the sum is at most p. I'll break this down by the number of nonzero coordinates and sum over all possibilities. I'm working through the combinatorial count for the constraint set, and it's getting messy with the nested summations. Let me step back and estimate the size instead—using the hockey stick identity, |U| is roughly C(n+p, p), which for n=18 and p=5 gives around 33,649. Comparing this to the total field size of 5^18 ≈ 3.8×10^12, the probability that a random vector lands in U is vanishingly small, about 10^-8. The key observation is that V and U only intersect at the origin, which constrains the structure significantly.
+
+The counting argument alone doesn't yield a contradiction though—U is just too sparse relative to the ambient space. So I'm shifting to a dual approach using character sums to analyze the weight distribution of elements in V, which should give me tighter constraints on what weights are actually achievable. I need to organize what I've actually proven and highlight the genuinely new contributions here—the CW argument's limitations, the structural constraints on multi-fiber sets, the cross-fiber collinearity criterion, and the support-scaling dichotomy all fit together as a coherent framework for understanding where the problem stands.
+
+Now I'm formalizing the Support-Scaling Dichotomy as a precise theorem about how weighted sums behave modulo p, establishing when dependencies on support-k sets can be rescaled to weight p. w(μ) = Σ⟨μaᵢ⟩ where ⟨x⟩ is the integer representative of x mod p in {1,...,p-1} (for x ≢ 0) or 0 (for x ≡ 0). Since each aᵢ ≠ 0 and μ ≠ 0: μaᵢ ≠ 0, so ⟨μaᵢ⟩ ∈ {1,...,p-1}. Thus w(μ) = Σ⟨μaᵢ⟩ ∈ {k, ..., k(p-1)}. Since each ⟨μaᵢ⟩ ≡ μaᵢ mod p, the sum satisfies w(μ) ≡ μΣaᵢ mod p, which means w(μ) = μΣaᵢ mod p + jp for some non-negative integer j constrained by the range of w(μ). For the zero-sum case where Σaᵢ = 0, I need to examine how this affects the possible values of j. So when j = 1, the weight becomes μΣaᵢ mod p plus p, and for this to satisfy w(μ) ≤ p, I need μΣaᵢ ≡ 0 mod p. If the sum of coefficients is already divisible by p, then w(μ) = p regardless of μ, but this creates a constraint on j.
+
+Now I'm working through the case where Σaᵢ ≡ 0 mod p. Since w(μ) must be divisible by p and fall within the range {k, ..., k(p-1)}, the possible values are the multiples of p in that interval. For k ≤ p, the smallest such multiple is p itself, so w(μ) = p. p is possible iff there exists μ with Σ⟨μaᵢ⟩ = p.
+
+When all aᵢ are identical, w(μ) = p exactly. But if the aᵢ are distinct, the situation changes—the values ⟨μaᵢ⟩ might not all be distinct even when k exceeds p-1, so w(μ) could be larger than p.
+
+For k = 3, the Hamming weight must be divisible by p and fall between 3 and 3(p-1), which means w(μ) ∈ {p, 2p} for p ≥ 5. I can always find some μ achieving w(μ) = p. Now checking the case k = 4 with p = 5... I'm checking whether w = p works for specific tuples in F_7*, testing cases like (1,3,5,5) where different μ values give either 2p or p, and (1,2,3,1) which achieves p = 7. For (1,2,3,4) with sum 10 ≡ 3 mod 7, this doesn't satisfy the constraint anyway, so it's not relevant to this analysis. For the tuple (1,3,4,6) at p=7, I'm checking what happens when I multiply each element by different values of μ modulo 7—and remarkably, every single multiplication gives a sum of 14, which equals 2p. This is a problem because it means the minimum weight for this dependency is 2p, not p, which violates what we'd expect for a good code structure. I'm trying to understand why this set has this special property where scaling by any μ preserves the total weight. - μ=2: {2,6,1,5}
+- μ=3: {3,2,5,4}
+- μ=4: {4,5,2,3}
+- μ=5: {5,1,6,2}
+- μ=6: {6,4,3,1}
+
+Each set has the same sum mod 7 (namely 0) and each is a 4-element subset of {1,...,6}. The sum of representatives is always 14.
+
+The reason: {1,3,4,6} is a UNION OF COSETS of the unique subgroup of F_7* of index 2. The subgroup of squares in F_7* is {1,2,4} (since 1²=1, 2²=4, 3²=2, 4²=2, 5²=4, 6²=1). Wait, that's only 3 elements. The non-squares are {3,5,6}. {1,3,4,6} is not a coset.
+
+Actually, F_7* ≅ Z_6. Using g=3 as a generator: 3^0=1, 3^1=3, 3^2=2, 3^3=6, 3^4=4, 3^5=5. In discrete log terms: 1↦0, 3↦1, 2↦2, 6↦3, 4↦4, 5↦5. So {1,3,4,6} maps to {0,1,3,4}, and I'm checking what the sum of these exponents is.
+
+The sum of discrete logs is 0+1+3+4=8, which doesn't immediately suggest a coset structure. But the key insight is that A satisfies two conditions: the sum of its elements is 0 mod p, AND for every nonzero μ in F_p*, the sum of μa over all a in A equals 2p. This second condition captures how A and its negation overlap in a specific balanced way.
+
+Now I'm working through the arithmetic more carefully. When I compute the sum of ⟨μa⟩ values (where ⟨·⟩ denotes the representative in {1,...,p-1}), I need to account for how many times the modular reduction wraps around. Since Σa ≡ 0 mod p, the sum μΣa is also 0 mod p, so the total sum depends entirely on counting these wraparound points. So I can express the Hamming weight as w(μ) = p(μm - Σqᵢ(μ)) where m is the average contribution and qᵢ(μ) captures the quotient from each modular multiplication. For k = 4, the sum of the aᵢ values ranges between 4 and 4(p-1), and since it must be divisible by p, m takes on specific values in that range.
+
+Let me work through the concrete case where p = 5 and the coefficients are (1,2,3,4), giving a sum of 10 and m = 2. I'm checking what happens at μ = 1: each product aᵢ·μ stays below 5, so all quotients are zero, making Σqᵢ = 0 and w = 5(2·1 - 0) = 10.
+
+At μ = 2, the products 2·3 = 6 and 2·4 = 8 exceed 5, contributing quotients of 1 each, so Σqᵢ = 2 and w = 5(4 - 2) = 10 again. This suggests w stays constant at 10 for all μ in this case, which would require 2μ - Σqᵢ(μ) = 2 always. But I'm wondering whether there's a configuration where this difference equals 1 instead, which would give w = 5. Since qᵢ(μ) = ⌊μaᵢ/p⌋ and each qᵢ ∈ {0,...,p-2}: Σqᵢ ∈ {0,...,4(p-2)}.
+
+At p=5: need Σqᵢ = 2μ-1 ∈ {1,3,5,7} (for μ=1,2,3,4). And qᵢ = ⌊μaᵢ/5⌋.
+
+Testing each value of μ, I'm computing the individual quotients and their sums. For μ=1 through μ=4, the sums consistently fall short by exactly 1 from what's needed. This pattern reveals something crucial: the tuple (1,2,3,4) satisfies Σqᵢ(μ) = 2μ - 2, which means w = 5(2μ-(2μ-2)) = 10 regardless of μ. This is the balanced arithmetic progression property I'm looking for.
+
+The key insight is that {1,2,3,4} forms the complete set of nonzero residues modulo 5, so multiplying by any μ just permutes this set—both the sum of quotients and the number of wraps remain invariant. This generalizes to a theorem: whenever a tuple is a rearrangement of all nonzero residues in F_p*, the weight w(μ) becomes constant across all μ, equal to p(p-1)/2. For p=5 with k=4, this gives w(μ) = 10 for all μ, confirming the calculation.
+
+Now I'm checking when w can be small enough to satisfy w ≤ p. Since w = p(p-1)/2 for balanced tuples, I need p(p-1)/2 ≤ p, which simplifies to p ≤ 3. This means for any prime p ≥ 5, a dependency whose coefficients form a complete rearrangement of F_p* will have w too large to satisfy the constraint.
+
+But I should verify whether this actually occurs in practice. For a 4-vector dependency at p=5 where all coefficients are distinct elements of {1,2,3,4}, the weight exceeds p, creating what I'm calling the Balanced Tuple Obstruction. Since any 4-vector dependency in 4-dimensional space comes from the vectors spanning a 3-dimensional subspace, the coefficients are essentially determined by the geometry once I normalize. The question is whether these coefficients can actually form a permutation of {1,2,3,4}.
+
+Now I'm trying to pin down the real constraint: when the coefficients aren't a permutation of F_p*, can I always rescale to get weight ≤ p? For k=4 and p=5, the sum of coefficients relates to the zero-sum condition modulo 5, and I need to figure out what values are actually achievable. ᵢvᵢ = 0 in F_p^4, which doesn't constrain Σaᵢ directly.
+
+Hmm, I was sloppy. The zero-sum is Σaᵢvᵢ = 0 in F_p^{r+1}. This constrains the VECTOR sum, not the coefficient sum. The coefficient sum Σaᵢ can be anything.
+
+For the weight: w(μ) = Σ⟨μaᵢ⟩, and w(μ) mod p = μΣaᵢ mod p. So w(μ) = μΣaᵢ mod p + p·(wraps).
+
+For w(μ) ≤ p, I need either μΣaᵢ ≡ 0 with wraps = 1 giving w = p, or μΣaᵢ ≡ c ∈ {1,...,p-1} with wraps = 0 giving w = c ∈ {k,...,p-1}. When Σaᵢ ≡ 0 mod p, the weight is always a multiple of p, so achieving w = p requires the carry terms to sum to exactly 1, which depends on how the individual ⟨μaᵢ⟩ values distribute.
+
+But if Σaᵢ ≢ 0 mod p, I can choose μ = (Σaᵢ)^{-1} · c for any c ∈ {k,...,p-1}, making μΣaᵢ ≡ c mod p. If all μaᵢ < p (no wraps), then w(μ) = c exactly, which is in the target range. This might be the key insight—when the coefficient sum is nonzero mod p, I have direct control over the weight.
+
+The constraint for avoiding wraps is μ ≤ (p-1)/max(aᵢ). Within this bound, all products μaᵢ stay below p, so the weight equals the modular sum directly without any carry contributions.
+
+Now let me formalize this cleanly. I'm stating a theorem about support-k weight reduction when the coefficients don't sum to zero mod p: if I choose μ = 1, the weight is simply the sum of the representatives, which is bounded by p.
+
+But if that sum exceeds p, I can use the fact that Σaᵢ is nonzero mod p to guarantee that some scalar multiple μ₀ pushes the product μ₀Σaᵢ into the range {k, k+1, ..., p-1}, which then gives me a weight bound I'm trying to establish.
+
+The issue is that μ₀ is pinned down by the congruence condition, so I can't freely choose how large it is. Let me try a different approach: instead of hunting for a specific μ₀, I'll just check μ = 1 and μ = -1 directly. When μ = -1, the weight becomes the sum of p minus each aᵢ, which totals exactly k.
+
+p minus the original weight. So the two weights always sum to k.p. This means at least one of them must be ≤ p unless both fall in the gap between p and (k-1)p, which only happens when k ≥ 3. For k = 2, the constraint forces one weight to stay within bounds.
+
+For k = 3, the interval (p, 2p) allows both weights to exceed p, but I've already shown the minimum across all three choices equals p. For k = 4, I'm checking whether the same holds when both w(1) and w(-1) could exceed p...
+
+When the sum is divisible by p, the possible values are p, 2p, or 3p. If the sum equals p or 3p, I can find a character with weight at most p, but when it's 2p, neither w(1) nor w(-1) helps directly. I need to verify this case works with the third character choice.
+
+For sums not divisible by p, I'm checking whether w(1) or w(-1) stays bounded by p depending on the remainder structure. Never (since r ≤ p-1). So w(-1) > p. Hmm.
+
+Actually wait: for Σaᵢ ≢ 0 mod p with k = 4 and aᵢ ∈ {1,...,p-1}: Σaᵢ ∈ {4,...,4(p-1)} with Σ ≢ 0 mod p.
+
+If Σ ≤ p: w(1) ≤ p. ✓
+If Σ ∈ {p+1,...,2p-1}: w(1) ∈ {p+1,...,2p-1}. w(-1) = 4p - Σ ∈ {2p+1,...,3p-1}. Both > p.
+
+Let me explore μ = 2 instead. When I compute w(2) = Σ⟨2aᵢ⟩, the behavior depends on whether each 2aᵢ wraps around p. If all aᵢ < p/2, then w(2) = 2Σaᵢ which exceeds p. But when some aᵢ ≥ ⌈p/2⌉, those terms reduce by p, so I need to track how many such terms exist—let me call this count mₖ.
+
+The condition w(2) ≤ p requires mₖ ≥ 2Σ/p - 1. Given that Σ ranges from p+1 to 2p-1, this threshold falls between 1 and 3, meaning I need at least 2 of the 4 coefficients to be at least ⌈p/2⌉.
+
+This detailed case analysis is pointing toward a broader structural principle. Let me step back and formulate the key theorem: for a dependency a₁v₁ + ... + a_kv_k = 0 with k ≤ 2p - 1, the minimum value of Σ⟨μaᵢ⟩ over all nonzero μ ∈ F_p is at most p, unless the dependency satisfies some special structural condition.
+
+The tricky part is pinning down exactly what that condition is. I initially thought it was about balanced tuples or cosets, but now I'm realizing the real issue is when the sum Σ⟨μaᵢ⟩ stays constant regardless of which μ we choose. That would happen if the multiset {μa₁,...,μa_k} equals {a₁,...,a_k} for every μ, meaning the multiset is closed under multiplication. But since F_p* is cyclic and acts transitively on itself, the only such multiset is F_p* itself, which doesn't quite capture the problematic cases I'm seeing.
+
+Let me check my concrete examples more carefully. At p=7 with the tuple (1,3,4,6), when I multiply by μ=1 I get {1,3,4,6} with sum 14, and when I multiply by μ=2 I get {2,6,1,5}, which also sums to 14.
+
+The key insight is that this constant sum isn't because the set is closed under multiplication—it's actually coming from a deeper constraint. The sum formula Σ⟨μaᵢ⟩ = p·(μm - Σqᵢ(μ)) means for the sum to stay constant across all μ, I need μm - Σqᵢ(μ) = 2 for every μ, where m = 2 at p=7.
+
+This translates to Σqᵢ(μ) = 2(μ-1), and I'm verifying this holds: at μ=1 the sum of quotients is 0, at μ=2 it's 2, at μ=3 it's 4, and the pattern continues as expected.
+
+The key insight is that the set {1,3,4,6} has a special complementary structure—the pairs sum to 7, which is the modulus p, and this symmetry is what drives the exact formula. So the key insight is that complementary pairs—coefficients that sum to p—create a balanced obstruction. When k is even and all coefficients form such pairs, every choice of μ yields the same weight kp/2. I'm seeing this pattern emerge across examples: at p=5 with {1,4,2,3} and at p=7 with {1,6,3,4}, both decompose into two complementary pairs and hit weight 2p. This suggests a fundamental theorem: a support-k dependency achieves minimum weight kp/2 uniformly across all μ precisely when the normalized coefficients arrange into complementary pairs.
+
+Now I'm checking when this obstruction actually blocks small weights. For w ≤ p to be possible, I'd need kp/2 ≤ p, which forces k ≤ 2—so any even support-4 or higher with this complementary structure is automatically stuck at weight ≥ 2p. For odd k, the complementary pair trick doesn't apply since k/2 isn't an integer, though other obstructions might still exist. Support-3 is already handled: we know w = p is always achievable there. Now I'm looking at support-5 cases, particularly when k = p = 5. I'm realizing that complementary pairs with weight exactly p might be doing the work here, not necessarily rescaling to weight less than p. Looking at the computational results, all 607 candidates at p=5 get eliminated—513 through support-3 dependencies and 94 through support-4—but some of those support-4 eliminations could be happening via complementary pairs or non-complementary coefficient structures rather than the rescaling mechanism I was focusing on.
+
+Now I'm checking whether a support-4 dependency at p=5 with non-complementary coefficients can always be rescaled to weight ≤ 5. Let me work through the possible normalized coefficient tuples (1, a, b, c) where all entries are in {1,2,3,4} and the sum is divisible by 5.
+
+For Σ = 5, I need (a,b,c) summing to 4, which gives tuples like (1,1,2) and permutations—the coefficient tuple (1,1,1,2) has weight 5 at μ=1. For Σ = 10, I'm enumerating all (a,b,c) with sum 9, including cases like (1,4,4), (2,3,4), and (3,3,3), to check their weights under rescaling. Looking at (1,3,3,3) with Σ=10, when μ=2 I get 2+1+1+1=5 which equals p, so this one rescales. For (2,2,2,4), both μ=2 and μ=3 work as rescaling factors. And (2,2,3,3) forms complementary pairs like the earlier cases, which should also give a constant sum.
+
+Now moving to Σ=15, the only partition is (4,4,4,3). When μ=4, I'm computing the residues: 4·4≡1 mod 15, 4·3≡12≡2 mod 15, and summing these up to check if this gives a valid rescaling. I'm verifying that (4,4,4,3) produces a weight of 5 at μ=4, which matches p perfectly. Now checking the complementary pair cases—(1,4,2,3), (1,1,4,4), and (2,2,3,3) all consistently give weight 10, which doesn't work since that's 2p.
+
+All the other multisets rescale to weight 5: (1,1,1,2), (1,3,3,3), (2,2,2,4), and (4,4,4,3) each achieve this. So the real obstruction for support-4 at p=5 comes down to when the vectors satisfy a linear dependency with coefficients that form complementary pairs—I need to understand what constraint that imposes.
+
+When the coefficients are (a, p-a, b, p-b), the dependency simplifies to a(v₁ - v₂) + b(v₃ - v₄) = 0 modulo p, which means the difference vectors must be linearly dependent in a very specific way. So I've established that complementary pair coefficients force the vectors into a parallel-difference configuration, giving a minimum weight of 2p. But here's the catch: even when a support-4 dependency has this structure, there could be entirely different zero-sums involving the same vectors that achieve lower weight by using different support or coefficients. I'm now exploring whether support-3 subsets of these vectors might yield better bounds.
+
+The parallel-difference property doesn't automatically create collinear triples—that's a distinct geometric condition—so I need to check if any three vectors among the four are actually collinear. Beyond that, I should consider whether pulling in additional vectors from the larger set S could produce a 5-vector or higher-support zero-sum with weight below p, which would dominate the 4-vector bound.
+
+Now I'm reconsidering what the computer means by "support-4 kill": is it claiming there's a 4-vector dependency with weight ≤ p after rescaling, or just that some zero-sum of any support involving the 18th vector has weight ≤ p? The distinction matters because a support-4 zero-sum with complementary pair coefficients might still have weight 2p even after optimal rescaling, so the actual killing mechanism could involve a different zero-sum structure entirely.
+
+But the computer's verification confirms these vectors ARE killed, meaning they do form zero-sums with weight ≤ p. If the minimum-support zero-sum is support-4 with complementary pairs at weight 2p, there must be another higher-support zero-sum achieving the lower weight—unless the support-4 coefficients themselves aren't complementary pairs. At p=5, I'm checking which non-complementary support-4 coefficient tuples sum to 0 mod 5.
+
+The non-complementary ones like (1,1,1,2) can be rescaled, while complementary pairs like (1,4,2,3) cannot. So all 94 support-4 kills involve 4-vector dependencies where the coefficients either aren't complementary or there's a lower-weight combination from a different set of vectors. This points to a clean structural result: any 18 non-proportional nonzero vectors in F_p^4 must either contain a collinear triple (giving a support-3 zero-sum of weight p) or admit a 4-vector dependency with non-complementary coefficients (yielding weight ≤ p after rescaling).
+
+Now I need to figure out whether there's also a third case involving zero-sums with 5 or more vectors that have weight ≤ p. If I can show that for 18 vectors at least one of these three scenarios always occurs, I'd have the upper bound. Let me step back and organize the cleanest results I can actually prove. The complementary pair obstruction is the key insight—it's the precise geometric barrier preventing support-4 rescaling, and it characterizes exactly which dependencies have weight kp/2 that can't be reduced to weight ≤ p.
+
+The Cayley-Weil argument produces many solutions to the zero-sum constraint, but it doesn't separate them by weight class, whereas Ax-Katz tells us there are exponentially many solutions overall. For the multi-fiber obstruction in a ZSF 3-spread set, the constraints are that no fiber exceeds the s-constant threshold, no three points are collinear, and all supports must satisfy certain conditions.
+
+Now I'm checking whether support-3 dependencies always yield weight p. The argument hinges on the fact that w(1) + w(-1) = 3p, and since each weight is either p or 2p, both can't equal 2p without exceeding 3p. But I need to reconsider the weight calculation here.
+
+Actually, looking at this more carefully: if w(1) + w(-1) = 3p and each is in {p, 2p}, then either w(1) = p (done) or w(1) = 2p which forces w(-1) = p. So the result holds.
+
+Moving on to the rank-4 case with 18 vectors in F_p^4 having 3-spread, I'm working through whether the upper bound η ≤ 17(p-1)+1 characterizes configurations where every set of 18 non-proportional vectors contains either a collinear triple or a parallel difference structure.
+
+The parallel-difference condition means v₁ - v₂ is proportional to v₃ - v₄, which geometrically represents a projective parallelogram.
+
+For the multi-fiber ZSF sets at p=5, they persist because they avoid collinear triples, maintain complementary pair structure in all 4-vector dependencies, and have no higher-support zero-sums of weight ≤ p. Adding the 18th vector disrupts one of these conditions—either introducing a non-complementary support-4 dependency or forcing a support-5 zero-sum.
+
+Now I'm reconsidering what the ZSF condition actually requires. The 54 multi-fiber sets with 17 vectors might contain many 4-vector dependencies, but those with complementary coefficients produce weight 2p, which exceeds p and doesn't create zero-sums of weight ≤ p. So the ZSF condition demands that all dependencies across every support level have minimum rescaled weight exceeding p. For support 3, this is impossible since collinear dependencies always yield weight p, which means every ZSF set must be collinearly free—no three vectors can be linearly dependent. This forces every triple into general position in F_p^4.
+
+For 4-vector dependencies, the set can tolerate those with complementary-pair coefficients since they produce weight 2p, but must exclude any other configuration. So a ZSF set needs to be 3-independent with all 4-vector dependencies having this specific complementary structure.
+
+For any dependency involving 5 or more vectors, the minimum weight must exceed p to avoid violating the ZSF condition.
+
+This translates to two key structural requirements: the set must form a cap in projective 3-space (no three collinear points), and it must be "parallelogram-closed," meaning every 4-vector dependency takes the form of parallel differences—essentially requiring that any four points in the set form a projective parallelogram. This second condition is quite restrictive and severely limits what configurations are possible.
+
+The proof hinges on the support-3 weight reduction for caps and the complementary pair observation: if a 4-vector dependency had non-complementary coefficients, it could be rescaled down to weight at most p, which would contradict the ZSF property.
+
+Now I'm investigating how large such a cap can actually be. The doubled+e₁ construction yields 17 vectors satisfying both the cap and parallelogram-closure properties, and the 54 multi-fiber ZSF sets also exhibit this structure. This suggests a natural upper bound, and I'm conjecturing that 17 is indeed the maximum size for any cap with parallelogram closure in F_p^4, which I've verified holds at p=5.
+
+If this conjecture is true, it would immediately yield the bound η(C_p^4) ≤ 17(p-1)+1. More broadly, I'm defining PC(r,p) as the maximum size of a parallelogram-closed cap in F_p^r, and conjecturing that PC(r,p) = α(r)+1 = 9·2^{r-3} for all r ≥ 3. Now I'm trying to understand whether this can be proven by examining the matroid or combinatorial structure underlying parallelogram closure, and considering what's known about cap sizes in projective geometry.
+
+For p ≥ 5, caps in PG(3,p) can reach size p²+1 (an ovoid), which is far larger than our target of 17—so the cap constraint isn't what's limiting us here. The parallelogram closure condition is the real bottleneck. In affine terms, a parallelogram is four points where one pair of opposite sides are parallel (their difference vectors are proportional), and I'm trying to characterize what happens when every 4-point set spanning a 3-dimensional subspace must satisfy this parallelogram property.
+
+The doubled+e₁ construction actually respects this beautifully: taking two parallel fibers A₈ and A₈+e₁, any four points with two from each fiber automatically form a parallelogram since the differences within each pair are identical (both equal to -e₁).
+
+Now I'm checking whether we can mix points differently—specifically, what happens if we try to include three points from A₈ and one copy of e₁. The first coordinate constraint forces the coefficient on e₁ to vanish, which would require the three points from A₈ to be collinear, contradicting the cap property. So this mixing is impossible unless we're careful about dependencies.
+
+Actually, let me reconsider: four vectors from A₈ alone live in a 3-dimensional fiber, so they automatically have a dependency. But when we add e₁ to the construction, three points from A₈ plus e₁ generically span 4 dimensions, meaning no dependency exists among them. The real question is what happens with all four points from the same fiber—those will always be dependent since the fiber is only 3-dimensional. the parallel-difference condition: need v₁-v₂ ∝ v₃-v₄. This is the same condition within A₈ ⊂ F_p^3.
+   - But wait, 4 vectors from A₈ in F_p^3 are in 3 dimensions, so any 4 have a dependency. Is this dependency always complementary-pair?
+   - A₈ is ZSF with α(3)+1 = 9 elements... hmm actually A₈ has 8 elements, so α(3) = 8 and α(3)+1 = 9. Wait, α(3) = 9·2^0 - 1 = 8. And A₈ has 8 elements = α(3) elements. The construction uses α(r) elements, and α(r)+1 is the threshold.
+
+At rank 3, the ZSF property enforces that no zero-sum of weight ≤ p exists among the 8 vectors—this means no collinear triples, and every 4-vector dependency must have complementary pair coefficients to avoid being rescalable to smaller weight. The structure is actually recursive: A₈ in F_p^3 is itself a cap with parallelogram closure, and this same condition holds at every rank. So a ZSF set at rank r is fundamentally a cap with parallelogram closure in the projective space, and the maximum size follows from this unified structure.
+
+The key realization is that this is purely a combinatorial and geometric property, independent of the field size p. Checking the examples: at rank 3, the maximum cap with parallelogram closure has size 8, which matches α(3) and doesn't depend on p. At rank 4, the maximum is 17, following the pattern 9·2^{r-3}.
+
+Now I'm examining whether the parallelogram closure condition itself depends on p. The proportionality relation "v₁-v₂ ∝ v₃-v₄" is defined over F_p, so the scalar field does matter for what counts as proportional. However, in characteristic 2 (like F_2), the structure changes fundamentally since every vector equals its negation, making the parallelogram condition become v₁+v₂ = v₃+v₄ instead.
+
+For odd primes p, I'm trying to establish a bound of 9·2^{r-3} that grows as 2^r independent of p. Let me approach this combinatorially by attempting to prove that a set of non-proportional nonzero vectors that is both a cap (no three collinear) and parallelogram-closed (satisfying the 4-vector dependency condition) has a size bound that doesn't depend on p.
+
+I'll use induction on r, starting with the base case r = 3. In this case, I need to show |S| ≤ 8. While a cap in PG(2,p) can have up to p+1 points for large p, the parallelogram-closure condition must be the restrictive constraint here. I'm examining what happens when we require every 4-point subset in general position to satisfy the parallelogram property. Now I'm recalling that a (k; n)-arc meets any line in at most n points, so a cap is specifically a (k; 2)-arc. For this cap in PG(2,p) where every 4-subset forms a parallelogram, I need to check small cases—but wait, at p=5 the maximum cap size should be 6, yet the ZSF set has 8 points, which seems like a contradiction.
+
+Let me reconsider: those 8 points in F_5^3 are projectively distinct, giving 8 points in PG(2,5), but if they truly form a cap with no three collinear, that violates the known bound. So either A₈ contains collinear triples, or my understanding of the structure is wrong. Since A₈ is a zero-sum-free set, I need to check whether that property actually prevents collinearities. I'm realizing I may have conflated affine and projective spaces—the η-constant problem works with vectors in F_p^r (affine), where "non-proportional" means projectively distinct, and three vectors are collinear in the projective sense when they satisfy a specific linear dependence. Let me reconsider whether A₈ actually has 8 projectively distinct points or if some are proportional to each other. So for p=5, the maximum cap size should be 6, but A₈ has 8 elements—that's a contradiction unless A₈ isn't actually a cap. Let me reconsider whether my claim about collinear triples always producing weight-p zero-sums is actually correct, since that's the foundation of this argument.
+
+If three vectors are linearly dependent with a₁v₁+a₂v₂+a₃v₃ = 0, I can construct a zero-sum by taking ⟨μa₁⟩v₁ + ⟨μa₂⟩v₂ + ⟨μa₃⟩v₃ for some choice of μ, and this gives weight p. The key insight is that in the original sequence, each vector appears p-1 times, so I can use different coefficients ⟨μaᵢ⟩ for each vector without exceeding the available copies—each coefficient is between 1 and p-1, so it uses at most one copy of that vector. This means the claim is sound: any three linearly dependent vectors do yield a weight-p zero-sum.
+
+Now, for A₈ to avoid all weight-p zero-sums, it must have no three linearly dependent vectors, which translates to no three collinear points in the projective plane PG(2,p). But caps in PG(2,p) are capped at p+1 points, so for p=5 where p+1=6, I can't fit 8 projectively distinct points without violating the cap constraint. This suggests either A₈ has fewer than 8 distinct projective points at p=5, or there's an error in my reasoning. Let me reconsider the η-constant analysis. Let me verify the cap size in PG(2,5). A projective plane of order 5 has 31 points and 31 lines with 6 points per line, and the maximum cap size for odd order q is q+1, so that's 6 points maximum. This means 8 vectors must contain a collinear triple, which would give a zero-sum of weight 5 — but the extremal ZSF set with 33 elements should have exactly 8 distinct vectors without any such constraint.
+
+The key insight is that the ZSF condition counts the sequence with multiplicities, not just distinct vectors. A collinear triple produces a zero-sum using one copy of each vector with coefficients in {1,...,4}, giving total weight 5. Since each vector appears with multiplicity 4 in the sequence, this is feasible. But if the 8 distinct vectors contain a collinear triple, then...
+
+Actually, wait—I need to reconsider what η(C₅³) = 33 means. If a cap in PG(2,5) has maximum size 6, then 8 projectively distinct vectors can't all be non-collinear. Either my cap bound is wrong, or the 8 vectors aren't all projectively distinct despite the problem saying "non-proportional," or η(C₅³) ≠ 33.
+
+Let me think about this differently: if A₈ at p=5 does contain collinear triples, maybe those triples don't produce zero-sums of weight ≤ 5. I claimed earlier that collinear triples always give zero-sums of weight p, but I should verify that proof more carefully.
+
+For three vectors v₁, v₂, v₃ satisfying a₁v₁+a₂v₂+a₃v₃ = 0 with coefficients in F_p*, I'm checking whether the weight formula w(1)+w(-1) = 3p holds. When μ=1, the weight is just a₁+a₂+a₃, and when μ=-1, it's (p-a₁)+(p-a₂)+(p-a₃) = 3p minus that sum, so indeed w(1)+w(-1) = 3p.
+
+But wait—I'm realizing the zero-sum condition on the vectors doesn't actually constrain the sum of coefficients modulo p. The vector equation a₁v₁+a₂v₂+a₃v₃ = 0 is a constraint in F_p^r, not on the coefficients themselves, so Σaᵢ can be anything.
+
+This means w(μ) = μΣaᵢ mod p isn't forced to be zero—it can take any residue value depending on what Σaᵢ actually is. My entire approach to analyzing when w(μ) ≡ 0 mod p was built on a false assumption.
+
+Now for k = 3, I'm checking when w(1) stays bounded by p. If the sum of coefficients Σaᵢ ≡ c (mod p) where c ≠ 0, then w(1) = c plus some multiple of p. Since w ranges between 3 and 3(p-1), the only way w(1) ≤ p is if there's no wrapping—meaning w(1) = c itself, which must fall in the valid range.
+
+This happens exactly when a₁ + a₂ + a₃ < p as an integer sum, giving w(1) = a₁ + a₂ + a₃ directly without any modular reduction.
+
+When the sum is at least p, I get w(1) ≥ p, and then w(-1) = 3p - w(1) gives me an upper bound of 2p. If the sum reaches 2p or more, w(-1) drops to p or below, which works. But for sums strictly between p and 2p, w(-1) lands in the problematic range (p, 2p), so I need to explore other values of μ to find a solution that actually works.
+
+Let me reconsider the structure here. Any dependency a₁v₁+a₂v₂+a₃v₃ = 0 with nonzero coefficients in F_p is determined up to scaling—multiplying all coefficients by some μ ∈ F_p* gives the same dependency but different representatives. When I scale by μ and take representatives in {1,...,p-1}, the resulting weight w(μ) = Σ⟨μaᵢ⟩ changes, and the real question is whether I can always find some μ that produces a weight in the range I need.
+
+Since each representative is at least 1, the weight is always at least 3. The key insight is that w(μ) ≡ μc (mod p) where c = Σaᵢ mod p. If c = 0, then w(μ) must be a multiple of p, so the minimum achievable weight is p itself. If c ≠ 0, I can choose μ to hit any residue class modulo p, which gives me much more flexibility in controlling the weight. μ to achieve it. In particular, choose μ such that μc ≡ 3 mod p (the minimum possible w). Then w(μ) = 3 if all ⟨μaᵢ⟩ = 1, which requires μaᵢ ≡ 1 for all i, impossible for distinct aᵢ. But w(μ) might be 3 + p·(wraps). If wraps = 0: w = μc mod p ∈ {3,...,p-1}. For this, we need Σ⟨μaᵢ⟩ = μc mod p, i.e., no wraps.
+
+When there are no wraps, the weight equals the sum of the scaled coefficients, which means all products μaᵢ must stay below p as integers. This constrains μ ≤ (p-1)/aᵢ for each i. Testing μ = 1 gives w(1) = Σaᵢ, which works if this sum is less than p. For small values of μ and aᵢ, the no-wrap condition is satisfied naturally.
+
+Now I'm working through the specific case where k = 3 and p = 5 to see how these constraints play out concretely.
+
+For F₅*, I'm looking at all three-element multisets from {1,2,3,4}. Since any linear dependency a₁v₁ + a₂v₂ + a₃v₃ = 0 is determined up to scaling, I can normalize by setting a₁ = 1, which gives me pairs (a₂, a₃) from {1,2,3,4}. This yields 16 possible coefficient triples, and for each one I need to compute the weight w(μ) = ⟨μ⟩ + ⟨μa₂⟩ + ⟨μa₃⟩ across different values of μ.
+
+Now I'm checking specific cases to verify which ones satisfy the weight condition. For (1,1,1) the sum is 3, giving weight 3 at μ=1. For (1,1,3) and (1,2,2) the sums equal 5, which is p, so those work. For (1,2,3) with sum 6, I'm computing weights at different μ values—at μ=1 it's 6, at μ=2 it's 7, at μ=3 it's 8, and I need to check μ=4 as well.
+
+Actually, checking all μ values for (1,2,3), the minimum weight is 6, which exceeds p=5. This is a collinear triple that has no weight-≤-5 zero-sum representation. My earlier assumption that collinear triples always yield weight ≤ p was wrong—I incorrectly thought the sum of coefficients would always be divisible by p, but that's not necessarily true.
+
+This fundamentally changes the picture: ZSF sets can contain collinear triples as long as their dependencies have inherently high weight across all rescalings. The 8-point contradiction resolves because while 8 points in PG(2,5) must contain collinear triples, the ZSF condition only forbids those with "good" dependencies (weight ≤ p). Some collinear triples have "bad" dependencies that stay high-weight no matter how you rescale them.
+
+Now I need to figure out which collinear triples actually achieve weight ≤ p. For a triple (1, a₂, a₃), the weight function w(μ) = ⟨μ⟩+⟨μa₂⟩+⟨μa₃⟩ needs to dip to p or below for some μ, and the example (1,2,3) at p=5 shows this doesn't always happen.
+
+I notice that w(μ) and w(-μ) are complementary—they sum to 3p because each pair ⟨x⟩+⟨-x⟩ equals p. This means if one is small, the other must be large, and the minimum of the two is at most 3p/2. For the minimum to be ≤ p, I need the maximum to be ≥ 2p, which gives me a concrete condition to check. . min ≤ p iff max ≥ 2p.
+
+So: min_μ w(μ) ≤ p iff max_μ w(μ) ≥ 2p.
+
+At p=5, (1,2,3): max w = 9 < 2·5 = 10. So min w = 3·5 - 9 = 6 > 5. ✓ (min > p because max < 2p.)
+
+And: min_μ w(μ) ≤ p ⟺ max_μ w(μ) ≥ 2p ⟺ Σ⟨μaᵢ⟩ ≥ 2p for SOME μ.
+
+For the sum to exceed 2p, each representative needs to be large enough—roughly at least ⌈2p/3⌉ + 1 each. When p is odd, a perfectly balanced distribution at 3p/2 isn't possible, so the weights oscillate between (3p±1)/2 instead. For p=5 with k=3, the weights range from 3 to 12, and complementary pairs sum to 15, so I'm checking which combinations actually occur. w(μ) ≤ 5 isn't achievable for collinear triples—my original assumption was wrong. This means the entire framework I was building around cap conditions and parallelogram closure doesn't hold. I need to step back and reconsider what actually characterizes a zero-sum-free set, starting from the dependency structure itself rather than geometric constraints.
+
+For k-vector dependencies, a zero-sum exists with weight ≤ p exactly when the maximum weight across all μ reaches at least (k-1)p. Since the maximum possible weight is k(p-1), this is only feasible when k ≤ p. For k = 2 specifically, the pairing constraint w(μ) + w(-μ) = 2p forces the maximum to always exceed p, so pairs always admit a zero-sum.
+
+Now looking at k = 3: I need the maximum weight to hit 2p or higher for a zero-sum to exist, but the ceiling is 3p-3. This requires finding some μ where the three mod-p representatives collectively produce w(μ) ≥ 2p, which constrains how the representatives distribute. Testing the concrete case (1,2,3) at p=5 to see what weight values actually arise.
+
+The weights come out to {6,7,8,9}, so the maximum is 9, which falls short of 2p=10. This means the minimum weight is 6, exceeding p=5, confirming no dependency can achieve weight ≤ p.
+
+The real constraint isn't avoiding collinear triples altogether—it's avoiding those whose coefficients, after rescaling, would produce weight ≤ p. A collinear triple only creates a zero-sum-free violation when the maximum weight across all μ reaches 2p or beyond, which depends entirely on how extreme the coefficients are.
+
+When coefficients cluster near the extremes (close to 1 or p-1), the weight can spike above 2p for certain μ values. But when they're moderate (near p/2), the weight stays relatively constant around 3p/2 regardless of μ, never dipping to p or climbing to 2p. Let me systematically check all possible triples at p=5 to see which ones actually violate the condition. Continuing to check the remaining tuples: (1,1,4) fails because the maximum weight is only 9, below the threshold of 10, and the minimum exceeds 5. (1,2,2) passes the minimum constraint. (1,2,3) and (1,2,4) both fall short of the maximum weight requirement. I'm checking whether (2,2,3) is actually a scalar multiple of (1,1,4) by verifying the ratios, and computing the constraint values for this tuple to confirm it fails the conditions. I'm finishing the verification for (3,3,4) by multiplying by the modular inverse, confirming it matches (1,1,3). Now I'm checking the remaining cases and finding that at p=5, only three distinct triples work: (1,1,1), (1,1,2), and (1,1,3), while (1,1,4) and (1,2,3) fail the minimum weight requirement. So the ZSF condition is actually the inverse of what I initially thought—it requires avoiding triples with minimum weight ≤ p (the "good" dependencies) while permitting those with minimum weight > p (the "bad" ones). This is far more subtle than simply forbidding all collinear triples.
+
+The characterization hinges on which specific dependency types yield weights below the threshold p, and that depends entirely on the coefficients involved. This makes the analysis considerably more intricate than the cap condition.
+
+Let me step back and formulate what I can actually establish rigorously. For a triple of non-proportional vectors with a dependency relation, the zero-sum weight is bounded by p precisely when a certain maximum over all possible scalings exceeds 2p.
+
+The proof follows from the symmetry property w(μ) + w(-μ) = 3p, which means minimizing one weight is equivalent to maximizing the other. So the minimum drops to p or below exactly when the maximum reaches 2p or higher.
+
+For concrete cases like p = 5, this translates to checking whether the three representatives include two that are large (at least 4) and one that's small (at most 2), or whether they sum to at least 10.
+
+Now I'm testing specific triples to verify which ones satisfy this condition. For (1,1,1) scaled by μ = 4, I get representatives summing to 12, which works. For (1,1,2) at the same scaling, the sum is 11, also valid. The triple (1,1,3) already satisfies the bound directly at μ = 1. But (1,1,4) fails—even at optimal scaling μ = 4, the maximum sum I can achieve is 9, which falls short of the required 10.
+
+For (1,3,3), I need to check across different scalings. At μ = 3, the sum reaches 11, which meets the threshold, and the minimum across all scalings stays at 4, satisfying the lower bound of 5. Now I'm working through (1,1,4) more carefully, computing the sums at each scaling factor to find the maximum possible value.
+
+The pattern emerging is that triples fail when their maximum weighted sum stays below 10. Looking at the structure, having coefficients close to p-1 paired with small values seems to create this "badness"—the issue isn't just about individual elements but how they combine under different scalings. μ) when one coefficient equals -1 mod p. With aᵢ = p-1, multiplying by μ gives p-μ, which explains why I keep getting (4,4,1) instead of configurations with larger sums—the structure of the modular arithmetic forces this constraint. I'm working through the algebraic properties of these triples by using modular arithmetic—since p-1-a equals -(1+a) mod p, I can rewrite the weight function and apply the triangle inequality to show that ⟨μ⟩+⟨μa⟩ is always at least ⟨μ(1+a)⟩. So the weight function w(μ) can only take two values: p when there's no wraparound (which happens when μ(1+a) < p), or 2p when wraparound occurs. For the triple (1, a, p-1-a), the no-wrap condition holds whenever a < p-1, which is always satisfied in the valid range.
+
+Now I'm checking whether these "good" triples—those of the form (1, a, p-1-a)—consistently give weight p at μ=1. But I need to distinguish them from other triples like (1,1,4) where the sum is 6 rather than p=5. The form (1, a, p-1-a) has sum exactly p, whereas (1,1,4) has sum 6 ≡ 1 mod 5, so they're fundamentally different cases. I should clarify what conditions actually determine the dependency structure here.
+
+A linear dependency is really a projective point in PG(2,p), since proportional coefficient vectors represent the same dependency. The weight function w(μ) = Σ⟨μaᵢ⟩ depends on which representative I choose, but rescaling all coefficients by μ just gives another representative of the same projective point. So I'm really looking for the minimum weight across all possible representatives of a given projective dependency.
+
+Testing specific examples at p=5: the projective point (1:1:3) achieves minimum weight 5 (equal to p) across its representatives, making it "good," while (1:1:4) has minimum weight 6 (exceeding p), making it "bad." The good triples and their permutations are the ones where this minimum equals p exactly.
+
+Now I'm realizing the ZSF analysis is far more intricate than I initially grasped—the key insight is that collinear triples can actually belong to ZSF sets as long as their linear dependency has coefficients with rescaled weight greater than p. This completely reframes the problem and explains why |A₈| = 8 doesn't contradict the maximum cap size of 6 in PG(2,5). Let me reorganize the findings into a cleaner theoretical framework.
+
+For support-3 dependencies, there's a critical dichotomy: a triple achieves weight ≤ p precisely when the maximum over all characters of the sum of character evaluations reaches 2p, which is equivalent to saying the complementary triple (formed by subtracting each coefficient from p) also achieves weight ≤ p due to the symmetry w(μ) + w(-μ) = 3p. When support-k dependencies have coefficients arranged in k/2 complementary pairs {a, p-a}, the weight locks at exactly kp/2, which prevents any weight ≤ p for k ≥ 4. Geometrically, this complementary pair obstruction corresponds to parallel differences among the vectors involved.
+
+The Ax-Katz bound gives p^{2α(r)-r} solutions to zero-sum systems but doesn't separate them by weight class. A zero-sum-free set fundamentally avoids all dependencies—regardless of support size—whose minimum rescaled weight is at most p, so what counts as "good" versus "bad" depends on the actual coefficients rather than just how many vectors are involved. The refined question becomes whether every set of α(r)+2 vectors must contain a good dependency, replacing the earlier incorrect conjecture about collinear triples. I should pin down the precise characterization of good triples before writing this up cleanly.
+
+A dependency (a₁:a₂:a₃) in PG(2,p) is "good" (weight ≤ p) exactly when it's not complementary—meaning the multiset {a₁,a₂,a₃} doesn't satisfy the property that max_μ Σ⟨μaᵢ⟩ < 2p. Equivalently, a triple is "bad" (weight > p for all scalings) precisely when every rescaled representative has integer sum strictly between p and 2p.
+
+Since w(μ) + w(-μ) = 3p, if w(μ) ∈ {p+1,...,2p-1} for all μ, then w(-μ) must also lie in that range, which is consistent. Looking at p=5 specifically, I'm finding that the bad normalized triples—those with weight > 5 across all scalings—include (1,1,4), (1,2,3), (1,2,4), (1,3,4), and (1,4,4), accounting for 5 of the 9 possible triple types. That's more than half, suggesting a significant concentration of bad triples at this prime.
+
+This actually makes sense: A₈ can fit 8 projective points in PG(2,5) while remaining zero-sum-free precisely because so many of its collinear triples are bad and don't produce zero-sums. The real constraint on ZSF sets isn't about caps or parallelogram closure—it's about avoiding all good dependencies across every support size: good triples for support 3, good quadruples for support 4, and so on. The question then becomes finding the maximum size of a set that sidesteps all these good dependencies, and I think the key insight here is that the cap condition was too restrictive.
+
+So the main contributions to write up are the correction about caps and collinear triples, the precise characterization of good versus bad dependencies, the weight dichotomy theorems, the CPO for support 4, and a refined picture of what multi-fiber ZSF sets actually look like. Now I'm wondering whether this corrected framework opens up any new directions. The central question is whether α(r)+2 non-proportional vectors in F_p^r must always contain a good dependency—at rank 3 with p=5, that's 10 vectors, and we know 9 can avoid it, so the threshold is tight.
+
+Actually, I need to be more careful here. α(3) = 8, so the extremal ZSF set has exactly 8 vectors, meaning 9 vectors must contain a good dependency. The Davenport constant η(C_p^3) = 8(p-1)+1 = 33 at p=5, which tells us that any sequence of 33 elements from C_5^3 \ {0} has a zero-sum subsequence with weight at most 5. When we account for multiplicity p-1 = 4, this means 8 vectors each appearing with multiplicity 4 gives us the critical length.
+
+So 9 non-proportional vectors in F_5^3 must contain a good dependency, which translates to every set of 9 points in PG(2,5) having a good dependency. Since PG(2,5) has 31 points total, the maximum good-dependency-free set contains exactly 8 points.
+
+Moving to rank 4: 18 non-proportional vectors in F_5^4 must have a good dependency, since the bound η(C_5^4) ≤ 69 and 18·4 = 72 exceeds this. The conjecture states that η(C_p^4) = 17(p-1)+1, meaning 17 vectors can avoid zero-sum-free configurations but 18 cannot. The key distinction is that 17-vector ZSF sets manage to avoid all good dependencies through various bad dependencies, while 18 vectors inevitably force at least one good dependency to appear.
+
+This is fundamentally an extremal combinatorics problem—showing that for any 18 vectors, the bad dependencies alone can't cover all possibilities, so a good dependency must emerge. The specific algebraic structure of F_p^r should provide the leverage needed here. Now I'm ready to compile this into a substantial report and look up the relevant theorems from Gao and Geroldinger on η constants.
+
+============================================================
+BLOCK 8 (362 chars)
+============================================================
+Good. Now I have all the context I need. Let me write up the Round 2 theorist report. The key contribution is the CORRECTION about the cap assumption, the precise weight dichotomy, and the revised structural framework.
+
+Let me also think about what concrete "good" vs "bad" dependency analysis means for the inductive step.
+
+Let me write a clean, focused report.

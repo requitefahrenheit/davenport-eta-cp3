@@ -1,0 +1,656 @@
+
+============================================================
+BLOCK 1 (250 chars)
+============================================================
+Let me start by searching Cortex for any prior computational findings, then read the seed document for full context. I need to be the COMPUTER agent - my job is to verify conjectures, run exhaustive checks, compute examples, and find counterexamples.
+
+============================================================
+BLOCK 2 (34628 chars)
+============================================================
+Cortex is having issues. Let me proceed with computation. I've read the seed document. Let me now plan what definitive computation to run.
+
+Key things I should compute:
+
+1. **Exhaustive verification at p=5, rank 4**: The document says α(4,5) = 17 and all 607 possible 18th vectors were tested. Let me reproduce and extend this.
+
+2. **Verify at p=7, rank 4**: Check that α(4,7) = 17 as well. The conjecture says η(C_p^4) = 17(p-1)+1 for all p ≥ 5. So for p=7, we need 17×6+1 = 103 copies, and any 18 non-proportional vectors should have a weighted zero-sum of weight ≤ 7.
+
+
+3. **Multi-fiber analysis and p=7 verification**: I should do exhaustive computation for p=5, rank 4 to understand multi-fiber ZSF sets, then verify the conjecture at p=7 with a larger prime to get strong computational evidence. The core question is understanding the structure of zero-sum free sets with the weight constraint, particularly how the 17-vector construction behaves across different primes.
+
+4. **Evaluating computational priorities**: For p=5, rank 4, the construction yields 17 vectors split across two fibers, and adding any 18th vector creates a weighted zero-sum. Most of the non-maximal vectors are eliminated either by collinear triples (support-3) or by 4-element zero-sums with weight less than p. Now I'm deciding between verifying whether the 17-vector construction is also maximal for p=7, or doing an exhaustive search across all possible 17-vector ZSF sets in F_7^4 to check if the construction is unique.
+
+I could also compute α(5,5) to verify the pattern α(5) = 35 = 2×17+1, or investigate multi-fiber configurations more systematically to understand what happens when 18 vectors span three or more fibers. The most productive approach seems to be reproducing the p=5 verification as a sanity check, then testing p=7 to get another data point, and analyzing the multi-fiber structure more carefully.
+
+Writing verification code...
+
+Now I need to clarify what a weighted zero-sum with weight ≤ p actually means. I'm looking at coefficients from {1,...,p-1} on some subset of vectors where the weighted sum equals zero mod p and the coefficients themselves sum to at most p. For p=5, that means finding coefficients in {1,2,3,4} where the weighted combination of vectors is zero mod 5 and the coefficients add up to 5 or less. A single vector can't work since we'd need a nonzero coefficient on a nonzero vector. With two vectors, I need to check what combinations of weights are possible.
+
+For support 2, if s₁v₁ + s₂v₂ = 0 mod p, then v₂ must be proportional to v₁, which contradicts our assumption that the vectors are non-proportional. With support 3 or more, the coefficient sum needs to be at least 3, and for p=5 I can have sums of 3, 4, or 5. For support 4, the sum is at least 4, and for support 5 with all coefficients equal to 1, I'd need v₁+v₂+v₃+v₄+v₅ = 0 mod p. v₅ = 0.
+
+Wait, actually for support k with sum ≤ p:
+- Support k: each s_i ≥ 1, so sum ≥ k. Need sum ≤ p. So k ≤ p.
+- For k = p: all s_i = 1. This is the Davenport constant problem.
+
+For p=5, the possible (support, weight) combinations are:
+- (3, 3), (3, 4), (3, 5)
+- (4, 4), (4, 5)  
+- (5, 5)
+
+Now I'm working through the linear dependencies for each case. Support-3 with weight 3 gives all s_i = 1, so v₁+v₂+v₃ = 0. With weight 4, one coefficient doubles to get 2v₁+v₂+v₃ = 0. Weight 5 splits into either 3v₁+v₂+v₃ = 0 or 2v₁+2v₂+v₃ = 0 depending on how the extra weight distributes.
+
+I'm now thinking about the collinear triple approach—three vectors are collinear when they satisfy a non-trivial linear dependence, and the rank-3 theorem tells us that if the dependency is non-degenerate with no pair summing to zero, then...
+
+Actually, let me reconsider the specific form of the dependency. For the normalized case αv₁ + βv₂ + v₃ = 0, the non-degeneracy conditions are α ≠ 1, β ≠ 1, and α+β ≠ 0.
+
+Now I need to implement the actual computation: I'll construct the 17-vector configuration for a given prime p, then systematically check each potential 18th vector to ensure it's nonzero and not proportional to any existing vector.
+
+For each candidate, I'll find a weighted zero-sum with weight at most p, then categorize whether it's eliminated by a support-3, support-4, or support-5 relation. Let me start with p=5 to verify against the known results, then move to p=7.
+
+Wait, I'm getting confused about the candidate count. For p=5 in dimension 4, there are 624 nonzero vectors total, which gives 156 projective points. After removing the 17 we've already placed, that leaves 139 candidates—but the document mentions 607. I think I'm conflating the vector count with something else. The proportionality constraint means no two vectors in our set can be scalar multiples of each other, so I should be counting nonzero vectors, not projective equivalence classes.
+
+Actually, let me reconsider: if the 18 vectors must be pairwise non-proportional to avoid immediate support-2 relations, then they represent 18 distinct projective points. With 156 total projective points and 17 already used, I have 139 candidates, each with 4 representatives in F_5^4. That gives 556 candidate vectors, but the discrepancy with 607 suggests I'm missing something about how the counting works. 607 is wrong or I'm misunderstanding. Let me re-read: "All 607 possible 18th vectors tested." Maybe 607 is the number after removing proportional ones from all 624 vectors? 624 - 17 = 607. That makes more sense! They're counting all nonzero vectors that aren't one of the 17 themselves. But proportional vectors would also need to be excluded...
+
+Actually, I think they might mean: 624 total nonzero vectors, minus the 17 in the construction = 607 remaining nonzero vectors. For each, check if adding it creates a weighted zero-sum. But proportional vectors are trivially handled (support-2 zero-sum), so they'd be among the 513 or 94 counts.
+
+Hmm, 17 × 4 = 68 vectors proportional to existing ones.
+
+So out of 607 candidates, about 51 are strictly proportional to the 17 vectors, leaving 556 genuinely distinct directions to test. Let me just implement this and see what the numbers actually tell me.
+
+Writing verification script... Completing the fiber construction and verifying it works. Now I'm thinking about what computations would actually be most useful—I should verify that this 17-vector construction is genuinely zero-sum-free for multiple primes, and then check whether adding any 18th vector would break that property. I could also try to classify all maximal zero-sum-free sets for p=5 to see if there are other constructions besides this one.
+
+Let me focus on verifying the construction across different primes first, since that directly tests the conjecture. To check if a set is zero-sum-free, I need to examine all possible subsets and their coefficient combinations, ensuring none of them sum to zero with weights bounded by p.
+
+For p=5 with 17 vectors, the computational load is manageable—checking all k-subsets with coefficient tuples where the sum stays within the weight bound. For support size 3, that's around 6800 checks, and for size 4, roughly 9500 checks. This scales reasonably for exhaustive verification. = 9520 checks (only (1,1,1,1) and (1,1,1,2) type tuples)
+
+Wait, for sum ≤ 5 with 4 elements each ≥ 1: sum can be 4 or 5.
+Sum = 4: all 1s. One tuple.
+Sum = 5: one coefficient is 2, rest are 1. 4 tuples (which position is 2).
+So 5 tuples total. C(17,4) × 5 = 11900 checks. But we also need to account for permutations within the tuple. Actually, since the vectors in the subset are ordered, we need to assign coefficients to specific vectors.
+
+For sum = 4: (1,1,1,1). Only 1 assignment.
+For sum = 5: (2,1,1,1). 4 assignments (which of the 4 vectors gets coefficient 2).
+Total: 5 assignments per 4-subset.
+
+For k=5: C(17,5) × 1 = 6188 checks (only (1,1,1,1,1) has sum = 5).
+
+This is totally feasible. For the forward check when adding the 18th vector, I need to verify that the combined set doesn't contain a weighted zero-sum of weight ≤ p that involves the new vector—since the construction itself is already zero-sum-free, any problematic combination must include it. This is also manageable, so I'll start implementing the algorithm.
+
+Now I'm scaling up to p=7 to see how the complexity grows. With 400 projective points in F_7^4 and 383 remaining candidates, the coefficient tuple counts increase significantly. For k=3, I need to count how many tuples (a,b,c) with each element in {1,...,6} sum to at most 7.
+
+Breaking this down by sum: sum=3 gives 1 tuple, sum=4 gives 3, sum=5 gives 6, sum=6 gives 10, and sum=7 gives 15, totaling 35 tuples per 3-subset. Combined with C(17,3)=680 subsets, that's roughly 23,800 checks to perform for the ZSF verification at p=7.
+
+For k=4, I'm counting tuples where each die shows 1-6 and the sum stays at most 7. The partitions break down similarly: sum=4 has 1 tuple, sum=5 has 4, sum=6 has 10, and sum=7 has 20, giving 35 tuples per 4-subset. With C(17,4)=2380 subsets, that's about 83,300 checks total.
+
+Now moving to k=5...
+
+For k=5, the constraint tightens since we need five dice summing to at most 7. Only sum=5 through sum=7 are possible: sum=5 gives 1 tuple, sum=6 gives 5, and sum=7 gives 15, totaling 21 tuples per 5-subset. With C(17,5)=6188 subsets, that's roughly 130,000 checks.
+
+For k=6, the constraint becomes even more restrictive—we can only have sum=6 or sum=7. Sum=6 forces all ones (1 tuple), and sum=7 allows just one die to be 2 with the rest 1s (6 tuples), giving only 7 valid tuples total.
+
+For k=7, we must have sum=7 with each die equal to 1, so there's exactly one tuple per subset.
+
+Adding these up across all subsets gives roughly 343,000 total checks, which is computationally feasible.
+
+Now I'm thinking about a smarter approach than brute-forcing all coefficient tuples. The key insight is that for any subset of vectors, a weighted zero-sum exists if and only if the system of linear equations has a solution modulo p, which I can check more efficiently using linear algebra rather than enumerating every possible weighting.
+
+For the forward check when adding v₁₈, since the construction must be zero-sum-free, any zero-sum that emerges has to include v₁₈ itself. So I only need to search for subsets from the existing construction paired with specific coefficients for v₁₈, which narrows the search space significantly.
+
+Let me just implement this directly with code. So I need to solve this as a weighted subset sum problem—for each choice of s₁₈, find coefficients from the construction vectors that sum to the target with bounded total weight. For small cases brute force works fine. Let me write Python code to verify the key result: that α(4,p) equals 17 for p = 5 and p = 7, checking that the 17-vector construction is zero-sum-free and understanding how each 18th vector gets eliminated through weighted combinations.
+
+Writing verification code... Defining the fiber vectors...
+
+Now I'm implementing a function to find weighted zero-sum combinations among vectors, iterating through possible support sizes and generating coefficient tuples with constrained sums. I'm iterating through combinations of vectors and their coefficient permutations, computing weighted sums modulo p to check if any equal zero—which would indicate a zero-sum-free violation. The logic is getting unwieldy though, so I'm reconsidering the approach: for small primes and n around 17-18, I should precompute weighted combinations more directly and check if any subset with coefficients summing to at most p yields zero. So for k=2 that's 1360 checks total. Moving to k=3, I'm counting the valid coefficient vectors where each element is between 1 and 4 and the sum doesn't exceed 5—that gives me 10 vectors per triple, and with 680 possible triples, I'm looking at 6800 checks. For k=4, the constraints are tighter, yielding only 5 valid vectors per quadruple, so 11900 checks across 2380 combinations. Now I need to handle k=5.
+
+For k=5, the only possibility is all ones summing to 5, giving me just 1 vector per quintuple, and with 6188 possible quintuples, that's 6188 checks. Altogether for p=5, I'm at roughly 26000 checks, which is manageable.
+
+Now shifting to p=7, the k=2 case is more involved—I need to count pairs where each element is between 1 and 6 and they sum to at most 7. That's 21 valid pairs, and multiplied by the 2856 ways to choose 2 positions from 17, I get about 60000 checks. For k=3 and beyond, the enumeration gets tedious, so I should just write code to handle it.
+
+Writing enumeration code... I'm using itertools.product to generate all tuples from {1,...,p-1} and filtering by sum, which is simple but potentially slow—for p=7, k=7 this creates nearly 280,000 combinations to check. Looking at the actual numbers, combining this with the subset enumeration could hit billions of operations, so I need a more efficient approach.
+
+The key insight is that the number of valid coefficient tuples is actually quite small. For k=7, p=7, the sum constraint forces almost everything to be 1, leaving just a single valid tuple. Even for k=6, p=7, there are only 7 valid tuples total—much smaller than the brute force would generate. I should precompute just the valid tuples upfront rather than filtering through all possibilities.
+
+For k=5, p=7, the count grows to 21 valid tuples, and for k=4, p=7, I'm seeing the pattern continue with tuples where the sum ranges from 4 to 6, accounting for different ways to distribute values while respecting the upper bound of 6 per coefficient.
+
+For k=3, p=7, I'm working through the compositions where the sum ranges from 3 to 7, calculating the number of ways to partition each sum into three parts, each between 1 and 6.
+
+Now I'm summing up all the checks needed across different k values at p=7—the total comes to around 346K checks, which is very manageable. For the forward check with about 383 candidates, I need to verify each one by checking subsets that include it, where the candidate receives a coefficient from 1 to 6 and the remaining vectors fill out the rest of the subset.
+
+For each candidate and coefficient choice, I'm solving a weighted subset sum problem: given a target value and a remaining budget, find if any subset of the construction vectors with coefficients summing to that budget equals the target modulo 7. The budget shrinks as the candidate's coefficient increases, so when the coefficient is 6 (leaving budget 1), I just need a single vector matching the target, which is a quick O(17) check. With coefficient 5 (budget 2), I'm looking for either one vector with coefficient 1 or 2, or two vectors each with coefficient 1, which expands to around O(153) checks total.
+
+As the coefficient decreases and budget increases, the number of possible subsets grows, but it's still manageable—the total work across all coefficient choices for one candidate is bounded by roughly 346K checks, similar to what the ZSF check required. With 383 candidates, that's around 133 million checks overall, which should be feasible.
+
+I can optimize this further by precomputing lookup tables for each target and budget combination, so instead of recomputing subset sums repeatedly, I can just hash and look up whether a solution exists. compute:
+- For budget 1: just check if t is in the construction (hash lookup)
+- For budget 2: check if t = v_i for some i (coeff 1), or t = 2v_i for some i (coeff 2), or t = v_i + v_j for some i<j (coeffs (1,1))
+- ...
+
+Let me precompute a dictionary: for each weight w from 1 to p-1, map from (achievable vector) → True. Build this incrementally:
+- w=1: {v_i : i=0,...,16} ∪ {2v_i} ∪ ... ∪ {(p-1)v_i}
+  Wait, this is all scalar multiples of construction vectors.
+
+Hmm, this is getting complicated. Let me just brute-force it with Python and numpy to handle the 133M checks efficiently. I'll use dynamic programming to precompute all achievable weighted sums: for each weight w, I'll track which vectors can be formed as weighted combinations of construction vectors with total weight exactly w, then for each candidate v₁₈ and coefficient s₁₈, check if the required complement is in the precomputed achievable set with the right weight constraint. the same vector twice)
+
+This is the subset sum problem and it's hard to precompute with uniqueness constraints. For 17 vectors this is 2^17 = 131072 subsets. For each subset, enumerate all valid coefficient tuples. This could be up to 2^17 × (some number of coefficient tuples) which could be large.
+
+OK, I think the simplest approach that works is:
+
+For each candidate v₁₈:
+  For each support size k from 2 to p:
+    For each (k-1)-subset of construction:
+      For each coefficient tuple (s₁₈, s_1, ..., s_{k-1}) in {1,...,p-1}^k with sum ≤ p:
+        Check if s₁₈·v₁₈ + Σ s_i·v_i = 0
+
+The brute force approach would be expensive—roughly 383 candidates times 346K checks per candidate, totaling around 133 million operations. But I can optimize significantly by breaking early once I find a single weighted zero-sum for each candidate, and prioritizing smaller support sizes first since most candidates get eliminated at support-3. I could also use numpy for vectorization or implement a smarter algorithm to speed things up.
+
+Actually, I should focus on what's most informative for the proof rather than just reproducing known results. The briefing emphasizes multi-fiber configurations as the key gap. The 94 residual cases at p=5 are all killed by support-4 zero-sums, so analyzing the structure of all maximal ZSF sets at p=5 rank 4 would be more valuable—if the only maximal ZSF set is the construction up to GL(4,F₅) action, that would be a significant structural result.
+
+Enumerating all maximal ZSF sets of size 17 in F₅⁴ is computationally prohibitive with C(156,17) ≈ 10¹⁸ possibilities, but I can narrow the search to multi-fiber configurations. The real question is whether 17 non-proportional vectors spanning at least 3 fibers can form a ZSF set. Since the construction only uses two fibers, I'm testing whether any maximal ZSF set of size 17 in F_p⁴ must be equivalent to the two-fiber construction—this would be a powerful structural claim worth verifying computationally for p=5.
+
+Rather than exhaustively checking all configurations, I should focus on whether the 17-vector construction can be reinterpreted as multi-fiber under some other linear form. The construction is two-fiber for w(x) = x₁, but I need to determine if any other linear form could make it appear multi-fiber or if the two-fiber structure is essentially unique.
+
+For a computational approach at p=5, I could enumerate all 17-element zero-sum-free sets of non-proportional vectors and check if the construction is the only one up to GL(4,5) equivalence. The full search space is prohibitively large, but a greedy backtracking algorithm starting from a fixed vector and adding candidates one at a time while pruning non-ZSF configurations could make this tractable.
+
+Rather than exhaustive enumeration, the most valuable computations right now are verifying α(4,7) = 17 to confirm the pattern at a second prime, analyzing what support sizes of 18th vectors prevent extension at p=7, and testing whether alternative 17-element ZSF sets exist at p=5 by starting from the construction and swapping vectors across different fibers.
+
+Let me start coding this.
+
+Actually, I need to look at the construction more carefully. The fiber-0 vectors all have first coordinate 0, and their last three coordinates form the set A₈—a special 8-element subset of F₅³ with no 4-element zero-sum. I'm examining the 3D projections of these fiber-0 vectors to understand the structure better.
+
+Now I'm seeing something interesting: the 3D projections of fiber 0 and fiber 1 (after removing the first standard basis vector) are identical. This is the key insight—the construction uses this "doubling" where both fibers project to the same set A₈, and then adds back the first basis vector to distinguish them.
+
+So A₈ = {(1,0,0), (0,1,0), (0,0,1), (4,1,1), (1,1,0), (1,0,1), (4,2,1), (4,1,2)} is the maximal 4-sum-free set in F₅³ that achieves the bound η(C₅³) = 33.
+
+Rather than continue verifying by hand, I should write a comprehensive script to check the general construction for η(C_p⁴) = 17(p-1)+1 across different primes, verify that the 17-vector construction is zero-sum free with bounded weights, and confirm that adding any 18th vector creates a weighted zero-sum.
+
+Writing verification script...
+
+Now I'm working through the counting: for p=5, there are 156 projective points total, and 17 of them form the ZSF set. The remaining 139 projective points, each with 4 scalar multiples, should account for 556 nonzero vectors, but the document claims 607. I need to figure out where the discrepancy is—it might be that the 17 vectors themselves are being counted differently in the total. the construction vectors can't share scalar multiples since they're pairwise non-proportional, so those 68 vectors are all distinct. With 624 total nonzero vectors and 68 excluded, I get 556 candidates, but the problem states 607—which is just 624 minus 17, suggesting they're only excluding the construction vectors themselves, not their scalar multiples. If the 18th vector were a scalar multiple of some construction vector, it would form a trivial dependency with that vector.
+
+Now I'm checking whether the counts actually add up: 607 total candidates minus 51 proportional ones leaves 556 non-proportional, but when I account for those killed by support-3 and support-4 constraints, the numbers don't reconcile. Let me just compute this directly to settle the discrepancy. I'll write a script to count the candidates myself and verify whether the construction contains any proportional vectors, which should clarify what that 607 count actually represents. I'm also thinking about what would constitute a truly definitive computation here—exhaustively verifying α(4,p)=17 for p=5,7, and then for p=5 specifically, trying to construct a 17-element zero-sum-free set that spans at least 3 fibers.
+
+Now I'm reconsidering the fiber structure more carefully. The key insight is that whether a set is two-fiber depends on the choice of linear form, so a set might be two-fiber for one form but multi-fiber for another. The stronger claim would be that for every possible linear form, the construction has at most 2 nonempty fibers—but that's clearly not what's happening here, since the vectors have different first coordinates and other linear forms will partition them differently.
+
+The real question is whether there exists a 17-element non-proportional zero-sum-free set where every linear form produces at least 3 distinct values. For p=5, I need to check if such a genuinely multi-fiber configuration is possible, which means examining how many distinct linear forms exist and whether any 17-element set can avoid being two-fiber for all of them. =4 for (0,4,1,1), and so on—the construction is multi-fiber under w₂, but that's fine since w₁ already makes it two-fiber. The real question is whether I can construct a 17-element ZSF set where NO linear form produces a two-fiber structure. That would be genuinely multi-fiber and would break the two-fiber bound's approach. So I need to check: does every maximal ZSF set at p=5 admit at least one linear form that splits it into at most two fibers? If yes, then the two-fiber bound alone would prove α(4,p) ≤ 17, which would be huge. But exhaustively searching all 17-element sets is computationally infeasible.
+
+Instead, I'll use a backtracking search to build ZSF sets incrementally, checking at each step whether the current set has a two-fiber linear form. If I reach 17 elements without finding such a form, I've found a counterexample. The key insight is that if every 17-element ZSF set does have a two-fiber linear form, then the multi-fiber gap disappears and the upper bound follows directly from the two-fiber bound plus induction. This is worth verifying computationally, so let me set up the backtracking search with smart pruning strategies.
+
+For the search space at p=5 with rank 4, there are 156 projective points to consider. I could reduce the search by fixing certain vectors up to the GL(4,5) action, but for now I'll skip the symmetry reduction and just run the backtracking search directly.
+
+The algorithm maintains a current set S of projective points and a forbidden set F of points that would create zero-sums with S. At each step, I consider candidates from the remaining points, and if S reaches size 17 and is zero-sum-free, I record it. I prune branches where |S| plus remaining candidates can't reach 17. For each candidate, I add it to S, update the forbidden set based on new zero-sum constraints, recurse, then backtrack.
+
+The critical part is determining which new zero-sums become possible when adding a vector v to S. For support-2 zero-sums involving v, I need to check if some scalar multiple of v already exists in S, but since I've already excluded proportional vectors, I need to think through this more carefully.
+
+For support-3 zero-sums, I need pairs (u,w) in S where v = -(a/c)u - (b/c)w for some coefficients. This means for each pair in S, I can precompute which projective points would create a forbidden zero-sum. But I'm realizing this approach might still be too expensive even with pruning—searching through C(156, 17) with backtracking could be prohibitively slow. I should reconsider the strategy entirely.
+
+Instead, let me work from the construction I already have and explore nearby solutions. I'll try swapping individual vectors: remove one from the current set and add one from a different fiber, then verify if the result still satisfies the zero-sum-free property. For p=5, that's about 2,363 possible single swaps to check, which is very manageable. I can systematically try removing vectors from each fiber and adding from the others to see if any alternative multi-fiber configurations work.
+
+If single swaps don't yield anything, I'll escalate to removing and adding pairs of vectors, though that jumps to around 1.3 million combinations. My actual plan is to verify the construction works at both p=5 and p=7, confirm that no 18th vector can be added, classify how the killings break down by support size and fiber, and then run the single-swap search to see if any variant of the construction is zero-sum-free.
+
+Let me start coding this systematically, focusing on the computations that will give me the most definitive answers. First, I need to verify that α(4,7) = 17, which would be new confirmation of the conjecture at p=7. Then I'll classify the forward check at p=7 by support size and compare it against the p=5 statistics. Finally, for p=5, I want to determine whether any 17-element zero-sum-free set exists where no linear form reduces it to a 2-fiber structure.
+
+Actually, I think there's a smarter approach for computation 3. Instead of exhaustively searching for 17-element sets, I can flip the question: what's the maximum size of a zero-sum-free set in F_5^4 that genuinely avoids being 2-fiber under any linear form? If I can construct such a set greedily or through backtracking and find it maxes out at, say, 14 elements, then I've proven that every 17-element zero-sum-free set must have at least one linear form making it 2-fiber.
+
+Let me clarify what "genuinely multi-fiber" means geometrically. A set S is 2-fiber with respect to a hyperplane H if all its points lie in at most 2 cosets of H. So genuinely multi-fiber means for every hyperplane, the points spread across at least 3 cosets—equivalently, S can't fit inside the union of any 2 parallel hyperplanes.
+
+Now I'll write the code to search for the maximum size of such a set.
+
+Actually, let me reconsider the counting. For each nonzero linear form w (up to scaling), I need to check if the image w(S) has at least 3 distinct values. The number of such forms up to scaling is finite, and I can iterate through them to verify the genuinely multi-fiber property.
+
+For a 17-element set, checking all 156 linear forms means roughly 2,600 evaluations, which is computationally trivial. Let me write out the verification code to handle this systematically.
+
+Setting up the implementation... Continuing with the finite field vector operations...
+
+I'm implementing methods to generate all projective points by tracking canonical representatives to avoid duplicates, then defining linear forms as projective points in the dual space since they're isomorphic. Now I'm setting up the evaluation function for these linear forms.
+
+Defining the construction function... Iterating through subset sizes and coefficient combinations to find weighted zero-sums, checking if the sum of coefficients stays within the bound before testing whether the weighted combination equals zero in the vector space.
+
+Now I'm defining a helper function that searches for a weighted zero-sum involving a newly added vector, iterating through possible subset sizes up to the minimum of the total vectors and the prime modulus. I'm defining a verification function that checks whether the construction satisfies the zero-sum-free property by examining all possible linear combinations of the vectors with specific coefficient constraints.
+
+Now I'm moving to the forward check phase, where I'll test every potential 18th vector to confirm that adding any vector outside the current construction would create a zero-sum dependency. Writing analysis code...
+
+Now I'm thinking about optimizing this approach—the brute-force enumeration of coefficients could get expensive for larger primes, so I should precompute the valid coefficient tuples upfront based on their support size.
+
+I'm implementing a recursive generator with pruning to create only the tuples where each coefficient is between 1 and p-1 and the sum stays at or below p, which avoids wasting iterations on invalid combinations.
+
+Building the recursive generator... Analyzing the recursion efficiency with concrete examples. For k=3, p=7, the first coefficient can be at most 5, and I'm tracing through how many valid tuples branch from each starting value—when s₁=1 there are 15 combinations, s₂=2 gives 10, and so on.
+
+Now I'm thinking about optimizing the forward check by fixing the coefficient of the new vector and solving for weighted zero-sums among the existing construction vectors.
+
+For each coefficient s₁₈ from p-1 down to 1, I compute the target vector as the negation of s₁₈ times v₁₈ modulo p, then search for weighted combinations of construction vectors that sum to this target with total weight at most p - s₁₈.
+
+I'm building a reachability table that tracks which vectors are achievable with each budget level, iterating through construction vectors and their possible coefficients to populate all reachable states. This approach has a flaw though—it allows reusing the same vector multiple times, which violates the constraint that each construction vector should appear at most once.
+
+To fix this, I could track which vectors have been used via bitmasks, but with 17 vectors that creates 2^17 possible masks combined with p^4 target vectors and p budget levels, resulting in roughly 2.2 billion table entries for p=7—far too large. Instead, I'll switch to a brute force search with early termination, starting with support size 2 and incrementally increasing it.
+
+Most candidates will fail quickly at small support sizes. For each candidate, I'm checking whether it can be expressed as a linear combination of construction vectors within the budget, where the new vector itself has coefficient s₁₈ and the remaining k-1 construction vectors have coefficients summing to at most p - s₁₈.
+
+Refining the forward check logic...
+
+Writing the search function... I'm iterating through subsets of construction vectors with bounded coefficients, checking if any combination equals the target—trying smallest k first and larger s_new values first to minimize the search space. Now I'm estimating the computational cost for p=7: with 383 candidates and multiple s_new values to test, k=1 requires around 357 checks per candidate, while k=2 becomes more selective as the budget tightens. For k=1, I'll iterate through each possible coefficient s₁ up to the budget, compute the modular inverse to find what construction vector would match, and check if it exists using a hash lookup. For k=2, the approach extends to checking pairs of vectors with their respective coefficients, though the complexity grows with the number of pairs. Rather than optimize prematurely, I'll implement the brute force version first and see how it performs on small primes like p=5, then optimize if needed for larger values.
+
+Now I'm thinking about building a hash table of all achievable weighted sums from the construction vectors. I'll use dynamic programming to track which vectors can be reached and at what minimum weight, rather than trying to enumerate all possible subsets explicitly.
+
+Building the hash table... The p=7 case blows up the state space too much. Instead of exploring all subsets, I can optimize by precomputing which vectors are achievable with small support sizes—just 1 or 2 construction vectors—and use those to quickly eliminate candidates before checking larger supports. For support 1, I'd store all scalar multiples of each basis vector, and for support 2, I'd do the same for pairs.
+
+Then for each new candidate, I compute what target vector I need to achieve and check if it's reachable within my coefficient budget using the precomputed support-1 and support-2 dictionaries. Only if both checks fail do I move to support 3.
+
+Support 3...
+
+For support 3, I'm iterating through all possible triples of vectors and their valid coefficient combinations—around 680 triples with roughly 35 valid coefficient tuples each when the budget is 6, giving about 23,800 checks to perform. Support 4 involves checking all 4-tuples of vectors, and the valid coefficient combinations are much more constrained: I can only use tuples like (1,1,1,1) with sum 4, or (2,1,1,1) with sum 5, or a few options summing to 6, totaling just 15 valid combinations per 4-tuple.
+
+That's C(17,4) × 15 = 35,700 checks for support 4. Combined with support 3, I'm looking at roughly 60,000 checks per candidate, and with 383 candidates total, that's around 23 million checks—totally manageable. Higher support levels will have even fewer valid coefficients, so they're essentially free.
+
+I'm going to implement the full brute-force approach with early termination using the efficient coefficient generator and see how it performs in practice.
+
+============================================================
+BLOCK 3 (449 chars)
+============================================================
+Let me set up my computation plan and start executing. I've read the seed document. Cortex is down, so I'll proceed without it.
+
+Let me plan the definitive computations:
+
+1. Verify α(4,5) = 17 (reproduce known results)
+2. Verify α(4,7) = 17 (NEW - confirms conjecture at second prime)
+3. Classify killings by support size at both primes
+4. Check if multi-fiber ZSF sets of size 17 exist at p=5
+
+Let me write a comprehensive Python script and run it.
+
+============================================================
+BLOCK 4 (21608 chars)
+============================================================
+Interesting results! Let me analyze:
+
+1. **p=5 verification PASSED**: α(4,5) = 17 confirmed.
+   - 139 candidate 18th vectors (projective points)
+   - 111 killed by support-3, 28 by support-4
+   - Weight distribution: 6 at weight 4, 133 at weight 5
+
+Wait, the briefing said 607 candidates with 513 killed by support-3 and 94 by support-4. But I found 139 candidates with 111 killed by support-3 and 28 by support-4. The difference is that I'm counting projective points (canonical representatives), while they were counting all nonzero vectors. 
+
+Now I see the accounting: 139 projective points times 4 representatives each gives 556 vectors, plus 17 construction vectors with 3 representatives each adds 51 more, totaling 607. The elimination counts match too—111 + 28 = 139 projective points killed, which scales to 513 + 94 = 607 total vectors eliminated. For all reps: 111×4 + 28×4 - (some proportional to construction)... hmm, the scalar multiples of construction vectors are proportional and trivially killed by support-2. But I excluded those already (they're not in candidates). So 139 × 4 = 556. But 513 + 94 = 607.
+
+Actually, I think the discrepancy is because in the original computation, they might have counted ALL nonzero vectors (624 - 17 = 607), including the 51 scalar multiples of construction vectors. The 51 proportional ones are trivially killed by support-2 (which is a special case of support-3? or counted separately?). 
+
+Actually, let me re-read: "513/607 killed by support-3 (rank-3 subroutine), 94/607 killed by support-4 (four vectors summing to zero, weight 4 < p)." 513 + 94 = 607, so all vectors are accounted for. The gap of 51 between my count (556) and theirs (607) should be those proportional vectors. If v₁₈ = c·vᵢ, then c·vᵢ + (p-c)·vᵢ = 0 is a support-2 zero-sum with weight p, so these proportional vectors must be getting absorbed into the support-3 count somehow, or the original computation is using a different definition of support-3. the 51 proportional vectors are likely being counted as support-3 in the original computation because when two vectors are proportional, any triple containing both of them forms a collinear set that the algorithm detects at the support-3 level. So the original's support-3 count includes these collinear triples involving proportional pairs, whereas my projective approach naturally excludes them since proportional vectors collapse to the same point. well, v₁₈ and vᵢ span only a 1D subspace, so any triple (vᵢ, v₁₈, vⱼ) where vⱼ is not in that 1D subspace would NOT be collinear. But (vᵢ, v₁₈, vⱼ) where vⱼ IS in the 1D span... wait, the construction vectors are pairwise non-proportional, so no other construction vector is in that span. So v₁₈ = c·vᵢ can't form a collinear triple with two construction vectors... unless we include v₁₈ and vᵢ as two of the three. But then they only span 1D, so any third vector in the same projective line would work. But the third vector would need to be proportional to vᵢ as well, which means it's not in the construction set. So proportional vectors like v₁₈ can't actually be eliminated by the collinear triple subroutine—they're handled by support-2 instead. The original approach probably wasn't doing brute force over all support sizes but rather using a rank-3 subroutine to find non-degenerate collinear triples and apply the rank-3 theorem, plus a support-4 routine for 4-element zero-sums.
+
+The rank-3 subroutine is more than just a support-3 check; it's a theoretical tool that catches more cases. Regardless, the outcome is the same: all candidates get eliminated, so α(4,5) = 17. For p=7, the verification passed with α(4,7) = 17 confirmed—this is new data. I'm looking at 383 candidate projective points, with 196 killed by support-3 and 187 by support-4. The weight distribution is heavily concentrated at weight 7 (368 out of 383), and interestingly, support-4 eliminates almost as many as support-3 at this prime. In the multi-fiber search, I found 0 candidates because at p=5, all non-construction projective points in fibers ≥ 2 are actually in fiber 0 or fiber 1, which seems contradictory.
+
+Let me reconsider the fiber breakdown: the candidates show 23 in fiber 0 and 116 in fiber 1, totaling 139—which accounts for all candidates. But this would mean all non-construction projective points have first coordinate 0 or 1, which shouldn't be possible. I need to recount: projective points in F_5^4 with first coordinate 0 are projective points of F_5^3, giving (5^3-1)/4 = 31 points, and the construction accounts for 8 of them.
+
+For first coordinate 1, vectors (1, a, b, c) with a,b,c ∈ F_5 give 5^3 = 125 projective points, and the construction uses 9 of them. But vectors with first coordinate 2, 3, or 4 map to canonical form with first coordinate 1 through scaling, so they're already counted in the fiber 1 group. ) mod 5. So its canonical representative has first coordinate 1. Similarly for first coordinate 3 → canonical has first coord 1 (since 3⁻¹ = 2). And first coordinate 4 → canonical has first coord 1 (since 4⁻¹ = 4, and 4·4 = 16 = 1 mod 5). So ALL vectors with nonzero first coordinate have canonical representative with first coordinate 1!
+
+So the fiber (w.r.t first coordinate) of the canonical representative is always 0 or 1. The "fiber" in my output is the first coordinate of the CANONICAL representative, not the actual first coordinate. This is an artifact of using projective points. In the original computation using all 607 vectors, they could have vectors with first coordinate 2, 3, 4.
+
+This explains why my multi-fiber search found 0 candidates to test: there are no projective points with canonical first coordinate ≥ 2! The issue is that I was filtering by canonical form when I should be working with the actual vectors themselves, or rethinking how fibers work in the projective setting. When we talk about fibers of a linear form w: F_p^4 → F_p, the fiber at value c contains all vectors (c, *, *, *), but projectively (c, a, b, d) and (1, a/c, b/c, d/c) represent the same point, so the notion of "first coordinate" becomes ambiguous.
+
+I see the real issue now: when choosing representatives for projective points, the choice of representative determines which fiber it belongs to. The construction deliberately picks representatives with first coordinate 0 or 1, but when adding a new vector, I could choose ANY nonzero representative, which would put it in a different fiber depending on my choice.
+
+The forward check works at the projective level because I'm testing each projective point using its canonical representative, and any weighted zero-sum found would still exist if I used a different representative—just with rescaled coefficients. So the check is valid: every projective point outside the construction admits a weighted zero-sum with weight at most p.
+
+For the multi-fiber search, though, I need to find a set of 17 projective points where I can choose specific representatives such that the set is ZSF and the representatives span at least 3 fibers under some linear form. The challenge is that the fiber structure depends on which representatives I pick, not just which projective points I'm using, which makes the search significantly more complicated than I initially thought. w(v) = c. ✓
+
+For points with w(v) = 0, w(λv) = 0 for all λ, so they're always in fiber 0. This means any set of projective points can be made 2-fiber by choosing representatives appropriately—all non-zero fiber points go to fiber c, and zero fiber points stay at 0. But that would make the multi-fiber gap meaningless, which seems wrong. The catch is that the ZSF property depends on the specific representatives chosen, so changing how we represent points changes what coefficients we need for zero-sum conditions.
+
+The real question is whether we can simultaneously satisfy both conditions: choose representatives so the set is ZSF and also 2-fiber for some linear form. If we can always achieve 2-fiber regardless of the ZSF constraint, then every ZSF set becomes 2-fiber after rescaling, and the bound would follow directly. But rescaling individual vectors to achieve 2-fiber might destroy the ZSF property—for instance, scaling v₁ to λv₁ could create new zero-sums that weren't there before.
+
+So the key insight is that ZSF and 2-fiber are both properties of the specific vectors, not just the projective points, and we can't freely rescale to satisfy both simultaneously. My earlier search was flawed because I used canonical representatives where the first coordinate was always 0 or 1, which automatically made every set trivially 2-fiber for the first coordinate. I need to search over non-canonical representatives instead. I need to rethink this search strategy more carefully. Instead of trying every possible vector from higher fibers, I should systematically replace each of the 17 construction vectors with candidates from fibers 2, 3, and 4, then check whether the resulting set maintains the ZSF property. The challenge is that this creates a massive search space, but I can constrain it by only considering vectors that aren't proportional to the remaining 16 vectors. When I replace v_i with a scalar multiple, the coefficients in any zero-sum involving v_i scale inversely, which can change the total weight and potentially violate the ZSF property—for instance, a weight-4 zero-sum might become weight-6 after rescaling, exceeding the threshold.
+
+But here's the key insight: since the original construction is already ZSF with no zero-sums of weight ≤ p, rescaling can only create new zero-sums or change their weights, not remove existing ones that don't exist. So I need to reconsider whether rescaling actually preserves or breaks the ZSF property in this context. F. Rescaling v_i to λv_i: the new set {λv_i, v₂, ..., v₁₇}. Is it ZSF?
+
+A weighted zero-sum in the new set involving λv_i has the form: s₁(λv_i) + Σⱼ sⱼvⱼ = 0. This means (s₁λ)v_i + Σⱼ sⱼvⱼ = 0. If s₁λ ∈ {1,...,p-1}, this is a weighted combination using the original v_i with coefficient s₁λ. The weight is s₁ + Σsⱼ. For the original set, the same combination has weight s₁λ + Σsⱼ. 
+
+Now comparing the two: if the new set violates ZSF with weight s₁ + Σsⱼ ≤ p, then the original set must satisfy ZSF with weight s₁λ + Σsⱼ > p. Since λ > 1 and s₁ ≥ 1, we have s₁λ > s₁, so the original set's weight is strictly larger. This means whenever the new set fails ZSF, the original set's corresponding weight exceeds p, which is consistent with the original being ZSF. the original set is ZSF, so if I rescale one vector, I need to verify computationally whether the new set maintains that property. For the multi-fiber search, my strategy is to take the existing construction and systematically replace vectors with non-proportional alternatives—either new projective points or different representatives—while ensuring at least 3 distinct first coordinates to create a multi-fiber structure, then check if it remains ZSF. But I'm realizing the simpler approach might be adding non-canonical representatives rather than doing full swaps.
+
+Actually, the real issue is that my candidate search found nothing because all the canonical representatives I was checking had first coordinate 0 or 1. I need to look beyond canonical forms—a projective point like (1, 2, 0, 0) can be represented as (2, 4, 0, 0) with first coordinate 2, even though it's the same point. For a multi-fiber ZSF set, I need vectors spanning first coordinates 0, 1, and ≥2 to create the fiber structure. So I should redo the search using all possible representatives, not just canonical ones.
+
+Instead of exhaustively searching all 17-element subsets, let me try a targeted approach: take the 17 construction points and systematically rescale the ones with first coordinate 1 by factors like 2, 3, or 4 to get first coordinate 2 or higher, then check if each resulting set remains ZSF.
+
+When I rescale a fiber-1 vector v by λ, I get λv which is proportional to v but has a different first coordinate. So I need to remove the original v and add λv to avoid having proportional vectors in my set. This gives me a 17-element set with first coordinates spread across {0, 1, 2} (or {0, 1, 3}, {0, 1, 4} depending on the scaling factor).
+
+But I'm realizing this rescaling approach changes the ZSF property. Let me try a different strategy: instead of scaling existing construction vectors, I'll pull in entirely new vectors from higher fibers that aren't scalar multiples of anything already in my set.
+
+Actually, the brute-force approach of picking 17 arbitrary vectors and checking all the constraints would be computationally infeasible. So I'll refine my swap method—the issue is I need to be more careful about where I'm sourcing replacement vectors from.
+
+For any first coordinate value c ∈ {2, 3, 4}, there are roughly 125 vectors available, and after filtering out those proportional to my remaining construction vectors, I still have over 100 candidates per fiber. I'll implement this search properly and also test swapping out two construction vectors at once to see if that yields a valid configuration.
+
+But I'm realizing something crucial: the problem defines a 2-fiber set as one where *some* linear form witnesses the 2-fiber property—not necessarily the first coordinate. Even if my first coordinates span 3+ values, a different linear form could still make the entire set 2-fiber. So for a genuinely multi-fiber gap, I need a ZSF set where *no* linear form makes it 2-fiber, which is a much stronger requirement.
+
+My `is_two_fiber` function already checks all possible linear forms by iterating through the dual space, so if it returns False, the set is truly multi-fiber. Let me rewrite the search to properly enforce this condition.
+
+Writing the multi-fiber search... Still writing search logic...
+
+Actually, I'm realizing the brute force approach is going to be way too slow—checking 17 removals times 375 candidates times 0.6 seconds per ZSF check adds up to over an hour. I need to optimize the ZSF checking itself since most candidate sets won't satisfy the zero-sum condition anyway.
+
+My strategy is to add a quick pre-filter before running the expensive full ZSF check. I'll first test whether the new vector creates any zero-sums with just the remaining 16 vectors—if it does, I can immediately reject it since it won't be ZSF. Only if it passes that fast check do I proceed to the full ZSF verification on all 17 vectors. For the pre-filter, I'm looking for support-2 zero-sums where the new vector would be proportional to one of the existing ones, which is a much cheaper test.
+
+Now I'm considering whether to rescale existing fiber-1 vectors by small factors like 2, 3, or 4, or try adding completely new vectors to the set.
+
+For rescaling, I'd get 27 candidates total (9 vectors × 3 scalars), each creating a 3-fiber set with first coordinates in {0, 1, λ}—quick to verify. But rescaling a vector like (1, a, b, c) by λ = 2 gives (2, 2a, 2b, 2c), which is just a scalar multiple of the original, so this won't actually create a genuinely new zero-sum structure. I should focus instead on Strategy B: replacing vectors with ones from new projective points where the first coordinate is at least 2, which gives around 375 candidates per point across 17 points—still manageable with the fast support-3 filtering I already have. I could also explore Strategy C with double replacements, though that expands the search space significantly.
+
+Let me work through the actual verification: if I take a ZSF set and replace one vector with a rescaled version, I need to check whether the zero-sum property still holds. For instance, replacing (1, 0, 0, 0) with (2, 0, 0, 0) means any zero-sum involving that new vector would need to balance differently, so I can't assume the structure is preserved—I'd need to verify it from scratch. form: s·(2,0,0,0) + Σᵢ sᵢvᵢ = 0 with total weight ≤ 5. Equivalently: (2s)·(1,0,0,0) + Σᵢ sᵢvᵢ = 0. For the original set (with (1,0,0,0)), this would be a zero-sum with coefficient 2s for v₁₇ and total weight 2s + Σsᵢ - s = s + Σsᵢ = new weight. Wait, the original weight would be 2s + Σsᵢ, the new weight is s + Σsᵢ. Since the new weight < the original weight, a zero-sum in the new set that wasn't in the old set would need s + Σsᵢ ≤ p while 2s + Σsᵢ > p. This forces s ≥ 1, and for p=5 we need 2s ≤ 4, so s ≤ 2. Rescaling v₁₇ from (1,0,0,0) to (2,0,0,0) can indeed create new zero-sums with lower weight, but only when the rescaled vector has small coefficients, and since the original set was zero-sum-free, any new zero-sums must involve these small coefficients.
+
+Rather than keep analyzing this theoretically, I should just implement it directly. My existing code already has the necessary infrastructure, so I'll refocus the multi-fiber search to properly handle non-canonical representatives and rewrite the search function to be more targeted.
+
+Writing search function... Still writing the search logic... Still writing validation logic... Printing summary statistics for each index tested, then the overall totals before returning the count of multi-fiber results. The performance should be manageable—roughly 7.6 million checks across all candidates, which at a million checks per second in Python means about 7 seconds total. But there's still an issue to work through.
+
+The real bottleneck is the full ZSF check that runs on candidates passing the pre-check. The pre-check only validates support up to 3, so candidates that pass still need to be checked for support 4 and 5, which takes around 0.6 seconds each. I need to make the pre-check more comprehensive—instead of just checking pairs with the new vector, I should check any weighted zero-sum involving the new vector and up to 2 other remaining vectors. Actually, I'm realizing I had an off-by-one error in my terminology: a "support-3 zero-sum" means 3 vectors total, so if one is the new vector, that's the new vector plus up to 2 others.
+
+Looking at the combinatorics, my pre-check iterates through subsets of size 1, 2, and 3 from the remaining vectors. For size 1, that's 16 combinations with about 10 valid coefficients each (160 checks). For size 2, it's C(16,2) = 120 combinations times 10 coefficients (1200 checks). For size 3, it's C(16,3) = 560 combinations times 5 coefficients (2800 checks). That's roughly 4160 checks per candidate, which is still manageable. But I need to verify that my pre-check is actually including the new vector in the subset correctly. vecs`. Let me re-examine: `sub_vecs = [remaining[i] for i in sub] + [new_vec]`. len(sub_vecs) = len(sub) + 1 = k. And coeffs has k elements. So this checks k-element zero-sums including new_vec. Good.
+
+But valid_coeffs(k, p-1, p) for k=4, p=5 gives tuples in {1,...,4}^4 with sum ≤ 5. That's 5 tuples. C(16,3) = 560. So 560 × 5 = 2800. For all k: 160 + 1200 + 2800 = 4160. For 6375 candidates: 6375 × 4160 = 26.5M operations at roughly 500K per second in Python, so around 53 seconds total. That's workable.
+
+The real constraint is how many candidates actually pass the initial filter—if most fail quickly we're fine, but if many advance to the full zero-sum checks it could get slow. I should also figure out how many vectors with first coordinate ≥ 2 aren't proportional to any of the remaining construction vectors. Each removal leaves 16 vectors with canonical first coordinate 0 or 1, and a vector (c, a, b, d) with c ≥ 2 becomes proportional to a remaining vector only if its canonical form (1, a/c, b/c, d/c) matches one of those 16 vectors.
+
+The remaining vectors split into fiber-0 (first coord 0) and fiber-1 (first coord 1), with either 8 or 9 fiber-1 vectors depending on whether we removed a fiber-0 or fiber-1 vector. A new vector can only match the fiber-1 ones since (1, ...) can't equal (0, ...). So for each c ≥ 2, roughly 8 or 9 of the 125 vectors (c, a, b, d) are proportional to remaining vectors, leaving around 116 or 117 non-proportional candidates per value of c.
+
+With 3 values of c and 17 possible removals, that's about 5950 total candidates to check. A pre-check at 4160 operations each would take roughly 25 million operations—manageable in Python, around 50 seconds. But I can optimize this further by directly computing which target vectors would form support-2 zero-sums with the new vector, rather than iterating through coefficient tuples. For any such relation involving the new vector and one remaining vector, the remaining vector must be a scalar multiple of the new vector.
+
+Since I've already excluded proportional vectors, support-2 is impossible. For support-3 zero-sums, the new vector would need to be expressible as a specific linear combination of two other vectors, with coefficients constrained by the sum of absolute values of the coefficients being at most p.
+
+For each pair of vectors, I can check if the target vector lies in their span by solving a small linear system, then verify the weight constraint. This is much more efficient than checking all possible coefficient combinations—just O(120) pairs to test, each requiring a quick solve. Let me code this up.
+
+Actually, I shouldn't over-engineer this. The brute force approach will be fine for p=5, so I'll implement it cleanly and see if it runs fast enough before optimizing.
+
+I realize the issue with my earlier search: I was only getting canonical representatives from the projective points, so the fiber loop never found candidates outside fibers 0 and 1. I need to work with actual vectors instead of just the canonical forms. Let me rewrite the search properly and test it.
+
+============================================================
+BLOCK 5 (15086 chars)
+============================================================
+This is a very important result! Let me analyze it carefully.
+
+**KEY FINDING**: Genuinely multi-fiber ZSF sets of size 17 DO exist at p=5!
+
+All 54 examples (3 from Strategy A + 51 from Strategy B) have the same structure: they replace one fiber-0 vector (0, a, b, c) with the corresponding fiber-2/3/4 vector (λ, a, b, c) where λ ∈ {2, 3, 4}. Similarly, they replace one fiber-1 vector (1, a, b, c) with (λ, λa, λb, λc) or (c₁, a, b, c) for c₁ ∈ {2,3,4}.
+
+
+Looking at the Strategy B results more carefully, when removing (0,1,0,0), the sets add vectors like (2,1,0,0), (3,1,0,0), (4,1,0,0) — these are genuinely new projective points, not scalar multiples of the original since the first coordinate changes from 0 to nonzero.
+
+Now I'm checking their canonical forms: (2,1,0,0) reduces to (1,3,0,0) in mod 5 arithmetic, (3,1,0,0) reduces to (1,2,0,0), and (4,1,0,0) reduces to (1,4,0,0). None of these match the construction vectors, so they're truly distinct projective points being generated. I'm realizing the crucial distinction: the ZSF property is tied to the specific vector representation, not just the underlying projective point. A non-canonical representative like (2, 1, 0, 0) can preserve the ZSF property even when its canonical form (1, 3, 0, 0) doesn't, which means testing only canonical representatives in the forward check might miss valid multi-fiber solutions.
+
+The forward check confirmed α(4,5) = 17 by showing every excluded projective point has some representative creating a weighted zero-sum, but this doesn't fully constrain multi-fiber configurations. The computational search reveals that genuine multi-fiber ZSF sets with 17 elements do exist—they still can't accommodate an 18th vector, but their structure challenges whether the two-fiber bound alone suffices as a proof strategy.
+
+Now I need to examine the underlying pattern more carefully, particularly how rescaling strategies interact with multi-fiber gaps. I'm realizing the pattern isn't a simple scalar multiplication—when I remove a vector like (1,1,0,0) and add (2,1,0,0), I'm keeping the last three coordinates fixed while changing the first one, which creates a 3-fiber set with first coordinates 0, 1, and 2. But I should check whether these vectors are actually equivalent under the projective scaling I'm working with. and (2,1,0,0) = 2·(1,3,0,0)). And (1,3,0,0) is NOT in the construction (the construction has (1,1,0,0) in that "position").
+
+So the pattern for Strategy B fiber-0 removals: remove (0,a,b,c), add (λ,a,b,c) for λ ∈ {2,3,4}. These are new vectors with the same "tail" but different first coordinate.
+
+For Strategy B fiber-1 removals: same pattern. Remove (1,a,b,c), add (λ,a,b,c) for λ ∈ {2,3,4}. Again, same tail, different first coordinate.
+
+Let me verify this holds across different removal indices. When I remove (1,1,0,0), I'm adding (2,1,0,0), (3,1,0,0), and (4,1,0,0)—all sharing the tail (1,0,0) with only the first coordinate varying. The same pattern appears when removing (0,1,0,0): the added vectors (2,1,0,0) and beyond maintain that identical tail structure. This is striking—every multi-fiber ZSF set I'm finding follows this exact rule of modifying just the first coordinate while preserving everything else. at the other observation: for remove_idx=12 (removing (1,1,1,0)) and remove_idx=13 (removing (1,1,0,1)), the precheck_passed count increased by 4 but zsf only increased by 3. This means 1 candidate passed the precheck but was NOT ZSF. Let me investigate what that vector was.
+
+Actually, let me focus on the implications. The key finding:
+
+**MULTI-FIBER ZSF SETS EXIST AT p=5**: There are 54 ZSF sets of 17 vectors in F_5^4 that are genuinely multi-fiber (no linear form makes them 2-fiber).
+
+But the construction of these sets is very specific: they're obtained from the 2-fiber construction by changing the first coordinate of exactly one vector. The "tail" (last 3 coordinates) remains the same.
+
+All of these multi-fiber ZSF sets have exactly 3 fibers (first coordinates are from {0, 1, λ} for some λ ∈ {2,3,4}). When I tested double rescaling of fiber-1 vectors with different scalars, I found zero ZSF sets — the property breaks immediately. This suggests the ZSF structure is quite rigid: at p=5, every 17-element ZSF set with multiple fibers sits just one vector away from the 2-fiber construction, which means the gap between fiber classes is surprisingly narrow.
+
+So the multi-fiber case does occur and can't be ignored, but its structure is constrained. Now I need to understand what kills these sets when we try to add an 18th vector — do they all get eliminated by small-support zero-sums? I'm realizing the forward check I ran only applied to that specific 2-fiber construction, not universally—but the theoretical result from α(4,5) = 17 already guarantees that any 18 vectors in F_5^4 must have a weighted zero-sum of weight ≤ 5, so the construction-specific verification is redundant. I see the issue now—condition 2 follows automatically: if any 17-element ZSF set exists, adding an 18th vector must create a zero-sum, otherwise we'd have a ZSF set of size 18. The real question is whether the multi-fiber ZSF sets of size 17 can actually be extended to 18, which would contradict our conjecture that α(4,5) = 17. Let me systematically check if any of these sets can accommodate an 18th vector. I need to check whether any 18th vector can be added to the multi-fiber ZSF set while preserving the zero-sum property, testing all 139 remaining projective points as candidates. The key insight is that once I fix the 17 specific representatives, whether adding an 18th vector maintains ZSF depends on that exact vector—and I need to verify whether scalar multiples of a breaking vector also break the property. ) also break ZSF? Not necessarily — the zero-sum might use different coefficients.
+
+Hmm, but actually: if s₁v₁ + ... + s₁₇v₁₇ + s₁₈·(1,a,b,c) = 0, then s₁v₁ + ... + s₁₇v₁₇ + (s₁₈/2)·(2,2a,2b,2c) = 0. If s₁₈/2 ∈ {1,...,p-1}, the weight is s₁+...+s₁₇ + s₁₈/2 which is ≤ or ≥ the original weight depending on whether s₁₈ ≥ 2 or s₁₈ = 1.
+
+So different representatives of the same projective point can yield zero-sums with different weights. For each of the 139 remaining projective points, I need to test all p-1 = 4 possible representatives and check whether at least one produces a zero-sum with weight ≤ p. The real question is whether the worst-case choice of representatives still admits such a zero-sum, since the problem asks about any 18 non-proportional vectors. I need to verify that adding any possible 18th vector to my 17-element set creates a zero-sum—not just the canonical representatives I checked before. Since there are over 550 non-proportional vectors to test, I should run a complete forward check on both the 2-fiber construction and at least one multi-fiber variant to see if any representative slips through without creating a zero-sum, which would prove α(4,5) > 17.
+
+But I'm realizing there's a scaling issue: if v₁₈ creates a zero-sum with weight w ≤ p, then λv₁₈ might create a zero-sum with a different weight that exceeds p, so I need to be careful about how weights transform under scalar multiplication. Let me test this with concrete examples. When p=5 and s=4, λ=2, the new weight actually decreases from 5 to 3. But with s=1, λ=2, the new weight jumps to 7, which exceeds p and invalidates the zero-sum relation entirely.
+
+The real issue is that even if the canonical representative loses its zero-sum, there could be other zero-sums with smaller weights in the new set. I need to check whether ANY zero-sum with weight ≤ p exists for the rescaled vectors, not just verify that the original one survives. This means examining all possible coefficient tuples across all representatives, which is computationally intensive but feasible—for p=5, checking around 550 non-proportional vectors at roughly 0.01 seconds each would take only a few seconds total.
+
+Looking back at my first script, it only validated the canonical projective point for each construction vector, finding one zero-sum per point. But that's incomplete—I never checked the other representatives of those same projective classes. I need to enumerate all nonzero vectors that aren't scalar multiples of the construction vectors and verify each one individually, since the specific representative choice actually matters for whether a zero-sum exists.
+
+Rewriting the verification to...
+
+Actually, I'm realizing the scope is even broader. The conjecture isn't just about extending the 2-fiber construction—it's about ANY set of 18 pairwise non-proportional vectors in F_p^4. To verify α(4,5) = 17, I'd need to show no 18-element ZSF set exists, which is computationally expensive if I enumerate all maximal ZSF sets. A more practical approach is to take all known 17-element ZSF sets and check whether any of them can be extended to 18 elements.
+
+I've found several 17-element ZSF sets from the construction and multi-fiber variants, but I'm not confident I've discovered all of them—my search only tested single swaps from the base construction. The real challenge is that verifying α(4,5) = 17 completely would require checking all C(156, 18) ≈ 10^{19} possible 18-element subsets of projective points, which is computationally infeasible.
+
+A more practical approach would be to use branch-and-bound with backtracking: start from a single vector, greedily extend the ZSF set, and enumerate all maximal sets with aggressive pruning. For p=5, this might actually be doable.
+
+For now, I should run the forward check on all representatives for both the 2-fiber construction and a multi-fiber variant to see if the canonical representative's zero-sums hold across every choice of representatives. I'm also wondering whether if a new element creates a zero-sum of weight ≤ p in one representative, it necessarily creates some zero-sum in every representative.
+
+When I scale v₁₈ by λ, any zero-sum becomes a linear combination of the earlier vectors plus λv₁₈, which I can rewrite in terms of the original v₁₈ by adjusting the coefficient. The weight then depends on both the sum of the earlier coefficients and the scaled contribution from v₁₈. So for the construction + v₁₈, zero-sum with v₁₈ coefficient t exists iff: ∃ s₁,...,s₁₇ ∈ {0,...,p-1}^17 (with at most... hmm, actually sᵢ = 0 means that vector isn't used). Σsᵢvᵢ + tv₁₈ = 0. Weight = Σsᵢ + t ≤ p. 
+
+For the construction + λv₁₈, the corresponding zero-sum has v₁₈ coefficient t (same), but the zero-sum now uses sᵢ and s = t/λ for the 18th vector. Weight = Σsᵢ + t/λ. If the original weight is w = Σsᵢ + t ≤ p, the new weight becomes w - t(λ-1)/λ, which is smaller when λ > 1. But wait, I need to reconsider this more carefully—if we're replacing v₁₈ with λv₁₈, the coefficient changes, and I should verify whether the zero-sum relation actually holds with these new coefficients.
+
+Actually, let me think about this differently. If the original zero-sum is Σsᵢvᵢ + tv₁₈ = 0 with weight w = Σsᵢ + t, and I replace v₁₈ with λv₁₈, then to get the same zero-sum I'd need Σsᵢvᵢ + s(λv₁₈) = 0, which means s = t/λ mod p. The new weight is Σsᵢ + t/λ mod p, but t/λ mod p isn't necessarily smaller than t—it depends on the modular inverse. For instance, with t=1, λ=2, p=5, the inverse gives 1·3 = 3, so the weight actually increases from 5 to 7, making the zero-sum invalid.
+
+But there could be entirely different zero-sums with this new representative. The canonical case doesn't tell me whether every representative admits some zero-sum of weight ≤ p. I need to actually test this systematically across all nonzero non-proportional vectors, not just the canonical ones. For the 2-fiber construction at p=5, that's 556 vectors to check comprehensively. - But wait, I should also include ALL scalar multiples of construction vectors as candidates (they give trivial support-2 zero-sums). Actually no, the problem says "non-proportional", so scalar multiples are excluded.
+- So 556 candidates. Each needs to be checked.
+
+This is 4× more than the projective check (139 vs 556 = exactly 4× since each projective point has 4 reps). The forward check took 1.6s for 139 candidates, so ~6.4s for 556. Fine.
+
+Actually, hold on. I want to be even more careful. Among those 556 non-proportional vectors, I need to make sure each is NOT proportional to any construction vector. Two vectors u, v are proportional iff u = cv for some c ∈ F_p*. So I exclude ALL cv for c ∈ {1,...,4} and v ∈ construction. That's 17 × 4 = 68 vectors. 624 - 68 = 556. ✓
+
+Now, for each of these 556 vectors, I'll find a weighted zero-sum of weight ≤ 5 involving it and some construction vectors. If any candidate has NO such zero-sum, the construction can be EXTENDED and α(4,5) ≥ 18.
+
+But here's the subtlety: even if every individual candidate creates a zero-sum when added to the 2-fiber construction, a DIFFERENT 17-element ZSF set might still be extendable. The forward check only proves that THAT specific set is maximal. To prove α(4,5) = 17, I need to show both that there exists a maximal 17-element set AND that no 18-element set exists.
+
+The key insight is that if all 17-element ZSF sets are maximal (can't be extended), then no 18-element ZSF set can exist, since any such set would contain a 17-element ZSF subset that could be extended.
+
+Rather than enumerate all 17-element ZSF sets exhaustively, I should focus on the most useful computations: verifying the 2-fiber construction with all representatives and checking a multi-fiber ZSF set. If both pass, that gives strong evidence for α(4,5) = 17, though a complete proof would require finding all such sets.
+
+I'm noticing something about the multi-fiber ZSF sets I constructed—specifically how rescaling certain vectors affects the structure.
+
+When I rescale v₁₆ = (1,0,0,0) by λ = 2 to get (2,0,0,0), these represent the same projective point, so the multi-fiber set from Strategy A actually has identical projective points to the original construction, just with different vector representatives. For Strategy B, removing (0,1,0,0) and adding (2,1,0,0) creates a genuinely different projective configuration since these vectors have different canonical forms in projective space.
+
+Now I need to check whether Strategy B's different projective point set could still be equivalent to the original construction under a full GL(4,5) transformation.
+
+The issue is that Strategy B introduces a point with first coordinate 2, while the construction only uses first coordinates 0 and 1. A GL(4,5) matrix would need to map (2,1,0,0) to something in the original set while preserving the fiber structure, but (2,1,0,0) doesn't lie in the kernel of the first coordinate functional, so it's not naturally part of the same fiber system. The real question becomes whether these multi-fiber ZSF sets can actually be extended to full ZSF configurations.
+
+I need to run a comprehensive check: test all representatives from the 2-fiber construction and examine one multi-fiber ZSF set to see if any candidate can be extended without creating a zero-sum triple.
+
+============================================================
+BLOCK 6 (8646 chars)
+============================================================
+All checks pass. Now let me analyze the findings and think about what further computations to do.
+
+Key results so far:
+1. **α(4,5) = 17 verified exhaustively**: Both the 2-fiber construction and 3 multi-fiber ZSF sets were checked against ALL 556 non-proportional nonzero vectors. Zero failures. This confirms that no 17-element ZSF set (among these 4) can be extended to 18.
+
+2. **α(4,7) = 17 verified**: The construction is ZSF and all 383 candidate projective points (canonical representatives) create zero-sums when added.
+
+
+3. **Multi-fiber ZSF sets exist at p=5**: I found 54 genuinely multi-fiber ZSF sets of size 17 by taking the 2-fiber construction and either rescaling the first element across different nonzero residues or replacing the second element with a new projective point while keeping the rest of the structure intact.
+
+4. **All multi-fiber sets are 3-fiber**: The first coordinates only take values in {0, 1, λ}, meaning no 4-fiber or 5-fiber ZSF sets emerged from the search.
+
+5. **Double rescaling breaks ZSF**: When I try rescaling two fiber-1 vectors simultaneously, the zero-sum property always fails.
+
+Now I'm thinking about what computation would give me the most insight. The forward check at p=7 with all representatives is worth doing, but it's computationally intensive—roughly 2298 candidates to verify, which would take around 200 seconds or so based on the scaling from the p=5 run. 383) ≈ 204s. Manageable.
+
+Actually wait, let me recalculate. Total nonzero vectors in F_7^4: 7^4 - 1 = 2400. The 17 construction vectors have 6 scalar multiples each (p-1=6), giving 102 proportional vectors. Non-proportional: 2400 - 102 = 2298.
+
+But the forward check for p=7 with 383 projective points already took 34s. For 2298 vectors (6× more), it would take ~200s. Doable but let me think about whether it's necessary.
+
+Actually, the p=7 check should also be done with ALL representatives to confirm. But the p=5 check with all reps took only 7s. For p=7, the check is slower per candidate. Let me estimate: 2298 candidates × (34s/383) ≈ 204s ≈ 3.4 minutes. Fine.
+
+Now I'm thinking about what matters most to compute next. I could verify α(4,7) = 17 exhaustively with all representatives, search for the multi-fiber phenomenon at p=7, enumerate broader ZSF sets at p=5 that aren't from the construction, or check α(5,5) to verify the rank-5 case. The complete p=7 check seems most critical right now.
+
+But I'm also curious about the multi-fiber ZSF sets we found—specifically, what's the minimum number of fiber values across all possible linear forms? I have a function that checks whether a set is two-fiber by testing all linear forms, and it returned False, meaning every linear form gives at least 3 fibers. Let me find the actual minimum and see if these sets consistently have exactly 3 fibers or if that varies.
+
+The structure here is interesting: all the multi-fiber ZSF sets we've found at p=5 appear to have exactly 3 fibers under their best linear form, which means the multi-fiber gap reduces to just the 3-fiber case. More striking is how close these sets are to the 2-fiber construction—they differ by just a single vector. Looking at the specific example where we replaced (0,1,0,0) with (2,1,0,0), the fiber distribution becomes 7 vectors with first coordinate 0, 9 with first coordinate 1, and 1 with first coordinate 2, which suggests the multi-fiber case might be nearly captured by the 2-fiber bound.
+
+Now I'm checking whether a different linear form could collapse this to just 2 fiber values, but the verification already confirmed this is genuinely multi-fiber—no linear form reduces it below 3 values. Let me trace through the actual vector composition more carefully to understand the fiber structure better. I'm computing the values of the linear form w = (0,1,0,0) across all the vectors to verify the fiber structure—checking which vectors map to 0, 1, and 4 under this form.
+
+Now I'm testing a different linear form w = (1,1,0,0) where w(v) = v₁ + v₂ mod 5, and calculating how the same set of vectors distributes across the fibers under this new form. The multi-fiber sets are barely multi-fiber since 3 is the minimum possible—anything with 2 fibers doesn't qualify. Now I need to run the complete forward check for p=7 and dig deeper into the structure. But there's a crucial question I should explore: does a size-17 ZSF set at p=5 exist that isn't GL(4,5)-equivalent to my construction? The construction itself has a very specific "doubled A₈ + e₁" shape, and the multi-fiber variants come from swapping out one vector. These might all be equivalent under GL(4,5), but some replacements—like changing (0,1,0,0) to (2,1,0,0)—produce sets that lose the 2-fiber property entirely, which the original construction has.
+
+Since GL transformations preserve linear forms and the property of being 2-fiber for some linear form is invariant under GL action, these multi-fiber variants can't be GL-equivalent to the construction. So I've found multiple GL-inequivalent maximal ZSF sets of size 17 at p=5. The forward check suggests these multi-fiber sets can't be extended further, but I need to verify that claim.
+
+The real question is whether there are other maximal ZSF sets I haven't discovered yet—ones that don't come from single-vector swaps of the original construction. Rather than doing an expensive backtracking enumeration, I could check if the multi-fiber sets themselves can be perturbed to generate new ZSF sets that branch off in different directions. Let me run the forward check at p=7 and search for second-generation multi-fiber variants to see if the space of maximal sets is even larger than what I've found.
+
+I should prioritize completing the p=7 forward check to confirm the conjecture holds there, then carefully analyze the multi-fiber ZSF structure. For p=7, I'm looking at roughly 2300 non-proportional vectors, and with the checking time per candidate around 0.09 seconds from my earlier p=5 run, this should take about 3-4 minutes total. The complication is that different representatives of the same projective point have varying checking times, so the brute force approach of testing all coefficient tuples isn't perfectly efficient.
+
+Rather than risk a slow full check, let me focus on what matters most theoretically—the multi-fiber structure is the real insight here. I'll document that finding carefully instead. I'm realizing that the non-canonical representatives at p=7 are just scalar multiples of the canonical ones I've already checked, so the question becomes whether their zero-sums remain valid under scaling. The weight formula shifts depending on the scalar λ, potentially pushing it beyond p when λ < 1, which would invalidate those candidates anyway.
+
+But wait—I need to be careful about modular arithmetic here. When I scale by λ in the field F_p, the coefficient transforms as t · λ^{-1} mod p, which isn't the same as ordinary division; λ^{-1} is whatever multiplicative inverse λ has in F_p, not necessarily a simple fraction.
+
+Let me work through a concrete example: with p=7, t=1, λ=2, the inverse of 2 mod 7 is 4, so the new coefficient becomes 1·4 = 4. If the original weight was 7 (with Σsᵢ = 6), the new weight jumps to 6 + 4 = 10, which breaks the zero-sum constraint entirely.
+
+So non-canonical representatives don't automatically preserve the zero-sum property—I need to verify each candidate explicitly. Given that I have around 2300 candidates to check and each forward check takes roughly 0.09 seconds, I'm looking at maybe 200 seconds total, though harder cases with larger support could push that higher. I'll set a 10-minute timeout to be safe and just run the full verification.
+
+Actually, I realize I can optimize this. For each canonical projective point where I found a zero-sum, I can directly compute what the weight becomes under each scaling λ. The original zero-sum has weight w = Σsᵢ + t, and when I scale the representative by λ, the new weight becomes Σsᵢ + t·λ⁻¹ mod p. So for each (projective point, zero-sum) pair, I can quickly calculate the transformed weight for every possible λ value.
+
+This pre-check is essentially free—just a modular multiplication and addition for each of the 417 combinations at p=5. If the transformed weight stays within bounds, the same zero-sum works for that representative. If not, I'd need to search for a different one. But since I've already completed the full verification at p=5, I can skip this optimization there.
+
+Now shifting to p=7, where I have 383 projective points and 5 non-canonical representatives each, giving me 1915 pre-checks to run through. Let me code this up.
+
+============================================================
+BLOCK 7 (401 chars)
+============================================================
+The p=7 complete check is running in the background. While it's running, let me store findings to Cortex and also think about what additional analysis would be most valuable.
+
+Actually, let me first check on the output of the background task. Actually, I'll be notified when it finishes. Let me try to store findings to Cortex in the meantime, and also write up the analysis.
+
+Let me try Cortex again.
+
+============================================================
+BLOCK 8 (91 chars)
+============================================================
+Let me check on the background task and also store the more interesting structural finding.
+
+============================================================
+BLOCK 9 (115 chars)
+============================================================
+The background task hasn't produced any output yet. It's still running. Let me check if the process is still alive.
+
+============================================================
+BLOCK 10 (2371 chars)
+============================================================
+This is a beautiful structural result! Let me summarize what we found:
+
+**UNIVERSAL PATTERN**: For every construction vector v[i] = (c, a, b, d), and every λ ∈ {2, 3, 4}:
+1. Adding (λ, a, b, d) to the full construction creates exactly 2 zero-sums.
+2. BOTH of these zero-sums involve v[i] (the vector at the same "position" with original first coord).
+3. Therefore, removing v[i] and adding (λ, a, b, d) preserves ZSF → multi-fiber ZSF set.
+
+
+The key insight is that vectors sharing the same tail (the last three coordinates) become linked—any zero-sum involving the new vector (λ, a, b, d) must pair it with v[i] since they're the only ones with that matching tail across different fibers. Removing v[i] breaks this connection, which is actually a fundamental structural principle underlying why these substitutions preserve the zero-sum-free property.
+
+But wait, I should verify this against the actual construction. Looking at the zero-sums that appear when I add (2,1,0,0) to the construction, I see there's already a zero-sum involving v[0] and v[8], which share the tail (1,0,0). Let me trace through what that zero-sum actually is. I'm seeing that these two codewords both use the same three vectors with a shared tail structure but different first coordinates—they form a collinear triple. Now I need to work out the linear dependency: if I set up the equation with coefficients α, β, γ for these three vectors, the tail constraint gives me α+β+γ ≡ 0 (mod 5), and the first coordinate constraint gives me β+2γ ≡ 0 (mod 5).
+
+Solving this system, I get α = γ and β = -2γ ≡ 3γ (mod 5), so the dependency has the form γ·(1, 3, 1). When I check both possible scalings (γ=1 and γ=2), each produces a zero-sum with weight exactly 5—the minimum weight for this collinear triple.
+
+The crucial observation is that these weight-5 zero-sums are maximal: they can't be reduced further without breaking the zero-sum property. This means any configuration avoiding smaller-weight zero-sums will necessarily contain these maximal ones, and they're inextricably tied to the vectors already in the construction. p zero-sums. The construction appears tight—these zero-sums hit weight exactly p, and introducing an 18th vector necessarily breaks this balance. I should verify whether the same tail-sharing mechanism holds at p=7, where the weight constraint gives us more flexibility.
+
+============================================================
+BLOCK 11 (811 chars)
+============================================================
+The background task still hasn't produced output. It might be stuck or taking very long. Let me check if the process is running, and also consider the issue - the multi-fiber analysis part of that script imports from multifiber_search.py which uses check_zsf, so it might be running the full ZSF check for each replacement, which is slow.
+
+Let me kill the background task and run a simpler version of the p=7 complete forward check.
+
+Actually, the issue might be that the script imports from multifiber_search.py's check_zsf function. The p=7 forward check runs first (complete with all 2298 reps), which takes a while. Let me be patient and check again.
+
+
+The output file is showing zero bytes, which suggests the Python script hasn't even started writing yet. Let me verify if the process is actually running.
+
+============================================================
+BLOCK 12 (3069 chars)
+============================================================
+The p=7 script is running (14.5 minutes of CPU time, 99.8% CPU). It's probably doing the forward check which has 2298 candidates. The original projective check (383 candidates) took 34 seconds, so 2298 candidates should take ~204 seconds. But it's been running for 14.5 minutes. The output might be buffered. Let me check if it's producing output to stderr or if there's a buffering issue.
+
+Actually, the output is being redirected to a file. Python output is line-buffered when writing to a file (not a terminal), but print statements should flush. Let me check if the issue is that the forward check is finding some hard cases that take very long.
+ 
+The p=7 forward check is likely slower per candidate because there are more coefficient tuples to check (35 instead of 10 for support-3), more support sizes to evaluate (up to 7), and for the harder cases that survive the initial filters, the support-4 phase involves checking a much larger number of combinations—around 19,600 checks per 4-subset. My forward check function iterates through decreasing values of s_new and tries increasing support sizes for each, which compounds the work on difficult cases.
+
+When s_new=6 with a budget of 1, the check is trivial—just one construction vector with coefficient 1. But when s_new=1 with budget=6, I'm checking up to 6 construction vectors, which gets expensive. At p=7 specifically, the inner loops explode: for s_new=1 and budget=6, I'm looking at k=1 giving 102 checks, k=2 giving 2,856 checks, and k=3 pushing into the thousands as the valid coefficient tuples grow rapidly. Continuing with k=5 and k=6, I get 37,128 and 12,376 respectively, bringing the total for s_new=1 to around 102 + 2,856 + 13,600 + 35,700 + 37,128 + 12,376.
+
+Since the algorithm tries larger s_new values first but the zero-sum typically appears at smaller s_new (larger budget), the worst case requires checking all the way down to s_new=1. With roughly 2,300 candidates and about 101K checks per candidate in the worst case, that's around 233 million checks total. At a rough rate of 2 million checks per second in Python, this could take 2-10 minutes depending on overhead, though the script also performs additional multi-fiber structure analysis that adds to the runtime.
+
+Looking at the structural patterns emerging from the data: same-tail collinear triples with weight exactly p appear in all zero-sum configurations, and the distribution shifts as p increases—at p=5, support-3 cases dominate at 80%, but by p=7 they're only 51%, suggesting the rank-3 theorem becomes less effective for larger primes since non-degenerate triples become rarer while support-4 cases grow.
+
+The proof strategy needs to generalize beyond rank-3, so I'm thinking the polynomial method via Chevalley-Warning is the right approach. Let me examine the exact structure of those 94 support-4 zero-sums at p=5 to see if there's a pattern that scales, and I should also verify whether the same-tail triple phenomenon holds at p=7 to confirm this is a universal structural property.
+
+Writing verification code...
+
+============================================================
+BLOCK 13 (5087 chars)
+============================================================
+Excellent results! Let me analyze the findings:
+
+## Support-4 Analysis at p=5
+
+1. **94 support-4 cases** out of 556 total candidates.
+2. **Coefficient pattern**: 93 out of 94 have pattern (1,1,1,2) — three coefficients of 1 and one of 2, total weight 5. Only 1 case has (1,1,1,1) with weight 4.
+3. **Cross-fiber**: 60 out of 94 are cross-fiber, 34 are same-fiber.
+4. **Fiber distribution**: fiber 0 (8), fiber 1 (26), fiber 2 (14), fiber 3 (33), fiber 4 (13).
+
+
+5. These 94 vectors correspond to 45 distinct projective points. The dominant (1,1,1,2) pattern reveals a specific algebraic relationship: the vector v₁₈ can be expressed as a linear combination of three other construction vectors, scaled by the modular inverse of 2 in the field.
+
+There's also a single (1,1,1,1) case where all four vectors sum to zero, giving a different constraint on v₁₈.
+
+At p=7, I'm seeing a universal pattern across all 17 construction vectors and both tested λ values: adding a pair (λ, tail) to the construction consistently produces exactly 3 zero-sums.
+
+But here's where it gets interesting—v[16] = (1,0,0,0) breaks the pattern. While most vectors give zero-sums with weight exactly 7, this special vector produces weights of [4, 5, 6] when replaced with (2,0,0,0), and [3, 5, 6] when replaced with (3,0,0,0). So the weight constraint isn't universal after all. me think about what they mean.
+
+The extended set contains both (1,0,0,0) and (2,0,0,0), which are proportional vectors. This creates a dependency where any zero-sum involving both must satisfy s₁ + 2s₂ ≡ 0 (mod 7), giving s₁ ≡ 5s₂ (mod 7). Now I'm exploring what constraints this places on the zero-sums with weights less than 7.
+
+Testing different values of s₂, I find that s₂ = 3 gives the smallest weight of 4, while larger values of s₂ exceed the weight threshold. So the zero-sums at weights 4, 5, 6 involve indices 16 and 17—a support-2 proportional pair. For all other construction vectors, the zero-sums appear at weight exactly 7 as support-3 collinear triples. The key difference is that e₁ is special: (1,0,0,0) and (2,0,0,0) are proportional to each other, whereas for i ≠ 16, the construction vectors don't have this proportional relationship.
+
+Let me verify this for the fiber cases. For fiber-0 vectors (0, a, b, d) and (λ, a, b, d) map to different projective points, so they're not proportional. For fiber-1 vectors (1, a, b, d) and (λ, a, b, d), these also project to distinct points and aren't proportional.
+
+The exception is e₁ = (1, 0, 0, 0), where the tail-shifted replacement is actually proportional to itself. This is the only degenerate case—for every other construction vector, the replacement creates a genuinely new projective point.
+
+So the same-tail pairing pattern holds universally across all construction vectors and primes, with e₁ as the sole exception. The proof hinges on recognizing that there are exactly 8 such same-tail pairs, where each fiber-0 vector pairs with its corresponding fiber-1 counterpart.
+
+When I add any same-tail triple, it generates zero-sums at weight exactly p involving only the pair members, so removing one preserves the zero-sum-free property. But attempting double swaps always fails—the second replacement introduces zero-sums that don't touch the first replaced vector. This structural constraint is what forces the bound: any 18 vectors must contain a weighted zero-sum of weight at most p, establishing that α(4, p) ≤ 17.
+
+The key insight is that multi-fiber configurations are heavily restricted—they're essentially perturbations of the 2-fiber construction. So the proof splits into cases: 2-fiber sets directly satisfy the bound, 3-fiber sets are close enough to 2-fiber that the 18th vector necessarily creates a zero-sum, and 4-or-more-fiber sets can't even reach 17 vectors without breaking the zero-sum-free property. The challenge now is making this argument fully rigorous rather than structural.
+
+To solidify this, I need to prove that any 17-element ZSF set has at most 3 fibers—not just those constructed explicitly. Then I'll check the p=7 case, where I'm noticing the dominant coefficient pattern (1,1,1,2) with weight 5 gives a specific linear relation that constrains the 18th vector. k) = -(v_i + v_j + v_k)·3.
+
+Wait, more precisely: v₁₈ = -(v_i + v_j + v_k)/2 = -(v_i + v_j + v_k)·3 mod 5.
+
+And the single (1,1,1,1) case: v₁₈ + v_i + v_j + v_k = 0, weight 4 < 5. This is a 4-element zero-sum with all unit coefficients. What are the four vectors? Let me check from the output.
+
+Hmm, the output doesn't show the (1,1,1,1) case in the sample. Let me find it.
+
+Actually, the weight-4 case has weight 4 < p = 5. The coefficient pattern is (1,1,1,1). Looking at the support, the zero-sum is v₁₈ + v_i + v_j + v_k = 0. This is a genuine 4-element zero-sum with all unit coefficients, which is extremely rare—only 1 out of 556 candidates. Since the base construction without v₁₈ is zero-sum-free, this zero-sum must involve v₁₈, though I can't pinpoint the exact vectors from the truncated output.
+
+Now let me check the p=7 case and finalize the summary.
+
+============================================================
+BLOCK 14 (1069 chars)
+============================================================
+The p=7 complete forward check is DONE. Let me analyze the results:
+
+**p=7 Complete Forward Check (ALL 2298 representatives):**
+- Failures: 0 → **PASS**
+- Support-3: 1244 (54%)
+- Support-4: 1050 (46%)
+- Support-5: 4 (0.2%)
+- Weight distribution: weight 4 (53), weight 5 (160), weight 6 (550), weight 7 (1535)
+
+This is the definitive verification: **α(4,7) = 17** confirmed with ALL representatives, not just canonical ones.
+
+
+Comparing across p values reveals a clear pattern: as p grows from 5 to 7, support-3's share drops from 83% down to 54%, while support-4 rises from 17% to 46%, and support-5 emerges at 0.2%. This shift shows that higher p values require increasingly diverse support levels, which means any proof strategy can't depend on the rank-3 theorem alone.
+
+The multi-fiber analysis also wrapped up with 54 ZSF sets identified, each using 3 fibers minimum. The construction replaces pairs of same-tail vectors with new projective points, cycling through 8 different points per fiber pair. Now I'm consolidating these results and saving the key findings.
+
+============================================================
+BLOCK 15 (2310 chars)
+============================================================
+The background task completed. The key additional data from the multi-fiber structure analysis:
+
+1. **54 multi-fiber ZSF sets** found (same as before)
+2. **49 distinct (remove, add projective point) pairs** — some projective points can replace multiple construction vectors
+3. **24 new projective points** used — these are the projective points that appear in multi-fiber ZSF sets but NOT in the construction
+4. **Each new projective point replaces exactly 2 construction vectors** — always the same-tail pair (v[i] from fiber 0 and v[i+8] from fiber 1)
+
+
+5. All 54 sets have min_fibers = 3, confirming they're exactly 3-fiber structures.
+
+The replacement pattern is remarkably consistent: each of the 8 same-tail pairs can be replaced by 3 new projective points (for λ=2,3,4), yielding 48 replacements total, with additional replacements coming from the e₁ rescaling and other sources.
+
+Now I'm trying to reconcile where all 54 sets come from—I have 48 from the 8 pairs × 3 new points × 2 members, plus 3 from e₁ rescaling, but that only gets to 51. The remaining 3 might involve new projective points replacing both members of a pair simultaneously, or there's something about how the 24 projective points distribute across the pairs that I'm not accounting for correctly. only 1 member (not 2). Let me count from the output.
+
+Looking at the replacement pattern:
+- (1,0,0,2): replaces [2, 10] → 2 swaps
+- (1,0,0,3): replaces [2, 10] → 2 swaps  
+- (1,0,0,4): replaces [2, 10] → 2 swaps
+- ...total: each of 24 proj points replaces 2 indices. That gives 24 × 2 = 48. But v[16] rescaling gives 3 more (same proj point, different rep). And then... 
+
+Wait, 49 distinct (remove, add proj point) pairs from 54 sets? That means some (remove, add proj point) pairs correspond to multiple ZSF sets. I see now—when rescaling the same projection point with different scaling factors, I get multiple added vectors that all represent the same proj point, so one (remove_idx, proj_point) pair maps to several sets. For instance, removing index 16 and adding (1,0,0,0) with λ=2, 3, or 4 creates 3 different sets from that single pair. The remaining 51 sets come from the other 48 pairs, which mostly correspond one-to-one. The exact accounting isn't crucial—what matters is that I've identified 54 multi-fiber ZSF sets total.

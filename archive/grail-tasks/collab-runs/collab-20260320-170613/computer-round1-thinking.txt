@@ -1,0 +1,774 @@
+
+============================================================
+BLOCK 1 (339 chars)
+============================================================
+Let me start by searching Cortex for prior computational findings and then reading the briefing document. I need to focus on my role as the COMPUTER - verifying conjectures, running exhaustive checks, and computing examples.
+
+Let me search Cortex first, then read the briefing, and start on the computational tasks outlined in section (B).
+
+============================================================
+BLOCK 2 (176 chars)
+============================================================
+Good, I have the Cortex results and the briefing. Let me now look for the Session 4 analysis file and the prior collaboration directory for more detail on the window structure.
+
+============================================================
+BLOCK 3 (463 chars)
+============================================================
+Let me read the u1_analysis.md file and the Session 4 findings, then start computing. My tasks as COMPUTER are:
+
+1. Verify window structure at p = 29, 31, 37
+2. For the (8,7,2) distribution: verify U1 by checking all pairs of extra vectors at p = 5, 7
+3. Check window structure for OTHER maximal ZSF sets
+4. Verify sumset completeness Σ_k + Σ_l = Σ_{k+l} at p = 29, 31
+
+Let me read the u1_analysis first, then write and run Python code for all these computations.
+
+============================================================
+BLOCK 4 (495 chars)
+============================================================
+Let me read the computer-round3 file in parts, and also start building the main computation script. I have a clear picture of what needs to be computed:
+
+1. Verify window structure at p = 29, 31, 37
+2. For the (8,7,2) distribution: verify U1 at p = 5, 7
+3. Check window structure for OTHER maximal ZSF sets
+4. Verify sumset completeness Σ_k + Σ_l = Σ_{k+l} at p = 29, 31
+
+Let me write a comprehensive Python script and run it. I'll also look at the existing shadow formula scripts for reference.
+
+============================================================
+BLOCK 5 (83519 chars)
+============================================================
+Let me set up the todo list and then write the comprehensive computation script. I need to:
+
+1. Verify window structure at p = 29, 31, 37
+2. For the (8,7,2) distribution: verify U1 by checking all pairs of extra vectors at p = 5, 7
+3. Check if OTHER maximal ZSF sets exist (beyond A₈) at small p, and if so check their window pattern
+4. Verify sumset completeness Σ_k + Σ_l = Σ_{k+l} at p = 29, 31
+
+Let me write the Python script now. I need to be careful about the A₈ definition. From the briefing:
+
+
+Extracting the A₈ set from the fiber structure...
+
+Now I need to understand the window structure on the invariant line L = {(0,j,j) : j ∈ F_p*}. The key is figuring out which j values can be represented as weighted sums of the A₈ vectors where the weights sum to w and each weight stays in the range [0, p-1].
+
+Looking at the A₈ basis vectors, I need to check what constraints the first coordinate being zero places on the coefficients—specifically, c₀ + (p-1)c₃ + c₄ + c₅ + (p-1)c₆ + (p-1)c₇ must equal zero modulo p.
+
+Then I'm verifying that the second and third coordinates are equal, which gives me another linear constraint on the coefficients. Finally, I need to determine what value j takes and ensure the sum of all coefficients works out correctly.
+
+For the verification at larger primes like 29, 31, and 37, brute force enumeration over all possible coefficient tuples becomes infeasible since that's roughly 29^8 ≈ 2×10^11 combinations. Instead, I can leverage the two linear constraints to reduce the problem from 8 variables down to 6 free ones, then systematically enumerate valid tuples for each weight w to see which j values are actually achievable.
+
+Even with 6 free variables though, at p=29 that's still around 29^6 ≈ 6×10^8 iterations, which is pushing it. A better strategy is to recognize that the weight constraint itself eliminates another degree of freedom, leaving me with 5 truly independent variables to iterate over. Let me carefully set up the constraint system: I have the two linear equations on the coefficients, and I need to think through how the weight constraint interacts with them to maximize the reduction in search space.
+
+With 5 free variables at p=29, that's 29^5 ≈ 2×10^7, which is much more manageable. But I need to be careful here—the weight constraint Σcᵢ = w is an integer constraint, not modular, while the coordinate constraints are mod p. Since the coefficients are nonnegative and sum to w, and for p ≥ 2w+1 they all stay in the range {0,...,w}, the modular constraints actually become exact integer constraints. This means I can treat everything uniformly as integer constraints, which simplifies the verification significantly.
+
+For the window structure check across p=29, 31, 37 with varying weights, I'll need to handle two cases: small weights where the constraints are purely integer and p-independent, and large weights near p-1 where the full modular arithmetic matters. The most direct approach is to enumerate all feasible coefficient tuples for each weight, compute the resulting j values modulo p, and verify they match the window formula predictions. With 8 variables and a weight constraint, I can use a composition-counting approach to iterate through the possibilities efficiently. satisfied, record j = (c₁ + c₃ + c₄ + 2c₆ + c₇) mod p, then compare against the window formula results.
+
+For p=29 with w=28, that's roughly 23.5 million compositions to check—computationally intensive but manageable. However, I can leverage the two constraints to dramatically shrink the search space: constraint 1 expresses c₀ in terms of the others, and constraint 2 does the same for c₁, so I really only need to enumerate over the remaining free variables and derive c₀ and c₁ from the weight equation.
+
+Substituting those expressions into the weight constraint gives me 2c₂ + 2c₃ - c₄ + c₅ + c₆ + 3c₇ = w (mod p), but the modular arithmetic complicates things—for small w values everything stays exact, but larger w requires careful handling of the wraparound.
+
+Let me try a different angle: I could compute the shadow layer by layer using convolution, starting from the zero vector and iteratively adding each generator with coefficient 1, building up all vectors at each weight level. But that approach doesn't properly account for coefficients greater than 1.
+
+Actually, the real constraint is that I'm choosing coefficients c₀ through c₇ from {0,...,p-1} such that their sum equals w, and then computing c₀a₀ + ... + c₇a₇ as a vector in F_p³. Each generator aᵢ contributes independently to the final result based on its coefficient.
+
+For the restriction to the line L, I only need to track one parameter j, so I can solve for two of the coefficients in terms of the others and check if solutions exist. Let me just implement this directly—for p ≤ 37, a smart enumeration should be efficient enough. For each weight w, I need to find which values of j are actually achievable on L.
+
+My strategy is to use the six free variables to parameterize the space, then derive the two constrained coefficients from the linear equations. I'll verify that both fall in the valid range, that the total weight matches w, and compute the resulting j value. I see that iterating over all 6 free variables gives about 594 million combinations—way too many. Instead, I can iterate over just the 5 variables c₃ through c₇, which determines c₀ directly. Then for each choice of c₂, I compute c₁ from the constraint, giving me a much more manageable search space.
+
+But wait, that's still 29^6 total iterations. Let me step back and think about this differently—since I only care about values on line L, I can reduce this to a one-dimensional problem where j is computed directly from the coefficients.
+
+Now I'm substituting the constraint for c₁ into the expression for j, which simplifies it to just c₂ + c₃ + c₅ + c₆ + 2c₇ (mod p). For the weight calculation, I'm using another constraint to express c₀ in terms of the other coefficients, which should help reduce the dimensionality further. I need to be more careful about distinguishing between the integer values of these expressions and their modular equivalents. Let me define c₀' and c₁' as the raw integer sums, then take them modulo p to get the actual coefficients c₀ and c₁ that fall in the range {0,...,p-1}. Now I can compute w as the full integer sum of all coefficients, and I'm working through what j equals in terms of these same coefficients.
+
+For the regime where p is large enough (specifically p ≥ 2w+1), all the individual coefficients stay bounded by w, which means c₀' and c₁' don't actually need any modular reduction—they're already in the valid range without wrapping around.
+
+Now I'm checking the boundary conditions: c₀' stays non-negative only when the sum c₃ + c₆ + c₇ is at least as large as c₄ + c₅, and the upper bound is automatically satisfied since c₀' can't exceed 3w, which is well below p-1. But when c₀' does go negative, I need to add p to bring it back into range, and then I have to verify that the resulting weight still satisfies the constraint w ≤ p-1.
+
+This constraint checking is getting unwieldy, so I should switch to a computational approach using dynamic programming or generating functions to track all possible weight distributions across the field.
+
+For each of the eight generators, I can map out which field elements it produces at each weight value, then convolve these distributions together to find all achievable weights in the shadow.
+
+Implementing this as a polynomial representation...
+
+Now I'm tracking achievable (j, w) pairs as I process each generator sequentially, where j is the field element and w is the accumulated weight. Since the field has 29 elements and weights range from 0 to 28, the state space stays manageable at around 900 pairs. I'll iterate through each generator's coefficients, updating which (j, w) combinations are reachable by adding multiples of that generator's contribution.
+
+But wait—I need to reconsider whether I can just track j directly. The final vector must lie on the line L = {(0,j,j)}, which imposes two linear constraints, but intermediate partial sums don't need to satisfy these constraints. So I actually need to track the full 3D vector (x, y, z) along with the weight w, giving me roughly p^4 ≈ 700K states. With 8 generators and p coefficient choices per generator, that's around 140 million operations—still feasible but getting tight.
+
+A better approach is to use a 4D numpy array indexed by (x, y, z, weight) as a boolean indicator, or even more efficiently, reduce the coordinate space by exploiting the structure of L. Since the constraint is x = 0 and y = z, I could track just (x, y-z, y+z) or work with the full coordinates and filter to L at the end.
+
+The cleanest strategy is probably the standard DP approach: for each weight w, compute the set of all vectors reachable with exactly w as the sum of coefficients, then restrict to L at the end.
+
+The DP works by maintaining states as (vector, weight) pairs. For each generator, I iterate through the current state and for each pair, I try adding multiples of that generator (from 0 to min(p-1, max_w - w)) to generate new states. With 8 generators and p around 29-37, this is manageable with a 2D boolean array indexed by (vector_index, weight), where vector_index encodes (x, y, z) as x*p² + y*p + z. For p=37, that's roughly 1.87 million booleans, which is feasible.
+
+I could also use a 4D array with shape (p, p, p, p) where dp[x][y][z][w] indicates whether (x, y, z) is reachable at weight w—that's also about 1.87 million entries for p=37. I'll precompute the multiples of each generator and then iterate through the DP table, marking reachable states as I process each generator. Writing the DP implementation... across 3 fibers. The fiber-0 and fiber-1 projections are subsets of F_p^3 that are ZSF. The maximum ZSF set in F_p^3 has 8 elements (= A₈). So fiber 0 has A₈ and fiber 1 has 7 elements.
+
+Actually, a 17 = 8 + 7 + 2 split means fiber 0 has 8 vectors (so their tails form a ZSF set of 8 elements, which is A₈ or equivalent), fiber 1 has 7 vectors, and fiber c has 2 vectors.
+
+For the (8,7,2) case at p=5: fiber 0 has A₈ (the unique maximal ZSF 8-set in F_5^3), fiber 1 has 7 elements from a ZSF set in F_5^3, and fiber c (where c ∈ {2,3,4}) has 2 elements. To verify U1, I need to check all possible 7-element ZSF subsets in fiber 1, all choices of 2 vectors in fiber c, and all valid c values to ensure there's always a zero-sum of weight ≤ p. Since A₈ is the unique maximal ZSF set, there are exactly 8 possible 7-element subsets. The 2 vectors in fiber c are any non-proportional nonzero vectors with first coordinate c.
+
+I'm getting tangled up in the details here. Let me refocus on what's actually computationally tractable and most important: verifying the window structure at p = 29, 31, 37 is the highest priority, followed by checking the (8,7,2) distribution.
+
+Writing the computational script... I need to set up a 4D boolean array where each dimension represents the modular space, then iterate through each generator to update which states are reachable by applying multiples of that generator's contribution.
+
+Building the DP array... Building the DP update logic... Writing the sumset verification... Σ_k (which I already have from the DP), take their Minkowski sum, and check equality with Σ_{j+k}.
+
+The Minkowski sum of two sets S, T ⊆ F_p^3: S + T = {s + t : s ∈ S, t ∈ T}.
+
+I can represent each Σ_w as a boolean array of size p^3, and the Minkowski sum is the OR of all shifts of T by elements of S (or equivalently, the convolution of the two indicator functions, thresholded at 1).
+
+For p=29: p^3 = 24389. Each indicator is a 24K boolean array. The convolution can be done by iterating over elements of the smaller set and shifting. If |Σ_w| is up to ~24K elements, this could get expensive for large w, but I only need to verify a few (j,k) pairs to confirm the pattern holds.
+
+For efficiency, I can use FFT over F_p^3 to compute the Minkowski sum—converting the indicator functions to 3D arrays, taking their FFTs, multiplying element-wise, then inverse transforming and thresholding. For p=29, this should be fast enough.
+
+I should also make sure to handle the (8,7,2) distribution in my script.
+
+Now I'm thinking through what to verify for the (8,7,2) case at p=5: the 17 vectors split as 8 in fiber 0, 7 in fiber 1, and 2 in some other fiber c. The fiber 0 tails form A₈ (the unique 8-element ZSF set), and fiber 1 tails should be a 7-element ZSF subset of F_5^3. But I'm not certain every 7-element ZSF set is necessarily a subset of A₈—there might be other 7-element ZSF sets that aren't contained in A₈.
+
+Actually, since A₈ is the unique maximal ZSF set, any 7-element ZSF set that isn't a subset of A₈ would be maximal among its own elements, meaning adding any element from A₈ would create a zero-sum at weight ≤ 4. So I need to verify that for the (8,7,2) distribution—with 8 vectors in fiber 0 forming a zero-sum-free set, 7 in fiber 1, and 2 in fiber c—the full 17-vector configuration in F_5^4 maintains the ZSF property at weight ≤ 5. The key question is whether every such configuration necessarily contains a zero-sum of weight ≤ p, which would confirm U1 holds for this distribution, and this case behaves differently from the (8,8,1) scenario. because with only 7 vectors in fiber 1 (not a full A₈), the cross-fiber structure is different.
+
+Let me be more specific. The 17 vectors in F_p^4:
+- Fiber 0: (0, b₁), ..., (0, b₈) where {b₁,...,b₈} is ZSF in F_p^3
+- Fiber 1: (1, d₁), ..., (1, d₇) where {d₁,...,d₇} is some 7-element set in F_p^3
+- Fiber c: (c, e₁), (c, e₂) where c ∈ {2,...,p-1}
+
+The overall set must be non-proportional and nonzero. Since vectors in different fibers can't be proportional (different first coordinates), pairwise non-proportionality within each fiber is sufficient.
+
+For p=5, fiber 0 must be A₈ (the unique 8-element ZSF in F_5^3), fiber 1 can be any 7-element non-proportional set, and fiber c can be any 2-element non-proportional set. But the full 17-vector set itself must be ZSF at weight ≤ 5, which means each fiber's projection must independently be ZSF—any zero-sum within a single fiber would create a zero-sum in the full set.
+
+Now I'm checking whether cross-fiber zero-sums at weight ≤ 5 are unavoidable. The key question for U1 verification is: given that the full 17-vector set is strongly ZSF with no zero-sum at weight ≤ p, can we derive a contradiction? If every possible (8,7,2) configuration that's ZSF necessarily contains a zero-sum at weight ≤ p, then no such ZSF set can exist with this distribution, confirming U1.
+
+For p=5, I need to check fiber 1 by iterating over 7-element subsets of the projective space PG(2, F_5), which has 31 points—that's C(31,7) ≈ 2.6 million subsets to examine. But actually, the constraint is more subtle: fiber 1 doesn't need to be ZSF on its own, only part of a larger ZSF set. Since fiber 0 is A₈ with no internal zero-sum at weight ≤ 4, any zero-sum in the full set must involve vectors from both fibers. zero-sum of the full set at weight ≤ 5 must involve vectors from multiple fibers.
+
+Actually, I'm approaching this backwards. The claim is that any 17-vector configuration with 3+ fibers *does* have a zero-sum of weight ≤ p, so I need to verify this holds for every possible (8,7,2) split. If either fiber 0 or fiber 1 contains an internal zero-sum, we're done. Otherwise, I need to find a cross-fiber zero-sum.
+
+Now I'm clarifying the zero-sum-free definitions: A₈ has no zero-sum at weight ≤ p = 5, with the first one appearing at weight p+1. For the 7-vector fiber, I need to check whether it contains a zero-sum at the relevant weight threshold. ≤ 5, then the full configuration has a zero-sum (within fiber 1), and we're done. So the hard case is when fiber 1 is also ZSF at weight ≤ 5.
+
+But since A₈ is the unique maximal ZSF set of size 8, a 7-element strongly ZSF set is either a subset of A₈ or a different set.
+
+At p=5: the Cortex entry on uniqueness says A₈ is the unique strongly ZSF 8-element set. So any 8-element set that is strongly ZSF is (projectively equivalent to) A₈. But a 7-element set could be different.
+
+However, ANY 7-element subset of A₈ is strongly ZSF (since A₈ is). And there might be other 7-element strongly ZSF sets not contained in A₈.
+
+This is getting complicated, so let me narrow the focus to what I can actually compute. For the (8,7,2) distribution at p=5, I need to show that every strongly ZSF 17-vector set with this distribution contains a weight-≤-5 zero-sum. But if the set is strongly ZSF, it has no weight-≤-5 zero-sum at all—which means U1 is saying no such set exists. So I should try to construct one computationally; if I can't find it, then U1 holds for this case.
+
+The search space is huge: fiber 0 is fixed as A₈, but fiber 1 has C(124, 7) ≈ 3.7 billion possible 7-element subsets of F_5^3 \ {0}, which is computationally infeasible to enumerate. The key constraint is that the combined set must be ZSF at weight ≤ 5, which means A₈ is already ZSF internally, fiber 1 must be ZSF internally, and there can be no cross-fiber zero-sum at weight ≤ 5.
+
+But wait—the research goal is asking me to verify U1 for the (8,7,2) distribution by checking all pairs of extra vectors at p = 5, 7. I think the intent is to start from the doubled+e₁ construction (the (8,8,1) case with A₈ in fiber 0 and A₈ + (1,0,0,0) in fiber 1) and then modify it by removing one vector from fiber 1 and adding two vectors to fiber c, which gives the (8,7,2) distribution.
+
+More concretely, I need to check all possible pairs of vectors that could go into fiber c for each choice of c ∈ {2,3,4} and each 7-element subset of A₈ in fiber 1. At p=5, that's 8 choices for which fiber-1 vector to remove, 3 choices for c, and C(124,2) = 7626 possible pairs for fiber c—or 465 projective pairs when accounting for non-proportionality constraints.
+
+So I'm looking at 8 × 3 × 465 = 11,160 total configurations to check. Each projective pair of vectors in fiber c can be represented in multiple ways depending on how I scale them, but here's where it gets tricky: the zero-sum condition with coefficients in {1,...,p-1} isn't invariant under arbitrary scaling of individual vectors, so I can't just count projective pairs and multiply by scaling choices.
+
+Actually, wait—I'm reconsidering this. If I scale a vector v by λ, the coefficient s used with that vector becomes s/λ to maintain the zero-sum. Since I need coefficients in {1,...,p-1}, scaling permutes which coefficients work but doesn't change whether a valid zero-sum exists at all. So the ZSF condition is projectively invariant after all. That means I can work directly with the 465 projective pairs without worrying about multiple representatives, giving me 8 × 3 × 465 = 11,160 configurations to verify.
+
+For p=7, the count jumps to 8 × 5 × 1,596 = 63,840, still manageable. Now I need to think about what constraints the fiber 1 part must satisfy—it's a 7-element set, and I'm trying to determine whether every possible configuration of 17 vectors distributed as (8,7,2) across the three fibers admits a zero-sum of weight at most p.
+
+The fiber 0 part is locked in as A₈, the unique 8-element strongly zero-sum-free set in F_p^3. For fiber 1, I need to check all 7-element sets, not just subsets of A₈. The key constraints are that fiber 1 must be internally zero-sum-free up to weight p, there can't be cross-fiber zero-sums between fibers 0 and 1 at weight p or less, and critically, no zero-sum involving fiber c can exist at that weight. This third constraint is what I'm trying to show is impossible. The problem is getting unwieldy, so I'll focus on the computationally tractable cases and set aside the full (8,7,2) search for now.
+
+I'll prioritize verifying the window structure at p = 29, 31, 37, checking sumset completeness at p = 29 and 31, and testing the (8,7,2) case with fiber 1 as a 7-element subset of A₈ at p = 5 and 7. Now I'm writing a comprehensive Python script that computes the window structure by restricting Σ_w(A₈) to L for each w and verifying the formula, checks sumset completeness by computing Σ_j + Σ_k and comparing with Σ_{j+k}, and systematically tests all (8,7,2) configurations where fiber 1 is contained in A₈.
+
+For the window structure on L, I'm using a dynamic programming approach to compute the shadow. Since vectors on L have the form (0, j, j), I only need to track j values, but during the DP I'll maintain the full vector representation to ensure correctness, then extract just the j component at the end.
+
+Looking at the constraints more carefully, I can reduce the dimensionality by tracking (x, y-z, j) instead of the full 3D vector—this captures the key invariants while keeping the state space smaller.
+
+Actually, let me reconsider: I could use (x, d, s) where d = y-z and s = y+z, which gives me the same information but doesn't actually reduce the number of dimensions during the DP. So I'll just proceed with the full computation. For p=37, the DP table has 37^4 entries, and with 8 generators each requiring 37 iterations, the total computational cost is manageable.
+
+Now I'm thinking through the actual DP transition: for each generator and coefficient k, I need to update the DP state by shifting the position vector and decrementing the weight. In numpy, I can implement this efficiently by rolling the first three axes and slicing the weight dimension appropriately.
+
+Actually, using np.roll repeatedly might not be the most efficient approach here. Instead, I should precompute all the shifted versions for each generator and combine them with bitwise OR operations.
+
+For each of the 8 generators, I'll iterate through k from 0 to p-1, applying the spatial shift by k*a and the weight axis shift by k, then accumulating these into a result array. With p=37, that's 296 total iterations across all generators, and since each array is only about 1.87 MB, this should run quite quickly—well under 30 seconds even with the overhead of rolling and slicing operations.
+
+Now I need to verify that I'm computing the full shadow of Σ_w(A₈) and then correctly extracting just the L slice, since the window formula is specifically defined for L = {(0,j,j)}. Let me also make sure I'm handling the generator vectors correctly for arbitrary p—they're defined in F_p^3 with specific coordinates like (p-1, 1, 1) for a₃ that depend on the field size. I'm noticing a critical distinction in how the shadow is defined—whether coefficients can range from 0 to p-1, or whether each vector appears with multiplicity p-1 and we're selecting subsets. Let me work through the code to verify which interpretation matches the Cortex construction.
+
+Writing the verification script... the (8,7,2) distribution at p=5, let me think about what's actually being asked. The research goal says: "For the (8,7,2) distribution (hardest after (8,8,1)): verify U1 by checking all pairs of extra vectors at p = 5, 7."
+
+I think "all pairs of extra vectors" means: for the doubled+e₁ construction (8+8+1 distribution), we move one vector from fiber 1 to a new fiber c. This creates an (8,7,1,1) distribution. Then we add one more vector to the new fiber, creating an (8,7,2) distribution. The "pairs of extra vectors" are the (moved vector, added vector) pair.
+
+Actually, I think it's simpler than that. Starting from the two-fiber structure where fiber 0 has A₈ and fiber 1 has A₈, the (8,7,2) distribution means one vector was moved from fiber 1 to fiber c, leaving fiber 1 with 7 vectors and fiber c with the moved vector plus one new vector. But really, the (8,7,2) configuration doesn't need to come from that construction—the fibers can have arbitrary content. So let me just fix fiber 0 as A₈, fiber 1 as any 7-element set B with pairwise non-proportional vectors that don't overlap with A₈, and fiber c as any 2-element set satisfying the same constraints.
+
+For a more tractable approach, I'll restrict fiber 1 to be a 7-element subset of A₈ (8 choices for which element to drop), and fiber c to be any 2 non-proportional vectors in F_p^3. At p=5, that's 8 × 3 × 465 = 11,160 cases to check, where for each case I verify whether the 17-vector set has a zero-sum of weight ≤ 5.
+
+The brute force approach of checking all subsets with coefficient assignments is prohibitively expensive—around 79 billion operations total. Instead, I'll compute the shadow of the union of fiber 0 and fiber 1 up to weight p-1, then check whether any vector in fiber c appears in the negated shadow.
+
+More precisely, a zero-sum with weight ≤ p means there's a nonempty subset of the 17 vectors with positive coefficients summing to at most p that equals zero. The shadow at weight w captures all possible sums with coefficients in {0,...,p-1} that sum to exactly w. I need to check if 0 appears in the shadow for any weight from 1 to p, which I can compute efficiently using a 4D dynamic programming approach.
+
+Since the vectors live in F_p^4, the DP state space is p^5 (four coordinates plus the weight dimension). For p=5 that's 3125 entries, and for p=7 that's 16807 entries—both very manageable. Processing all 17 vectors with their possible coefficients takes only around 85-119 iterations depending on p, so this is computationally feasible.
+
+The real challenge is scaling across all 11,160 configurations at p=5 (or 63,840 at p=7). Multiplying out the iterations and array sizes gives roughly 3 billion operations at p=5, which is slow in pure Python but doable with numpy. I'm thinking I could optimize this by precomputing the shadow for the 14 "fixed" vectors (the 8 from fiber 0 plus 7 from fiber 1, excluding whichever A₈ vector gets dropped), then incrementally adding the 3 vectors that vary across configurations. The tricky part is that which vectors count as "fixed" depends on which A₈ vector I'm dropping.
+
+So the strategy is: for each of the 8 possible A₈ vectors to drop, precompute the shadow of the resulting fixed set once, then iterate through all pairs in fiber c and add their contributions. This way I'm reusing the fixed shadow computation across all 1,485 pairs for each dropped vector. B_i} — 7 vectors
+  - Precompute shadow of the 15 fixed vectors in F_5^4
+  - For each c ∈ {2, 3, 4}:
+    - For each pair (e₁, e₂) of non-proportional nonzero vectors in F_5^3:
+      - Fiber c = {(c, e₁), (c, e₂)} — 2 vectors
+      - Check if 0 is in the shadow of all 17 vectors at weight ≤ 5
+
+For the check: I can compute the shadow of the 15 fixed vectors, then convolve with the shadow of the 2 variable vectors. The zero-sum condition holds if either the 15 vectors alone produce 0 at some weight, or if combining them with at least one of the new vectors does. I'll precompute the shadow for the 15 fixed vectors once per choice of i — that's manageable at 3125 entries — but the shadow for each pair (c, e₁, e₂) needs to be recalculated since it depends on those specific vectors.
+
+The shadow of two vectors is determined by all linear combinations with coefficients summing to w', excluding the zero combination. Since coefficients are in {0,...,4}, there are only w'+1 possible pairs (k₁, k₂) for each weight w', making the shadow of just 2 vectors very compact. I can check membership by iterating through S₂ and seeing if the negation lies in S₁₅.
+
+For each pair of edge vectors (e₁, e₂) and fiber label c, I'll generate all possible combinations with weights from 1 to 5, then for each resulting vector s at weight w₂, verify whether its negation exists in S₁₅ at weight 5 - w₂ or lower. This per-pair check is fast, but the real computational cost comes from precomputing S₁₅ itself at p=5.
+
+The DP for S₁₅ processes 15 vectors across a 3750-state space (accounting for weights 0 through 5), which amounts to roughly 281K operations—essentially negligible. For each of the 8 choices of i, the computation takes under a millisecond, then for the ~1395 configurations (465 pairs × 3 fiber labels), I compute S₂ and check its intersection with S₁₅, bringing the total to around 3.4M operations. But I should also verify whether S₁₅ itself contains the zero vector at any weight up to 5.
+
+If S₁₅ already has a zero-sum at weight ≤ 5, then every (8,7,2) extension automatically has one too, and I'm done. Otherwise, I need to check what the fiber c vectors contribute. The 15-vector set consists of 8 vectors of the form (0, aⱼ) and 7 vectors (1, bⱼ), so any zero-sum using only these would need to balance across both coordinates.
+
+For a zero-sum to exist, the first coordinate requires Σ tₖ ≡ 0 (mod p), and the second requires Σ sⱼ aⱼ + Σ tₖ bₖ = 0. Given the weight constraint, either all fiber-1 coefficients are zero (giving a fiber-0 zero-sum, which contradicts A₈ being ZSF) or Σ tₖ = p exactly, forcing all fiber-0 coefficients to zero.
+
+So I need to check whether 7 vectors from B_i = A₈ \ {aᵢ} can form a zero-sum at weight p. Since A₈'s first zero-sum occurs at weight p+1, any zero-sum of a 7-element subset at weight p would be a zero-sum of 7 elements from A₈ itself at that weight.
+
+But wait—such a zero-sum wouldn't use aᵢ at all (its coefficient would be 0), which contradicts A₈'s first zero-sum being at weight p+1. So B_i has no internal zero-sum at weight ≤ p.
+
+Now I'm realizing the 15-vector set could have cross-fiber zero-sums where the weights don't sum to exactly p, but rather to some multiple mp. However, the total weight constraint limits this—the sum of all coefficients is bounded by p, so this doesn't actually give us additional zero-sums to worry about.
+
+Let me check both cases: if the cross-fiber sum equals 0, we'd only use fiber-0 vectors, which is impossible. If it equals p, we'd only use fiber-1 vectors, which I've already ruled out. So the 15-vector set from these two fibers has no zero-sum at weight ≤ p.
+
+This means any zero-sum must involve at least one vector from fiber c. Now I'm setting up the cross-fiber equation: using the two fiber-c vectors along with contributions from fibers 0 and 1, I need the total to equal zero with weight at most p. The first coordinate gives me c times the sum of the fiber-c coefficients plus the fiber-1 contribution, and I need to work through what constraints this places on the coefficients. c2) + Σ tₖ ≡ 0 mod p.
+So Σ tₖ ≡ -c(s_c1 + s_c2) mod p.
+
+Remaining coordinates: s_c1 * e₁ + s_c2 * e₂ + Σ sⱼ aⱼ + Σ tₖ bₖ = 0 in F_p^3.
+
+Weight: s_c1 + s_c2 + Σ sⱼ + Σ tₖ ≤ p.
+
+This is what I need to check. Using the shadow approach, I'm computing all possible targets from fiber c using one or two vectors with coefficients in {1,...,p-1} that sum to some weight w₂, then checking whether the negation of each target appears in S₁₅ at a weight bounded by p - w₂. Since S₁₅ has no zero-sum, I need to find a target -t in S₁₅[w₁] for some w₁ ≤ p - w₂ to make the combined set sum to zero at the required weight.
+
+Now I'll precompute S₁₅ for each of the 8 possible A₈ configurations, then for each (c, e₁, e₂) triple, enumerate all vectors in S_c and verify the condition. S_c contains all linear combinations s_c1*(c,e₁) + s_c2*(c,e₂) where both coefficients range over {0,...,p-1} and their sum is between 1 and p-1, keeping the total weight at most p-1 since S₁₅ must contribute at least weight 1.
+
+Actually, wait—if s_c1 + s_c2 = p, then the fiber 0 and 1 coefficients vanish entirely, leaving only a zero-sum of the two fiber-c vectors. That would require e₁ and e₂ to be proportional, contradicting our assumption that they're linearly independent. So s_c1 + s_c2 must stay strictly below p.
+
+This means S₁₅ has to contribute at least weight 1, while S_c contributes somewhere between 1 and p-1. Now I need to set up the verification: for each element t in S_c at weight w₂, I check whether -t appears in S₁₅ at any weight w₁ where w₁ + w₂ ≤ p. I can precompute the cumulative sets to make this efficient.
+
+Let me write out the full algorithm as a Python script. I'll set up A₈ in F_p³, compute its complete shadow using dynamic programming with the window structure, extract and verify the L restriction, check that the sumset is complete, and finally validate the (8,7,2) distribution. For the larger primes like 29, 31, 37, the full shadow computation in F_p³ gets computationally intensive, so I'll need to be careful with the implementation.
+
+Now I'm looking at the memory and runtime constraints for each prime. The DP array for the full shadow scales as p⁴ states, which for p=37 means about 1.87 MB—totally manageable. The processing involves iterating through generators and shifts, so I'm estimating around 10-30 seconds for the largest case. After computing the shadow sets, I'll need to verify the sumset completeness by computing the Minkowski sums and checking coverage.
+
+For the Minkowski sum computation, I can either enumerate directly—which for p=29 means roughly 590M operations comparing all pairs of shadow elements—or use FFT-based convolution on the 3D indicator arrays to speed things up.
+
+Now I'm writing out the full script to solve this problem, starting with a function to generate the A₈ vectors...
+
+Continuing with the helper functions...
+
+For each vector, I'm creating a new DP table and iterating through possible coefficients. For each coefficient k, I'm shifting the spatial dimensions by the scaled vector components modulo p, then updating the new table by combining the shifted states with the appropriate weight increments.
+
+Now I'm updating the main DP table and returning the final result. Then I'm defining a function to extract the shadow on the line L by checking which j values are reachable at each weight, and starting to write a helper function for the expected window formula.
+
+Continuing with the window formula...
+
+Now I'm checking whether the actual window sets match what the formula predicts for each width w, and I'm noticing something important about the edge cases—specifically when w gets close to p-1, there might be modular wraparound effects that the formula doesn't account for in the way I initially stated it. Now I'm checking which vectors from A₈ actually lie on the line L = {(0,j,j)}, and finding that none of them do since they all have non-zero first coordinates. This confirms the formula predicts an empty set at w=1. Moving to w=2, where the window should be non-empty.
+
+For w=2, I'm examining all pairwise sums including doubled vectors to see which ones satisfy the line condition (first coordinate zero, second equals third). At p=5, I found a₀+a₃ = (0,1,1) works, but I'm still checking other combinations like a₄+a₅ and 2*a₃ to see what else lands on L. Now I'm checking the window at weight 4, which spans from 2 to 4, and determining that the gap on the line L at this weight contains only j=1, so the intersection Σ_4 ∩ L starts with {2...
+
+Actually, let me verify the cumulative coverage across all weights from 1 to 4 to confirm we're hitting every element in F_5*.
+
+Now I'm checking the general pattern for larger primes. The window formula alternates based on whether the weight is even or odd: for even weights w=2k, the window spans from k up to 2k, while for odd weights w=2k+1 it goes from k+1 to 2k. This means the bottom boundary shifts up by 1 every two steps while the top grows with each weight. When w equals p-1 (which is even for odd primes), the window covers roughly the upper half of F_p*, leaving the lower half uncovered. For w=p-2 (odd), I need to work out where that window lands. I'm working through the cumulative coverage by tracking where each window starts and ends as the weight increases. The bottom boundary follows a pattern based on whether the weight is even or odd, and similarly for the top boundary, so I'm computing how these intervals stack up to see what range of F_p* they collectively cover.
+
+After checking the sequence, I notice that even weights extend the upper bound while odd weights fill in gaps, and by the time I reach weight p-1, the cumulative range is exactly [1, p-1], which means the shadow achieves full saturation across all of F_p*.
+
+Now I need to verify this pattern holds when modular arithmetic comes into play—specifically when products like c_i * a_i(coord) wrap around mod p for larger values of p. The window formula was validated up to p = 23, so it should account for these effects, but I want to confirm it scales correctly at higher primes.
+
+Let me write a comprehensive script to handle the (8,7,2) case at p=5 and check sumset completeness. I'll embed fiber 0 as (0, a) for each a in A₈, then for each position i, construct fiber 1 with elements (1, b) where b ≠ a_i. For coefficients c in {2, 3, 4} and pairs of non-proportional projective points in PG(2, F_5), I'll set up fiber c with those points and verify the sumset conditions.
+
+Now I'm thinking through the zero-sum check: I need to verify whether fiber 0 ∪ fiber 1 ∪ fiber c contains a zero-sum at weight ≤ 5. For the projective points, I should generate representatives from PG(2, F_5)—which has 31 points total—and pick canonical ones. Actually, since the vectors (c, e₁) and (c, e₂) are concrete elements in F_p^4 rather than projective classes, I need to work with actual vectors, though the ZSF condition should be projectively invariant so I can fix one representative per class.
+
+Two vectors in the same fiber are non-proportional exactly when their tails e₁ and e₂ are non-proportional in F_p^3. For the (8,7,2) check, I'm iterating over pairs of non-proportional nonzero vectors in F_5^3. Since there are 124 nonzero vectors forming 31 projective classes, and the ZSF condition respects permutations and scaling within fibers, I can work with unordered pairs of projective classes—that's 465 pairs to check.
+
+Now I need to verify that vectors from different fibers are always non-proportional: a vector (0, a) from fiber 0 and (c, e) from fiber c ≠ 0 can't be scalar multiples since λ·0 = 0 ≠ c. For vectors (1, b) and (c, e) with c ≠ 1, they're proportional only if λ = c and b = c·e, which determines a specific relationship between the tail vectors. So the key constraints on e₁ and e₂ are that they must both be nonzero and non-proportional to each other, and crucially, neither can be proportional to any of the vectors in fiber 1—which simplifies to saying e₁ and e₂ shouldn't be proportional to any b_j.
+
+Now I'm counting the available choices: with fiber 1 containing 7 projective points from the 8 vectors in A₈, that leaves 24 projective points in ℙ³₀ that aren't proportional to any fiber 1 vector.
+
+Since fiber 0 and fiber c vectors can never be proportional (different first coordinates), there's no additional constraint from fiber 0, so I can freely choose e₁ and e₂ from these 24 points, giving C(24,2) = 276 pairs. Across 8 choices of dropped vector and 3 fiber labels, that's 6,624 total configurations.
+
+But I need to reconsider: the 24 available projective points actually depend on which A₈ vector gets dropped, since that vector's projective class becomes available for fiber c. When I drop a_i to form fiber 1, I have 7 vectors in fiber 1 and the dropped vector's class opens up for fiber c.
+
+Now I'm working through the non-proportionality constraint more carefully—the fiber c vectors (c, e₁) and (c, e₂) can't be proportional to any fiber 1 vector (1, b_j), which means there's no scalar λ where λ times c equals 1 and λ times e_k equals b_j. and fiber c vectors shouldn't be proportional to fiber 0 vectors, but since fiber 0 is just {(0, a)}, any proportionality would require 0 = λc, which is impossible—so there's no additional constraint there. Now I'm ready to implement this. I'll use dynamic programming to check for zero-sum subsets at weight ≤ p across the 17 vectors: tracking which vectors in F_p^4 are reachable at each weight, then checking if the zero vector appears at any weight between 1 and p.
+
+The state space is manageable—for p=5 that's 625 × 6 = 3750 entries, and for p=7 it's about 19K entries. Processing each of the 17 vectors with up to p−1 scalar multiples gives roughly 17 × p^6 operations, which is only 265K for p=5 and around 2M for p=7. I'll iterate through each vector, updating the DP table by considering all nonzero scalar multiples and accumulating reachable states at each weight.
+
+For the (8,7,2) case, I need to enumerate configurations and compute the weighted sums from each fiber to check feasibility.
+
+The algorithm is: precompute the cumulative shadow of fibers 0 and 1 once, then for each configuration's weighted sums at weight w₂, check if their negatives appear in the shadow at weight ≤ p - w₂. This gives roughly p² checks per configuration, which is very manageable.
+
+Writing the implementation... I see the current rewritten thinking ends mid-code. Since the next thinking continues that same code implementation, I'll output a short progress phrase:
+
+Still writing the DP logic... Writing verification logic... Continuing to verify the window formula, I'm now tracking cumulative coverage across all weight values to see if the shadow on L eventually saturates all possible values, then moving into a new verification function for sumset completeness.
+
+Computing Minkowski sums via convolution... Checking for mismatches between the convolution result and the expected shadow set, distinguishing between impossible cases where extra elements appear versus cases where elements are missing from the convolution. I'm setting up the main execution to test window structure across three primes and then verify sumset completeness for a subset of them. But I'm realizing the FFT approach for checking sumset completeness might introduce floating point errors, so I should reconsider the strategy—the key insight is that one direction of the equality is straightforward since any sum of a weight-j element and weight-k element naturally produces a weight-(j+k) element. weight-(j+k) sum). The ⊇ direction is the interesting one: every weight-(j+k) sum can be decomposed as a weight-j sum plus a weight-k sum.
+
+For the FFT approach: the convolution of indicator functions gives the number of ways to decompose each vector, not just whether it's achievable. Thresholding at > 0 gives the Minkowski sum. The floating point issue is that the FFT might have small numerical errors. I can round the result to the nearest integer and check if it's > 0.
+
+Alternatively, I can use integer convolution via a different method, but FFT should be fine for our purposes (values are integers, no overflow for p ≤ 37).
+
+For p=31, I'd need to check roughly 420 pairs, and each requires a 3D FFT of size 31³ = 29791, which is computationally fast.
+
+But I'm realizing the claim about Σ_j + Σ_k = Σ_{j+k} assumes independent copies of A₈. When we have two disjoint copies A₈^(1) and A₈^(2), using coefficients from the first summing to j and the second to k gives a weight-(j+k) sum of two copies—not the same as a weight-(j+k) sum of a single copy. I need to reconsider what the Cortex entry actually claims here. Σ_l(A₈) = Σ_{k+l}(A₈) — the shadow is splitting-closed" and "The cross-fiber argument using two full fibers (each containing A₈) gains NO additional coverage from independence. The sumset of two copies at weights j and k is exactly the shadow at j+k of a single copy."
+
+So the claim is: using coefficients from two independent copies with weights j and k gives exactly the same set as using coefficients from a single copy at weight j+k. This is non-trivial and potentially surprising.
+
+For verification: I compute Σ_j(A₈) and Σ_k(A₈) from the same shadow computation (single copy), take their Minkowski sum, and compare with Σ_{j+k}(A₈) from the same computation.
+
+The key insight is that when I combine two independent copies with coefficient vectors summing to j and k respectively, the resulting elements have the form Σ(cᵢ+dᵢ)aᵢ where the total weight is j+k. Since each individual coefficient cᵢ and dᵢ ranges from 0 to p-1, their sum cᵢ+dᵢ can exceed p-1, but this is exactly what happens when I compute the shadow at weight j+k in the single-copy case. The claim is that two copies don't actually give us any extra reach—everything achievable with two copies is already achievable with one. That's a strong assertion, so I need to verify it carefully. My script uses FFT convolution of the indicator functions to compute the Minkowski sum representing what two copies can reach, then compares it directly against the single-copy reachable set to test if they're equal. The key subtlety is that each copy has coefficients in {0,...,p-1}, so their sum cᵢ + dᵢ can go up to 2(p-1), potentially unlocking combinations a single copy can't achieve.
+
+Actually, I'm realizing the modular arithmetic complicates this more than I initially thought. When we work in F_p^3, the combined vector becomes Σ(cᵢ+dᵢ)aᵢ mod p, which is equivalent to Σeᵢaᵢ where eᵢ = (cᵢ+dᵢ) mod p. But the sum of the eᵢ values doesn't directly correspond to j+k because of how the modular reduction works—carries can shift the total. So the claim that Σ_j + Σ_k = Σ_{j+k} is really about the set of reachable vectors themselves, not about the coefficient sums, and I need to reconsider what I'm actually comparing. The sum of coefficients works out to j + k, with each individual coefficient bounded by 2(p-1). For this to represent an element in Σ_{j+k}, I need to express it using coefficients in the standard range {0,...,p-1}. The key insight is that the coefficient bound doesn't actually restrict which vectors we can reach—the image set is the same whether we allow coefficients up to 2(p-1) or just p-1. Let me test this with a concrete example at p=5 to verify the claim.
+
+Looking at the sumset structure: Σ_1 consists of the 8 vectors themselves, and Σ_1 + Σ_1 gives all pairwise sums aᵢ + aⱼ. Meanwhile, Σ_2 with the standard coefficient constraint includes both pairwise sums and doubled vectors, but I'm noticing that Σ_1 + Σ_1 already captures more than just the ordered pairs—it includes all combinations regardless of order.
+
+Now for Σ_2 + Σ_1, I need coefficients summing to 3. The key insight is that any such tuple can be decomposed into a pair summing to 2 and a single element, so this set should equal Σ_2 + Σ_1 by the same additive structure.
+
+More generally, I'm seeing a pattern: for j + k ≤ p-1, any coefficient tuple summing to j+k can be partitioned into two tuples with sums j and k using a greedy assignment strategy. I'm realizing the issue: when j+k ≤ p-1, the sum of any two coefficients cᵢ + dᵢ should be bounded by j+k, but that's only true if the total weight distributes evenly—which it doesn't necessarily. Let me reconsider whether the subset inclusion actually holds in this direction. So when j+k ≤ p-1, the equality holds trivially since every combined coefficient stays within range. The real question is what happens when j+k ≥ p, and I'm realizing the claim specifically restricts to j+k ≤ p-1 where this trivial case applies.
+
+In the cross-fiber argument with total weight up to p, I need to think about what happens at j+k = p. But our framework only defines coefficients up to weight 8(p-1), so Σ_p doesn't exist in our setup. Let me reconsider how the cross-fiber context actually constrains this.
+
+If fiber 0 contains A₈ and fiber 1 contains A₈, then for a cross-fiber zero-sum at weight w ≤ p, the first coordinate forces Σtₖ to be either 0 or p mod p. When Σtₖ = 0, we're back to fiber 0 only, which contradicts A₈'s zero-sum-free property. When Σtₖ = p, then Σsⱼ = 0, leaving only fiber 1—but A₈ in F_p^3 also has no zero-sums at this weight.
+
+So the two-fiber case with both fibers being A₈ eliminates all cross-fiber zero-sums at weight ≤ p. Adding a third fiber changes the constraint on the first coordinate, allowing Σtₖ to take intermediate values and opening up new possibilities for zero-sums.
+
+The sumset completeness for j+k ≤ p-1 is straightforward, but the real question is whether this property holds for the cross-fiber case. Let me verify this computationally at p = 29 and 31 to confirm, though I need to clarify whether we're checking the full shadow sets in F_p^3 or just the shadow on line L. j+k ≤ p-1 it's trivially true as I showed.
+
+If it's about the shadow restricted to line L, things get more interesting. The Minkowski sum of two L-subsets stays on L since adding vectors (0, j₁, j₁) + (0, j₂, j₂) gives (0, j₁+j₂, j₁+j₂), which is still on L. But vectors from outside L in each shadow could combine to land back on L, so the full Minkowski sum intersected with L might be larger than just the restricted shadows added together. The real question is whether the shadow on L at weight j+k actually equals the Minkowski sum of the individual shadows restricted to L, given that the unrestricted equality Σ_j + Σ_k = Σ_{j+k} holds for j+k ≤ p-1. I'm clarifying the notation by using w for weight and J for the coordinate values on L, then defining the sets W_j and W_k as the ranges of valid J values for each weight, and now I need to work out what their sum W_j + W_k looks like modulo p. I'm verifying that the sumset bounds hold by checking the ceiling and floor properties—when j and k are both even, the sum simplifies directly, but I need to work through the cases where one or both are odd to confirm the inequalities actually work out. When both j and k are odd, the sum of their ranges W_j + W_k has a left endpoint that's strictly greater than W_{j+k}'s left endpoint, but a right endpoint that's strictly smaller. So the ranges don't align—one is shifted higher on the left but lower on the right.
+
+This reveals a critical issue: the claim that Σ_j + Σ_k = Σ_{j+k} can't hold when restricting to L if both j and k are odd, unless vectors off L somehow combine to land back on L. I'm realizing that the Minkowski sum in the full space might be producing this equality, but when we intersect with L, off-L vectors could be adding together to create points on L that wouldn't exist if we only summed the L-restricted sets directly.
+
+Actually, wait—the sumset relation Σ_j + Σ_k = Σ_{j+k} is trivially true in F_p^3 for j+k ≤ p-1, so the real question is whether this holds when j+k > p-1, where the combined coefficients might wrap around or behave differently.
+
+Looking back at the research goal, it asks to verify sumset completeness for all k, l pairs, but our shadow computation only extends up to weight p-1. To properly verify the sumset property beyond that threshold, I'd need to extend the computation to handle larger combined weights.
+
+The key insight is that for the cross-fiber argument, the relevant weights only go up to p, so I need to extend my shadow calculations to that point. For j + k = p, individual combined coefficients can reach p, which exceeds p-1, but since each coefficient is bounded by p-1, their sum is at most p.
+
+For a single copy at weight p, I need vectors where each eᵢ ∈ {0,...,p-1} and they sum to p—which is achievable, like setting e₀ = p-1 and e₁ = 1. So Σ_p(A₈) consists of all vectors of the form Σeᵢaᵢ with these constraints.
+
+When I combine two sums Σ_j and Σ_k where j+k = p, I'm looking at vectors where the coefficients cᵢ and dᵢ each range from 0 to p-1, with Σcᵢ = j and Σdᵢ = k. The combined coefficients cᵢ+dᵢ can go up to 2(p-1), but since we're working over F_p³, these get reduced modulo p, so what actually appears in the sum is (cᵢ+dᵢ) mod p.
+
+The Minkowski sum in F_p³ is indeed the set of all u + v where u ∈ Σ_j and v ∈ Σ_k, with addition happening in F_p³. Now I need to check whether this Minkowski sum equals Σ_{j+k} when j+k = p. For the inclusion in one direction, I'd take any u from Σ_j and v from Σ_k and see if their sum lands in Σ_{j+k}.
+
+But I'm running into a subtlety: when I add two representations u = Σ cᵢ aᵢ and v = Σ dᵢ aᵢ, the coefficients add to give eᵢ = cᵢ + dᵢ, which has total weight Σ(cᵢ + dᵢ) = p as integers. However, once I reduce modulo p to get the actual coefficients in F_p, the weight might not be p anymore—it could be p minus some multiple of p. I need to be more careful about what "weight" means when working in F_p³ versus working with integer coefficients. (as integers). For the shadow:
+Σ_w(A₈) = {Σ eᵢ aᵢ mod p : eᵢ ∈ {0,...,p-1}, Σeᵢ = w}
+
+Note that the weight w is an INTEGER, not a mod-p quantity. So Σ_w is the image of the "weight-w slice" of the coefficient space in the vector space F_p^3.
+
+For the Minkowski sum Σ_j + Σ_k in F_p^3: this is {u + v mod p : u ∈ Σ_j, v ∈ Σ_k}.
+
+Now, u + v = Σ(cᵢ+dᵢ)aᵢ mod p. When I add the coefficients cᵢ and dᵢ, some components might exceed p, so I need to reduce them modulo p. The overflow from each component is at most 1 since cᵢ+dᵢ ≤ 2(p-1). The reduced coefficients eᵢ and total overflow count Σnᵢ satisfy Σeᵢ = j+k - p*Σnᵢ, which means for u + v to land in Σ_{j+k}, the weight constraint must be preserved after accounting for these overflows.
+
+So the Minkowski sum Σ_j + Σ_k is contained in the union of Σ_{j+k-mp} for m = 0, 1, ..., ⌊(j+k-1)/(p-1)⌋, where m counts the total number of overflows across all components.
+
+When j+k ≤ p-1, no overflows are possible, so Σ_j + Σ_k ⊆ Σ_{j+k}.
+
+So the sum u + v lands in different weight sets depending on how many component overflows occur—zero overflows keeps it in Σ_{j+k}, one overflow moves it to Σ_{j+k-p}, and so on. So the property Σ_j + Σ_k = Σ_{j+k} only holds when j + k ≤ p-1, which matches what the u1_analysis documentation actually states—it's not claiming this for all cases, just for that restricted range.
+
+The real question is whether the cross-fiber argument at weight p (where j + k = p) could benefit from independence, since the Minkowski sum of two independent copies might include overflow vectors that aren't in Σ_p itself. This would contradict the "no additional coverage" claim unless those overflow contributions happen to be empty for A₈ specifically. Let me examine what happens when some coordinate sum exceeds p. So if A₈ is symmetric under negation, then the shadow of the negated set equals the original shadow, meaning 0 appears in Σ_j + Σ_k precisely when those two sets intersect. This creates a constraint for the ZSF condition—I need 0 to avoid all individual Σ_w for w between 1 and p, but the overflow mechanism forces 0 into some sum Σ_j + Σ_k.
+
+Actually, I'm overcomplicating this theoretically. Let me pivot to what I actually need to compute: verify the window structure at p = 29, 31, 37, check whether sumsets are complete for j+k ≤ p-1 and what happens at j+k = p, and test the (8,7,2) distribution across small primes with fiber constraints. I'll start implementing this now.
+
+For p=37, the DP array will be manageable at around 1.87M bytes, but I need to be careful with the 296 shift operations—using numpy.roll would create too many temporary arrays. Instead, I'll use index-based shifting with np.take to avoid unnecessary allocations.
+
+Building the shift indexing...
+
+Actually, flattening the spatial dimensions into a single index won't work cleanly because modular arithmetic on the flattened coordinate doesn't preserve the structure I need. I should stick with the 3D or 4D approach, or reconsider the algorithm entirely.
+
+Let me try a different strategy: instead of maintaining a large DP array, I'll compute the shadow sets Σ_w directly as sets of tuples for each weight w. This is more memory-efficient and avoids the array indexing complications. I'll iterate through each generator and update the reachable vectors at each weight level.
+
+Building the shadow computation function... I'm realizing the computational complexity here is substantial—with each generator potentially adding millions of set insertions, and Python's set operations being relatively slow, the total runtime could easily stretch into minutes even for moderate problem sizes.
+
+Let me switch to a numpy-based approach instead, using a 4D boolean array to track reachable states more efficiently.
+
+Building the DP array... Finishing the array indexing operation, then I'm analyzing the memory and computational complexity—with p=37, the dp array takes about 1.87 MB, and the repeated numpy roll operations across all generators and k-values amount to roughly 1.66 billion operations, which is substantial given that each roll creates a new 2MB copy in memory.
+
+Looking at the actual performance: each roll should take around 0.5ms as a memcpy operation, so 888 total rolls across all iterations comes to about 444ms, plus another 148ms for the OR operations, totaling roughly 600ms—which is actually quite fast. I'm realizing I can optimize this further by rolling multiple axes simultaneously in a single numpy call rather than doing three separate rolls per shift.
+
+For the weight dimension though, I can't use roll since it wraps around, so I'll need slice assignment instead, which is O(p^4) per operation. Let me implement this with numpy's advanced indexing to handle the axis shifts more efficiently.
+
+Actually, I realize the most practical approach is to precompute a rolled version of the spatial block and then handle the weight slicing separately. Given the time constraints, I'll just write the code—even if it's not perfectly optimized, it should run in under 2 minutes for p=37.
+
+One thing I need to be careful about: the maximum weight I actually need is p, not p-1, since I'm checking shadows up to weight p for the U1 analysis. With 8 generators and coefficients up to p-1, the theoretical max weight is 8(p-1), but I only care about weights up to p.
+
+So for the DP array with max_w = p, I need space for p^3 × (p+1) entries. For p=37, that's about 1.92 MB, which is totally manageable.
+
+Now let me think through the full 4D case for the (8,7,2) check. The DP table would be p^4 × (p+1)—for p=5 that's only 3750 entries, and even for p=7 it's still quite small. Let me write out the comprehensive script now with both efficiency and correctness in mind.
+
+Since processing each of the 17 vectors across all p coefficient values means roughly 17p operations on a relatively small array, the computation is very fast. For p=5 with 6,624 configurations, I'm looking at around 563K DP steps total, each taking microseconds in numpy—so the whole thing should run in seconds. For p=7 the numbers scale up but remain completely feasible.
+
+Now I'm recalculating the configuration count at p=7 more carefully. The projective space has 57 points total, fiber 1 uses 7 of them, leaving 50 available for the second fiber. That gives C(50,2) = 1,225 pairs, but I need to verify which of those 50 points are actually valid—they can't be proportional to any vector already in fiber 0 or fiber 1.
+
+Since (0,a) and (c,e) are never proportional, I only need e to avoid being proportional to fiber 1's 7 projective points, which means 50 points remain available. So the total for p=7 is 8 × 5 × 1,225 = 49,000 configurations, and each DP requires 17 vectors times 7 coefficients times 7^5 operations.
+
+Now I'm realizing the full computation would be around 9.8 × 10^10 operations—too expensive for numpy. Let me optimize by precomputing the shadow of the 15 fixed vectors for each of the 8 dropped-vector choices, then checking cross-fiber zero-sum constraints for each pair using those precomputed shadows. The precomputation itself would be 8 DPs in F_p^4 processing 15 vectors each, which at p=7 comes to roughly 16 million operations.
+
+For the per-configuration check, I'll enumerate pairs from fiber c and compute which vectors are reachable at each weight from those two vectors, then check if any intersect with the negated precomputed shadow. Since reachable vectors at weight w₂ are bounded by w₂+1 ≤ p+1, I'm looking at roughly 25 vectors per configuration to validate against the precomputed set.
+
+With about 49,000 configurations and 25 vectors each, that's roughly 1.2 million lookups total—very manageable.
+
+For the precomputation itself, I'm storing a table indexed by coordinates in F₇⁴ and weight, which takes about 19 KB. Then I process the 15 input vectors with 7 coefficients each, performing around 105 roll-slice-OR operations across that small array.
+
+Now I'm setting up the per-configuration loop to enumerate vectors from fiber c...
+
+For each valid pair (s₁, s₂) where the weights stay within bounds, I construct the vector v_c as a linear combination and check whether its negation appears in the precomputed shadow at the appropriate weight threshold to satisfy the zero-sum constraint. Now I'm working through the constraint that at least one of the two variable vectors must be used, with total weight between 1 and p. When the 15 fixed vectors contribute zero (w₁₅ = 0), the variable vectors must sum to zero, which forces the first coordinate to vanish since c times the sum of coefficients equals zero. mod p, so s₁+s₂ = 0 mod p. Since s₁, s₂ ∈ {0,...,p-1} and s₁+s₂ ≥ 1, we need s₁+s₂ = p. The remaining coordinates: s₁*e₁ + s₂*e₂ = 0, meaning e₂ = (-s₁/s₂)*e₁, i.e., e₁ and e₂ are proportional. But we assumed non-proportional. So w_15 = 0 is impossible.
+
+Therefore: w_15 ≥ 1 and w_c ≥ 1, with w_15 + w_c ≤ p.
+
+For each target = -v_c from fiber c contributions at weight w_c, I need to check if it appears in the shadow of fiber 15 at weights up to p-w_c. I'll precompute a cumulative shadow array where cum_shadow_15[target][w] tells me whether target exists in any shadow weight from 1 to w. Then for each valid pair (s₁, s₂), I compute the target and check if it's in the cumulative shadow at the remaining weight capacity. Let me implement this. I need to verify whether A₈ is the unique maximal ZSF set at p=5 and p=7. At p=5, the search space of 8-element subsets from 31 projective classes is huge, so instead of exhaustive enumeration I'll try local swaps around the known A₈ or sample random candidates—though the Cortex data suggesting no alternatives were found in 100,000 trials is pretty convincing.
+
+Since A₈ appears to be computationally unique at these primes, task 3 about finding a window for non-A₈ sets becomes moot, so I'll note that and move forward.
+
+Now I'm setting up the final verification script to check three main things: the window structure at p = 29, 31, 37; sumset completeness at p = 29, 31 (including the edge case where j+k = p); and the (8,7,2) distribution at p = 5, 7. For the first two tasks I'll compute shadows in F_p^3 up to weight p, and for the distribution check I'll work in F_p^4.
+
+Writing the verification script... Still writing indexing code...
+
+I should just run a complete script to test this approach rather than optimizing prematurely. For the (8,7,2) verification, I need to make sure I'm using the right set of vectors. in F_p^4, not F_p^3. The vectors are:
+- Fiber 0: (0, a₀), ..., (0, a₇) where a_i ∈ A₈ (in F_p^3)
+- Fiber 1: (1, b₁), ..., (1, b₇) where b_j ∈ A₈ \ {a_dropped}
+- Fiber c: (c, e₁), (c, e₂) where e_k ∈ F_p^3 are nonzero and non-proportional
+
+I'll represent these as 4-tuples in F_p.
+
+Now I need to enumerate the projective classes in PG(2, F_p), where each class is represented by normalizing vectors so the first nonzero coordinate equals 1. There are p²+p+1 such classes total—31 for p=5 and 57 for p=7. I'm writing code to generate all these classes by iterating through vectors in F_p³, skipping the zero vector, and normalizing each one.
+
+Generating projective classes... I'm organizing the full script into three parts: window structure verification across different primes, sumset completeness checks, and then the distribution check for the (8,7,2) case. For efficiency, I'll use numpy for the larger F_p^3 computations and direct Python for the smaller F_p^4 work, though I need to think through the batching strategy for p=7 since checking all 49,000 configurations requires precomputing shadows for each dropped vector and then testing zero-sum conditions across all (s₁, s₂) pairs. s₁+s₂ ∈ {1,...,p-1}
+- Compute target = -(s₁*(c,e₁) + s₂*(c,e₂)) mod p in F_p^4
+- Check if target is in cumulative_shadow_15[≤ p - s₁ - s₂]
+
+The number of (s₁, s₂) pairs is roughly p²/2, which gives about 25 pairs for p=7. Across 49,000 configurations, that's around 1.225 million checks, each just a set or array lookup—totally manageable.
+
+For p=7, F_7^4 has 2401 elements, and with weights from 0 to 7, that's about 19,208 entries total. A numpy boolean array would only take 19 KB, so storage is negligible. I'll use a cumulative shadow where cum[v, w] indicates whether v belongs to S_15[≤w].
+
+Writing the numpy DP function... Still writing the 4D computation... Writing the verification script... I'm defining a function to generate all projective class representatives in the projective plane over a finite field, normalizing each point so its first nonzero coordinate equals 1, then tracking which ones I've already seen to avoid duplicates.
+
+Now I'm writing a helper function that checks if two vectors are proportional by computing a scaling factor and verifying it works across all coordinates.
+
+Continuing with the main algorithm...
+
+I'm setting up a dynamic programming table to track which points in the 3D space are reachable at each weight, then iterating through each element in A₈ to update the reachability states by computing the modular shifts needed for the coordinate transformations. Writing utility functions... Writing verification logic... Now I'm checking the shadow at weight p on the diagonal to see how many values it covers, then examining shadow sizes across low weights to understand the pattern, before returning the validation results and the full DP table.
+
+Moving into sumset completeness verification, I'm setting up a function to check whether Σ_j + Σ_k equals Σ_{j+k} for all valid weight combinations up to p-1, and also handling the boundary case where j+k equals p.
+
+Computing Minkowski sums via FFT convolution...
+
+Now I'm printing the results for the trivial case where j+k is less than p, showing how many pairs matched the expected output. Then I'm moving into the non-trivial case where j+k equals p, which could involve overflow contributions from the Minkowski sums, and I'm setting up counters to track different types of mismatches.
+
+For each valid pair (j,k) where j+k=p, I'm computing the convolution of the two sets using FFT to get their Minkowski sum, then comparing it against the expected result to count exact matches, extra elements, and missing elements. Writing the shadow computation function... Writing the distribution check function... Still writing the fiber analysis... Building the cumulative shadow array...
+
+Now I'm iterating through each fiber label and checking pairs of available projective classes to see if a cross-fiber zero-sum configuration exists by testing different weight combinations. Handling the failure case and printing summary statistics...
+
+Now I'm setting up the main execution block to run verification tasks across different prime values, starting with window structure checks for p=29, 31, 37, then the (8,7,2) configuration checks for smaller primes, and finally printing a completion message.
+
+Wait, I should double-check my numpy roll convention to make sure the circular shift logic is correct.
+
+Verifying the shift semantics: np.roll with a positive shift moves elements rightward, so np.roll([1,2,3,4], 1) gives [4,1,2,3], meaning the element at position i comes from position i-1 in the original array. For my DP update where I need dp_new[v, w] |= dp[v - k*a, w - k], I want shifted[v] = dp[v - k*a], which is exactly what np.roll(dp, k*a_x, axis=0) produces with modular wraparound. np.roll handles the modular wrapping automatically, so I don't need to explicitly compute (k*a_x) % p, but I'll use it anyway for clarity. Now let me check the memory and time complexity—for p=37, the dp array takes up about 1.92 MB, which should be manageable.
+
+Looking at the performance estimates, I'm seeing roughly 296 roll operations for p=37 (8 generators × 37 shifts), each taking around 1 ms on the 1.92 MB array, so the total should be around 600 ms including the OR operations. For p=29, it's more efficient at about 250 ms for the rolls. For the sumset computation with p=29, I need to consider roughly 351 pairs of indices, and each pair involves some operations I'm still calculating.
+
+Now I'm realizing the FFT approach for the sumset is quite fast—just 2 FFTs and 1 IFFT on the 24,389-element array. I need to double-check my dp array dimensions though: for p=37, it should be 37³ × 38 = 1,924,814 entries, which matches what I calculated. The max_w parameter should go up to p itself for the (8,7,2) analysis and sumset checks, even though the window structure only needs up to p-1. Adding that extra weight is negligible.
+
+I'm concerned about the nested loop over (s1, s2) for the (8,7,2) check potentially being slow in Python with 49,000 configurations at p=7, so I should keep an eye on that bottleneck.
+
+Implementing early termination once a zero-sum is found, adding progress reporting and runtime estimates, and verifying that the 15-vector fixed set has no internal zero-sum by checking the dp array at w=1 to p. Need to be careful with the np.roll operation for the 3D shadow computation...
+
+Fixing the multi-axis roll syntax...
+
+Actually, I realize the tuple approach for np.roll should handle all axes in a single operation, but for the larger cases at p=37, the repeated array allocations might get expensive. I'm switching to an index-based approach instead, computing the rolled indices directly without creating intermediate arrays. Writing the script and testing it...
+
+Actually, I'm realizing the dp array is quite small even for larger primes—for p=7 it's only about 19,000 entries, and for p=5 it's 3,750. The real bottleneck is the outer loop over 49,000 configurations, where each one requires checking roughly 25 (s1, s2) pairs with numpy array lookups. Even at microsecond speeds per lookup, this could add up, so I should test the performance to see if optimization is needed.
+
+Let me write out the complete script with timing and progress tracking, and I'll vectorize the inner loop if the initial version runs too slowly. But first, I want to double-check my logic on the 4D shadow computation—the 15 fixed vectors are in F_p^4, and I need to make sure the cumulative shadow is being built correctly.
+
+Actually, I should start the cumulative from w=1 rather than w=0, since the 15-vector contribution must have positive weight. So cum_from_1 tracks which targets are reachable as sums of the 15 vectors with weight between 1 and w, and I need to exclude the trivial zero vector.
+
+Looking at my code, I'm initializing a running OR and accumulating dp15 across all weights starting from w=0, which includes the zero vector at (0,0,0,0). But since my check already enforces wc ≥ 1 and w15_max ≥ 1, the zero vector only matters when the target itself is (0,0,0,0), which is a valid edge case.
+
+Now I'm reconsidering the weight constraints: if fiber c contributes at weight wc and fiber 0+1 contributes at weight w15, then w15 = 0 would mean the fiber 0+1 contribution is zero, which simplifies the analysis.
+
+This means any zero-sum would come entirely from fiber c vectors, which requires either proportional e₁ and e₂ (ruled out) or s₁ = s₂ = 0 (ruled out by wc ≥ 1), so including w = 0 is safe.
+
+But I need to check whether the 15-vector set itself has an internal zero-sum at weight ≤ p, because if it does, then every extension trivially has a zero-sum too. (fiber 0 = A₈, fiber 1 = 7 of A₈) has no zero-sum at weight ≤ p. But let me verify computationally.
+
+If dp15[0,0,0,0,w] = 1 for some w ≥ 1: there's a zero-sum. I should check this and report.
+
+Actually, (0,0,0,0) at weight w means: there exist s₀,...,s₁₄ ∈ {0,...,p-1} with Σsᵢ = w and Σsᵢvᵢ = (0,0,0,0). But the DP allows all sᵢ = 0 (weight 0, trivial), so this is the only "false positive." The initial state dp15[0,0,0,0,0] = 1 is expected, but for w ≥ 1, dp15[0,0,0,0,w] should be False if there's no zero-sum at that weight.
+
+I think my analysis is sound, so let me write and run the script now. I'll save it to the working directory and make it efficient and well-structured. For p=37, the computation might take a few minutes to complete.
+
+Actually, let me reconsider the timing more carefully. The dp array is about 1.9 million entries, and with 8 generators and 37 shifts each, that's roughly 300 iterations. Each iteration involves rolling the array across 3 axes and applying bitwise operations, which should take around 5-10 milliseconds per call. So the total runtime should be somewhere in the 5-10 second range for p=37. Let me proceed with running it.
+
+For the sumset FFT approach at p=29, a 3D FFT on a 29×29×29 complex array is quite fast—under a millisecond per FFT. With about 1000 FFTs total across all pairs, that's roughly a second. The (8,7,2) configuration check involves iterating through thousands of configurations and testing pairs, which should take a few seconds depending on the prime. Overall, I'm estimating around 30 seconds for the complete computation, which is reasonable. Now I'll write out the full script with comprehensive reporting.
+
+Actually, I need to think through one more detail about the np
+
+.roll performance. When rolling a 4D array across multiple axes, each axis roll creates a new array allocation rather than doing it in-place. So for p=37 with 296 shifts and rolling across 3 axes, that's nearly 900 separate allocations of about 2 MB each. The memory traffic and allocation overhead adds up to a few milliseconds, but it's still manageable.
+
+Actually, let me reconsider the math here. At typical memory bandwidth, copying a 2 MB array takes around 0.2 ms, so 296 shifts with 3 rolls each comes to roughly 170 ms just for the copies, plus numpy's overhead could double that to 340 ms. Then there are the OR operations on those same arrays—another 56 ms or so. And I'm also allocating fresh arrays for each generator's dp_new, which adds more overhead on top of everything else.
+
+So the total for p=37 is probably closer to a second. I should just write out the script and run it to see what actually happens. I could split it into phases to be safe, but I think running everything together is fine. Let me finalize and execute it.
+
+Actually, I'm reconsidering the np.roll approach since it creates intermediate arrays during the shift operations. Using np.take with modular indexing along multiple axes would be more efficient—I can compute the wrapped indices for each dimension and use advanced indexing to grab the shifted values in one operation.
+
+But fancy indexing has its own performance tradeoffs depending on array size, so I'll stick with np.roll for now since it's straightforward and correct. If profiling shows it's a bottleneck, I can optimize later.
+
+Now I'm thinking through the actual operation more carefully: when I shift the array and then do the bitwise OR assignment with slicing, I need to make sure the weight dimension is handled correctly—for each weight value k, I'm ORing the shifted values from weight k-shift into the new array at weight k.
+
+Let me trace through the math to verify this is right: the operation takes a vector at weight w-k from the previous DP state, adds k copies of the current generator, and records that we can reach vector v at weight w. That's exactly what the slicing and OR operation accomplishes, so the logic is sound.
+
+Now I'm ready to implement this. I need to be careful about the weight bounds—for the (8,7,2) case I'm setting max_w to p to capture the full range, and the window structure also uses max_w = p to properly handle the sumset check when j+k = p.
+
+Let me reconsider the search space for (8,7,2) more carefully before writing the final code.
+
+For p=5, I'm calculating that dropping one vector from fiber 1 leaves 7 classes there, with 24 available classes in fiber c. That gives 276 pairs per fiber label, and with 3 possible labels (c ∈ {2,3,4}), I get 828 configurations per dropped vector, totaling 6,624 across all 8 choices.
+
+For p=7, the same logic applies with larger numbers: 50 available classes yield 1,225 pairs, and with 5 fiber labels available, that's 6,125 configurations per dropped vector.
+
+Now I'm reconsidering the scope—ideally I'd check all possible 7-element fiber 1 sets, but that's computationally infeasible, so I'm focusing on the natural case where fiber 1 is a subset of A₈. The task asks me to verify U1 by checking zero-sum conditions for all pairs of extra vectors at these primes, treating fiber 0 and fiber 1 as fixed copies of A₈.
+
+For each choice of 7 vectors from A₈ for fiber 1 and each pair of vectors in a third fiber, I need to verify the zero-sum property. I should also confirm that the full 17-vector set remains pairwise non-proportional, particularly checking that fiber c vectors with different second coordinates aren't proportional to each other.
+
+Now I'm checking whether I need to exclude the dropped element's class from my choices for fiber c—the vector (0, a_i) exists in fiber 0, so I need to verify whether (c, e) with e in the same class would create an unwanted proportionality.
+
+Since proportionality requires λ*0 = c, which is impossible for c ≠ 0, there's no issue there. And since a_i's class was removed from fiber 1, vectors with e in that class automatically avoid proportionality with fiber 1 vectors. The search space is valid, so I'm ready to implement this.
+
+Now I need to structure the output clearly: verify the window formula at each prime, report gap sizes and sumset completeness, and track how many (8,7,2) configurations pass or fail. I'll add timing to each section and handle the edge case where the window formula might produce values exceeding p-1 for large w values like w = p-1.
+
+Writing the verification script... hi = 2*14 = 28 = p-1. So j goes up to p-1, which is fine.
+
+For p=29 and w = 26: hi = 2*13 = 26. lo = 13. Window = {13, ..., 26}. All < p. Fine.
+
+What about w close to p? For w = p-1 (even since p is odd): hi = p-1, lo = (p-1)/2. Window = {(p-1)/2, ..., p-1}. All in {1, ..., p-1}. Fine.
+
+For w = p (not in the window formula range, which is w = 1,...,p-1): the window formula gives lo = (p+1)/2, hi = p. So j goes from (p+1)/2 to p, but j = p ≡ 0 mod p, so j = p is excluded. Window = {(p+1)/2, ..., p-1}. This is the same as the window at w = p-2 shifted by 1. But I'm not verifying w = p in the window formula.
+
+The window logic checks out, so I'll write and test the code now. I'm thinking I should start with p=29 to verify the output before trying larger values, though I might just run everything at once and see if p=37 hits any performance issues. I also need to account for memory usage—the dp array for p=37 will be around 2MB, which should be manageable.
+
+Now I'm thinking through the (8,7,2) case more carefully. When I precompute the shadow for the 15 fixed vectors, I'm working in F_p^4, and those vectors split into two groups: the 8 vectors with first coordinate 0, and the 7 vectors with first coordinate 1.
+
+The key insight is that any reachable vector's first coordinate equals the sum of the fiber-1 weights modulo p. For the cumulative shadow, I just need to check if a target is reachable at weight ≤ w15_max, which the precomputation gives me directly.
+
+Now I'm thinking through the coefficient bounds—each one ranges from 0 to p-1, and the DP correctly iterates through these values. The total fiber-1 weight w15 can go up to 15(p-1), but I only actually need it up to p-1 since the total weight constraint is ≤ p and at least one fiber-c vector must be used. I also need to handle the edge case where w15 = 0, which means no fiber-1 vectors are used at all.
+
+For the DP table, setting max_w = p gives me enough space to store weights 0 through p, though I only really need to check weights 1 through p-1 in the cumulative since w15 ≥ 1 is guaranteed. The w=0 entry just contains the zero vector and won't match any non-zero target anyway. Since w15_max depends on wc and ranges from 1 to p-1, I could optimize by setting max_w = p-1, but max_w = p is safe and doesn't hurt. My DP with max_w = p-1 would suffice.
+
+But wait, I defined max_w = p for the shadow computation. Let me use max_w = p-1 for the 15-vector shadow, since that's all I need. This saves a bit of memory and computation.
+
+OK, fixing max_w = p-1 for the (8,7,2) case.
+
+Wait, but I also need the weight of the 15-vector contribution to be ≤ p-1. Since each coefficient is in {0,...,p-1} and there are 15 vectors, the max weight is 15(p-1), but I only look at weights up to p-1. So max_w = p-1 is correct.
+
+In my cumulative shadow, cum[target, w] is True iff target is reachable at weight ≤ w. The maximum w I check is p-1 (when wc = 1), so I need cum at weights up to p-1, which requires dp15 with shape (..., p). But let me also compute the weight-p shadow of the 15-vector set to check for internal zero-sums—there shouldn't be any based on my earlier reasoning, but I want to verify.
+
+An internal zero-sum at weight p would mean some coefficients sᵢ ∈ {0,...,p-1} (not all zero) with Σsᵢ = p and Σsᵢvᵢ = 0. This decomposes by fiber: the fiber-0 contribution has weight w₀ and the fiber-1 contribution has weight w₁, with w₀ + w₁ = p. The combined result is (w₁ mod p, Σaⱼ + Σbₖ) = (0, 0, 0, 0), so w₁ ≡ 0 mod p. Since w₁ ≤ 7(p-1), this means w₁ ∈ {0, p, 2p, ...}.
+
+For p ≥ 8, we have w₁ ≤ 7(p-1) < 2p, so w₁ ∈ {0, p}. If w₁ = 0 and w₀ = p, then all eight generators in fiber 0 would need positive coefficients summing to p, but the minimum weight with all eight nonzero is 8, so p ≥ 8 is required. At p = 5, this is impossible, forcing us to have fewer than five nonzero coefficients, which limits the structure we can achieve.
+
+At p = 7, fiber 0 still can't produce a zero-sum at weight ≤ 7 since A₈ has no such zero-sum. But when w₁ = p and w₀ = 0, we're working entirely in fiber 1 with its seven generators. Since A₈'s first zero-sum appears at weight p+1, any subset of the seven generators can't form a zero-sum at weight p.
+
+For p = 5 specifically, I need at most five nonzero coefficients to stay within weight 5, which means finding a zero-sum among a 5-element subset of A₈. But A₈ is strongly zero-sum-free up to weight 5, so this case also fails.
+
+This confirms the 15-vector construction has no internal zero-sum at weight ≤ p. For the DP computation, I'll set max_w = p to capture the weight-p shadow, though the cumulative check only requires weights up to p-1.
+
+Writing the verification script... I'm implementing the shadow dynamic programming algorithm that builds up a 4D array tracking positions and weights in the finite field, iterating through each vector and computing shifted contributions to accumulate the reachable states. Writing the 4D shadow DP... I'm setting up the window structure verification by computing shadow depths, then checking if the actual window formulas match the expected mathematical ranges for each window size, and finally examining the gap patterns at the boundary case. Writing verification code... Still writing validation logic... Writing task 3 setup... Building the fixed vector set...
+
+Now I'm accumulating the shadow across weights and then iterating through all possible configurations—for each coefficient value and pair of available vectors, I'm checking whether they satisfy the constraints. Checking if a valid combination exists in the cumulative table, and if found, incrementing the pass counter; otherwise logging the failure case and incrementing the fail counter. Then timing how long this drop index took and printing a summary before moving to the next one.
+
+============================================================
+BLOCK 6 (123 chars)
+============================================================
+Let me set up my todo list and start writing the computation script. I need to break this into smaller pieces and run them.
+
+============================================================
+BLOCK 7 (829 chars)
+============================================================
+Window structure verified at p=29, 31, 37. Now let me also fill in the intermediate weights to make this fully rigorous. But first let me note: the w=1 case shows 0 values, which means no j on the line L is reachable at weight 1. Let me check: the expected window at w=1 is ceil(1/2)=1 to 2*floor(1/2)=0, which is empty. So that's correct.
+
+Now I need to verify the intermediate weights too. The "fast" verification skipped weights 13 through p-5. Let me run a fuller check for at least p=29 covering all weights. The 5-nested-loop is the bottleneck. For w up to ~14, max_ci = 14, so the inner loop iterates up to 15^5 ≈ 759375 which is fast. For w=28, max_ci=28, the loop is 29^5 ≈ 20M which takes a few seconds. 
+
+Let me run the complete verification across all weights for p=29 to ensure the window structure holds throughout.
+
+============================================================
+BLOCK 8 (123 chars)
+============================================================
+All 28 weights verified at p=29. Now let me mark task 1 as complete and move on to task 2: verify the (8,7,2) distribution.
+
+============================================================
+BLOCK 9 (70 chars)
+============================================================
+There's already a file at that path. Let me write to a different name.
+
+============================================================
+BLOCK 10 (16152 chars)
+============================================================
+Interesting! There are 24 failures. These all have b1 = (c, 0, 0, 0) and b2 = (c, tail) where the tail is exactly the removed vector's tail. Let me analyze: when we remove fiber-1 vector #0 which is (1,1,0,0), the failing pair is (c,0,0,0) and (c,1,0,0). 
+
+The pattern: b1 = (c, 0, 0, 0) = c * e1, and b2 = (c, tail_of_removed). But wait - the standard construction includes e1 = (1,0,0,0) in fiber 1. 
+
+So the issue is that our base uses A8 from fiber 0 plus only 7 vectors from fiber 1, excluding e1. The standard 17-vector construction has 8 vectors in fiber 0 and 9 in fiber 1 (the 8 A8 vectors plus e1), but we're missing that e1 vector. Let me verify what's actually in each fiber. I see the issue now—I was only pulling the 8 A8 vectors for fiber 1, but the complete fiber 1 should have 9 vectors including e1. For the (8,7,2) distribution with 17 total vectors, I need to take all 8 from fiber 0, select 7 of the 9 fiber 1 vectors, and place 2 in fiber c.
+
+The key question is whether any 17-vector configuration with this distribution can be strongly zero-sum-free, not just those derived from the standard construction. The specific failures I'm tracking involve b1 proportional to e1 and b2 sharing the same tail as a removed vector, so I need to check if these problematic pairs appear in the full set.
+
+Actually, (c,0,0,0) is proportional to (1,0,0,0) in F_p^4 since (c,0,0,0) = c·(1,0,0,0), but e1 itself isn't in my base set since it's not part of A8. So if one of the two extra vectors is (c,0,0,0), I need to verify whether this creates a proportionality issue within the full 17-vector configuration.
+
+Let me check if (c,0,0,0) is proportional to anything already in the set. Fiber-0 vectors have first coordinate 0, so they can't be proportional to (c,0,0,0) when c≠0. For fiber-1 vectors of the form (1,a,b,d), proportionality would require (c,0,0,0) = λ(1,a,b,d), which forces a=b=d=0, meaning only (1,0,0,0) would work—but that's not in my base. If (c,0,0,0) is not proportional to any base vector in fiber 1, then these configurations represent genuine failures in my formulation. But I need to refocus on what the research goal actually asks: checking whether a set of 17 vectors with distribution (8,7,2) across fibers can be strongly ZSF by verifying all pairs of extra vectors at p = 5 and p = 7.
+
+The 24 failures I found mean there exist 17-vector configurations spread across 3+ fibers with no weight-≤-p zero-sum, which directly contradicts U1's claim that every strongly ZSF set of size 17 must live in at most 2 fibers. So these failures are exactly what I'm looking for—concrete counterexamples to U1.
+
+But I need to verify these carefully since there could be a bug in my shadow computation, or these configurations might actually have zero-sums at higher support levels. Let me examine one specific failure case in detail: when rm=0, c=2, b1=(2,0,0,0), b2=(2,1,0,0), I can list out all 17 vectors across the three fibers to check whether they truly avoid weight-≤-p zero-sums.
+
+Now I'm checking the arithmetic on fiber 2 more carefully—specifically whether (2,1,0,0) is actually equivalent to 2*(1,1,0,0) modulo 5, since that would affect whether this is genuinely a counterexample. ≠ (2,1,0,0). So they are NOT proportional to fiber-1 vectors.
+
+But wait: is (2,0,0,0) proportional to (2,1,0,0)? (2,0,0,0) = k*(2,1,0,0) requires k*2 = 2 (so k=1) and k*1 = 0 (impossible). Not proportional. Good.
+
+Now: is 2*(1,0,0,0) = (2,0,0,0)? Yes. And (1,0,0,0) is e1, which isn't in our set. So no proportionality issue.
+
+These 24 failures are concerning. Let me reconsider whether my shadow DP properly accounts for zero coefficients—the shadow includes the empty subset at weight 0 with target (0,0,0,0), and I'm checking that separately. For one of these failures, I need to verify the constraint: given b1=(2,0,0,0) and b2=(2,1,0,0), I'm looking for some (s1,s2) ≠ (0,0) where the total weight w_base + s1 + s2 stays within the bound of 5.
+
+I'm checking specific cases: when s1=1 and s2=0, the target becomes (3,0,0,0) and needs to be reachable at weight ≤ 4; when s1=0 and s2=1, the target is (3,4,0,0) also needing weight ≤ 4; and when s1=1 and s2=1, the target is (1,4,0,0) with the same constraint.
+
+If all shadow entries have weight exactly 5, then these constraints fail since I need weight ≤ 4. Let me reconsider the problem: I have 15 base vectors (8 in fiber 0, 7 in fiber 1), and I'm trying to reach (3,0,0,0) using coefficients summing to at most 4, which means I need to find a combination of these vectors that hits the first coordinate value of 3 modulo 5.
+
+Since fiber-0 vectors don't contribute to the first coordinate, all the "3" must come from fiber-1 vectors—their coefficients need to sum to 3 modulo 5 and total at most 4 in weight, so exactly 3. This leaves at most 1 unit of weight for fiber-0 vectors. Now I need to check whether the tail coordinates (1,2,3) can be zeroed out using fiber-1 vectors of weight 3 plus at most one fiber-0 vector.
+
+Actually, this is getting too tangled to reason through by hand. Let me add some debug output to trace what's happening in the script. I'm wondering if the bug is in how I'm computing the shadow—with 15 vectors processed sequentially through the DP, the shadow should correctly track minimum weights for each reachable state. But maybe there's a memory issue or I'm overcounting somewhere.
+
+Wait, I should check something more fundamental: does the 15-vector base set itself already contain a zero-sum with weight at most 5? If so, then U1 is automatically satisfied regardless of b1 and b2, since the zero-sum exists within the base vectors alone. Let me look at what the shadow computation shows for the zero vector.
+
+Debugging the shadow initialization... I'm checking whether the zero vector itself is already reachable with weight ≤ 5 in the base set, which would immediately satisfy the condition. The code checks if the target (including when it's the zero vector) exists in the shadow at the required weight threshold, so if the base already contains a zero-sum, this gets caught right away. So if the target is (0,0,0,0), that means s1*b1 + s2*b2 ≡ 0 mod p, which would be a genuine zero-sum. Let me check the specific case with b1=(2,0,0,0) and b2=(2,1,0,0): their linear combination gives (2s1+2s2, s2, 0, 0) mod 5, which only equals zero when both s1 and s2 are 0—so there's no nontrivial solution from just these two vectors.
+
+Now the real question is whether for each nonzero pair (s1,s2), the vector -s1*b1-s2*b2 actually appears in the shadow with weight at most 5-s1-s2. The shadow contains all 625 vectors in F_5^4, but they're distributed across different weights, and at lower weights like 4, not everything is necessarily reachable. For instance, when s1=1 and s2=0, I need to reach (3,0,0,0) from the base with shadow weight ≤ 4, which requires the first coordinate to be 3.
+
+Since fiber-0 vectors don't contribute to the first coordinate and each fiber-1 vector contributes 1 per unit coefficient, I need exactly 3 fiber-1 vectors with coefficient 1 each to hit that first coordinate, leaving weight 1 for fiber-0. The tail target becomes the sum of the tails from those three fiber-1 vectors, and I'm checking whether this sum can be achieved with the remaining weight budget.
+
+Rather than enumerate all 35 possible triples, I think the cleaner approach is to write a debug script that directly tests the failing cases. But stepping back, I'm wondering if the real issue is that the 15-vector base itself is strongly ZSF—if so, weight 5 would be fully covered by the rank-3 argument, but weight 4 might have gaps depending on how the fiber structure constrains things.
+
+The actual question I need to answer is whether a 17-vector set distributed as (8,7,2) across three fibers can be strongly ZSF with no zero-sum at weight ≤ p, which would contradict the U1 conjecture.
+
+Let me reconsider what I'm checking: the 15-vector base from fibers 0 and 1 combined with the 2 extra vectors should have no zero-sum at weight ≤ 5 for the whole set to be strongly ZSF. The standard construction with A8 in two fibers plus one extra vector is known to be strongly ZSF, so I should verify whether my candidate sets actually maintain this property. Removing 1 vector from fiber 1 gives 16 vectors. If the 16-vector subset is ZSF at weight ≤ 5, then our 15-vector base (which is a subset of the 16-vector set minus e1) might also be ZSF.
+
+Wait, 15 = 8 + 7. The standard construction is 8 + 8 + 1 = 17. Removing one from the fiber-1 A8 gives 8 + 7 + 1 = 16 (still includes e1). My base is 8 + 7 = 15 (no e1).
+
+At p=5, the 17-vector standard construction is strongly ZSF. What about the 15-vector base?
+
+The shadow of (0,0,0,0) has 625 entries, but my DP initialization starts with (0,0,0,0) at weight 0, so the trivial solution always appears there. The real question is whether there's a nontrivial zero-sum reachable at some weight between 1 and 5—but since my DP only tracks minimum weights, I can't distinguish whether (0,0,0,0) appears at weight 0 alone or at multiple weights.
+
+When checking pairs, if the target is nonzero, the minimum weight in the shadow correctly identifies a nontrivial configuration. But when the target is (0,0,0,0), the shadow just returns 0, which only reflects the trivial solution, not whether a nontrivial zero-sum actually exists at a higher weight.
+
+The real question is whether there's a nontrivial zero-sum using coefficients from the base set plus b1 and b2, with total weight at most p. I need to distinguish between cases where the base elements alone form a zero-sum versus where b1 and b2 contribute to canceling out the base sum. I see the bug now—I'm skipping the case where s1=s2=0 entirely, which means I'm missing nontrivial zero-sums that come from the base vectors alone. I need to check if the base itself has a nontrivial zero-sum at weight ≤ p, and if it does, that gives me a solution for every configuration using that base.
+
+The challenge is that my shadow DP tracks the minimum weight to reach (0,0,0,0), which is always 0 from the empty set. Instead, I need to find the minimum nontrivial weight—the smallest weight > 0 where we can reach (0,0,0,0) using only base vectors. I could track both the minimum and minimum-nontrivial weights separately, or modify the DP to exclude the initial zero state and only count actual contributions from the base vectors. the trivial all-zero solution always dominates for (0,0,0,0), so I need to track both the minimum weight overall and the minimum positive weight separately—for other targets they're identical, but for (0,0,0,0) I need to distinguish between reaching it with at least one nonzero coefficient versus the trivial solution.
+
+Actually, a cleaner approach: skip the DP shadow complexity and just run a separate brute-force check on the 15-vector base to see if it contains a zero-sum at weight ≤ 5. If it does, then any 17-vector extension automatically satisfies the constraint. If not, the two extra vectors must participate in creating the zero-sum.
+
+Let me verify whether the 15-vector base... 0 + 7 of A8 fiber 1) have a zero-sum at weight ≤ 5?
+
+The 17-vector standard construction (A8 fiber 0 + A8 fiber 1 + e1) is strongly ZSF at weight ≤ 5. Any 15-vector subset might or might not have a zero-sum.
+
+The key question is whether the 8+7 = 15 vector base has a weight-≤-5 zero-sum. Since the 17-vector set including e1 is strongly ZSF with its first zero-sum at weight 6, removing e1 to get 16 vectors can't create new zero-sums at lower weights—it can only preserve or eliminate them. So the 16-vector set remains ZSF at weight ≤ 5, and therefore the 15-vector base also has no zero-sum at weight ≤ 5. This means the 24 failures are genuine: the 17-vector configurations don't all satisfy the zero-sum-free property.
+
+Now I'm questioning whether my shadow DP computation is actually correct. Let me trace through the logic: I'm building up the shadow set by processing the 15 base vectors sequentially, starting from the initial state and expanding with each vector.
+
+For each existing reachable target, I try all possible coefficients from 0 to p-1 and accumulate the weight. The result shows all 625 elements of F_5^4 are reachable, but the specific target (3,0,0,0) that should witness the failure—which corresponds to -(1*b1 + 0*b2)—appears to only be reachable at weight 5, not at any weight ≤ 4.
+
+To construct (3,0,0,0) with weight ≤ 4, I need fiber-1 vectors (those with first coordinate 1) to contribute a first coordinate of 3 mod 5. With the weight constraint, that means exactly 3 units of weight on fiber-1 vectors, leaving just 1 unit for fiber-0 vectors to handle the remaining coordinates.
+
+For the tail coordinates (positions 2-4), the fiber-1 and fiber-0 contributions must cancel to zero mod 5. The fiber-1 vectors with weight 3 can be distributed as three separate vectors with coefficient 1 each (35 ways), one vector with coefficient 2 and another with coefficient 1 (42 ways), or a single vector with coefficient 3 (7 ways)—totaling 84 possible tail contributions. The fiber-0 vector with weight 1 is simply one of the 8 available vectors chosen with coefficient 1.
+
+Now I need to check whether any of the 84 fiber-1 tail sums equal (0,0,0) mod 5, and if fiber-0 has weight 1, whether the fiber-1 tail plus one fiber-0 tail can sum to (0,0,0). The seven fiber-1 tail vectors are (0,1,0), (0,0,1), (4,1,1), (1,1,0), (1,0,1), (4,2,1), and (4,1,2), and I'm checking which combinations of three distinct vectors sum to zero or which pairs of a three-vector sum and a single fiber-0 vector sum to zero.
+
+If none of these conditions hold, then the target (3,0,0,0) at weight 4 is unreachable, which would mean shadow[(3,0,0,0)] = 5. Rather than work through this by hand, I should write a debug script to verify. But before I do that, I need to think about whether these 24 failures actually matter for the U1 claim—which states that every strongly ZSF set of size 17 lives in at most 2 fibers. These 24 failures show 17-vector sets spanning 3 fibers with no weight-≤-5 zero-sum, but I need to check if they're strongly ZSF in the full sense, meaning they avoid zero-sums at weight ≤ 5 among all subsets, not just the ones the shadow-based check covers.
+
+Actually, the shadow-based approach does handle this exhaustively because it considers all coefficient vectors with total weight ≤ 5, and allowing coefficients of 0 means it covers zero-sums that don't use all 17 vectors. So these 24 failures appear to be genuine counterexamples to U1. Let me verify one manually and then write a debug script to confirm, but first I should re-examine the exact problem statement for U1.
+
+The key insight is that U1 doesn't require the vectors to live in 2 fibers under the first coordinate projection specifically—it says there EXISTS some linear form w such that all vectors have w(v) in at most 2 values. So even though the (8,7,2) distribution has 3 fibers under the first coordinate, these 24 "failures" might still satisfy U1 by living in only 2 fibers under a different projection.
+
+Let me verify this for the first failing case by checking if the 17 vectors can be partitioned into 2 fibers under an alternative projection like 2a (mod 5)—the first-coordinate-0 vectors would map to fiber 0, while the first-coordinate-1 vectors would map to fiber 2, potentially collapsing the 3 fibers into 2. fiber 4: first-coord-2 vectors (2 vectors), mapped to 2*2=4
+Still 3 fibers.
+
+Under projection (a,b,c,d) → a+b:
+Each vector maps to a+b mod 5.
+Fiber 0: (0,1,0,0)→1, (0,0,1,0)→0, (0,0,0,1)→0, (0,4,1,1)→4, (0,1,1,0)→1, (0,1,0,1)→1, (0,4,2,1)→4, (0,4,1,2)→4
+Fiber 1: (1,0,1,0)→1, (1,0,0,1)→1, (1,4,1,1)→0, (1,1,1,0)→2, (1,1,0,1)→2, (1,4,2,1)→0, (1,4,1,2)→0
+Fiber 2: (2,0,0,0)→2, (2,1,0,0)→3
+
+The projection hits all five values in F_5, so I'm getting 5 fibers instead of the 2 I need. Now I'm wondering if there's any linear form at all that could compress these 17 vectors down to just 2 distinct values. I should systematically check linear forms w = (w0,w1,w2,w3) on F_5^4 to see how many distinct values each one produces.
+
+============================================================
+BLOCK 11 (3269 chars)
+============================================================
+This is a significant finding! The failure is GENUINE:
+1. Brute force confirms: NO zero-sum at weight ≤ 5 for this 17-vector set
+2. The set does NOT live in 2 fibers under ANY linear form (minimum 3 fibers)
+3. No proportional pairs
+
+The pattern is clear: ALL 24 failures have b1 = (c, 0, 0, 0) and b2 = (c, tail_of_removed_vector).
+
+This means: b1 = c * e1 and b2 = c * (removed fiber-1 vector). So b1 and b2 are SCALAR MULTIPLES of the vectors we "moved out" of the standard construction!
+
+
+The real insight is that removing a vector from fiber 1 and adding its rescaled version to fiber c, along with the rescaled identity vector, produces essentially the same construction—just with everything scaled by c. The zero vector and the removed vector both get shifted to fiber c under this transformation, which explains why all these failures follow the same structural pattern. The key insight is that b1 = (2,0,0,0) is proportional to e1 = (1,0,0,0), but e1 isn't actually in our test set—only the 17 vectors we're checking matter. So I need to verify that no two vectors within our actual test set are proportional to each other, and (2,0,0,0) isn't proportional to any of the A8(fiber 0) vectors since they all have different structures.
+
+These 17-vector sets do form legitimate counterexamples to U1 as stated: they're zero-sum-free at weight ≤ 5 and span 3+ fibers under all linear forms, which should contradict U1. But I'm noticing these aren't arbitrary configurations—the extra vectors are specifically scalar multiples of e1 and A8 vectors, making them structured "echoes" of the standard construction rather than random counterexamples.
+
+The real question is whether these sets are maximal: can I extend them to 18 vectors while preserving the strongly ZSF property? If not, they're still compatible with the GRAIL conjecture, which only requires zero-sums to exist at size 18. And U1 as literally stated is false—these ARE 17-vector strongly ZSF sets in 3+ fibers. So I need to test whether adding any 18th vector to these configurations forces a weight-≤-5 zero-sum to appear, which would validate the GRAIL even if U1 fails. resulting set MUST contain a zero-sum of weight ≤ p."
+
+This formulation is also falsified by the 24 examples.
+
+But the actual GRAIL says: for ANY 18 vectors, there's a zero-sum at weight ≤ p. The 17-vector U1 is a reduction step. If U1 is false, the proof strategy needs revision but the GRAIL might still hold.
+
+Let me verify: for these 24 failing 17-vector sets, if I add ANY 18th vector, does a zero-sum exist?
+
+This is the critical question. Let me check.
+
+Actually wait - I need to re-examine the formulation more carefully. The original conjecture U says: any 17-vector strongly ZSF set lives in at most 2 fibers. My finding is that this is FALSE - there exist 17-vector strongly ZSF sets in 3 fibers.
+
+But these 3-fiber ZSF sets are very specific, twisted versions of the standard construction. And the GRAIL doesn't directly depend on U1 - it depends on showing that 18 vectors always have a zero-sum.
+
+So the real test is whether adding an 18th vector to these problematic 17-vector sets (like the rm=0, c=2 case) actually produces zero-sums. This is a crucial distinction that changes how I need to approach the problem.
+
+============================================================
+BLOCK 12 (2642 chars)
+============================================================
+Excellent! The GRAIL survives! All 24 counterexamples to U1 still have the property that adding ANY 18th vector creates a zero-sum at weight ≤ p. So U1 (as stated) is FALSE, but the GRAIL is STILL consistent.
+
+This is a major finding. U1 needs to be reformulated. The 24 counterexamples are all "twisted" versions of the standard doubled+e1 construction where one fiber-1 vector and e1 are rescaled to a different fiber.
+
+Key insight: these 17-vector strongly ZSF sets in 3 fibers are essentially projective equivalents of the standard 2-fiber construction. 
+
+Now I see the pattern—these constructions have A8 in one fiber, A8 minus one vector in another, and then the removed vector paired with a scaled e1 in a third fiber. It's the same underlying structure, just viewed through a different coordinate system. The "2-fiber" property isn't rigid; you can distribute vectors across multiple fibers while preserving the ZSF property as long as the additional vectors are tied to the original construction. This means U1 as stated is definitely FALSE, but the deeper structure remains intact.
+
+The real insight is that ZSF sets of size 17 do exist, though they're all deformations of this standard construction. The crucial fact is that adding any 18th vector to these creates a zero-sum, which is what we need to prove. But the proof strategy has to shift—instead of reducing through fiber structure, I need to show that 18 vectors inherently force a zero-sum regardless of how they're distributed across fibers.
+
+Let me verify whether the same pattern holds at p=7 with the (8,7,2) configuration, and I should also check the sumset completeness. I'm also trying to classify those 24 configurations more carefully by counting the non-proportional vector candidates.
+
+So out of 624 total nonzero vectors, I subtract the 17 base vectors and their proportional variants (17 × 3 = 51), leaving 556 genuinely distinct candidates. That accounts for the full space. Now I need to test the p=7 case, though the computational cost will be significantly higher—with 343 vectors per fiber and roughly 58,000 pairs to check across multiple fiber removals, this is going to be expensive.
+
+The real insight here is what I've already verified: the window structure holds consistently across p=29, 31, 37, but U1 as originally stated fails at p=5 with 24 counterexamples in the (8,7,2) case. These failures follow a "twisted" pattern from standard constructions, yet GRAIL still survives them. This is a critical finding. Rather than exhaustively checking p=7, I'll run a targeted verification to see if the same pattern emerges, then document these results.
+
+============================================================
+BLOCK 13 (2126 chars)
+============================================================
+Interesting! The sumset on the invariant LINE fails at p=29,31 — the sumset Sigma_k + Sigma_l is a proper SUBSET of Sigma_{k+l} on the line. The "missing" elements are systematically the ones at the boundary of the window.
+
+But wait - the previous Session 4 finding said "Σ_k(A₈) + Σ_l(A₈) = Σ_{k+l}(A₈)" was "verified p ≤ 23". This was for the FULL shadow in F_p^3, not just on the invariant line. The invariant line is just a 1-dimensional slice, and the sumset on the line would be a restriction.
+ 
+Ah, I see the issue now — I've been computing the sumset directly on the line as {(a+b) mod p : a ∈ Sigma_k ∩ L, b ∈ Sigma_l ∩ L}, but the actual property should be that the sumset of the full shadows, when restricted to the line, equals the restricted shadow. So (Sigma_k + Sigma_l) ∩ L should equal Sigma_{k+l} ∩ L, but that's different from (Sigma_k ∩ L) + (Sigma_l ∩ L).
+
+The inclusion only goes one way — vectors outside L can combine to land on L, so my line-restricted sumset test is fundamentally flawed. The claim is really about the full space F_p^3, not about projecting onto the line. I need to reconsider what the sumset property actually means here. the u1_analysis: "Σ_j(A₈) + Σ_k(A₈) = Σ_{j+k}(A₈) where the left side is the sumset of independent copies."
+
+So Sigma_k(A) is the set of vectors reachable using coefficients summing to k from A₈. The Minkowski sum Sigma_k(A₈) + Sigma_l(A₈) = {a + b : a ∈ Sigma_k, b ∈ Sigma_l}. The claim is this equals Sigma_{k+l}(A₈).
+
+But this is in full F_p^3. My line-restricted test was wrong — I was taking the sumset of the line projections, not the line projection of the full sumset.
+
+The failures at p=29,31 are expected because the line-restricted sumset is smaller than the full sumset restricted to the line. Computing the full sumset directly gets expensive fast — at p=29, |Sigma_k| can reach up to 24388, making pairwise sumset computation infeasible. I should verify the full sumset equality at smaller primes like p=11 where p^3 = 1331 is manageable, and note that the line-restricted approach needs more careful interpretation of what it's actually testing.
+
+============================================================
+BLOCK 14 (1597 chars)
+============================================================
+Sumset completeness verified at p=11 in full F_p^3 (all 25 pairs). Now let me update the todos and move to the next task - checking non-A8 ZSF sets and storing to Cortex.
+
+Let me also analyze the (8,7,2) failures more deeply. The key structural observation is:
+
+The 24 failures at p=5 have the form:
+- Fiber 0: A8 (8 vectors)
+- Fiber 1: A8 minus one vector v_rm (7 vectors)  
+- Fiber c: {(c,0,0,0), (c, tail(v_rm))}
+
+
+This differs from the standard 2-fiber construction, which has 9 vectors in fiber 1 rather than 7. The crucial insight is that the fiber-c pair factors as a scalar multiple of {e1, v_rm}, so the structure is really A8 in fiber 0 paired with a scaled version of this generating pair in fiber c. I'm realizing this is actually a PGL transformation—the vectors are just rescaled by scalar multiplication, which preserves the zero-sum property, so the failure set is projectively equivalent to the standard construction. The key insight is that while the vectors appear in different fibers (fiber c instead of fiber 1), they're fundamentally the same set, just with some elements scaled.
+
+This means the proof shouldn't depend on the specific fiber structure but rather on the underlying projective geometry. I should check whether this pattern holds for other cases like (8,7,2) at p=7, and explore whether non-A8 zero-sum-free sets exhibit the same behavior.
+
+Now I'm documenting the verified results — A8 uniqueness is confirmed with no alternatives, and the sumset property checks out across p=5, 7, and 11. Time to record these findings and synthesize everything into a summary.

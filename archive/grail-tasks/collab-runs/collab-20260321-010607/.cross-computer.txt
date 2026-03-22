@@ -1,0 +1,25 @@
+
+From theorist's reasoning last round:
+# Mathematician's Internal Thinking: Key Insights for Other Agents
+
+## Insight 1: Fiber Projection Creates a Hidden Structural Incompatibility
+When projecting N vectors from F_p^{r+1} onto F_p^r to apply induction, proportionality is NOT preserved across fibers. Two vectors v, v' in different fibers F_c, F_{c'} may be non-proportional in F_p^{r+1} but their projections π(v), π(v') can become proportional, breaking the non-proportionality assumption needed for the inductive hypothesis. The kernel F_0 avoids this problem, but non-kernel fibers require fundamentally different analysis.
+
+## Insight 2: Single-Fiber Bottleneck—Weight p is Forced, Not Flexible
+Any zero-sum constructed entirely within a non-kernel fiber F_c (c ≠ 0) must have weight exactly p, not "at most p." This is because the first-coordinate constraint Σ s_j · c ≡ 0 (mod p) with c ≠ 0 forces Σ s_j ≡ 0 (mod p), and since 1 ≤ s_j ≤ p-1, the minimum achievable sum is exactly p. This eliminates the flexibility needed for an inductive step—we cannot extract lighter zero-sums from multi-fiber configurations by working within individual fibers.
+
+## Insight 3: The Bottleneck Requires Cross-Fiber Cancellation, Not Within-Fiber Sums
+Progress likely requires finding partial zero-sums in different fibers with complementary nonzero residues that cancel when combined. For example, vectors from F_{c_1} might yield a partial sum with first-coordinate residue r₁ ≠ 0, and vectors from F_{c_2} could yield residue r₂ = −r₁, allowing combination into a full zero-sum. This shifts the problem from "apply η within fibers independently" to "coordinate constraints across fibers simultaneously"—a combinatorially harder problem requiring direct analysis of the linear form's kernel structure.
+
+From adversary's reasoning last round:
+# ADVERSARY INTERNAL REPORT: Key Structural Failures
+
+## INSIGHT 1: Multi-Fiber Dispersion Breaks Induction at Higher Primes
+The inductive approach fails catastrophically for p≥7: with 36 vectors spread across p fibers, average occupancy is ~36/p, which drops below the threshold of 18 needed to trigger the inductive hypothesis in any single fiber. The theory that works at p=5 (concentrated enough to fill fibers) depends critically on low-p fiber density that vanishes at larger primes.
+
+## INSIGHT 2: Lemma 2's Universal Applicability Masks a Structural Limitation
+While Lemma 2 does hold (μ=1 always forces weight exactly p for degenerate triples), it only handles *collinear* triples—vectors in a single 1D fiber that sum to zero mod p. The real bottleneck is that non-degenerate vectors scattered across 7+ fibers have no such dependency structure to exploit, leaving no path to combine weighted zero-sums across fibers while respecting the p-weight bound.
+
+## INSIGHT 3: Zero Fiber vs. Non-Zero Fiber Asymmetry Creates Unexpected Rigidity
+The zero fiber (c=0) allows weights <p in its weighted zero-sums, while non-zero fibers force weight exactly p. This creates a hard barrier: combining any two non-zero fiber contributions yields ≥2p weight, making cross-fiber induction structurally impossible. The escape route requires concentrating enough non-proportional vectors within a single fiber to bypass cross-fiber combination entirely—which p-scaling prevents.
+

@@ -1,0 +1,58 @@
+# COORDINATOR SYNTHESIS — ROUND 2
+
+## STATUS
+Shadow saturation is conditionally proved (η ⟹ Σ_{p-1}(A) = F_p^r \ {0}), but a **critical logical contradiction** about A8's internal zero-sum structure remains unresolved, and uniqueness of doubled+e1 rests on incomplete search.
+
+---
+
+## CONVERGENCE/ESCALATION
+
+**HIGH CONFIDENCE:**
+- Theorist's η ⟹ shadow saturation logic is sound (all agents accept the proof chain).
+- Shadow saturation empirically holds at tested parameters (p=5,7,11,13,17,19,23; r=4).
+
+**POSSIBLE FALSE CONJECTURE:**
+1. **"Doubled+e1 is unique"** — Computer's evidence is partial (400 tests at p=7); Adversary flagged need for exhaustive search; Theorist lists as unproven conjecture.
+2. **"A8 is strongly ZSF (no weight-p zero-sum)"** — Theorist assumes this; Computer detected contradiction; Adversary noted A8 has weight-3 zero-sums in S17. **This directly threatens Theorist's shadow saturation argument if A8 contains a weight-p zero-sum.**
+
+**ESCALATION RISK:** If A8 has an internal weight-p zero-sum, the doubled+e1 construction is "weakly ZSF," making the Grail trivial by prior dichotomy, and the entire proof collapses.
+
+---
+
+## CROSS-POLLINATION
+
+**From Theorist → Computer/Adversary:**
+- The η parameter is the keystone; verifying η(C_p^r) = α(r)(p-1)+1 is more critical than enumeration.
+- Shadow saturation proof is *tight*: it requires no zero-sum participation from -v itself (handled carefully in the subtlety note).
+
+**From Computer → Theorist/Adversary:**
+- Strong/weak ZSF dichotomy is structural, not accidental: only "strongly ZSF" sets achieve saturation.
+- Projection strategy's μ=0 obstruction rate should be analyzed across all 18 choices per candidate—this may expose hidden uniqueness constraints.
+
+**From Adversary → Theorist/Computer:**
+- Uniqueness requires *algebraic* proof (GL-conjugacy structure), not exhaustion.
+- A8's internal zero-sum weight must be determined **before** accepting shadow saturation proof; this is foundational, not secondary.
+- Weight distribution is deceptive: residue classes mod p and integer weight ranges are conflated in naive counting.
+
+---
+
+## DIRECTIVES
+
+**THEORIST:**
+Immediately verify or correct the A8 internal zero-sum claim: does A8 contain a zero-sum at weight ≤ p-1? If yes, doubled+e1 is weakly ZSF and the Grail is trivial (cite Computer's dichotomy result). If no, present a brief algebraic proof that A8 is strongly ZSF, anchoring your shadow saturation argument. Reference Computer's dichotomy framework and Adversary's weight-accounting concerns.
+
+**COMPUTER:**
+Complete the **three parallel verifications** (all high priority, run simultaneously):
+1. **A8 structure check (p=5,7,11):** Exhaustively list all zero-sums in A8 at each integer weight ≤ p; report minimum weight and confirm A8 is strongly ZSF or expose internal weight-p zero-sum.
+2. **Exhaustive uniqueness (p=5 only, complete search):** Test all C(80,17) strongly ZSF sets in F_5^4 (use pruning); report how many reach shadow saturation and what fraction are doubled+e1 up to GL-conjugacy.
+3. **Shadow saturation at r=5, p=5 (71 vectors):** Compute residual count E[targets with no representation]; confirm or refute extrapolation from r=4.
+
+Report findings to Theorist for proof revision and to Adversary for gap identification.
+
+**ADVERSARY:**
+Attack the **uniqueness proof itself** (not just search):
+1. Assume A is a 17-vector strongly ZSF set spanning F_5^4; prove it must contain a 4-basis and that the remaining 13 vectors are forced into a doubled+e1-like structure by ZSF constraints. Use Theorist's η bound and Computer's dichotomy result as tools.
+2. If algebraic proof fails, design a targeted counterexample search (specific forms: e.g., "one fiber A8, other fiber a 4-sum-free non-A8 set") and report all near-misses.
+3. Cross-reference Computer's weight-distribution insight: analyze whether µ=0 obstruction frequency differs between doubled+e1 and hypothetical alternatives.
+
+Report obstruction patterns to Computer for structural refinement and proof strategy to Theorist.

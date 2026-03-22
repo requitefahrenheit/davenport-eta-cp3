@@ -1,0 +1,661 @@
+
+============================================================
+BLOCK 1 (132 chars)
+============================================================
+Let me start by searching Cortex for relevant prior results, then read the key files to understand the current state of the problem.
+
+============================================================
+BLOCK 2 (153 chars)
+============================================================
+Good, I have extensive Cortex results. Let me now search for more specific results about the window structure proof and the (8,7,2) configuration status.
+
+============================================================
+BLOCK 3 (1065 chars)
+============================================================
+Very important finding! There's a Cortex entry saying "CONJECTURE U1 IS FALSE AT p=5" with 3 genuine counterexamples, and another entry about a "COMPLETE CLASSIFICATION OF U1 COUNTEREXAMPLES AT p=5" with 324 genuine counterexamples and a modified conjecture.
+
+This is a critical development. Let me read the u1_analysis.md file and also the modified conjecture entry more carefully.
+
+The key facts I have so far:
+1. Window Structure Theorem: PROVED (sub-problem A closed)
+2. U1 (Two-Fiber Forcing) as originally stated: DISPROVED at p=5 with genuine counterexamples
+
+
+3. A modified conjecture has emerged: every maximal ZSF set should lie on at most α+1 = 9 parallel lines, meaning the tail projection stays bounded by |π(S)| ≤ α+1
+
+My role as THEORIST in Round 2 has fundamentally changed—I need to accept that U1 in its original form doesn't hold, pivot to understanding the modified version, and figure out how the counterexamples still connect to the Grail conjecture. Let me dig into the analysis file to see what structure these counterexamples actually have.
+
+============================================================
+BLOCK 4 (52913 chars)
+============================================================
+Now I have a very clear picture. Let me synthesize what I know:
+
+## Key Facts from Cortex
+
+1. **Window Structure Theorem: PROVED** (Sub-problem A closed)
+   - j ∈ Σ_w(A₈) ∩ L iff ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋
+   - Proof via parity identity 2j = w + S
+
+2. **U1 (Two-Fiber Forcing) as originally stated: FALSE at p=5**
+   - I've found 3 genuine counterexamples and classified all 324 total, which are all tail-replacement variants of the standard construction
+
+3. **Structure of counterexamples:**
+   - Every counterexample projects the same tail: {A₈ vectors} ∪ {(0,0,0)} in F_p³, with the 17 vectors lying on exactly 9 parallel lines in F_p⁴
+   - They differ from the standard construction only in which fiber value each line samples from
+
+4. **Same-Tail Swap Theorem (proved):**
+   - Swapping (f,t) with (f',t) preserves strongly ZSF as long as no proportional pair exists, and the dangerous fiber is always the partner fiber
+
+5. **Modified Conjecture (replaces U1):**
+   - Every maximal ZSF set lies on at most 9 parallel lines, or equivalently, there exists a projection π: F_p⁴ → F_p³ with |π(S)| ≤ 9
+
+6. **Self-Shadow Reduction (partial):**
+   - I've covered some cases for (8,8,1) with fiber label c on L, but there's still a gap of O(√p) to resolve
+
+Now I need to acknowledge that U1 is false and work with this modified conjecture going forward.
+
+The old architecture had U1 (two-fiber) plus U2 (A₈ uniqueness), but since U1 doesn't hold, I'm shifting to a new framework. The key is establishing that every strongly ZSF set of size 2α+1 in F_p^{r+1} lies on at most α+1 parallel lines under some projection, and that the projected image is essentially A_α ∪ {0} up to linear transformation. I'm reconsidering the structure more carefully, particularly around what the counter-examples reveal about the underlying geometry.
+
+The crucial observation is that all counterexamples to U1 preserve the same tail structure as the standard construction—they just vary how vectors distribute across fibers. This suggests I should focus on proving shadow saturation holds universally for any set with this tail structure, regardless of the specific fiber assignments. My new proof strategy is to establish the line structure through projection, verify the projected multiset relates to A_α ∪ {0}, then show shadow saturation follows from this structure alone. The real breakthrough is recognizing that fiber flexibility doesn't break shadow saturation, so I'm now working toward a theorem that captures this fiber-flexible version. So the shadow saturation property holds for all the U1 counterexamples because they're maximal—no 18th vector can be added to any of them. This means the equivalence between maximality and shadow saturation applies across all variants, not just the standard construction.
+
+Now I need to be careful about the weight bounds. Maximality means for any vector v outside S, there's a zero-sum of weight ≤ p in S ∪ {v}, which puts -v in the shadow set at weight ≤ p. The Grail argument requires showing that among any 18 nonzero non-proportional vectors, there exists a zero-sum of weight ≤ p, and the strategy is to pick a 17-subset and either find a zero-sum at weight p-1 or use the maximality property to force one at weight p.
+
+The crux is that every strongly ZSF 17-set must be maximal—meaning it has shadow saturation—and this follows from the fact that η(C_p³) = 8(p-1)+1. But I'm realizing maximality and shadow saturation aren't quite the same thing in general; maximality guarantees a zero-sum of weight ≤ p when adding any 18th vector, while shadow saturation is a more specific structural property.
+
+Let me think through this more carefully. If S is strongly ZSF and maximal, then adding any vector v outside S creates a zero-sum of weight ≤ p that must use v (since S itself has no internal zero-sums). This constrains where v can be relative to the sums we can form from S, but I need to verify this actually forces shadow saturation. The key insight I'm working toward is that the Shadow Saturation Theorem for A₈ in F_p³ should give us exactly what we need.
+
+Now I'm checking whether the standard doubled+e1 configuration in F_p⁴ saturates by leveraging how each fiber's A₈ saturates F_p³, and whether tail-swap variants preserve this saturation property despite modifying which vectors appear in certain fibers.
+
+The key insight is that maximality here means no additional nonzero non-proportional vector can be added while keeping zero-sum-free sets at weight ≤ p, which implies that for any candidate vector, there's already a zero-sum of weight ≤ p that would be violated.
+
+Now I'm checking whether shadow saturation at weight p-1 actually holds for these tail-swap variants, not just the original doubled+e1 configuration. The variants preserve all eight A₈ tail values with multiplicity 2 each, so for every tail a, there should be two vectors (c₁, a) and (c₂, a) present in the variant.
+
+The key insight is that as I vary the tail a across A₈ and combine weights, the pooled contributions from each tail should collectively cover all of F_p⁴. This is getting intricate, so I need to refocus on what's actually worth proving in this round.
+
+Given that U1 is false, the most productive path forward is to establish that the modified conjecture U1' about line structure implies the Grail.
+
+U1' states that every strongly ZSF set of size 2α+1 in F_p^{r+1} lies on at most α+1 parallel lines. Combined with U2 (the uniqueness of A₈), this should yield the Grail. The argument goes: if S is strongly ZSF with size 2α+1, then by U1' its projection has at most α+1 elements, which means by pigeonhole principle, at least α+1 of those lines must contain at least 2 vectors from S.
+
+Now I'm working through the specific case where we have 17 vectors distributed across 9 lines—this means 8 lines get exactly 2 vectors each and one line gets 1 vector. The tail projection includes the zero vector from the e₁ direction, giving us 9 distinct tail values: the 8 from A₈ plus the origin. Each A₈ tail corresponds to exactly 2 vectors on its line, while the zero tail accounts for the remaining vector.
+
+For the shadow saturation analysis, I'm looking at how the copies pool behaves: each A₈ tail a has two associated vectors with multiplicity p-1, and when I combine k₁ copies of one with k₂ copies of the other at weight w, the first coordinate becomes a linear combination modulo p while the tail scales by the total number of copies used.
+
+This means for a single tail at weight m, I can generate m+1 distinct first-coordinate values paired with m·a, since the coefficient differences are all distinct modulo p.
+
+Now I'm considering what happens when I use multiple tails simultaneously at the same total weight w.
+
+When combining different tails, their fiber coordinates add together, giving me full flexibility in the first coordinate as long as the coefficient pairs remain non-proportional for each tail—which is guaranteed by construction.
+
+I'm formalizing this as a theorem about fiber-flexible shadow saturation: given a set of vectors distributed across parallel lines with non-proportional pairs on each line, I can achieve complete freedom in controlling the first coordinate while maintaining the desired tail structure.
+
+The proof strategy is to show that for any target point, I can decompose it using the tail saturation property and then independently choose fiber coordinates for each tail component, since the non-proportionality condition ensures no constraints between them. I'm realizing this is a feasibility problem—can I choose the right number of copies for each tail to hit any target value modulo p? If I have enough flexibility with the tails, particularly one with at least p-1 copies available, then I can cover all residues mod p.
+
+For targets with zero tail component, the e₁ vector alone works since it has multiplicity p-1, letting me reach any value d ∈ F_p at weight d. But for non-zero tail components, I need to figure out which tail values are actually achievable through the linear combinations.
+
+The weight constraint is tricky—if I use weight w on tails to hit some tail value t, and weight w' on e₁ to contribute to the first coordinate, the total weight is w + w', which must stay ≤ p-1. The first coordinate then comes from both the e₁ contribution and whatever the tails contribute, making this a coupled optimization problem.
+
+Let me step back and focus on what I can actually prove rigorously rather than getting lost in the general case.
+
+For Theorem 2, the key insight is that shadow saturation should depend only on the tail structure of a strongly ZSF set, not on how we assign fibers. If the standard construction with fibers {0, 1} achieves shadow saturation, then any variant using the same tails but different fiber assignments should also achieve it. Let me check this by looking at how fiber values affect the first coordinate contribution—a vector with fiber 0 contributes 0 to the first coordinate regardless of weight, while fiber 1 contributes proportionally to the weight used.
+
+Now I'm examining whether variants with different fiber choices like {0, 2} preserve shadow saturation. With fibers {0, 2}, the first coordinate values become even numbers only—{0, 2, 4, ..., 2m}—rather than the consecutive range {0, 1, ..., m} from the standard construction. This seems like it would give fewer options and potentially break shadow saturation for certain targets. Yet the Cortex claims all variants are maximal, which means they must all achieve shadow saturation at weight m, so there's something deeper about how the tail structure guarantees this property regardless of fiber choice.
+
+Let me reconsider what maximality actually requires. A 17-subset being maximal means any 18th vector creates a weight-≤p zero-sum, but that doesn't necessarily mean shadow saturation holds at every weight up to p-1—there could be weight-p zero-sums that don't appear at lower weights. So I need to trace through the Grail proof more carefully: take any 17-subset T from 18 nonzero non-proportional vectors, and either T already has a zero-sum at weight ≤ p-1, or T is weakly zero-sum-free at that range but has some other structure that forces the conclusion.
+
+For the strongly zero-sum-free case, the key insight is that adding the 18th vector v must create a zero-sum at weight ≤ p, which means v appears with some coefficient in a weight-≤p combination that sums to zero. Since T itself is strongly zero-sum-free, the 18th vector's coefficient must be positive for this to work.
+
+If that coefficient equals d, then d·v must be expressible as a combination of the first 17 vectors at weight ≤ p-d. The simplest scenario to check is when d=1.
+
+Now I'm considering whether this always works when T has shadow saturation at weight p-1, or if we need larger coefficients for certain variants. The real question is whether any 18 nonzero non-proportional vectors must contain a weight-≤p zero-sum—which means for any 17-vector set T and any vector v outside it, adding v forces such a zero-sum. If T is strongly zero-sum-free, the zero-sum must involve v with some coefficient d, requiring d·v to be in the span of T at weight ≤ p-d.
+
+I'm realizing I need to refocus on the structural picture rather than chase individual cases. The key is understanding how U1' and the shadow saturation of the tail set work together to guarantee this property.
+
+When T has the right structure—lying on 9 parallel lines with A₈ tails—the shadow saturation result tells me that every nonzero tail is reachable at weight ≤ p-1 from the copies pool. For any 18th vector v = (d, t), if t is nonzero I can reach it from the A₈ tails at that weight, and then handle the first-coordinate matching through fiber flexibility or by using e₁. If t is zero, I simply use d copies of e₁ to get a weight-≤p-1 zero-sum directly.
+
+Now I'm getting tangled up on how to actually construct the zero-sum. Let me reconsider: I need to find nonnegative coefficients c₁,...,c₁₈ summing to at most p such that their weighted sum against the 18 vectors equals zero. Rearranging, the contribution from v (with coefficient c₁₈) must cancel out the contributions from the first 17 vectors.
+
+The key insight is that if I set c₁₈ = 1, then -v needs to be expressible as a sum of the first 17 vectors with coefficients bounded by p-1. So the real question becomes whether the shadow of T at weight p-1 covers everything nonzero in the space, and I'm now checking whether this holds for the specific fiber-{0,2} case.
+
+Looking at the two configurations: the standard 17-set uses fiber 1 for a₁, while the variant swaps it to fiber 2. The shadow structure depends on which fiber assignments are used and what sums we can form from the a₈ vectors, but including the e₁ vector complicates the analysis since it adds another degree of freedom to the shadow computation.
+
+Now I'm working through how to reach a target (f, t) with total weight at most p-1 by strategically allocating weight across e₁ and the eight tail vectors, where each tail can be represented using different fiber choices to control the first coordinate independently of the tail contribution. Once the {mᵢ} values are fixed from the tail equation, I need to solve for the kᵢ coefficients. Setting D equal to f minus the weighted tail contributions, I'm looking for non-negative integer solutions where each kᵢ stays bounded by mᵢ and the total weight w₀ fits within the remaining capacity p-1-w_tail. I need to be more careful distinguishing between modular arithmetic over F_p and regular integer arithmetic. Let me reconsider this over the integers first, where the copies pool consists of all linear combinations with coefficients in {0,...,p-1} that sum to w, and the zero-sum condition requires the dot product with the vectors to equal zero in F_p.
+
+Actually, I'm getting bogged down in technical details here. Let me refocus on what theoretical contribution I'm trying to make. The key insight is that U1 is false but the counterexamples have a very specific structure with the same tail set, so I should prove that U1' (the line structure condition) guarantees shadow saturation regardless of how fibers are assigned. This becomes the central theorem I need, replacing the original U1 argument. Then I can state and prove the Fiber-Flexible Shadow Saturation Theorem for sets lying on at most α+1 parallel lines with the right tail structure, using an argument about first-coordinate reachability. Finally, I'll reformulate the entire Grail proof chain around U1' instead.
+
+Now let me actually work through the Fiber-Flexible Shadow Saturation Theorem itself. I'm setting up the formal statement with 2α+1 nonzero non-proportional vectors in F_p^{r+1} distributed across α+1 parallel lines under first-coordinate projection, where the tail set consists of α non-zero tails (each appearing twice with distinct fiber values) plus the zero tail. The claim is that if the non-zero tails satisfy a certain condition, shadow saturation holds.
+
+For the proof, I need to show every nonzero element in F_p^{r+1} can be expressed as a weighted sum from T with weight at most p-1. When the target has zero tail, I can just use copies of the unit vector. When the tail is nonzero, I'm applying the shadow saturation property of the base set to construct the required combination. aᵢ}, ∃ non-negative integers m₁,...,mα with:
+- Σmᵢaᵢ = t (mod p)  
+- Σmᵢ = w_tail ≤ p-1
+- Each mᵢ ≤ p-1
+
+For each tail aᵢ, I'm decomposing mᵢ into kᵢ copies of one pair (cᵢ₁, aᵢ) and the remainder using another pair (cᵢ₂, aᵢ), where 0 ≤ kᵢ ≤ mᵢ.
+
+The first-coordinate contribution becomes w₀ + B + Σδᵢkᵢ, where B = Σcᵢ₂mᵢ is the baseline from the second pair and δᵢ = cᵢ₁ - cᵢ₂ captures the difference between the two pairs.
+
+Now I need to check whether I can choose the kᵢ values and w₀ to hit the target f modulo p, given the constraint that w₀ + w_tail ≤ p-1.
+
+The achievable sums Σδᵢkᵢ form some subset S of the field, and adding the flexible w₀ range gives me S + {0,...,p-1-w_tail}. By Cauchy-Davenport, this sumset has size at least min(p, |S| + (p-w_tail)), so if |S| is large enough relative to w_tail, I should be able to cover all residues modulo p. p-1-w_tail}| = p, so we need |S| + (p-1-w_tail) ≥ p, i.e., |S| ≥ w_tail + 1.
+
+So the question reduces to: |S| ≥ w_tail + 1, where S is the set of values of Σδᵢkᵢ (mod p) with kᵢ ∈ {0,...,mᵢ}.
+
+By iterated Cauchy-Davenport, the sumset |δ₁·{0,...,m₁} + ... + δα·{0,...,mα}| is at least min(p, Σmᵢ + 1) = min(p, w_tail + 1), which is exactly the bound we need. Each set δᵢ·{0,...,mᵢ} contains exactly mᵢ+1 elements, and applying Cauchy-Davenport repeatedly gives us this lower bound on the size of their sumset. Since w_tail < p-1, I can apply the Cauchy-Davenport inequality to show |S + {0,...,p-1-w_tail}| reaches p, meaning S + {0,...,p-1-w_tail} = F_p in both cases. This completes the proof—I've shown that for any target first coordinate in F_p, I can find appropriate parameters kᵢ and w₀, which establishes Fiber-Flexible Shadow Saturation using only shadow saturation of the tail set. chy-Davenport inequality
+3. The non-proportionality condition (δᵢ ≠ 0)
+
+This is a clean, short theorem that resolves the key concern about U1 counterexamples!
+
+Let me double-check the Cauchy-Davenport iteration. 
+
+For sets A₁, ..., Aₙ ⊆ F_p (nonempty):
+|A₁ + A₂ + ... + Aₙ| ≥ min(p, |A₁| + |A₂| + ... + |Aₙ| - (n-1))
+
+This is a standard result, proved by iterating the base case |A+B| ≥ min(p, |A|+|B|-1).
+
+In our case, each Aᵢ consists of the multiples δᵢ · {0, 1, ..., mᵢ}, which gives mᵢ+1 distinct elements in F_p since δᵢ ≠ 0. Applying Cauchy-Davenport across α sets, I get |A₁ + ... + Aα| ≥ min(p, Σmᵢ + 1), where the α-1 term from the iteration accounts for the number of sets involved.
+
+Then for the second step, I'm adding the set {0, 1, ..., p-1-w_tail} to S. This set has size p-w_tail, so by Cauchy-Davenport again, |S + {0,...,p-1-w_tail}| ≥ min(p, |S| + p - w_tail - 1). If |S| ≥ w_tail + 1, this reaches p, which is what I need. = p: trivially p. ✓
+
+So the theorem is proved.
+
+Actually wait, I need to be a bit more careful. The set {0,...,p-1-w_tail} has size p-w_tail. So:
+
+|S + {0,...,p-1-w_tail}| ≥ min(p, |S| + (p - w_tail) - 1) = min(p, |S| + p - w_tail - 1)
+
+With |S| ≥ min(p, w_tail + 1):
+- If |S| = p: done.
+- If |S| ≥ w_tail + 1: min(p, w_tail + 1 + p - w_tail - 1) = min(p, p) = p. ✓
+
+Great, the argument works.
+
+Now there's a subtlety: when some coefficients mᵢ = 0 in the representation Σmᵢaᵢ = t, those tails don't actually contribute to the sum, so I can just exclude them from the Cauchy-Davenport calculation. The remaining tails with mᵢ > 0 still sum to w_tail total, and the bound |S| ≥ min(p, w_tail + 1) holds regardless of how many tails are involved. δ₁·{0,...,m₁} + ... + δₖ·{0,...,mₖ}|
+≥ min(p, (m₁+1) + ... + (mₖ+1) - (k-1))
+= min(p, w_tail + 1)
+
+This is the same bound. ✓ (The terms with mᵢ = 0 contribute {0}, which is neutral for the sumset and doesn't affect the count.)
+
+So the theorem is clean. Let me also handle the edge case: t = 0 is handled by Case 1 (just use e₁).
+
+Now checking the remaining edge cases: when w_tail = 0, that reduces to t = 0 which Case 1 covers. And if S needs to contain the full field F_p, then |S| ≥ min(p, p) = p works out. For the non-proportionality condition, the δᵢ values are guaranteed nonzero mod p because the two vectors on each line aren't proportional to each other—if the c-coordinates matched, they'd be identical rather than just sharing the same tail structure. So two vectors are non-proportional exactly when their first coordinates differ. Now I'm realizing there's a subtlety in the argument—the representation Σmᵢaᵢ = t isn't unique, and I only need one valid representation to work, not all of them.
+
+The zero-tail vector e₁ = (1, 0, ..., 0) is special because it contributes only to the first coordinate while leaving the tail untouched, giving me flexibility in how I balance the first coordinate. But I should check what happens if S contains a different vector that also lies on the zero-tail line.
+
+If the zero-tail vector is (c, 0, 0, 0) for some c ≠ 1, then w₀ copies of it contribute c·w₀ to the first coordinate instead of just w₀. The achievable first-coordinate values become c · {0, 1, ..., p-1-w_tail}, which still has size p-w_tail since c is invertible in F_p. The Cauchy-Davenport argument carries through unchanged because the size of the set I'm adding to S remains the same.
+
+Now I need to think about what happens when there's no zero-tail vector at all.
+
+If every vector in a strongly ZSF set has a nonzero tail, then by the pigeonhole principle, with 2α+1 vectors distributed across at most α+1 possible tail values, at least α of the lines must contain two vectors each. But this seems like it should lead to a contradiction or constraint I haven't fully worked out yet.
+
+What's interesting is that every known example—the standard construction and all counterexamples—includes a zero-tail vector like e₁. I'm wondering if this is actually necessary, but proving it feels complicated, so I'll set this aside for now and focus on what I've established so far. as stated requires a zero-tail vector, which empirically always appears.
+
+Wait, let me reconsider the proof structure. For every strongly ZSF set to work, I need: the line structure (U1'), a zero-tail vector, and the right tail set (U2). The zero-tail condition might actually be derivable from the line structure plus the strongly ZSF property itself.
+
+But actually, maybe I don't need the zero-tail vector at all. If there's no zero-tail vector, then I have 2α+1 vectors spread across α+1 lines, all with nonzero tails—some lines get 1 vector, others get 2 or 3. With this distribution, the Cauchy-Davenport argument on the tail components still gives |S| ≥ min(p, w_tail + 1). The problem is that without the zero-tail vector contributing to coverage, I need S itself to span all of F_p. If w_tail = p-1, then |S| = p and I'm done, but if w_tail < p-1, the bound |S| ≥ w_tail + 1 might not guarantee full coverage. So I'd need to ensure every element t reaches maximum tail weight p-1 through shadow saturation, which guarantees the representation exists. ≤ p-1; we can always "pad" a lower-weight representation to weight p-1 by adding zero-weight contributions).
+
+Wait, can we pad? Adding weight without changing the target means: add 0 = m·aᵢ + (w-m)·(-λaᵢ) for appropriate λ? No, that requires having -λaᵢ in the tail set.
+
+Actually, we can pad by using the same tail twice: add k copies of (c₁, aᵢ) and k copies of (-c₁, aᵢ)... wait, that's not in the set.
+
+Hmm, we can pad using the "splitting" property: if aᵢ has two vectors (c₁, aᵢ) and (c₂, aᵢ), and we currently use m copies of aᵢ, we can increase to m+2 by using one extra copy of each. This adds 2 to the weight and contributes (c₁+c₂, 2aᵢ) to the sum, but it also changes the tail sum, so padding isn't straightforward.
+
+The real issue is that we need the tail sum to match exactly. If the tail weight is p-1, then we have at least p elements in our set, so any first coordinate is achievable. The question is whether we can always find a representation with minimal tail weight that still reaches our target.
+
+For the case without a zero-tail vector, this becomes much harder—we can't freely adjust the weight without changing the tail sum. Let me focus on the case where a zero-tail vector exists, which covers the known applications.
+
+I should now state the main theorem precisely: we have a set of 2α+1 nonzero, pairwise non-proportional vectors in F_p^{r+1}, and under some linear projection to F_p, they project to... The key insight is that the Grail proof actually works without U1—I only need the weaker structural condition U1' about line arrangements and the tail uniqueness property U2. This means the U1 counterexamples don't break the proof chain at all, and shadow saturation propagates through Cauchy-Davenport regardless of how fibers are assigned within lines. Now I'm wondering whether adding an 18th vector to any of these multi-fiber variants would necessarily create a zero-sum, since they're already maximal and strongly zero-sum-free.
+
+The Fiber-Flexible Shadow Saturation theorem actually handles this directly—if a variant has shadow saturation at weight ≤ p-1, then any new vector v must have its negative in the existing shadow, forcing a zero-sum at weight ≤ p. This applies even to the (8,7,2) distribution where fibers are rearranged through tail-swaps, so those variants maintain shadow saturation and would also be forced to accept a zero-sum with an 18th vector. The apparent contradiction between what the computer found and the adversarial concern dissolves once I recognize that these multi-fiber distributions are still covered by the same structural guarantees.
+
+Now I'm turning to the U1' conjecture itself—whether every strongly ZSF set of size 2α+1 must lie on at most α+1 parallel lines. The empirical pattern at p=5 is striking: every counterexample to U1 sits on exactly 9 lines, which is precisely α+1, suggesting this tighter bound might actually hold universally.
+
+To prove U1', I'd need to show that if vectors are spread across α+2 or more distinct projections, a weight-≤p zero-sum is forced. A pigeonhole argument combined with Cauchy-Davenport could work here—if I have 10 distinct tail values distributed among 17 vectors, the concentration becomes too weak to avoid zero-sums, and the constraint that at most α tails can have 2 vectors each becomes the critical bottleneck.
+
+Now I'm checking whether the self-shadow reduction actually holds formally. There's a partial result from the Cortex showing it works for (8,8,1) with A8, but since U1 turned out to be false, that analysis doesn't serve as a proof tool anymore.
+
+The Flexible Shadow Saturation theorem gives a cleaner approach to the whole problem. Let me think about how to strengthen this result and lay out the new proof architecture properly. I'm formulating a conditional theorem on U1' and U2 that establishes the exact value of η for C_p^{r+1}, then sketching both the upper bound using the doubled+e₁ construction and the lower bound argument.
+
+For the lower bound, I'm taking any set of (2α+1)(p-1)+1 nonzero elements, reducing to nonzero non-proportional vectors, and then analyzing what happens when I pick a 17-element subset. The key is splitting into three cases: either the subset has a zero-sum at weight ≤ p-1 and we're done, or it's weakly ZSF with an internal zero-sum at weight p, or it's strongly ZSF where the Line Structure and Tail Uniqueness conditions force a contradiction or yield the required zero-sum.
+
+For the strongly ZSF case, the zero-tail line contains exactly one vector, and by the Fiber-Flexible Shadow Saturation Theorem, the shadow saturation covers all nonzero vectors. This means the 18th vector v must have -v representable as a weight-≤(p-1) sum from the subset, so adding v itself gives a zero-sum at weight ≤ p. The proof is cleaner because U1' is actually weaker than the original U1, making it easier to establish.
+
+Now I'm setting up verification checks: confirming that all 324 counterexamples to U1 achieve shadow saturation at the required weight for p=5, and checking that no strongly ZSF 17-set has more than 9 distinct tail values under projections. But I should reconsider whether the zero-tail requirement is truly necessary or if it can be relaxed—specifically, whether a strongly ZSF set can exist without a zero-tail vector at all.
+
+If all 17 vectors have nonzero tails, then the distribution across lines becomes constrained: 8 lines get 2 vectors each and 1 line gets 1 vector. For the Cauchy-Davenport argument to work without the e₁ boost, I need S alone to cover any first-coordinate value, which requires |S| ≥ min(p, w_tail + 1). When w_tail = p-1, this gives |S| = p and the argument succeeds, but the question is whether every nonzero tail value reachable at some weight ≤ p-1 can actually be achieved at weight exactly p-1, or if padding a lower-weight representation always works.
+
+The issue is that reaching the zero vector at an arbitrary weight w requires finding coefficients that sum to zero, which isn't guaranteed for every weight in the shadow-saturated set.
+
+Let me check whether 0 is reachable at different weights for the standard A₈: at w=1, I'd need a single nonzero vector to equal zero, which is impossible; at w=2, I'd need two vectors to be proportional negatives, but A₈ has no such pairs. Since A₈ is strongly zero-sum-free, the zero vector isn't reachable at any weight.
+
+This constraint means I can't simply pad a representation by adding copies of e₁ to increase its weight—without e₁ available, I need to construct a weight-(p-1) representation directly rather than building up from a lighter one.
+
+In the no-e₁ case, I'm targeting a specific pair (f, t) where t ≠ 0, using a minimal-weight representation of t. The issue is that if t's lightest representation has weight less than p-1, I might not generate enough first coordinates to hit my target f, even though Cauchy-Davenport guarantees coverage when |S| ≥ w_tail + 1.
+
+But actually, I don't need to hit all first coordinates—just the one f I'm aiming for. So the real question is whether there exists some (f, t) pair where f falls outside S for every valid representation of t. This "unmatched first coordinate" problem is hard to rule out without e₁, so I should probably just state the theorem assuming e₁ is present.
+
+Now I'm wondering if strongly ZSF sets always contain a zero-tail vector. If T spans α+1 lines and every vector has a nonzero tail, then some line is a singleton {v = (c, a)}. Adding (0, a) to the set would give the same tail but fiber 0, but I'm not sure that immediately produces a zero-sum in a useful way.
+
+Looking at the empirical evidence, the doubled+e₁ construction includes e₁ = (1, 0, ..., 0) with zero tail, and all the p=5 counterexamples are modifications of this that also preserve zero tail. The exhaustive search at p=5 found that every strongly ZSF 17-set is a tail-replacement variant of doubled+e₁, meaning zero tail is always present in those cases. So while I can't prove it generally, I'll state the theorem with zero tail as a condition and note that it holds across all known examples.
+
+Now I'm ready to write up the main results. I have three key contributions to present. Let me work through the projection argument: if every projection yields at least 10 distinct values, then distributing 17 vectors across 10+ fibers means the largest fiber contains at most 2 vectors, which contradicts the structure we need for a strongly ZSF set.
+
+When the maximum fiber size is 1, all vectors have distinct tail values—17 distinct tails in F_p³ should easily admit a weight-≤p zero-sum. If the maximum is 2, we get 7 fibers with 2 vectors and 3 with 1 vector. Either way, spreading the set across many fibers actually facilitates zero-sums rather than preventing them, since concentrated sets with few fibers can carefully choose tails to avoid zero-sums, but dispersed sets lose that control.
+
+Now I'm trying to formalize this intuition. The expected number of zero-sums grows roughly as O(p²⁺) when there are 3+ fibers, and even faster with 10+ fibers. I'm attempting a Cauchy-Davenport-style lemma: if a set S has size 2α+1 and every projection has image size at least α+2, then S must contain a weight-≤p zero-sum. The proof would start by taking the projection that minimizes the image size, then analyzing the fiber structure to derive a contradiction if no zero-sum exists.
+
+But working through the fiber analysis—where each fiber contains vectors with distinct tail values, and we're trying to show that combining them achieves enough first-coordinate coverage—is getting messy. I'm going to set this aside for now and explore a different angle instead: the weight grading approach.
+
+The weight grading φ sums all coordinates across F_p^{r+1}, which is fundamentally different from the fiber projection that isolates a single coordinate. Even though this might offer another way to force zero-sums when S has vectors with diverse φ-values, I don't think it's leading anywhere productive right now.
+
+Let me refocus on what I can actually complete: proving the Fiber-Flexible Shadow Saturation Theorem, laying out the Revised Grail Architecture that connects U1' and U2, stating what I need the computer to verify, storing everything to Cortex, and then explaining what U1' really means.
+
+Before I move forward though, I should double-check that the Cauchy-Davenport bound I've been using is actually correct. Let me test it with a concrete example to make sure the arithmetic holds up.
+
+For p=5 with two tails where m₁ = 2, m₂ = 1, w_tail = 3, δ₁ = 1, δ₂ = 2, I get S = {0,1,2,3,4}, which gives |S| = 5, meeting the bound of min(5, 3+1) = 4. Then checking another case with p=7 and one tail where m₁ = 3, δ₁ = 2, I get S = {0,2,4,6} with |S| = 4, which also satisfies min(7, 3+1) = 4. When I expand this set by the w₀ range, it covers all of F₇, confirming the bound works as expected.
+
+Now I want to check whether the theorem still holds when there are single-vector lines beyond just the zero-tail line.
+
+Looking at the p=5 counterexamples, they all have exactly 8 nonzero tails with 2 vectors each, plus 1 zero-tail vector, giving 17 total. I'm wondering if a strongly ZSF set could exist with some nonzero tails having only 1 vector—say 7 tails with 2 vectors and 2 tails with 1 vector, which would also total 17 vectors. The single-vector tails wouldn't contribute any flexibility in the kᵢ parameter since there's only one fiber value available.
+
+When a tail has just one vector, mᵢ copies of it produce a fixed first-coordinate value with no split between fiber values, so that tail contributes zero flexibility. This means the Cauchy-Davenport bound for S only applies to the multi-vector tails, and with k such tails having weights m₁,...,mₖ, we get |S| ≥ min(p, Σmᵢ + 1). The total weight across all tails determines the e₁ range as p-1 minus that total weight.
+
+When I apply the Cauchy-Davenport bound to S plus the e₁ range, the calculation shows |S + {0,...,p-1-w_tail}| ≥ min(p, p - Σm'ⱼ), where Σm'ⱼ is the weight from single-vector tails. Since those single-vector tails have positive weight, this sum is strictly less than p, which breaks the argument—the approach fails precisely when some nonzero tails contain only a single vector.
+
+But I can sidestep this by choosing a different representation of t that avoids single-vector tails entirely. If I set m'ⱼ = 0 for all single-vector tails, then all the tail weight concentrates in the multi-vector tails, giving w_tail = Σmᵢ. The bound then becomes |S + {0,...,p-1-Σmᵢ}| ≥ min(p, p) = p, which works. The question is whether such a representation always exists—whether t can be expressed using only multi-vector tails, which requires t to lie in the sumset of those tails taken p-1 times.
+
+In practice, this isn't an issue because the standard construction and all known counterexamples have only nonzero tails with at least 2 vectors; the only single-vector line is the zero-tail. So I can state the theorem cleanly by requiring that all nonzero tails have at least 2 vectors, and then proceed to write up the formal statement.
+
+The theorem says that given 2α+1 pairwise non-proportional vectors in F_p^{r+1} and a projection π where the tail set has exactly α elements with 2 preimages each, a single zero-tail vector, and shadow saturation in the lower dimension, then the original set has shadow saturation in the higher dimension.
+
+For the proof, I'm checking that any nonzero element (f, t) in F_p^{r+1} can be expressed as a weighted sum of at most p-1 vectors from T. When t = 0 and f ≠ 0, I can use the zero-tail vector e = (c₀, 0) with c₀ ≠ 0, scaling it by f/c₀ (which is well-defined in F_p and corresponds to an integer weight between 1 and p-1) to recover f in the first coordinate.
+
+For the case t ≠ 0, I'm using property (iii) to decompose t as a sum of elements from A with coefficients m_a that are each at most p-1 and sum to at most p-1. Then for each nonzero m_a, I'm splitting the m_a copies of the tail vector (c_a, a) into two groups with different head coefficients to construct the required representation.
+
+The first coordinate gets contributions from these tail splits plus the w₀ copies of the identity element, and I need to verify that I can choose the split parameters k_a to satisfy the congruence constraint on the first coordinate. f (mod p)
+- 0 ≤ k_a ≤ m_a for all a
+- 0 ≤ w₀ ≤ p - 1 - w_tail (to keep total weight ≤ p-1)
+
+Let F' = (f - B) (mod p). We need: c₀ · w₀ + Σ_a δ_a k_a ≡ F' (mod p).
+
+Let S = {Σ_a δ_a k_a mod p : 0 ≤ k_a ≤ m_a ∀a}. By the iterated Cauchy-Davenport inequality in F_p, the size of S is at least min(p, w_tail + 1). The possible values of c₀ · w₀ form a set of size p - w_tail since c₀ is nonzero. Applying Cauchy-Davenport again to the sumset S + c₀ · {0,...,p-1-w_tail}, I can show this combined set covers enough residues to guarantee a solution exists.
+
+Completing the calculation: the sumset has size at least min(p, (w_tail + 1) + (p - w_tail) - 1) = p, so F' is definitely in the sumset, confirming the representation exists.
+
+The proof is elegant—it relies entirely on Cauchy-Davenport and cleanly resolves the fiber-flexibility constraint. Now I'm considering what follows from this result, particularly whether U1 counterexamples satisfying the theorem's conditions must be maximal structures.
+
+If I try to add any new nonzero vector v not proportional to existing elements, the theorem guarantees -v has a weight-≤(p-1) representation in the sumset of T^{p-1}. Combining that with v itself creates a zero-sum at weight ≤p, which violates the strongly ZSF property—so no such vector can be added without breaking the structure.
+
+This maximality result is tight. Moving forward, I'm examining how U1' (the line structure condition) and U2 together imply the main conjecture.
+
+Now I'm working through the line structure forcing argument for U1'. If S is strongly ZSF with size 2α+1...
+
+Actually, let me reconsider the fiber constraint: every linear form must partition the vectors into at least 3 nonempty fibers, each of size at most α. This forces at least ⌈(2α+1)/α⌉ = 3 fibers, which checks out. But when I try to apply the η bound—if some projection creates a fiber with α+1 or more vectors, that contradicts the η(C_p^r) = α(p-1)+1 bound on the copies pool. So the copies pool contains α+1 distinct vectors, each repeated p-1 times, giving (α+1)(p-1) total elements. Since (α+1)(p-1) ≥ α(p-1)+1 for p ≥ 3, the η constant guarantees a weight-≤p zero-sum exists in this collection. The catch is that this zero-sum could concentrate up to p copies of a single vector.
+
+Now I'm being more precise about what the η condition actually requires: each vector aᵢ can appear with coefficient cᵢ between 0 and p-1 (respecting its multiplicity), the total weight Σcᵢ is at most p, and the sum Σcᵢaᵢ equals zero. From η(C_p^r) = α(p-1)+1, I know that among any α(p-1)+1 nonzero elements of C_p^r, such a zero-sum must exist.
+
+With α+1 distinct vectors each appearing p-1 times, I get (α+1)(p-1) = α(p-1) + (p-1) ≥ α(p-1) + 1 for p ≥ 3, so a weight-≤p zero-sum definitely exists among the tail vectors in F_p^r. The key issue is whether this zero-sum lifts to F_p^{r+1}—that requires the first coordinates to also sum to zero, which is what I need to verify.
+
+When all vectors in the fiber share the same first coordinate f, the first-coordinate sum becomes f times the total weight W. This equals zero mod p only if f = 0 or W is a multiple of p, and since W ≤ p, the latter means W = 0. So for the zero-fiber, any tail zero-sum at weight ≤ p produces a zero-sum in the full space, but for nonzero fibers, I need the weight to be exactly p to get a zero first coordinate. A weight-p tail zero-sum requires at least two vectors since no single multiplicity can equal p. The η bound only guarantees weight ≤ p though, not exactly p, so if the zero-sum lands at a smaller weight in a nonzero fiber, the first coordinate won't be zero.
+
+The key insight is whether I can guarantee a weight-exactly-p zero-sum exists. If so, then the first coordinate sums to f·p ≡ 0 mod p, giving me a true zero-sum in F_p^{r+1}. The fiber contains α+1 vectors from F_p^r, and while they'd form a strongly zero-sum-free set if they were the original vectors, the fiber has more vectors than the original set, so the strongly ZSF property doesn't apply here—that's why η can still produce a zero-sum despite the apparent contradiction.
+
+Now I'm checking whether α+1 vectors can actually be strongly ZSF. Since η(C_p^r) = α(p-1)+1 and the strongly ZSF threshold maxes out at α vectors, adding one more vector means the copies pool has at least α(p-1)+1 elements, guaranteeing a weight-≤p zero-sum exists. So α+1 vectors cannot be strongly ZSF. They might be weakly ZSF instead—no zero-sum at weight ≤p-1, but one at weight exactly p—which would give me the zero-sum I need in F_p^{r+1}.
+
+If they're non-ZSF with a zero-sum at weight W ≤ p-1 in the tails, the first coordinate sums to f·W. Since f ≠ 0 and 1 ≤ W ≤ p-1, this product is never zero mod p, so there's no zero-sum in F_p^{r+1}. For a nonzero fiber with α+1 vectors, this rules out the non-ZSF case. - If weakly ZSF: ∃ weight-p tail zero-sum → weight-p zero-sum in F_p^{r+1}. ✓
+- If NOT ZSF at weight p-1: ∃ weight-≤(p-1) tail zero-sum, but first-coord ≠ 0. NOT a zero-sum in F_p^{r+1}.
+
+Hmm, so the non-ZSF case is a problem. But CAN a fiber with α+1 vectors be non-ZSF at weight p-1?
+
+Yes! If the α+1 vectors include A_α and one more vector, the A_α subset is strongly ZSF at weight ≤ p. Adding the extra vector: is there a weight-≤(p-1) zero-sum? Not necessarily. The extra vector might not create weight-≤(p-1) zero-sums with A_α elements.
+
+Now, the multiplicity constraint η(C_p^r) = α(p-1)+1 forces (α+1)(p-1) ≥ α(p-1)+1, guaranteeing a weight-≤p zero-sum exists. Since A_α is strongly ZSF and we have α+1 vectors, this zero-sum must involve the additional vector—it can't be contained entirely in A_α.
+
+If the zero-sum only used A_α vectors, its weight would be ≤p and contradict strong ZSF. So the extra vector participates with coefficient ≥1. Looking at the first coordinate: all vectors in the fiber share the same value f, so the coordinate sum equals f times the total weight. For this to vanish, either f=0 or the weight equals p exactly.
+
+When f≠0, the weight must be exactly p, giving us a weight-p zero-sum.
+
+But wait—the weight could actually be less than p. The η bound gives an upper bound of p, but doesn't force equality. If A_α is strongly ZSF, then any zero-sum involving the extra vector must use it essentially (since A_α alone has no internal zero-sum at weight ≤p). The extra vector appears with coefficient ≥1, and the A_α part contributes weight W-c₀ without forming a zero-sum on its own. This means the total weight W could range from 2 to p depending on how the coefficients distribute.
+
+The real constraint is that if f≠0, we need W≡0 (mod p), forcing W=p exactly. So the question becomes: does there always exist a zero-sum at weight exactly p in {v₀}∪A_α? The η bound only guarantees weight ≤p, not weight =p, so there's no certainty that a weight-p zero-sum exists even though the minimum weight zero-sum might be smaller.
+
+Looking back at the computational evidence: for 9 vectors in F_p³, the fiber bound theorem verified that a weight-p zero-sum always appears (confirmed for p=5,7), and theoretically η(C_p³)=8(p-1)+1 should support this, though the full proof for all p remains open.
+
+The issue is that arbitrary 9 vectors might not contain the special structure A₈, so some 8-subsets could fail to be strongly ZSF, making it hard to guarantee weight exactly p rather than just weight ≤p.
+
+I should focus on what I've actually established: the Fiber-Flexible Shadow Saturation Theorem under the right tail conditions and the Revised Grail Architecture conditional on U1' and U2, rather than pushing further into this uncertain territory.
+
+Whether U1' holds universally is a separate question—I've verified it exhaustively at p=5 where all strongly ZSF 17-sets have exactly 9 tail values, but the general case remains open. If U1' fails for some p, the tail structure wouldn't be determined by the strongly ZSF property alone, requiring a fundamentally different approach.
+
+I'm now exploring the kernel space of A₈—the coefficient vectors that sum to zero in F_p³—which might offer another angle on understanding U1'. at the origin. For 17 vectors in F_p⁴, the kernel becomes 13-dimensional, and I'm calculating that the expected number of low-weight kernel elements grows as p^13/(17!), which means random vector sets should contain many such elements. The strongly ZSF condition—requiring zero low-weight kernel elements—is therefore extremely restrictive, suggesting the kernel must be positioned very carefully to avoid the low-weight polytope entirely.
+
+This aligns with the U1' structure, though I'd need more rigorous work to formalize it as a proof. Let me wrap up my analysis here as a heuristic argument.
+
+Before finalizing, I should verify the Cauchy-Davenport argument holds regardless of which representation of the target tail we use. Since conditions (i) and (ii) ensure all nonzero tails have multi-vector preimages, the argument applies to any representation. And if there's no zero-tail vector, condition (ii) fails, which would be a counterexample to consider.
+
+For the general case without a zero-tail, I have 2α+1 vectors distributed across at most α+1 lines with nonzero tails, so at least one line contains just one vector. The Case t≠0 argument still works if I set w_tail = p-1 to force |S| = p and make any first coordinate achievable, but then I need to verify that every nonzero t actually admits a weight-(p-1) representation. This requires checking whether shadow saturation at weight p-1 covers all nonzero elements, not just whether the single weight class Σ_{p-1} reaches everything.
+
+Looking at the window structure, at weight p-1 the gap on L consists of specific unreachable targets, though these are still reachable at lower weights by shadow saturation. This creates a problem: if a target t is reachable only at some weight w_tail < p-1, then I'd need |S| ≥ min(p, w_tail+1), which could be less than p, and I can't guarantee f-B ∈ S. So the approach breaks down without the zero-tail element.
+
+That's why e₁ is crucial for the clean argument—without it, I'd need to dig into the specific structure of A₈'s kernel. But now I'm confident in the theorem, so let me write this up. I should also double-check whether there's a way to handle the case where t = 0 and f ≠ 0 without e₁, which would require the tail sum to be zero through some coefficient combination at weight ≤ p-1.
+
+Since A₈ is strongly ZSF at weight ≤ p, there's no zero-sum among the tails at that weight, so reaching (f, 0) for f ≠ 0 is impossible without e₁. This means shadow saturation fails for the zero-tail hyperplane, which is necessary for maximality—so any strongly ZSF set lacking a zero-tail vector can't be maximal, meaning it either satisfies condition (a) or something else.
+
+Let me check what happens when adding v = (1, 0, ..., 0) to T. If a weight-≤p zero-sum exists in T ∪ {v}, it must use v with some coefficient d, giving d·(1,0,...,0) + Σcᵢ(fᵢ, aᵢ) = 0. The tail constraint Σcᵢaᵢ = 0 combined with T's strong ZSF property at weight ≤ p creates a contradiction. need Σcᵢ > p - d. Combined with d + Σcᵢ ≤ p: Σcᵢ ≤ p - d. So Σcᵢ > p-d AND Σcᵢ ≤ p-d: CONTRADICTION. No zero-sum!
+
+Wait, that can't be right. Let me recheck. T is strongly ZSF: no weight-≤p zero-sum among T's elements. The zero-sum in T ∪ {v} has weight d + Σcᵢ ≤ p, with tail equation Σcᵢaᵢ = 0. The weight of the T-part is Σcᵢ ≤ p-d ≤ p-1.
+
+But T is strongly ZSF at weight ≤ p. The tail equation Σcᵢaᵢ = 0 is a zero-sum in F_p^r with Σcᵢ ≤ p-1 < p, so this is a zero-sum at weight ≤ p-1 among the tail vectors. Now, T's tails are α nonzero vectors, each appearing twice with different fiber values. The tail zero-sum uses coefficients that represent the total usage of each tail across both occurrences, not individual vectors.
+
+For each tail a appearing twice as (f₁, a) and (f₂, a), the total coefficient is c_{a,1} + c_{a,2}. The tail weight is Σ_a (c_{a,1} + c_{a,2}) ≤ p-1. Since each tail has 2 vectors with multiplicity p-1 each, the total usage of tail a is bounded by the sum of coefficients from both fiber values. The tail zero-sum Σ_a (c_{a,1}+c_{a,2}) · a = 0 requires a zero-sum among the α tail vectors with weight ≤ p-1.
+
+Now, A₈ being strongly ZSF means no zero-sum Σ mᵢaᵢ = 0 with 0 ≤ mᵢ ≤ p-1 and 1 ≤ Σmᵢ ≤ p. Here mᵢ = c_{a_i,1} + c_{a_i,2} can reach 2(p-1), exceeding p-1, so the strongly ZSF condition doesn't directly constrain this case. But when the total weight is ≤ p-1, we have Σmᵢ ≤ p-1, which forces each mᵢ ≤ p-1.
+
+So the tail zero-sum becomes a zero-sum with weight ≤ p-1 and individual multiplicities ≤ p-1. The total coefficient mᵢ for each tail element aᵢ equals c_{a_i,1} + c_{a_i,2}, and this must satisfy 0 ≤ mᵢ ≤ p-1 with 1 ≤ Σmᵢ ≤ p-1.
+
+If A₈ is strongly ZSF with no zero-sums at weight ≤ p, then there's no zero-sum at weight ≤ p-1 either, so the tail equation has no solution. This means adding v to T doesn't create a zero-sum at weight ≤ p, contradicting the maximality of T—unless the maximum strongly ZSF size in F_p^{r+1} is actually larger than 2α+1 when e₁ isn't included.
+
+A set of 2α vectors without e₁ can't be maximal since we could add e₁ and maintain the strongly ZSF property. So any maximal set of size 2α+1 must include a zero-tail vector, which proves that every such maximal set on ≤ α+1 parallel lines requires at least one zero-tail vector under the distinguishing projection. I need to reconsider this more carefully—the strongly ZSF property applies to T's vectors in F_p^{r+1}, not directly to the tail space. For any zero-sum in F_p^{r+1}, both the first coordinate and the tail must sum to zero independently, and the strongly ZSF condition constrains which coefficient sequences are possible.
+
+When I add v = (1, 0, ..., 0) to T, a zero-sum involving v with coefficient d ≥ 1 forces the first coordinate equation d + Σ c_{a,j}·f_{a,j} = 0, which creates a constraint I need to work through more carefully.
+
+For single-vector tails like a₀, the tail equation c_{a₀} · a₀ = 0 immediately forces c_{a₀} = 0 since a₀ is nonzero, so a₀ can't participate in any zero-sum. For multi-vector tails, I need to track how the coefficients m_a = c_{a,1} + c_{a,2} satisfy the tail equation Σ m_a · a = 0, and this interacts with the weight constraint d + Σ c_{a,j} ≤ p.
+
+Now the key question is whether the strong ZSF property of T (meaning no weight-≤p zero-sum exists in T itself) places restrictions on what tail zero-sums are actually achievable. A tail zero-sum Σ m_a · a = 0 is necessary for constructing a zero-sum in the full space, but it's not sufficient—I also need the first-coordinate equation Σ c_{a,j} · f_{a,j} = 0 to hold. So I'm checking whether the tail zero-sum constraint alone is enough to force a contradiction with the strong ZSF property, or if there's still room for valid configurations. have solutions where the first-coord also cancels. The strongly ZSF condition says this doesn't happen (at weight ≤ p).
+
+So: ∃ tail zero-sum at weight ≤ p-1 iff ∃ (mₐ) with Σmₐa = 0 and Σmₐ ≤ p-1. Whether the first-coord also cancels depends on the fiber assignments.
+
+For T strongly ZSF: whenever Σmₐa = 0 at weight ≤ p, the first-coord equation Σ c_{a,j}·f_{a,j} ≠ 0 for all valid splits of mₐ = c_{a,1}+c_{a,2}.
+
+Now adding v: I need Σmₐa = 0 at weight ≤ p with d + Σ c_{a,j}·f_{a,j} = 0 and d + Σ c_{a,j} ≤ p. If there's a tail zero-sum at weight W_tail ≤ p-1, then each split determines a first-coord value g = Σ c_{a,j}·f_{a,j}, and I need d = -g. When g ≠ 0 (mod p), this gives d = p - g, but if g = 0 that's impossible since d ≥ 1.
+
+So the constraint becomes: if there's a tail zero-sum at weight W_tail ≤ g (where g is the first-coord sum from some split), then I can add v with d = p - g and total weight ≤ p.
+
+The real question is whether the minimum weight tail zero-sum W_min satisfies W_min ≤ g_max, where g_max is the maximum first-coord value across all splits at that weight. This is more intricate than I initially thought, and the zero-tail necessity argument isn't as straightforward as I'd hoped.
+
+Let me just document what I've actually proved cleanly: the Fiber-Flexible Shadow Saturation Theorem, the Revised Grail Architecture combining U1' + U2 with this theorem, and the automatic resolution of the (8,7,2) blocker. I'll write this up and store it.
+
+============================================================
+BLOCK 5 (40689 chars)
+============================================================
+Good, stored. Now let me also think about what additional insights I can provide, especially for the other agents.
+
+Let me think about whether there's a path to proving U1'. This is the remaining structural lemma.
+
+### Approach to U1'
+
+U1' says: every strongly ZSF set of size 2α+1 in F_p^{r+1} lies on ≤ α+1 parallel lines under some projection.
+
+Equivalently: ∃ projection π: F_p^{r+1} → F_p^r with |π(S)| ≤ α+1.
+
+
+Taking the contrapositive: if every linear form L: F_p^{r+1} → F_p produces at least α+2 distinct image values on S, then S must contain a weight-≤p zero-sum. For our main case with r=3, this means in F_p^4 with α=8, any set of 17 elements where every linear form hits at least 10 distinct values would need to have a zero-sum subset.
+
+Now I'm realizing I need to distinguish between two different types of projections—hyperplane projections π that map to F_p^3 versus linear forms L that map to F_p. The condition |π(S)| ≤ α+1 means the 17 points collapse to at most 9 distinct images under a hyperplane projection, essentially lying on parallel lines in the target space. But |L(S)| counts the number of distinct fiber levels under a linear form, which is a different notion entirely. I need to figure out which projection type the U1' condition actually uses.
+
+Looking at the Cortex definition, U1' is clearly about the hyperplane projection π: F_p^4 → F_p^3—the claim is that a maximal ZSF set of size 2α+1 has at most α+1 = 9 distinct images. For the Grail proof, I need this same projection structure where the 17 vectors partition into at most 9 classes (corresponding to parallel lines), with each class containing at most 2 vectors, and the tail set being A₈.
+
+Now I'm thinking about whether there's a counting or probabilistic argument that explains U1'. If I project 17 points from F_p^4 to F_p^3, the number of collisions (pairs mapping to the same image) depends on the underlying geometry. For a generic set with no special structure, a random projection would produce relatively few collisions. But for the doubling+e₁ configuration, the 17 points naturally sit on 9 lines, giving exactly 8 collisions—and the right projection realizes all of them. In contrast, a truly spread set where no two points lie on a line parallel to any coordinate axis would have all 17 images distinct under every projection.
+
+The question is whether such a spread set could still be strongly ZSF. My intuition says no—with 17 distinct tails, the kernel of the zero-sum equations becomes 13-dimensional, which seems large enough that the low-weight polytope would intersect it. I'm trying to formalize this using the η bound: if some projection gives at least 10 distinct tails, then those 10 vectors in F_p^3 generate a copies pool of size 10(p-1), and I'm checking whether this is large enough to force a collision in the zero-sum structure.
+
+The η bound tells me there's a weight-≤p zero-sum among these 10 tails, but the challenge is that this tail-level zero-sum doesn't automatically lift to a zero-sum in F_p^4 since the first coordinates might not cancel. I need to trace through how each tail aᵢ decomposes into its constituent vectors to see if the zero-sum structure propagates upward. For single-vector tails, the split is completely determined and contributes a fixed value to the first coordinate. But when a tail has multiple vectors available, I have flexibility in how to distribute the copies, which lets me achieve different first-coordinate contributions. The key question is whether I can coordinate these choices across all tails to make the total sum to zero—and if there are enough flexible tails, the Cauchy-Davenport theorem suggests the achievable values should cover the entire field. many tails have nᵢ = 1, there's limited freedom.
+
+With |π(S)| ≥ 10 and |S| = 17: on average nᵢ = 1.7. At least 7 tails have nᵢ = 1 (if 10 tails with Σnᵢ = 17: at most 7 tails have nᵢ = 2 and 3 have nᵢ = 1). Or: at most 7 have nᵢ ≥ 2.
+
+The fixed part: Σ_{nᵢ=1} mᵢf_{i,1} is determined by the tail zero-sum.
+The free part: Σ_{nᵢ≥2} gᵢ needs to compensate.
+
+By Cauchy-Davenport, the achievable set from the free part has size at least min(p, w_free + 1) where w_free = Σ_{nᵢ≥2} mᵢ. For the constraint to be satisfiable, I need the required sum -Σ_{nᵢ=1} mᵢf_{i,1} to actually be achievable from the free part's contribution.
+
+This is guaranteed only if w_free ≥ p - 1, meaning the achievable set covers all of F_p. But w_free could be much smaller than p - 1 if the tail zero-sum has low weight on the multi-vector tails.
+
+So the direct approach doesn't immediately yield U1'. I'd need to find a tail zero-sum with w_free ≥ p - 1, which might be hard to guarantee. Let me consider whether there's a different angle here.
+
+Actually, with 10 distinct tails, there are many zero-sums in the tail space beyond just the one from η. Even though η gives us one zero-sum with weight ≤ p, the tail space likely contains many more zero-sums with different weight distributions.
+
+By Olson's theorem, for n vectors in F_p^3 with n ≥ 3p - 2, every element is representable at every weight. But 10 vectors is far below that threshold, so this doesn't directly help.
+
+I think proving U1' requires a more sophisticated argument tailored to strongly ZSF sets. Let me set that aside for now and focus on what I've established.
+
+Actually, let me see if I can prove the Zero-Tail Necessity theorem instead.
+
+For the proof, I'm assuming T has 2α+1 vectors with nonzero tails on at most α+1 lines. If I introduce v₀ = (1, 0, ..., 0) and look for zero-sums in T ∪ {v₀}, any such sum must use v₀ with some coefficient d ≥ 1. This gives me constraints: the first coordinate forces d = -Σ c_j f_j (mod p), the tail coordinates require Σ c_j · π(v_j) = 0, and the weight bound limits Σ c_j ≤ p - d.
+
+Now I'm analyzing the tail equation more carefully. Grouping vectors by their tail value a, I get coefficients m_a for each line, and I need Σ m_a · a = 0 with total weight Σ m_a ≤ p - 1. The first-coordinate equation then pins down d ∈ {1, ..., p-1} based on the individual coefficients c_j. The question is whether T ∪ {v₀} can actually avoid having a zero-sum under these constraints.
+
+For this to work, I need a tail zero-sum at weight W_tail ≤ p - 1 whose first-coordinate sum g satisfies the weight bound: if g = 0 then d = 0 (forbidden), but if g ≠ 0 then d = p - g and the total weight is at most p exactly when W_tail ≤ g.
+
+Now checking the A₈ case: since A₈ is strongly zero-sum-free in F_p^3, there are actually no tail zero-sums at weight ≤ p among these 8 vectors. This is a crucial constraint—if all 2α+1 vectors have nonzero tails distributed across at most α+1 = 9 lines with at most 2 vectors per line, the tail structure is too sparse to form the required zero-sum.
+
+But once I introduce a 9th nonzero tail a₉ to the set A₈, the situation changes: now I have 9 vectors in F_p^3, and by the bound η(C_p^3) = 8(p-1)+1, the copies pool of 9 vectors contains enough elements to guarantee a zero-sum at some weight ≤ p-1.
+
+However, there's a subtlety I need to account for: each tail in my construction can have either 1 or 2 actual vectors, so the tail coefficient m_a (the sum of all c_j values for vectors sharing that tail) can reach up to 2(p-1) rather than just p-1. This actually gives me more flexibility, not less, since the η bound assumes m_a ≤ p-1. So the tails A₈ ∪ {a₉} should still force a zero-sum despite this extra freedom.
+
+Now I'm checking whether this zero-sum admits a split where the fiber contribution g is at least W_tail. The key is that for 2-vector tails, I can distribute the total coefficient m_a between the two fiber values in different ways—if the two vectors have fiber values f_{a,1} and f_{a,2} with coefficients summing to m_a, then g_a can range over a whole interval determined by the difference f_{a,1} - f_{a,2}.
+
+By Cauchy-Davenport, the total range of possible g values is at least min(p, W_tail + 1), since each 2-vector tail contributes m_a + 1 choices while single-vector tails fix g_a entirely. no splitting freedom). For 2-vector tails: g_a ranges over mₐ+1 values.
+
+So |range of g| = |Σ_{2-vector tails} g_a + Σ_{1-vector tails} g_a|. The 1-vector part is fixed. The 2-vector part has range ≥ min(p, Σ_{2-vect} (mₐ+1) - (k₂-1)) = min(p, W₂+1) where W₂ = Σ_{2-vector tails} mₐ.
+
+We need g ≥ W_tail. The range of g is some coset of the 2-vector range. If the 2-vector range covers all of F_p (i.e., W₂ ≥ p-1), then any g is achievable, including g ≥ W_tail. But W₂ ≤ W_tail ≤ p, so I need W₂ ≥ p-1. When the tail zero-sum has maximum weight p, I have W_tail = p, which means at most one unit of weight can go to single-vector tails. If the 9th tail (the only 1-vector tail) has weight at most 1, then W₂ ≥ p-1 and g covers all of F_p, making g ≥ p achievable—but this creates a contradiction since g must be in F_p = {0,...,p-1}.
+
+Wait, I'm confusing myself with the modular arithmetic. The actual constraint is W_tail ≤ g where g is interpreted as an integer in {1,...,p-1}. If W_tail = p, I'd need g ≥ p, which is impossible since g ∈ {0,...,p-1}. This forces d = p - g and weight = d + p = 2p - g, but the weight constraint requires d + p ≤ p, meaning d ≤ 0. Since d must be at least 1, this is impossible.
+
+So a tail zero-sum can't have weight p.
+
+Now I'm checking whether the 9th tail can participate in a weight ≤ p-1 zero-sum with the A₈ tails. The 9th tail contributes c₉ copies (c₉ ≥ 1), the A₈ tails contribute Σmₐ copies satisfying Σmₐaₐ = -c₉a₉, and the total weight c₉ + Σmₐ must be at most p-1.
+
+By shadow saturation of A₈, the element -c₉a₉ can be represented as a sum of A₈ elements at weight w ≤ p-2 (since we need total weight ≤ p-1 and c₉ ≥ 1). This gives us the zero-sum we're looking for.
+
+Now I'm checking whether -a₉ itself can be represented at weight ≤ p-2, or if its minimum weight is exactly p-1. If -a₉ only appears in the weight p-1 gap on L—specifically in the set of elements reachable at weight p-1 but not p-2—then choosing c₉ = 1 would give us W_tail = p, which exceeds our bound.
+
+I could try using c₉ ≥ 2 instead, which would represent -c₉a₉ as a different vector that might be reachable at lower weight, but this consumes more weight from A₈ and creates a trade-off. The real question is whether there exist strongly ZSF sets of size 2α+1 that have no zero-tail vectors, meaning we can add v₀ = (1,0,...,0) without creating a zero-sum. If such sets exist, they wouldn't be maximal, but extending them to size 2α+2 while preserving the strongly ZSF property might not always be possible.
+
+Actually, if T has 2α+1 vectors and adding v₀ doesn't create a zero-sum, then T ∪ {v₀} would have 2α+2 vectors and remain strongly ZSF—but this seems to contradict the upper bound on η(C_p^{r+1}), which relates to zero-sums in the copies pool rather than the number of vectors themselves. I'm getting confused about whether the bound applies to the number of distinct vectors or the total weight in the copies pool.
+
+Let me reconsider: if the copies pool of T ∪ {v₀} has (2α+2)(p-1) elements and η(C_p^{r+1}) = (2α+1)(p-1)+1, then since (2α+2)(p-1) ≥ (2α+1)(p-1)+1 for p ≥ 3, there must exist a zero-sum of weight at most p in this copies pool. The key question is whether this zero-sum can be constructed using multiple copies of the same vector, with each vector appearing at most p-1 times.
+
+If T ∪ {v₀} were strongly ZSF, no such zero-sum could exist—contradiction. So adding v₀ to T must create a zero-sum of weight ≤ p. Now I need to trace through the cases: this zero-sum either uses only copies from T (impossible since T is strongly ZSF) or it must involve copies of v₀, which means the tail equation has a solution after all. v₀: at least one copy of v₀ participates.
+
+So the zero-sum uses d ≥ 1 copies of v₀. The tail equation: Σ mₐ · a = 0, first-coord: d + Σ c_j f_j = 0. Weight: d + Σ c_j ≤ p.
+
+But I showed above that this requires a tail zero-sum at weight ≤ p-1 with g = Σ c_j f_j = -d ≠ 0, and W_tail ≤ g (as elements of {0,...,p-1}). This might fail for specific configurations...
+
+But the η bound says there IS a zero-sum. So either my analysis is wrong or the conditions ARE met.
+
+Let me reconsider. In (T ∪ {v₀})^{p-1}, any zero-sum uses d copies of v₀ where 1 ≤ d ≤ p-1, along with cⱼ copies of elements from T where 0 ≤ cⱼ ≤ p-1 and total weight d + Σcⱼ ≤ p. The tail constraint forces Σ cⱼ π(vⱼ) = 0, which means the weighted sum of tail values equals zero with total tail weight bounded by p-d.
+
+For the first coordinate, I need d + Σ cⱼfⱼ = 0 in ℤ_p, so d ≡ -Σ cⱼfⱼ (mod p). Since 1 ≤ d ≤ p-1, this determines d uniquely from the split weights. The weight constraint then gives Σ cⱼ ≤ p-d, which bounds the tail weight by g = Σ cⱼfⱼ. The η bound ensures such a configuration exists.
+
+Actually, I'm not going in circles—the η bound on (T ∪ {v₀})^{p-1} guarantees a zero-sum exists, and since T is strongly zero-sum-free, this zero-sum must use v₀. The weight constraint is automatically satisfied, so I get a tail zero-sum with the required split property. Adding v₀ = (1,0,...,0) to any 2α+1 strongly ZSF vectors forces a zero-sum at weight ≤ p.
+
+Now, the zero-sum in T ∪ {v₀} could be at weight exactly p rather than strictly less, which would make the set weakly ZSF instead of strongly ZSF. For the Grail argument: I need to show that among (2α+1)(p-1)+1 nonzero elements, there's a zero-sum at weight ≤ p. The pool of 2α+2 non-proportional vectors gives (2α+2)(p-1) ≥ η elements total, which is enough to apply the bound.
+
+But wait—I'm using η in the argument when η is exactly what I'm trying to prove. That's circular reasoning. Let me separate this properly: the lower bound comes from the strongly ZSF construction showing η ≥ (2α+1)(p-1)+1, and the upper bound should show that any (2α+1)(p-1)+1 nonzero elements must contain a zero-sum at weight ≤ p.
+
+For the upper bound, I can't invoke η itself. Instead, if I take (2α+1)(p-1)+1 nonzero elements and group them by non-proportional vectors, each non-proportional class has multiplicity at most p-1 (otherwise a single vector would give a zero-sum trivially). This forces at least 2α+2 distinct non-proportional vectors to appear.
+
+Now, any subset T of 2α+1 of these vectors either fails to be strongly zero-sum-free—giving me a zero-sum at weight ≤ p directly—or it is strongly zero-sum-free. In that case, the remaining vector v satisfies -v ∈ Σ_{≤p-1}(T^{p-1}), so I can combine v with a representation of -v to form a zero-sum at weight at most p.
+
+But here's the issue: I'm relying on shadow saturation of T, which the Fiber-Flexible theorem establishes only under specific structural conditions. The real question is whether shadow saturation holds for *any* strongly zero-sum-free 17-set in F_p^{r+1}, regardless of its structure—and that's what I need to pin down.
+
+The original proof worked by showing T is GL-equivalent to a doubled set plus a vector, which immediately gave shadow saturation. But without the structural assumptions U1' and U2, I can't make that equivalence claim. The Fiber-Flexible theorem handles the case where T has the right tail structure, but I'm stuck on whether there's a purely structural argument that works universally.
+
+Let me explore whether I can prove shadow saturation directly for any strongly zero-sum-free set of this size without needing to know its specific form.
+
+Actually, I realize I already proved this earlier—the shadow saturation theorem follows from the η definition in just a few lines. So for any strongly ZSF set S of size α in F_p^r, shadow saturation holds by that result. Now I'm working through the key steps: when we add -v to the copies pool, we get exactly η(C_p^r) = α(p-1)+1 elements total, which forces a zero-sum at weight ≤ p. Since -v must participate in this zero-sum (otherwise we'd have a contradiction with the strongly ZSF property of S), we can extract the relation d·(-v) + Σcᵢsᵢ = 0.
+
+This means v = (Σcᵢsᵢ)/d, where d is the coefficient of -v and is invertible mod p since 1 ≤ d ≤ p-1. So any nonzero v is reachable as a weighted sum of elements from S. I'm working through the constraint that when d > 1, knowing dv is in the lower-weight sum doesn't directly give us v in the target sum. But the zero-sum construction actually provides what we need: it shows a zero-sum exists at weight ≤ p using the vector v, which is exactly the condition required for the argument.
+
+Now I'm being more careful about the formal definition—specifically, η(G) counts the smallest n such that any n nonzero elements of G admit a nontrivial zero-sum with coefficients bounded by the exponent of G, which for C_p^r equals p.
+
+The key insight is that our pool of α(p-1) copies has exactly one fewer element than η requires to guarantee a zero-sum, but adding the single vector -v brings us to exactly η elements, which triggers the guarantee. However, I need to be careful here because -v is a specific vector, not an arbitrary choice from the group.
+
+Since the η bound applies to ANY set of η nonzero elements—including our specific pool with -v—we're guaranteed a zero-sum exists. The coefficients in this zero-sum can be grouped by which original vector from S they correspond to, giving us coefficients dⱼ for each sⱼ ∈ S (bounded by p-1 since there are only p-1 copies of each) and a coefficient d₀ for -v.
+
+If d₀ = 0, we'd have a zero-sum entirely within S^{p-1} at weight ≤ p, contradicting the strong ZSF property. So d₀ must equal 1, which means v = Σdⱼsⱼ with total weight at most p-1.
+
+This gives us v ∈ Σ_{≤p-1}(S^{p-1}), confirming shadow saturation holds for any strongly ZSF set of maximal size. The argument is remarkably clean—it doesn't require any structural assumptions, just the zero-sum-free property itself.
+
+Now I need to check whether this extends to the Grail case. The η argument works for F_p^4, so I'm asking: what's η(C_p^4)? If the Grail holds, then η(C_p^4) should equal 17(p-1)+1, which would mean 17 vectors each with multiplicity p in the pool...
+
+Wait, but I'm trying to prove the Grail in the first place—using η in the argument would be circular reasoning. I need to find a weaker, already-established bound for η(C_p^4) instead. From general theory, η(C_p^r) is bounded by c·p^{r-1} for some constant depending on r, so for r=4 that gives η(C_p^4) ≤ c·p³.
+
+This weak polynomial bound means 17(p-1) elements might not actually saturate the shadow in F_p^4, so the direct η argument fails there. That's why the structural theorems—U1', U2, Fiber-Flexible—become essential: they handle the inductive step where the η method breaks down. The base case with A₈ in F_p^3 works because η(C_p^3) = 8(p-1)+1 is already known, but proving shadow saturation for T in F_p^4 requires going deeper into the structure.
+
+Alternatively, maybe I can bypass the structural analysis entirely by finding a partial η bound—something that shows if T is strongly ZSF of size 2α+1, then the richness of its copies pool automatically forces shadow saturation, even without knowing η(C_p^4) exactly.
+
+Looking at the copies pool size: it has 17(p-1) elements out of p⁴-1 nonzero vectors total, which for p=5 gives about 11% of the space—a meaningful fraction. The weight-1 shadow is trivially 17, and Cauchy-Davenport gives a lower bound on the weight-2 shadow of at least 33, though that's quite loose.
+
+For the sumset growth in F_p^4, I'm applying the Plünnecke-Ruzsa inequality: if |A+A| ≤ K|A|, then |nA| ≤ Kⁿ|A|. With T having 17 elements, the sumset |T+T| could reach 289, and after w additions, |wT| could grow as 17^w without cancellations. By w = p-1, this gives |T^w| ≈ 17^p, which far exceeds the p⁴ size of the field.
+
+The strongly ZSF condition—no subset sums to zero at weight ≤ p—imposes tight structural constraints on T, ruling out proportional elements and small linear dependencies. However, proving that all strongly ZSF 17-sets actually achieve shadow saturation in F_p^4 seems like a difficult open problem, so the structural approach using Fiber-Flexible conditions is more tractable.
+
+My conclusion is that the Fiber-Flexible Shadow Saturation Theorem is established and addresses the main concern about U1 counterexamples, and the revised framework should work.
+
+But there's another angle: the Same-Tail Swap Theorem from the Cortex shows that replacing (f, t) with (f', t) preserves the strongly ZSF property, and combined with Fiber-Flexible, this means all same-tail swaps of doubled+e₁ automatically have shadow saturation. Since every known U1 counterexample at p=5 is a same-tail swap, the Grail actually holds for all of them—and for the Grail to fail, you'd need a strongly ZSF set that isn't a same-tail swap.
+
+The exhaustive verification at p=5 shows no such set exists, with strong evidence at p=7 as well, so the Grail is essentially proved structurally even without U1' and U2, assuming the p=5 verification captures the universal pattern. Now I'm formalizing this as a precise theorem about zero-tail vector necessity.
+
+For any nonzero v in F_p^r, adding -v to S^{p-1} creates exactly η(C_p^r) nonzero elements, which by the η property guarantees a zero-sum at weight ≤ p. Since S is strongly ZSF, -v must be the participating element, forcing v itself to be expressible as a weighted sum from S^{p-1} at weight ≤ p-1, which proves shadow saturation. This relies on knowing η(C_p^r) = α(p-1)+1, which holds for the base case at r=3.
+
+For r ≥ 4, this formula becomes the main conjecture we're trying to establish, so the shadow saturation argument only works unconditionally when r=3. For r=4, I need either the structural approach combining U1', U2, and Fiber-Flexible properties, or an independent proof of η(C_p^4) to make the argument go through.
+
+The logical chain is: η(C_p³) = 8(p-1)+1 is proven and gives us shadow saturation for 8-sets in F_p³, which feeds into the structural analysis for 17-sets in F_p^4, ultimately yielding η(C_p^4) = 17(p-1)+1 as the output—so there's no circularity here.
+
+Now I'm wondering whether zero-tail vectors are actually required for strongly ZSF sets of size 2α+1. If a 17-set in F_p^4 had all nonzero tails, could adding e₁ still create a zero-sum? The copies pool contains 17(p-1) elements, and adding e₁ gives us 17(p-1)+1 total, but without knowing η(C_p^4) yet, I can't determine whether a zero-sum must exist.
+
+The general upper bounds from Harborth and Gao suggest η(C_p^4) ≤ roughly 81p, which is much larger than 17(p-1)+1 ≈ 17p. This means I can't guarantee a zero-sum with just 17(p-1)+1 elements using those bounds alone—the specific structure of C_p^4 must matter more than the general estimates.
+
+I'm now exploring whether the strongly zero-sum-free condition combined with the line constraint gives me what I need. If a strongly ZSF set of size 2α+1 fits on at most α+1 lines, then by pigeonhole, some line contains exactly one vector. If that vector has a nonzero tail component, I can isolate it, and the remaining 2α vectors spread across at most α other lines—this might force a zero-tail structure that leads to the zero-sum I'm looking for.
+
+But when I try to count the tail multiplicities and pool sizes, the argument gets messy and doesn't cleanly contradict the ZSF property. I think proving zero-tail necessity rigorously requires a deeper structural insight I'm not seeing right now, so I'm going to set that aside and consolidate what I've actually established.
+
+Actually, wait—I'm wondering if I can turn U1' into a finite verification problem. The claim is that every strongly ZSF 17-set in F_p^4 must lie on at most 9 lines, and a counterexample would need at least 10 distinct tail values across all projections. For any fixed p, this is just a finite check: enumerate the 17-element subsets up to GL equivalence, test the strongly ZSF condition, and count the lines. I've already verified this works at p=5, and I've made progress at p=7. For larger primes, the number of subsets explodes, but the structure of strongly ZSF sets is heavily constrained, so maybe there's a parametric argument that avoids brute force.
+
+Let me try a different angle—a heuristic argument for why U1' should hold. If S is a 17-element set where every coordinate projection yields 10 or more distinct tail values, then every coordinate hyperplane "sees" S as 10+ distinct points. For a zero-sum relation at weight ≤ p to exist in the kernel of S, we'd need Σcᵢvᵢ = 0 with Σcᵢ ≤ p, but the high multiplicity of distinct images under projections makes this geometrically very restrictive.
+
+I could estimate the volume of nonnegative lattice points in the simplex {c : cᵢ ≥ 0, Σcᵢ ≤ p}, which scales like p^17/(17!), and intersect with the 13-dimensional kernel, but the calculation gets too speculative without more structure. I think U1' is worth flagging as an open question and requesting computational verification on a large sample of strongly ZSF 17-sets.
+
+Now I'm working through a cleaner structural result: if a strongly ZSF set in F_p^{r+1} lies on n parallel lines and any zero-sum at weight ≤ p has all its vectors on the same line, then that line must contain at least 3 vectors. The proof starts by checking the 2-vector case on a single line, where the zero-sum constraints force both the head and tail components to vanish independently.
+
+With just one vector, only the trivial zero-sum exists. But with three or more vectors on a line, non-trivial zero-sums become possible—for instance, if three vectors have heads satisfying c₁ + c₃ = 2c₂, then we can form a genuine zero-sum by taking the appropriate linear combination.
+
+Now I'm realizing the constraint is tighter: for a zero-sum to exist, the sum of coefficients must be divisible by p, which means either Σc'ᵢ = 0 (trivial) or Σc'ᵢ = p. When the sum equals p, the first coordinates must also sum to zero.
+
+With just two vectors, this forces a contradiction unless they're identical—if c'₁ + c'₂ = p and c'₁f₁ + c'₂f₂ = 0, then since f₁ ≠ f₂, the only solution is c'₁ = 0 or p, which means one coefficient vanishes entirely.
+
+But with three vectors, there's genuine flexibility—I can distribute the weight p across multiple coefficients while still satisfying the zero-sum constraint on the f-values.
+
+This reveals something crucial: if a line contains three or more vectors, it can harbor an intra-line zero-sum at weight p, which would violate the strongly ZSF property. So strongly ZSF sets must restrict themselves to at most two vectors per line, exactly as U1' requires.
+
+Now I'm working through the algebra: for three vectors on a line with fiber values f₁, f₂, f₃ to have a weight-p zero-sum, I need coefficients c₁, c₂, c₃ that sum to p and satisfy a congruence condition. Rearranging the first coordinate equation shows that c₁(f₁-f₃) + c₂(f₂-f₃) must be divisible by p, and since the fiber values are pairwise distinct, this constraint becomes quite restrictive. and f₂-f₃ are nonzero. Let a = f₁-f₃, b = f₂-f₃. Need: c₁a + c₂b ≡ 0 with c₁+c₂ ≤ p, 0 ≤ c₁, c₂.
+
+c₂ = -(c₁a)/b (mod p). For c₂ ∈ {0,...,p-1}: need 0 ≤ -(c₁a)/b ≤ p-1 (mod p). Since a, b are nonzero in F_p: for any c₁ ∈ {0,...,p-1}, c₂ = -(c₁a)b⁻¹ mod p gives a unique c₂ ∈ {0,...,p-1}. Then c₃ = p-c₁-c₂, and I need c₃ to stay in the valid range, which means c₁+c₂ must be between 1 and p inclusive.
+
+Now checking the boundary cases: when c₁ = 0, I get c₂ = 0 and c₃ = p, which violates the upper bound. When c₁ = p-1, the calculation gives c₃ = 1-ab⁻¹ mod p. For the middle range where c₁ ∈ {1,...,p-2}, the sum c₁+c₂ stays within the required bounds.
+
+I need to count how many values of c₁ satisfy c₁+c₂ ≤ p, where c₂ is defined as a linear function of c₁ modulo p. Since c₂(c₁) = -ab⁻¹c₁ mod p, the sum c₁ + c₂(c₁) behaves like c₁(1-ab⁻¹) mod p, though I need to be careful about how the modular arithmetic interacts with the integer sum.
+
+Looking at this more carefully: as c₁ ranges from 1 to p-1, the value c₂ is sometimes small (less than p/2) and sometimes large (near p), so the sum c₁+c₂ distributes roughly evenly across the range {1,...,2p-2}. This means about half of the p-1 choices for c₁ will satisfy c₁+c₂ ≤ p, giving me roughly p/2 valid values. For each of these valid c₁ values, I have c₁, c₂, c₃ all non-negative with c₁+c₂+c₃ = p.
+
+Now I need to verify the constraints: c₃ = p-c₁-c₂ ≤ p-1 requires c₁+c₂ ≥ 1, which holds since c₁ ≥ 1. And both c₁ and c₂ are already bounded by p-1 by construction. So for p ≥ 5, I get at least 2 valid weight-p zero-sums, meaning 3 vectors on a single line in F_p^{r+1} can be linearly dependent in this way.
+
+Let me double-check this at p=5 with fiber values f₁=0, f₂=1, f₃=2 on a line with tail a. Setting a=0 and b=-1 (mod 5) gives a/b = 0, so c₂ = 0 for all c₁, yielding (c₁, 0, 5-c₁). For c₃ ≤ 4, I need c₁ ≥ 1, and c₁ ≤ 4 by the bound. Now checking the first coordinate: c₁·0 + 0·1 + (5-c₁)·2 = 2(5-c₁).
+
+This simplifies to 10-2c₁ ≡ -2c₁ (mod 5), which needs to equal 0, so c₁ ≡ 0. But c₁ must be at least 1 and at most 4, so there's no valid solution here. Let me reconsider: with f₁=0, f₂=1, f₃=2, I need c₁·0 + c₂·1 + c₃·2 = 0 and c₁+c₂+c₃ = 5. Substituting c₂ = 5-c₁-c₃ into the first equation gives 5-c₁-c₃ + 2c₃ ≡ 0 (mod 5).
+
+Simplifying, I get 5-c₁+c₃ ≡ 0 (mod 5), which means c₃ ≡ c₁ (mod 5). Since both are in {0,...,4}, I have c₃ = c₁, making c₂ = 5-2c₁. For valid solutions, c₂ must be between 0 and 4, so c₁ ranges from 1 to 2. This gives me two solutions: (1, 3, 1) with weight 5, and (2, 1, 2) with weight 5.
+
+Verifying both: the first checks out as 0·1 + 1·3 + 2·1 = 5 ≡ 0 (mod 5), and the second as 0·2 + 1·1 + 2·2 = 5 ≡ 0 (mod 5). So for fiber values {0,1,2} at p=5, there are exactly 2 solutions. This suggests that three vectors on a line with distinct fiber values generically always admit weight-p zero-sums, though not for every possible fiber triple. My earlier example with f₁=0, f₂=1, f₃=2 did work, so I need to reconsider my algebra. Now let me test the case f₁=0, f₂=1, f₃=3 at p=5.
+
+Working through the constraints: from c₂ + 3c₃ ≡ 0 and c₁+c₂+c₃ = 5, I can substitute to get 2c₃ ≡ c₁ (mod 5), which gives c₃ = 3c₁ (mod 5). Testing c₁=1 yields c₃=3 and c₂=1, giving the vector (1,1,3) with weight 5, and checking: 0·1 + 1·1 + 3·3 = 10 ≡ 0 (mod 5) ✓.
+
+For c₁=2, I get c₃≡1 and c₂=2, so (2,2,1) works with 0·2 + 2·1 + 1·3 = 5 ≡ 0 (mod 5) ✓. When c₁=3, the calculation gives c₂ = -2, which fails since coefficients must be non-negative. Similarly, c₁=4 produces c₂ = -1, also invalid.
+
+So I have exactly two solutions: (1,1,3) and (2,2,1).
+
+Now I'm noticing a pattern—for p=5, every fiber triple I tested yields at least two weight-p zero-sums. Let me formalize this. I'm setting up a general theorem: three vectors lying on a line in the fiber always admit weight-p zero-sums. The setup involves three vectors with the same second coordinate but distinct first coordinates in F_p, and I need to show that the system c₁+c₂+c₃=p and c₁f₁+c₂f₂+c₃f₃=0 always has solutions with coefficients in the valid range.
+
+I'm parameterizing by c₁ and solving for c₂ using the constraint equations. Since f₂ and f₃ are distinct, I can express c₂ as an affine function of c₁ modulo p, which means as c₁ ranges over all elements of F_p, c₂ sweeps through all of F_p as well.
+
+Now I need to check the integer constraints: each coefficient must be in {0,...,p-1} and sum to exactly p. Since c₃ = p - c₁ - c₂, I need to verify that c₃ stays within the valid range.
+
+For each choice of c₁, the value c₂ is determined by the modular equation c₂ ≡ -c₁α (mod p), where α is the ratio (f₁-f₃)/(f₂-f₃). The sum c₁ + c₂ depends on whether the modular reduction causes wraparound, which affects whether c₃ remains valid.
+
+Let me reconsider the boundary cases more carefully. When c₁ = 0, we get c₂ = 0, so c₁ + c₂ = 0, which violates the constraint that c₃ must be in {0,...,p-1}. I need to check which values of c₁ actually produce valid triples. So as c₁ ranges over {1,...,p-1}, the sum c₁+c₂ hits each residue class modulo p exactly once—this follows from the bijection property when α ≠ 1. For each residue r in {1,...,p-1}, there's exactly one value of c₁ that produces that residue, and I need to figure out which of these sums fall in the range {1,...,p}. I need to count how many values of c₁ from 1 to p-1 result in c₁ + c₂ ≤ p, which would give valid solutions where c₃ ≥ 0.
+
+Let me introduce β = (1-α)⁻¹ mod p, which exists since α ≠ 1 (meaning f₁ ≠ f₂). This lets me express the constraint in terms of c₁ directly, but I'm getting tangled up in the algebra here. A symmetry argument might be cleaner—let me count the valid triples (c₁, c₂, c₃) where each component is in {0,...,p-1}, they sum to p, and the weighted sum equals zero, then substitute c₃ = p - c₁ - c₂ to simplify.
+
+This reduces to a linear constraint on (c₁, c₂) modulo p, which traces out a line in F_p². Parametrizing this line as t(-b, a) for t ∈ F_p gives me c₁ = -tb and c₂ = ta, where a and b are the nonzero differences f₁ - f₃ and f₂ - f₃. Now I need to figure out which values of t keep c₃ in the valid range. c₂. So if t gives sum s, then p-t gives sum 2p-s, and exactly one of these falls in the valid range {1,...,p}.] The direct approach is cleaner—let me just verify with concrete examples. Testing p=5 with different coefficient combinations, I'm getting roughly half the values of t yielding valid solutions, which suggests the count is around (p-1)/2, definitely sufficient for p ≥ 5. This is pointing toward a theorem about three non-collinear vectors summing to zero with weight p.
+
+Now I'm formalizing this as a lemma: for any three distinct field elements, I need to count solutions to a system of two linear constraints on the coefficients. The parametrization by t ∈ F_p* should let me analyze this systematically. I'm exploring how the pairing t ↔ p-t creates a symmetry in the sums: when I swap t with p-t, the values c₁ and c₂ transform in complementary ways modulo p, essentially flipping between c and p-c depending on whether they're zero.
+
+Rather than pursuing this pairing approach further since it's getting complicated, I'm shifting to directly computing the total sum Σ_{t=1}^{p-1} [c₁(t) + c₂(t)] by evaluating each component separately, starting with what Σ c₁(t) equals in terms of the modular arithmetic. Σ_{k=1}^{p-1} k = p(p-1)/2.
+Similarly Σ c₂(t) = p(p-1)/2.
+
+So Σ s(t) = p(p-1). The average s(t) = p(p-1)/(p-1) = p.
+
+Among p-1 values of t, the average s is p. The valid range is s ∈ {1,...,p}. The invalid range is s ∈ {p+1,...,2p-2}.
+
+Since s(t) ∈ {1,...,2p-2} (c₁ ∈ {0,...,p-1}, c₂ ∈ {0,...,p-1}, and c₁+c₂ ≥ 1 for t ≥ 1):
+
+Now I'm setting up a constraint equation where the weighted sum of valid and invalid t values must equal p(p-1). If V counts the valid cases and I counts the invalid ones with V+I = p-1, then the upper bound on the total becomes V·p + I·(2p-2) ≥ p(p-1).
+
+From this I can derive that I ≥ p(p-1-V)/(2(p-1)), and working through the lower bound constraint V + I(p+1) ≤ p(p-1), I find that V ≥ 1. But this is a weak bound—I need to see if I can tighten it. The average s value across all t is exactly p, and for odd p the median might give me additional structure to work with.
+
+Let me think about this more systematically using a pairing argument. For each t in {1,...,p-1}, I'll pair it with t' = p-t, which creates an involution with no fixed points since p is odd. If I can show that s(t) + s(t') = 2p whenever all the relevant values stay in {1,...,p-1}, then for each pair one value must be ≤ p and the other ≥ p, which constrains V more tightly.
+
+Now I'm verifying this claim by computing the modular arithmetic. Since c₁(t) = -tb mod p and c₂(t) = ta mod p, I need to check what happens when I substitute t' = p-t into these expressions and see how they relate to the original values.
+
+After working through the algebra, I find that c₁(t) and c₁(t') are complementary modulo p, as are c₂(t) and c₂(t'). This means s(t) + s(t') always equals 2p, which partitions the values into pairs where one sum is less than p and the other exceeds p, except when s(t) = p exactly.
+
+Now I'm analyzing the validity constraints: since we need s ∈ {1,...,p} for a valid configuration, and the pairing ensures s(t) + s(t') = 2p, each pair {t, t'} contributes at least one valid value. This gives a lower bound of (p-1)/2 valid configurations, but the constraint that s ≥ 1 combined with the pairing structure means exactly one element per pair satisfies s ≤ p. I'm checking whether any pairs can have both elements equal to p. If c₁ + c₂ = p and c₃ = 0, then substituting into the congruence gives c₁(f₁ - f₂) ≡ 0, which forces c₁ = 0 since f₁ ≠ f₂. But that means c₂ = p, violating the constraint c₂ ≤ p - 1, so no such pairs exist.
+
+This means valid solutions must have s(t) strictly between 1 and p - 1, while invalid ones fall in the range p to 2p - 2. Since paired solutions sum to 2p, whenever one is valid the other is invalid, and if either equals p it's automatically invalid. BOTH invalid, since c₃ = 0 requires c₂ = p). If s(t) > p: s(t') < p.
+
+So each pair {t, t'} contributes either 1 valid (if s(t) ≠ p and s(t') ≠ p: exactly one valid) or 0 valid (if s(t) = s(t') = p: but this requires t = t', i.e., t = (p-1)/2+1?...).
+
+Wait, t' = p-t. For s(t) = p: t is determined (if it exists). From c₁+c₂ = p: (-tb) mod p + (ta) mod p = p. This means (-tb mod p) + (ta mod p) = p. Since both terms ∈ {0,...,p-1}: this is possible.
+
+Let u = ta mod p, v = tb mod p. Then c₂ = u, c₁ = p-v. s = p-v+u = p. So v = u. ta ≡ tb (mod p) iff t(a-b) ≡ 0 iff t = 0 (since a ≠ b). So s(t) = p only at t = 0, which is excluded.
+
+Great! So s(t) ≠ p for all t ∈ {1,...,p-1}. Each pair {t, t'} has exactly one valid and one invalid. The number of valid solutions is (p-1)/2.
+
+Now I need to verify that c₁, c₂, c₃ are all positive. Since c₃ = p - c₁ - c₂ and s < p, we have c₃ ≥ 1. For c₁ and c₂: c₁ = 0 would require tb ≡ 0 (mod p), so t = 0, which is excluded. Similarly c₂ = 0 would require ta ≡ 0 (mod p), so t = 0, excluded. Therefore c₁, c₂ ≥ 1 for all valid t.
+
+This establishes that for any three distinct vectors sharing the same nonzero coordinate, there are exactly (p-1)/2 weight-p zero-sums with all coefficients in {1,...,p-1}. The corollary follows: for p ≥ 5, a strongly ZSF set can have at most 2 vectors on each parallel line, which constrains how many lines a set of size 2α+1 can occupy.
+
+Now I'm verifying the constraint more carefully—if we have at most 2 vectors per line and exactly α+1 lines, then 2α+1 ≤ 2(α+1), which means at least one line must have exactly 1 vector. This confirms the structure of the U1' construction. The key insight is that ≥3 vectors on a line immediately produces a weight-p zero-sum, violating the strongly ZSF property, so the ≤2 per line bound is fundamental.
+
+Let me also verify the zero-sum coefficients are valid: if c₁, c₂ ∈ {1,...,p-1}, then c₃ = p-c₁-c₂ falls in {1,...,p-2}, which is a subset of {1,...,p-1}, and the total weight is exactly p.
+
+So I have a genuine weight-p zero-sum, which contradicts the strongly ZSF property—meaning at most 2 vectors can lie on any given line. This immediately gives me a bound: any strongly ZSF set of size n requires at least ⌈n/2⌉ parallel lines under any projection. For odd n = 2α+1, that's a lower bound of α+1 lines, and U1' apparently claims this is also the upper bound.
+
+Now I'm checking whether I can prove that upper bound. If I have 2α+1 vectors distributed across α+2 or more lines, the pigeonhole principle forces at least 3 lines to contain only 1 vector each, which seems to create a contradiction with the structure U1' is claiming.
+
+For the Fiber-Flexible argument, I need to see if those 3 single-vector lines—which contribute fixed values to the first coordinate with no splitting freedom—still allow me to cover all possible first-coordinate values using the flexibility from the multi-vector lines.
+
+The free part can reach at least min(p, w_free+1) values, but without e₁ present and if w_free falls short of p-1, I'm left with fewer than p reachable values. That means certain first-coordinate values become unreachable, which breaks the saturation property for specific configurations.
+
+So the upper bound from the 3-per-line constraint doesn't follow immediately—I've hit the limits of what I can cleanly prove here.
+
+Now I'm consolidating the solid results: the fiber-flexible shadow saturation theorem via Cauchy-Davenport, the three-on-a-line theorem showing that three vectors on a line yield (p-1)/2 weight-p zero-sums and fail strong ZSF, the revised grail architecture conditional on U1' and U2, and the resolution of the (8,7,2) blocker. Let me document the three-on-a-line result and wrap this up.
+
+============================================================
+BLOCK 6 (2173 chars)
+============================================================
+Good. Now let me summarize my full output and provide the cross-pollination insights for the other agents.
+
+Let me also think about one more thing: can I say anything useful about U1'?
+
+The key observation from the Three-on-a-Line theorem: strongly ZSF sets have ≤ 2 per line. So 2α+1 vectors on exactly α+1 lines means α lines have 2 vectors and 1 line has 1 vector.
+
+For the upper bound (at most α+1 lines): this would mean at most 1 "singleton" line and exactly α "doubleton" lines.
+
+
+If we had α+2 lines instead, we'd need α-1 doubletons and 3 singletons to reach 2α+1 vectors total. The question for U1' is whether having 3 or more singleton lines—each contributing just one vector to the copies pool—forces a zero-sum constraint, since the pool becomes sparser compared to configurations with more doubletons.
+
+I'm not confident I can pin down U1' completely right now, so let me try a different angle using sumset size. The idea is that for a strongly ZSF set on k lines, the copies pool has n(p-1) elements and the weight-w shadow grows as we add vectors from T. The strongly ZSF condition means no zero-sum exists up to weight p, which translates to 0 not being in the sumset of T up to weight p-1. I can apply the Davenport constant here—for the group C_p^{r+1}, it equals r(p-1)+1—to constrain how large T can be before a zero-sum is forced.
+
+But here's the catch: the Davenport constant guarantees an unweighted zero-sum, whereas I need one that respects the weight constraint. That's the gap I'm running into.
+
+Let me pivot to what I should communicate to the other agents. For the computational side, I want to verify the Fiber-Flexible theorem by checking shadow saturation across all 324 U1 cases at p=5, and confirm U1' at p=7 by verifying that strongly zero-sum-free 17-sets have at most 9 tails. The Three-on-a-Line theorem is useful here since it bounds how many vectors can appear per line, which narrows the search space considerably. For the adversarial approach, the goal would be to find a counterexample—a strongly zero-sum-free 17-set with 10 or more tails—but that same line-based bound limits how many configurations are even possible to check.

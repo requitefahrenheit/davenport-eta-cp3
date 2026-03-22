@@ -1,0 +1,42 @@
+# Research Briefing (COMPUTER thread)
+
+**Goal:** Find the correct general formula for η(C_p³) (the short Davenport constant for rank-3 elementary p-groups). Known: η(C_2³)=8, η(C_3³)=17, η(C_5³)=33. The formula 8(p-1)+1 fits p=3,5 but may fail for p≥7. Compute η(C_7³) to test. Then identify the correct formula and prove it (or prove it for specific primes). If no clean closed form exists, characterize the growth rate and structural regime changes.
+
+---
+
+### Round 1  (18:24)
+
+We validated the core computational method: using a bitset/DP that tracks which group-sums are achievable with each exact length, the worker brute-forced the base case C_2^3 and reproduced the known extremal configuration (all seven nonzero vectors) showing the maximum short-zero-sum-free length is 7 and hence η(C_2^3)=8, which both confirms the implementation and gives confidence in the approach; the same DP/DFS framework is now set up to attack p=7 (state space 343 group elements, tracking sums up to length 7) to test whether a short-zero-sum-free sequence of length 48 exists (which would support the 8(p−1)+1 guess) or to find the true maximum, so we’ve made concrete preparatory progress though the p=7 computation itself remains to be run and analyzed. Vibe check: (green) = real progress.
+
+**Cost so far: $0.04** | Tokens: 17,914 in / 1,417 out
+
+### Round 2  (18:26)
+
+I was trying to decide whether the short Davenport constant η(C_p^3) follows the simple formula 8(p−1)+1 by computing η(C_7^3); I implemented a DFS over element-multisets with an exact-k subset-sum DP on bitsets for F_7^3 but the run timed out before producing a certificate because the critical operation Sigma_k ← Sigma_k ∪ (Sigma_{k−1}+a) was implemented by shifting a bitset via iterating its set bits: with group size 7^3=343 those translations become very expensive per node and the search blew the time limit even though the DP idea is correct. The blockage is therefore algorithmic/implementation (how to apply 343 possible translations to Python integer bitsets very fast), not a conceptual mathematical impasse; my concrete next steps are (1) replace the slow per-bit shift with a precomputed translation table so shifts become simple bitwise permutations (or else switch to a C-backed bitarray library), (2) rerun a targeted search for a length-48 zero-sum-free construction (which would show η≥49 and test the 8(p−1)+1 conjecture for p=7), and (3) in parallel check known combinatorial bounds (Olson/Gao-Geroldinger-style results) to try to prove or tightly bound η(C_7^3) without brute force. I can commit to implementing the fast-shift approach and re-running the search in the next iteration; for now we’re making technical progress but haven’t reached a mathematical conclusion — vibe check: (yellow).
+
+**Cost so far: $0.09** | Tokens: 40,306 in / 2,909 out
+
+### Round 3  (18:28)
+
+We made concrete progress toward testing the conjectured formula η(C_p^3) = 8(p–1)+1 by building a fast, provably-correct "meet‑in‑the‑middle" oracle that detects the exact obstruction one needs to rule out an 8-point support in F_p^3 from giving the suspected extremal sequence: it searches for a nontrivial linear combination of the eight support points whose coefficients are nonnegative integers summing to at most p and that gives the zero vector (equivalently a short zero-sum in the uniform-(p–1) multiplicity sequence). I validated the routine on the known extremal p=5 support (it correctly returns “no obstruction”), and used it to reject at least one natural candidate 8-set in F_7^3 (the routine finds an obstruction there), so there is no evidence yet that the 8(p–1)+1 pattern survives to p=7. The immediate next step is an exhaustive or orbit-reduced search up to GL(3,7)-equivalence (using the oracle as a fast rejection test) to decide whether any 8-set in F_7^3 avoids such bounded-weight kernel relations; if none do, the 8(p–1)+1 formula fails at p=7 and one must find the corrected formula or piecewise growth description. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.14** | Tokens: 67,213 in / 4,528 out
+
+### Round 4  (18:30)
+
+Goal: test whether the conjectured formula η(C_p^3)=8(p−1)+1 survives at p=7. What I did: I recast the problem as searching for an 8-point set A⊂F_7^3 whose 6-fold multiplicity A^{[6]} has no short zero-sum, which is equivalent to asking that there be no nonzero coefficient vector c∈{0,…,6}^8 with total weight ≤7 and ∑ c_i a_i = 0; I implemented an exact meet‑in‑the‑middle oracle that certifies the existence of such bounded‑weight relations for a given 8-set, then ran a structured random scan of 120 GL(3,7)-normalized supports (fixing a basis and (1,1,1), sampling four more points with small first coordinate to avoid degeneracies); every single sampled support admitted a short relation (so no extremal 8-support was found in that slice). What this gives us is strong, certified negative evidence that the 8(p−1) extremal regime exists at p=7, but it is not a proof: the two concrete next actions I will take are (1) run a complete exhaustive check of all 8-point subsets up to GL(3,7)-orbits (so a finite, certified search that would settle existence decisively), and (2) attempt a short combinatorial lemma showing any 8 vectors in F_p^3 admit a nontrivial zero combination of small total weight (≤p) which would give a conceptual proof for p≥7; at present the work has produced meaningful evidence but no theorem, so vibe check: (yellow)
+
+**Cost so far: $0.19** | Tokens: 99,132 in / 5,974 out
+
+### Round 5  (18:32)
+
+We pushed one concrete empirical step toward the goal of deciding whether the “8-point support” construction (which would give η(C_p^3)=8(p−1)+1) survives at p=7: I defined a measurable obstruction w_min(A) that captures the smallest total coefficient mass of a nontrivial short (sum ≤ p) linear relation among an 8-point set A⊂F_7^3, then sampled 60 random 8-sets and found every sample admitted a very small relation (weights clustered 2–6, average ≈4.1), so heuristically 8-point supports almost always fail at p=7 and the candidate value 49 looks unlikely; the next concrete step is to convert this heuristic into a proof by one of two routes I will try immediately: (a) a deterministic combinatorial/linear-algebra lemma showing every 8-set in F_7^3 admits a short relation of total weight ≤6 (which would rule out the 8-support extremal and force a smaller η(C_7^3)), or (b) an exhaustive computer classification up to GL(3,7)-symmetry to certify the claim; overall this round produced useful evidence and a clear next plan but no final proof yet — vibe: (yellow).
+
+**Cost so far: $0.26** | Tokens: 135,782 in / 7,463 out
+
+### Round 6  (18:35)
+
+Goal was to decide whether the short Davenport constant η(C_7^3) equals 8(p−1)+1 = 57 (or otherwise determine the correct general formula), but the worker did not reach a definitive computation; instead they reframed and probed the “small-obstruction” regime for 8-point supports in F7^3. Concretely they defined weight-2 relations (equivalently two points on the same 1‑dimensional subspace / collinear pair) and weight-3 relations (a+b+c=0 triples), then sampled 300 random 8-point subsets (excluding 0) and found ~32% had a collinear pair, ~12% had a 3-term zero-sum but no collinear pair, and ~56% had neither — so more than half of random 8-sets avoid these lowest-weight obstructions and would require detecting weight-4–6 relations to force a zero-sum. The upshot is a useful structural clarification: forbidding collinear pairs and 3-term zero-sums does not settle the p=7 case, so a successful proof must handle those “hard” configurations (the worker suggested proving a deterministic lemma that any 8-point set with no collinear pair and no 3-term zero-sum still admits a relation of weight ≤7), but no exhaustive or symmetric enumeration nor a rigorous lemma was produced before the attempt was halted, so η(C_7^3) remains undetermined by this round. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.32** | Tokens: 177,465 in / 8,817 out
+

@@ -1,0 +1,25 @@
+
+From theorist's reasoning last round:
+# Mathematician's Internal Thinking - Key Insights for Other Agents
+
+## Insight 1: Shadow Saturation Fails for General ZSF, Not Just Edge Cases
+**Near-miss observation**: The asymptotic argument (coefficient count ~p^17/17! vs targets p^4) suggests shadow saturation should hold universally for size-2α(r)+1 ZSF sets, but empirical data from Adversary (cap-based ZSF at p=7 covers only 2244/2400) proves the argument is incomplete. The bottleneck is *not* arithmetic—it's structural: only **strongly ZSF sets** (those with zero-sum at weight exactly p, not p-1) exhibit saturation. This means any proof must exploit the specific fiber structure of doubled+e1, not general ZSF properties.
+
+## Insight 2: Weight Distribution Counting is Deceptive at Small Primes
+**Structural observation**: The binomial count N(W) = C(W+16, 16) for vectors with coordinate sum W appears sparse (5985 vectors for p=5 vs 625 targets), but using equidistribution naively conflates **weight residue classes mod p** with **actual integer weight ranges**. A solution at weight 4 and weight 4+p are distinct residue classes, yet both fall in "small weight." The correct accounting requires separating how p^12-sized fiber intersections distribute across integer weights W ≤ p-1, not just residue classes—this explains why the naive pigeonhole argument stalls.
+
+## Insight 3: The Zero-Sum at Weight p-1 is the Critical Constraint
+**Unexpected connection**: The fact that doubled+e1 has a zero-sum representation at weight exactly p-1 (but none below) is not a deficit—it's the mechanism ensuring saturation. This zero-sum forces the fiber structure such that *any* nonzero target's representation set must include vectors with low integer weights (to "use up" the zero-sum constraint without exceeding it). The proof likely needs to show that removing or rerouting the p-weight solutions creates a contradiction for nonzero targets.
+
+From computer's reasoning last round:
+# Key Insights for Other Agents
+
+## 1. **Strong vs Weak ZSF Dichotomy is Structurally Critical**
+Most ZSF sets are "weakly ZSF" (contain internal weight-p zero-sum, making Grail trivial), but **doubled+e1 appears uniquely "strongly ZSF."** The Adversary's p=7 cap construction failing shadow saturation suggests strong ZSF is rare and structural, not accidental—this constraint should be exploitable for uniqueness proofs rather than just computational verification.
+
+## 2. **Projection Strategy Has Single Failure Mode Worth Isolating**
+The gap occurs only when μ=0 (quotient zero-sum lifts to zero), forcing a_k = p. Computing the **exact frequency of μ=0 across all 18 projection choices** for each candidate ZSF set would reveal whether doubled+e1 has anomalously low obstruction rate or if this is universal—this single distributional question may decode the strategy's true power.
+
+## 3. **Fiber Structure Theorem Could Replace Enumeration**
+Rather than exhaustively test C(400,17) combinations at p=7, **prove structurally that any 17-vector set spanning F_p^4 is forced by ZSF constraints into doubled+e1 form up to GL conjugacy.** Since any spanning set can be coordinatized to have 4 basis vectors, the remaining 13 are heavily constrained—the algebraic argument might be tighter than computational search.
+

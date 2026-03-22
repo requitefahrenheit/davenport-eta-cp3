@@ -1,0 +1,23 @@
+# Research Result
+
+**Goal:** Prove: for a,b,c in F_p* with no pair summing to 0 mod p and a+b+c != 0 mod p,
+the wrap count k(lambda) = floor(([la]+[lb]+[lc])/p) is NOT identically 1.
+
+Equivalently: f(lambda) = [la]+[lb]+[lc] < p for some lambda in F_p*.
+
+By the involution f(l)+f(-l)=3p and sum(k)=p-1: this is equivalent to showing
+k=2 for some lambda (then -lambda gives k=0, f <= p-1).
+
+Verified for p = 5,7,11,13,17,19. Zero exceptions.
+**Arch:** gpt
+**Turns:** 6
+**Cost:** $0.6902
+
+## Log
+
+
+[Turn 1] The worker falsified the proposed “local large-sum inequalities can’t all hold” claim by an explicit counterexample for \(p=11\), and correctly diagnosed the issue as needing global (all \(\lambda\)) carry-compatibility rather than single-\(\lambda\) constraints. They computed \(k(\lambda)\) for \((a,b,c)=(1,5,7)\) at \(p=11\) showing \(k\) is not identically 1, and began reframing the problem via global carry sets \(X,Y\) and an invariance condition under \(\lambda\mapsto -\lambda\). Approaches tried: (1) local inequality obstruction — disproved by counterexample; now moving to (2) global carry-set structure; Lakatos threshold not reached (only one approach failed, and it failed by outright counterexample, not small-margin parity).
+[Turn 2] This turn produced a solid standalone lemma about index-2 antisymmetric subsets of \(\mathbb F_p^\*\) and invariance implying the multiplier is a quadratic residue. But the application to the main problem is still an outline with unproven assertions (e.g., that \(k\equiv 1\) forces \(X=Y\) and forces invariance under \(t_1,t_2\), and an unexplained claim \(t_1t_2\equiv -1\)). Approaches tried: (1) local inequality obstruction—disproved; (2) global carry-set/group invariance—promising but not yet connected rigorously; Lakatos threshold not reached.
+[Turn 3] The worker advanced from outline to a concrete lemma connecting the global hypothesis \(k(\lambda)\equiv 1\) to a precise structure of the no-carry set \(X\): it is an index-2 subset of \(\mathbb F_p^\*\) and antisymmetric under \(\lambda\mapsto -\lambda\), with \(|X|=(p-1)/2\). This supplies the missing rigorous “half-set + antisymmetry” prerequisite needed to apply the earlier group-theoretic invariance lemma. Approaches tried: (1) local inequality obstruction—disproved; (2) global carry-set structure—now has at least one proved structural lemma; Lakatos threshold not reached.
+[Turn 4] The worker identified a real obstruction: the hoped-for direct multiplier invariance of the carry set \(X\) does not follow, and they exhibited this with a concrete \(p=11\) computation. However, they then shifted to a new “pigeonhole/coincidence of three half-sets” plan without proving any new lemma and with vague claims (“exactly two carries 0 and one 1”, “at least two half-sets coincide”) that are not yet justified; the compute snippets also show some careless errors (undefined variables, rep not in scope). Approaches attempted: (1) local inequality obstruction—failed by counterexample; (2) global carry-set invariance—partially built but now abandoned due to obstruction; (3) new triple-carry/pigeonhole idea—only stated, not advanced. Lakatos threshold not reached (no pattern of multiple near-miss failures yet), but the process is drifting into plan-switching without a committed proof step.
+[Turn 5] The worker committed to and proved a concrete new lemma (Lemma 2): assuming \(k(\lambda)\equiv 1\), plugging \(\lambda=x^{-1}\) forces strict inequalities \([yx^{-1}]+[zx^{-1}]\ge p+1\) for each ordered choice of pivot \(x\in\{a,b,c\}\), unless an antipodal pair exists. This is genuine progress toward a contradiction and replaces earlier vague “pigeonhole” claims with a checkable derived constraint. Approaches so far: (1) local inequality obstruction—disproved by counterexample; (2) multiplier invariance idea—blocked; (3) triple-carry counting—sketched; now (4) derive six quotient-sum inequalities from \(k\equiv 1\) (new lemma). No Lakatos threshold (not 3+ approaches failing by similar margin); latest computation just illustrates carry patterns for a non-\(k\equiv1\) example.

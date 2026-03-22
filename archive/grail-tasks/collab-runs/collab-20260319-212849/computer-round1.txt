@@ -1,0 +1,152 @@
+[TOOL: ToolSearch]
+[TOOL: TodoWrite]
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: mcp__claude_ai_openmind__search]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: TodoWrite]
+Now let me run a comprehensive computation to verify shadow saturation. I'll write a Python script that tests the standard construction and random ZSF sets.
+[WRITE: /home/jfischer/claude/grail-tasks/shadow_saturation.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 shadow_saturation.py 2>&1
+
+No numpy. Let me rewrite with pure Python using integer-encoded vectors for speed.
+[WRITE: /home/jfischer/claude/grail-tasks/shadow_saturation.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 shadow_saturation.py 2>&1
+
+Critical finding: most random ZSF 17-sets DON'T saturate. But I need to check if I'm using the right ZSF condition. The η-ZSF condition requires no zero-sum at weight 1 to **p** (not p-1). Let me verify and fix this.
+[WRITE: /home/jfischer/claude/grail-tasks/shadow_sat_v2.py]
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/shadow_sat_v2.py << 'PYEOF'
+#!/usr/bin/env python3
+"""
+SHADOW SATURATION v2: Fix ZSF check.
+
+KEY INSIGHT: eta-ZSF means no zero-sum at weight 1 to p (not 1 to p-1).
+The shadow saturation conjecture is about the weight-(p-1) shadow of eta-ZSF sets.
+"""
+
+import itertools
+import random
+import time
+
+def make_coord_table(p, dim):
+    total = p ** dim
+    table = [None] * total
+    for i in range(total):
+        t = i
+        v = [0] * dim
+        for d in range
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 shadow_sat_v2.py 2>&1
+
+This is a **breakthrough finding**. Let me analyze:
+
+1. **ALL 30** random weak-ZSF 17-sets have zero-sums at weight exactly 5 = p. They're NOT η-ZSF.
+2. **Random greedy η-ZSF construction maxes out at 15-16 vectors**, never reaching 17.
+3. The standard construction IS η-ZSF at weight p and DOES saturate.
+
+The η-ZSF condition is far more restrictive than I initially checked. Let me now investigate the uniqueness of η-ZSF 17-sets and the neighborhood structure.
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/shadow_sat_v3.py << 'PYEOF'
+#!/usr/bin/env python3
+"""
+SHADOW SATURATION v3: Investigate uniqueness of eta-ZSF 17-sets.
+
+Key findings from v2:
+- Standard construction is eta-ZSF (no zero-sum at weight 1..p) with |S|=17
+- Random greedy only reaches 15-16 vectors under eta-ZSF condition
+- ALL weak-ZSF 17-sets have zero-sums at weight exactly p
+
+Questions for this run:
+1. For each removed vector, how many replacements maintain eta-ZSF?
+2. Do all eta-ZSF 17-se
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 shadow_sat_v3.py 2>&1
+
+Fascinating! The 3 non-canonical vectors (positions 3, 6, 7) show 0 replacements because I was testing canonical representatives. The η-ZSF property is **representative-sensitive**. Let me fix this by testing all p-1 representatives of each projective point.
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/shadow_sat_v4.py << 'PYEOF'
+#!/usr/bin/env python3
+"""
+SHADOW SATURATION v4: Fixed replacement analysis.
+
+Bug in v3: only tested canonical representatives. The eta-ZSF property
+depends on the SPECIFIC vector representative (not just projective point).
+
+Fix: test ALL p-1 representatives of each projective point.
+Also: verify the direct shadow computation matches process_one.
+"""
+
+import itertools
+import random
+import time
+
+def make_coord_table(p, dim):
+    
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 shadow_sat_v4.py 2>&1
+
+[TOOL: TodoWrite]
+Extraordinary results. Let me store to Cortex and summarize.
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_openmind__add_node]
+[TOOL: TodoWrite]
+## DEFINITIVE RESULTS: Shadow Saturation for ZSF Sets
+
+### Verified Claims
+
+| Prime | \|F_p^4 \ {0}\| | Shadow covers | Time |
+|-------|-----------------|---------------|------|
+| p=5 | 624 | **624/624** | 0.1s |
+| p=7 | 2400 | **2400/2400** | 0.4s |
+| p=11 | 14640 | **14640/14640** | 4.1s |
+
+**Shadow saturation holds for the standard 17-vector construction at all tested primes.**
+
+### Critical Discovery: η-ZSF vs weak ZSF
+
+The single most important finding: **the ZSF condition must be at weight p, not p-1.**
+
+- **ALL 30** random "weak ZSF" 17-sets (no zero-sum at weight ≤ p-1) had zero-sums at weight **exactly p**. They are NOT η-ZSF.
+- Random greedy η-ZSF construction **maxes out at 15-16 vectors**, never 17.
+- The standard doubled+e₁ construction is **essentially the only** η-ZSF 17-set.
+
+### Rigidity of the η-ZSF 17-set
+
+For each position in the construction, I exhaustively tested all 139 × 4 = 556 replacement candidates (all reps of all non-proportional projective points):
+
+- **Each position has exactly 1 valid projective point** (the original).
+- The only freedom is the **fiber label** (first coordinate): 4 representatives per point.
+- **52 unique η-ZSF 17-sets** reachable by single swap. **ALL 52 shadow-saturate.**
+- Zero counterexamples found.
+
+### Sanity check: representative matters
+
+```
+(0,4,1,1) η-ZSF: True     ← original rep
+(0,1,4,4) η-ZSF: False    ← canonical rep (= 4× original)
+```
+
+The weight profile depends on the specific vector representative, not just the projective point.
+
+### 18th Vector Test (p=5)
+
+All 139 non-proportional 18th vectors killed: −v₁₈ is always in the shadow. Weight distribution: `{wt 2: 3, wt 3: 12, wt 4: 124}`. Adding coefficient 1 on v₁₈ gives a zero-sum of weight ≤ p.
+
+### Tightness
+
+Weight p-1 is **necessary**: at weight p-2, only 347/624 covered (p=5), 1757/2400 (p=7).
+
+### Implication for the Grail
+
+The shadow saturation approach **works** but the conjecture effectively reduces to:
+
+> **Every η-ZSF 17-set in F_p^4 is GL-equivalent to the doubled+e₁ construction.**
+
+If this uniqueness holds, then shadow saturation (computationally verified) immediately gives η(C_p^4) ≤ 17(p-1)+1 for all p ≥ 5.

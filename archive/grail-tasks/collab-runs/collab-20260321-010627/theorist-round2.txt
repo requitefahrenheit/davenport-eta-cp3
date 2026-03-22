@@ -1,0 +1,274 @@
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+Let me read the briefing and check for prior work.
+[TOOL: mcp__claude_ai_dev__dev_read_file]
+[TOOL: Glob]
+[TOOL: Glob]
+Let me read the most recent theorist work and the cross-pollination notes.
+[READ: /home/jfischer/claude/grail-tasks/collab-20260321-010607/theorist-round1.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260321-010607/.cross-theorist.txt]
+[READ: /home/jfischer/claude/grail-tasks/THEORIST_R3_REPORT.md]
+
+[BASH] ls -la /home/jfischer/claude/grail-tasks/collab-20260321-*/theorist-round1.txt 2>/dev/null | tail -5
+
+[TOOL: Glob]
+
+[BASH] ls -la /home/jfischer/claude/grail-tasks/collab-20260321-010607/ | head -20
+
+[READ: /home/jfischer/claude/grail-tasks/collab-20260321-010607/.cross-theorist.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260321-010607/theorist-round1.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260321-010607/adversary-round2.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260321-010607/adversary-round2.txt]
+Now let me do a targeted literature search to support the key correction I've identified.
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+Now I have all the context. Let me produce the Round 2 report with the critical correction and new theorems.
+
+---
+
+# THEORIST REPORT: Round 2
+
+## CRITICAL CORRECTION: The Cap Assumption is Wrong
+
+**The most important finding this round is a fundamental error in prior reasoning (including my own Round 1 report).**
+
+**Claimed (Round 1 and earlier sessions):** A ZSF set must be a "cap" — no 3 vectors can be collinearly dependent (linearly dependent), because any collinear triple can be rescaled to a zero-sum of weight p.
+
+**This is FALSE.** A collinear triple a₁v₁ + a₂v₂ + a₃v₃ = 0 does NOT always yield a zero-sum of weight ≤ p after rescaling.
+
+**Counterexample.** At p = 5, consider the dependency with normalized coefficients (1, 1, 4). Weight at each μ ∈ F₅*:
+
+| μ | ⟨μ·1⟩ | ⟨μ·1⟩ | ⟨μ·4⟩ | Weight |
+|---|--------|--------|--------|--------|
+| 1 | 1 | 1 | 4 | 6 |
+| 2 | 2 | 2 | 3 | 7 |
+| 3 | 3 | 3 | 2 | 8 |
+| 4 | 4 | 4 | 1 | 9 |
+
+Minimum weight = 6 > p = 5. **No rescaling achieves weight ≤ p.**
+
+[VERIFY: At p=5, confirm that for the dependency type (1:1:4), no μ ∈ {1,2,3,4} gives Σ⟨μaᵢ⟩ ≤ 5.]
+
+**Why this matters:** It was assumed that A₈ (the 8-element ZSF set in F_p³) must be a cap. But PG(2,5) has max cap size 6 (a conic), while A₈ has 8 projective points. This was a hidden contradiction. The resolution: **A₈ DOES contain collinear triples, but only "bad" ones (weight > p for all μ).**
+
+---
+
+## Theorem 1: The Weight Dichotomy for Triples (PROVED)
+
+**Theorem.** Let (a₁ : a₂ : a₃) ∈ PG(2, p) be the projective dependency of a collinear triple. Define w(μ) = ⟨μa₁⟩ + ⟨μa₂⟩ + ⟨μa₃⟩. Then:
+
+(i) **Pairing identity:** w(μ) + w(p - μ) = 3p for all μ ∈ F_p*.
+
+(ii) **Good iff extreme:** min_μ w(μ) ≤ p ⟺ max_μ w(μ) ≥ 2p.
+
+(iii) **The "moderate coefficient" obstruction:** min_μ w(μ) > p ⟺ w(μ) ∈ {p+1, ..., 2p-1} for ALL μ.
+
+**Proof.**
+
+(i) w(μ) + w(p-μ) = Σᵢ [⟨μaᵢ⟩ + ⟨(p-μ)aᵢ⟩] = Σᵢ [⟨μaᵢ⟩ + ⟨-μaᵢ⟩] = Σᵢ p = 3p. Here we use that ⟨x⟩ + ⟨-x⟩ = p for any x ∈ F_p*.
+
+(ii) From (i): min_μ w(μ) = 3p - max_μ w(μ). So min ≤ p ⟺ max ≥ 2p.
+
+(iii) If min > p, then all w(μ) > p. By (i), w(p-μ) = 3p - w(μ) < 3p - p = 2p. So all w(μ) < 2p. Combined: w(μ) ∈ {p+1, ..., 2p-1} for all μ. ∎
+
+**Corollary (Classification at p = 5).** A normalized dependency (1, a, b) with a ≤ b is:
+- **Good** (weight ≤ 5 achievable): (1,1,1), (1,1,2), (1,1,3), (1,3,3)
+- **Bad** (weight > 5 for all μ): (1,1,4), (1,2,3), (1,2,4), (1,3,4), (1,4,4)
+
+That's 4 good types vs 5 bad types. **More than half of all dependency types are "bad" at p = 5.**
+
+[VERIFY: At p=5, for each of the 9 normalized dependency types (1,a,b) with 1≤a≤b≤4, confirm whether min_μ Σ⟨μaᵢ⟩ ≤ 5 or > 5. Also repeat at p=7: enumerate all normalized triples and classify as good/bad.]
+
+---
+
+## Theorem 2: The Complementary Pair Obstruction (CPO) — PROVED
+
+**Theorem.** A support-k dependency (a₁, ..., a_k) with k even, whose coefficients consist of k/2 complementary pairs {a, p-a}, has constant weight kp/2 for all μ ∈ F_p*.
+
+**Proof.** For each pair {a, p-a}: ⟨μa⟩ + ⟨μ(p-a)⟩ = ⟨μa⟩ + ⟨-μa⟩ = p. Total: (k/2) · p = kp/2. Independent of μ. ∎
+
+**Corollary.** Such a dependency gives weight ≤ p only if k ≤ 2. For k = 4: weight = 2p > p. For k = 6: weight = 3p > p.
+
+**Theorem (Geometric Characterization of CPO).** Four vectors v₁, v₂, v₃, v₄ have a dependency with complementary pair coefficients iff v₁ - v₂ is proportional to v₃ - v₄ (under some pairing of the four vectors).
+
+**Proof.** If the dependency is a(v₁) + (p-a)(v₂) + b(v₃) + (p-b)(v₄) = 0, this gives a(v₁ - v₂) + b(v₃ - v₄) = 0, i.e., v₁ - v₂ = -(b/a)(v₃ - v₄). Proportional. ∎
+
+**This means CPO ↔ "parallel differences" ↔ projective parallelogram.**
+
+---
+
+## Theorem 3: Revised ZSF Structure (PROVED)
+
+**Theorem (ZSF = Avoiding Good Dependencies).** A set S ⊂ F_p^r \ {0} of non-proportional vectors, each with multiplicity p-1, is zero-sum free iff it avoids all "good" dependencies — dependencies (a₁, ..., a_k) over subsets of S with min_μ Σ⟨μaᵢ⟩ ≤ p.
+
+**Key consequences of the corrected theory:**
+
+1. **ZSF sets CAN contain collinear triples** (linearly dependent triples), provided all such triples have "bad" coefficients (min weight > p for all rescalings).
+
+2. **ZSF sets CAN contain 4-vector dependencies** of complementary-pair type (weight always 2p).
+
+3. **The "cap" condition (no collinear triple) is STRICTLY STRONGER than ZSF.** The true constraint on ZSF sets is weaker: avoid "good" dependencies only.
+
+4. **This resolves the |A₈| = 8 vs cap-size-6 paradox at p = 5.** The 8-element ZSF set A₈ in F₅³ has collinear triples, but only "bad" ones. It is NOT a cap.
+
+---
+
+## Theorem 4: When Support-3 Gives Weight p (PROVED)
+
+**Theorem.** For a dependency (a₁ : a₂ : a₃) with Σaᵢ = p (integer sum), the weight at μ = 1 is exactly p.
+
+**Proof.** w(1) = a₁ + a₂ + a₃ = p. ∎
+
+**More generally:** a dependency has w(μ) = p iff the integer sum of the rescaled representatives equals p, i.e., ⟨μa₁⟩ + ⟨μa₂⟩ + ⟨μa₃⟩ = p. This requires no "wrap-around" in the mod-p reduction except for the total summing to p.
+
+**Theorem (Complementary Triple Weight).** For a dependency of the form (1, a, p-1-a) with a ∈ {1, ..., p-2}:
+
+w(μ) ∈ {p, 2p} for all μ. Specifically, w(μ) = p when μ(1+a) < p (no wrap), and w(μ) = 2p when μ(1+a) ≥ p (wrap occurs).
+
+In particular, w(1) = 1 + a + (p-1-a) = p. So these are always "good."
+
+**Proof.** Write a₃ = p - 1 - a = -(1+a) mod p. Then ⟨μa₃⟩ = p - ⟨μ(1+a)⟩. The sum w(μ) = ⟨μ⟩ + ⟨μa⟩ + p - ⟨μ(1+a)⟩. Since ⟨μ⟩ + ⟨μa⟩ = ⟨μ(1+a)⟩ + εp where ε ∈ {0,1}: w(μ) = p + εp ∈ {p, 2p}. ∎
+
+---
+
+## Theorem 5: Non-Complementary Support-4 (Partial — PROVED)
+
+**Theorem.** At p = 5, every support-4 dependency whose coefficients are NOT of complementary-pair type can be rescaled to weight ≤ p.
+
+**Proof.** Exhaustive check. The complementary-pair types at p = 5 are (up to scalar and permutation): {1,4,2,3}, {1,4,1,4}, {2,3,2,3} (multisets {{1,4},{2,3}}, {{1,4},{1,4}}, {{2,3},{2,3}}). All other 4-tuples with Σ ≡ 0 mod 5 achieve weight 5 for some μ:
+
+- (1,1,1,2): w(1) = 5 = p. ✓
+- (1,3,3,3): w(2) = 2+1+1+1 = 5. ✓
+- (2,2,2,4): w(3) = 1+1+1+2 = 5. ✓
+- (4,4,4,3): w(4) = 1+1+1+2 = 5. ✓
+
+The complementary-pair types all give weight 10 = 2p for every μ. ∎
+
+[VERIFY: At p=7, enumerate all normalized support-4 dependencies (1,a,b,c) with Σ≡0 mod 7, classify as complementary-pair vs non-complementary, and check whether all non-complementary types achieve weight ≤ 7 for some μ.]
+
+---
+
+## Theorem 6: The CW Solution Count (PROVED, extends R1 Thm)
+
+**Theorem (Chevalley-Warning + Ax-Katz).** Let S = {v₁, ..., v_n} be non-proportional vectors in F_p^{r+1}. The number N of solutions to {Σsᵢvᵢ = 0, Σsᵢ ≡ 0 mod p} with sᵢ ∈ F_p satisfies:
+
+p^{n-r-2} | N, where the system has r+2 equations of degree 1 in n variables.
+
+For n = 2α(r)+2, r ≥ 3: the exponent is n - r - 2 = 2α(r) - r ≥ 2·8 - 3 = 13 (at r = 3).
+
+**The obstacle:** These N ≥ p^{2α(r)-r} solutions split among weight classes {0, p, 2p, ...}. CW/Ax-Katz cannot distinguish weight classes. Weight-0 accounts for exactly 1 solution (the trivial solution). The remaining p^{2α(r)-r} - 1 solutions have weight ≥ p, but we need at least one with weight EXACTLY p.
+
+**Why direct CW fails:** The weight-exactly-p constraint is an INTEGER constraint (not a mod-p condition), so it cannot be encoded in the polynomial framework. Encoding it as a polynomial increases the total degree by (p-1), potentially violating the CW hypothesis.
+
+---
+
+## The Revised Proof Architecture
+
+### What the correction changes
+
+The proof chain from Session 5 assumed collinear triples always give weight p (used in "support-3 kills all"). This is wrong. The correct picture:
+
+```
+WRONG:  ZSF ⊂ Cap (no collinear triple)
+RIGHT:  ZSF ⊂ Good-Dep-Free (no dependency of any support with weight ≤ p)
+```
+
+The "good-dep-free" condition is WEAKER than "cap." This makes the problem HARDER: the extremal ZSF sets are larger than the largest caps (8 > 6 at p=5 in PG(2,5)), and the constraint we must violate is more permissive.
+
+### What survives from R1
+
+1. **Fiber Threshold Lemma (R1 Thm 1):** CORRECT. Uses the s-constant within a fiber, independent of the cap issue.
+
+2. **Complete Inductive Reduction (R1 Thm 3):** CORRECT. Reduces to condition (MF_r) about 3-spread sets.
+
+3. **Cross-Fiber Weight Budget (R1 Prop 4):** CORRECT. The weight arithmetic is valid.
+
+4. **CPO (this round, Thm 2):** NEW. Precisely characterizes the support-4 obstruction.
+
+### What dies
+
+5. **The "collinear triples kill everything" argument:** DEAD. Many collinear triples are "bad" and don't produce weight-≤-p zero-sums.
+
+6. **The cap + parallelogram closure framework:** DEAD before it started. The cap assumption was the foundation and it's wrong.
+
+### The revised question
+
+**Open Question (Revised MF_r).** For a 3-spread set S of 2α(r)+2 non-proportional vectors in F_p^{r+1}: does S contain a "good" dependency of ANY support — i.e., vectors v_{i₁}, ..., v_{i_k} and coefficients a₁, ..., a_k ∈ F_p* with Σa_j v_{i_j} = 0, such that min_μ Σ⟨μa_j⟩ ≤ p?
+
+This is harder than the cap question because "bad" dependencies are allowed and don't help us.
+
+---
+
+## Reconciling the 54 Multi-Fiber ZSF Sets
+
+The coordinator asked me to reconcile the Projection Decoupling Obstruction with the 54 multi-fiber ZSF sets at p=5.
+
+**The reconciliation is now clear:** These 54 sets of 17 vectors are ZSF because:
+
+1. All support-3 dependencies they contain are "bad" (min weight > 5).
+2. All support-4 dependencies have complementary-pair coefficients (weight always 10 = 2p).
+3. All higher-support dependencies also have min weight > 5.
+
+When the 18th vector is added, it creates either:
+- A new support-3 dependency that is "good" (513 of 607 cases), OR
+- A new support-4 dependency with non-complementary coefficients (94 of 607 cases), which can be rescaled to weight 5.
+
+The Projection Decoupling Obstruction (fiber sizes one short of the s-constant) is NOT the sole mechanism — it's supplemented by the "bad dependency" structure. The obstruction explains why single-fiber induction fails; the bad-dependency structure explains why the set is ZSF despite having collinear triples.
+
+[VERIFY: For the 54 multi-fiber ZSF sets at p=5, confirm that they DO contain collinear triples (linearly dependent triples) — specifically, triples whose dependencies are of type (1,1,4), (1,2,3), (1,2,4), (1,3,4), or (1,4,4) mod scalar. Count how many collinear triples each set contains.]
+
+---
+
+## Addressing the Adversary's Challenges
+
+### Challenge 1: The 8-tail confusion
+
+The adversary noted that η(C_p³) = 8(p-1)+1 seems to conflict with lifting arguments. With the corrected theory, the 8-element ZSF set A₈ is NOT a cap — it contains "bad" collinear triples. The "8-tail" argument in prior sessions assumed A₈ is cap-like, which is wrong. The lifting from rank 3 to rank 4 must account for bad triples in A₈.
+
+**However,** the Fiber Threshold Lemma (R1 Thm 1) does NOT depend on the cap assumption — it uses the s-constant within fibers, which is a counting argument, not a dependency-type argument. So the fiber threshold survives.
+
+### Challenge 2: p ≥ 11 orbit coverage
+
+The Self-Consistent Orbit Coverage conjecture (from the R3 report) asked whether every target b ∈ F_p³ has wb ∈ Σ_w(A₈) for some w. This conjecture was based on the Window Structure Theorem, which IS correct (it's an analytic proof about polytopes, independent of the cap issue).
+
+The coverage question remains open for p ≥ 11 but is NOT invalidated by the correction. It's a separate number-theoretic question about window intervals and multiplicative orbits.
+
+---
+
+## Strategic Assessment for Round 3
+
+### The correct path forward
+
+1. **Classify "good" vs "bad" dependencies at each rank.** This is the replacement for the (wrong) cap question. The classification depends on p and the support size k.
+
+2. **Prove that 2α(r)+2 vectors force a good dependency.** This is the core of (MF_r). The tools are:
+   - Dimension counting (too many vectors for a "bad-only" configuration)
+   - The CW solution count (many solutions exist; can we show some have weight p?)
+   - Structural analysis of "bad-dependency-closed" sets
+
+3. **The polynomial method with a weight sieve.** CW gives p^{n-r-2} solutions to the zero-sum system. If we can show the weight-p class has density ≥ 1/p among weight-kp solutions, we get p^{n-r-3} weight-p solutions > 0 for n large enough. This would prove the upper bound.
+
+4. **Direct combinatorial bound on "good-dep-free" sets.** A set with no good dependency of any support is extremely rigid. The parallelogram condition (all support-4 deps must be CPO type) means v_i - v_j ∝ v_k - v_l for EVERY 4-element dependency. This is an affine rigidity condition that may force the set into a union of parallel lines (= the 2-fiber structure).
+
+**Conjecture (Strong Form).** Every "good-dependency-free" set of non-proportional vectors in F_p^r with |S| > α(r) has the 2-fiber structure under some linear form. Equivalently: multi-fiber good-dep-free sets have size ≤ α(r).
+
+If true, this immediately gives the upper bound: any set of α(r)+1 vectors either has the 2-fiber structure (handled by the Two-Fiber Theorem) or is multi-fiber with a good dependency.
+
+[VERIFY: For the 54 multi-fiber ZSF sets of size 17 at p=5 — are there any that are NOT equivalent to the doubled+e₁ construction under GL₄(F₅)? If so, they are genuinely new structures. If not, "multi-fiber" is an artifact of the coordinate system and all maximal ZSF sets are actually 2-fiber under the right basis.]
+
+---
+
+## Summary of New Results
+
+| # | Result | Status | Key Point |
+|---|--------|--------|-----------|
+| C | Cap assumption correction | **PROVED WRONG** | ZSF ≠ cap; collinear triples can be "bad" |
+| 1 | Weight Dichotomy for Triples | **PROVED** | w(μ)+w(-μ)=3p; good ⟺ max≥2p |
+| 2 | Complementary Pair Obstruction | **PROVED** | Support-4 with pairs {a,p-a}: weight=2p always |
+| 3 | Geometric CPO ↔ parallel differences | **PROVED** | Projective parallelogram characterization |
+| 4 | Revised ZSF = good-dep-free | **PROVED** | Correct structural characterization |
+| 5 | Non-complementary support-4 rescales (p=5) | **PROVED** | Exhaustive at p=5 |
+| 6 | CW solution count | **PROVED** | Many solutions, but weight indeterminate |
+
+**The correction is the MAIN CONTRIBUTION.** It invalidates several prior arguments but also opens a cleaner path: the true constraint (good-dep-free) is more algebraically natural than the cap condition, and connects directly to the polynomial method via the weight dichotomy.

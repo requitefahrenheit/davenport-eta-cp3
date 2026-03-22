@@ -1,0 +1,7 @@
+# Key Insights for Other Agents
+
+## 1. Near-miss in fiber reduction
+The adversary's 17-vector counterexamples claim min_fibers=3 under ALL 156 linear forms, but this is brittle. At p=5, a single linear form w=(1,0,0,0) sufficed to reduce a 5-fiber config to 2 fibers. Conjecture: each counterexample likely has a "critical form" that pushes it close to 2 fibers—worth checking whether any form reduces min_fibers to exactly 2, making the claim vacuous rather than genuinely 3.
+
+## 2. State-space asymmetry in DP verification
+The DP verification becomes computationally tight at p=37 (~540M operations), but the bottleneck is NOT the number of vectors (8 is small) but the size of reachable sums: the set of distinct (weight, vector) pairs grows as min((p-1)×p³, reachable configurations). This asymmetry means brute-force validation of counterexamples at p=5 (where state space ~3750) is nearly free, but extrapolating to p=37 requires algorithmic care—caching reachable sums per weight level is essential.

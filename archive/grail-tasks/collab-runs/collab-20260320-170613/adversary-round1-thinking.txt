@@ -1,0 +1,316 @@
+
+============================================================
+BLOCK 1 (341 chars)
+============================================================
+The user wants me to act as the ADVERSARY in a mathematical research collaboration. My job is to:
+
+1. Search Cortex first for existing findings
+2. Read the seed briefing document
+3. Try to break the conjectures, find counterexamples, and stress-test the claims
+
+Let me start by searching Cortex and reading the briefing document in parallel.
+
+============================================================
+BLOCK 2 (3172 chars)
+============================================================
+Excellent. I have a massive amount of context now. Let me digest the key findings from Cortex and the briefing:
+
+1. **The current state**: The grail reduces to proving that doubled+e1 is the unique strongly ZSF set of size 2α(r)+1. Shadow saturation is proved (from η), cross-fiber completeness is proved (Minkowski identity).
+
+2. **Key adversary finding from Round 2**: Multi-fiber strongly ZSF 17-element sets EXIST in F_5^4 with no two-fiber linear form. This is critical - it means the two-fiber proof strategy has a real gap.
+
+
+3. **The current task (Session 4 focus)**: Conjecture U1 claims every strongly ZSF set of size 17 in F_p^4 lives in at most 2 hyperplane fibers, with the shadow window structure following ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋. But wait—this directly contradicts the Round 2 adversary result showing multi-fiber strongly ZSF 17-element sets exist. I need to carefully re-examine what that Cortex entry actually says.
+
+The adversary found strongly ZSF sets spanning 3+ fibers under every linear form, which would falsify U1 outright. Yet the same source confirms shadow saturation holds universally across all tested strongly ZSF sets regardless of fiber structure. This suggests the proof should target shadow saturation directly rather than forcing a two-fiber constraint. But if U1 is supposedly the single remaining gap in Conjecture U, either the Round 2 finding was misinterpreted or there's a fundamental inconsistency I'm missing.
+
+Let me parse the exact statements: U1 claims every strongly ZSF 17-element set in F_5^4 lives in at most 2 hyperplane fibers, while the adversary found multi-fiber sets with no two-fiber linear form. These seem to directly contradict—unless "no two-fiber linear form" means something different from what U1 is asserting. The key distinction might be whether U1 is claiming existence of a linear form that confines the set to 2 fibers, or something else entirely.
+
+My main angle here is to track down that adversary finding about multi-fiber strongly ZSF sets and verify whether those sets actually satisfy the strongly ZSF property—if they do, U1 is false and the whole research direction needs to shift. I should also check whether the adversary's definition of "strongly ZSF" matches what U1 is using, or if there's been a correction I'm missing. Let me look more carefully at what the proof state actually says about shadow saturation. The key insight is that GL-equivalence preserves the existence of a 2-fiber form—if doubled+e1 always admits such a form, then any set GL-equivalent to it must too. So if the adversary found strongly ZSF sets that can't be restricted to 2 fibers under any linear form, those sets would be fundamentally different from doubled+e1, which would contradict the uniqueness conjecture and invalidate U1 as a path forward.
+
+Now I need to track down the actual computation that found these multi-fiber sets and verify whether they're real, then systematically attack U1 by searching for such sets, checking the window structure at larger primes, attempting to construct 3-fiber configurations without weight-≤-p zero-sums, and determining if non-A8 maximal 4-sum-free sets exist for p ≥ 7.
+
+============================================================
+BLOCK 3 (291 chars)
+============================================================
+Let me read the key files that are most relevant:
+1. The adversary round 2 report - mentions multi-fiber strongly ZSF sets
+2. The u1_analysis.md - comprehensive writeup of Session 4 findings
+3. The multi_fiber_search files - to understand what was found
+4. The adversary round 3 final report
+
+============================================================
+BLOCK 4 (4929 chars)
+============================================================
+This is extremely revealing. Let me synthesize the key findings:
+
+1. **Adversary Round 2 found multi-fiber strongly ZSF 17-element sets in F_5^4** - confirmed by exhaustive checking. These cannot be placed in ≤ 2 fibers under ANY linear form.
+
+2. **Adversary Round 3 found A8 is NOT unique** at p ≥ 5 - multiple GL-inequivalent strongly ZSF 8-sets exist.
+
+3. **The Same-Tail Swap Theorem** means even within the doubled+e1 framework, there's huge flexibility in fiber assignments.
+   
+4. **Shadow saturation holds universally** across all the strongly ZSF sets I've tested, independent of how they're distributed across fibers.
+
+But wait—the current goal is attacking Conjecture U1 about two-fiber forcing, yet Round 2 already demolished that with multi-fiber examples. Either U1 is a refined version that wasn't updated with those findings, or I'm misunderstanding what it's actually claiming. Let me look at the exact U1 statement again to see if there's a constraint I'm missing.
+
+The conjecture says every strongly ZSF set of size 17 in F_p^4 must live in at most 2 hyperplane fibers. But the adversary already found 11 counterexamples at p=5—sets with fiber distributions like {0:7, 1:9, 3:1} and even a 4-fiber configuration. These are confirmed as strongly ZSF (no zero-sum at weight ≤ 5), so they directly contradict U1 as stated.
+
+Though there's an interesting wrinkle in the adversary's findings: all multi-fiber ZSF sets max out at 17 vectors, and there's this "near-2-fiber" pattern where even the multi-fiber sets have most of their mass concentrated in just two fibers. So the adversary found sets of size 17 that are strongly ZSF with no zero-sum at weight ≤ p, yet they span 3+ fibers under every linear form tested—which directly contradicts U1's claim that such sets must be confined to at most 2 hyperplane fibers. The adversary checked all 624 nonzero linear forms on F_5^4 and found none that restrict these sets to 2 or fewer fibers. values. That means they genuinely span 3+ fibers under every linear form. And they are strongly ZSF. This directly contradicts U1.
+
+WAIT. Let me re-read even more carefully. Actually, U1 says the EQUIVALENT formulation is: "if you distribute 17 nonzero vectors across 3+ fibers, the resulting set MUST contain a zero-sum of weight ≤ p."
+
+But the adversary found 17-element strongly ZSF sets that span 3+ fibers. So U1 is false.
+
+Actually, hmm, let me reconsider. The sets the adversary found have SIZE 17 (= 2α+1). But α = 8 here, so 2α+1 = 17. U1 says every strongly ZSF set of SIZE 17. But these sets ARE strongly ZSF and have size 17 and span 3+ fibers. So U1 fails.
+
+Now I need to figure out whether the adversary's verification is correct or if U1 is actually false. The adversary constructed these sets through single-vector perturbations of the doubled+e1 construction, and I should trace through one example to see if the claimed properties actually hold. I'm working through the combinatorial calculation for checking all coefficient tuples with weight ≤ 5 across the 17 vectors. Since each coefficient must be at least 1 and the total weight is bounded by p=5, the maximum support size is also 5, which means the exhaustive check covers all subsets up to size 5 with valid coefficient assignments—so the adversary's claim of completeness checks out.
+
+Now I'm realizing my strongest counterargument to U1 is that it was already disproven by the multi-fiber strongly ZSF sets from the adversary's Round 2 report. But the u1_analysis.md file was written after that report on the same day (March 20, 2026), which suggests either U1 was reformulated in response or there's been some miscommunication about what the current version of U1 actually claims. The research goal states U1 is the single remaining gap in Conjecture U, yet the adversary already demonstrated it's false—I need to check the Session 4 computational verification to see if something changed.
+
+Looking at what the verification actually checks, it's testing (8,8,1) split configurations with A₈ specifically placed in fibers 0 and 1, and it claims all such configurations have a zero-sum of weight ≤ p. But the adversary found strongly ZSF configurations with (7,9,1) or (8,8,1) splits where the 8 vectors in fiber 0 aren't A₈ at all—they're a different strongly ZSF set entirely. So the verification and the adversary's counterexamples are actually checking different things, which explains the apparent contradiction.
+
+The adversary's sets are perturbations of doubled+e1 where they change one vector, so they still contain most of the A₈ vectors but the modification breaks that structure. Since A₈ isn't unique at p≥5, the adversary can construct 17-element strongly ZSF sets with multiple fibers that don't rely on A₈ in any particular fiber. My next step is to re-verify whether the Round 2 adversary finding about multi-fiber strongly ZSF sets actually holds up.
+
+Writing verification code...
+
+============================================================
+BLOCK 5 (334 chars)
+============================================================
+Let me set up my attack plan and then execute it. The key attacks are:
+
+1. **Re-verify the Round 2 multi-fiber counterexamples** - this is the most important. If they're real, U1 is dead.
+2. **Attack the window structure** at larger primes
+3. **Try to construct hard 3-fiber configurations**
+
+Let me write the verification code first.
+
+============================================================
+BLOCK 6 (340 chars)
+============================================================
+The computation is running. Let me also start the window structure attack at larger primes in parallel, and look for the specific multi-fiber sets that were found in Round 2.
+
+Actually, let me check the output of the running computation while also preparing attack 3.
+
+Wait, the computation is running in the background. Let me check on it.
+
+============================================================
+BLOCK 7 (1497 chars)
+============================================================
+Let me check on the main computation. Also, I realize the prior adversary code used a different ZSF check method (support enumeration) vs the DP approach. Let me check the output of my attack.
+
+Actually, let me also think more carefully about the multi-fiber counterexamples. The key question is:
+
+When the adversary says "Position 1" - what is position 1 in S17_base? Let me count:
+- Positions 0-7: fiber 0 vectors (0, tail) for tail in A8_tails
+- Positions 8-15: fiber 1 vectors (1, tail) for tail in A8_tails
+
+
+- Position 16: e1 = (1,0,0,0)
+
+So position 1 is (0, 0, 1, 0) (second A8 tail in fiber 0). Replacing it with (3, 0, 1, 0) moves it to fiber 3. Position 9 is (1, 0, 1, 0) (second A8 tail in fiber 1), and swapping it for (2, 0, 1, 0) moves it to fiber 2. These are single-vector perturbations that shift them across fibers, which is what I'd expect to see.
+
+Now I need to verify whether these perturbations actually produce proportional pairs. The vector (3, 0, 1, 0) at position 5 would need a scalar multiple that matches something in S17 modulo 5, but checking s=2, 3, 4 gives me (1, 0, 2, 0), (4, 0, 3, 0), and (2, 0, 4, 0) respectively—none of which appear in the base set after removing position 1.
+
+Since all fiber-0 vectors start with 0, they can't be proportional to (3, 0, 1, 0), and checking the remaining vectors like (1, 1, 0, 0) fails the proportionality test. This looks consistent with what the prior adversary would have verified, so let me check my computation output.
+
+============================================================
+BLOCK 8 (162 chars)
+============================================================
+The computation is still running. The full ZSF check at p=5 with 17 vectors is exhaustive and can take time. Let me check what's happening with the output so far.
+
+============================================================
+BLOCK 9 (3960 chars)
+============================================================
+The output file is empty - the program might be buffered or still computing the initial base ZSF check. The base check for 17 vectors at p=5 with the `coeff_gen` approach could be slow because it enumerates all coefficient tuples. Let me think about the complexity:
+
+For support k, there are C(17,k) subsets. For each subset, we enumerate tuples summing to ≤ p=5 with each entry ≥ 1.
+
+Support 1: 17 subsets, 4 coefficient values = 68
+Support 2: C(17,2)=136 subsets, tuples (a,b) with a+b ≤ 5, a,b ≥ 1: about 10 = 1360
+
+
+Support 3: C(17,3)=680 subsets, roughly 10 tuples per subset = 6800
+Support 4: C(17,4)=2380 subsets, only 4 valid tuples each = 9520
+Support 5 and beyond get increasingly constrained since we need at least 5 entries summing to at most 5, which forces most entries to be 1.
+
+So I'm looking at around 24000 total coefficient-vector evaluations, which should be manageable since each evaluation is just a 4D vector sum mod 5. But I'm wondering if the recursive generator for creating these coefficient tuples might be the bottleneck—let me trace through the logic to see if there's an inefficiency in how I'm generating them. I see the issue—the range should be `range(1, max_weight + 1)` to include `max_weight` itself, not exclude it. Right now when `max_weight=1`, the range is empty and nothing gets yielded, but we should be generating the tuple `(1,)`. I'm seeing the issue now—when k=1 and max_weight=1, range(1, 1) produces an empty set, which means I'm missing valid coefficients like (4,1) that should have total weight 5. The base case needs to include max_weight itself, so the range should go up to max_weight + 1 instead of max_weight. I see the real problem now—the function doesn't receive `p` as a parameter, so it can't enforce the constraint that each coefficient must be in {1,...,p-1}. For the specific case where p=5 and max_weight=5, the base case happens to work out correctly, but I need to trace through what happens for k=2 to verify the logic holds. I'm realizing the bug actually works in the opposite direction—by missing valid coefficient tuples, my verification might fail to detect zero-sums that actually exist, which means sets I marked as ZSF in Round 2 could actually contain zero-sums and be false positives. Let me trace through the logic more carefully to understand what went wrong. I'm tracing through the recursive calls more carefully now. When I call coeff_gen(2, 5), each value of c generates a smaller subproblem, and I can see exactly which tuples get produced and which ones are missing—specifically (4,1), (1,4), and (2,3) fall through the cracks because the recursion stops before reaching those maximum weight combinations.
+
+This is a critical flaw: every weight-p zero-sum with support ≥ 2 gets missed by this algorithm. The only weight-p cases that work are support-1 tuples, but even those don't exist at weight p since c would need to exceed p-1. This means the Round 2 adversary's "strongly ZSF" claim is potentially invalid—they may have found sets with weight-p zero-sums at higher support levels that this buggy check completely overlooked.
+
+Wait, I need to reconsider. The Round 2 code actually uses a different function that generates all tuples with entries in {1,...,p-1} and then filters by weight, which is correct. For support 2 at p=5, it generates all 16 possible coefficient pairs and keeps those with weight ≤ 5, so it should catch everything.
+
+My implementation has a bug then, but since the counterexamples were verified against the correct code, they're likely legitimate. I should switch to the same approach—generating all tuples and filtering by weight—and re-run to confirm. I also need to check whether the Round 2 adversary actually tested up to p=5 with the support parameter. If they still fail after fixing the bug, then either the Round 2 code was actually correct or my reconstructed sets are wrong. I need to stop the current computation and patch the code.
+
+============================================================
+BLOCK 10 (118 chars)
+============================================================
+Let me also run a quick separate check on just the first counterexample to get fast results while the full suite runs.
+
+============================================================
+BLOCK 11 (135 chars)
+============================================================
+The first counterexample is confirmed. Let me now check that it has no 2-fiber linear form. Let me also check a few more cases quickly.
+
+============================================================
+BLOCK 12 (2268 chars)
+============================================================
+This is extremely important. ALL 7 claimed counterexamples from Round 2 have:
+- Minimum fiber count = 3 over ALL 156 projective linear forms
+- No 2-fiber form exists
+
+But I've only confirmed the ZSF check for one of them (pos=9). Let me quickly check the others too. Actually, let me wait for the main computation to finish, but let me also run quick ZSF checks on a couple more.
+
+Actually, let me think more carefully. The ZSF check for pos=9 passed (3.6 seconds). The full suite is running but will take longer. 
+
+I should verify a few more in parallel while thinking through what this means. The key finding is that these 17-vector sets are strongly ZSF with minimum 3 fibers under every linear form, which directly contradicts U1. But I need to reconsider how this affects the broader proof strategy that was outlined in the major proof advance.
+
+The original approach relied on shadow saturation lifting from the shadow of A to the shadow of doubled+e1, which would establish uniqueness and lead to the grail. The adversary Round 2 report shows that shadow saturation actually holds universally across all tested strongly ZSF sets, regardless of their fiber structure. This means U1 was a red herring all along—it was already disproved, yet Session 4 was still pursuing it. The real questions are whether shadow saturation holds for all strongly ZSF sets of size 17 without assuming the 2-fiber constraint, and whether we can prove it without that structural assumption.
+
+Now I see the Cortex entry shows shadow saturation is actually proved for rank-3 sets through Theorem 1, which connects η(C_p^r) to the saturation property for maximal ZSF sets. The proof works for rank-3 because η(C_p^3) is established, but for rank-4 sets like S17, shadow saturation is still what we're trying to prove since η(C_p^4) remains unknown. So the proof chain only extends as far as rank-3 right now.
+
+But here's what's striking: the Round 2 adversary tested multi-fiber 17-sets (which aren't the doubled+e1 construction) and found they also satisfy shadow saturation perfectly. This means shadow saturation might hold for all strongly ZSF sets of size 17, not just the specific doubled+e1 case—which would require a completely general proof independent of the lifting argument.
+
+============================================================
+BLOCK 13 (794 chars)
+============================================================
+All multi-fiber counterexamples have shadow saturation 624/624. So:
+
+1. U1 is FALSE (7 confirmed counterexamples)
+2. Shadow saturation holds for ALL tested strongly ZSF sets (including multi-fiber ones)
+3. The proof should target shadow saturation directly, not 2-fiber forcing
+
+Now let me check the window structure results from the main computation, and also think about what this means for the window structure approach.
+
+The window structure was claimed to be on the "invariant line L = {(0,j,j)}" of A8. But the multi-fiber counterexamples don't use A8 in both fibers - they have perturbed sets. 
+
+The window structure analysis appears to be tied specifically to A8, so it won't necessarily extend to these perturbed configurations. Let me look at what the main computation actually found.
+
+============================================================
+BLOCK 14 (170 chars)
+============================================================
+The main suite seems to still be running on the larger primes. The window structure is confirmed for p=5,7. Let me check if the computation is still running or completed.
+
+============================================================
+BLOCK 15 (2772 chars)
+============================================================
+The p=11 computation is taking longer because the direct enumeration of 11^8 coefficient vectors is very expensive. Let me think about the situation:
+
+1. U1 is dead — 7 confirmed counterexamples
+2. Window structure holds at p=5,7 (confirmed)
+3. Shadow saturation holds for all multi-fiber counterexamples
+
+The larger primes will take too long with direct enumeration. The DP approach would be faster. Let me focus on the most important adversary attacks that I haven't done yet:
+
+1. The window structure at larger primes — I should use the DP approach instead of direct enumeration
+
+
+2. Non-A8 sets — does the window structure hold for alternative B8 sets?
+3. Can I construct anything that breaks shadow saturation?
+
+Since U1 is clearly false, I should refocus my efforts. The window structure is mathematically interesting, but it was only useful for proving U1, which doesn't hold. What really matters now is whether I can prove shadow saturation directly — if the window structure helps establish that, then it's worth pursuing further.
+
+The path forward is clearer now: I need to show that for any maximal strongly ZSF 8-set in F_p^3, the cumulative shadow at weight p-1 covers everything except zero, and the same for the 17-set case in F_p^4. The second part is what I'm actually trying to prove, and it follows directly from the η bound — if the bound holds, then any maximal ZSF set must have its cumulative shadow saturate the space at weight p-1.
+
+The problem is that at rank 4, I don't have the η bound yet; that's exactly what I'm trying to establish. The lifted argument works for the doubled+e1 construction using rank-3 results, but it doesn't generalize to all maximal strongly ZSF 17-sets. So the remaining gap is proving shadow saturation at rank 4 for every such set, or showing they all reduce to the doubled+e1 case somehow.
+
+I should prioritize checking whether the window structure holds at p=11 via dynamic programming, testing if non-A8 sets exhibit different windows (which would suggest the window structure is too specific), and attempting to construct a counterexample to shadow saturation. The key insight from Round 2 is that weakly ZSF sets fail shadow saturation, but strongly ZSF sets should preserve it—so I need to verify whether a strongly ZSF 17-set can actually have an incomplete shadow, and if so, understand why the minimum kernel weight of p+1 doesn't prevent it.
+
+The constraint is extremely tight: I need a code with minimum distance p+1 but covering radius greater than p-1, which violates the sphere-covering bound for such a high-rate code.
+
+Rather than pursuing this theoretical angle further, I should shift to testing computational attacks—running the DP-based window check at p=11 and p=13, plus the non-A8 window check.
+
+============================================================
+BLOCK 16 (3082 chars)
+============================================================
+While the window check runs, let me think about what's the most useful thing I can do with my remaining time. The key findings are:
+
+1. U1 is FALSE — completely confirmed with 7 independent counterexamples
+2. Shadow saturation holds universally for all tested strongly ZSF sets
+
+The remaining attacks:
+- Window structure: running in background, will take a while for p=29,31
+- Shadow saturation break attempt: this would be the most valuable
+
+Let me also think analytically about the structure of the counterexamples. All of them have the form: take doubled+e1, and replace ONE vector (f, tail) with (f', tail) for some f' ≠ f. 
+
+This is exactly the "Same-Tail Swap Theorem" from Round 3 — replacing a vector while keeping its tail direction preserves the projective tail class and the rank-3 ZSF property, while blocking dangerous weight-p zero-sums through partner fiber exclusion. So U1 fails because of these same-tail swaps, which are technically small counterexamples.
+
+But the real question is whether this affects the proof. Shadow saturation still holds, so if I can show it works for ALL strongly ZSF 17-sets with arbitrary fiber assignments and an e1 direction, then the proof goes through regardless of these swaps.
+
+The deeper issue is whether there are strongly ZSF 17-sets outside this family entirely—ones where the tail set isn't a single B8 configuration. The deep uniqueness result at p=7 suggests all such sets are either doubled+e1 variants or trivial fiber shifts, but since A8 isn't unique at higher primes, I could potentially have a doubled+e1 with a completely different B8 tail set, which would still fit the family but with a different underlying structure.
+
+The adversary Round 2 report confirms that shadow saturation holds across all 6 alternative B8 choices for doubled+e1 configurations, so the property appears universal for strongly ZSF 17-sets regardless of which B8 set anchors the construction or how the fibers distribute. This suggests the right approach is to prove shadow saturation directly for any strongly ZSF 17-set in F_p^4, rather than case-by-case analysis.
+
+I should verify the background computation and move toward the final report, but first I want to think through whether anything could actually break shadow saturation—for a 17-vector strongly ZSF set to fail it, there'd need to be some nonzero target v that escapes the shadow sum entirely.
+
+Since S is strongly ZSF with minimum weight zero-sum at p+1, the code it generates has minimum distance p+1, and shadow saturation at weight p-1 is really asking whether the covering radius stays bounded by p-1. I'm checking the sphere-covering bound for a [17, 13, 6]_5 code to see if the covering radius could exceed p-1. I'm realizing the constraint is actually about weighted sums of coefficients, not Hamming distance—the weight is the total sum of all coefficients, not just counting nonzero positions. This makes it a covering problem in a different metric space, which is harder to analyze generally, so I'll check the computational results and move forward with the report.
+
+============================================================
+BLOCK 17 (117 chars)
+============================================================
+Window structure confirmed up to p=29. p=31 is running. Let me wait a bit for p=31 and then check the non-A8 results.
+
+============================================================
+BLOCK 18 (1279 chars)
+============================================================
+Interesting! The greedy search found ZERO ZSF 8-sets at p=7 or p=5, not even A8 itself. This means my greedy search is too strict — probably because the sequential greedy approach (adding one vector at a time) is getting stuck. The issue is that when checking ZSF incrementally (one vector at a time), the ZSF check for each partial set is expensive and the search space is huge.
+
+Actually, the problem is that `is_zsf_quick` checks ALL supports up to p, which means for 8 vectors at p=7, it checks support up to 7. For a partial set of 4 vectors at p=7, it checks all C(4,1)*6 + C(4,2)*6^2 + C(4,3)*6^3 + C(4,4)*6^4 = 24 + 216 + 1296 + 5184 = 6720 coefficient tuples. 
+
+For a partial set of 7 vectors, it's checking even more, which means the greedy approach is path-dependent and often gets stuck in local optima. Instead of continuing with greedy search, I should try a different strategy: take A8 as a starting point and perform single-vector swaps to find alternative B8 sets, since I know alternatives must exist from Round 3.
+
+But this is taking too long. The U1 counterexample is confirmed and the window structure holds for A8 across all tested primes, so let me focus on that instead and try constructing known alternative B8 sets directly by swapping one vector in A8.
+
+============================================================
+BLOCK 19 (3586 chars)
+============================================================
+This is DEVASTATING for U1. Let me summarize the findings:
+
+1. **ALL 128 tested double swaps to fiber 2 pass** (STRONGLY ZSF). Not a single failure!
+
+2. **The 5-fiber configuration {0:4, 1:4, 2:4, 3:4, 4:1} is STRONGLY ZSF!** This is a set spread across ALL 5 fibers, and it's still strongly ZSF.
+
+3. **The balanced 5-fiber config {0:4, 1:4, 2:3, 3:3, 4:3} is STRONGLY ZSF!** 
+   
+Wait, but "Min fibers: 2" is throwing me off — that means under some other linear form, this configuration only has 2 fiber values, even though it spans 5 fibers under the first coordinate. So this wouldn't actually be a U1 counterexample after all, since it does collapse to 2 fibers under a different form. I need to reconsider what this actually means for the test.
+
+Now I'm realizing I only checked min_fibers for the balanced 5-fiber config, not for the {0:4, 1:4, 2:4, 3:4, 4:1} distribution. And the single-swap counterexamples I found earlier all have min_fibers=3 across every form, so some configurations genuinely can't be reduced to 2 fibers. Let me check what the min_fibers value is for the balanced config to see if it's actually a valid counterexample. fibers=2 — meaning some linear form gives only 2 fibers. This makes sense: even though the first coordinate spreads them across 5 fibers, some other linear combination of coordinates might align them into 2 fibers.
+
+The key distinction: 
+- Same-tail single swaps: min_fibers=3 (confirmed U1 counterexamples)
+- Multi-swap configurations: min_fibers=2 (NOT U1 counterexamples)
+
+So the single-swap mechanism is special! When you swap ONE vector to a different fiber, you break the 2-fiber structure under ALL forms. But when you do multiple swaps, some forms can still give 2 fibers.
+
+When I swap one fiber-0 vector from (0, tail) to (2, tail), I'm adding 2 to the first coordinate. Under any form w = (a,b,c,d), the original and swapped vectors differ by 2a in their fiber value. If a=0, the form (0,b,c,d) collapses them into the same fiber, but it still needs to separate the remaining 16 vectors into at most 2 fibers. For the single-swap set, this constraint turns out to be impossible — any form that merges the swapped pair forces at least 3 fibers overall. Looking at the min_fibers results, the single-swap cases consistently show 3 fibers while the multi-swap configurations collapse to 2, and I'm trying to understand why. For the balanced multi-swap setup, the first set of 8 tails maps to fibers 0,0,1,1,2,2,3,3 and the second set maps to 4,4,0,0,1,1,2,2, giving 5 fibers under the standard form but potentially collapsing when I apply a form that mixes in a linear combination of the tail coordinates.
+
+The key insight is that when vectors share the same tail but have different fiber assignments, a carefully chosen linear form could make their values equal by using the tail coordinates to offset the fiber differences. This works when there's a strong correlation between which fibers get assigned and what the tail values are. For single-swap cases, only one vector differs in fiber assignment, so there's barely any tail-fiber correlation to exploit, which is why they stay at 3 fibers.
+
+Now I've confirmed the main findings: U1 is definitely false with multiple counterexamples, 5-fiber strongly ZSF sets are achievable through the same-tail swap mechanism, the window structure holds across all tested primes, and shadow saturation appears universal. Rather than trying to prove U1, the proof should focus directly on establishing shadow saturation. Let me check the non-A8 window results before finalizing the report.
+
+============================================================
+BLOCK 20 (1026 chars)
+============================================================
+The single-swap search at p=7 found 0 alternatives. This is strange given that the adversary Round 3 found 6 distinct GL(3,7) classes. The issue is that single-swaps from A8 at p=7 might not produce alternatives because A8 is more rigid at p=7 (the removal of one vector might not be compensable by any single replacement).
+
+Let me try at p=5 where there are known to be many alternatives. Actually, the search code is buggy — it checks each `remove_idx` and for each one, tries all projective points. But the ZSF check is very expensive (support up to 7 at p=7 means checking subsets of size up to 7). 
+
+The combinatorics are brutal: with 8 vectors and support 7, I'm looking at roughly 2.2 million tuples per weight to check, which is prohibitively slow. Let me shift to p=5 where the computation is faster, or better yet, move forward with the key insight that U1 is false. The critical next step is checking whether the 5-fiber configuration also exhibits shadow saturation—that would be the strongest possible refutation.
+
+============================================================
+BLOCK 21 (2278 chars)
+============================================================
+Extraordinary findings! Let me summarize:
+
+1. **The 5-fiber config (0:4, 1:4, 2:4, 3:4, 4:1) is strongly ZSF AND has full shadow saturation.** Under the first coordinate, it uses ALL 5 fibers. BUT under some other linear form (1,4,4,4), it only uses 2 fibers. So this specific config IS a 2-fiber set under some form.
+
+2. **The spread_1 config also has full shadow saturation.**
+
+The key insight from the 5-fiber config: min_fibers = 2 under form (1,4,4,4). So the 5-fiber appearance is ILLUSORY — under the right linear form, the set collapses to 2 fibers! This actually SUPPORTS U1 (there exists a 2-fiber form), it doesn't contradict it.
+ 
+Now I'm seeing the real distinction: single-swap counterexamples genuinely achieve min_fibers = 3, making them true U1 counterexamples, while multi-swap configs collapse to min_fibers = 2 under some form, so they're not actually counterexamples at all. The single-swap sets are the ones that truly resist the 2-fiber property.
+
+For the single-swap case with that one vector at (2,0,1,0), I'm checking why no linear form can collapse this to 2 fibers—the structure has 8 vectors in fiber 0, 8 in fiber 1, and just that 1 outlier in fiber 2, and any form trying to merge fibers would need to handle this asymmetry. Looking at the specific tail vectors from the restricted set, their form values under any nonzero (b,c,d) will vary across the board, and requiring them to collapse into just two distinct values while simultaneously keeping the fiber-1 values, the special vector (2,0,1,0), and e1 all within that same two-value constraint is extremely restrictive—essentially ruling out any valid form through exhaustive checking.
+
+So the upshot is clear: U1 is definitively false with seven single-swap counterexamples showing min_fibers=3, while the more complex multi-swap and 5-fiber configurations that looked problematic actually do admit 2-fiber forms. Shadow saturation emerges as the truly universal property across all tested strongly ZSF 17-sets, and the window structure holds consistently for A8 across all primes up to 31. The proof strategy should focus on establishing that U1 and uniqueness are both false, then proving shadow saturation directly as the fundamental invariant. Now I'm compiling the final report to store.

@@ -1,0 +1,200 @@
+# TARGET THEOREM
+
+Prove: η(C_p³) = 8(p−1)+1 for every odd prime p.
+
+The lower bound η(C_p³) ≥ 8(p−1)+1 is ALREADY PROVED and machine-checked
+in Lean 4. You do not need to touch it.
+
+Your job is the UPPER BOUND:
+
+**Theorem (Target).** For every odd prime p and every sequence S over
+(Z/pZ)³ of length 8(p−1)+1, S contains a nonempty zero-sum subsequence
+of length ≤ p.
+
+This is equivalent to:
+
+**Theorem (Reformulated).** For every set V of 9 nonzero vectors in F_p³,
+the multiset V^{[p−1]} (each vector with multiplicity p−1) contains a
+nonempty zero-sum subsequence of length ≤ p.
+
+---
+
+## WHY THIS REFORMULATION IS SUFFICIENT
+
+The following is PROVED (do not re-derive):
+
+**Extremal Reduction Lemma.** Any short-zero-sum-free sequence S over
+C_p³ has all multiplicities ≤ p−1. If |S| ≥ 8(p−1)+1, either some
+element has multiplicity ≥ p (instant zero-sum) or the support has ≥ 9
+distinct elements. So the upper bound reduces to: every 9-element
+support with multiplicities p−1 forces a short zero-sum.
+
+**Kernel Reformulation.** A set V = {v_1,...,v_9} ⊂ F_p³\{0} gives a
+3×9 matrix M with rank ≤ 3, so dim(ker M) ≥ 6 over F_p.
+The multiset V^{[p−1]} has a short zero-sum iff ker(M) contains a
+nonzero vector c = (c_1,...,c_9) with each c_i ∈ {0,...,p−1} and
+1 ≤ c_1 + ... + c_9 ≤ p.
+
+So the Target Theorem is equivalent to:
+
+**Theorem (Kernel Form).** Let K be a subspace of F_p⁹ with dim(K) ≥ 6.
+Then K contains a nonzero vector c with all coordinates in {0,...,p−1}
+and coordinate sum at most p.
+
+This is a PURE LINEAR ALGEBRA statement. No group theory, no sequences,
+no combinatorics. A subspace of dimension 6 in a 9-dimensional space
+over F_p must contain a "short" vector.
+
+---
+
+## WHAT IS KNOWN
+
+| Fact | Status |
+|------|--------|
+| η(C_p³) ≥ 8(p−1)+1 for all odd p | PROVED (Lean 4, 541 lines) |
+| η(C₃³) = 17 | PROVED (lower + upper verified computationally) |
+| η(C₅³) = 33 | PROVED (lower + exhaustive DFS, 845K nodes) |
+| η(C₇³) ≥ 49 | PROVED (A₈ at mult 6, machine-checked DP) |
+| A₈ works for ALL tested primes | Verified p=3,5,7,11,13 |
+| All 335 9th-vector extensions of A₈ at p=7 create short zero-sums | Verified |
+| Min kernel weight of A₈ = p+1 at p=3,5,7 | Verified |
+| Every 9-element support tested forces short zero-sum | Verified (thousands of random tests at p=7) |
+| Extremal supports are affine caps (no 3 collinear) | PROVED |
+| Collinear triple ⇒ short zero-sum of length ≤ p | PROVED |
+
+---
+
+## THE PROOF LANDSCAPE
+
+Here are the approaches that might work. Try them IN THIS ORDER.
+
+### Approach 1: Counting / Pigeonhole on the kernel
+
+K has dimension ≥ 6 in F_p⁹, so |K| = p⁶.
+Define W = {c ∈ F_p⁹ : all c_i ∈ {0,...,p−1}, 1 ≤ Σc_i ≤ p}.
+We need K ∩ W ≠ ∅.
+
+Note: W excludes only the zero vector and vectors with Σc_i > p.
+The number of vectors in {0,...,p−1}⁹ with Σc_i > p is bounded.
+If |K| > |F_p⁹ \ W|, we're done.
+
+The question: is p⁶ large enough relative to the complement of W?
+Compute |W| and |F_p⁹ \ W| for small p. Check if the pigeonhole works.
+
+WARNING: The "projection scaling obstruction" showed that naive averaging
+fails for 5-dimensional kernels (from 8-vector supports). But here the
+kernel is 6-dimensional. The extra dimension may be exactly what's needed.
+Check whether the counting argument that fails at dim 5 succeeds at dim 6.
+
+### Approach 2: Average weight over the kernel
+
+For c ∈ K, define w(c) = sum of (c_i reduced to {0,...,p−1}).
+This is the lift-weight.
+Compute the average of w(c) over all nonzero c ∈ K.
+
+If avg(w) ≤ p, then some nonzero c has w(c) ≤ p. Done.
+
+For a RANDOM d-dimensional subspace of F_p⁹, each coordinate of a
+random nonzero vector is uniformly distributed over F_p, so the
+average lift of one coordinate is (p−1)/2. The average total weight
+is 9(p−1)/2.
+
+We need this to be ≤ p, i.e., 9(p−1)/2 ≤ p, i.e., 7p ≤ 9.
+This fails for p ≥ 3. So uniform averaging over the WHOLE kernel fails.
+
+But: can you average over a STRUCTURED SUBSET of the kernel?
+E.g., vectors supported on at most k coordinates? Or vectors in a
+specific coset? The kernel has subspaces and the weight function is
+not linear — it wraps mod p. Exploit the wrapping.
+
+### Approach 3: Polynomial method (Chevalley–Warning / Combinatorial Nullstellensatz)
+
+The condition "Σ c_i v_i = 0, 0 ≤ c_i ≤ p−1, 1 ≤ Σc_i ≤ p" can be
+encoded as a system of polynomial equations over F_p:
+
+- M c = 0 (3 linear equations)
+- c_i^p - c_i = 0 for each i (Fermat: forces c_i ∈ F_p, automatic)
+- Need: Σc_i ≠ 0 and Σc_i is "small"
+
+Chevalley–Warning: if the total degree of the system is < the number
+of variables, then the number of solutions is divisible by p.
+Here: 3 linear + 1 constraint on the sum = 4 equations in 9 variables.
+Degrees sum to 3 + (something for the sum constraint) < 9? Possibly.
+
+Alon's Combinatorial Nullstellensatz: if a polynomial doesn't vanish
+at a specific point, and degree conditions are met, then it doesn't
+vanish on a grid. The contrapositive might force the existence of
+the vector we need.
+
+Be precise about the polynomial formulation. What polynomial vanishes
+exactly when no short zero-sum exists?
+
+### Approach 4: Structural / geometric
+
+9 points in F_p³. By pigeonhole, some coordinate has ≥ 3 points
+sharing a value (9 points, p values for each coordinate — actually
+this depends on p). For small p this gives collinear or coplanar
+configurations that force relations.
+
+More precisely: 9 points in a 3-dimensional space span at most a
+3-dimensional affine space. Their convex/linear structure is highly
+constrained. The 6-dimensional kernel means 6 independent relations
+among the 9 points. Each relation is a potential zero-sum if its
+coefficients are bounded.
+
+Key question: can a 6-dimensional subspace of F_p⁹ avoid ALL vectors
+with entries in {0,...,p−1} and entry sum ≤ p? What geometric
+property would such a subspace need? This is related to coding theory
+— it's asking about the minimum "lift-weight" of a linear code.
+
+### Approach 5: Induction on p or reduction to known results
+
+For p = 3 and p = 5, the exact values are known computationally.
+Can you prove the general case by induction on p? Or by reducing
+to a known result about caps, codes, or sumsets?
+
+The Ellenberg–Gijswijt cap set bound (2017) shows cap(F_3^n) ≤ O(2.756^n).
+For F_p³ specifically, cap(AG(3,p)) grows with p. But we need a
+FIXED support size (9) to force a short zero-sum. This might connect
+to bounds on codes with restricted weight.
+
+---
+
+## DEAD ENDS (do not repeat)
+
+1. Random computational search. We've done 14,000+ random tests. More
+   tests will not produce a proof.
+2. Exhaustive enumeration of 8-supports. The search space is ~10¹³.
+   Even with GL-reduction and filters, it didn't finish.
+3. Naive averaging over the full kernel. The average weight is
+   9(p−1)/2 >> p. This bound is useless.
+4. The inverse theorem for C_p³. It's FALSE.
+5. Projective arc upper bounds for s-constants. Fatal coefficient-sum gap.
+
+---
+
+## RULES
+
+1. Every turn must contain a LEMMA with a proof attempt, a precise
+   OBSTRUCTION statement, or a CONJECTURE with structural justification.
+2. Computation is permitted ONLY to verify a specific conjecture you
+   have already stated.
+3. A proof that works for all primes p simultaneously is worth
+   infinitely more than any computation for a single prime.
+4. If you get stuck on one approach, state EXACTLY what fails
+   ("I need X but can only get Y") and switch to the next approach.
+5. The goal is ONE THEOREM. Stay focused.
+
+---
+
+## WHAT SUCCESS LOOKS LIKE
+
+A proof of: every 6-dimensional subspace of F_p⁹ contains a nonzero
+vector with coordinates in {0,...,p−1} summing to at most p.
+
+Or equivalently: every 9 nonzero vectors in F_p³ with multiplicities
+p−1 force a zero-sum subsequence of length ≤ p.
+
+That single theorem, combined with the existing machine-checked lower
+bound, gives η(C_p³) = 8(p−1)+1 for all odd primes. First exact
+determination of this constant in 50 years.

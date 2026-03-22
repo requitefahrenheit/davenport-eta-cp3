@@ -1,0 +1,44 @@
+# Research Briefing (COMPUTER thread)
+
+**Goal:** Prove: for a,b,c in F_p* with no pair summing to 0 mod p and a+b+c != 0 mod p,
+the wrap count k(lambda) = floor(([la]+[lb]+[lc])/p) is NOT identically 1.
+
+Equivalently: f(lambda) = [la]+[lb]+[lc] < p for some lambda in F_p*.
+
+By the involution f(l)+f(-l)=3p and sum(k)=p-1: this is equivalent to showing
+k=2 for some lambda (then -lambda gives k=0, f <= p-1).
+
+Verified for p = 5,7,11,13,17,19. Zero exceptions.
+
+---
+
+### Round 1  (00:07)
+
+Goal was to show that for any nonzero triple a,b,c mod p with no opposite pairs and a+b+c ≠ 0, the “wrap count” k(λ) (how many times the sum of the three scaled residues crosses p) cannot be constantly 1 as λ ranges over Fp* — equivalently that for some λ the three scaled residues sum to < p. In this round the worker tested the initial “local” obstruction idea (three pairwise large-sum inequalities) and found it false: a concrete counterexample at p = 11 (taking the ratios u = b/a = 5, v = c/a = 7, or the triple (1,5,7)) satisfies those local large-sum conditions but produces k(λ) values [1,1,1,1,0,2,1,1,1,1], so k is not identically 1 and the single-λ inequalities are too weak. They then diagnosed the real constraint as global: the carry bits coming from different pairwise sums must synchronise for every λ, and framed this by defining two λ-sets (where one kind of carry is 0 and where the complementary carry is 1) that would have to coincide and be stable under λ↦−λ — a very rigid “checkerboard” partition that they now plan to show is impossible except in degenerate cases (like a+b ≡ 0). Progress: the original approach was disproved but that sharpened the problem to a promising global-carry formulation; next work will try to rule out the required perfect partition of Fp*. Vibe check: (yellow) 🟡 — working and clearer, but not yet a complete proof.
+
+**Cost so far: $0.22** | Tokens: 48,862 in / 9,593 out
+
+### Round 2  (00:15)
+
+We set out to show that the "wrap count" k(λ) = floor(([λa]+[λb]+[λc])/p) cannot equal 1 for every nonzero λ in F_p under the given nondegeneracy hypotheses; in this round we proved a clean, useful lemma: any half-size subset of F_p^* that is anti-symmetric (contains no element and its negative) and is invariant under multiplication by a fixed t must have t a quadratic residue. Using that lemma we argued informally that if k(λ) ≡ 1 then a certain carry-set X would have to equal another set Y, and that equality would force X to be invariant under multiplication by the three explicit ratios t1=(a+b)/a, t2=c/a (and similarly t3=b/a), which—by the lemma—would force those ratios to be quadratic residues and lead to a contradiction; however two important gaps remain and one earlier claim was mistaken: I have not yet given a rigorous proof that k≡1 implies X=Y and thus invariance under t1,t2,t3, and the assertion that t1·t2 ≡ −1 was unjustified (so the exact multiplicative relations among the t_i that produce the contradiction still need to be derived). The concrete next step is therefore to (A) prove carefully that k≡1 forces the carry-set equalities and hence invariance under the t_i, (B) compute the exact relations among t1,t2,t3 implied by the wrap identities, and (C) finish by applying the residue lemma and group-structure facts (or produce a counting obstruction) to cover both p≡1 and p≡3 mod 4; progress is real but the crucial deductions are incomplete, so: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.33** | Tokens: 66,554 in / 16,064 out
+
+### Round 3  (00:21)
+
+In this round the worker turned a heuristic into a concrete, usable structural lemma: assuming the wrap count k(λ) were 1 for every nonzero λ, they defined the “no-carry” set X = {λ : ⌊λa⌋+⌊λb⌋ < p} and proved two strong constraints — X has exactly (p−1)/2 elements and is anti-symmetric under λ ↦ −λ (so each ± pair contributes exactly one element of X) — which rigorously captures the combinatorial bottleneck any all-ones configuration must satisfy. That removes a lot of entropy from the hypothetical counterexample and sets up the planned next move (showing the multiplicative actions t1=(a+b)/a and t2=c/a would force extra invariance of X and thus a contradiction unless a forbidden antipodal relation among a,b,c holds). The step is substantive and the evaluator accepted it, so the project is making real progress toward the final contradiction rather than spinning; overall vibe: (green)
+
+**Cost so far: $0.36** | Tokens: 81,524 in / 17,547 out
+
+### Round 4  (00:25)
+
+Goal: show that for nonzero a,b,c mod p with no pair summing to 0 and a+b+c ≠ 0, the quantity k(λ) = floor(([λa]+[λb]+[λc])/p) is not identically 1 (equivalently some λ gives [λa]+[λb]+[λc]<p). Progress this round: the worker isolated the main obstruction to the earlier simple idea (trying to force the two carries to swap by multiplying λ by a fixed scalar): an explicit counterexample (a,b,c)=(1,5,7), p=11 shows that scaling by t1=(a+b)/a does not send the no-carry set X for (a,b) to the yes-carry set for (a+b,c), because the second term picks up an extra factor ac/(a+b) that isn’t in {a,b}. That kills the hoped-for one-step multiplier invariance, so the plan was changed to treat all three pairwise carry-sets X12,X23,X31 at once and attempt a pigeonhole/counting argument that two of these “half-sets” must coincide (which would force an antipodal relation and contradict the generic hypothesis). Computations supporting the obstruction were run (and one correct snippet produced X = [1,3,5,7,9] vs its scaled image [6,7,8,9,10]), but the notebook also contains some coding slips (undefined variable, sloppy rep logic). The next concrete task is to prove the claimed overlap/coincidence statement for the three carry-sets or else find a different global invariant; as of now the obstruction is clear but the new pigeonhole step is only sketched and unproven, and the evaluator flagged drifting/indecision. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.54** | Tokens: 155,921 in / 21,572 out
+
+### Round 5  (00:28)
+
+Goal: show that for nonzero a,b,c in F_p with no pair summing to 0 and a+b+c ≠ 0, the integer f(λ) = [λa]+[λb]+[λc] is < p for some λ (equivalently k(λ)=floor(f/p) is not identically 1). Progress this round: the worker proved a concrete new lemma that if k(λ)=1 for every λ then, for each choice of pivot x in {a,b,c}, the sum of the least-positive representatives of y/x and z/x must be at least p+1 (strictly > p because equality would force a forbidden antipodal pair), giving six explicit inequalities on the three quotients; they also ran small-p computer checks (e.g. p=11 with a=1,5,7) that illustrate nonconstant k patterns and confirmed no counterexamples for primes tested. This replaces earlier vague pigeonhole heuristics with a precise, checkable obstruction whose next step is to show the six inequalities cannot all hold simultaneously and so produce the desired contradiction. Vibe check: (green) = real progress.
+
+**Cost so far: $0.63** | Tokens: 200,864 in / 23,603 out
+

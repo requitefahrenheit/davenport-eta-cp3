@@ -1,0 +1,183 @@
+# TARGET: Prove Case A of η(C_p³) = 8(p−1)+1.
+
+Case B is PROVED. Case A is the last gap.
+
+---
+
+## CASE A: PRECISE STATEMENT
+
+Given 9 nonzero vectors v₁,...,v₉ in F_p³, not all lying on a common
+affine hyperplane, each with multiplicity p−1. Show there exists a
+nonempty subsequence of length ≤ p summing to 0.
+
+---
+
+## KEY COMPUTATIONAL FINDING (NEW)
+
+Tested 538 exact Case A configurations across p = 5, 7, 11.
+For EVERY configuration, the following procedure succeeds:
+
+1. Find a collinear triple (v_i, v_j, v_k linearly dependent).
+2. Compute the kernel relation: a·v_i + b·v_j + c·v_k = 0.
+3. Find a scalar λ such that lift(λa) + lift(λb) + lift(λc) ≤ p.
+4. This gives a short zero-sum of length lift(λa) + lift(λb) + lift(λc).
+
+ZERO FAILURES in 538 tests.
+
+Note: for individual triples, step 3 CAN fail (some triples have
+min_λ f(λ) = p+1). But among ALL collinear triples in the 9-point
+configuration, at least one always succeeds.
+
+---
+
+## THE TWO SUB-CASES
+
+For a collinear triple with relation (a,b,c), define s = a+b+c mod p.
+
+**Sub-case s = 0:** The weight-3 inversion trick gives lift-sum = p.
+Proof: set λ = a⁻¹. Then lift(λa) = 1, and lift(λb) + lift(λc) = p-1
+(since b/a + c/a = -1 mod p and both are nonzero). Total = p. QED.
+
+So: if K₀ (the sum-0 kernel) has a weight-3 vector, we're DONE.
+
+**Sub-case s ≠ 0:** The triple is in K_s, not K₀. The inversion trick
+gives lift-sum = 1 + f(b/a, c/a) where f can be p-1 (giving total p)
+or 2p-1 (giving total 2p) depending on wrapping.
+
+Need: for some scaling λ, the integer sum of the three lifted entries
+is ≤ p. This means the three entries (λa mod p, λb mod p, λc mod p)
+sum to ≤ p as integers.
+
+Since each entry is in {1,...,p-1}: integer sum ∈ {3,...,3(p-1)}.
+Need sum ≤ p, i.e., the entries are "small" (average ≤ p/3).
+
+---
+
+## WHAT NEEDS TO BE PROVED
+
+**Lemma (Collinear Triple Lemma):** For any 9 projectively distinct
+nonzero vectors in F_p³ (not all on a hyperplane), one of the following
+holds:
+
+(a) K₀ has minimum distance ≤ 3 (a collinear triple with s = 0), OR
+(b) Some collinear triple has a scaling with integer sum ≤ p.
+
+Then: (a) is handled by the inversion trick. (b) is direct.
+
+---
+
+## APPROACHES (TRY IN ORDER)
+
+### Approach 1: Prove d(K₀) ≤ 3 always.
+
+K₀ = ker([M; 1...1]) is a [9,5] code over F_p. Its parity check is
+4×9 with columns (v₁,1),...,(v₉,1) in F_p⁴.
+
+d(K₀) ≤ 3 means: some 3 of these 4-dimensional column vectors are
+linearly dependent. Equivalently: 3 of the 9 points (v_i, 1) in PG(3,p)
+are collinear.
+
+For p ≤ 7: MDS bound says no [9,5,5] code exists (needs p ≥ 8).
+So d ≤ 4. But we need d ≤ 3, which is STRONGER.
+
+Question: can a [9,5,4] code exist over F_p for p = 5,7?
+Computation: yes (about 10% of Case A configs have d(K₀) = 4).
+So d(K₀) ≤ 3 is NOT always true.
+
+### Approach 2: When d(K₀) = 4, use K \ K₀.
+
+If d(K₀) = 4: all collinear triples have s ≠ 0. There ARE collinear
+triples (9 > p+1 for p ≤ 7, so arcs don't exist). Their kernel
+relations have s ∈ {1,...,p-1}.
+
+Need to show: among these s ≠ 0 triples, at least one has a
+scaling with integer sum ≤ p.
+
+A weight-3 vector (a,b,c) with integer sum a+b+c (all in {1,...,p-1}):
+if a+b+c ≤ p, we're done immediately (take λ = 1, no scaling needed!).
+
+So the question reduces to: does some collinear triple have
+coefficients summing to ≤ p as integers?
+
+Since a,b,c ∈ {1,...,p-1} and a+b+c ≥ 3: need a+b+c ≤ p.
+This means the entries are "small."
+
+The kernel relation is unique up to scalar. If (a,b,c) is one
+representative, then (λa mod p, λb mod p, λc mod p) is another.
+We need: for some λ, the sum is ≤ p.
+
+The average over all λ is 3(p-1)/2. We need minimum ≤ p.
+For p ≤ 7: 3(p-1)/2 ≤ 9, and p ≥ 5, so avg/p ≤ 9/5 = 1.8.
+The ratio is < 2, which is favorable.
+
+KEY FACT: for the specific triple (1,1,p-2) [i.e., coefficients
+{1, 1, p-2} where two are small and one is large], the minimum
+over all λ is p+1 (fails!). This is the unique "bad" shape:
+two entries near 0 and one near p.
+
+BUT: the kernel relation is determined by the three vectors.
+The "bad" shape (1,1,p-2) means v_i + v_j = 2v_k (an affine
+midpoint relation). This is a SPECIFIC geometric condition.
+
+Question: can ALL collinear triples in a 9-point configuration
+have the "bad" coefficient shape? If not: we're done.
+
+### Approach 3: Geometric argument on midpoints.
+
+A "bad" collinear triple has v_i + v_j ≡ 2v_k (mod scaling).
+This means v_k is the midpoint of v_i and v_j on the line.
+
+If every collinear triple is a midpoint relation: the 9 points
+form a very rigid geometric structure. Prove this leads to a
+contradiction (with the "not all on a hyperplane" condition or
+with the projective distinctness).
+
+Alternatively: count midpoint triples vs non-midpoint triples.
+Show non-midpoints must exist when there are enough collinear triples.
+
+### Approach 4: For p ≥ 11 without collinear triples.
+
+9-arcs in PG(2,p) exist for p ≥ 11. No weight-3 kernel vectors.
+Need weight-4 from K₀ or from K. This connects to the Case B
+argument (Sidon/conic structure) applied to the augmented space.
+
+For the augmented code K₀ = [9,5,4-or-5]: use the averaging
+argument on weight-4 codewords as in Case B. The Sidon property
+of the conic in PG(2,p) gives no bad quadruples. In PG(3,p) the
+structure might be different but related.
+
+---
+
+## VERIFIED FACTS
+
+| Fact | Status |
+|------|--------|
+| 0/538 failures for collinear-triple-scaling | Verified (p=5,7,11) |
+| d(K₀) = 2: ~15% of configs | Verified |
+| d(K₀) = 3: ~70% of configs | Verified |
+| d(K₀) = 4: ~15% of configs | Verified |
+| d(K₀) = 4 cases: all solved by weight-3 from K\K₀ | Verified |
+| Bad triple shape: (1,1,p-2) type, midpoint relation | Verified |
+| Bad individual triples exist for all p ≥ 5 | Verified |
+| ALL collinear triples bad in a config: NEVER observed | Verified |
+
+---
+
+## DEAD ENDS
+
+1. Projection to C_p² + weighted subset-sum: stuck for 20 rounds.
+2. Chevalley–Warning: degree barrier.
+3. Pigeonhole: margin = 1.
+4. Weight-4 individual scaling: FALSE for some quadruples.
+5. d(K₀) ≤ 3 always: FALSE (~15% have d=4).
+
+---
+
+## RULES
+
+1. Every turn: lemma + proof attempt, or precise obstruction.
+2. Computation only to verify stated conjectures.
+3. Focus on Approach 2 or 3 first (the midpoint/bad-triple argument).
+4. If you prove: "not all collinear triples can be midpoint relations
+   for 9 points not on a hyperplane," that's the theorem.
+5. One lemma. Stay focused.

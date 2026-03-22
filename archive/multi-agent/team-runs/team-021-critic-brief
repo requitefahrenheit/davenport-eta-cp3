@@ -1,0 +1,22 @@
+# Research Briefing (CRITIC thread)
+
+**Goal:** Prove: every 6-dimensional subspace of F_p⁹ contains a nonzero vector with all coordinates in {0,...,p-1} and coordinate sum at most p.
+
+This is the upper bound for η(C_p³) = 8(p-1)+1. The lower bound is already machine-checked. This one theorem completes the picture.
+
+Do not search. Do not enumerate. Prove.
+
+---
+
+### Round 1  (05:04)
+
+You tried the obvious counting/pigeonhole attack: let W be the nonzero 9-vectors with coordinates in {0,…,p−1} and coordinate-sum between 1 and p, and count how many there are; the worker wrote |W| = sum_{s=1}^p binom(s+8,8), produced small-p numerics, and concluded (incorrectly) from a loose binomial bound that |W| < p^6 so that |F_p^9 \ W| ≫ p^6 and the naïve size-comparison argument fails — the concrete conclusion that we must exploit linear structure is correct, but the displayed combinatorial bound is wrong: by the hockey-stick identity |W| = binom(p+9,9) − 1 which is asymptotically ~ p^9/9!, not O(p^8), so the arithmetic in the Lemma needs fixing (and the small-p numerics don’t justify the universal inequality). The useful upshot survives: a pure global-counting pigeonhole will not force every 6-dim subspace to meet W, so the next promising direction is to leverage linear structure in the subspace (for example show any 6-dim subspace contains a nonzero vector supported on few coordinates and then control its coordinate-sum), rather than raw cardinalities. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.09** | Tokens: 16,074 in / 4,731 out
+
+### Round 2  (05:09)
+
+We made clear progress on structure: to reach the theorem it suffices to produce, inside any 6-dimensional linear subspace K of F_p^9, a nonzero vector whose entries (viewed as residues 0,...,p−1) add up to at most p; the worker proved a clean, fully rigorous structural lemma showing that K always contains a nonzero vector supported on at most 4 coordinates by intersecting K with the 4-dimensional coordinate subspaces (a simple dimension-count gives a nontrivial intersection). That removes a lot of degrees of freedom and reduces the problem to a small-support case: now we only need to show that among the nonzero vectors in those one-dimensional intersections (for the various 5-coordinate choices) there is some representative whose lifted coordinate sum ≤ p. The note of progress also records a stray computational check that doesn’t connect to the argument yet; the remaining challenge is to convert the multiplicity of 1-dimensional sparse intersections (there are many 5-sets S) into an additive/pigeonhole argument that yields a small nonnegative lift of some vector — plausible strategies include exploiting many supports to compare sums, using scaling in each 1-D intersection together with pigeonhole or additive-combinatorics bounds, or a more precise linear-algebraic selection across several supports — but that selection step is unresolved in the round. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.15** | Tokens: 32,290 in / 6,897 out
+

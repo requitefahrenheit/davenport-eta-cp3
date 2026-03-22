@@ -1,0 +1,84 @@
+# SYNTHESIS REPORT: Three-Agent Collaborative Analysis
+
+## STATUS
+**Window formula ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ for A₈ is rigorously proven and computationally verified; U1 conjecture (fibers ≤2 → strongly ZSF) appears falsified by 24 explicit Computer counterexamples and contradicts Adversary's prior Round 2 findings.**
+
+---
+
+## CONVERGENCE/ESCALATION
+
+### ✓ HIGH CONFIDENCE: Window Structure Theorem
+- **Theorist**: Three-identity proof establishing tight bounds via integer feasibility
+- **Computer**: Exhaustive verification at p=29,31,37 across all weights w ∈ [1,28]
+- **Both reduce** to mod-p transparency when cᵢ ≤ w ≤ p−1
+- **Conclusion**: Window formula is **proven and verified**
+
+### ⚠ POSSIBLE FALSE CONJECTURE: U1 (Fiber Constraint)
+- **Computer**: 24 explicit counterexamples in F₅⁴ with ≤2 fibers that violate strong ZSF
+- **Adversary**: Cites prior Round 2 counterexamples (multi-fiber strongly ZSF 17-sets) and flags direct contradiction
+- **Shared obstruction**: Both independently hit failures in the (8,7,2) distribution check and coefficient sign constraints
+- **Critical gap**: U1 is **used to justify the proof** but appears **empirically false**
+- **Conclusion**: U1 status is **UNRESOLVED**—either the conjecture is false, or the failure cases are constraint-formulation artifacts
+
+---
+
+## CROSS-POLLINATION: Three Key Insights
+
+### Insight A: Dimension Collapse in Constraint Reduction (Computer → Theorist, Adversary)
+Computer's near-miss on brute-force enumeration reveals the real bottleneck: the 8-dimensional coefficient space collapses to **1-dimensional j-filtration on L** via two linear constraints. This explains why:
+- Theorist's three-identity proof is optimal (cannot reduce further)
+- Adversary should focus on **coefficient-saturation mechanisms**, not global fiber geometry
+- **Action**: Use this to redirect U1 attack toward local structural invariants
+
+### Insight B: Two Computational Regimes (Computer → Theorist, Adversary)
+Computer's observation that w ≤ (p−1)/2 makes all mod-p arithmetic **exact over ℤ** (no wraparound) suggests:
+- Window formula may be **p-independent for stable weights**
+- Boundary weights near p−1 require genuine modular reduction
+- **Action**: Theorist should stratify proof by regime; Adversary should attack boundary cases w > p/2
+
+### Insight C: Counterexample Structure is Not Random (Computer, Adversary → Theorist)
+Both agents found failures cluster around specific coefficient patterns:
+- Computer: "twisted copies" where b₁ = (c,0,0,0) and b₂ replicates removed vectors
+- Adversary: 3+ fibers under all linear forms while maintaining strong ZSF
+- **Common thread**: These sets have **rigid structural constraints**, not generic failures
+- **Action**: Theorist should investigate whether these failures lie in a *proper subset* (e.g., non-generic under GL-action) where a *weakened U1'* might still hold
+
+---
+
+## DIRECTIVES: Coordinated Next Steps
+
+### → **THEORIST**: 
+**Investigate whether U1 can be weakened to U1' by restricting to A₈-type canonical sets or generic GL-orbits.** 
+- Reference Computer's finding that 24 failures have "twisted" structure (not fully generic)
+- Reference Adversary's Round 3 insight that GL-equivalence classes are larger than suspected
+- *Dependency*: Requires Computer to classify failure patterns by structural type (rigid vs. generic)
+- **Target**: Prove U1' for "most" 17-element configurations, leaving exceptional cases for Adversary
+
+---
+
+### → **COMPUTER**: 
+**Classify the 24 F₅⁴ counterexamples by structural invariant (fiber multiplicity, coefficient patterns, GL-orbit membership) and test whether all failures are confined to a proper subvariety.**
+- Reference Adversary's Round 3 observation that Same-Tail Swap Theorem creates massive flexibility in fiber assignment
+- Reference Theorist's three-identity framework to understand which constraint combinations force the failures
+- *Dependency*: Results feed directly to Theorist for weakened conjecture and Adversary for targeted construction
+- **Concrete task**: For each 24-set failure, compute its GL-stabilizer rank and fiber-configuration automorphisms; report if all failures share a common invariant
+
+---
+
+### → **ADVERSARY**: 
+**Test whether the window formula ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ holds universally for *all* 8-element sets (not just A₈), and construct a counterexample if it fails for some canonical variant.**
+- Reference Theorist's proof that the three identities depend only on the rank-3 structure of A₈'s action on L
+- Reference Computer's regime-stratification (p-independent stable, p-dependent boundary) to focus attacks on boundary weights
+- *Dependency*: If universal window formula fails, use counterexample to guide Computer's structural classification
+- **Concrete task**: For p=7, try to construct 8-element sets B with w=3 such that j ∉ [2,2] (i.e., j < 2 or j > 2); report structure of any counterexample found
+
+---
+
+## CRITICAL FLAGGED ISSUE
+
+**U1's role in the proof chain must be clarified immediately:**
+1. If U1 is **lemma** (required for window theorem): The theorem collapses and needs reproof
+2. If U1 is **conjecture under investigation**: Window theorem stands independently; U1 is separate open problem
+3. If the **24 failures are artifacts** of coordinate/constraint encoding: Verify with alternate formulation
+
+**Recommend: Theorist provides brief explicit statement of which theorems assume U1 vs. prove independently.** This resolves the contradiction with Adversary.

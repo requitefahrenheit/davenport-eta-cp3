@@ -1,0 +1,622 @@
+[TOOL: Agent]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/MEMORY.md]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: Glob]
+[TOOL: Grep]
+[TOOL: Grep]
+[TOOL: Grep]
+[TOOL: Grep]
+[TOOL: Grep]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/gap_hypothesis_verified.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/alpha4_maximality_verified.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/alpha4_verification.md]
+[TOOL: Grep]
+[TOOL: Grep]
+[TOOL: Grep]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/task6-proof-attempt.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary-round1.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_session5_round1.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_session6_round1.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/THEORIST_R3_REPORT.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/agent2-decomposition.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/task7-decomposition.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/task2-weighted-cw.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_round2_report.md]
+[TOOL: Grep]
+[TOOL: Grep]
+[TOOL: Grep]
+[TOOL: Grep]
+
+[BASH] ls /.auto/home7a/jfischer/claude/grail-tasks/*.md /.auto/home7a/jfischer/claude/grail-tasks/*.txt 2>/dev/null
+
+Let me read the key prior reports to understand the exact state of the proof.
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/THEORIST_R3_REPORT.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_round2_report.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary-round1.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_session5_round1.md]
+Now I have a comprehensive picture. Let me focus on the primary task: completing Theorem 1(c) and formulating the inductive closure.
+[TOOL: ToolSearch]
+[TOOL: TodoWrite]
+Now let me work through the proofs. I'll build up from the clean fiber bounds to the new results.
+
+---
+
+## THEOREM A: Fiber Bounds (Parts (a) and (b))
+
+**Setup.** Fix rank $r \geq 3$. Assume inductively:
+- $\eta(C_p^r) \leq \alpha(r)(p-1)+1$ where $\alpha(r) = 9 \cdot 2^{r-3} - 1$
+- $s(C_p^r) = \eta(C_p^r) + p - 1 \leq (\alpha(r)+1)(p-1) + 1$
+
+Let $S \subset \mathbb{F}_p^{r+1} \setminus \{0\}$ be a set of $N = 2\alpha(r)+2 = \alpha(r+1)+1$ nonzero pairwise non-proportional vectors. Assume $S$ is **ZSF**: no zero-sum of weight $\leq p$ exists.
+
+Fix a linear form $w: \mathbb{F}_p^{r+1} \to \mathbb{F}_p$. Define fibers $F_c = \{v \in S : w(v) = c\}$.
+
+**Theorem A(a).** $|F_0| \leq \alpha(r)$.
+
+*Proof.* Vectors in $F_0$ lie in $\ker(w) \cong \mathbb{F}_p^r$. They are nonzero and pairwise non-proportional (inherited from $S$). Any zero-sum among $F_0$-vectors with weight $\leq p$ lifts directly to $\mathbb{F}_p^{r+1}$ (the $w$-coordinate sum is $0 \cdot W = 0$ automatically). By the inductive hypothesis, if $|F_0| \geq \alpha(r)+1$, the sequence of $|F_0|(p-1) \geq \alpha(r)(p-1) + (p-1) \geq \alpha(r)(p-1)+1 = \eta(C_p^r)$ elements yields a zero-sum of weight $\leq p$. This contradicts ZSF. $\square$
+
+**Theorem A(b).** $|F_c| \leq \alpha(r)+1$ for $c \neq 0$.
+
+*Proof.* Vectors in $F_c$ have the form $(c, u_i)$ in the decomposition $\mathbb{F}_p^{r+1} = \mathbb{F}_p \times \mathbb{F}_p^r$. Since $c \neq 0$: if $(c, u_1) = \lambda(c, u_2)$, then $\lambda = 1$ (from the first coordinate), so $u_1 = u_2$. Hence the projections $u_i$ are **distinct**.
+
+A zero-sum within $F_c$ with coefficients $s_i$: the first coordinate gives $c \cdot \sum s_i \equiv 0$, so $\sum s_i \equiv 0 \pmod{p}$. Since $s_i \in \{1,\ldots,p-1\}$, the minimum integer weight with $\sum s_i \equiv 0$ is $\sum s_i = p$. So within-fiber zero-sums have weight **exactly** $p$, which is the $s$-constant regime.
+
+By induction, $s(C_p^r) \leq (\alpha(r)+1)(p-1)+1$. If $|F_c| \geq \alpha(r)+2$, the sequence has $\geq (\alpha(r)+2)(p-1) \geq (\alpha(r)+1)(p-1)+1$ elements (for $p \geq 3$), yielding a zero-sum of length exactly $p$, hence weight $p$. This lifts to weight $p$ in $\mathbb{F}_p^{r+1}$. Contradiction. $\square$
+[TOOL: TodoWrite]
+## THEOREM B: The Two-Nonzero-Fiber Gap (Analysis of Part (c))
+
+**Claim (Part (c) as stated in Round 4):** A ZSF set of size $2\alpha(r)+2$ spans $\geq 3$ fibers under every linear form.
+
+**Analysis.** Suppose $S$ spans $\leq 2$ fibers under some $w$. Three sub-cases:
+
+**Case 1: One fiber.** If $S \subseteq F_0$: $|F_0| = 2\alpha(r)+2 > \alpha(r)$, contradicting (a). If $S \subseteq F_c$ ($c \neq 0$): $|F_c| = 2\alpha(r)+2 > \alpha(r)+1$, contradicting (b).
+
+**Case 2: $F_0 \cup F_c$ ($c \neq 0$).** By (a) and (b): $|S| \leq \alpha(r) + (\alpha(r)+1) = 2\alpha(r)+1 < 2\alpha(r)+2$. **Contradiction** — not enough room.
+
+**Case 3: $F_{c_1} \cup F_{c_2}$ (both nonzero, $c_1 \neq c_2$).** By (b) twice: $|S| \leq (\alpha(r)+1) + (\alpha(r)+1) = 2\alpha(r)+2$. **No contradiction** — the bounds are met with equality.
+
+**Conclusion: Part (c) does NOT follow from (a) and (b) alone.** The two-nonzero-fiber case with $|F_{c_1}| = |F_{c_2}| = \alpha(r)+1$ is a genuine gap.
+
+**What the existing "two-fiber bound" covers.** Re-reading the proof structure: the proved two-fiber bound uses $F_0 \cup F_c$ specifically — the $\eta$-constant applies within $F_0$ (a subspace) and the $s$-constant within $F_c$. The counting contradiction comes from $\alpha(r) + (\alpha(r)+1) < 2\alpha(r)+2$. **This does not apply when both fibers are nonzero.**
+
+### Key Structural Fact about Two Nonzero Fibers
+
+**Proposition.** Within either nonzero fiber $F_{c_i}$, every zero-sum has integer weight $\equiv 0 \pmod{p}$, hence weight $\geq p$.
+
+*Proof.* If $\sum s_j v_j = 0$ with all $v_j \in F_{c_i}$, then the $w$-coordinate gives $c_i \sum s_j \equiv 0 \pmod{p}$. Since $c_i \neq 0$: $\sum s_j \equiv 0 \pmod{p}$. With $s_j \geq 1$: $\sum s_j \geq p$. $\square$
+
+So the two-nonzero-fiber case is hard precisely because **within-fiber zero-sums can never have weight $< p$**, and cross-fiber zero-sums face a coupled constraint.
+[TOOL: TodoWrite]
+## THEOREM C: Cross-Fiber Zero-Sum When Projections Overlap
+
+**Setup.** WLOG $c_1 = 1$ (rescale $w$). So $S = F_1 \cup F_c$ with $c \in \mathbb{F}_p \setminus \{0,1\}$, $|F_1| = |F_c| = \alpha(r)+1$. Write $F_1 = \{(1, u_i)\}$ and $F_c = \{(c, u'_j)\}$. Let $U_1 = \{u_i\}$ and $U_c = \{u'_j\}$ be the projection sets.
+
+**Theorem C.** If $U_1 \cap U_c \neq \emptyset$, then $S$ has a zero-sum of weight $p$ (hence $\leq p$).
+
+*Proof.* Let $u \in U_1 \cap U_c$. Then $v_1 = (1, u)$ and $v_2 = (c, u)$ are both in $S$.
+
+They are non-proportional: $v_2 = \lambda v_1$ would require $\lambda = c$ (first coord) and $\lambda = 1$ (since $u \neq 0$), contradiction since $c \neq 1$.
+
+Seek $s_1 v_1 + s_2 v_2 = 0$ with $s_1 + s_2 \leq p$:
+- First coordinate: $s_1 + c \cdot s_2 \equiv 0 \pmod{p}$
+- Projection: $(s_1 + s_2) u \equiv 0 \pmod{p}$. Since $u \neq 0$: $s_1 + s_2 \equiv 0$, so $s_2 \equiv -s_1$.
+- Substituting: $s_1 - c \cdot s_1 = s_1(1-c) \equiv 0$. Since $c \neq 1$: $s_1 \equiv 0$.
+
+So 2-element zero-sums don't work. But consider **3 elements**: pick any $v_3 = (1, u_3) \in F_1$ with $u_3 \neq u$ (exists since $|F_1| \geq 2$ for $r \geq 3$, as $\alpha(r)+1 \geq 9$).
+
+Seek $s_1(1,u) + s_2(c,u) + s_3(1,u_3) = 0$:
+- First coord: $s_1 + cs_2 + s_3 \equiv 0$
+- Projection: $(s_1+s_2)u + s_3 u_3 \equiv 0$
+
+From the projection: $s_3 u_3 = -(s_1+s_2)u$. Since $u$ and $u_3$ are not proportional (otherwise $(1,u)$ and $(1,u_3)$ would need checking — but they have the same first coordinate $1$, so proportionality requires $u = u_3$, which we excluded): the equation has a 1-dimensional solution space parameterized by, say, $s_3$.
+
+Actually, let me reconsider. The vectors $u$ and $u_3$ in $\mathbb{F}_p^r$ may or may not be proportional. If $u_3 = \lambda u$: then $s_3 \lambda u = -(s_1+s_2)u$ gives $s_1+s_2 = -\lambda s_3$. Combined with first coord: $s_1 + cs_2 + s_3 = 0$.
+
+Set $s_1 = -\lambda s_3 - s_2$. Then $(-\lambda s_3 - s_2) + cs_2 + s_3 = s_3(1-\lambda) + s_2(c-1) = 0$. So $s_2 = s_3(\lambda - 1)/(c-1)$.
+
+For $s_3 = c-1$: $s_2 = \lambda - 1$, $s_1 = -(c-1)\lambda - (\lambda-1) = -c\lambda + \lambda - \lambda + 1 = 1 - c\lambda$.
+Weight: $s_1 + s_2 + s_3 = (1-c\lambda) + (\lambda-1) + (c-1) = c + \lambda - c\lambda - 1 = (c-1)(1-\lambda)$.
+
+Hmm, this depends on specific values. This line of attack gets messy. Let me state the cleaner result:
+
+**Theorem C (Refined).** If $U_1 \cap U_c \neq \emptyset$, there exists a zero-sum of weight exactly $p$.
+
+*Proof.* Let $u \in U_1 \cap U_c$. Vectors $v_1 = (1,u)$ and $v_2 = (c,u)$ are in $S$. Take $s_1$ copies of $v_1$ and $s_2$ copies of $v_2$ with:
+- $(s_1 + s_2)u = 0 \implies s_1 + s_2 = p$ (since $u \neq 0$, need $s_1 + s_2 \equiv 0$; minimum positive value is $p$)
+- $s_1 + cs_2 \equiv 0 \pmod{p}$. With $s_2 = p - s_1$: $s_1 + c(p-s_1) = s_1(1-c) + cp \equiv s_1(1-c) \equiv 0$. Since $c \neq 1$: $s_1 \equiv 0$, giving $s_1 = p, s_2 = 0$ or $s_1 = 0, s_2 = p$.
+
+But $s_1 = p$ means coefficient $p \equiv 0$, not in $\{1,\ldots,p-1\}$. So this doesn't give a valid zero-sum with just these two vectors.
+
+**The 2-vector approach fails.** But consider using multiplicity: take $p$ copies of $v_1 = (1,u)$. Weight $p$, sum $= (p, pu) = (0,0)$. This IS a valid zero-sum of weight $p$ — but it uses $v_1$ with coefficient $p$, which is $\equiv 0 \pmod{p}$. In the sequence formulation, we'd need $p$ copies of $v_1$ available. Each direction has multiplicity $p-1$, so we only have $p-1$ copies. **One short!**
+
+This is exactly the gap between $\eta$ and $s$: the $s$-constant needs one more copy.
+
+**Revised approach.** The overlap $u \in U_1 \cap U_c$ gives us $(1,u)$ and $(c,u)$ — effectively **2 non-proportional vectors with the same projection**. This gives us $2(p-1)$ elements projecting to multiples of $u$. Using these:
+
+Take $a$ copies of $(1,u)$ and $b$ copies of $(c,u)$ with $a+b = p$ (for projection zero), $a + cb \equiv 0$ (first coord), $a, b \in \{0,\ldots,p-1\}$:
+
+$a + cb = a + c(p-a) = a(1-c) + cp \equiv a(1-c) \pmod{p}$. Need $a(1-c) \equiv 0$, so $a = 0$ (giving $b = p$ — invalid) or... wait, $a \in \{0,\ldots,p-1\}$ and $1-c \neq 0$, so $a = 0$ is the only solution. Same dead end.
+
+**The overlap alone doesn't suffice with 2 vectors.** We need support $\geq 3$.
+
+Let me try the right approach: use **all** vectors in the fiber.
+
+**Theorem C (Final Form).** If $|U_1| = \alpha(r)+1$ and there exist **proportional** vectors across fibers (i.e., $u_i \in U_1$ and $\lambda u_i \in U_c$ for some $\lambda$), then a zero-sum of weight $\leq p$ exists, provided $\alpha(r) \geq r$.
+
+Actually, let me abandon this specific case analysis and move to the more powerful result.
+[TOOL: TodoWrite]
+## THEOREM D: Prescribed-Weight Shadow Surjectivity
+
+This is the key new result that could close the two-nonzero-fiber gap.
+
+**Theorem D (Shadow Surjectivity).** Let $U = \{u_1, \ldots, u_m\} \subset \mathbb{F}_p^r$ be nonzero vectors with $m \geq r+1$. If $U$ does NOT lie in any affine hyperplane $\{\ell(x) = 1\}$ (i.e., no linear form $\ell$ satisfies $\ell(u_i) = 1$ for all $i$), then for every $w \in \mathbb{F}_p$ and every target $t \in \mathbb{F}_p^r$, there exist $s_1, \ldots, s_m \in \mathbb{F}_p$ with $\sum s_i \equiv w \pmod{p}$ and $\sum s_i u_i = t$.
+
+*Proof.* Consider the linear map $\Phi: \mathbb{F}_p^m \to \mathbb{F}_p^r \times \mathbb{F}_p$ defined by $\Phi(s) = (\sum s_i u_i, \sum s_i)$.
+
+The matrix of $\Phi$ is:
+$$M = \begin{pmatrix} u_1 & u_2 & \cdots & u_m \\ 1 & 1 & \cdots & 1 \end{pmatrix} \in \mathbb{F}_p^{(r+1) \times m}$$
+
+$\Phi$ is surjective iff $M$ has rank $r+1$. The top $r$ rows have rank $\leq r$. Adding the bottom row increases rank iff $(1,\ldots,1) \notin \text{rowspan}(\text{top } r \text{ rows})$.
+
+$(1,\ldots,1)$ is in the row span of $[u_1|\cdots|u_m]$ iff there exists $\lambda \in \mathbb{F}_p^r$ with $\lambda^T u_i = 1$ for all $i$, i.e., the linear form $\ell = \lambda^T$ satisfies $\ell(u_i) = 1$ for all $i$. This is exactly the condition that $U$ lies in the affine hyperplane $\{\ell = 1\}$.
+
+By hypothesis, no such $\ell$ exists. So $\text{rank}(M) = r+1$, and $\Phi$ is surjective. $\square$
+
+**Corollary D1.** Under the same hypotheses, $\Sigma_w(U) = \mathbb{F}_p^r$ for every $w \in \mathbb{F}_p$ (where $\Sigma_w$ counts mod $p$, not integer weight).
+
+**CRITICAL CAVEAT.** This gives weight $\equiv w \pmod{p}$, not integer weight $= w$. The integer weight could be $w, w+p, w+2p, \ldots$ The ZSF problem needs integer weight $\leq p$, so we need to find a solution with integer weight in $\{w\}$ (if $1 \leq w \leq p$) or $\{p\}$ (if $w = 0$).
+
+### Lifting from mod-$p$ to integer weight
+
+**Theorem D2 (Integer Weight Realization).** Let $\Phi$ be as above with $\text{rank}(M) = r+1$, and $m \geq r+2$. For any $(t, w) \in \mathbb{F}_p^r \times \mathbb{F}_p$, among all $s \in \mathbb{F}_p^m$ with $\Phi(s) = (t,w)$, there exists one with integer weight $\sum s_i \leq p$ (where $s_i \in \{0,\ldots,p-1\}$), provided $m \geq 2r+1$.
+
+*Proof attempt.* The solution set is a coset $C = s_0 + K$ where $K = \ker(\Phi)$ has dimension $m - (r+1)$. The integer weight function $W(s) = \sum_{i=1}^m s_i$ (with $s_i$ viewed as integers in $\{0,\ldots,p-1\}$) takes values in $\{0, \ldots, m(p-1)\}$.
+
+On the coset $C$, $W$ takes values $\{w, w+p, w+2p, \ldots\}$ up to $m(p-1)$ (here $w$ is the smallest non-negative representative). The number of distinct weight values is $\lfloor(m(p-1)-w)/p\rfloor + 1 \approx m(p-1)/p \approx m$.
+
+We need $W(s) \leq p$ for some $s \in C$, i.e., $W(s) \in \{w, w+p\} \cap \{0,\ldots,p\}$, which is $\{w\}$ if $w \leq p$ (always true since $w \in \{0,\ldots,p-1\}$), but we also need $s_i \geq 0$ for all $i$ (i.e., the integer interpretation must be in $\{0,\ldots,p-1\}$, which is automatic in $\mathbb{F}_p$).
+
+Wait — **this is the key realization.** In $\mathbb{F}_p$, the elements ARE $\{0,1,\ldots,p-1\}$. The integer weight $\sum s_i$ (interpreting each $s_i$ as an integer in $\{0,\ldots,p-1\}$) satisfies $\sum s_i \equiv w \pmod{p}$. The minimum integer weight with this residue is $w$ itself (achieved when $\sum s_i = w$ as integers).
+
+**But can we always find $s \in C$ with integer weight exactly $w$?**
+
+The integer weight $W: \mathbb{F}_p^m \to \mathbb{Z}$ is NOT linear over $\mathbb{F}_p$ (it involves the integer lift). Restricting to the coset $C$, $W$ varies as we move through $K$.
+
+**Lemma.** For $s \in C$ and $k \in K$: $W(s+k) = W(s) + W(k) - p \cdot |\{i : s_i + k_i \geq p\}|$ (where the addition $s_i + k_i$ wraps mod $p$, causing carries).
+
+This carry structure makes the integer weight analysis hard. However:
+
+**Lower bound on weight variation.** The coset $C$ has $p^{m-r-1}$ elements. The integer weights cover values in $\{w, w+p, w+2p, \ldots\} \cap [0, m(p-1)]$. There are $\lfloor m(p-1)/p \rfloor + 1 \geq m-1$ such values. The minimum weight in the coset is $w_{\min} \geq 0$ and the maximum is $w_{\max} \leq m(p-1)$.
+
+**Key claim: $w_{\min} \leq p-1$** (which gives weight $\leq p-1 < p$, so weight $\leq p$ for free).
+
+This would follow if we can show the coset contains an element with small integer weight. Here I can use a **greedy/pigeonhole argument**:
+
+**Theorem D3 (Small-Weight Coset Element).** Let $K \leq \mathbb{F}_p^m$ be a subspace of dimension $d = m-r-1$. For any coset $C = s_0 + K$, the minimum integer weight element of $C$ satisfies:
+$$W_{\min}(C) \leq \frac{m(p-1)}{p^d} \cdot p \approx \frac{m(p-1)}{p^{d-1}}$$
+
+For $m = \alpha(r)+1$ and $d = m - r - 1 = \alpha(r) - r$:
+- Rank 4 ($r = 3$): $m = 9$, $d = 5$, bound $= 9 \cdot 4 / 5^4 \cdot 5 = 180/625 \cdot 5 \approx 1.4$. So $W_{\min} \leq 1$! (Too good — let me re-derive.)
+
+Actually, let me use the proper covering radius bound. The minimum integer weight in a coset is related to the **covering radius** of the code $K$.
+
+**Definition.** The covering radius $\rho(K)$ of a linear code $K \leq \mathbb{F}_p^m$ is $\max_{s \in \mathbb{F}_p^m} \min_{k \in K} d_H(s, k)$ where $d_H$ is the Hamming distance.
+
+For $s \in C$ and $k \in K$: the Hamming weight of $s + k$ (number of nonzero coordinates) is $\leq$ the integer weight $W(s+k)$ (since each nonzero coordinate contributes $\geq 1$). But we need integer weight, not Hamming weight.
+
+Let me use a different approach.
+
+**Theorem D4 (Pigeonhole Weight Bound).** Let $C$ be a coset of $K$ in $\mathbb{F}_p^m$ with $|K| = p^d$. Then $C$ contains an element of integer weight $\leq \lfloor m(p-1)/2 \rfloor$.
+
+*Proof.* The involution $s \mapsto \bar{s}$ where $\bar{s}_i = p - s_i$ (complement) maps $C$ to $\bar{C}$, and $W(s) + W(\bar{s}) = mp$. If $C = \bar{C}$ (i.e., $\bar{s}_0 + K = s_0 + K$, which happens iff $\bar{s}_0 - s_0 \in K$), then for every $s \in C$, $\bar{s} \in C$. Since $W(s) + W(\bar{s}) = mp$, one of them has weight $\leq mp/2 = m(p-1)/2 + m/2$.
+
+This gives weight $\leq mp/2$, which is way too large (we need $\leq p$).
+
+**Better approach: use the lattice structure.**
+
+I think the right tool here is the **Singleton-type bound** combined with the specific structure.
+
+Let me instead prove a more targeted result.
+
+**Theorem D5 (Cross-Fiber Zero-Sum Existence).** In the two-nonzero-fiber setting with $|F_1| = |F_c| = \alpha(r)+1$ and $\alpha(r)+1 \geq r+2$, if the combined projection set $U_1 \cup U_c$ spans $\mathbb{F}_p^r$ and is not contained in any affine hyperplane, then $S$ admits a zero-sum of weight $\leq p$.
+
+*Proof.* Apply Theorem D to the full vector set in $\mathbb{F}_p^{r+1}$. The vectors $\{(1,u_i)\} \cup \{(c,u'_j)\}$ have $m = 2(\alpha(r)+1)$ elements. The map $\Phi: \mathbb{F}_p^m \to \mathbb{F}_p^{r+1}$, $s \mapsto \sum s_i v_i$, has rank $r+1$ (the vectors span $\mathbb{F}_p^{r+1}$ since we have both fiber values $1$ and $c$).
+
+The weight function is $W(s) = \sum s_i$ with target $t = 0$ (zero-sum) and modular weight $w \equiv 0 \pmod{p}$. The solution set $C = \{s : \Phi(s) = 0, W(s) \equiv 0\}$... but wait, $W$ is already part of $\Phi$ (the first coordinate of $\sum s_i v_i$ involves $W$ via the fiber values). Let me separate:
+
+$\Phi(s) = 0$ in $\mathbb{F}_p^{r+1}$ is $r+1$ equations. This gives $\ker(\Phi)$ of dimension $m - (r+1) = 2\alpha(r)+2 - r - 1 = 2\alpha(r) - r + 1$.
+
+At rank 4: $m = 18$, $\ker$ dimension $= 18 - 4 = 14$.
+
+The zero-sum condition is $\Phi(s) = 0$. The weight constraint is $\sum s_i \leq p$ as integers. Since $s_i \in \{0,\ldots,p-1\}$, the condition $\sum s_i \leq p$ is very restrictive: at most $p$ nonzero coordinates, averaging $1$ each.
+
+The coset $C = \ker(\Phi)$ has dimension $14$ at rank 4, giving $p^{14}$ elements. Among these, we want one with integer weight $\leq p$ and $\sum s_i \not\equiv 0$ (i.e., not the trivial $s = 0$).
+
+**But $s = 0$ is already in $C$ with weight $0$!** We need a NONZERO element of $\ker(\Phi)$ with integer weight $\leq p$.
+
+This is exactly the **minimum distance** problem for the code $\ker(\Phi)$ under the INTEGER weight metric (not Hamming weight).
+
+The ZSF condition says: no nonzero $s \in \ker(\Phi)$ has integer weight $\leq p$. This means the minimum integer weight of $\ker(\Phi) \setminus \{0\}$ is $> p$.
+
+**The minimum integer weight of a nonzero kernel element equals $p+1$ for ZSF sets** (from the adversary's finding: minimum weight zero-sums have weight $p+1$).
+
+So our question becomes: **can $\ker(\Phi)$ have minimum integer weight $> p$ when $\dim(\ker(\Phi)) = m - r - 1$ and $m = 2\alpha(r)+2$?**
+[TOOL: TodoWrite]
+## THEOREM E: The Integer Weight Plotkin Bound
+
+This is where I attempt to derive a contradiction for the two-nonzero-fiber case using coding theory.
+
+**Setup.** $V = [v_1|\cdots|v_m]$ is an $(r+1) \times m$ matrix over $\mathbb{F}_p$, $m = 2\alpha(r)+2$. The kernel code $\mathcal{C} = \ker(V)$ has dimension $d = m - (r+1)$. The ZSF condition says: no nonzero codeword $s \in \mathcal{C}$ has integer weight $W(s) = \sum_{i: s_i \neq 0} s_i \leq p$ (where $s_i \in \{0,\ldots,p-1\}$).
+
+Define the **integer weight** $\text{wt}_{\mathbb{Z}}(s) = \sum_{i=1}^m s_i$ where $s_i$ is the integer representative in $\{0,\ldots,p-1\}$.
+
+**Lemma (Average Integer Weight).** For a linear code $\mathcal{C} \leq \mathbb{F}_p^m$ of dimension $d$:
+$$\sum_{s \in \mathcal{C}} \text{wt}_{\mathbb{Z}}(s) = |\mathcal{C}| \cdot m \cdot \frac{p-1}{2}$$
+
+*Proof.* For each coordinate $i$, the restriction $\mathcal{C} \to \mathbb{F}_p$, $s \mapsto s_i$, is a linear form. If this form is zero (coordinate $i$ is identically 0 on $\mathcal{C}$), it contributes 0. If nonzero, it's surjective with each value appearing $p^{d-1}$ times. The average value is $\frac{1}{p^d} \sum_{a=0}^{p-1} p^{d-1} \cdot a = \frac{p-1}{2}$.
+
+If the form is zero for $k$ coordinates: $\sum \text{wt}_{\mathbb{Z}} = p^d \cdot (m-k) \cdot \frac{p-1}{2}$.
+
+For the dual of a full-rank generator matrix ($V$ has rank $r+1$): no coordinate is identically zero on $\mathcal{C}$ (since each column $v_i \neq 0$, wait — actually $s_i = 0$ on all of $\mathcal{C}$ means the $i$-th standard basis vector is in $\mathcal{C}^\perp = \text{rowspan}(V)$, which means $e_i$ is a linear combination of the rows of $V$. This could happen, but for our specific $V$ it means vector $v_i$ has a specific structure).
+
+In the generic case (no zero coordinates): $\sum_{s \in \mathcal{C}} \text{wt}_{\mathbb{Z}}(s) = p^d \cdot m(p-1)/2$.
+
+Average over nonzero codewords: $\frac{p^d \cdot m(p-1)/2}{p^d - 1} \approx m(p-1)/2$.
+
+**Plotkin-type bound.** If every nonzero codeword has integer weight $> p$, then:
+$$m(p-1)/2 \approx \text{average wt}_\mathbb{Z} > p$$
+$$m > \frac{2p}{p-1} = 2 + \frac{2}{p-1}$$
+
+This gives $m \geq 3$. But we have $m = 2\alpha(r)+2 \gg 3$. The bound is trivially satisfied and gives **no contradiction**.
+
+The Plotkin bound is too weak because the integer weight concentrates around $m(p-1)/2$, which is much larger than $p$ for large $m$. The constraint "weight $> p$" only removes a tiny fraction of codewords.
+
+**Better approach: use the COMPLEMENT weight.**
+
+Define $\bar{s}_i = p - 1 - s_i$ (not $p - s_i$). Then $\text{wt}_\mathbb{Z}(\bar{s}) = m(p-1) - \text{wt}_\mathbb{Z}(s)$. The map $s \mapsto \bar{s}$ is NOT linear (it's affine: $\bar{s} = (p-1,\ldots,p-1) - s$).
+
+The codewords of weight $\leq p$ are those satisfying $\sum s_i \leq p$, meaning $s$ has small support (most $s_i = 0$) or small nonzero values.
+
+**The number of vectors in $\mathbb{F}_p^m$ with integer weight $\leq p$:** This is the number of $(s_1,\ldots,s_m) \in \{0,\ldots,p-1\}^m$ with $\sum s_i \leq p$. Each $s_i \geq 0$ and $\sum s_i \leq p$: by stars and bars (since each $s_i < p$ is non-binding when $\sum \leq p$ and $m \geq 2$), this is $\binom{m+p}{p}$.
+
+The fraction of such vectors: $\binom{m+p}{p} / p^m$.
+
+For $m = 18, p = 5$: $\binom{23}{5}/5^{18} = 33649/5^{18} \approx 33649 / 3.8 \times 10^{12} \approx 10^{-8}$. Very small!
+
+For the code to avoid ALL of these (except $s = 0$), we need: $\mathcal{C} \cap B_p = \{0\}$ where $B_p = \{s : \text{wt}_\mathbb{Z}(s) \leq p\}$.
+
+**Gilbert-Varshamov-type bound.** If $|\mathcal{C}| > p^m / |B_p|$, then by pigeonhole, $\mathcal{C}$ must intersect some translate of $B_p$, but NOT necessarily $B_p$ itself. This doesn't directly help.
+
+**Direct counting.** $|\mathcal{C} \setminus \{0\}| = p^d - 1$. $|B_p \setminus \{0\}| = \binom{m+p}{p} - 1$.
+
+If $\mathcal{C} \cap B_p = \{0\}$: the $p^d$ elements of $\mathcal{C}$ must all lie in $\{s : \text{wt}_\mathbb{Z}(s) > p\} \cup \{0\}$, which has $p^m - \binom{m+p}{p} + 1$ elements.
+
+For this to be possible: $p^d \leq p^m - \binom{m+p}{p} + 1$. This is always true for large $p$ since $\binom{m+p}{p}$ grows polynomially while $p^m$ grows exponentially. **No contradiction this way either.**
+
+### Insight: Integer Weight is the WRONG metric
+
+The coding theory approach via Plotkin/GV bounds doesn't give sharp enough results because:
+1. The integer weight ball $B_p$ is exponentially small compared to $\mathbb{F}_p^m$
+2. The kernel code is exponentially large
+3. But codes CAN avoid exponentially small sets
+
+**The ZSF condition is not about a code avoiding a ball — it's about a very specific algebraic structure (the kernel of a matrix) avoiding a very specific combinatorial set (integer weight $\leq p$).** Generic coding bounds can't capture this.
+
+### New Direction: The Inductive Weight Decomposition
+
+Let me try a completely different approach to the two-nonzero-fiber case.
+
+**Theorem F (Cross-Fiber Reduction to Weight-Constrained Sumset).** Consider $S = F_1 \cup F_c$ with $|F_1| = |F_c| = \alpha(r)+1$, $c \neq 0, 1$. WLOG $c \not\equiv -1 \pmod{p}$ (the case $c = p-1$ is handled separately).
+
+For each integer $w \in \{1,\ldots,p-1\}$, define $w_1(w) = \lfloor cw/(c-1) \rfloor \bmod p$ as the unique solution to $w_1 + c(w - w_1) \equiv 0 \pmod{p}$ with $w_2 = w - w_1$.
+
+A cross-fiber zero-sum of weight $w$ requires:
+- A "partial sum" $t_1 \in \Sigma_{w_1}(U_1)$ from fiber 1
+- A "partial sum" $t_2 = -t_1 \in \Sigma_{w_2}(U_c)$ from fiber $c$
+- The weight split $(w_1, w_2)$ satisfying $w_1 + cw_2 \equiv 0 \pmod{p}$ and $w_1 + w_2 = w \leq p$
+
+**Proof of structure.** A zero-sum $\sum_{i \in I} s_i (1, u_i) + \sum_{j \in J} t_j (c, u'_j) = 0$ gives:
+- First coord: $W_1 + cW_2 \equiv 0 \pmod{p}$ where $W_1 = \sum s_i$, $W_2 = \sum t_j$
+- Projection: $\sum s_i u_i + \sum t_j u'_j = 0$, i.e., $\sum s_i u_i = -\sum t_j u'_j$
+- Weight: $W_1 + W_2 \leq p$
+
+The first constraint determines $W_1 \equiv -cW_2/(1) \pmod{p}$ (from $W_1 \equiv -cW_2$). Given total weight $w = W_1 + W_2$: $W_1 = w - W_2$ and $w - W_2 + cW_2 = w + (c-1)W_2 \equiv 0$, so $W_2 \equiv -w/(c-1) \pmod{p}$ and $W_1 \equiv cw/(c-1) \pmod{p}$.
+
+**Since $c \neq 1$, the split is uniquely determined by $w$.** As $w$ ranges over $\{1,\ldots,p-1\}$, the pair $(W_1, W_2) \pmod{p}$ cycles through all pairs with $W_1 + cW_2 \equiv 0$.
+
+**The question reduces to:** Does there exist $w \in \{1,\ldots,p-1\}$ such that $\Sigma_{W_1}(U_1) \cap (-\Sigma_{W_2}(U_c)) \neq \emptyset$?
+
+Here $W_1, W_2$ are the integer representatives in $\{0,\ldots,p-1\}$ determined by $w$, and we need $W_1 + W_2 = w$ as integers (not just mod $p$). $\square$
+
+**This reformulation is clean and powerful.** It reduces the two-nonzero-fiber problem to:
+
+> Show that for SOME weight $w \leq p$, the shadows $\Sigma_{W_1}(U_1)$ and $-\Sigma_{W_2}(U_c)$ intersect.
+
+By Theorem D (Shadow Surjectivity), if $U_1$ doesn't lie in an affine hyperplane, then $\Sigma_{W_1}(U_1) = \mathbb{F}_p^r$ for every $W_1$. In this case, the intersection is automatic. So:
+
+**Theorem G (Two-Nonzero-Fiber Bound, Generic Case).** If neither $U_1$ nor $U_c$ lies in an affine hyperplane of $\mathbb{F}_p^r$, and $W_1 + W_2 \leq p$ for some valid weight split (guaranteed when $c \neq p-1$), then $S$ has a zero-sum of weight $\leq p$.
+
+*Proof.* By Theorem D, $\Sigma_{W_1}(U_1) = \mathbb{F}_p^r$. In particular, for any $t \in -\Sigma_{W_2}(U_c)$ (which is nonempty since $W_2 \geq 1$), $t \in \Sigma_{W_1}(U_1)$. So the intersection is nonempty, giving a cross-fiber zero-sum of weight $W_1 + W_2 \leq p$.
+
+**BUT WAIT** — I need integer weight $W_1$, not just $W_1 \bmod p$. Theorem D gives $\sum s_i \equiv W_1 \pmod{p}$, and the integer weight could be $W_1 + kp$ for $k \geq 0$.
+
+**This is the same carry problem.** However, there's a saving grace:
+
+**If $W_1 \leq p-1$ and $|U_1| \leq p$**: among the solutions $s$ with $\sum s_i u_i = t$ and $\sum s_i \equiv W_1 \pmod{p}$, the support of $s$ has $\leq |U_1| = \alpha(r)+1$ elements. If $W_1 \leq \alpha(r)+1$ (so at most one coefficient per vector at value $1$), we can certainly achieve integer weight $W_1$. But for larger $W_1$, we'd need multiple non-unit coefficients, potentially pushing integer weight above $p$.
+
+**The integer weight realization is the remaining technical obstacle.**
+
+Let me formalize what's needed:
+
+[VERIFY: For $p = 5, 7, 11$ and $c \in \{2,\ldots,p-2\}$: in the two-nonzero-fiber setting with $|F_1| = |F_c| = \alpha(3)+1 = 9$ non-proportional vectors in $\mathbb{F}_p^4$, does a zero-sum of weight $\leq p$ always exist? Specifically: for the doubled+$e_1$ construction mapped by $T: (x_1,x_2,x_3,x_4) \mapsto (x_1 + c \cdot x_1, x_2, x_3, x_4)$... actually just test: take 9 generic non-proportional vectors in $\mathbb{F}_p^3$, form $(1,u_i)$ and $(c,u'_j)$, check if a zero-sum of weight $\leq p$ exists in $\mathbb{F}_p^4$.]
+[TOOL: TodoWrite]
+## Handling the Affine Hyperplane Case
+
+**When does $U_1$ lie in an affine hyperplane?** All $\alpha(r)+1$ projections $u_1, \ldots, u_m$ satisfy $\ell(u_i) = 1$ for some linear form $\ell$ on $\mathbb{F}_p^r$.
+
+**Theorem H (Affine Hyperplane Implies Extra Zero-Fiber Vector).** If $U_1 \subset \{\ell = 1\}$ for some linear form $\ell$, then $S$ has a zero-sum of weight $\leq p$, unless very special conditions hold.
+
+*Proof.* Consider the linear form $w' = \ell \circ \pi: \mathbb{F}_p^{r+1} \to \mathbb{F}_p$ where $\pi$ is the projection to the last $r$ coordinates. For vectors $(1, u_i) \in F_1$: $w'((1,u_i)) = \ell(u_i) = 1$. For vectors $(c, u'_j) \in F_c$: $w'((c,u'_j)) = \ell(u'_j)$.
+
+Now consider the COMBINED linear form $\tilde{w} = w' - w$ (i.e., $\tilde{w}(v) = \ell(\pi(v)) - w(v)$, which is linear on $\mathbb{F}_p^{r+1}$).
+
+For $v = (1, u_i) \in F_1$: $\tilde{w}(v) = 1 - 1 = 0$.
+For $v = (c, u'_j) \in F_c$: $\tilde{w}(v) = \ell(u'_j) - c$.
+
+Under the new form $\tilde{w}$: **all $\alpha(r)+1$ vectors of $F_1$ are in the zero fiber!**
+
+By Theorem A(a), the zero fiber can have at most $\alpha(r)$ vectors. But $|F_1| = \alpha(r)+1 > \alpha(r)$. **CONTRADICTION** with ZSF!
+
+Wait — does Theorem A(a) apply? It requires the $F_1$ vectors to be non-proportional in $\ker(\tilde{w})$. Let's check: $(1,u_i)$ and $(1,u_j)$ are non-proportional in $\mathbb{F}_p^{r+1}$ (given), and they both lie in $\ker(\tilde{w})$. Are they non-proportional within $\ker(\tilde{w})$? Yes — proportionality is an absolute property, independent of the ambient subspace.
+
+And $\ker(\tilde{w})$ is a hyperplane of $\mathbb{F}_p^{r+1}$, isomorphic to $\mathbb{F}_p^r$. So the inductive hypothesis applies. With $\alpha(r)+1$ non-proportional nonzero vectors in $\ker(\tilde{w}) \cong \mathbb{F}_p^r$, the $\eta$-bound gives a zero-sum of weight $\leq p$.
+
+**Therefore: if $U_1 \subset \{\ell = 1\}$ for ANY linear form $\ell$, then $S$ is NOT ZSF.** $\square$
+
+### The Symmetric Case: $U_c$ in an Affine Hyperplane
+
+By the same argument: if $U_c \subset \{\ell' = 1\}$, consider $\tilde{w}' = c \cdot \ell' \circ \pi - w$. For $(c, u'_j) \in F_c$: $\tilde{w}'(v) = c \cdot \ell'(u'_j) - c = c(1-1) = 0$... wait, let me redo.
+
+$\tilde{w}' = \ell' \circ \pi - (1/c) \cdot w$. For $(c, u'_j)$: $\tilde{w}' = \ell'(u'_j) - c/c = \ell'(u'_j) - 1 = 0$. ✓
+For $(1, u_i)$: $\tilde{w}' = \ell'(u_i) - 1/c$, which is generically nonzero.
+
+So $F_c$ maps to the zero fiber of $\tilde{w}'$, with $|\alpha(r)+1|$ vectors. Same contradiction. $\square$
+
+**This eliminates both affine hyperplane cases!**
+
+## THEOREM I: The Two-Nonzero-Fiber Bound (COMPLETE)
+
+**Theorem.** Let $S \subset \mathbb{F}_p^{r+1}$ be ZSF with $|S| = 2\alpha(r)+2$. Then $S$ cannot be contained in exactly two nonzero fibers $F_{c_1} \cup F_{c_2}$ under any linear form $w$.
+
+*Proof.* WLOG $c_1 = 1, c_2 = c \neq 0,1$ (rescale $w$). Then $|F_1| = |F_c| = \alpha(r)+1$.
+
+**Case 1: $U_1$ lies in some affine hyperplane $\{\ell = 1\}$.** By Theorem H, the linear form $\tilde{w} = \ell \circ \pi - w$ puts all of $F_1$ in the zero fiber. Since $|F_1| = \alpha(r)+1 > \alpha(r)$, Theorem A(a) gives a zero-sum. Contradiction.
+
+**Case 2: $U_c$ lies in some affine hyperplane $\{\ell' = 1\}$.** Symmetric argument. Contradiction.
+
+**Case 3: Neither $U_1$ nor $U_c$ lies in any affine hyperplane.** By Theorem D, $\Sigma_{W_1}(U_1) = \mathbb{F}_p^r$ for every $W_1 \in \mathbb{F}_p$. By Theorem F, a cross-fiber zero-sum of modular weight $w$ requires $\Sigma_{W_1}(U_1) \cap (-\Sigma_{W_2}(U_c)) \neq \emptyset$ where $(W_1, W_2)$ is the unique split. Since $\Sigma_{W_1}(U_1) = \mathbb{F}_p^r$, the intersection is the entirety of $-\Sigma_{W_2}(U_c)$, which is nonempty for $W_2 \geq 1$.
+
+**Remaining issue: integer weight realization.** The shadow surjectivity gives $\sum s_i \equiv W_1 \pmod{p}$, but the integer weight might be $W_1 + kp > p$.
+
+**Resolution via secondary form.** Choose the weight $w^*$ that minimizes $W_1 + W_2$ as integers. Since $c \neq p-1$ (if $c = p-1$: handle separately below), the pair $(W_1, W_2)$ has $W_1 + W_2 < p$ for some $w^*$ (by the averaging argument on $W_1 + \langle -c \cdot W_1 \rangle$, average $= p$, not constant $\implies$ some value $< p$).
+
+For $c = p-1$: $W_1 + W_2 = W_1 + \langle (p-1)^{-1}(-W_1) \rangle = W_1 + (p - W_1) = p$ for ALL $w$. Every cross-fiber zero-sum has weight exactly $p$. We need weight $\leq p$, so weight $= p$ is acceptable!
+
+In this case, the modular weight constraint gives $W_1 + W_2 = p$ exactly, and we need a MODULAR solution: $s$ with $\sum s_i \equiv W_1 \pmod{p}$ (automatically integer weight $\equiv W_1$, and the minimum integer weight is $W_1$ if achievable, or $W_1 + p$ otherwise). Since $W_1 \leq p-1$ and we use $|U_1| = \alpha(r)+1 \geq 9$ vectors, a solution with support $\leq W_1$ and all coefficients $= 1$ gives integer weight $= W_1$ if it exists. The surjectivity guarantees SOME solution with $\sum s_i \equiv W_1$; the minimum integer weight among all such solutions is $\leq W_1 + p(\alpha(r)+1-1) \cdot ...$
+
+**OK, let me prove the integer weight bound properly.**
+
+**Lemma (Integer Weight Bound).** Let $\Phi: \mathbb{F}_p^m \to \mathbb{F}_p^{r+1}$ be surjective with $m \geq r+2$. For any $c \in \ker(\Phi)^{\perp}$... 
+
+Actually, I realize there's a much cleaner argument. Let me use it.
+
+**Lemma (Key).** For $m \geq r+2$ vectors in general position in $\mathbb{F}_p^{r+1}$, there exists a nonzero element of $\ker(\Phi)$ with Hamming weight $\leq r+2$ and integer weight $\leq r+2 \leq p$ (for $p \geq r+2$).
+
+*Proof.* Any $r+2$ vectors in $\mathbb{F}_p^{r+1}$ are linearly dependent (dimension $r+1$). So there's a nontrivial relation $\sum_{i \in I} \lambda_i v_i = 0$ with $|I| \leq r+2$. The Hamming weight is $|I| \leq r+2$.
+
+But the integer weight is $\sum_{i \in I} \lambda_i$ (interpreting $\lambda_i \in \{0,\ldots,p-1\}$), which could be up to $(r+2)(p-1)$. **NOT necessarily $\leq p$.**
+
+However, we can SCALE: multiply all $\lambda_i$ by $\mu \in \mathbb{F}_p^*$. The integer weight becomes $\sum \langle \mu \lambda_i \rangle$. As $\mu$ varies, the average integer weight is $|I| \cdot (p-1)/2$. The minimum over $\mu$ is $\leq |I|(p-1)/2$. Still too large.
+
+**This approach doesn't directly bound integer weight.**
+
+### The Correct Argument: Switching Linear Forms
+
+I realize the cleanest path avoids the integer weight problem entirely:
+
+**Theorem I (Complete, Clean Proof).** $S$ cannot be contained in exactly two nonzero fibers.
+
+*Proof.* Suppose $S = F_1 \cup F_c$ under linear form $w$. Both $|F_1| = |F_c| = \alpha(r)+1$.
+
+**Step 1.** The projections $U_1 = \{u_i\}$ (from $F_1$) are $\alpha(r)+1$ distinct elements of $\mathbb{F}_p^r$.
+
+**Step 2.** Either $U_1$ lies in an affine hyperplane, or it doesn't.
+
+**If $U_1 \subset \{\ell = 1\}$:** Define $\tilde{w} = \ell \circ \pi - w$, a linear form on $\mathbb{F}_p^{r+1}$. Every vector in $F_1$ has $\tilde{w}$-value $0$. So under $\tilde{w}$, the zero fiber contains $\alpha(r)+1$ non-proportional vectors. By Theorem A(a), this exceeds $\alpha(r)$, giving a zero-sum of weight $\leq p$. **Done.** ✓
+
+**If $U_1 \not\subset \{\ell = 1\}$ for any $\ell$:** Then two of the $u_i$ satisfy $\ell(u_i) \neq \ell(u_j)$ for every linear form $\ell$... wait, the condition is that no SINGLE $\ell$ satisfies $\ell(u_i) = 1$ for ALL $i$. This just means the vectors don't all lie in one affine hyperplane.
+
+Pick any $u_a, u_b \in U_1$ with $u_a \neq u_b$. Since they're not proportional in $\mathbb{F}_p^r$ (they correspond to non-proportional vectors $(1,u_a), (1,u_b)$ in $\mathbb{F}_p^{r+1}$, and first coordinates match, so non-proportionality comes from $u_a \neq u_b$, but $u_a$ and $u_b$ COULD be proportional in $\mathbb{F}_p^r$).
+
+Hmm wait — $(1, u_a)$ and $(1, u_b)$ are non-proportional iff $u_a \neq u_b$ (since first coords are both $1$, proportionality requires $\lambda = 1$). So $u_a \neq u_b$ but they might be proportional ($u_b = \mu u_a$ for some $\mu \neq 1$).
+
+This is getting too case-heavy. Let me state the theorem cleanly with what IS proved.
+[TOOL: TodoWrite]
+## Resolving the Integer Weight Gap for Case 3
+
+The situation: $U_1$ does NOT lie in any affine hyperplane. Theorem D gives mod-$p$ surjectivity. I need integer weight $\leq p$.
+
+**New Idea: Use a DIFFERENT linear form to create a zero fiber, even when neither projection set lies in an affine hyperplane.**
+
+**Theorem J (Always-Zero-Fiber Lemma).** For any set $S$ of $2\alpha(r)+2$ non-proportional nonzero vectors in $\mathbb{F}_p^{r+1}$ with $\alpha(r)+1 \geq r+2$ (which holds for $r \geq 3$), there exists a linear form $w^*$ such that $|F_0^{w^*}| \geq \alpha(r)+1$.
+
+*Proof.* The space of linear forms on $\mathbb{F}_p^{r+1}$ is $(\mathbb{F}_p^{r+1})^*$, of dimension $r+1$. For each vector $v \in S$, the set of linear forms $w$ with $w(v) = 0$ is a hyperplane in the dual space, isomorphic to $\mathbb{F}_p^r$.
+
+We want: $|S \cap \ker(w^*)| \geq \alpha(r)+1$, i.e., at least $\alpha(r)+1$ vectors of $S$ lie in $\ker(w^*)$.
+
+The vectors in $S$ span a subspace $V \leq \mathbb{F}_p^{r+1}$ of dimension $\leq r+1$. The dual vectors (hyperplanes containing each $v_i$) form a configuration in $(\mathbb{F}_p^{r+1})^*$. Each $w^*$ "kills" the vectors $\{v \in S : w^*(v) = 0\}$.
+
+**This is NOT guaranteed to have $\alpha(r)+1$ vectors in one kernel!** We have $N = 2\alpha(r)+2$ vectors, $r+1$ dimensions. By pigeonhole on the projective dual... hmm, this isn't straightforward.
+
+**Counter-reasoning.** Actually, we CAN have all vectors with pairwise linearly independent dual hyperplanes, in which case no $w^*$ kills more than $r$ vectors. For example, take $2\alpha(r)+2$ vectors in "general position" — no $r+1$ of them linearly dependent. Then any hyperplane contains at most $r$ of them. So $|F_0^{w^*}| \leq r < \alpha(r)+1$ for all $w^*$.
+
+**This means Theorem J is FALSE.**
+
+The Always-Zero-Fiber Lemma fails for sets in general position. So the two-nonzero-fiber case cannot be reduced to the zero-fiber case by just switching the linear form.
+
+### The Fundamental Difficulty
+
+Let me clearly state where we are:
+
+**What IS proved:**
+- (a) $|F_0| \leq \alpha(r)$ ✓
+- (b) $|F_c| \leq \alpha(r)+1$ for $c \neq 0$ ✓
+- The {$F_0, F_c$} two-fiber case is impossible by counting ✓
+- The {$F_{c_1}, F_{c_2}$} two-fiber case with one projection set in an affine hyperplane is impossible by Theorem H ✓
+
+**What is NOT proved:**
+- The {$F_{c_1}, F_{c_2}$} two-fiber case when neither projection set lies in an affine hyperplane AND the integer weight realization problem
+
+**However:** Theorem H might handle MORE than just the affine hyperplane case. Let me check: the condition for Theorem H is that $U_1 \subset \{\ell = 1\}$. This is equivalent to: the augmented matrix $[u_1|\cdots|u_m; 1|\cdots|1]$ has rank $\leq r$. Since $U_1 \subset \mathbb{F}_p^r$ and there are $\alpha(r)+1$ vectors, the generic rank of the top part is $\min(\alpha(r)+1, r) = r$. The augmented matrix has rank $r$ iff $(1,\ldots,1)$ is in the row span.
+
+For $\alpha(r)+1 > r$ (always true for $r \geq 3$): the $m \times r$ matrix has $m > r$ rows, so the vectors have dependencies. The $(1,\ldots,1)$ vector is one specific element of $\mathbb{F}_p^m$, and the row span has dimension $r$. So the probability that $(1,\ldots,1)$ is in a random $r$-dimensional subspace of $\mathbb{F}_p^m$ is $1/p^{m-r}$. Very unlikely for large $m$.
+
+**So the "generic" case is Case 3 (no affine hyperplane), and it remains open.**
+
+Let me try one more approach to Case 3.
+
+### Theorem K: Prescribed Integer Weight via Short Dependencies
+
+**Theorem K.** Let $U = \{u_1,\ldots,u_m\} \subset \mathbb{F}_p^r$ with $m \geq r+1$. For any $w \in \{1,\ldots,m\}$ and any target $t \in \text{span}(U)$, there exist $s_i \in \{0, 1\} \subset \{0,\ldots,p-1\}$ with exactly $w$ nonzero entries and $\sum s_i u_i = t$, provided $w \geq r+1$ and the appropriate combinatorial conditions hold.
+
+Wait, this is asking for a 0-1 solution, which is a SUBSET SUM problem. By EGZ-type results, for $w = p$ and special structures, this works. But for general $w$, it's NP-hard in general.
+
+However, in our setting, $m = \alpha(r)+1 = 9 \cdot 2^{r-3}$, and we're over $\mathbb{F}_p$ (finite field). The Chevalley-Warning theorem or additive combinatorics might help.
+
+**Olson's theorem (1969):** For $G = C_p^r$, the Davenport constant $D(G) = r(p-1)+1$. This means any sequence of $r(p-1)+1$ elements over $G$ has a nonempty zero-sum subsequence (any length).
+
+But we need a zero-sum of SPECIFIC length (related to weight constraint). The **weighted Erdős-Ginzburg-Ziv problem** is closer.
+
+Let me try the simplest version:
+
+**Lemma.** Let $u_1,\ldots,u_m \in \mathbb{F}_p^r$ with $m \geq r+1$. There exist $s_i \in \{0,1\}$, not all zero, with $\sum s_i u_i = 0$ and $\sum s_i \leq r+1$.
+
+*Proof.* Any $r+1$ vectors in $\mathbb{F}_p^r$ are linearly dependent: $\sum_{i \in I} \lambda_i u_i = 0$ with $|I| \leq r+1$, $\lambda_i \neq 0$. But the coefficients are $\lambda_i \in \mathbb{F}_p^*$, not necessarily $\{0,1\}$. ✗
+
+**OK, the 0-1 approach doesn't work directly.** Let me try yet another angle.
+
+### The Right Approach: Direct Fiber Form Change
+
+**Theorem L (Fiber Form Switching).** Let $S = F_1 \cup F_c$ under $w$, with $|F_1| = |F_c| = \alpha(r)+1$. There exists a linear form $w'$ such that $S$ has $|F_0^{w'}| \geq 1$ AND $|F_0^{w'}| + |F_{c'}^{w'}| \leq 2\alpha(r)+1$ for some nonzero fiber $F_{c'}^{w'}$ containing the rest.
+
+Actually, this is just wishful thinking. Let me approach this differently.
+
+**Observation.** Under the original form $w$, the two-nonzero-fiber setup has $F_0^w = \emptyset$. Consider ALL possible linear forms. For each $w'$, let $n_0(w') = |S \cap \ker(w')|$. 
+
+**Counting argument:** $\sum_{w' \in (\mathbb{F}_p^{r+1})^* \setminus \{0\}} n_0(w') = |S| \cdot \frac{p^r - 1}{1} = N \cdot (p^r - 1)$... wait, each vector $v \in S$ lies in the kernel of exactly $p^r - 1$ nonzero linear forms (the hyperplane $v^\perp$ in dual space has $p^r$ elements, minus the zero form). Actually: the set of $w'$ with $w'(v) = 0$ is a hyperplane in $(\mathbb{F}_p^{r+1})^*$, with $p^r$ elements total ($p^r - 1$ nonzero).
+
+So: $\sum_{w' \neq 0} n_0(w') = N(p^r - 1)$.
+
+The number of nonzero linear forms is $p^{r+1} - 1$. Average $n_0 = N(p^r-1)/(p^{r+1}-1) = N/(p + 1/(p^r-1)) \approx N/p$.
+
+For $N = 2\alpha(r)+2$: average $n_0 \approx (2\alpha(r)+2)/p$.
+
+At rank 4, $\alpha(3)+1 = 9$, $N = 18$: average $n_0 \approx 18/p$. For $p = 5$: $\approx 3.6$. For $p = 7$: $\approx 2.6$.
+
+So ON AVERAGE, each linear form puts $\sim 3\text{--}4$ vectors in the zero fiber at $p = 5$. We need $\alpha(r)+1 = 9$ for Theorem A(a) to give a contradiction. The average is way too small.
+
+**But we don't need $n_0 \geq \alpha(r)+1$.** We need $n_0 + \max_c n_c \leq 2\alpha(r)+1$ where $n_c = |F_c^{w'}|$. This is: $n_0 \leq \alpha(r)$ AND $n_c \leq \alpha(r)+1$ AND at most 2 fibers. The {$F_0, F_c$} case gives $n_0 + n_c \leq 2\alpha(r)+1 < N$, a contradiction.
+
+So ANY $w'$ with $n_0(w') \geq 1$ AND only 2 nonempty fibers (the zero fiber and one nonzero fiber) gives a contradiction. But requiring exactly 2 fibers with one being zero is very restrictive.
+
+**I think the two-nonzero-fiber case requires a genuinely new technique.** Let me state the precise obstruction and move to the inductive closure.
+[TOOL: TodoWrite]
+## INDUCTIVE CLOSURE THEOREM
+
+**Theorem (Inductive Step — Conditional).** Assume:
+1. $\eta(C_p^r) \leq \alpha(r)(p-1) + 1$ (inductive hypothesis at rank $r$)
+2. **Two-Nonzero-Fiber Conjecture (TNFC):** No ZSF set of $2\alpha(r)+2$ non-proportional nonzero vectors in $\mathbb{F}_p^{r+1}$ is contained in exactly two nonzero fibers $F_{c_1} \cup F_{c_2}$ under any linear form.
+
+Then $\eta(C_p^{r+1}) \leq (2\alpha(r)+1)(p-1) + 1 = \alpha(r+1)(p-1) + 1$.
+
+*Proof.* Let $S$ be a sequence of $\alpha(r+1)(p-1)+1 = (2\alpha(r)+1)(p-1)+1$ elements over $C_p^{r+1}$. We must find a zero-sum subsequence of length $\leq p$.
+
+**Step 1: Reduction to distinct directions.** If any element appears $\geq p$ times, $p$ copies give a zero-sum. So each element has multiplicity $\leq p-1$, giving $\geq \lceil L/(p-1) \rceil \geq 2\alpha(r)+2$ distinct nonzero directions.
+
+**Step 2: Fiber analysis.** Choose any linear form $w$. Partition the $N \geq 2\alpha(r)+2$ directions into fibers.
+
+By Theorem A: $|F_0| \leq \alpha(r)$ and $|F_c| \leq \alpha(r)+1$ for $c \neq 0$.
+
+**Step 3: Case analysis on fiber structure.**
+
+*Case A: $\leq 1$ nonempty fiber.* Impossible since $N \geq 2\alpha(r)+2 > \alpha(r)+1$.
+
+*Case B: Exactly 2 fibers, one zero.* $|F_0| + |F_c| \leq \alpha(r) + \alpha(r)+1 = 2\alpha(r)+1 < N$. Contradiction.
+
+*Case C: Exactly 2 fibers, both nonzero.* Ruled out by TNFC.
+
+*Case D: $\geq 3$ nonempty fibers.* This is the ONLY remaining case. All vectors span $\geq 3$ fiber values.
+
+**Step 4: Multi-fiber argument.** With $\geq 3$ nonempty fibers: $F_0, F_{c_1}, F_{c_2}, \ldots$ (possibly $F_0 = \emptyset$).
+
+*Sub-case D1: $F_0 \neq \emptyset$.* Take any $F_{c_i}$ with $|F_{c_i}| \geq 1$. The $|F_0|$ vectors in the zero fiber project to $\ker(w) \cong \mathbb{F}_p^r$. They give a ZSF set of size $\leq \alpha(r)$ in $\mathbb{F}_p^r$.
+
+Now consider adding a vector from $F_{c_i}$. The combined set $F_0 \cup \{v\}$ (one vector from a nonzero fiber) has $|F_0|+1 \leq \alpha(r)+1$ vectors in $\mathbb{F}_p^{r+1}$ with fiber values in $\{0, c_i\}$. This is a two-fiber configuration with $F_0 \neq \emptyset$, already handled.
+
+But this doesn't directly give a zero-sum — we've only shown the SIZE constraint.
+
+*Sub-case D2: The shadow saturation approach.* If the shadow $\Sigma_{\leq p-1}(S)$ covers all of $\mathbb{F}_p^{r+1} \setminus \{0\}$, then adding any $(N+1)$-th vector creates a zero-sum (since $-v_{N+1} \in \Sigma_{\leq p-1}$, giving total weight $\leq p$). But proving shadow saturation for general ZSF sets of size $\alpha(r+1)$ is itself the open problem.
+
+**Step 5 (Conditional conclusion).** Under TNFC, Cases A-C are impossible for ZSF sets of size $2\alpha(r)+2$, so $S$ is not ZSF, meaning it contains a zero-sum of weight $\leq p$. **But Case D is not resolved by TNFC alone.**
+
+**Revised Theorem:** The inductive step requires TWO conditions:
+1. TNFC (two-nonzero-fiber conjecture)
+2. A multi-fiber zero-sum argument (for $\geq 3$ fibers)
+
+### The Real Structure of the Inductive Step
+
+Actually, wait. Let me reconsider. The point is: we're proving that $2\alpha(r)+2$ directions CAN'T be ZSF — not that specific fiber configurations are impossible. The TNFC says "two-nonzero-fiber configurations can't be ZSF," and Cases A-B say "{$F_0, F_c$} and single-fiber can't fit $2\alpha(r)+2$ vectors." But Case D ($\geq 3$ fibers) with the SIZE of $2\alpha(r)+2$ is NOT directly contradicted.
+
+**The gap I identified is real but was already known.** The multi-fiber case ($\geq 3$ fibers) IS the open problem, as stated in the briefing. The TNFC handles a sub-case, but the main multi-fiber problem remains.
+
+So the clean formulation is:
+
+**Theorem (Partial Inductive Step).** Assume the inductive hypothesis at rank $r$. Then any ZSF set of $2\alpha(r)+2$ non-proportional nonzero vectors in $\mathbb{F}_p^{r+1}$ must:
+1. Have $\leq \alpha(r)$ vectors in any zero fiber (Theorem A(a))
+2. Have $\leq \alpha(r)+1$ vectors in any nonzero fiber (Theorem A(b))
+3. Span $\geq 3$ fiber values under ANY linear form, UNLESS it sits in two nonzero fibers with both projection sets in general position (not on an affine hyperplane)
+4. If in two nonzero fibers with projections in general position: a zero-sum exists at the MODULAR level but integer weight realization is unresolved
+
+The multi-fiber case ($\geq 3$ fibers under the optimal linear form) remains the principal obstruction.
+[TOOL: TodoWrite]
+Now let me write the complete report.
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/THEORIST_R5_REPORT.md]
+[TOOL: TodoWrite]
+## Summary of This Round
+
+### What's New and Proved
+
+**Theorem H (Affine Hyperplane Trick)** is the main new contribution. It says: if a ZSF set sits in two nonzero fibers $F_{c_1} \cup F_{c_2}$ and EITHER projection set $U_1$ or $U_c$ lies in an affine hyperplane $\{\ell = 1\}$, then the set cannot be ZSF. The proof constructs a new linear form $\tilde{w} = \ell \circ \pi - w$ that puts $\alpha(r)+1$ vectors into the zero fiber, exceeding the bound from Theorem A(a).
+
+**Theorem D (Shadow Surjectivity)** proves that when the projection set is NOT on an affine hyperplane, the shadow $\Sigma_w(U)$ covers all of $\mathbb{F}_p^r$ at the modular level.
+
+**Theorem F (Weight Decomposition)** shows the cross-fiber zero-sum problem reduces to a shadow intersection problem with uniquely determined weight splits.
+
+### What's Precisely Open
+
+Two named obstructions remain:
+
+1. **IWRC (Integer Weight Realization Conjecture):** Mod-$p$ shadow surjectivity doesn't guarantee integer weight $\leq p$. This blocks the two-nonzero-fiber case when projections are NOT on any affine hyperplane.
+
+2. **MFC (Multi-Fiber Conjecture):** The $\geq 3$ fiber case, where no fiber is large enough for within-fiber induction. This was already known as the principal gap.
+
+### Verification Requests for COMPUTER
+
+[VERIFY: IWRC test — for random non-proportional vectors in $\mathbb{F}_p^3$ not on an affine hyperplane, check integer-weight shadow coverage at $p = 5, 7, 11$]
+
+[VERIFY: Two-nonzero-fiber exhaustive — at $p = 5$, do ANY 18 non-proportional vectors in $\mathbb{F}_5^4$ with values in $\{c_1, c_2\}$ (both nonzero) under some linear form avoid all zero-sums of weight $\leq 5$?]

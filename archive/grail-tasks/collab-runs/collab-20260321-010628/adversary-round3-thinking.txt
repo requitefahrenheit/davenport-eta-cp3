@@ -1,0 +1,589 @@
+
+============================================================
+BLOCK 1 (686 chars)
+============================================================
+Let me understand my role: I'm the ADVERSARY in round 3 of 3. My job is to try to break things - find counterexamples, disprove lemmas, and identify where proposed proofs fail. 
+
+Let me start by:
+1. Searching Cortex for what's been stored from previous rounds
+2. Understanding the current state of the proof attempts
+3. Focusing on the key directives from the coordinator:
+   - DIRECTIVE 1: Resolve the "total_break" truncation - complete the attack on 18-vector candidates
+   - Focus on collinear triple mechanism robustness
+   - Test the partition dichotomy
+
+This is round 3 of 3, so I need to make it count. Let me search Cortex first, then focus on the most critical attack vectors.
+
+============================================================
+BLOCK 2 (116 chars)
+============================================================
+Let me search Cortex for everything related to the grail conjecture, adversary findings, and previous round results.
+
+============================================================
+BLOCK 3 (171 chars)
+============================================================
+Excellent. I have a rich set of Cortex entries. Let me now search for more specific recent results, especially from this round (round 3), and the latest theorist findings.
+
+============================================================
+BLOCK 4 (861 chars)
+============================================================
+OK, some Cortex errors. Let me proceed with what I have. Let me now look at the existing code in the grail-tasks directory, and then focus on my three main attack vectors for this final round:
+
+1. **Attack the Fiber Concentration Lemma** — This is now the key claim. If I can find a counterexample (18 projective points in PG(3,p) where no linear form concentrates ≥9 points in one fiber), the whole proof strategy collapses.
+
+2. **Attack Conjecture L (liftability)** — The reformulated gap. Can I construct an α-dispersed set where NO liftable tail zero-sum exists?
+
+
+3. **Attack the projection step** — The claim that projecting from fiber to ker(w) preserves non-proportionality is critical here. The zero-projection resolution asserts this works, but I need to verify it carefully.
+
+Let me examine the existing code setup to understand the structure better.
+
+============================================================
+BLOCK 5 (941 chars)
+============================================================
+Now I have a clear picture of the landscape. Let me read the most recent theorist report (Session 6 Round 3) and the latest adversary reports to understand the current state, then launch my attacks.
+
+Key attack targets for this final round:
+
+1. **FIBER CONCENTRATION LEMMA** — The claim that any 18 projective points in PG(3,p) have a half-space containing ≥9. This is now the CENTRAL claim. If I can build a counterexample, the entire inductive strategy fails.
+
+2. **CONJECTURE L (liftability)** — The reformulated gap. Can I construct an α-dispersed set where no liftable tail zero-sum exists?
+
+
+3. **Projection non-proportionality preservation** — The claim that projection preserves non-proportionality. The Cortex entry about this already notes issues.
+
+4. **The "total_break" attack** — The coordinator specifically demanded this be resolved.
+
+Let me check the most recent reports and the total_break script to see what's been flagged.
+
+============================================================
+BLOCK 6 (33543 chars)
+============================================================
+Excellent. Now I have a comprehensive picture. Let me identify the THREE critical attack vectors for this final round:
+
+**Attack 1: FIBER CONCENTRATION LEMMA (FCL)**
+The claim: any 18 projective points in PG(3,p) have some fiber (under some linear form) with ≥9 points. Cortex says this was verified by "adversarial simulated annealing" and found tight at exactly N/2. But:
+- Simulated annealing is NOT exhaustive
+- The tight cases (exactly 9) are suspicious — if the minimum is always exactly N/2, that's a very strong claim
+
+
+I should try to construct explicit counterexamples using algebraic geometry techniques.
+
+**Attack 2: INTEGER WEIGHT REALIZATION CONJECTURE (IWRC)**
+The Theorist identified this as the remaining gap. Theorem D gives mod-p surjectivity. The gap: integer weight could be w+kp. I need to find vectors where mod-p solutions ALL have integer weight > p.
+
+**Attack 3: MULTI-FIBER CONJECTURE (MFC)**
+With ≥3 fibers, no proof exists. The weight-decoupling obstruction makes fiber induction impossible. Can I construct a ≥3-fiber ZSF set at 2?
+
+Focusing on Attacks 1 and 2 as the most impactful—Attack 1 is critical since the FCL is the new "golden path" to the proof. Let me verify the projection step in the FCL proof is sound: given 18 projective points in PG(3,p), some fiber has ≥9 points, I choose a complement u ∉ S to avoid zero projections, project to ker(w) to get ≥9 non-proportional nonzero vectors, and by the rank-3 bound a zero-sum of weight ≤ p should exist. But step 3 has a subtle issue—the Cortex entry claims "at most C(fiber_size, 2) = 36 forbidden choices of u", but I need to verify this constraint actually holds.
+
+If two vectors in the fiber project to the same line in ker(w), they differ by a scalar multiple of u, so the number of bad projective directions for u is bounded by C(9,2) = 36. Since available directions scale like p², I need p² > 36, meaning p ≥ 7 for this argument to work.
+
+Now I'm reconsidering the actual constraint: two vectors v₁ = (c, u₁) and v₂ = (c, u₂) from the same fiber are non-proportional in F_p⁴, but their projections u₁ and u₂ become proportional. This happens when u₁ = λu₂ for some λ, which forces v₁ - λv₂ to be proportional to the first basis vector.
+
+The key insight is understanding the projection mechanism itself—we're using a linear form w that extracts the first coordinate, and projecting onto its kernel by subtracting off the first coordinate component. So when we project (c, u₁, u₂, u₃), we get (0, u₁, u₂, u₃) in the kernel.
+
+Within a single fiber F_c where c ≠ 0, two vectors (c, u) and (c, λu) with λ ≠ 1 are not proportional in F_p⁴ (since that would require λ = 1). But their projections u and λu are proportional in F_p³, meaning the projection can collapse distinct vectors from the same fiber into proportional ones. proportional ones! The question is: can this happen for vectors in the SAME fiber?
+
+v₁ = (c, u) and v₂ = (c, λu) for λ ≠ 1. Are they non-proportional in F_p⁴? Proportionality: (c, u) = μ(c, λu) iff c = μc (so μ = 1) and u = μλu = λu. So proportionality requires u = λu, which means (λ-1)u = 0, so λ = 1 (since u ≠ 0). So yes, (c, u) and (c, λu) are non-proportional in F_p⁴ for λ ≠ 1, but their projections u and λu ARE proportional in F_p³!
+
+This reveals a critical flaw: the projection map doesn't preserve non-proportionality within fibers. A fiber over c contains 9 non-proportional vectors in F_p⁴, but their projections to F_p³ can have proportional relationships among them. If I'm relying on the inductive hypothesis that 9 non-proportional vectors guarantee a zero-sum, I need to count how many distinct proportionality classes actually appear in the projections—and that could be significantly fewer than 9. include some proportional pairs. The projective classes of {u₁, ..., u₉} could have as few as... well, how few? 
+
+Each projective class [u] can contain at most one element from {u₁, ..., u₉}, UNLESS two vectors (c, u) and (c, λu) with λ ≠ 1 are both in S. But they ARE both non-proportional in F_p⁴, so they can both be in S.
+
+For each projective class [u] in F_p³, the set of vectors in F_c whose tails are in [u] is {(c, λu) : λ ∈ F_p*}. These are all non-proportional in F_p⁴ (as shown above). So a single projective class [u] can contribute up to p-1 vectors to F_c.
+
+If all 9 vectors in F_c share the same tail projective class, that's possible when p ≥ 11, giving us 9 non-proportional vectors from just one projective class. For the ZSF property though, any zero-sum combination of these vectors (c, λᵢu) forces both the coefficient sum and the weighted tail sum to vanish independently. I'm realizing the Cortex entry addresses a different constraint—avoiding zero projections through careful choice of u—but that's separate from the proportionality issue I'm wrestling with. Let me trace through the FCL proof again, particularly step 4, which claims we can extract non-proportional nonzero vectors after projecting to the kernel.
+
+The problem is that projecting vectors like (c, u₁) and (c, u₂) down to their u-components can collapse distinct vectors into proportional classes, which would contradict the claim. This looks like a genuine gap in the proof strategy, unless there's a constraint I'm missing about which vectors actually land in S—specifically, whether S avoids pairs like (c, u₁) and (c, λu₁) that would create proportional projections. So this reveals a genuine flaw in the FCL proof—the projection doesn't necessarily preserve non-proportionality of vectors. Let me construct a concrete counterexample: for p = 5 with α(3) = 8, I need 9 non-proportional vectors in the fiber F_c, but I can make all their tails proportional to a single vector u by choosing v_i = (c, λ_i · u) for different scalars λ_i.
+
+The constraint is that |F_p*| limits how many vectors can share the same projective class of tails. For p = 5, that's only 4 vectors per class, so 9 vectors need at least 3 classes. For p = 7, it's 6 per class, needing 2 classes. But for p = 11, all 9 could fit in a single projective class—meaning the projection collapses to just 1 independent direction, which would trivially satisfy the inductive hypothesis on the lower-dimensional space.
+
+However, the copies pooling argument saves us: even with 9 identical copies (each with multiplicity p-1), the total sequence length is 9(p-1), and the η bound requires at least 8(p-1)+1 = 8p-7 elements. Since 9(p-1) = 9p-9 ≥ 8p-7 whenever p ≥ 2, the bound fires regardless of whether the tails collapse into a single projective class. I see the problem now — I only have p-1 copies of each individual vector, so I can't actually construct p copies of the same vector to form a zero-sum of weight p. The constraint that each (c, u) appears with multiplicity p-1 means I'm stuck below the threshold needed for a zero-sum in the fiber. (c, λᵢu) has p-1 copies.
+
+If all 9 tails are in the same projective class, say tails λ₁u, ..., λ₉u, then the vectors are (c, λ₁u), ..., (c, λ₉u). Each has p-1 copies. A zero-sum Σ_{i=1}^{9} aᵢ(c, λᵢu) = 0 requires:
+- c·Σaᵢ = 0, so Σaᵢ ≡ 0 (mod p), meaning Σaᵢ = p (if weight ≤ p)
+- (Σaᵢλᵢ)u = 0, so Σaᵢλᵢ ≡ 0 (mod p)
+
+So I'm looking at a system with two constraints on the coefficients: the sum must equal p and the weighted sum of the λᵢ values must vanish mod p. For p = 11 with 9 distinct λᵢ in F₁₁*, this becomes a question of whether I can find coefficients in {0, 1, ..., 10} satisfying both conditions—the kernel has dimension 7, giving plenty of solutions mod 11, though I need to verify one exists with the right weight distribution. The Erdős-Ginzburg-Ziv bound actually still applies here—even if projection collapses some vectors into proportional classes, we're still working with a sequence of length 9(p-1), which exceeds the threshold 8(p-1)+1 needed to guarantee a zero-sum of weight at most p. So the proportionality issue doesn't actually undermine the argument. Let me think through what η really requires... η(C_p³) = 8(p-1)+1 guarantees that any sequence of that length over nonzero elements (with each appearing ≤ p-1 times) contains a zero-sum subsequence of length ≤ p. In the fiber F_c with 9 vectors, I'm generating 9(p-1) elements from the copies pool, which exceeds the bound for p ≥ 2, but I need to check whether proportional tails cause issues with the zero-sum guarantee.
+
+If two vectors like (c, u) and (c, 2u) both contribute to the pool, their tails u and 2u are proportional—the same direction [u] appears with combined multiplicity up to 2(p-1), which violates the requirement that each element appears at most p-1 times. This breaks the applicability of η.
+
+Wait, but u and 2u are actually distinct elements in F_p³, so they count separately toward the constraint. The element u appears p-1 times from the first vector, and 2u appears p-1 times from the second—these are different, so the bound holds and η does fire on the copies pool. This means the zero-sum in ker(w) lifts to a zero-sum in F_p⁴ with weight at most p, but I need to verify whether it lifts correctly to the fiber F_c.
+
+Looking at the fiber structure: the zero-sum from η gives Σ aᵢ u_i = 0 in F_p³ with total weight W = Σaᵢ ≤ p. Since each u_i is the tail of the vector (c, u_i) in F_c, the corresponding zero-sum in F_p⁴ becomes Σ aᵢ (c, u_i) = (c·W, 0). For this to actually be zero in F_p⁴, I need c·W ≡ 0 (mod p), which forces W ≡ 0 (mod p). Given that 1 ≤ W ≤ p, this means W must equal p exactly. But the η bound only guarantees W ≤ p, so W could be anything from 1 to p—the zero-sum in the tails might not have the required weight.
+
+This is the core issue: if W < p, then c·W ≠ 0, so the lifted vector isn't actually a zero-sum in F_p⁴. The fiber projection breaks the zero-sum property unless the weight is exactly p. The weight-decoupling obstruction I proved earlier shows that any nonzero zero-sum in a fiber must have weight p, so η's zero-sum can only lift if it happens to have weight p. But η only guarantees weight ≤ p, not weight = p.
+
+Now I need to clarify what η actually bounds. The definition varies depending on convention — is it counting the minimum sequence length, or the minimum weighted sum? Let me look back at the original problem statement to pin down exactly what η(C_p^r) measures.
+
+In the standard formulation, η(C_p^r) is the smallest N such that any sequence of N elements from G\{0} (where each element repeats at most p-1 times) contains a zero-sum subsequence of length at most p. Here a subsequence means we pick elements with coefficient 1, so the weight equals the count of elements chosen. Given the pool of 9(p-1) elements over F_p³, I need to find a zero-sum subsequence of length k ≤ p. When I lift this to the fiber over F_c, those k elements give vectors that sum to (c·k, 0) in F_p⁴, which forces c·k ≡ 0 mod p.
+
+Since 1 ≤ k ≤ p, this means k must equal p exactly. But here's the problem: η only guarantees some zero-sum subsequence of length in [1, p], not necessarily length p. There could be a zero-sum of length 3 or 7, and if k ≠ p, the lift to F_p⁴ fails to be zero. So the FCL proof has a gap—η fires on the tails and produces a zero-sum of some length k, but we specifically need k = p for the argument to work, and η doesn't guarantee that.
+
+The s-constant fixes this: s(C_p^r) = (α(r)+1)(p-1)+1 guarantees a zero-sum of length exactly p (or multiples thereof, with p being minimal). But our sequence pool has only 9(p-1) elements, and we need at least (α(r)+1)(p-1)+1 = 9(p-1)+1 for s to fire. We're one element short—exactly the gap the Theorist identified in round 3.
+
+The fiber-1 tail copies pool is A^{p-1} ∪ {0^{p-1}}, which is the unique extremal sequence for this threshold. The zero-tail vector takes up one slot without contributing to the sum, leaving us exactly one below what's needed for the lift. This reveals why the FCL proof strategy fails: we have 9 vectors in the fiber and 9(p-1) elements in the copies pool, but generating a zero-sum of length p requires 9(p-1)+1 elements—we're short by precisely 1.
+
+The η bound can produce a zero-sum of some length k ∈ [1, p], but it doesn't guarantee k = p specifically. If the zero-sum has length less than p, the lift collapses. So the FCL approach has a critical gap: it needs the tail zero-sum to have weight exactly p, and neither η nor s provides that guarantee. This is actually the same fundamental issue that the Theorist identified as the "Integer Weight Realization" problem—the mod-p constraint works, but realizing the integer weight doesn't.
+
+Let me reconsider the Theorist's bounds more carefully. Theorem A(b) states |F_c| ≤ α(r)+1 for c ≠ 0, and the proof structure suggests that if |F_c| ≥ α(r)+2, something breaks.
+
+I see the core tension now: the fiber bound requires α(r)+2 vectors to trigger the s-bound contradiction, but the FCL proof only has α(r)+1 vectors available—that's exactly one short of what's needed to force the zero-sum. This gap is the crux of the problem, and I need to determine whether it's a genuine limitation or if there's a way to close it.
+
+My strategy is to first verify whether the FCL itself actually holds by attempting to construct a counterexample at p=5, then explore whether the Integer Weight Realization Conjecture might provide an alternative path forward. The simulated annealing verification in the Cortex entry could be missing configurations, so I should try to build 18 projective points in PG(3,5) where no fiber contains enough points to trigger the contradiction.
+
+Now I'm working through the fiber structure more carefully—in PG(3,5), a linear form partitions the 156 projective points into a kernel hyperplane and several fibers, and I need to understand exactly how the 125 non-kernel points distribute across the nonzero fibers to see if I can avoid any fiber reaching 9 points. I'm realizing the key issue: proportional vectors in a nonzero fiber F_c can't both be in F_c since scaling changes the fiber. So each element of F_c represents a distinct projective point, giving exactly p³ projective points for each nonzero fiber. impossible since they'd be in different fibers). Wait: if v ∈ F_c and v' = λv, then w(v') = λw(v) = λc. So v' ∈ F_{λc}. For v' to also be in F_c, we need λc = c, so λ = 1. Therefore, no two distinct vectors in F_c are proportional. Each element of F_c is its own projective class.
+
+So F_c contains p³ distinct projective points. The total projective space PG(3,p) has (p⁴-1)/(p-1) = p³+p²+p+1 projective points. The kernel F_0 contains p³-1 nonzero vectors representing p²+p+1 projective points. Each nonzero fiber F_1, ..., F_{p-1} contributes p³ projective points. Let me verify the count: p²+p+1 + (p-1)·p³ should equal p³+p²+p+1. Expanding the left side gives p⁴-p³+p²+p+1, which matches the right side. p²+p+1 + (p-1)·p³ = p²+p+1+p⁴-p³.
+Check: p³+p²+p+1 vs p⁴-p³+p²+p+1. Equal iff p³ = p⁴-p³, i.e., 2p³ = p⁴, i.e., p = 2. 
+
+So for p ≥ 3, these don't match. Let me reconsider—the issue isn't that F_c contains zero vectors since c ≠ 0, so all elements are nonzero. The total nonzero vectors in F_p⁴ should be p⁴-1: F_0 contributes p³-1 nonzero vectors, and each F_c for c=1,...,p-1 contributes p³ vectors, giving (p³-1) + (p-1)p³ = p⁴-1. ✓ Projectively, F_0 yields p²+p+1 classes while each F_c yields p³ classes since every vector represents a distinct projective point.
+
+Wait, that's wrong—vectors in different fibers can be proportional. If v ∈ F_c, then λv ∈ F_{λc}, so a single projective class [v] = {λv : λ ∈ F_p*} contains representatives across multiple fibers. I need to reconsider how projective classes distribute across the fibers.
+
+Actually, each projective class from nonzero vectors has exactly one representative in each nonzero fiber. So there are p³ such classes total, plus p²+p+1 classes entirely in F_0, giving p³+p²+p+1 projective points—which matches |PG(3,p)|. But here's the key issue: the fiber decomposition fundamentally works on vectors, not projective points, since different representatives of the same projective class fall into different fibers. So any statement about the FCL needs to be about vectors, not projective points. I'm realizing the issue with defining fibers projectively — the standard fiber assignment breaks down because projective points don't have unique representatives. Let me reconsider the actual problem: we're working with n = 2α(r)+2 projective points in PG(r, F_p), each with multiplicity p-1, giving a total sequence length of n(p-1).
+
+The fiber decomposition only makes sense when we fix representatives v_1, ..., v_n for each projective point, and then a linear form w assigns each representative to a fiber value w(v_i). But here's the catch — if I normalize by choosing representatives where w(v) = 1 for all non-kernel points, that trivializes the problem and doesn't actually constrain anything meaningful about the projective configuration.
+
+So the real question needs to be about the kernel fiber instead — the hyperplane itself. For 18 projective points in PG(3,5), I'm asking whether some hyperplane must contain at least 9 of them. Since each hyperplane in PG(3,5) has 31 points out of 156 total, I can compute the average: 18 points times 31 points per hyperplane divided by 156 total hyperplanes gives roughly 3.6 points per hyperplane on average, so I need to think about whether the pigeonhole principle or some geometric constraint forces a larger concentration.
+
+The key insight is that if these 18 points form a cap — a set with no three collinear — then their intersection with any hyperplane is bounded by the cap's structure. Since caps in PG(3,5) can reach size 26, I need to determine whether 18 points can be positioned as a cap such that no hyperplane cuts through more than 8 of them. So a cap of 18 points in PG(3,5) intersects each hyperplane in at most 6 points, which would contradict the fiber concentration lemma—but wait, the FCL actually applies to all linear forms, not just hyperplanes, and the nonzero fibers don't projectivize the same way. I need to reconsider what the lemma actually says about fixed vector representatives in the η problem.
+
+For the original setup, I have 18 nonzero non-proportional vectors in F_p^4 (p ≥ 5), and I'm asking whether some linear form w and some value c can force |F_c| ≥ 9. The kernel fiber F_0 corresponds to a hyperplane containing projective classes of these vectors, but the key is that the kernel has p³-1 nonzero elements to distribute among the 18 vectors.
+
+Now I'm thinking about how the nonzero fibers work. Since scaling a vector changes which fiber it lands in—if w(v_i) = c, then w(λv_i) = λc—and my 18 vectors represent distinct projective classes, the fiber distribution depends on how the linear form partitions these projective classes across the nonzero values in F_p.
+
+The key realization is that I can actually rescale the representatives. If I choose different representatives from the same projective classes, I can shift which fibers the vectors fall into, which means I have some control over the fiber sizes for nonzero values. we replace v_i by λ_i v_i for arbitrary λ_i ∈ F_p*, we get the same projective classes but different nonzero fiber distributions. So the question is: for any choice of representatives (scalings) of 18 projective classes, does some w have max fiber size ≥ 9?
+
+Equivalently: does there exist a scaling of the 18 projective points and a linear form w such that ≥ 9 scaled points fall in the same fiber?
+
+For the kernel fiber, scaling doesn't matter (0 stays 0).
+
+For nonzero fibers: given w, for each projective point [v_i] with w(v_i) ≠ 0, I can choose λ_i = c/w(v_i) so that w(λ_i v_i) = c. This means by rescaling, I can push all nonzero-fiber points into the same fiber F_c. So the maximum nonzero fiber size across all scalings equals 18 minus the number of points in the kernel.
+
+But wait—in the actual η problem, the vectors are fixed, not rescalable. I'm given a specific sequence of nonzero non-proportional vectors in F_p^4, each with multiplicity p-1, and I need to find coefficients that satisfy the zero-sum condition.
+
+The fiber decomposition depends on both the choice of w and the specific representatives. The FCL conjecture claims that for any 18 non-proportional nonzero vectors, there exists some w where the maximum fiber has size ≥ 9. But since the vectors are fixed elements, the fiber sizes depend on their specific values.
+
+For a potential counterexample, I'm considering 18 projective points forming a cap in PG(3,5) with carefully chosen representatives. For any linear form w, the kernel fiber contains at most 6 points (since a cap intersects a hyperplane in at most p+1 = 6 points), leaving 12+ nonzero points distributed among 4 nonzero fibers. The key question is whether we can select representatives so that for every possible w, no nonzero fiber exceeds 8 points.
+
+With 12 nonzero points spread across 4 fibers, the average is 3 per fiber, so keeping each fiber ≤ 8 seems feasible in principle. However, the challenge is that different choices of w produce different kernels, which changes which points are nonzero and how they distribute. By carefully selecting representatives, I might be able to control which nonzero fiber receives points for each w.
+
+This reduces to a combinatorial problem: find 18 vectors such that for every linear form w, no value appears more than 8 times in the multiset {w(v_1), ..., w(v_18)}. I'm exploring whether random scaling of representatives might naturally satisfy this constraint. for all forms. This is totally feasible—let me construct a cap in PG(3,5) and test different scalings to see if I can find a counterexample. Looking back at the Cortex entry, it mentions that adversarial simulated annealing found the minimum max-fiber is always exactly 9 for rank 4 with N=18, but I'm wondering if they actually tested caps. For a cap in PG(3,5), every hyperplane hits at most 6 points, leaving 12+ points distributed among the nonzero fibers—so I need to check whether this structure can avoid having any fiber with 9 or more points.
+
+If I take 18 projective points from a cap and evaluate them against a linear form, the kernel contains at most 6 points, and the remaining 12 values distribute across {1,2,3,4}. The distribution matters: (3,3,3,3) gives max fiber 3, while (9,2,1,0) would hit exactly 9 and break the counterexample. So the key constraint is ensuring no linear form produces any nonzero value appearing 9+ times across the 18 evaluations.
+
+The real question is whether I can choose representatives such that this holds simultaneously for all 156 linear forms. Scaling a single vector v_i by λ multiplies w(v_i) by λ for every linear form w, so different forms are affected differently by the same scaling choice.
+
+I need to find scalars λ_1, ..., λ_18 from F_p* that minimize the maximum bin occupancy across all linear forms and all possible values. With p=5, this is a search over 4^18 ≈ 7×10^10 configurations—too large for exhaustive search, but feasible with random sampling or optimization heuristics. The Cortex entry mentions simulated annealing was already applied and found a minimum of 9, which is tight. This suggests either their search was comprehensive and 9 is genuinely optimal (supporting FCL), or they missed some configuration. I should design a more targeted approach to test this.
+
+Actually, let me think about this differently. For any 18 non-proportional vectors in F_p^4, I can consider all p³+p²+p+1 linear forms. Each form w partitions the 18 vectors by their values under w, and the average max fiber size is constrained by a counting argument. If I construct an incidence matrix where each row represents a linear form and each column a vector, with entries being the form's value on that vector, then for each row I'm looking at the maximum count of any value. I want this maximum to be at most 8 across all rows.
+
+The key insight is that with an average of 3.6 occurrences per value and needing a max of 8, this is a very loose constraint. Even treating each cell as an independent binomial random variable with probability 0.2, the probability of exceeding 8 is quite small.
+
+But I'm realizing the fiber sizes aren't actually binomial—they're determined by the linear structure of the set. The real question is whether a ZSF-structured set would satisfy the FCL, since random vectors lack the algebraic constraints that might cause concentration. Let me look back at what the FCL actually claims about projective points and nonzero linear forms.
+
+The statement seems to apply to arbitrary projective point sets, not just special ones, so I should test whether random or cap-based configurations can violate it. Looking at the computational results they cite, they found that for N=18 points in PG(3,p) across several primes, the minimum max-fiber was exactly 9—which matches the FCL bound—using adversarial search over thousands of iterations.
+
+But I'm realizing there's a subtle issue: when we talk about fibers of a linear form on projective points, the fiber isn't well-defined without fixing vector representatives, since scaling changes which fiber a point belongs to. The FCL statement in the Cortex might actually be about vectors in the underlying vector space rather than projective points themselves.
+
+Actually, rereading it more carefully, I think the key insight is that the kernel fiber F_0 is the only one that's projectively well-defined—a projective point [v] is in the kernel iff w(v) = 0 regardless of which representative we choose. So the statement should probably be restricted to the kernel fiber specifically.
+
+But then I'm realizing the η problem is fundamentally about vectors, not projective points, so maybe the Fiber Covering Lemma should be reformulated in terms of vectors: given 18 nonzero vectors in F_p^4, does there exist a linear form w such that some fiber (likely the kernel) contains at least 9 of them? If yes, the FCL would be false for these vectors. Let me write code to check this systematically—with 18 vectors, 156 projective linear forms, and 4 nonzero fiber values per form, that's 624 total checks, which is very manageable. But the Cortex entry claims the minimum max-fiber is exactly 9, which suggests they already found this bound, though I'm not sure if they tested caps specifically or optimized over different scalings. Let me also think about this from a pigeonhole perspective: for any 18 non-proportional vectors, there are 156 projective linear forms, each partitioning into 5 fibers, and I need to understand what happens when I look at the nonzero fibers across all forms.
+
+Actually, I should just run the computational tests rather than work through the algebra. I'll launch three parallel attacks: test FCL for caps in PG(3,5) with various scalings, search for integer weight realization counterexamples, and check for multi-fiber ZSF at size 2α+2.
+
+Writing test scripts...
+
+Wait, I need to step back. The real vulnerability is if the FCL itself is false—that's the linchpin of the entire proof strategy. Let me look at what the FCL actually claims: for N = 2α(r)+2 projective points in PG(r, p), some linear form's fiber should contain at least α(r)+1 points. If I can break that, the whole approach collapses.
+
+But looking at the proof strategy more carefully, there's a fundamental mismatch: it's working with vectors in F_p^{r+1}, not projective points, and the projection step that's supposed to preserve non-proportionality actually fails in nonzero fibers. Even worse, when we do get vectors in a lower-dimensional space, the zero-sum bound we get has the wrong weight—we need exactly p in a nonzero fiber, but the bound only guarantees weight ≤ p.
+
+The kernel fiber is different though. Both problems disappear there: projection preserves non-proportionality naturally, and weight ≤ p is actually sufficient since there's no first-coordinate constraint. So the FCL proof works cleanly for the kernel fiber, but that fiber is tiny for cap sets. The real question is whether the proof could fail on the kernel fiber while succeeding elsewhere, and if that even matters for the overall argument.
+
+For nonzero fibers, the proportionality issue doesn't actually block things—the copies pool is large enough that the η bound kicks in regardless. But then the zero-sum we extract might have weight less than p, which can't lift back to a proper zero-sum in the ambient space. The kernel fiber case is more promising: with 9 vectors in the kernel, the copies pool again exceeds the η threshold, and here a zero-sum of weight ≤ p actually does lift properly.
+
+The real bottleneck is that this whole approach only works if the concentrated fiber is always the kernel, which would require finding a hyperplane containing at least 9 of the 18 projective points. For caps, no such hyperplane exists (the maximum is p+1 = 6 when p=5), so the FCL fails there. For non-caps, the rank-3 theorem already handles any degenerate collinear triples, so the FCL is only needed for caps or sets where all collinear triples are degenerate. This splits into the case analysis from the Open Lemma.
+
+Now I need to focus on what actually matters: whether 18-caps in PG(3,p) can even be zero-sum-free, whether the Open Lemma's claim about support-4 zero-sum vectors for caps holds up, and whether I can attack the Integer Weight Realization Conjecture for the two-nonzero-fiber case. Let me start by investigating whether 18-caps can be ZSF at all.
+
+The real problem I'm seeing is that the FCL proof strategy completely breaks down for nonzero fibers—even if some fiber has enough vectors, if it's nonzero the weight-decoupling obstruction prevents the proof from working, and for caps the kernel fiber is too small anyway. This means I need either a way to force the kernel fiber to have at least 9 vectors (which is impossible for caps) or an entirely different approach. The crucial question becomes whether 18 non-proportional nonzero vectors can simultaneously form a cap and be zero-sum-free.
+
+Let me check this computationally for small cases. For p=5, I can construct 18-caps in PG(3,5)—the maximum cap size there is 26, so they definitely exist—and test whether any of them avoid zero-sums. Since caps have no collinear triples, the smallest possible zero-sum must involve at least 4 vectors, so I'm looking for whether any 18-cap has no 4-vector zero-sums with weight at most 5.
+
+Looking at the computational data: for p=5, all 50 random 18-caps tested had weight-5 zero-sums (minimum count 34), and for p=7, all 20 random 18-caps had weight-7 zero-sums. This strongly suggests that 18-caps are never ZSF.
+
+Actually, this is helpful for the proof structure. If every 18-cap automatically contains a weight-≤p zero-sum, then any ZSF set of size 17 must be a non-cap with collinear triples, which means the collinear argument applies directly. So the real challenge is handling non-caps in the two-nonzero-fiber case, where the IWRC and MFC conjectures become the key bottlenecks.
+
+For IWRC, I need to construct 18 non-proportional vectors split into two 9-element fibers such that no cross-fiber zero-sum stays within weight p. Using Theorem F, a cross-fiber zero-sum with weight w forces specific fiber weights W₁ and W₂, and the zero-sum exists only if the weighted sum sets intersect. The strategy is to choose the fiber constant c = p to decouple the weight constraints and prevent low-weight solutions. But the integer weight realization isn't guaranteed. To construct a counterexample to IWRC, I'd need sets U₁ and U_c with 9 elements each in F_p^3, not lying in any affine hyperplane, where every possible weight w forces the actual integer weight of any zero-sum realization to exceed p. This would require that for each w, achieving the modular constraint Σa_i ≡ W₁ (mod p) forces the actual sum to be at least W₁ + p, meaning we'd need more than p copies total—and combined with the other fiber, we'd exceed p overall.
+
+For this to work, all the "easy" solutions at weight exactly W₁ would have to fail, meaning no choice of coefficients summing to W₁ can produce the target element. This becomes a question about whether certain integer linear combinations over F_p-valued vectors are achievable.
+
+I should test this computationally at p=5 with specific configurations. But stepping back, I'm realizing the most impactful directions right now are completing the total break attack, testing IWRC computationally, and proving or disproving the FCL for caps—I should run all three in parallel as scripts to see what yields results.
+
+Looking at what's already been established in previous rounds, I've disproved U1 and U2, proved weight-decoupling, found ALT as a non-A8 maximal ZSF, and verified the gap hypothesis through p=53. The coordinator's priorities for this final push are resolving the total break truncation, testing the partition dichotomy, and attacking IWRC. I'll write focused code to re-run total break with complete output at p=5 and p=7, test IWRC across random configurations at those same primes, and attempt to construct a counterexample to the Grail at p=5 using the two-nonzero-fiber approach.
+
+But I've also uncovered something critical: the FCL proof strategy has two fundamental bugs when dealing with nonzero fibers—non-proportionality loss and weight-decoupling both break it. This means even if FCL itself is true, it's insufficient for proving the Grail, and the proof will need entirely different machinery for caps versus non-caps. Let me start writing those attack scripts.
+
+============================================================
+BLOCK 7 (400 chars)
+============================================================
+Let me now launch the computational attacks. I'll write scripts for Attacks 2, 3, and 4 in parallel, while providing the theoretical analysis for Attack 1.
+
+For Attack 1 (theoretical), I've already identified the two bugs:
+1. Non-proportionality loss under projection from nonzero fiber
+2. Weight-decoupling: η gives weight ≤ p but we need weight = p for nonzero fibers
+
+Let me write the scripts now.
+
+============================================================
+BLOCK 8 (10546 chars)
+============================================================
+Excellent! Let me analyze these results:
+
+**Attack 1 (FCL Destruction) - MAJOR FINDINGS:**
+
+1. **Bug 1 CONFIRMED**: Non-proportionality is destroyed by projection. At p=5, 4 non-proportional vectors in F_5^4 project to only 1 projective class. At p=7, 6 such vectors collapse to 1 class. For 9 vectors in a fiber, only 3 tail classes minimum (p=5) or 2 (p=7).
+
+2. **Bug 2**: The weight-decoupling observation is confirmed: copies pool is ONE SHORT of s-bound (9(p-1) < s = 9(p-1)+1). However, **SURPRISINGLY**, all tail zero-sums found have weight EXACTLY p, not < p! At p=5: 28/28 = 100% weight-p. At p=7: 133/133 = 100% weight-p. This is unexpected — it means that even though η doesn
+
+'t guarantee weight = p, the zero-sums that η finds always happen to have weight p for these random configurations.
+
+This is actually quite interesting. I'm wondering whether for 9 tails in F_p^3, zero-sums of weight less than p would necessarily require vectors from different projective classes, and whether there's some structural reason why all the zero-sums we're finding have weight exactly p rather than being distributed across smaller weights.
+
+The Davenport constant for C_p^3 is 3(p-1)+1, which means for p=5 we get 13 and for p=7 we get 19—both larger than 9, so there's no guarantee of a zero-sum subsequence from the constant alone. But when we account for the multiplicity of p-1 copies per element, we're working with a pool of 9(p-1) elements, and the η bound tells us there should be a zero-sum of weight at most p. What's striking from my experiments is that for random configurations of 9 non-proportional vectors, every zero-sum we find has weight exactly p. If this turns out to be a general theorem—that all zero-sums of such configurations must have weight divisible by p—then what I've been treating as Bug 2 might not actually be a bug at all.
+
+But I need to be careful here. A trivial counterexample would be two proportional vectors like u₁ = -u₂, which sum to zero with weight 2, much less than p. However, we're explicitly assuming non-proportional tails, which rules out such cases. For non-proportional vectors, the minimum-support zero-sum has support at least 3 unless there's a collinear pair, in which case it's at least 2. So I'm really asking: among 9 non-proportional nonzero tails, each with multiplicity p-1, can we find a zero-sum with weight w < p? That would require coefficients s_i ∈ {0,...,p-1} summing to w where Σ s_i u_i = 0.
+
+For w = 2, I'd need two vectors u and v with coefficients summing to 2, so either (2,0), (0,2), or (1,1). The first two are trivial. For (1,1), I'd need u + v = 0, meaning u = -v, which makes them proportional—contradiction. So w = 2 is impossible. For w = 3, I could have three vectors summing to zero (a collinear triple) or two vectors with coefficients like (2,1) or (1,2), but the latter still requires proportionality.
+
+So the only genuine zero-sum with weight less than p is a collinear triple where u + v + w = 0. When I tested random tails at p = 5, I found no such zero-sums, suggesting those particular vectors don't form any collinear triples. If that's the case, the minimum support jumps to 4 vectors, and the minimum weight would also be 4.
+
+Now I'm realizing the core question: for any 9 non-proportional nonzero vectors in F_p^3, each with multiplicity p-1, must there always exist a zero-sum of weight exactly p? The Davenport constant guarantees this for sufficiently many copies, but I need to verify whether my test case actually satisfies the conditions or if those random tails just happened to avoid weight-4 zero-sums.
+
+Looking at the fiber structure more carefully: when I lift vectors to F_p^4 by adding a first coordinate c, a zero-sum equation forces the coefficients to sum to a multiple of p, and since the weight is bounded by p with at least one nonzero coefficient, the sum must equal exactly p.
+
+But my test was actually checking zero-sums of just the tail vectors (the u_i components in F_p^3), which don't have this first-coordinate constraint—so I'm puzzled why those also consistently gave weight p.
+
+Looking at the empirical data, all 28 zero-sums of the tails had weight exactly 5, even though theoretically weight-3 zero-sums should be possible. This could be a quirk of the specific random tails I generated, or there might be something structural preventing low-weight solutions. Let me test this directly on the A8 tails to see if weight-p is actually forced or just coincidental.
+
+I'm checking various combinations of the A8 tail vectors to see if any subset sums to zero mod 5 with weight less than 5, but so far the combinations I'm testing either don't sum to zero or have weight at least 5.
+
+Wait, I need to reconsider what I'm actually looking at here. The A8 set is specifically constructed to be zero-sum-free, meaning its tail vectors have no zero-sums of any weight up to p. So when I add a ninth tail, any new zero-sums that emerge should only have weight p, since combinations involving the fiber vectors are constrained to that weight.
+
+But actually, the critical insight is distinguishing between the fiber and the tail space. In the fiber, zero-sums are forced to weight p, but in the tail space itself (F_p^3), zero-sums can have any weight. The question is whether a tail zero-sum with weight less than p actually lifts to a zero-sum in the full F_p^4 space. When I lift a tail zero-sum with weight w, the fiber coordinate becomes c·w, which is zero in F_p^4 only if w is divisible by p—meaning w must equal p. So tail zero-sums of weight less than p don't actually lift to zero-sums in the full space.
+
+This raises a crucial question: when the algorithm finds a zero-sum in the tail space, is it guaranteed to have weight p? The algorithm finds zero-sums of weight at most p, but it could be weight 3, 4, or anywhere up to p—only weight p lifts. However, my empirical testing on random 9-tail configurations revealed something striking: every single zero-sum found had weight exactly p. There were no zero-sums of smaller weight at all, which suggests that for generic configurations of 9 non-proportional tails, the only zero-sums that exist are precisely those at weight p.
+
+But now I'm testing whether this always holds. I can construct a counterexample: take four vectors u1 = (1,0,0), u2 = (0,1,0), u3 = (0,0,1), u4 = (4,4,4) mod 5. These sum to zero with weight 4, which is less than p=5. So weight-less-than-p zero-sums definitely exist for some configurations—my random test just happened to avoid this structure. This means if the fiber tails contain such a lower-weight zero-sum, the algorithm might find that instead of a weight-p zero-sum, which would break the lifting argument.
+
+Now looking at the IWRC counterexample more carefully: the script claims no modular weight works for target 0, but it's based on sampling 200,000 random cases out of a search space of 5^9 ≈ 2 million. That's only about 10% coverage, so the "counterexample" is probably just a sampling gap. The direct two-fiber attack actually found solutions, which suggests the counterexample is a false alarm.
+
+I need to run an exhaustive search for the IWRC test with p=5 and 9 vectors to get a definitive answer, and I'm still waiting on the background task for Attack 3 to finish.
+
+The most critical issue so far is that the FCL kernel version can't even handle 18-caps in PG(3,5) and PG(3,7) — the maximum hyperplane intersection is only 6, well below the 9 needed. But caps themselves aren't zero-sum-free, which complicates the picture.
+
+Both bugs in the proof are real: the η function still fires on the copies pool even with proportionality loss, and weight-less-than-p tail zero-sums do exist for certain configurations. However, empirically these bugs don't seem to manifest in actual ZSF sets, so the Grail conjecture might still hold even if the proof strategy is incomplete. I need to finish the IWRC test, check the total break output, and then work through the theoretical analysis of why these tail zero-sums don't actually break things.
+
+The IWRC question is whether we can achieve integer weight w for vectors outside any affine hyperplane—my random sampling found a counterexample, but I need to run an exhaustive search instead. With 9 vectors and p=5, that's about 2 million configurations to check, which is manageable. I'm also noticing something interesting from Attack 1: at p=5, the cap's maximum hyperplane intersection is 6, but the maximum fiber size across all linear forms is 15, meaning many more vectors can share the same fiber value than the cap structure would suggest.
+
+The key insight is that these 15 vectors live in a nonzero fiber where weight-decoupling applies, while the kernel fiber (which is itself a hyperplane) maxes out at 6 cap points. Rescaling won't help us pack more vectors into the kernel since projective points are invariant under rescaling. So the FCL fails for caps in the kernel version, and nonzero fibers have their own weight-decoupling constraints. But since 18-caps are never ZSF-relevant, this doesn't matter for the Grail—the FCL is only needed for actual ZSF configurations, which aren't caps. Now I need to check what happens with ZSF sets specifically.
+
+For the doubled+e1 construction at p=5, I'm looking at how the 17 vectors distribute across fibers under the first-coordinate projection: 8 vectors in fiber 0 and 9 in fiber 1. The real question is whether some hyperplane can capture at least 9 of these 17 vectors, and the doubled+e1 structure seems to have exactly this property built in.
+
+But here's the issue: the kernel fiber only has 8 vectors, which falls short of the 9 we'd need. And for the U1 counterexamples with 3+ fiber ZSF sets, the kernel fiber could be even smaller. This points to a fundamental problem with the FCL proof strategy—it would require showing that ZSF sets always have a large kernel fiber (at least 9 vectors) under some projection, but the Theorist already disproved this in their "Always-Zero-Fiber Lemma" analysis, showing that no such guarantee exists for sets of size 2α(r)+2.
+
+So the kernel version of FCL is provably false, the nonzero fiber version has weight-decoupling issues, and the entire FCL proof strategy is exhausted. My key findings this round are demonstrating both bugs in the FCL approach, showing how caps defeat the kernel version, identifying the one-short-of-s problem that undermines nonzero fibers, completing the total_break attack, and now I need to verify the IWRC test and check the total_break output.
+
+============================================================
+BLOCK 9 (687 chars)
+============================================================
+The total_break attack is RESOLVED. Results:
+
+1. **Total break at p=5**: 831 all-broken configs found (where ALL 4 collinear triple families are neutralized). ALL 831 gap targets are killed by SUPPORT-4 zero-sums (100%, not support-3 collinear). ZERO grail failures.
+
+2. **Full Grail test**: 5 all-broken ZSF configs tested with ALL 156 projective points as potential 18th vector. 695 candidates tested, ALL killed. ZERO failures.
+
+This definitively resolves the truncation issue from Directive 1. The Grail holds even when all collinear triples are broken — support-4 zero-sums at weight p provide a complete backup mechanism.
+
+
+Now I'm waiting for the IWRC exhaustive test to complete.
+
+============================================================
+BLOCK 10 (687 chars)
+============================================================
+The IWRC exhaustive test is still running. It's doing exhaustive search over 5^9 ≈ 2M configurations for each of 30 trials, which is 60M total. That could take a while. Let me check progress or kill it and write a faster version.
+
+Actually, for 8 vectors (A8 tails) at p=5: 5^8 = 390,625 combinations. That's fast. For 9 vectors: 5^9 = 1,953,125. For 30 trials: 58.5M iterations. At maybe 1M/s in Python, that's ~60 seconds. 
+
+The real bottleneck is Test 4, which loops through weights 1 to 16 and for each one enumerates all 390K coefficient vectors—that's 6.25M iterations total, which should still be manageable. I think I'll just scrap this and write something more targeted instead.
+
+============================================================
+BLOCK 11 (5814 chars)
+============================================================
+The IWRC exhaustive test is running in the background. Let me work on the theoretical analysis while waiting. Let me also update the todo list and start working on the synthesis.
+
+Actually, let me also run a crucial additional test: the IWRC for RANDOM 9-vector configs, not just A8+extra. And let me think about the theoretical implications of all my findings.
+
+Let me also think about what other attacks I can mount.
+
+Key theoretical insight I should develop:
+
+**WHY the FCL proof is dead (formal argument):**
+
+The Fiber Concentration Lemma proof strategy for the Grail:
+1. Given 2α(r)+2 = 18 non-proportional nonzero vectors in F_p^{r+1}
+
+
+2. (FCL) There exists a linear form w with max fiber ≥ α(r)+1 = 9
+3. Project the 9-vector fiber to the lower-dimensional space
+4. Apply the inductive η bound
+5. Lift the zero-sum
+
+**Bug 1 (Projection Non-Proportionality Loss):**
+- For kernel fiber F_0: projection preserves non-proportionality ✓
+- For nonzero fiber F_c: vectors (c,u) and (c,λu) are non-proportional in F_p^{r+1} but their tails u and λu become proportional after projection to F_p^r ✗
+- At p=5, each tail class can hold at most 4 vectors, so 9 vectors would need at least 3 distinct tail classes rather than staying non-proportional; at p=7, we'd need at least 2 classes. The η bound demands 9 genuinely non-proportional vectors, but the projection may collapse them into fewer equivalence classes.
+
+**Bug 2 (Weight-Decoupling):**
+- For kernel fiber F_0: a zero-sum with weight ≤ p in ker(w) ≅ F_p^r lifts directly ✓
+- For nonzero fiber F_c: a zero-sum lifts only if its weight is divisible by p, meaning weight = p exactly ✗
+- The copies pool contains 9(p-1) elements, which is less than s(C_p^r) = 9(p-1)+1, and η only guarantees weight falls in [1,p], not specifically p, so the lift fails.
+
+The FCL proof collapses entirely: it only works for the kernel fiber, which contains at most p+1 < 9 points for small primes, the "Always-Zero-Fiber Lemma" claiming general position avoids large kernel intersections is false, and the strategy breaks down for both general configurations lacking a large kernel fiber and nonzero fibers where weight-decoupling blocks any lift. Yet empirically, 18-caps never exhibit zero-sum-free structure, so there's still something preventing them.
+
+Now I need to focus on what's actually left to prove. The Theorist identified two critical gaps: the Integer Weight Realization problem for two-nonzero-fiber cases and the Multi-Fiber Conjecture for three or more fibers. The total_break attack showed that even when all collinear triples are broken, support-4 zero-sums still eliminate everything, suggesting the multi-fiber case actually works computationally. For the two-fiber case, random testing found no counterexamples, but I'm missing the theoretical justification. Let me see if there's a fundamental obstruction I can identify.
+
+The Bug 2 test revealed something striking: across random 9-vector configurations in F_5^3, every tail zero-sum had weight exactly 5 (matching p), with nothing below that threshold. This suggests a deeper pattern—that for generic 9-element subsets of F_p^3, all zero-sums might have weight divisible by p. If true, this would explain why η reliably finds weight-p zero-sums: there simply aren't any lighter alternatives. But I've already constructed an explicit counterexample with basis vectors that breaks this pattern.
+
+The real question is whether tail sets arising from ZSF-relevant configurations can actually contain weight-<-p zero-sums. For the doubled+e1 construction, the 8 tails form a ZSF system with no zero-sums of weight ≤ p, which would prevent Bug 2 from occurring in that specific case. all. Adding a 9th tail creates zero-sums, but only of weight p (as seen in the Bug 2 test).
+
+Wait, for A8 + extra, the zero-sums involve the extra tail. If the extra tail u₉ satisfies u₉ = -(s₁u₁ + ... + s₈u₈) for some s_i with Σs_i = w-1 < p-1, then s₁u₁ + ... + s₈u₈ + 1·u₉ = 0 with weight w < p. This exists iff u₉ ∈ -Σ_{w-1}(A8) for some w < p.
+
+For this to NOT exist: u₉ ∉ ⋃_{w=1}^{p-2} (-Σ_w(A8)). The shadow saturation theorem suggests Σ_{p-1}(A8) covers almost everything with only a small gap, so for larger w values most vectors get covered. I need to verify whether Σ_w(A8) for w < p-1 actually covers everything or leaves gaps.
+
+For the IWRC, the real question is whether the integer weight can be realized at exactly w rather than w+p, and the exhaustive test on 9 vectors should settle this. But before diving into that, I want to focus on the most critical theoretical question: can I actually prove the Grail is false? The Grail claims η(C_p^r) ≤ 9... ·2^{r-3}-1)(p-1)+1 for all r ≥ 3, all odd primes p.
+
+For r=3: η(C_p^3) = 8(p-1)+1. PROVED.
+For r=4: η(C_p^4) ≤ 17(p-1)+1. Computationally verified at p=5,7.
+
+To disprove the bound, I need to construct a zero-sum-free sequence of length 17(p-1)+1 in F_p^4 where no subsequence of weight ≤ p sums to zero. This would require finding 18 non-proportional vectors, but using only 17(p-1)+1 total elements means I can't give each vector p-1 copies—I'm one element short of the full configuration. length ≥ 17(p-1)+1. This requires ≥ 18 distinct elements since each can appear at most p-1 times. Computer searches have exhaustively confirmed that no 18-element ZSF set exists for p=5 and p=7—adding any 18th vector to a 17-element ZSF set always creates a zero-sum, so the bound holds. To challenge the conjecture, I'd need p ≥ 11 or r ≥ 5, but at p=11 the search space becomes intractable, and at r=5 the threshold α(5) = 35 is already pushing the limits.
+
+Since computational disproof isn't feasible, I need to shift focus to examining the proof strategies themselves. Let me revisit the IWRC test and take another careful look at the two-nonzero-fiber case at p=7.
+
+============================================================
+BLOCK 12 (313 chars)
+============================================================
+Good. The two-fiber Grail holds at p=7 as well. All zero-sums are intra-fiber at weight 7 = p with support 3 (collinear triples). This is interesting — the zero-sums are found WITHIN a single fiber, not cross-fiber.
+
+Now let me check on the IWRC exhaustive test. Actually, let me just rewrite it more efficiently.
+
+============================================================
+BLOCK 13 (13819 chars)
+============================================================
+THIS IS A MASSIVE FINDING!
+
+**IWRC IS FALSE!** 
+
+Exhaustive verification at p=5 reveals:
+
+1. **A8 tails have NO zero-sums of weight ≤ 5** (as expected — A8 is ZSF). The minimum weight zero-sum is at weight 6!
+
+2. **For A8 + ANY extra vector, the minimum integer weight for mod-w solutions with w ∈ {1,2,3} is 6, 7, 8 respectively — ALL ABOVE p=5!**
+
+This means: for the 9-vector fiber with A8 tails + 1 extra, the IWRC is FALSE:
+
+
+The modular weights w=1, 2, 3 all require integer weights exceeding p=5, while only w=4 and w=0 (which equals p) yield achievable solutions within the bound.
+
+This gap is precisely what the Theorist identified—when the cross-fiber zero-sum demands a specific modular weight in {1,2,3}, the integer weight jumps above p, blocking solutions at that weight. Yet the direct computation at p=5 shows that two-fiber configurations always have some zero-sum at weight ≤ 5, suggesting that even when IWRC fails for a particular target and modular weight, an alternative path exists (like intra-fiber zeros or cross-fiber at a different modular weight).
+
+For the two-nonzero-fiber case, I need to track how the fiber weights combine: the cross-fiber zero-sum requires W₁ + W₂ ≤ p, where W₂ is determined modulo p by the target and fiber structure, and W₁ follows from the constraint. The question is whether these modular weights can be realized as actual integer weights that stay within the bound.
+
+Now looking at the A8 tail data more carefully — the minimum weight zero-sum is 6, meaning there's no zero-sum at weight 5 or below. But when I add an extra tail to get 9 tails total, zero-sums appear at weights 4, 5, and 6, so the minimum total weight for any zero-sum drops significantly.
+
+The key insight is that a zero-sum at weight 4 won't lift to F_p^4 because 1·4 ≠ 0 mod 5, but a zero-sum at weight 5 does lift since 1·5 ≡ 0 mod 5. Weight 5 zero-sums actually exist in the data, so the intra-fiber zero-sum mechanism works at weight p. Now I need to check what happens when combining zero-sums across different fibers.
+
+For a cross-fiber zero-sum to work, I'd need contributions from both fiber 1 and fiber 2 with total weight at most p. But since each fiber requires minimum weight p for its zero-sums, I can't split the budget between them—one fiber would have to contribute weight p and the other nothing, which collapses back to the intra-fiber case. A genuine cross-fiber zero-sum would need both fibers contributing at least weight 1, but that immediately violates the constraint that their sum stays ≤ p.
+
+Wait, I'm seeing the weight-decoupling argument again: any cross-fiber zero-sum forces each fiber to contribute weight divisible by p, so the minimum total is 2p, which exceeds p. This should rule out two-fiber configurations entirely. But the computational results show zero-sums at weight ≤ p in two-fiber setups, so something's wrong with my reasoning. Let me look back at what the actual trial found.
+
+Oh, I see it now—the zero-sum the algorithm discovered is intra-fiber, not cross-fiber. It only uses vectors from a single fiber, which means the weight-decoupling argument doesn't apply here. The zero-sum stays within one fiber and achieves weight exactly p. So the Grail conjecture holds because each nonzero fiber contains enough vectors that their pooled copies exceed the threshold for finding a tail zero-sum, which then lifts to an intra-fiber zero-sum of weight p.
+
+But wait, there's a critical issue with this reasoning. The η bound guarantees a tail zero-sum of weight ≤ p, but does it guarantee weight exactly p modulo p? Looking at the exhaustive data, A8 tails have no zero-sum of weight ≤ 5, yet when I add one more tail to get 9 total, the minimum zero-sum weight drops to 4 at modular weight 4. That's a weight-4 zero-sum in the tails, which is less than p=5, so the lift would fail since 4 ≠ 0 mod 5.
+
+The key distinction is that η produces a subsequence, not a weighted sum. In the copies pool of 36 elements, I need to trace through what subsequence the algorithm actually extracts. The computational test confirms zero-sums are actually being found, but that's because the code exhaustively checks all support sizes and lands on the intra-fiber weight-p case. The proof itself has a real gap: η only guarantees *some* zero-sum of weight ≤ p, not specifically weight p, and the weight-decoupling constraint means only weight-p zero-sums can be intra-fiber. The fix would be switching to the s-constant, which does guarantee weight exactly p, but that requires one additional element beyond what we have—we're short by exactly 1.
+
+Now I'm realizing the collinear triple argument might bypass this whole issue. If three vectors in a fiber have tails that sum to zero, they form a collinear configuration that produces a zero-sum with a specific weight structure, independent of whether η or s is the right parameter.
+
+But wait—the test output shows weight 7 with support 3, which means the coefficients aren't uniform. I need to figure out what combination of coefficients on those three fiber vectors actually sums to zero in the group.
+
+So if I have three fiber vectors with coefficients a, b, c where a+b+c = 7, then the first coordinate becomes 7c, which is always divisible by 7. That's the key insight—at weight p, the zero-sum condition is automatically satisfied for the first coordinate. This is fundamentally different from weight-3 zero-sums, which required c = 0.
+
+So collinear triples can exist at weight p in nonzero fibers, and they work because the coefficients sum to p rather than to 3. The pattern seems to be that any linear dependency among three fiber vectors, where the coefficients sum to 0 mod p, will give us a zero-sum.
+
+Now I'm thinking about the constraint more carefully: with 9 tails in F_p³, I can use the pigeonhole principle to bound the number of projective points they span. At p=7, there are at most 57 projective points in PG(2,7), so 9 points definitely fit. The question is whether these 9 points must contain three collinear ones.
+
+For any collinear triple u, v, w satisfying au+bv+cw=0, the coefficient sum a+b+c determines whether a weight-p zero-sum exists—it needs to be 0 mod p. But I can scale the dependency by choosing λ to make the coefficient sum divisible by p, which would guarantee the lifting condition. p gives weight p. But this requires (a+b+c) to be nonzero mod p. If a+b+c ≡ 0 mod p, we need weight kp for some k ≥ 1, minimum p.
+
+Actually, wait. The dependency au+bv+cw = 0 means the tails are collinear. The zero-sum in the fiber is: coefficients (a, b, c) applied to the 4D vectors give weight a+b+c in the first coordinate c₁(a+b+c). For the zero-sum in F_p^4, we need c₁(a+b+c) ≡ 0 mod p, i.e., a+b+c ≡ 0 mod p.
+
+For any collinear triple with a dependency au+bv+cw = 0 where a+b+c is nonzero mod p, I can rescale the coefficients by multiplying each by p and dividing by their sum, which gives me new coefficients that sum to exactly p. This rescaling is always valid since the original sum is nonzero, so I can always find a representation with weight p. s, pb/s, pc/s) where s = a+b+c. These are in F_p and sum to p. But do they satisfy 1 ≤ pa/s ≤ p-1?
+
+pa/s ∈ {1,...,p-1} iff a/s ∈ {1/p,...,(p-1)/p} mod p iff a/s ≠ 0 mod p iff a ≠ 0. Similarly for b and c. So if a, b, c are all nonzero, the rescaled coefficients are valid.
+
+For a degenerate dependency where one coefficient vanishes—like u = λv giving 1·u + (-λ)·v + 0·w = 0—the zero-sum only involves the nonzero terms. But when all three coefficients are nonzero, rescaling produces a weight-p zero-sum in the fiber with support 3.
+
+The real question is whether the 9 tails always contain a non-degenerate collinear triple. If they form a cap with no three collinear points, then there's no such triple and the support-3 approach breaks down. For 9 points in PG(2,7), since the maximum cap size is 8, any 9 points must have at least one collinear triple. at least one collinear triple! (Since the cap bound is 8.)
+
+For PG(2,5): max cap = 6. So 9 > 6 means any 9 points have collinear triples.
+
+In general: max cap in PG(2,p) = p+1 for p odd. So any 9 > p+1 = 6 (for p=5) or 9 > 8 (for p=7) or 9 < 12 (for p=11) points have collinear triples.
+
+For p ≥ 11: p+1 ≥ 12 > 9. So 9 points in PG(2,p) CAN form a cap (no collinear triple). Then the support-3 argument fails.
+
+But when p=11, the cap size is 12, which exceeds 9, so 9 points can avoid collinearity entirely. This means any zero-sum among the fibers must have support at least 4. The real question becomes whether a weight-p zero-sum with support 4 exists for 9 non-collinear tails in F_11^3—which is exactly the Open Lemma problem, and computationally, 18-caps always exhibit such zero-sums. For smaller primes up to 7, the cap bound stays below 9, guaranteeing collinear triples among any 9 tails, which gives us the non-degenerate structure we need. argument works.
+For p ≥ 11: 9 tails CAN be a cap. Need support-4 argument.
+
+This is a CRITICAL DISTINCTION that the proof strategy needs to handle. For small primes, the collinear triple argument works automatically within each fiber. For large primes, we need a different mechanism.
+
+Wait — but for the two-fiber case at p ≥ 11, each fiber has 9 tails. If some tail triple is collinear, the collinear argument works. If the tails form a cap (for p ≥ 11), we need the Open Lemma.
+
+The Open Lemma says: among 18 cap points in PG(3,p), there exist 4 vectors and coefficients summing to p with weighted sum 0. Computationally verified.
+
+But I need to be careful here — the Open Lemma applies to 18 points in PG(3,p), whereas the fiber tails are only 9 points in F_p^3. So the real question becomes whether 4 of these 9 cap points in PG(2,p) can satisfy a weighted zero-sum with coefficients that add to p. For p=11 specifically, I'm looking at whether 9 points in PG(2,11) admit such a configuration with weights between 1 and 10.
+
+The key insight is that 4 vectors in F_p^3 always have a linear dependency since the dimension is 3, so any 4 points must satisfy some relation au₁+bu₂+cu₃+du₄ = 0. The question is whether we can choose the coefficients to sum to p while staying in the valid range. ∈ F_p^4 \ {0}. This exists for ANY 4 vectors in F_p^3.
+
+So the question reduces to: for 4 cap points u₁,...,u₄ in F_p^3 with dependency au₁+bu₂+cu₃+du₄ = 0, can we scale to get a+b+c+d = p with all coefficients in {1,...,p-1}?
+
+The dependency is determined up to scaling. Let (a,b,c,d) be any nonzero solution. Then:
+- If a+b+c+d ≡ 0 mod p: the natural scaling gives weight kp for some k. Setting weight = p requires dividing by k, but then some coefficients might be 0 or out of range.
+- If a+b+c+d ≢ 0 mod p: I can scale by p/(a+b+c+d) to get weight p, but this only works if none of the original coefficients are 0.
+
+For a 4-vector dependency in F_p^3, the dependency lives in the kernel of the 3×4 matrix formed by the four points. Since no three cap points are linearly dependent, any three of u₁,...,u₄ are linearly independent, which constrains the structure of possible dependencies.
+
+Since the kernel is 1-dimensional for 4 points in F_p^3, the dependency is unique up to scaling. So if a+b+c+d ≡ 0 mod p for one representative, it's 0 for all representatives—meaning we can't scale to weight p with all coefficients in {1,...,p-1}.
+
+Now I'm wondering if this could happen for all 126 four-point subsets of 9 points: every dependency has vanishing coefficient sum. That would require a very special configuration, like all 9 points lying on a conic or algebraic curve. But a conic in PG(2,p) has only p+1 points, so for p ≥ 11, having 9 points on a conic is impossible.
+
+Let me step back and focus on what matters for my final report. I've established that the FCL proof strategy doesn't work—the kernel version fails for caps, and the nonzero version has weight-decoupling issues. I've also shown IWRC is false at p=5 with specific counterexamples, and I've resolved the total break issue with zero failures using support-4.
+
+Two-fiber configurations consistently produce zero-sums within fibers, and 18-caps never satisfy the zero-sum-free property since they always contain support-4 zero-sums. The critical finding is that IWRC fails because mod-p solutions don't realize the right integer weights—but this doesn't invalidate the overall approach since zero-sums emerge through other mechanisms like intra-fiber collinear triples and support-4 configurations.
+
+Before finalizing everything, I want to double-check whether the IWRC failure specifically concerns the target weight being zero.
+
+Now I'm examining what happens with other target values and whether the cross-fiber zero-sum case has different constraints. For two nonzero fibers with c₁=1 and c₂=c, the cross-fiber mechanism requires balancing weights W₁ and W₂ derived from Theorem F, but the integer weight bound creates a tension—each weight must be at least 1, yet their sum needs to stay within p to realize at integer weight.
+
+The key insight is that the IWRC failure I found at target 0 doesn't necessarily constrain the cross-fiber case, since the cross-fiber target is some specific vector t, not zero. Let me explore what happens with non-zero targets instead, and revisit the IWRC failure more carefully by looking at concrete examples like the 9-tail case at p=5 to see where the minimum integer weight exceeds p. ≤ p, and since fiber 2 contributes at least 1, the total stays within bounds. So the IWRC failure is a real obstruction—it only blocks certain modular weight distributions depending on the fiber value and total weight. I should also check whether this failure persists with non-zero targets, since the test I ran used target = 0 but the cross-fiber case might have different targets. Let me gather these findings into my report.
+
+============================================================
+BLOCK 14 (6089 chars)
+============================================================
+This is incredibly important. Let me analyze the results:
+
+**IWRC Multi-Target Analysis:**
+
+For target (0,0,0): FAILS at w=1,2,3 (min integer weights 6,7,8)
+For target (1,0,0): FAILS at w=2,3 (min integer weights 7,8)  
+For target (0,1,0): FAILS at w=2,3
+For target (0,0,1): FAILS at w=2,3
+For target (1,1,1): FAILS at w=1 (min integer weight 6)
+
+
+For target (2,3,4): FAILS at w=1,2
+For target (0,1,1): FAILS at w=1,3
+For target (3,2,1): FAILS at w=1,2
+
+The pattern is clear—IWRC consistently fails across different targets, but which modular weights cause failures varies depending on the specific target. Now I'm examining the cross-fiber weight constraints for c=2, checking whether the fiber weight combinations can stay within the prime bound.
+
+When w=1 or w=2, the computed fiber weights exceed p=5, making those weights infeasible. But at w=3 and w=4, the sums fall within bounds. However, there's a discrepancy: using the Theorem F formula to derive W2 = -w mod 5 gives feasible fiber weight combinations, yet the IWRC check still fails for certain targets like (0,0,0) at modular weight 1.
+
+Now I'm realizing the issue—I was checking the zero-sum constraint for a single target value, but in the cross-fiber case, each fiber has its own target. The first fiber needs to sum to some value t while maintaining its weight W1, and the second fiber must sum to -t with weight W2, so their combined contribution across all four coordinates equals zero in the field. Let me reconsider how these constraints interact.
+
+For a total weight of 3, I could split it as W1=1 and W2=2. The first fiber would contribute a single vector with coefficient 1 that determines the target t, while the second fiber needs two vectors (or one with coefficient 2) that collectively map to -t. If I use just one vector in the second fiber with coefficient 2, that vector would need to map to -t/2, which might not exist depending on the field structure.
+
+Now I'm checking whether for random 9-element tail sets U1 and U2, there's always some element in U1 whose negated half appears in U2, or whether two elements in U2 sum to the negated value. The probability calculation suggests at least one such pairing should exist with reasonable likelihood.
+
+This reveals the crucial pattern: the integer weight root condition fails for certain weight and coefficient combinations, but not necessarily for the specific splits required by the cross-fiber zero-sum construction. The cross-fiber zero-sum imposes particular constraints on how weights distribute, and within those constraints, integer weights may actually be achievable.
+
+Let me verify this holds more generally by testing the problematic case where c equals p-1. = 4 + 4 = 8 > 5, so that's not feasible either. For w=4, I get W2 = 2 mod 5 and W1 = 2 mod 5, giving a sum of 4, which works. So only w=2 and w=4 are feasible for c=4. But wait—Theorem F claims the weight should always be p when c = p-1, so let me reconsider the derivation.
+
+When c = p-1, the constraint becomes W1 ≡ W2 mod p, meaning they're either equal or differ by a multiple of p. If W1 = W2, the total weight is 2W1, which for p=5 means W1 can be at most 2 to stay feasible. But if W1 = W2 + p, then W1 is at least p+1, which already exceeds the bound.
+
+Now I'm realizing that W1 and W2 represent both the actual integer sums of coefficients in each fiber and their residues modulo p. For fiber 1 with 9 tails where each coefficient is in {0,...,4}, the integer weight ranges from 0 to 36, but what matters for the zero-sum constraint is W1 mod p. So when I need W1 ≡ 2 mod p, I'm looking for integer weights like 2, 7, 12, 17, etc., and similarly for W2.
+
+The real question is whether I can find coefficients in fiber 1 summing to integer weight 2 that hit some target t via the inner product with the fiber's basis elements, while simultaneously finding coefficients in fiber 2 summing to integer weight 2 that hit -t. At integer weight 2, I can either use a single coefficient of 2 or two coefficients of 1, which gives me a limited set of achievable targets from fiber 1.
+
+Looking at the coverage: fiber 1 can hit 45 distinct targets out of 125 possible elements in F_p^3, and fiber 2 has the same 45 targets available. For the cross-fiber zero-sum condition to work, I just need one target from fiber 1 to match the negative of some target from fiber 2. With 45 elements each, the probability of finding such an intersection is actually quite high, so even though the IWRC fails for certain weight-target pairs, I only need a single successful pairing to make the cross-fiber construction work.
+
+But proving this rigorously is the challenge—I can't rely on Theorem D's mod-p surjectivity argument directly. I need to carefully analyze which specific weight splits and target combinations actually achieve the required coverage.
+
+Wait, I'm realizing something important from the computational results: all the two-fiber zero-sum configurations that were found actually used intra-fiber mechanisms—three collinear triples within a single fiber—rather than relying on the cross-fiber approach at all. This suggests the IWRC assumption is false and the cross-fiber mechanism doesn't work as intended, yet the Grail conjecture still holds because the intra-fiber collinearity structures are sufficient on their own.
+
+The real problem emerges for larger primes: when p ≥ 11, nine points can potentially form a cap in PG(2,p) with no collinear triples among them, which would break the intra-fiber argument. However, the specific construction here—with eight A8-like tails that do contain collinear triples plus one additional point—means the tail configuration isn't actually a cap, so the intra-fiber mechanism should still work.
+
+For p ≥ 11, even if individual fibers can't be forced to contain collinear triples, the multi-fiber structure becomes relevant: since nonzero fibers are bounded at size 9, we'd need multiple smaller fibers working together, and that approach can still yield zero-sums. I think I've explored the main cases enough to move forward with writing this up.
+
+============================================================
+BLOCK 15 (249 chars)
+============================================================
+This confirms my earlier reading of the total_break results. The report is already complete and accurate. Let me just confirm the background IWRC task status.
+
+Actually, let me also check if the first IWRC exhaustive test (b1rm72urv) ever completed.
+
+============================================================
+BLOCK 16 (2875 chars)
+============================================================
+The full exhaustive IWRC test confirms and STRENGTHENS my findings:
+
+1. **A8 tails (8 vectors)**: For target = 0, ALL modular weights have minimum integer weight > p=5:
+   - mod 0: min_iw = 10 (= 2p)
+   - mod 1: min_iw = 6
+   - mod 2: min_iw = 7
+   - mod 3: min_iw = 8
+   - mod 4: min_iw = 9
+
+This is even stronger than what I reported — even for 8 vectors, IWRC is false!
+
+
+2. **Random 9-vector configs**: 26 out of 30 trials fail (87%), and the pattern is strikingly consistent—every failure exhibits the same modular weight structure of (6, 7, 8, 9) for mods (1, 2, 3, 4). The 4 trials that passed were likely skipped because they fell within an affine hyperplane, which the code filters out.
+
+So the real finding is that IWRC fails universally across all non-affine-hyperplane configs tested. The min_iw pattern is remarkably uniform: it follows min_iw = p + mod_weight for random configs, giving (6, 7, 8, 9) at p=5, but the A8+extra configs break this pattern with min_iw = 4 instead. for mod w=4, but random configs show min_iw = 9. This is different! Let me recheck...
+
+For A8+extra at target 0:
+- w=0: 5, w=1: 6, w=2: 7, w=3: 8, w=4: 4
+
+For random 9-vector at target 0:
+- w=1: 6, w=2: 7, w=3: 8, w=4: 9
+
+The difference is at w=4: A8+extra gives 4 ≤ p, but random gives 9 > p. So the IWRC failure is EVEN WORSE for random configs: ALL 4 nonzero mod weights fail!
+
+And for A8+extra: mod w=4 gives min_iw = 4, which is a weight-4 zero-sum of the tails—a 4-element zero-sum with all coefficients 1. But this doesn't lift since 1*4 = 4 ≠ 0 mod 5 for fiber c=1.
+
+I'm also noticing something interesting: A8 tails alone (8 vectors, no extra) give min_iw = 10 at mod w=0, which is 2p. So there's no weight-5 zero-sum among just the 8 tails—the first weight-p zero-sum requires doubling to weight 10. But when I add the extra vector to get A8+extra, the minimum at mod w=0 drops to 5.
+
+Adding that 9th tail creates a weight-5 zero-sum, which is exactly where the η/s boundary kicks in. I'm seeing a universal pattern here: min_iw = p + k for modular weight k (where k = 1, 2, 3, 4 at p=5). This suggests that for any 9 non-proportional nonzero vectors in F_5^3 not lying in an affine hyperplane, the minimum integer weight achieving modular weight k is exactly p+k—except for A8+extra at mod 4, where it drops to 4 = p-1. This is a clean mathematical law: for target = 0, the minimum integer weight at modular weight k is p+k for k = 1, ..., p-1.
+
+The only achievable integer weight ≤ p at target 0 is w = p itself (at mod weight 0), and anything with higher modular weight requires overshooting by exactly k. This is strong evidence that the IWRC fails as a general statement, but the specific case of mod weight 0 always works—which is precisely what the Grail construction needs: intra-fiber zero-sums at weight p. I should update my report with this strengthened finding.
+
+============================================================
+BLOCK 17 (179 chars)
+============================================================
+Cortex is having issues. Let me try one more time with a simpler message, and if it fails, I'll just note it in the report. The key findings are already stored in the report file.
+
+============================================================
+BLOCK 18 (1102 chars)
+============================================================
+This confirms everything and adds more data points. Notable:
+
+1. A8 tails (8 vectors): first zero-sum at weight 6, first lifting zero-sum at weight 10 = 2p. Full spectrum through weight 28.
+
+2. For extras (0,1,3) and (2,0,1): mod w=4 gives min_iw = 9 (not 4). So the A8+extra pattern of min_iw=4 at mod w=4 is NOT universal — it depends on the specific extra vector.
+
+3. For extras (1,2,3), (0,1,2), (1,1,1), (2,3,4), (3,0,1), (1,3,2): mod w=4 gives min_iw = 4.
+   
+Now I'm seeing a clear pattern emerging: mod w=1, 2, and 3 consistently give min_iw values of p+1, p+2, and p+3 respectively, but mod w=4 is the outlier—it produces either p-1 or p+4 depending on which extra vector we're using. When mod w=4 yields that p-1 result, it's actually hitting a weight-4 zero-sum from the 9 tails that doesn't lift.
+
+The crucial finding is that mod w=0 is the only weight class that achieves min_iw = p, and this is the weight that actually lifts. So the complete picture is that p is the unique integer weight ≤ p that produces a zero-sum at the target, while every other weight class requires going above p.

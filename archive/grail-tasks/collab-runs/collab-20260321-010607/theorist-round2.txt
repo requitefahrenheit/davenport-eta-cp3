@@ -1,0 +1,199 @@
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: mcp__claude_ai_openmind__search]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+Let me now read the adversary's Round 1 report and the U1 counterexample details for crucial structural information.
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_openmind__get_node]
+[TOOL: mcp__claude_ai_openmind__get_node]
+[TOOL: mcp__claude_ai_openmind__get_node]
+Now I have the key structural data. Let me consolidate what I know and push toward new results.
+
+---
+
+## THEORIST REPORT — Round 2
+
+### Proved Results
+
+**Theorem A (Full Span Lemma).** *Any ZSF set of α(r+1)+1 = 2α(r)+2 nonzero non-proportional vectors in F_p^{r+1} (r ≥ 3, p ≥ 5) must span all of F_p^{r+1}.*
+
+**Proof.** If the span has dimension d ≤ r, the vectors lie in a copy of F_p^d. We have N = 2α(r)+2 non-proportional directions, each with multiplicity p−1, giving a sequence of N(p−1) elements of C_p^d \ {0}. By strong induction (base cases r ≤ 3 known, including η(C_p^2) = 4p−3 by Reiher), η(C_p^d) ≤ (α(d)+1)(p−1)+1. Since α is strictly increasing (α(d) < α(d+1) = 2α(d)+1), we have 2α(r)+2 ≥ α(d)+2 for d ≤ r. Thus:
+
+N(p−1) = (2α(r)+2)(p−1) ≥ (α(d)+2)(p−1) = (α(d)+1)(p−1) + (p−1) ≥ η(C_p^d)
+
+for p ≥ 2. The η bound yields a weighted zero-sum of weight ≤ p in F_p^d ⊂ F_p^{r+1}. ∎
+
+**Theorem B (Fiber Direction Bound).** *Under any linear form w: F_p^{r+1} → F_p, each fiber w⁻¹(c) of a ZSF set contains at most α(r)+1 distinct nonzero tail directions in F_p^r.*
+
+**Proof.** Suppose fiber c has ≥ α(r)+2 distinct nonzero tail directions. Each direction supplies multiplicity p−1 (from the weight range {1,...,p−1}), giving a tail sequence of length (α(r)+2)(p−1). Check: (α(r)+2)(p−1) − η(C_p^r) = (α(r)+2)(p−1) − (α(r)+1)(p−1) − 1 = p−2 ≥ 3 for p ≥ 5. So the tail sequence exceeds η(C_p^r), yielding a tail zero-sum Σ s_i t_i = 0 with weight W = Σ s_i ≤ p.
+
+- If c = 0: the first-coordinate constraint c·W = 0 is automatic. Zero-sum of weight ≤ p. ✓
+- If c ≠ 0: c·W ≡ 0 (mod p) forces W ≡ 0 (mod p). Since 1 ≤ W ≤ p: W = p ≤ p. ✓
+
+Both cases contradict ZSF. ∎
+
+**Corollary C (Two-Fiber Pairwise Bound).** *For any two fibers c₁, c₂ in a ZSF set S of 2α(r)+2 vectors: |F_{c₁}| + |F_{c₂}| ≤ 2α(r)+1.*
+
+**Proof.** The vectors in F_{c₁} ∪ F_{c₂} are nonzero, non-proportional, and sit in ≤ 2 fibers. By the proved two-fiber upper bound, ZSF in 2 fibers requires ≤ 2α(r)+1 vectors. ∎
+
+**Theorem D (Zero-Fiber Forces Extremal Tails).** *If the zero fiber of a ZSF set has exactly α(r)+1 vectors, their tails form a maximal ZSF configuration in C_p^r.*
+
+**Proof.** In fiber 0, non-proportionality of vectors ⟺ non-proportionality of tails. If the α(r)+1 tails admitted a zero-sum of weight ≤ p, the same zero-sum works in F_p^{r+1} (fiber 0 contributes 0 to the first coordinate). So the tails are ZSF. And α(r)+1 is the maximum size of a ZSF set (by the η bound at rank r). So the tails are *maximal* ZSF. ∎
+
+---
+
+### Critical Structural Insight: The Same-Tail Swap
+
+From Cortex: the Same-Tail Swap Theorem says changing a vector's fiber value preserves ZSF, because "tail equations are unchanged and the first-coordinate equation becomes MORE constrained."
+
+**Analysis of the mechanism:** For a ZSF set S, a zero-sum requires both (i) Σ s_i t_i = 0 (tail equation) and (ii) Σ s_i c_i ≡ 0 (first-coordinate equation). The set of tail zero-sums Z(T) = {(s_i) : Σ s_i t_i = 0, weight ≤ p} depends only on the tails. Swapping v = (c, t) to v' = (c', t) changes condition (ii) while preserving Z(T).
+
+**The key dichotomy:** If the Same-Tail Swap preserves ZSF bidirectionally, then any multi-fiber ZSF set can be rearranged to a 2-fiber configuration that is also ZSF. Since the 2-fiber bound gives ≤ 2α(r)+1 vectors, we'd be done. But:
+
+**Obstruction to this approach:** Swapping v = (c₁, t) to (c₂, t) can CREATE proportionality with an existing vector w = (d, s) if d/c₂ = s/t as scalar ratios (i.e., the 2D proportionality condition c₂·s = d·t). This doesn't occur when all tail directions are distinct, but DOES occur in the doubled+e₁ construction where each tail direction has multiplicity 2.
+
+[VERIFY: For the doubled+e₁ construction at p=5 in F_5^4, enumerate all 17 vectors. For each vector v = (c, t) and each target fiber c' ≠ c, check whether (c', t) is proportional to any other vector in the set. Report how many swaps are blocked by proportionality.]
+
+---
+
+### Dead End Confirmed: Gao's Bound
+
+I investigated whether s(G) ≤ D(G) + exp(G) − 1 (where D is the Davenport constant) could close the gap. **This bound is FALSE for C_p^r with r ≥ 2:**
+
+- D(C_p^2) = 2p−1, s(C_p^2) = 4p−3, but D + p − 1 = 3p−2 < 4p−3
+- D(C_p^3) = 3p−2, s(C_p^3) = 9p−8, but D + p − 1 = 4p−3 < 9p−8
+
+The η constant grows exponentially with rank while D grows linearly. No shortcut here.
+
+---
+
+### The Remaining Obstruction (Precisely Stated)
+
+**The Cross-Fiber First-Coordinate Problem:** Given N = 2α(r)+2 vectors in F_p^{r+1} spanning ≥ 3 fibers, the tail zero-sum space Z(T) is large (the tails exceed the η threshold at rank r, so Z(T) ≠ ∅). For each element (s_i) ∈ Z(T), define φ(s) = Σ s_i c_i mod p. We need 0 ∈ φ(Z(T)).
+
+The problem: φ is a linear functional on the solution space, but Z(T) is NOT a linear space (due to the weight constraint Σ s_i ≤ p and the integrality constraint s_i ∈ {0,...,p−1}). So surjectivity of φ on Z(T) is not automatic.
+
+**Why this is hard:** In the extremal doubled+e₁ construction, the fiber values are 0 and 1. The constraint Σ s_i c_i = Σ_{i ∈ fiber 1} s_i ≡ 0 (mod p) forces the fiber-1 weight to be 0 or p. Weight 0 means only fiber-0 vectors are used (giving a pure tail zero-sum, impossible since A₈ is ZSF). Weight p means the total is ≥ p, tight.
+
+---
+
+### New Conjectures for Computer Verification
+
+**[VERIFY 1: Support-4 Kill Structure]** At p=5, rank 4: among the 94 candidates killed by support-4 zero-sums (not support-3), do ALL 94 support-4 zero-sums involve the vector e₁ = (1,0,0,0)? If yes, this suggests a structural theorem about the role of the zero-tail vector.
+
+**[VERIFY 2: Tail Direction Count]** For EVERY maximal ZSF set of 17 vectors in F_5^4 (including the 3-fiber and 5-fiber variants from Same-Tail Swap), count the total number of distinct nonzero tail directions (under the standard first-coordinate projection). Is it always exactly 8 = α(3)?
+
+**[VERIFY 3: Extremal Uniqueness]** At p=5: how many GL(4,5)-equivalence classes of maximal ZSF sets of size 17 exist? Is the doubled+e₁ of A₈ essentially unique up to the action of GL(4,5) (combined with Same-Tail Swaps)?
+
+**[VERIFY 4: Weight-p Tail Zero-Sums]** Given the 17-vector doubled+e₁ construction at p=5 and an 18th vector v₁₈: for each of the 607 candidates, find the tail zero-sum of weight ≤ p that kills it. Report the WEIGHT of each killing zero-sum (is it always < p, or sometimes exactly p?) and the FIBER COMPOSITION (how many vectors from fiber 0 vs fiber 1 vs the new fiber).
+
+---
+
+### Theoretical Path Forward
+
+The most promising approach combines three ingredients:
+
+1. **Extremal uniqueness** (Conjecture): up to GL action and Same-Tail Swaps, the maximal ZSF set is essentially unique.
+
+2. **One-more-vector analysis**: Given the unique extremal structure, show that adding ANY (2α(r)+2)th vector forces a zero-sum. This splits into:
+   - Support-3 kills (non-degenerate collinear triples) — handled by rank-3 theory
+   - Support-4 kills — need a new lemma about four-element dependencies in the specific extremal structure
+
+3. **Inductive propagation**: If the rank-r extremal set is unique and the one-more-vector analysis works at rank r, then the rank-(r+1) extremal set is also unique (it must be doubled+e₁ of the rank-r extremal set), and the one-more-vector analysis propagates.
+
+The critical gap is proving (2): that ALL support-4 dependencies arising from adding a vector to the extremal construction have minimum weight ≤ p. The verification queries above target this.
+
+---
+
+### Storing Key Results to Cortex
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_openmind__add_node]
+Now let me state one more critical theorem and the key mechanism.
+[TOOL: mcp__claude_ai_openmind__add_node]
+Now let me search for whether A₈'s 4-sum-free property is well-characterized enough to prove the 3-sum coverage.
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: ToolSearch]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+The web search confirms a critical fact: **s(G) = D(G) + exp(G) − 1 is a CONJECTURE** for general groups, only proved for rank ≤ 2. So the Davenport shortcut is definitively dead.
+
+Let me now push the theory further on the unit-coefficient four-sum mechanism, which is the real key.
+
+---
+
+## Deepened Analysis: The Four-Sum Kill Mechanism
+
+**Critical observation from the fiber data:** The support-4 kills are ALL unit-coefficient four-sums v₁₈ + v_a + v_b + v_c = 0 (weight 4 < p). The fiber constraint c₁₈ + c_a + c_b + c_c ≡ 0 (mod p) with c_a, c_b, c_c ∈ {0, 1} limits which fiber values c₁₈ can be killed this way:
+
+| c₁₈ | Required c_a+c_b+c_c (mod p) | Achievable? |
+|------|------------------------------|-------------|
+| 0 | 0 | Yes: (0,0,0) |
+| 1 | p−1 = 4 | **No** (max=3) |
+| 2 | p−2 = 3 | Yes: (1,1,1) |
+| 3 | p−3 = 2 | Yes: (0,1,1) |
+| 4 | p−4 = 1 | Yes: (0,0,1) |
+
+**Theorem E (Fiber-1 Collinear Triple Forcing).** For v₁₈ in fiber 1: no unit-coefficient four-sum kill exists (fiber constraint impossible). Therefore ALL fiber-1 candidates must be killed by collinear triples.
+
+But every collinear triple (degenerate or not) gives weight ≤ p:
+- Non-degenerate → weight < p (rank-3 theorem)
+- Degenerate → weight = p (proved in briefing)
+
+So the key question for fiber-1 is: does v₁₈ always lie on a **line** through two existing points?
+
+**Theorem F (Collinear Triple Existence for Spanning Sets).** Let S be a set of n nonzero non-proportional vectors in F_p^{r+1} that spans F_p^{r+1}. If n ≥ r+2, then for any nonzero vector v not proportional to any element of S, there exist u, w ∈ S such that v ∈ span{u, w}.
+
+**Proof attempt:** We need v = αu + βw for some u, w ∈ S, α, β ∈ F_p. Since S spans F_p^{r+1}, v = Σ λ_i s_i for some s_i ∈ S. If only 2 coefficients are nonzero: done. If ≥ 3 are nonzero...
+
+**This is NOT true in general!** Counterexample: in F_p^3, let S = {e₁, e₂, e₃} (standard basis). The vector v = e₁ + e₂ + e₃ is NOT on any line through two basis vectors (it's in general position).
+
+So Theorem F fails. Some vectors require 3+ element combinations.
+
+**However:** Our set S has 17 vectors (much more than r+1 = 4). The lines through pairs of S cover many points. The question is whether they cover ALL points of PG(3, p).
+
+**Counting argument at p = 5:** PG(3, 5) has 156 projective points. S has 17 points. Lines through pairs: C(17,2) = 136 lines, each with 6 projective points. New points per line: ≤ 4 (excluding the two S-points). Total coverage: ≤ 136 × 4 = 544. Since only 156 − 17 = 139 points need covering, and 544 >> 139, coverage is likely complete, but this is an AVERAGE argument, not a proof.
+
+[VERIFY 5: At p=5, does every projective point in PG(3,5) lie on at least one line through two points of the 17-vector doubled+e₁ construction? Report any uncovered points.]
+
+---
+
+## The Proof Architecture (Summary)
+
+The full proof of η(C_p^{r+1}) ≤ (2α(r)+1)(p−1)+1 can be decomposed into:
+
+**Layer 1 (Proved):** Structural lemmas A–D restrict ZSF sets: full span, fiber direction bounds, pairwise fiber bounds.
+
+**Layer 2 (Proved):** Two-fiber upper bound handles ≤ 2 fibers.
+
+**Layer 3 (Needed):** For ≥ 3 fibers with 2α(r)+2 vectors, show a zero-sum exists via:
+- **(3a)** Collinear triple kills (support-3): any triple gives weight ≤ p. Need to show every candidate lies on SOME line through two existing points, OR
+- **(3b)** Unit four-sum kills (support-4, weight 4 < p): need candidate's tail in the 3-sumset of the tail multiset with compatible fiber constraint, OR
+- **(3c)** A hybrid argument combining both.
+
+**Layer 4 (Needed for full generality):** Inductive propagation—show the extremal structure at rank r forces the same structure at rank r+1, enabling the one-more-vector analysis to propagate.
+
+The most promising concrete path: prove that the doubled+e₁ construction has the property that every projective point in PG(r, p) lies on a line through two points of the 2α(r)+1 element construction. This would give Layer 3a directly. The counting argument strongly suggests this is true for all p ≥ 5.
+
+---
+
+## Verification Requests (Consolidated)
+
+**[VERIFY 1]:** Do ALL 94 support-4 kills at p=5 involve the vector e₁ = (1,0,0,0)?
+
+**[VERIFY 2]:** For every maximal ZSF set of 17 vectors in F_5^4, is the total number of distinct nonzero tail directions always exactly 8?
+
+**[VERIFY 3]:** At p=5, how many GL(4,5)-equivalence classes of maximal ZSF 17-sets exist?
+
+**[VERIFY 4]:** For each of the 607 killing zero-sums at p=5: what is the weight, and the fiber composition?
+
+**[VERIFY 5]:** Does every projective point in PG(3,5) lie on a line through two points of the 17-vector doubled+e₁ construction?
+
+**[VERIFY 6]:** At p=7: repeat VERIFY 5 for the 17-vector construction in F_7^4. Every projective point on some line through two construction points?
+
+Sources:
+- [Zero-sum problems in finite abelian groups: a survey](https://cfc.nankai.edu.cn/_upload/article/files/c6/e1/a2c52bf04b1896f59003b5993582/5c9e49ea-af5b-44ac-b153-5dbb6d8ae9a3.pdf)
+- [Weighted Davenport's constant and the weighted EGZ Theorem](https://www.researchgate.net/publication/251556770_Weighted_Davenport's_constant_and_the_weighted_EGZ_Theorem)
+- [What is the Davenport Constant? (Ohio State)](https://math.osu.edu/sites/math.osu.edu/files/What_is_2018_Davenport_Constant.pdf)
+- [Sumsets and structure (Ruzsa)](https://www.math.cmu.edu/~af1p/Teaching/AdditiveCombinatorics/Additive-Combinatorics.pdf)

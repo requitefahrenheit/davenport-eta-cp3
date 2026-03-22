@@ -1,0 +1,54 @@
+# Research Briefing (VERIFIER thread)
+
+**Goal:** Compute η(C_7³) or bracket it within ±1. The conjectured value is 49 = 8(6)+1. The standard {0,1}³ construction gives η ≥ 43 (length 42 = 7×6). For p=5, the true value is η = 33 = 8(4)+1, achieved by 8 elements × mult 4. Does the same pattern hold for p=7 (8 elements × mult 6 = 48)? Find the longest short-zero-sum-free sequence in C_7³ and verify it. If you can show η(C_7³) ≠ 49, this disproves the conjecture η = 8(p-1)+1.
+
+---
+
+### Round 1  (18:09)
+
+I checked the first nontrivial test case toward your conjecture η(C_7^3)=49 by verifying the classical {0,1}^3\{0} construction: take the seven nonzero 0/1 vectors in (Z/7Z)^3 and repeat each six times to form a length-42 sequence; using an exact dynamic-programming (bitset) check of all exact-length subsequence sums up to length 7, I found no zero-sum subsequence of length 1–7, so this sequence is short-zero-sum-free and therefore η(C_7^3) ≥ 43. As a sanity check I also recorded the sizes of the k-sum sets (|Σ_1|=7, |Σ_2|=23, |Σ_3|=54, |Σ_4|=105, |Σ_5|=181, |Σ_6|=287), confirming the computation; next I will search for an 8-element multiset repeated 6 times (total length 48) or otherwise try to either find a longer short-zero-sum-free sequence or prove none exists. Vibe check: (green)
+
+**Cost so far: $0.03** | Tokens: 17,261 in / 1,167 out
+
+### Round 2  (18:11)
+
+Goal: decide whether a short-zero-sum-free sequence of length 48 in C_7^3 of the form A^{[6]} with |A|=8 exists (if it does, η=49 remains plausible; if not, that conjecture fails). What I did this turn: ran a targeted randomized search that fixes a basis (1,0,0),(0,1,0),(0,0,1) to break GL-symmetry and sampled 200 random choices of the remaining 5 support vectors, checking each candidate exactly (dynamic programming over bounded multiplicities) for any zero-sum of length 1..7; result = 0 successes (every tested 8-set produced a short zero-sum), so this is concrete but nonrigorous negative evidence against the “8×(p−1)” pattern at p=7. What I will do next (concrete, implementable plan): implement a meet‑in‑the‑middle certifier that, for any given 8-set A, enumerates all coefficient-vectors on the first four elements with total coefficient sum ≤7 (≈≤330 possibilities) and the same for the last four, hashes their partial sums, and checks whether some pair combines to the zero vector with total coefficients ≤7; this per-A check is tiny, so the task reduces to enumerating 8-sets up to GL(3,7)-equivalence. By fixing an ordered basis we reduce to checking the C(340,5) choices of the remaining five vectors modulo the 216-element stabilizer (≈1.7×10^8 orbit representatives)—large but plausibly tractable on a modest cluster or with further pruning (discard supports contained in low-dimensional subspaces, exploit scalar multiples or simple obstructions early). Blockers: full exhaustive proof requires either (a) substantial compute (cluster/time) to run the ~1e8 certifying checks, or (b) a new combinatorial obstruction that proves every 8-set admits the required short relation; I can implement the certifier and begin a systematic orbit enumeration (or try to derive a short structural lemma) next. Vibe check: (yellow) = working and a clear next plan, but still unclear whether it will finish as a rigorous disproof without significant computation or a new theoretical insight.
+
+**Cost so far: $0.08** | Tokens: 37,961 in / 2,292 out
+
+### Round 3  (18:13)
+
+Goal was to decide whether the conjectured Davenport-type value η(C_7^3)=49 (the “8 points × multiplicity 6” pattern) can occur, or at least pin η(C_7^3) to within ±1. I implemented a certified meet-in-the-middle test that, for a given 8-point support A ⊂ F_7^3, searches for a nontrivial short relation Σ c_i a_i = 0 with 0≤c_i≤6 and total weight ≤7 (which would kill the uniform 8×6 construction), and ran this on 300 random 8-sets: every one of them produced such a short relation, so empirically the uniform 48-length witness looks impossible; this is strong computational evidence but not a proof because the search was not exhaustive over all 8-sets. One concrete next step I will pursue is a symmetry-reduced, solver-backed exhaustive search: encode the existence of an 8-set without any ≤7-weight relation as a SAT/ILP problem, add canonical symmetry-breaking constraints (fix a small canonical frame of points to eliminate AGL(3,7)-symmetry), and run a modern SAT/SMT solver to either find an explicit 8-set counterexample or certify unsatisfiability of the existence-of-counterexample instance; if that returns UNSAT it would settle that 8×6 cannot occur and thus η≠49, while a found witness would disprove the conjecture directly. Current status: strong negative evidence from 300/300 samples but no exhaustive proof yet — (yellow).
+
+**Cost so far: $0.12** | Tokens: 62,739 in / 3,924 out
+
+### Round 4  (18:15)
+
+Turn 4: I implemented a deterministic meet‑in‑the‑middle "certifier" that, for any proposed 8‑point support A in C7^3, either finds an explicit short zero‑sum relation with small integer coefficients (total coefficient sum ≤7) or correctly reports that none exists; the routine is exact (not heuristic) and returns a concrete certificate when it succeeds. Concretely, I split A into two 4‑point halves, enumerated coefficient 4‑tuples of weight 1…7 on each side, hashed partial sums and matched them to produce a full relation of total weight ≤7 if one exists; I tested it on a natural 8‑point example and it produced the valid relation 5·e1 + 1·(2e1) = 0 (weight 6), so that A with multiplicity 6 would be rejected. This certifier is the key atomic primitive needed to run a symmetry‑broken exhaustive search (fix e1,e2,e3 as the first three points, enumerate the remaining 5 up to linear and permutation symmetries, filter by span/duplication, and run the certifier on each support); if every candidate 8‑support is rejected, that would rigorously rule out the 8×6 uniform construction of length 48 and thus show η(C7^3) ≠ 49. I haven’t yet completed the full orbit‑reduced enumeration, but the certifier works and lets the next phase be a finite, provable check. Vibe check: (green) = real progress.
+
+**Cost so far: $0.19** | Tokens: 93,321 in / 5,687 out
+
+### Round 5  (18:17)
+
+Goal: determine whether the smallest length guaranteeing a zero-sum subsequence of weight ≤7 in (Z/7Z)^3 is 49 (the conjectured 8·6+1) or smaller. This round tried a direct, symmetry-broken exhaustive search: fix a basis for F7^3, enumerate 8-point supports containing that basis, and for each use a meet-in-the-middle (MITM) check for any short weighted relation; the MITM check itself is fast and sound, but the remaining enumeration after fixing a basis is astronomically large (about binomial(339,5) ≈ 4.5×10^10 candidate 8-sets) and the run hit a timeout well before covering a meaningful fraction, so no rigorous nonexistence/certification was obtained. The key takeaway is that the blocker is not the relation test but the sheer number of GL(3,7)-equivalence classes we’re implicitly still enumerating, so brute force needs a much stronger orbit/normal-form reduction (or a new theoretical lemma about possible 8-point configurations) to shrink the search to a feasible size; my next concrete move is to derive such canonical normal forms for 8-point supports under linear automorphisms so the MITM certification can actually be applied exhaustively. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.24** | Tokens: 128,995 in / 7,067 out
+
+### Round 6  (18:19)
+
+We’re trying to pin down η(C_7^3) (conjectured 49); the standard {0,1}^3 construction gives a 42-term short-zero-sum-free sequence (so η ≥ 43), and the key question is whether an “8-support × multiplicity 6” pattern can produce a 48-term short-zero-sum-free sequence (which would push η ≥ 49 and be consistent with the 8(p−1)+1 pattern seen at p=5). This round I ran an exact dynamic-programming check and reverified that the standard 42-term sequence is indeed short-zero-sum-free, checked that random linear changes (GL(3,7)) preserve that result, and then used a meet-in-the-middle certifier on a promising 8-point support (an 8-set lifted from the p=5 extremal pattern) — the certifier found no small-weight linear dependence (so this 8-set passes the obvious obstruction and is a concrete candidate for forming a 48-term witness). I have not yet run the full DP on the full 48-term sequence built from that 8-set, so we don’t yet know if η(C_7^3) ≥ 49 (or if the candidate fails and the conjecture is false); next step is that full DP check. (yellow)
+
+**Cost so far: $0.31** | Tokens: 171,281 in / 9,530 out
+
+### Round 7  (18:21)
+
+We set out to test the conjecture that η(C_7^3)=49 by searching for the longest sequence in (Z/7Z)^3 with no nonempty subsequence of length ≤7 summing to zero; using an explicit eight-point set A8 and repeating each point 6 times we built a 48-term sequence and ran an exact dynamic-programming check over all subsequence lengths 1–7, which found no zero-sum of any of those lengths, so this 48-term sequence is rigorously short-zero-sum-free and therefore η(C_7^3)≥49 (so the “8 points × multiplicity 6” pattern that gave the conjectured value at p=5 does give the matching lower bound at p=7); the remaining step is to prove the matching upper bound (that every 49-term sequence must contain a short zero-sum) to conclude η=49. Vibe check: (green) = real progress.
+
+**Cost so far: $0.37** | Tokens: 219,227 in / 10,638 out
+
+### Round 8  (18:23)
+
+I checked the standard 48-term candidate S = A_8^{[6]} in C_7^3 by computing all group elements that can be represented as a sum of 1 to 6 terms from S, and found that those attainable sums cover every nonzero element of C_7^3; equivalently, for every nonzero g there is a short subsequence of S summing to −g, so adding any element to S creates a short zero-sum and S is non-extendable — in particular no 49-term short-zero-sum-free sequence can contain this specific 48-term construction as a subsequence. This is a concrete, computer-verified structural fact that narrows the search: to disprove the conjecture one must now find a different 48-term sequence that is extendable (or exhibit a 49-term sequence not containing S), or else prove every 48-term short-zero-sum-free sequence has the same “covers all nonzero sums” property; I’ve made solid progress but the main conjecture remains unproven, so overall status: (green) = real progress.
+
+**Cost so far: $0.43** | Tokens: 271,818 in / 11,962 out
+

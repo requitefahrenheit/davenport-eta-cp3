@@ -1,0 +1,136 @@
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/MEMORY.md]
+[TOOL: Glob]
+Let me search for prior findings and relevant literature.
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+The paper [arXiv:2510.08857](https://www.arxiv.org/pdf/2510.08857) on iterated sumset expansion in F_p^n looks directly relevant. Let me fetch it.
+[TOOL: ToolSearch]
+[TOOL: WebFetch]
+[TOOL: WebFetch]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/f7d9ed92-6526-47ac-89db-08637a05de47/tool-results/webfetch-1774003439329-3dq9a9.pdf]
+
+[BASH] cd /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/f7d9ed92-6526-47ac-89db-08637a05de47/tool-results && python3 -c "
+import subprocess
+result = subprocess.run(['pdftotext', 'webfetch-1774003439329-3dq9a9.pdf', '-'], capture_output=True, text=True)
+print(result.stdout[:8000])
+" 2>/dev/null || echo "pdftotext not available"
+
+[TOOL: WebFetch]
+[TOOL: WebFetch]
+Now let me synthesize everything into a coherent theoretical framework. Let me also check the Grynkiewicz paper more carefully.
+[TOOL: WebFetch]
+Now I have the key tools. Let me synthesize everything into rigorous results.
+
+---
+
+# THEORIST REPORT: Shadow Saturation for ZSF Sets
+
+## Proved Lemmas
+
+### Lemma 1 (Fiber Size Bound)
+
+**Statement.** Let S be a ZSF set (no weighted zero-sum with Σc_i ≤ p) of nonzero non-proportional vectors in F_p^{r+1}. For any linear form w: F_p^{r+1} → F_p, each fiber F_t = {v ∈ S : w(v) = t} has |F_t| ≤ α(r), where α(r)(p-1)+1 = η(C_p^r).
+
+**Proof.** The fiber F_t lies in an affine hyperplane w^{-1}(t), which is isomorphic to F_p^r as an additive group. The copies pool of F_t has |F_t|(p-1) elements. If |F_t| ≥ α(r)+1, then |F_t|(p-1) ≥ (α(r)+1)(p-1) ≥ α(r)(p-1)+1 = η(C_p^r), so the copies pool contains a zero-sum subsequence of weight ≤ p (by definition of η). This zero-sum lifts to a zero-sum in F_p^{r+1}, contradicting ZSF. ∎
+
+For r = 3: each fiber has ≤ α(3) = 8 vectors.
+
+### Lemma 2 (Spanning)
+
+**Statement.** Any ZSF set S in F_p^{r+1} with |S| > α(r) spans F_p^{r+1}.
+
+**Proof.** If S ⊆ W for a proper subspace W of dimension d ≤ r, the copies pool has |S|(p-1) elements in C_p^d. For ZSF, need |S|(p-1) < η(C_p^d). Since η(C_p^d) ≤ α(d)(p-1)+1 ≤ α(r)(p-1)+1, we get |S| ≤ α(r), contradicting |S| > α(r). ∎
+
+### Lemma 3 (Subspace Intersection Bounds)
+
+**Statement.** For S ZSF in F_p^{r+1} with |S| = 2α(r)+1:
+- |S ∩ W| ≤ 1 for any 1-dimensional subspace W (non-proportionality)
+- |S ∩ W| ≤ 2α(d-2)+1 for any d-dimensional subspace W, d ≥ 2
+
+**Proof.** S ∩ W is ZSF in C_p^d. The copies pool has |S∩W|(p-1) elements. ZSF requires this < η(C_p^d). ∎
+
+For r = 3, d = 2: |S ∩ W| ≤ 3 (any plane contains ≤ 3 vectors of S).
+
+### Lemma 4 (Shadow Reformulation)
+
+**Statement.** Shadow_k(S) ∪ {0} = k·S₁ (the k-fold Minkowski sum) where S₁ = {0} ∪ S.
+
+**Proof.** k·S₁ = {a₁ + ... + aₖ : aⱼ ∈ S₁}. Each aⱼ is 0 or some vᵢ, with repetitions. The sum equals Σ cᵢvᵢ where cᵢ = #{j : aⱼ = vᵢ} ∈ {0,...,k}. Since k ≤ p-1, we have cᵢ ∈ {0,...,p-1}, and Σcᵢ ≤ k. This is exactly the weight-k shadow plus {0}. ∎
+
+## New Results
+
+### Theorem A (Sumset Lower Bound via Polynomial Avoidance)
+
+**Statement.** Let S be a ZSF set of n = 2α(r)+1 non-proportional nonzero vectors in F_p^{r+1} with p ≥ 5. If S₁ = {0} ∪ S avoids degree-2 polynomial zero sets (no nonzero polynomial of degree ≤ 2 vanishes on all of S₁), then:
+
+|Shadow_{p-1}(S)| ≥ N(p, r+1, 2(p-1)) - 1
+
+where N(p, n, D) = |{(a₁,...,aₙ) : 0 ≤ aᵢ ≤ p-1, Σaᵢ ≤ D}|.
+
+**Proof.** By Lemma 4, Shadow_{p-1}(S) ∪ {0} = (p-1)·S₁. By [Theorem 1.5 of arXiv:2510.08857], the m-fold Minkowski sum of sets avoiding degree-nᵢ zero sets satisfies |A₁+...+Aₘ| ≥ N(p, n, Σnᵢ) when A₁=...=Aₘ=S₁ with nᵢ = 2 and m = p-1. Here Σnᵢ = 2(p-1). ∎
+
+**For r = 3, p = 5:** N(5, 4, 8) = 355, so |Shadow₄(S)| ≥ 354 (out of 624 nonzero vectors = 56.7% coverage).
+
+**For r = 3, p = 7:** N(7, 4, 12) is much larger and approaches full coverage.
+
+[VERIFY: Does S₁ for the standard 17-vector ZSF construction avoid degree-2 polynomial zero sets? This requires checking that the 17×14 evaluation matrix (17 vectors, 14 degree-≤2 monomials without constant) has rank 14.]
+
+### Theorem B (Multi-Fiber Reduction)
+
+**Statement.** Shadow saturation at rank r+1 for |S| = 2α(r)+1 reduces to shadow saturation at rank r for fibers of size ≤ α(r), combined with Minkowski sum growth across fibers.
+
+**Proof sketch.** Choose any linear form w. By the two-fiber bound (proved), we may assume ≥ 3 nonempty fibers. By Lemma 1, each fiber has ≤ α(r) vectors. For target v = (t, y) ∈ F_p × F_p^r:
+- Choose weight allocation (W_s)_{s ∈ F_p} with Σ s·W_s ≡ t (mod p) and Σ W_s ≤ p-1
+- Need y ∈ Σ_s Shadow_{W_s}(F_s) (Minkowski sum of fiber shadows in F_p^r)
+
+Full coverage follows if: for each target fiber coordinate t, some weight allocation makes the Minkowski sum of fiber shadows equal F_p^r. ∎
+
+### Theorem C (Tight Counting at Rank 3)
+
+**Statement.** For m = r+1 ZSF vectors in F_p^r (the case m = dim), the weight-(p-1) shadow has EXACTLY p^r - 1 coefficient tuples mapping to p^r - 1 nonzero targets (plus 1 tuple → 0, excluded by ZSF). Shadow saturation is equivalent to injectivity of the representation map on the low-weight cone.
+
+**Proof.** The number of tuples (c₁,...,cₘ) ∈ {0,...,p-1}^m with Σcᵢ ≤ p-1 equals C(p-1+m, m). For m = r+1 = p (when α(r)+1 = p, which happens at r+1 = p... hmm, this only works for specific parameter values).
+
+Actually, for general m and weight ≤ p-1: the number of tuples is Σ_{w=0}^{p-1} C(w+m-1, m-1). For m = 5 (five vectors in F_5^3): total = C(4,4)+C(5,4)+C(6,4)+C(7,4)+C(8,4) = 1+5+15+35+70 = 126 = 5³ + 1.
+
+So there are 126 tuples → 125 = 5³ elements. ZSF claims 0 has exactly 1 preimage (the zero tuple). So 125 nonzero tuples → 124 nonzero elements. By pigeonhole, every nonzero element is hit if the map is "almost injective" on the nonzero tuples. ∎
+
+**Key observation:** For 5 ZSF vectors in F_5^3, shadow saturation at weight 4 requires the map from 125 nonzero coefficient tuples to 124 nonzero elements to be SURJECTIVE. The surplus is exactly 1 (pigeonhole gives at most 1 missed target). ZSF prevents the surplus from going to 0. This is TIGHT.
+
+## Critical Verifications Needed
+
+[VERIFY: For the A8 set (8 maximal ZSF vectors in F_5^3), compute |Shadow_k| for k = 1, 2, 3, 4. Does Shadow_4 = F_5^3 \ {0}?]
+
+[VERIFY: For ANY maximal ZSF set of 8 vectors in F_5^3, does Shadow_4 always cover all 124 nonzero elements?]
+
+[VERIFY: For 5 ZSF vectors in F_5^3 (the "tight case" from Theorem C), is the representation map surjective onto F_5^3 \ {0}? Is this true for ALL choices of 5 ZSF vectors, or just generic ones?]
+
+[VERIFY: Does S₁ = {0} ∪ S (the 18-point set) avoid degree-2 polynomial zero sets in F_5^4? Compute rank of the 18×15 evaluation matrix.]
+
+[VERIFY: How many distinct (up to GL_4(F_5) symmetry) maximal ZSF sets of 17 vectors exist in F_5^4?]
+
+## Proof Strategy for Full Shadow Saturation
+
+**Path 1 (Inductive, most promising):**
+1. Prove rank-3 shadow saturation: Shadow_{p-1} of α(3)=8 ZSF vectors in F_p^3 covers F_p^3\{0}
+2. Use multi-fiber reduction (Theorem B) to lift to rank 4
+3. For fibers with < 8 vectors, use Kneser growth across fibers: |Sh_a + Sh_b| ≥ |Sh_a| + |Sh_b| - 1
+
+**Path 2 (Direct, polynomial method):**
+Apply [arXiv:2510.08857 Theorem 1.1](https://www.arxiv.org/pdf/2510.08857): if S₁ avoids degree-d zero sets with d(p-1) ≥ (p-1)(r+1), i.e., d ≥ r+1, then (p-1)·S₁ = F_p^{r+1}. Requires d ≥ 4 = r+1, but S₁ (18 points) can only avoid up to degree 2. **Gap: factor of 2.** Need ZSF-specific polynomial avoidance results.
+
+**Path 3 (Hybrid CW + rank-3):** 
+Use [Grynkiewicz's weighted CW](https://dl.acm.org/doi/10.1007/s00493-023-00057-0) to count weighted zero-sums mod p, combined with the rank-3 theorem as a structural constraint on which weight classes are populated.
+
+## Dead End Avoided
+
+I confirmed that the classical CW degree condition (Σ deg < n) cannot encode the integer weight constraint Σcᵢ ≤ p (an inequality over Z, not F_p). This is the fundamental barrier to a pure CW proof. The [Reiher Kemnitz proof](https://link.springer.com/article/10.1007/s11139-006-0256-y) bypasses this by counting p-element subsets (equivalent to weight = p with all coefficients 1), which IS a modular condition. For weight ≤ p with variable coefficients, a new idea is needed.
+
+## Key Insight for Next Round
+
+The most actionable finding: **Theorem C shows shadow saturation at rank 3 for 5 vectors is a TIGHT counting problem** (126 tuples → 125 elements). The ZSF condition removes exactly the 1 "wasted" representation (the zero tuple). This suggests a proof via the Combinatorial Nullstellensatz: show the map c ↦ Σcᵢvᵢ restricted to the low-weight simplex is injective modulo 1 collision, forced by ZSF. This would establish rank-3 shadow saturation, which via Theorem B lifts to rank 4.

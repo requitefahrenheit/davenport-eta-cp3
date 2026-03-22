@@ -1,0 +1,54 @@
+# Research Briefing (THEORIST thread)
+
+**Goal:** Prove that η(C_p³) = 8(p−1) + 1 for all primes p ≥ 3, or find a counterexample. Computational evidence: η(C_3³) = 17 = 8(2)+1 and η(C_5³) = 33 = 8(4)+1 (both verified). IMPORTANT: prior work showed that naive projection/averaging approaches fail at a Θ(p) scaling barrier — any proof must use structural choice of projection or a completely different technique. The conjecture may be FALSE for p ≥ 7 (no extremal 8-point support found in random search for p=7). Primary deliverable is a PROOF for general p, or a proof that the conjecture fails.
+
+---
+
+### Round 1  (17:51)
+
+Goal was to decide whether η(C_p^3) = 8(p−1)+1 for all primes p≥3 (true for p=3,5 by computation) by either proving it or finding a counterexample; the worker tried a structural obstruction approach that fixes an 8-point support A, encodes it as a 3×8 matrix M and studies the kernel-lattice of integer lifts, then models “short” coefficient vectors as integer points in the scaled simplex pK and hoped to force such a short lift for large p via Minkowski/volume arguments. The claimed core step—turning a nonzero lattice point in the difference body pK−pK (guaranteed by volume) into an actual nonzero point in pK with nonnegative coordinates and sum ≤p—was not justified and is likely false; constants and the convex-body computations were handwaved and the evaluator correctly flagged this as spinning rather than a committed, validated step. Bottom line: no correct proof or counterexample emerged in this round; the geometry-of-numbers idea as executed is not sufficient and new structural/combinatorial input or a different tactic is needed. (red) = stuck or spinning.
+
+**Cost so far: $0.05** | Tokens: 10,623 in / 2,243 out
+
+### Round 2  (17:53)
+
+We tried to either prove or refute the conjecture η(C_p^3) = 8(p−1)+1; in this round the main concrete advance was fixing a flawed use of Minkowski by replacing it with an elementary pigeonhole/Blichfeldt-style lemma: because the lattice of kernel vectors has index p^3 in Z^8, any convex region containing at least p^3+1 integer points yields two points whose difference lies in that lattice, so one can always produce a nontrivial lattice difference from two short vectors in the scaled simplex pK. However, converting such a difference (which may have positive and negative coordinates) into a genuinely nonnegative kernel vector requires a standard trick u = w^+ + (p−1)w^-, and that can blow up the L1-length by a factor on the order of p, reproducing the previously observed Θ(p) scaling barrier; the turn clearly diagnoses and corrects a logical gap but does not overcome this core obstruction or produce the needed structural projection, so we have clarified the problem but not finished the proof. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.09** | Tokens: 25,310 in / 4,016 out
+
+### Round 3  (17:55)
+
+In this round I isolated the precise bottleneck: to refute the 8-point-support extremal construction one needs, for every 5-dimensional subspace V of F_p^8, a coset of the integer-lift Λ_V that contains two distinct lattice points inside the simplex T_p = {nonnegative integer 8-tuples summing to ≤ p} which are comparable coordinatewise — such a pair would yield a short nonnegative kernel vector and kill the conjecture for large p. I proved a clean, general upper bound on antichains in T_p (the largest family with no comparable pair lies inside a single fixed-sum “level”), and by counting showed why any naïve pigeonhole/projection argument cannot force such a comparable pair: T_p has about Θ(p^8) points and there are p^3 cosets (so only about Θ(p^5) points per coset on average), while the largest antichain has size Θ(p^7), leaving a quantitative gap of about Θ(p^2) — so coset-by-coset counting cannot guarantee comparability. Computational checks still match the conjecture for p=3 and p=5, but random searches for p=7 found no extremal 8-point support, so the truth for larger p remains open. Verdict: (yellow) = clear structural progress and a precise obstruction identified, but the key “chain-in-a-coset” lemma is unresolved and the standard counting route is provably insufficient.
+
+**Cost so far: $0.12** | Tokens: 43,629 in / 5,644 out
+
+### Round 4  (17:58)
+
+Round summary (plain language): The team is trying to prove or disprove the conjecture that every sequence of length 8(p−1)+1 in the 3-dimensional vector space over the field with p elements must contain a nontrivial subsequence summing to zero (this holds for p=3 and p=5 by computation). In the last round the worker performed a symbolic feasibility check showing that a straightforward polynomial-method attack (Chevalley–Warning / Combinatorial Nullstellensatz) that tries to encode the integer “ℓ1-weight ≤ p” constraint using only 8 coefficient variables cannot meet the CW degree condition: encoding the required weight-filter forces polynomial degree on the order of p, so the CW sum-of-degrees < 8 criterion fails for all moderately large primes, killing that naive route. The evaluator asked for one concrete new step; I therefore attempted a different concrete, limited structural move: classify possible 8-point supports up to linear change-of-coordinates and split into the 1D/2D/3D span cases. That quick classification immediately rules out 1D supports (trivial) and reduces 2D supports to the planar problem (which is already well-understood and does not produce new extremal examples), leaving only genuinely 3D supports to examine; no contradiction or full proof emerged from that hand-analysis, but it does narrow the search dramatically and points to the next concrete action — a symmetry-reduced computer search over GL(3,p)-inequivalent 8-point support types for p=7 (and beyond). Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.16** | Tokens: 66,262 in / 7,892 out
+
+### Round 5  (18:00)
+
+Round goal: decide whether the invariant η(C_p^3) equals 8(p−1)+1 for all primes p≥3 (computations show it holds for p=3 and p=5), with the added difficulty that naive averaging/projection arguments are known to hit a linear-in-p barrier so any resolution must use a structural projection or a different idea. In this round I proved a concrete new structural lemma: any 8-point multiset A in F_p^3 whose (p−1)-fold repetition has no nontrivial zero-sum subsequence of length ≤ p cannot contain three collinear points. The proof is simple and field-theoretic: if three points u,v,w are collinear then there is an affine relation u+v−2w=0, and rewriting −2 as p−2 gives a zero-sum that uses 1 copy of u, 1 of v and p−2 of w, totaling p terms—contradicting short-zero-sum-freeness—so no collinear triple can occur. Thus any extremal 8-point support must be a “cap” (no three on a line), which is a strong geometric restriction and helps explain why random searches for p=7 find no candidate; the next steps are to rule out other small affine configurations that similarly produce short zero sums (e.g. relations like u+v+w=3t when convertible to p terms) and then combine these obstructions with finite-geometry bounds on caps/arcs to either prove impossibility for p≥7 or exhibit a counterexample. Vibe check: (green)
+
+**Cost so far: $0.18** | Tokens: 92,726 in / 9,011 out
+
+### Round 6  (18:02)
+
+We tried to advance the problem of proving (or refuting) the conjectured formula for η(C_p^3) by asking a worker to first run a concrete linear-algebra check (Smith normal form of a 3×8 integer matrix, an explicit ℤ-basis for its integer kernel, and then enumerate the nonzero kernel vectors mod 7 to find the minimal ℓ1 weight and a witness), but instead the worker spent the turn drafting a broader “configuration-exclusion” lemma that aimed to rule out certain balanced affine relations; that lemma turned out to be flawed (they correctly caught that converting negative coefficients to allowed nonnegative multiples blows up the length by Θ(p)), and they never ran the requested computations — the evaluator told them to stop hand-waving and produce Python-backed exact results. So the round produced a useful diagnostic (the attempted lemma surfaces why naive coefficient manipulations fail and why any successful argument must be structurally careful), but it did not deliver the required numeric verification yet; the immediate next step is to run the explicit SNF/kernel computations in code as requested. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.24** | Tokens: 123,324 in / 11,286 out
+
+### Round 7  (18:04)
+
+We couldn't run computations in this thread, so the theorist issued a precise computational request and then did the algebraic part by hand: they solved the 3 linear constraints on the 8 unknowns and wrote every solution in terms of five free parameters, explicitly giving five integer vectors that generate the entire integer solution space; this both pins down the structure of all potential zero-sum relations for the chosen 8-point support and gives a clear target for the COMPUTER thread to check (compute Smith normal form and search for the shortest nontrivial solution mod 7, etc.). The evaluator approved the step as concrete progress and asked to continue with the planned computations; however, the main conjecture (η(C_p^3)=8(p−1)+1 for all primes p≥3) remains unresolved—this round produced a useful structural reduction that enables decisive computation, but no final proof or counterexample yet. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.28** | Tokens: 158,488 in / 12,796 out
+
+### Round 8  (18:06)
+
+We’re trying to decide whether the smallest length that forces a nontrivial zero-sum in (Z/pZ)^3 is 8(p−1)+1 for every prime p≥3, and after checking p=3 and p=5 the current round produced a new structural constraint: for p≥5 any 8-point “extremal” support A whose multiset A^{[p−1]} is short-zero-sum-free cannot contain four distinct points u,v,w,t with u+v+w=3t, because that gives a length-p zero-sum (u+v+w+(p−3)t=0); combined with the already-known no-3-collinear-triples condition this means an extremal A must be both a cap and “3‑centroid‑free,” a much stronger geometric restriction that plausibly explains why random searches for p=7 found no candidate 8‑point support; the plan is to extend the same reasoning to forbid any k-to-1 affine centroids for small k (so a1+...+ak = kt) and then use finite‑geometry incidence/counting arguments (plus targeted computations the worker requested: SNF/kernel checks for a specific 3×8 matrix and a GL(3,7)-reduced exhaustive search on 8‑point supports) to either prove the pattern fails for p≥7 or deduce a contradiction proving the formula for all p. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.31** | Tokens: 197,154 in / 13,821 out
+

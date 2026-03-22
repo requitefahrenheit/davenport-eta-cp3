@@ -1,0 +1,48 @@
+# Research Briefing (CONSTRUCTOR thread)
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+
+---
+
+### Round 1  (03:38)
+
+I implemented and validated the core engine needed to answer your question: a bitset dynamic-program that encodes C7^3 as 343 integers, precomputes the addition table, and tracks which group sums are achievable with 1…7 terms using 343-bit integers; it correctly reproduces the known 7-point ×6 (length 42) zero-sum-free construction and also rejects a random 8-point ×6 example (so the detector is behaving). I haven’t yet proven that no 8-point support with multiplicity 6 exists (the random trials you ran and my single random check suggest scarcity), so next I’m implementing a symmetry reduction (fix a GL(3,7) basis to preset three support points) plus cheap prefilters (antipodal/affine-cap/kernel-weight tests) to cull the space before running the full DP; with those in place I plan a large batch (order 10^7 supports) and will escalate or exhaustively search remaining survivors if any appear. In short: the toolchain is working and a concrete search plan is ready, but the core negative claim (no 8-support ×6 extremal) is not yet proven or disproven. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.07** | Tokens: 19,645 in / 2,440 out
+
+### Round 2  (03:41)
+
+We added two very fast geometric filters to prune candidate 8-point supports in C7^3 — rejecting any set that contains a pair of antipodal points (v and −v) or any collinear triple — and ran 200,000 random completions of a fixed basis through them: about 92.8% pass the antipodal test and about 66.4% pass both filters, so these cheap checks discard only roughly one third of candidates and leave an astronomically large search (≈8×10^9 after fixing a basis), meaning they’re helpful but far from decisive; we have not yet proven that no 8-element support at multiplicity 6 is short-zero-sum-free (no “extremal” support has been found so far in the random searches, including your earlier 3k trials), and the next concrete step is to implement a meet-in-the-middle “kernel-weight” obstruction that computes the 5-dimensional kernel of the 3×8 support matrix over F7 and efficiently searches for short-weight kernel vectors (coordinate-sum ≤7) to eliminate many more supports — we’ll profile it on large samples to estimate rejection power and only then attempt any exhaustive pass — (yellow) = working but unclear if productive.
+
+**Cost so far: $0.12** | Tokens: 43,061 in / 4,628 out
+
+### Round 3  (03:46)
+
+I implemented and machine-checked the kernel-weight obstruction (enumerating all 3002 coefficient patterns with total weight 1..7) and integrated it with the existing antipodal and affine-cap filters; on a random test of 10,000 8-element supports (pre-filtered by antipodal+cap) 6,570 passed the quick filters but only 19 survived the kernel-weight test (≈0.29% of that pool), so the new filter rejects ≈99.7% of candidates at that stage and cuts the GL-fixed search space from ~1.22×10¹⁰ to an expected ~2.2×10⁵ survivors — small enough to finish the final bitset-DP verification (we already have a 343-bit DP implemented; one DP run ≈0.05 ms so scanning the survivors is ≈11 s CPU). I have not yet completed the exhaustive scan, so I have not proven that no 8-element support with multiplicity 6 exists (nor found one); the work this turn makes that final check tractable and I will run the full enumerator next. Vibe check: (yellow) = working but not yet conclusive.
+
+**Cost so far: $0.21** | Tokens: 82,822 in / 7,630 out
+

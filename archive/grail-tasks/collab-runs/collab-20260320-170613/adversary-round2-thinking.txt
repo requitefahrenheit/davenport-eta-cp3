@@ -1,0 +1,297 @@
+
+============================================================
+BLOCK 1 (660 chars)
+============================================================
+Let me understand my role: I'm the ADVERSARY in a multi-agent mathematical research collaboration. My job is to break things - find counterexamples, disprove lemmas, and find the exact boundaries where things fail.
+
+This is Round 2 of 3. The key tasks for me are:
+
+1. Test whether the window formula ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ holds universally for ALL 8-element sets (not just A₈)
+2. Construct counterexamples if possible
+3. For p=7, try to construct 8-element sets B with w=3 such that j ∉ [2,2]
+
+
+4. Attack the boundary cases where w > p/2
+
+I should start by searching for existing findings and prior work, then run computational attacks to probe these weak points.
+
+============================================================
+BLOCK 2 (101 chars)
+============================================================
+Let me read the rest of the u1_analysis.md and look for any prior round files from the collaboration.
+
+============================================================
+BLOCK 3 (113 chars)
+============================================================
+Let me read the most recent adversary reports and cross-pollination files to understand what's been done already.
+
+============================================================
+BLOCK 4 (181 chars)
+============================================================
+Good. Now let me read the cross-pollination from other agents in this current round and the most recent adversary round from the prior collaboration to understand the state of play.
+
+============================================================
+BLOCK 5 (1343 chars)
+============================================================
+Now I have good context. Let me understand the situation:
+
+1. **Window formula** ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ on line L is verified at all primes p ≤ 29. The theorist's job is to prove it.
+
+2. **A8 uniqueness** (U2) is FALSE for p ≥ 5 — there are multiple GL-inequivalent strongly ZSF 8-sets. This was a key finding from Adversary Round 3.
+
+3. **U1 (two-fiber forcing)** has been attacked but not broken computationally at small primes.
+   
+The computer reported 24 alleged counterexamples to U1 in F₅⁴, though this might stem from a definition mismatch. My Round 2 priorities are to test whether the window formula holds across all 8-element sets beyond just A8, construct a counterexample if it fails for some variant, hunt for 8-element sets B in F₇ with w=3 where j falls outside [2,2], and probe boundary weights w > p/2. Since A8 lacks uniqueness for p ≥ 5, this becomes the critical direction.
+
+The real risk is that the window formula might break for strongly ZSF 8-sets that aren't GL-equivalent to A8, which would mean U1 depends on U2—contradicting the proof structure. I need to enumerate non-A8 strongly ZSF 8-sets at p=5 and p=7, verify the window formula for each, test U1 on 17-sets using these alternative bases, and leverage the swap theorem's flexibility to construct 3-fiber strongly ZSF 17-sets. Writing targeted attack scripts now.
+
+============================================================
+BLOCK 6 (1844 chars)
+============================================================
+This is HUGE! The 3-fiber swap attack is showing massive numbers of survivors at p=5. Let me read the full output to understand what's happening. It seems like every single swap from doubled+e1 to fiber 2 is surviving! This would mean U1 is completely FALSE.
+
+But wait - I need to be very careful here. Let me think about what doubled+e1 actually is and what the swap theorem says.
+
+The doubled+e1 construction in F_p^4 is:
+- Fiber 0: {(0, v) : v ∈ A8} (8 vectors)
+
+
+- Fiber 1: {(1, v) : v ∈ A8} (8 vectors)  
+- e1 = (1, 0, 0, 0) (1 vector in fiber 1)
+
+Total: 17 vectors in 2 fibers.
+
+The swap theorem says: replacing (f, t) with (f', t) for any f' ≠ f preserves strongly ZSF, provided no proportional pair is created. So when I swap vector (0, 1, 0, 0) from fiber 0 to fiber 2, I'm getting (2, 1, 0, 0), and I need to check if this creates any proportional pairs or violates the ZSF property.
+
+My code indicates this configuration is still strongly ZSF, which would mean U1 is false. But I'm realizing I need to be much more careful here—the swap theorem I proved earlier was specifically for swaps within the {0, 1} fiber structure, not for moving vectors to entirely new fibers like fiber 2. The theorem statement claims it works for ANY f' ≠ f, so I need to verify whether that actually includes fibers outside the original doubled construction. The swap theorem predicts that single swaps to fiber 2 should preserve strong ZSF, which my computation confirms, but it only guarantees this for single swaps—double swaps were only verified exhaustively at p=5 and p=7. If my code is finding double-swap survivors that create 3-fiber strongly ZSF sets, that would directly contradict U1. I need to carefully examine the output to verify these are genuine 3-fiber configurations and understand how many exist across different fiber combinations.
+
+============================================================
+BLOCK 7 (12911 chars)
+============================================================
+This is incredibly important! Every single swap to fiber 2 creates a 3-fiber strongly ZSF 17-set. And double swaps to fiber 2 also survive. This would mean U1 is FALSE.
+
+But WAIT. I need to be EXTREMELY careful with my DP. Let me verify this independently. The DP check might have a bug. Specifically, I need to make sure:
+
+1. The zero-sum definition is correct: c_1*v_1 + ... + c_17*v_17 = 0 in F_p^4, where 0 <= c_i <= p-1 and sum(c_i) = w for some 1 <= w <= p.
+
+
+2. My DP correctly tracks all achievable (weight, sum) pairs.
+
+Let me trace through the DP logic more carefully. For each vector, I'm iterating through all current states and trying to add 0 through p-1 copies of that vector, accumulating the result. The concern is whether a state (w, s) after processing all vectors truly represents all possible coefficient combinations that sum to weight w and produce sum s.
+
+Actually, I think the DP is sound. When I process vector i, I'm extending every state from vectors 0 through i-1 by using vector i between 0 and p-1 times. This correctly models the knapsack-style constraint where each vector can be used multiple times up to p-1.
+
+The real question is whether my DP correctly captures the zero-sum condition: I need sum of c_i * v_i = 0 in F_p^4 where the coefficients sum to w and each c_i is between 0 and p-1.
+
+Let me trace through the logic once more. After processing vectors 0 through k, dp[w] contains all possible vector sums achievable with coefficients summing to w. So the final check is straightforward: if (0,0,0,0) appears in dp[w] for any w between 1 and p, then the set has a zero-sum at that weight.
+
+I should verify this against a concrete example to make sure the implementation matches the theory.
+
+Now I'm realizing the critical distinction: the swap theorem guarantees that single swaps preserve the strongly ZSF property, and double swaps within the same fiber pair were exhaustively verified at p=5. But the question of whether double swaps to a completely different fiber—like jumping to fiber 2—also preserve strongly ZSF is what I'm actually testing here. My results suggest they do, which would be remarkable. Let me push the computation further to see if this pattern holds. an independent verification with a completely different approach.
+
+Actually, wait. Let me think about what "strongly ZSF" means in context.
+
+The claim is that the set S = {v_1, ..., v_17} in F_p^4 has no zero-sum at weight <= p. A zero-sum at weight w means: there exist c_1, ..., c_17 in {0, ..., p-1} with sum(c_i) = w and sum(c_i * v_i) = 0 in F_p^4.
+
+Now, the original doubled+e1 has this property. If I move one vector from fiber 0 to fiber 2, the TAIL (last 3 coordinates) is unchanged. Only the FIRST coordinate changes. So the zero-sum equation in the first coordinate changes.
+
+For the original config, a zero-sum requires sum(c_i * first_coord(v_i)) = 0 mod p. The original first coordinates are eight 0's, eight 1's, and one 1. If I swap v_0 from first coordinate 0 to first coordinate 2, the equation becomes 2*c_0 + sum_{i=8}^{16} c_i = 0 mod p, whereas originally it was just sum_{i=8}^{16} c_i = 0 mod p.
+
+The original constraint forces the fiber-1 coefficients to sum to 0 mod p. The new constraint allows the fiber-1 sum to be non-zero as long as c_0 compensates. This could actually make zero-sums easier to achieve, not harder. So the modified set might NOT be strongly ZSF.
+
+But wait—the DP confirms these sets are still strongly ZSF with no zero-sum at weight ≤ p, so that extra flexibility doesn't help after all.
+
+The key insight is that with 3 fibers, the first-coordinate equation becomes 2*c_{fiber2} + 1*c_{fiber1} ≡ 0 mod p, which has more solutions than the 2-fiber case where c_{fiber1} ≡ 0 mod p was mandatory. This means there are more candidate weight-w zero-sums to check in the 3-fiber case, yet the tail equations still manage to block all of them.
+
+This aligns with what the swap theorem predicts: the tail equations are the real constraint, while the fiber coordinate just adds another layer of restrictions.
+
+So for U1—which claims every strongly ZSF 17-set in F_p^4 lives in at most 2 hyperplane fibers—my computation shows there exist strongly ZSF 17-sets using 3 fibers, which would make U1 false. But I need to reread the exact statement carefully, particularly the phrase about coordinate projections.
+
+The claim is actually that if 17 nonzero vectors span 3+ fibers under any coordinate projection, the set must contain a zero-sum of weight ≤ p. My construction spreads 17 vectors across 3 fibers under the first projection and has no such zero-sum, so U1 fails for that projection. However, U1 requires this to hold under *every* coordinate projection simultaneously—so maybe under a different projection, the same set collapses to 2 fibers? That would make the statement vacuously satisfied for the first projection, but I need to check what U1 actually says.
+
+Reading U1 more carefully: the contrapositive tells me that if a set is strongly ZSF (no zero-sum of weight ≤ p), then under every coordinate projection it must use at most 2 fibers. So I need to verify whether my 3-fiber construction actually avoids zero-sums under all projections, not just the first one. , does there exist SOME other projection under which it uses only 2 fibers? That would be consistent with U1.
+
+Actually no. U1 says the set lives in at most 2 fibers. This means: there exists a projection such that the set uses at most 2 fibers. The "equivalently" statement says: if under SOME projection the set uses 3+ fibers, it must have a zero-sum.
+
+Wait, the "equivalently" reads: "if you distribute 17 nonzero vectors across 3+ fibers (under any coordinate projection F_p^4 → F_p), the resulting set MUST contain a zero-sum of weight ≤ p."
+
+"under any" here means "for any choice of projection." So if there exists ANY projection where the 17 vectors use 3+ fibers, the set must have a zero-sum.
+
+Under the first coordinate projection π₁, my 3-fiber set uses fibers {0, 1, 2}. That's 3+ fibers. So U1 says it MUST have a zero-sum at weight ≤ p. But my DP says it DOESN'T.
+
+So the question is whether "under any coordinate projection" means: for every projection, if it uses 3+ fibers then there's a zero-sum, or whether it means: if there exists any projection where it uses 3+ fibers, then there's a zero-sum. The phrasing suggests the latter interpretation—that a single projection with 3+ fibers is enough to trigger the zero-sum requirement. for EVERY projection π, if π gives 3+ fiber values, then the set has a zero-sum.
+
+Under projection π₁ (first coord), my set uses 3 fibers. U1 would predict a zero-sum. My DP says no zero-sum. So U1 IS FALSE.
+
+Actually, let me re-read the original conjecture statement one more time:
+
+"Every strongly ZSF set of size 2α+1 = 17 in F_p^4 lives in at most 2 hyperplane fibers."
+
+This means: for every strongly ZSF 17-set S in F_p^4, there exists a hyperplane H such that S is contained in at most 2 cosets of H. In other words, there exists a linear form l: F_p^4 → F_p such that |{l(v) : v ∈ S}| ≤ 2.
+
+But my 3-fiber set has |{first_coord(v) : v ∈ S}| = 3. This doesn't disprove U1 unless I can show that for EVERY linear form l, |{l(v) : v ∈ S}| ≥ 3.
+
+The key insight is that U1 claims there EXISTS a linear form giving at most 2 fibers. My set uses 3 fibers under π₁, but maybe another linear form gives only 2 fibers. Let me check whether every linear form on my p=5 example (constructed by moving v_0 from fiber 0 to fiber 2) produces at least 3 fibers.
+
+I'm listing out all 17 vectors in the set and checking their projections under different linear forms. Now I'm checking whether any linear form could compress this set down to just two fiber classes. Let me test a general form like (1, 1, 0, 0) and see what values it produces across all vectors—that gives me five distinct outputs, which is worse than the coordinate projections. So the real question becomes: is there any linear functional at all that can partition these vectors into at most two fibers?
+
+If no such functional exists, then U1 is definitively false, even for a single strongly ZSF 17-set with three or more fibers under the first coordinate. But if some other hyperplane does achieve two fibers, then U1 could still hold—the set would just be living in a different pair of parallel fibers than what the coordinate projections reveal. Reading the problem more carefully, "lives in at most 2 hyperplane fibers" seems to mean the set is contained in the union of two parallel translates of some hyperplane, which is equivalent to saying there exists a linear functional that takes on at most two values on the set.
+
+So U1 fails only if I can construct a strongly ZSF 17-set where every possible linear functional takes at least three values. Let me test this against my construction: the original doubled+e₁ configuration uses exactly two fibers under the first coordinate, but when I move one vector from fiber 0 to fiber 2, I get three values under that projection. However, a different linear functional might still capture just two values on this modified set. Checking the first coordinate functional specifically, I'm getting a distribution across multiple values.
+
+Now I'm testing what happens with different linear functionals on this set. Any functional depending only on the first coordinate will necessarily see three distinct values since the set has elements spread across three different first coordinates. This suggests the construction might actually satisfy the condition for U1 to be false. I have vectors with first coords 0, 1, 2).
+
+What about l = (0, a, b, c) that ignores the first coordinate? The image of S under such l is: {a*tail_coord + b*... + c*...}. The tails of our vectors are exactly A8 (for fibers 0 and 1) plus (1,0,0), (0,1,0), (0,0,1), etc. for fiber 1, plus (0,0,0) for e1.
+
+Actually, the 17 tails are: A8 (8 tails from fiber 0), A8 (same 8 tails from fiber 1), and (0,0,0) from e1. So the multiset of tails has A8 appearing twice and (0,0,0) once. Under any l = (0, a, b, c), the image becomes the set of all linear combinations of A8's elements under this form, plus 0. Since A8 contains 8 distinct vectors in F_5^3, a generic linear form will produce 8 or 9 distinct values in the image, so |l(S)| ≥ 8 for most choices.
+
+Now I'm checking what happens when l = (1, a, b, c) includes the first coordinate, starting with the swapped set where v_0 = (2, 1, 0, 0). a=b=c=0, this gives many values. So the original set lives in 2 fibers ONLY under l = (scalar, 0, 0, 0).
+
+For the swapped set, under l = (scalar, 0, 0, 0), we get {0, scalar, 2*scalar} = 3 values (assuming scalar ≠ 0). And under any l with nonzero tail part, we get ≥ 8 values.
+
+So the swapped set lives in 3+ fibers under EVERY linear form! This means U1 is genuinely FALSE!
+
+Let me verify this more carefully. Could there exist an l = (a, b, c, d) with |l(S)| ≤ 2? I need to check the 17 vectors after swapping v_0 to fiber 2 with p=5.
+
+Now I'm examining what values each vector produces under a general linear form l. c + d
+v₇ = (0, 4, 1, 2): l(v₇) = 4b + c + 2d
+v₈ = (1, 1, 0, 0): l(v₈) = a + b
+v₉ = (1, 0, 1, 0): l(v₉) = a + c
+v₁₀ = (1, 0, 0, 1): l(v₁₀) = a + d
+v₁₁ = (1, 4, 1, 1): l(v₁₁) = a + 4b + c + d
+v₁₂ = (1, 1, 1, 0): l(v₁₂) = a + b + c
+v₁₃ = (1, 1, 0, 1): l(v₁₃) = a + b + d
+v₁₄ = (1, 4, 2, 1): l(v₁₄) = a + 4b + 2c + d
+v₁₅ = (1, 4, 1, 2): l(v₁₅) = a + 4b + c + 2d
+v₁₆ = (1, 0, 0, 0): l(v₁₆) = a
+
+Now I'm looking at the constraint that all 17 vertices need to map to at most two values α and β under the linear functional l. Since l is nonzero, at least one of the coefficients a, b, c, d must be nonzero.
+
+Starting with the case where a ≠ 0, I can rescale so a = 1, which means v₁₆ maps to 1. Setting α = 1, I need v₁ = c and v₂ = d to both be in {1, β}. If both c and d equal 1, then v₃ = 4b + 2, v₄ = b + 1, and v₅ = b + 1. For v₄ to map to either 1 or β, if b + 1 = 1 then b = 0, which gives v₃ = 2, v₆ = 3, and v₇ = 4.
+
+But this forces {1, 2, 3, 4} to all be in {1, β}, which is impossible since β can't simultaneously equal 2, 3, and 4. So instead b + 1 = β, meaning v₃ = 4b + 2 must equal either 1 or β. If 4b + 2 = 1, then solving in F₅ gives b = 1, which I'm now checking for consistency.
+
+With b = 1, I get β = 2. Testing the sequence: v₆ through v₁₁ all evaluate to 2, matching β, but v₁₂ = 3, which isn't in {1, 2}. This case fails.
+
+For case 1b with c = 1 and d = β, I'm working through the constraints on b, but the algebra is getting unwieldy. I think the better approach is to write code that systematically checks all possible linear forms at p = 5 and finds which one minimizes the number of fibers.
+
+Since there are 156 projective equivalence classes of nonzero linear forms in F₅⁴ (or 624 nonzero forms total, which is still fast to check), I'll verify this computationally rather than continuing with case analysis.
+
+============================================================
+BLOCK 8 (7273 chars)
+============================================================
+This is DEVASTATING for U1. The results are:
+
+1. **Every single swap** from doubled+e1 to ANY fiber ≥ 2 produces a strongly ZSF 17-set with minimum 3 fibers under ANY linear form.
+
+2. **Double swaps** to fiber 2 also survive with min 3 fibers.
+
+3. **4-fiber configurations** (swaps to fibers 2 AND 3) also survive with min 3 fibers.
+
+This means U1 is CONCLUSIVELY FALSE at p=5. Not just "could be false" — EVERY swap creates a counterexample.
+ 
+I need to be careful here though. Let me verify this with an independent implementation and check if the same pattern holds at p=7. Actually, let me trace through the simplest case manually — swapping just the first element from fiber 1 to fiber 2 — to make sure I'm not missing something in my logic. None of these vectors in fiber 1 can be proportional to (2, 0, 0, 0) since they all have nonzero components in the tail positions. Looking at fiber 0, I see similar vectors like (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1), and others—none of which would be proportional to (2, 0, 0, 0) either.
+
+Now I'm realizing that (2, 0, 0, 0) actually replaces (1, 0, 0, 0) in the output, which is fine since we still have a valid 17-vector set. Let me trace through why this substitution happens.
+
+For the tail equation in F_5^3, the contributions from fiber-0 and fiber-1 vectors both involve the same tail structure A8, while the fiber-2 vector (2, 0, 0, 0) has a zero tail, so it doesn't affect the tail constraint. This means the tail equation only depends on the coefficients and tails from the first two fibers.
+
+For the first-coordinate constraint, the original construction requires sum_{fiber1} c_i ≡ 0 mod 5, but the swapped version adds a 2*c_16 term, giving sum_{fiber1} c_i + 2*c_16 ≡ 0 mod 5. So any zero-sum vector must satisfy both the tail equation (which ignores c_16) and this modified first-coordinate equation. The tail equation is independent of c_16 since it only involves the first 16 vectors, so I can find a tail-zero combination using c_0 through c_15, then choose c_16 to satisfy the first-coordinate constraint. The difference between the original and swapped versions is just how c_16 enters the first-coordinate equation—with coefficient 1 versus 2—which changes the required value of c_16 and thus the weight it contributes.
+
+Both versions satisfy the strong ZSF property with no zero-sum at weight ≤ 5, but they differ in their fiber structure under π₁: the original lives in 2 fibers while the swapped version spans 3 fibers.
+
+This counterexample definitively disproves U1. The implications are significant—if U1 is false, then the proof chain for Conjecture U breaks, though the overall conjecture about η(C_p^{r+1}) might still hold true through a different approach.
+
+Since everything else in the proof is already established, I need to find what argument could replace U1, and I should verify this finding at p=7 as well. But first, let me carefully reconsider what "strongly ZSF" actually means in this context.
+
+Looking back at the definitions: weakly ZSF means no zero-sum at weight ≤ p-1, while strongly ZSF means no zero-sum at weight ≤ p. The research goal states that if 17 nonzero vectors are spread across 3+ fibers under any coordinate projection, the set must contain a zero-sum of weight ≤ p. My dynamic programming checks exactly this weight bound, and my counterexamples are sets with no zero-sum at weight ≤ p—so there's a potential mismatch in how "zero-sum" is being defined, whether it requires coefficients in {0,1} or allows a broader range.
+
+After clarifying that the standard definition uses coefficients in {0, ..., p-1} with weight equal to their sum, and that my DP correctly implements this for the Davenport/eta-constant framework, I should verify the result at p=7 to strengthen it and explore 5-fiber configurations. The key insight is understanding what makes the 2-fiber case fail when extended to 3+ fibers.
+
+For 2 fibers, the first coordinate constraint forces the sum of coefficients in fiber-1 to be divisible by p, which severely limits what's possible at small weights. With at most 9 fiber-1 vectors and weight bounded by p, this constraint becomes tight enough to prevent zero-sums.
+
+When the fiber-1 sum is 0, I'm back to a single-fiber problem on A8 that's already known to be zero-sum-free. When it equals p, all fiber-0 coefficients vanish and the weight must be exactly p, but A8 in fiber-1 can't support a weight-p zero-sum due to strong zero-sum-freeness. This is the 2-Fiber Elimination Theorem.
+
+Now extending to 3 fibers introduces similar constraints on the coordinate sums across each fiber. The fiber-2 vector has a zero tail, so it doesn't actually constrain the tail equation—only the fiber-0 and fiber-1 vectors matter there, and the strong ZSF property still blocks all-zero solutions. The fiber-2 term only affects the first-coordinate equation, where c_16 adjusts to compensate, which is why swapping a vector's fiber doesn't create new zero-sums.
+
+For the e1 swap specifically, since e1 has a zero tail, the argument applies directly. When swapping other vectors like (0, 1, 0, 0) to fiber 2, the tail becomes (1, 0, 0), but there's already a matching tail in fiber 1 from vector (1, 1, 0, 0), so the tail equation still involves the same structure.
+
+The key difference emerges in the first-coordinate equation: originally c_0 didn't appear in this constraint, but after the swap, it does—the equation becomes 2*c_0 + sum of fiber 1 coefficients ≡ 0 mod p, which is a genuinely new constraint.
+
+This constraint actually determines c_0 uniquely in terms of the fiber-1 sum, removing its freedom. Since the original setup had c_0 as a free variable in the first-coordinate equation, the swap shrinks the solution space. The tail equation stays the same, so overall there are fewer candidate zero-sums, which explains why the strongly ZSF property is preserved—single swaps make it harder, not easier, to construct zero-sums.
+
+Now I'm checking whether this logic holds at p=7 and considering more extreme constructions. With only 5 possible fiber values at p=5, I'm wondering if I can distribute all 17 vectors across different fibers to test the limits of this approach. 17 vectors, by pigeonhole, at least 4 vectors must share a fiber. So the maximum number of fibers is 5.
+
+Let me try to construct a 5-fiber strongly ZSF 17-set at p=5.
+
+Actually, this might be hard since we need to avoid proportional pairs. Two vectors with the same tail are proportional only if they're identical—the tail coordinates force the proportionality ratio to be 1. But vectors with all-zero tails are always proportional to each other, so I can include at most one such vector.
+
+For the nonzero-tail vectors, I have more freedom: I can distribute them across fibers as long as no two vectors in the same fiber are proportional. Since each fiber corresponds to a different tail, vectors in different fibers automatically have different tails, so they can't be proportional. Within a fiber, I just need to ensure the head coordinates differ.
+
+With the doubled construction giving me two copies of each A8 vector, I can spread these 16 copies plus the single e1 vector across all 5 fibers. Let me verify this works computationally at p=7 to see if the pattern holds.
+
+============================================================
+BLOCK 9 (8347 chars)
+============================================================
+This is comprehensive. Let me summarize what I've found:
+
+1. **U1 is FALSE at p=5**: 17/17 single swaps to fiber 2 create strongly ZSF 17-sets with minimum 3 fibers under ALL linear forms.
+
+2. **U1 is FALSE at p=7**: Same result, verified for 5 representative swaps.
+
+3. **5-FIBER strongly ZSF 17-sets EXIST at p=5**: By moving 3 vectors from fiber 0 to fibers 2, 3, 4, we get a 5-fiber (= all fibers used) strongly ZSF 17-set.
+   
+4. The minimum fiber count is always exactly 3 across all linear forms — a clean lower bound arising from the doubled+e1 construction's 8 distinct tails from A8 appearing twice each, plus the zero tail. Since these 8 tails span F_p^3, no linear form can collapse them to fewer than 3 values.
+
+For linear forms that ignore the first coordinate like (0, b, c, d), the image depends only on the tails: the 8 distinct A8 tails plus (0,0,0) must map to at least 3 values under any nonzero (b,c,d). But I need to verify whether a form like (0, b, c, d) can actually collapse the A8 tails down to just 2 values — let me check what happens with specific tail vectors. -1,1,1), (1,1,0), (1,0,1), (p-1,2,1), (p-1,1,2). Under l = (0,0,0,1): values are 0, 0, 1, 1, 0, 1, 1, 2 = {0, 1, 2}. That's 3 values. Plus (0,0,0) maps to 0. So |l(S)| = 3.
+
+Under l = (0,1,0,0): values are 1, 0, 0, p-1, 1, 1, p-1, p-1 = {0, 1, p-1}. Plus 0 from e1. At p=5: {0, 1, 4} = 3 values.
+
+Now I'm checking whether we can achieve exactly 2 values. The A8 tails span all of F_5^3, so any linear functional with nonzero coefficients on the tail coordinates must hit at least 2 distinct values. For a functional l = (0, b, c, d) to map all 8 tails to the same value, I'd need the eight outputs {b, c, d, -b+c+d, b+c, b+d, -b+2c+d, -b+c+2d} to collapse to a single value, which forces b = c = d and simultaneously -b+c+d = b, a contradiction.
+
+So the minimum is 3 values total: 0 from the zero tail, plus at least 2 from the A8 tails.
+
+Now if I allow a ≠ 0, the fiber-0 vectors map to b*t1+c*t2+d*t3 while fiber-1 vectors map to a+b*t1+c*t2+d*t3—they differ by exactly a for each tail value. To compress all 17 values down to just 2, I'd need the fiber-0 and fiber-1 outputs to overlap significantly, which seems impossible since they're offset by a constant a. ≤ 2 distinct values, we need:
+- All 8 tail values to be the SAME (say v)
+- Then l(S) = {v, a+v, 2a} (from zero-tail in fiber 2)
+- For |l(S)| ≤ 2: need either 2a = v or 2a = a+v
+
+But we showed that A8 tails can at most have 2 distinct l-values under (0, b, c, d). So if A8 tails map to {v1, v2}, then l(S) includes {v1, v2, a+v1, a+v2, 2a}. For 2 distinct values, we'd need v1 = v2 and a+v1 = v1 (so a=0), contradiction. Or we need more complex coincidences.
+
+The core issue is that A8 tails always span at least 2 distinct l-values under any nonzero (b,c,d), and once we include the fiber shift and zero tail, we're forced to have at least 3 values total—this is an absolute lower bound. So no strongly ZSF 17-set with the doubled+e1 structure can fit into 2 fibers under every linear form; the standard doubled+e1 only achieves 2 fibers under l = (1, 0, 0, 0) and its scalar multiples. But U1 only requires the existence of some linear form giving ≤ 2 fibers, which is a much weaker condition.
+
+The original doubled+e1 does have such a form, but my swapped versions don't—so U1 is false for those variants. This settles it conclusively. Now I need to trace through what this means for the entire proof chain: η(C_p³) = 8(p-1)+1 is proven, U2 about A8 uniqueness is false for p≥5 and irrelevant, U1 about the 3+ fibers bound is false, and the conjecture U remains open. So U1 is dead.
+
+But Conjecture U itself might still hold—it just needs a different approach. The conjecture claims η(C_p^4) = 17(p-1)+1, meaning any sequence of that length in C_p^4 contains a zero-sum subsequence of exactly length p, which is the Erdős-Ginzburg-Ziv constant for this group.
+
+The lower bound comes from the doubled+e1 construction: taking 17 vectors each with multiplicity p-1 gives 17(p-1) elements with no zero-sum of length p. For the upper bound, the strategy was to assume 17(p-1)+1 elements have no such zero-sum, compress to 17 non-proportional vectors with no weight-p zero-sum, then use U1 to show these must lie in 2 fibers—a contradiction. However, U1 turns out to be false, so the 17 non-proportional vectors don't necessarily satisfy that constraint.
+
+I need a different approach that handles 3 or more fibers. Instead of relying on fiber structure, I could use the polynomial method via Chevalley-Warning, which works directly on the algebraic geometry without caring about how vectors distribute across fibers. Alternatively, I could try a direct dynamic programming argument or induction on the number of fibers to show that any 17 non-proportional vectors must have a zero-sum of weight at most p.
+
+But my counterexamples are revealing something important: strongly ZSF sets with 3+ fibers do exist with exactly 17 vectors, which means the proof can't simply rule out 3+ fibers. The real insight is that these counterexamples are all variants of doubled+e1 and they're consistent with the conjecture because they have 17 vectors, which is below the threshold—the upper bound actually requires 18 non-proportional vectors to guarantee a zero-sum at weight ≤ p. So the proof needs to show that 18 non-proportional vectors in F_p^4 must have a zero-sum, which would make 17 the tight boundary.
+
+I'm realizing the proof strategy is more subtle than I initially thought. The pigeonhole argument gives us either a repeated vector with multiplicity ≥ p (trivial zero-sum) or at most 17 non-proportional vectors each appearing ≤ p-1 times, and then we'd need to use the structure of F_p^4 to find a nontrivial zero-sum. Since U1 is false, the "2-fiber implies structure" approach won't work, so I need to find a different angle to prove the conjecture holds.
+
+For the adversary report, the main takeaways are clear: U1 fails with explicit counterexamples at p=5 and p=7, the swap theorem systematically generates these counterexamples, and I've found 3-fiber, 4-fiber, and even 5-fiber strongly ZSF 17-sets. The minimum fiber count is exactly 3 under any linear form, and the window formula is irrelevant to U1 since it addresses a different question about A8 shadows. Before finalizing the report, I should verify whether adding any 18th vector to a 3-fiber 17-set always produces a zero-sum, which would give me insight into whether the conjecture η(C_p^4) = 17(p-1)+1 still holds.
+
+Looking at the η-constant more carefully: it's the smallest N such that every sequence of N elements from C_p^4 contains a zero-sum subsequence of length p. My doubled+e1 construction yields a sequence of 17(p-1) elements with no zero-sum of length p since each of the 17 vectors appears exactly p-1 times, establishing that η ≥ 17(p-1)+1. For the upper bound, I need to show that any sequence of 17(p-1)+1 elements must contain such a zero-sum. When I decompose by proportionality classes and track multiplicities m_i summing to 17(p-1)+1, the argument hinges on whether the pigeonhole principle forces a zero-sum across these classes.
+
+If any single class has multiplicity ≥ p, then p copies of that vector immediately give a zero-sum of length p in C_p^4. So assuming all multiplicities stay bounded by p-1, I can count: with k classes and each m_i ≤ p-1, the total is at most k(p-1). Since the total is 17(p-1)+1, I need k(p-1) ≥ 17(p-1)+1, which forces k ≥ 18. This means I have at least 18 distinct proportionality classes, each appearing at most p-1 times.
+
+Now I'm realizing the key issue: the claim that every strongly ZSF set of size 17 lives in exactly 2 fibers would actually prevent any size-18 set from being strongly ZSF at all. But my counterexamples show 17 non-proportional strongly ZSF vectors spread across 3 or more fibers, which contradicts that claim. So the threshold where the fiber constraint kicks in must be 18, not 17—the proof needs to work with 18 non-proportional vectors, not fewer. So if U1 is actually false, the entire proof strategy collapses and I need a fundamentally different approach. Let me write up the report with the counterexamples clearly laid out, and I should run one more independent verification to make absolutely sure I haven't made a computational error.
+
+============================================================
+BLOCK 10 (663 chars)
+============================================================
+PERFECT. All three independent implementations confirm:
+
+1. The counterexample (swap e1 to fiber 2) is strongly ZSF (no zero-sum at weight ≤ 5)
+2. No linear form gives ≤ 2 fibers (minimum is 3)
+3. The counterexample is MAXIMAL — can't add an 18th vector
+
+This means:
+- U1 is FALSE (with triple-verified explicit counterexample)
+- But the main conjecture η(C_p^4) = 17(p-1)+1 is still CONSISTENT (the counterexample is maximal at 17)
+
+
+- The real constraint is that maximal strongly ZSF sets have size ≤ 17, not that they must fit into 2 fibers—the fiber structure was a red herring. Now I need to update my notes, save the findings, and write up the final report.

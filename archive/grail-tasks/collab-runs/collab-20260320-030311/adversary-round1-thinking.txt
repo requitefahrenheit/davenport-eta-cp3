@@ -1,0 +1,697 @@
+
+============================================================
+BLOCK 1 (422 chars)
+============================================================
+The user wants me to act as an ADVERSARY in a mathematical research context. My job is to try to break things - find counterexamples, disprove lemmas, and find boundaries where proposed theorems fail.
+
+Let me start by:
+1. Searching Cortex for prior findings
+2. Reading the briefing document
+3. Then systematically trying to break the shadow saturation conjecture
+
+Let me begin by searching Cortex and reading the briefing.
+
+============================================================
+BLOCK 2 (164 chars)
+============================================================
+Now I have the full context. Let me also check the cortex v2 log for the specific entry about "shadow-saturation-false" which is very relevant to my adversary role.
+
+============================================================
+BLOCK 3 (225 chars)
+============================================================
+There are many relevant files. Let me read the previous adversary findings and the shadow saturation test results. Also I need to check the most recent collaboration round's adversary findings, and the various attack scripts.
+
+============================================================
+BLOCK 4 (25583 chars)
+============================================================
+I have a good picture now. Let me read the key attack scripts to understand what was tested and identify what hasn't been attacked yet. Let me also read the most recent collaboration results.
+
+The key findings from prior rounds:
+1. Shadow saturation holds at r=3 (p ≤ 23) and r=4 (p=5)
+2. The doubled+e1 construction appears unique
+3. The sign convention is resolved
+4. p=5 is razor-thin (44 barely-reachable targets)
+
+My job as adversary is to BREAK things. Let me identify the most vulnerable points:
+
+1. **Shadow saturation for ALL ZSF sets, not just doubled+e1**: The claim is that ANY ZSF set of 2α(r)+1 vectors has shadow covering all nonzero vectors. 
+
+The real vulnerability is that prior testing only examined the doubled+e1 construction—I need to check whether shadow saturation actually holds for other ZSF sets, and whether the uniqueness claim even matters if I can find a counterexample in a different family. The margin at weight p-1 versus p-2 is also suspicious; if saturation barely holds, that's a constraint on what the proof can achieve. The claim is that for any zero-sum-free set S of 2α(r)+1 nonzero non-proportional vectors in F_p^{r+1}, the weight-(p-1) shadow covers all of F_p^{r+1} \ {0}. But if the prior adversary found that doubled+e1 is the unique strongly ZSF set at p=5, then shadow saturation for that construction would automatically hold for all ZSF sets—unless "strongly ZSF" and "ZSF" are different conditions. Let me check the definitions more carefully to see what distinguishes them. and the total weight stays bounded by p. So a zero-sum-free set means no such coefficients can exist with those constraints. The shadow saturation claim is striking—it says that for any ZSF set of 17 vectors in F_p^4, the weight-(p-1) shadow covers all nonzero vectors, which is far stronger than just analyzing the doubled+e1 construction. I'm wondering whether there's a unique ZSF set of size 17 at general p, since at p=5 we found none besides doubled+e1, and at p=7 the search was inconclusive. If uniqueness holds, shadow saturation becomes a single verification problem, but proving it generally requires a different approach.
+
+The missing diagonal conjecture about which vectors escape the sumset in F_p^3 is verified up to p=19 but lacks a general proof. I'm also trying to determine whether I can construct a ZSF set where shadow saturation actually fails, which would either force the doubled+e1 construction to be unique or reveal a counterexample. The core logical structure hinges on showing that for any 18 nonzero non-proportional vectors in F_p^4, we can always find coefficients in the right range that produce a zero sum. I'm working through the shadow saturation condition—if the weight-(p-1) shadow of a 17-vector ZSF set covers all nonzero vectors in F_p^{r+1}, then any 18th vector v can be expressed as a weighted combination of the original vectors with coefficients summing to at most p-1, which would create a zero-sum constraint at weight ≤ p and prevent v from being added while maintaining the ZSF property. I see the issue now—if I add (p-1)*v18 to get a zero-sum, the total weight becomes 2p-2, which far exceeds the p-bound I'm trying to prove. Let me reconsider what the problem is actually asking for. ... + c_k <= p-1 and c_1*v_{i1} + ... + c_k*v_{ik} = v."
+
+So if we can reach v18 at weight ≤ p-1, then c_1*v_{i1} + ... + c_k*v_{ik} - v18 = 0. The coefficients on the v_{ij} are c_j ∈ {1,...,p-1}, and the coefficient on v18 is p-1 (representing -1). The total weight is Σc_j + (p-1) ≤ (p-1) + (p-1) = 2p-2. That's not ≤ p.
+
+Wait, I think the argument is different. If we can reach -v18 at weight ≤ p-1, then we get c_1*v_{i1} + ... + c_k*v_{ik} + v18 = 0 with weight Σc_j + 1 ≤ p. Since the shadow at weight p-1 covers all nonzero vectors including -v18, this means we can always find such a dependence at weight p. v18 is not among the vectors in the shadow representation since it's new and the shadow only uses S, so this construction is valid. The zero-sum has coefficients from {1,...,p-1} on the vectors from S and coefficient 1 on v18, giving total weight at most p.
+
+Now I need to verify whether shadow saturation actually holds. At p=5, the doubled+e1 construction satisfies shadow saturation, and since uniqueness was verified there (only one ZSF set of size 17), shadow saturation holds for all ZSF sets at that prime. For general p, I need either uniqueness of the ZSF set plus shadow saturation for doubled+e1, or some other approach.
+
+I'm wondering if there's a Cortex entry about shadow saturation being disproven or reframed. The most direct computational attacks would be finding a ZSF set where shadow saturation fails, discovering a ZSF set of size 18, or proving shadow saturation fails outright—any of these would significantly impact the proof strategy.
+
+Looking at what's actually testable: attack #1 is blocked by uniqueness at p=5 and the absence of non-standard sets at p=7; attack #2 has been exhausted at p=5 but not fully explored at p=7; attack #3 could push beyond p=19 for the doubled+e1 construction; and attack #4 is essentially untestable since no non-standard sets have surfaced. The proof strategy hinges on two main pillars, so I need to figure out which computational direction would be most revealing.
+
+Actually, rereading the core claim more carefully — it's asking whether shadow saturation holds for *all* ZSF sets of the required size, not just the doubled+e1 construction. That's a different question than uniqueness. At p=5 there's only one such set so the answer is trivially yes, but at p=7 I'd need to check whether all possible ZSF sets of size 17 exhibit shadow saturation.
+
+To approach this as an adversary trying to disprove the claim, I should either construct a ZSF set where shadow saturation fails, look for theoretical reasons why it must fail for some class of sets, or test edge cases like p=3 to see if the pattern breaks down there.
+
+At p=3, the ZSF condition becomes very tight with coefficients in {1,2} and weight ≤ 3, making the weight-2 shadow quite constrained. With 17 vectors in F_3^4 and each having multiplicity 2, I get 34 copies total, but I need to cover all 80 nonzero vectors using only weight-1 and weight-2 combinations—weight-1 alone gives just 34 vectors, so weight-2 contributions become critical.
+
+Actually, I should check whether p=3 even applies here. The conjecture specifies p ≥ 5 for the general case, though p=3 is mentioned separately as a base case with α(4,3) = 17 computed exactly, suggesting it might follow different rules.
+
+For p=5, I need to reconsider the shadow saturation claim more carefully. At rank 4, the shadow of S₁₇ should equal F_5^4 minus the zero vector, and S₁₇ itself has...
+
+Actually, let me clarify the shadow definition. It's the set of all weighted sums Σ c_j * v_{ij} where the coefficients c_j come from {1,...,p-1} and their sum stays within weight w. The key question is whether we're summing over distinct vectors from S or if repetition is allowed, which changes the calculation significantly. s_i ∈ {0,...,p-1} for each vector in S, with Σs_i ≤ w. Each vector used at most once (with coefficient 0 meaning not used, 1,...,p-1 meaning used with that coefficient).
+
+Wait, but the research goal says "coefficients c_1,...,c_k in {1,...,p-1} with c_1 + ... + c_k <= p-1". Here c_j ≥ 1 for each used vector. So the number of vectors used (k) is at most p-1, and each coefficient is at least 1, so the total weight is at least k.
+
+The shadow at weight w = p-1 consists of all linear combinations where I pick distinct vectors from S with coefficients between 1 and p-1, and the coefficients sum to at most p-1. At p=5 with w=4, I can use up to 4 vectors with coefficient 1 each, or a single vector with coefficient up to 4, or various combinations in between. Now I'm counting the total representations at weight ≤ 4 with 17 vectors in F_5^4 — at weight 1 there are 68 representations (each of the 17 vectors with coefficients 1 through 4), and I need to continue this for weight 2 and beyond.
+
+Actually, this combinatorial counting is getting unwieldy. Let me shift focus to what I can actually compute: I should review the existing code to see what's been tested, then design a targeted computational attack that probes shadow saturation under adversarial conditions and looks for any previous findings about when shadow saturation fails.
+
+The real vulnerability might be testing shadow saturation on arbitrary ZSF sets rather than just the doubled+e1 construction that's been thoroughly analyzed. At p=5 uniqueness prevents this, but at p=7 there could be an undiscovered ZSF set with incomplete shadow coverage. Finding such sets is computationally hard though, so I need to think about whether there's a more tractable angle to explore. I'm checking whether 3 non-proportional vectors at weight p-1 can cover all p²-1 nonzero targets in F_p² for large p, and testing this concretely at p=5 where I need to cover 24 nonzero vectors with a shadow of size determined by 3 vectors with 4 coefficients each.
+
+But I'm realizing this computational rabbit hole isn't the right approach—I should focus on constructive attacks instead. The key insight from the research goal is that if shadow saturation holds, then any 18th nonzero vector should be reachable at some bounded weight, which is the actual condition I need to verify. So if S ∪ {v} contains a zero-sum at weight ≤ p, then S can't be extended to a larger ZSF set, which means any maximal ZSF set of size 17 must have its weight-(p-1) shadow covering all nonzero vectors outside it. This is exactly what we need to show no ZSF set of size 18 can exist. So when c > 1, the shadow representation has weight at most p - c, which is even tighter than p - 2. This reveals a key distinction: maximality only guarantees that *some* scalar multiple of v appears in the shadow at the right weight, whereas shadow saturation demands that v itself appears at weight p - 1. Since c ranges over all nonzero residues modulo p, every scalar multiple of v gets covered, but that's not quite the same as having v specifically at the required weight.
+
+Now I'm realizing the constraint "non-proportional to S" matters here—if v is already proportional to some element in S, we get a zero-sum immediately, so those cases are already handled.
+
+The real question is about the remaining projective points: S represents 17 distinct points in the projective space over F_p^4, and there are p^3+p^2+p+1 total projective points, leaving many others to account for. representing p-1 nonzero vectors.
+
+For the 18th vector v, we need v not proportional to any v_i ∈ S. So v represents one of the 139 remaining projective points. Actually, at p=5, the adversary report says 556 candidates, but 556 = 139 × 4 = 556. Wait, 139 × 4 = 556. Yes! So there are 139 projective points × 4 representatives each = 556 candidates.
+
+Wait, but the briefing says 607 candidates at p=5. Let me check: (5^4 - 1) - 17*(5-1) = 624 - 68 = 556. But the briefing says 607. Hmm.
+
+Let me recount. p=5, rank 4 (F_5^4). There are 624 nonzero vectors total. S contains 17 vectors, and each one has 4 nonzero scalar multiples. When I exclude all vectors proportional to those in S, I'm removing 17 × 4 = 68 vectors, leaving 556 candidates for the 18th vector. But I'm getting 556 while the briefing claims 607, so something's off with my calculation. ? No, we can't add v_i (it's already in S). And we can't add c*v_i for c ≠ 1 because it's proportional to v_i.
+
+So 556 candidates, not 607. But the briefing says 607. Let me check the earlier report: "556 candidate 18th vectors (nonzero, non-proportional to S17)." The adversary report says 556, matching my calculation. The briefing says 607. Maybe the briefing used a different construction with fewer vectors in a fiber? Let me check.
+
+Actually, the briefing says: "α(4, 5) = 17 = 2·8 + 1. All 607 possible 18th vectors tested." But the construction has Fiber 0 with 8 vectors and Fiber 1 with 9 vectors, total 17 vectors. So 607 candidates. But with 17 vectors in F_5^4, non-proportional candidates = 624 - 17*4 = 556. Wait, that's 68 subtracted from 624, giving 556. Yet the briefing claims 607. Maybe the discrepancy comes from counting the 17 vectors themselves without their scalar multiples—that would give 624 - 17 = 607. The adversary report and my calculation both show 556, but the briefing's 607 might be using a different counting method.
+
+Anyway, the real issue is the proof strategy. The construction works for p=5 because the ZSF set is unique. But for general p, we need to verify that shadow saturation holds for all possible ZSF sets, not just doubled+e1. That's the critical gap.
+
+Let me try a different angle: can I actually construct a counterexample? If I take a smaller ZSF set—say size 16 in F_5^4—its shadow at weight 4 shouldn't cover all nonzero vectors, otherwise the maximum ZSF size would be smaller than what we know it is. Let me test whether this smaller set fails the saturation property as expected.
+
+Actually, I'm realizing my logic was backwards. A 16-vector ZSF set lacking shadow saturation makes sense because we can add a 17th vector to it. But 17-vector ZSF sets do have shadow saturation—I've verified this. So the threshold is exactly at size 17.
+
+What's striking is that non-ZSF sets of size 17 never achieve full shadow coverage, and even 20-vector non-ZSF sets fail to saturate. This suggests shadow saturation is a phenomenon unique to ZSF sets at their critical size, which feels like more than coincidence.
+
+The ZSF property itself seems to force this saturation through a counting argument. When a 17-vector ZSF set has multiplicity p-1, it contributes 17(p-1) copies total. Since no subsequence of weight ≤ p sums to zero in a ZSF set, all that representational capacity must target nonzero vectors. With enough weight-≤-(p-1) subsequences and a finite number of nonzero targets, it becomes plausible that every target gets hit.
+
+For concrete numbers, I'm working through the combinatorics: with p=5 and weight ≤ 4, the number of ways to form coefficient sequences from 17 vectors is roughly C(21,4) - 1 ≈ 5984, which vastly exceeds the number of possible nonzero targets.
+
+This creates a severe bottleneck—nearly 5984 representations must map to only 624 targets, averaging about 9.6 representations per target. The adversary's findings reveal the real vulnerability: 44 targets have exactly one representation each, making them extremely fragile. If any of these unique representations were disrupted or collided with a different target, those points would become completely uncovered. This pattern suggests p=5 is the critical case where the system is most strained, and the situation likely improves at larger primes like p=7.
+
+Now I'm planning the computational attacks to verify this. I want to confirm that shadow representations at weight ≤ p-1 actually produce valid zero-sums, test the saturation boundary at larger primes like p=23 and p=29, search for alternative ZSF structures beyond the doubled+e1 pattern, and determine whether the saturation phenomenon at p=5 is a genuine coincidence or a structural necessity. Though most of these have already been explored by the prior work, I should still verify the key findings.
+
+Looking at what's actually left to test: I could try systematic constructions for random ZSF sets at p=7 instead of relying on greedy search, track down what that "shadow-saturation-false" entry in the Cortex was about, test rank 5 shadow saturation at p=7 rather than just p=5, and verify whether the proof's conclusion actually holds by constructing explicit zero-sums for random 18th vectors. But the most valuable move right now is finding that Cortex entry about shadow saturation being false and understanding what was discovered there.
+
+I'm also wondering if there's a theoretical angle here—whether shadow saturation could actually fail for certain ZSF sets. The shadow at weight p-1 is bounded by the number of nonzero representations, and while the doubled+e1 construction benefits from how its two A8 copies interact, a differently structured ZSF set might not have that same advantage. Let me search for that entry and think through whether the theoretical foundation holds up.
+
+For instance, if a ZSF set had three or more fibers instead of just two, the sumset interactions would work differently and might not achieve shadow saturation. But the real question is whether such a configuration could even reach size 17—the two-fiber bound caps us at 17, but we don't have a proven bound for three or more fibers. The conjecture that α(4) = 17 suggests no ZSF set of size 18 exists regardless of configuration, so I need to verify whether the maximum is truly 17 across all possible structures.
+
+Now I'm wondering if there's another configuration besides doubled+e1 that could also achieve 17. At p=5 this was computationally verified to be unique, but at p=7 it remains open. Let me explore whether I can construct a three-fiber ZSF set of size 17 by partitioning vectors across different fiber levels and checking if the zero-sum constraints can be satisfied. 7 exists.
+
+The ZSF condition constrains: for any zero-sum Σ s_i v_i = 0, the first coordinates give Σ s_i * x_1(v_i) = 0 mod 7. If vectors are in fibers 0, 1, 2 with coefficients s, the first coordinates sum to 0·(sum of fiber-0 coefficients) + 1·(sum of fiber-1 coefficients) + 2·(sum of fiber-2 coefficients) ≡ 0 mod 7.
+
+So s_fiber1 + 2*s_fiber2 ≡ 0 mod 7, where s_fiberj = sum of coefficients in fiber j. Also s_fiber0 + s_fiber1 + s_fiber2 ≤ 7 (total weight ≤ p).
+
+Given these constraints, the possible zero-sums are quite restricted. The simplest cases are when s_fiber1 = 5 and s_fiber2 = 1 with s_fiber0 = 0, giving weight 6 and first coordinates summing to 7 ≡ 0 mod 7, or when both s_fiber1 and s_fiber2 are zero, which gives a zero-sum entirely within fiber 0.
+
+Rather than continue analyzing this algebraically, I should just write code to search for 3-fiber ZSF sets at p=7, r=3. But stepping back, I need to think about what would actually be valuable for the adversary report. The prior work already tested extensively, so I should focus on what's genuinely new: finding the "shadow-saturation-false" Cortex entry and testing whether shadow saturation holds for ZSF sets in F_5^3 at lower rank. is A8 (8 vectors). Does Shadow(A8, 4) = F_5^3 \ {0}? If YES, this gives another data point. If NO, then shadow saturation fails at rank 3, which would be very interesting.
+
+3. **Systematic construction of 3-fiber ZSF sets at p=7**: if I can find one, test its shadow
+4. **The weak vs strong ZSF distinction**: the Cortex tag suggests this is important. "Weak ZSF" might mean zero-sum-free at unit coefficients (each c_i = 0 or 1), "strong ZSF" means at general coefficients (c_i ∈ {0,...,p-1}).
+
+Let me dig into point 2 more carefully. Looking at the sumset data for A8 at p=5: the weight-4 sumset has 123 elements out of 125 total, so exactly 2 elements are missing. Since 0 is never in the shadow (that's the ZSF property), there's exactly 1 nonzero element missing from Σ(A8, 4). Looking at the cumulative counts, I see that at weight 0 there's just the zero element, and moving to weight 1 adds 7 new nonzero elements for a total of 8. This means each of the 8 base vectors in A8 can be scaled by coefficients 1-4, but many representations must be colliding in F_5^3 since we're only getting 7 new distinct elements rather than the full 32 possible representations. , 2v, 3v, 4v, which are 4 distinct nonzero elements... but 8 vectors × 4 coefficients gives 32 nonzero elements, which map to at most 32 distinct elements. Since |F_5^3| = 125, 32 could map to up to 32 distinct elements.
+
+Hmm, but the cumulative size at w=1 is 8. If it includes {0}, then 7 nonzero elements. But 8 vectors with coefficients 1,2,3,4 give at least 8 distinct nonzero elements (just at coefficient 1). So something's off.
+
+Wait, maybe |Σ(A8, w)| is the number of elements reachable at EXACTLY weight w, not cumulative. Looking at the weight distribution: w=0 gives just {0}, w=1 gives 8 elements, w=2 gives 30, w=3 gives 73, and w=4 gives 123. Adding these up exceeds 125, so there must be significant overlaps across different weights. The report states that F_5^3 \ Σ(A8, 4) consists of elements of the form (0, k, k) where k ranges from 0 to 1, which means only two elements are unreachable at weight 4. So the cumulative sumset up to weight p-1 covers all of F_p^3, but when I look at just the exact weight p-1 layer, it's missing those {(0,k,k)} elements—they're covered at lower weights instead. For the S17 shadow saturation problem, I'm checking whether the cumulative shadow up to weight p-1 reaches all nonzero vectors in F_p^4.
+
+But wait, there's a tension here: the research goal defines the cumulative shadow with weights up to p-1, which should include the empty sum at weight 0 giving 0. Yet the ZSF condition claims 0 isn't reachable at weights 1 through p. That seems contradictory if weight 0 is part of the cumulative definition.
+
+Let me reconsider: maybe the ZSF condition applies only to positive weights, so 0 is covered at weight 0 (empty sum) but not at any weight 1 through p. For A8 specifically, the cumulative shadow at weight 4 does cover all 125 elements of F_5^3—with 0 appearing at weight 0 and the 124 nonzero vectors distributed across weights 1-4. But the claim I'm checking involves 17 vectors, not the 8 in A8, so I need to figure out where that larger set comes from.
+
+Now I'm reconsidering the shadow saturation argument: if A8's cumulative shadow at weight 4 already covers all nonzero elements, then any 9th vector v would have its negation -v already expressible as a sum at weight ≤ 4, which means adding v creates a zero-sum at weight ≤ 5. Since we know η(C_5^3) = 33, this tells us the maximum size of a zero-sum-free set is constrained by how quickly the cumulative shadow saturates.
+
+The key question is whether the sumset construction allows each vector to be used multiple times or just once—checking the definition, each v_i appears with a single coefficient s_i, so vectors are used at most once per sum.
+
+Now I need to test whether shadow saturation holds for S17 (the 17-vector set in F_p^4) across different primes p ≥ 5, and whether this property extends to all ZSF sets of that size, not just the doubled+e1 construction. The computational priority is running shadow saturation checks on A8 at various primes to understand the behavior of this rank-3 extremal set, particularly examining what elements the cumulative sumsets miss as p varies.
+
+The key insight is that cumulative saturation of A8 is actually equivalent to the rank-3 upper bound, which has been formally verified in Lean for all p ≥ 5—so cumulative saturation must hold universally as a consequence of that proof.
+
+Now I'm shifting focus to the adversarial angle: what would actually break this approach? The most critical vulnerabilities are whether shadow saturation fails for non-doubled+e1 sets, whether it breaks down at large primes for the doubled+e1 case, whether there's a logical gap between shadow saturation and the grail result, or whether shadow saturation only works for doubled+e1 and requires additional uniqueness arguments. Let me start by testing the first vulnerability.
+
+For non-doubled+e1 sets, I need a clever construction since greedy search failed at p=7. For the second vulnerability, I can push the computational testing beyond p=19 to larger primes. The third vulnerability seems solid on inspection—the shadow representation of -v at weight ≤ p-1 does produce a zero-sum at weight ≤ p. But wait, there's actually a potential circularity issue here: if v18 appears in its own shadow representation, that would undermine the whole argument.
+
+Actually, that can't happen. Since v18 isn't in S, the shadow representation only uses vectors from S, so v18 can't be involved in representing itself. And since the 18 vectors are pairwise non-proportional, v18 can't equal any vector in S. So the zero-sum genuinely involves distinct vectors—some from S and v18 itself. The logic holds.
+
+Now I need to verify the coefficients work out. The shadow gives me coefficients c_j in {1,...,p-1} for the vectors from S, and v18 appears with coefficient 1. Since 1 is also in {1,...,p-1}, all coefficients satisfy the constraint, and the total weight is at most p. This is indeed a valid zero-sum at the right weight.
+
+The argument for #3 is solid. For #4, I should examine whether the proof actually depends on uniqueness of the zero-sum representation.
+
+The key insight is that the claim doesn't require uniqueness at all—it just says any ZSF set of size 17 must have full shadow coverage. Whether multiple such sets exist doesn't matter; the statement applies universally. So the strategy is to prove shadow saturation holds for every ZSF set of size 17 in F_p^4, which immediately bounds the total number of nonzero vectors we can cover. The real challenge is establishing this saturation property for all such sets.
+
+My approach as an adversary would be to hunt for counterexamples: I'll search the previous logs for any documented failures of shadow saturation, construct some non-standard ZSF sets at small primes like p=7 and check their shadows empirically, test whether the pattern holds at lower ranks, and look for mathematical literature that might contain relevant counterexamples. Let me start by checking the logs for what's already been tried.
+
+============================================================
+BLOCK 5 (13732 chars)
+============================================================
+OK, now I have a good picture. Let me also look at the previous round's outputs to understand what the adversary found about "shadow-saturation-false" in the cortex. Also, let me look for the most recent collaboration outputs.
+
+Let me now focus on what I can actually ATTACK. The prior adversary tested:
+1. Shadow saturation at r=3 (rank 4) for doubled+e1: holds up to p=19
+2. Shadow saturation at r=4 (rank 5) for doubled+e1: holds at p=5
+3. Alternative ZSF sets at p=7: none found by greedy or single-swap
+
+
+4. Cap-based ZSF sets at p=7: couldn't find 17-element ZSF cap subsets
+
+What hasn't been tested yet: double swaps to search for ZSF sets at p=7, smaller ZSF sets to understand where the saturation threshold kicks in, whether there's a meaningful gap between weakly and strongly ZSF behavior, and constructions beyond the doubled+e1 framework.
+
+The real question is whether I can find a ZSF set where shadow saturation actually breaks down. The claim states that any ZSF set of 2α(r)+1 vectors should have its weight-(p-1) shadow cover all nonzero points in F_p^{r+1}, but maybe there's a theoretical obstruction or a concrete counterexample hiding in the structure. Let me approach this from a dimension-counting angle to see if the claim even holds up logically. counting**
+
+For S to be ZSF at weight ≤ p in F_p^{r+1}, we need: no coefficients c_i ∈ {1,...,p-1} with Σc_i ≤ p and Σ c_i v_i = 0.
+
+For shadow saturation at weight p-1: for every nonzero t, there exist c_i ∈ {1,...,p-1} with Σc_i ≤ p-1 and Σ c_i v_i = t.
+
+Note: the ZSF condition excludes t=0 at weight ≤ p. Shadow saturation asks for ALL nonzero t at weight ≤ p-1.
+
+Is it possible that ZSF at weight ≤ p IMPLIES shadow saturation at weight p-1? This would be a beautiful theorem.
+
+Let me test this with small cases. For F_p^2, the definition of α(r) only applies when r ≥ 3, so that's not helpful. Instead, I'll approach this combinatorially by counting the total number of representations at weight ≤ p-1 using the generating function Π_{i=1}^{|S|} (1 + z + z^2 + ... + z^{p-1}). For a concrete example with |S| = 17 and p = 5, I need to find the coefficient sum up to z^4.
+
+Using stars and bars, the number of coefficient vectors (c_1,...,c_17) with c_i ∈ {0,...,4} and Σc_i ≤ 4 is C(21,4) = 5985. This includes the zero vector, so there are 5984 nonzero representations mapping to at most 624 nonzero targets—roughly 9.6 representations per target on average. But the ZSF condition excludes all representations of 0 at weights 1 through 5, which constrains things significantly.
+
+For a generic set, I'd expect about 20348/625 ≈ 32.6 representations of 0 across those weights, but the condition forces this to zero—meaning S is actively avoiding 0 in a very specific way. If S truly avoids 0, then every representation lands on a nonzero target, which would concentrate representations more densely than a generic set would allow.
+
+Given the ZSF constraint, I have about 5984 representations distributed across 624 nonzero targets, averaging 9.6 per target. Using a random-map heuristic, the probability any target gets missed is roughly e^{-9.6} ≈ 0.00007, suggesting we'd expect only about 0.04 missed targets overall. But this is just a rough estimate—the representations follow algebraic constraints from S, not random placement, so the actual coverage could differ significantly.
+
+At p=5, the adversary found 44 targets with only a single representation, making them vulnerable to small structural changes. The real question is whether there exists any ZSF set of 17 vectors where the shadow at weight p-1 actually misses a nonzero target. At p=5, uniqueness guarantees the answer is no—there's only one such set and it saturates. At p=7, neither greedy nor swap searches found alternative ZSF sets, but at larger primes like p=11 or p=13, the shadow has much more budget to work with, making saturation more likely.
+
+The hardest case is p=5 because the weight budget is tightest, there are fewer targets overall, the doubled+e1 construction is unique, and those 44 fragile single-representation targets make the system brittle. If saturation holds at p=5, it should hold everywhere else—that's the key insight for a proof strategy. For general p, the number of targets grows as p^4-1 while representations at weight ≤ p-1 scale roughly as p^16/(16!), so the ratio becomes more favorable at larger primes.
+
+At p=5 the ratio is barely sufficient, but it does work computationally. A proof might verify p=5 directly and then show larger primes follow by a counting argument, though that's not what I'm trying to do here. I need to find what actually breaks in this construction.
+
+Let me focus on attacking the ZSF definition itself.
+
+The seed defines ZSF as preventing any linear dependence with coefficients in {1,...,p-1} and weight sum ≤ p. But shadow saturation uses weight ≤ p-1 instead, which creates a gap—the ZSF condition is actually weaker than what the saturation argument needs. 0 from being reached at weight ≤ p, but the shadow needs to cover everything at weight ≤ p-1.
+
+Wait, I need to be more careful. Let me re-read the shadow definition from the research goal:
+
+"for every nonzero v in F_p^{r+1}, there exist vectors v_{i1},...,v_{ik} in S and coefficients c_1,...,c_k in {1,...,p-1} with c_1 + ... + c_k <= p-1 and c_1*v_{i1} + ... + c_k*v_{ik} = v."
+
+So the shadow is defined with coefficients in {1,...,p-1} (each used vector has coefficient ≥ 1) and total weight ≤ p-1.
+
+And ZSF means no coefficients in {1,...,p-1} with total weight ≤ p sum to 0.
+
+The key insight: if the shadow at weight p-1 covers -v18, then I can write it as a sum with total weight ≤ p-1. Adding coefficient 1 on v18 gives me a zero sum with total weight ≤ p, which contradicts ZSF.
+
+Now I'm exploring whether v18 could be a scalar multiple of one of the vectors in S. Since v18 isn't in S and isn't proportional to any v_i by the non-proportionality condition, this avenue seems blocked. The contradiction confirms this approach won't work. Now let me explore what happens at p=3 as a test case. At p=3, the ZSF set has 17 vectors, and with coefficients in {1,2} and weight at most 3, the shadow at weight 2 can only use at most 2 vectors with coefficient 1 or 1 vector with coefficient 2. I need to count how many nonzero targets are achievable at weight ≤ 2.
+
+At weight 1, each of the 17 vectors can have coefficient 1 or 2, giving 34 representations that map to distinct nonzero targets since 2v ≠ v in characteristic 3. At weight 2, I can either pair two vectors with coefficient 1 each, or use a single vector with coefficient 2, yielding 136 + 17 = 153 representations.
+
+So across weights 1 and 2, I have 187 total representations mapping to at most 80 nonzero targets in F_3^4, averaging about 2.3 representations per target. That's tight coverage, but the real constraint is whether a 17-vector zero-sum-free set can actually exist in F_3^4—the ZSF condition forbids any subset with coefficients in {1,2} summing to at most 3 that equals zero.
+
+Now I'm checking whether weight 3 combinations (three vectors with coefficient 1, or one with coefficient 2 plus one with coefficient 1) could violate the ZSF property, and whether the doubled-plus-e1 construction actually yields 17 valid ZSF vectors at p=3.
+
+The key question is whether shadow saturation holds at p=3 for this construction—if it fails, that would show the conjecture requires p ≥ 5 as a necessary condition, giving us a concrete counterexample to the general claim.
+
+Wait, I need to be more careful about what η actually measures here. For C_3^4, it's the minimum sequence length guaranteeing a zero-sum subsequence with weight at most 3, where weight counts total multiplicities and coefficients come from {1,2}. The setup might differ between p=3 and p=5, so let me reconsider the framework.
+
+Looking at the specific case: with 18 vectors in F_3^4 and needing coefficients in {1,2} summing to at most 3, I can use at most 3 vectors with coefficient 1, or 1 vector with coefficient 2 and 1 with coefficient 1. This constraint is quite restrictive for finding a zero-sum combination.
+
+Now examining the shadow set at weight 2 for the ZSF construction with 17 vectors: I can form 17 vectors by taking 2v_i for each vector, and 136 additional vectors from pairs with coefficient 1 each, giving 153 total vectors at weight 2. The question is whether this covers all 80 nonzero vectors in F_3^4. So I have around 170 potential representations across weights 1 and 2, which is more than double the 80 nonzero vectors I need to cover. The real question is whether this theoretical abundance actually translates to hitting all 80 vectors in practice, or if there are enough collisions to leave some uncovered. I should verify this computationally rather than relying on the counting argument alone. up to C(17,2) = 136 more vectors, but many will collide with each other or with v_i/-v_j. We need to cover 80 - 34 = 46 more nonzero vectors from the 136 sums.
+
+This seems tight but plausible. Let me write code to test.
+
+ACTUALLY, I just realized something crucial. At p=3, non-proportional vectors: v and -v = 2v are proportional! So non-proportional means no v_i = c·v_j for any c ∈ {1,2}. Since c can be 1 or 2, and 2 = -1 (mod 3), non-proportional means v_i ≠ v_j AND v_i ≠ -v_j. So each projective point gives exactly 2 representatives, meaning distinct projective points.
+
+So 17 non-proportional vectors represent 17 of the 40 projective points. The weight-1 shadow gives {v_1,...,v_17}, and the weight-2 shadow gives {-v_i} ∪ {v_i+v_j}. The negatives are just the opposite representatives, so weight-2 contributes 17 opposite vectors plus up to 136 pairwise sums. That's potentially 170 vectors total against the 80 needed, which should be achievable. The question is whether the 17 projective points could be positioned such that all pairwise sums collide with existing vectors.
+
+If v_i + v_j always equals some v_k or -v_k, then the 17 points would form an additive subgroup. But subgroups of (Z/3Z)^4 have sizes dividing 81, so 17 is impossible. This rules out that failure mode, so the construction should work. Let me write code to verify.
+
+I'm planning five computational attacks: testing shadow saturation outside the claimed range at p=3, analyzing how many targets are fragile across primes, searching for ZSF sets via perturbations at p=7, checking whether subsets of S17 break saturation, and explicitly verifying the zero-sum construction. Before I start, I need to make sure the ZSF definition in my code matches the conjecture—the code defines it as no zero-sum at weight ≤ p-1, so let me confirm that's consistent.
+
+Looking at the code, I see the ZSF check explicitly states weight ≤ p-1, but the seed document describes the condition as weight ≤ p. This is a critical discrepancy—if the code is checking one weight bound and the conjecture uses another, I could be validating the wrong property entirely. instead of weight ≤ p, it might be accepting sets that are NOT ZSF (because they have a zero-sum at weight exactly p). This would mean the shadow saturation results are for a WEAKER condition than intended.
+
+Let me check: at p=5, the code checks weight ≤ 4 = p-1. But the ZSF condition requires no zero-sum at weight ≤ 5 = p. If there's a zero-sum at weight exactly 5, the code would miss it.
+
+Wait, but the shadow saturation also uses weight ≤ p-1. So the shadow at weight p-1 (= 4) covers all nonzero vectors. Adding v18 with coefficient 1 gives weight ≤ p (= 5). The ZSF condition at weight ≤ p means this zero-sum at weight ≤ p contradicts ZSF.
+
+But if the code defines ZSF as weight ≤ p-1, then it's checking a weaker condition than what's actually needed. Sets that have zero-sums at weight exactly p would pass the code's check but fail the true ZSF requirement, which means the doubled+e1 construction could contain a zero-sum at weight p that the code doesn't catch—a potentially critical bug. I'm checking the weight bounds in both functions. The `is_eta_zsf` function correctly validates weights up to p (inclusive), but `build_zsf_dp` only checks up to p-1, which means it could accept sets with zero-sums at exactly weight p when it shouldn't.
+
+This discrepancy doesn't affect the doubled+e1 construction since its first zero-sum is at weight p+1, and `attack2` found no alternative ZSF sets anyway, so the bug doesn't impact the actual results. Still, I should document this inconsistency.
+
+There's a critical distinction between two ZSF definitions: "eta-ZSF" requires no zero-sum at weight ≤ p (what we need for η bounds), while the code in `adversary_attacks.py` checks the weaker condition of no zero-sum at weight ≤ p-1. For the grail conjecture, we specifically need the eta-ZSF definition, which the current testing doesn't fully enforce.
+
+Now I'm checking whether sets can satisfy the weaker condition but fail the stronger one—that is, have a zero-sum at exactly weight p but nowhere below. The doubled+e1 construction avoids zero-sums until weight p+1, so it passes both conditions. But I need to verify if this distinction actually matters for other constructions at p=5, particularly when checking whether 5-vector zero-sums exist in sets of size 17.
+
+The key insight is that classical zero-sums of length p are central to Davenport constant theory, and the gap between "weight ≤ p-1" and "weight ≤ p" could reveal something important about the structure. Rather than continuing this theoretical analysis, I should move to testing these ideas empirically with code that checks shadow saturation, validates the ZSF definition discrepancy, and measures how the saturation margin varies across different primes.
+
+Writing the attack script...
+
+============================================================
+BLOCK 6 (242 chars)
+============================================================
+Let me run a separate, lighter attack while the main script runs. I'll focus on the theoretical attack: looking for structural issues in the shadow saturation argument. Also, let me search the web for known counterexamples or related results.
+
+============================================================
+BLOCK 7 (828 chars)
+============================================================
+Excellent! I now have a wealth of prior findings. Let me check the output of my running attack script, and then synthesize everything into a comprehensive adversary report.
+
+The prior adversary (round 1 from the previous collaboration) already found:
+1. Shadow saturation is FALSE for general ZSF sets (cap-based counterexample at p=7)
+2. The strong vs weak ZSF dichotomy is the key structural insight
+3. Doubled+e1 appears to be the UNIQUE strongly ZSF set
+4. Shadow saturation holds for doubled+e1 at all tested primes
+
+So my job now is to go DEEPER. Let me check what my current attack script found, especially:
+
+
+- Attack A testing p=3 outside the claimed range
+- Attack B examining ZSF definition discrepancies
+- Attack D analyzing margin behavior
+- Attack E detecting threshold effects
+
+Let me see what the output reveals.
+
+============================================================
+BLOCK 8 (70 chars)
+============================================================
+The task seems to have been lost. Let me just run the script directly.
+
+============================================================
+BLOCK 9 (761 chars)
+============================================================
+Interesting findings!
+
+**Attack A (p=3):** Shadow saturation HOLDS at p=3! The doubled+e1 construction covers all 80 nonzero vectors at weight p-1=2. This is actually STRONGER than expected - the claim is for p≥5 but it works at p=3 too. No counterexample here.
+
+**Attack B (ZSF definition):** The doubled+e1 construction is "strongly ZSF" at all tested primes:
+- p=5: First zero-sum at weight 6 = p+1 ✓
+- p=7: First zero-sum at weight 8 = p+1 ✓  
+
+
+- p=11: First zero-sum at weight 12 = p+1 ✓
+
+The ZSF definition discrepancy doesn't matter for doubled+e1 since its first zero-sum consistently appears at weight p+1, though it does affect the "weakly ZSF" sets from the prior adversary. Now moving on to test the margin analysis and threshold detection attacks.
+
+============================================================
+BLOCK 10 (3955 chars)
+============================================================
+Now I have very rich data. Let me analyze:
+
+**Attack D - Margin Analysis:**
+- p=5: 277/624 (44.4%) targets are fragile (need weight exactly 4 = p-1). Gap at weight 3: 277 vectors.
+- p=7: 643/2400 (26.8%) targets are fragile (need weight exactly 6 = p-1). Gap at weight 5: 643 vectors.
+
+This is interesting — the fraction decreases with p but is still large. The shadow needs the FULL weight budget to cover everything.
+
+**Attack E - Threshold Detection:**
+
+
+I'm seeing a clear saturation point emerge. As I increase the shadow size from 14 to 17, the gap shrinks dramatically from 58 down to 0, with saturation occurring precisely at |S|=17. When I test removing individual vectors from the shadow, the basis vectors from fiber 0 have the most impact on the gap, while non-basis vectors contribute less. 11 (fiber 1 "basis" vectors): gap=9
+- Removing vectors 12-15 (fiber 1 "non-basis" vectors): gap=6
+- Removing vector 16 (e1): gap=6
+
+There's a BEAUTIFUL symmetry here:
+- The first 4 vectors of each fiber (corresponding to e2, e3, e4, and (-1,1,1) in A8) each contribute 9 missing targets when removed
+- The last 4 vectors of each fiber (corresponding to (1,1,0), (1,0,1), (-1,2,1), (-1,1,2) in A8) and e1 each contribute 6 missing targets when removed
+
+This is a 2-class structure. The "basis" vectors of A8 are more important (contribute more to shadow coverage) than the "non-basis" vectors.
+
+Now I'm wondering what the most damaging counterexample would look like. The prior work already established that shadow saturation fails for general ZSF sets and found a strong versus weak dichotomy. But there might be something new here—p=3 actually satisfies shadow saturation, which suggests the p≥5 requirement might be too restrictive for that particular property. Looking at the gap pattern as |S| grows from 14 to 17, I'm seeing the gaps shrink dramatically—58 down to 0—roughly halving each time. If I can characterize this decay pattern, it might reveal something the previous analysis overlooked. -vector gap counts (6 or 9) are very structured**. This suggests the shadow saturation is intimately connected to A8's structure.
+
+Let me now run the most important attack: trying to find a non-doubled+e1 ZSF set at p=7 via systematic search, and testing if it's strongly ZSF.
+
+Actually, the prior adversary already found:
+- Cap-based ZSF set at p=7 with shadow coverage 2244/2400 (NOT saturated)
+- This set is WEAKLY ZSF (has weight-p zero-sum)
+- ALL 200 random and swap alternatives are weakly ZSF
+- Doubled+e1 appears to be the UNIQUE strongly ZSF set
+
+This is a major finding. Let me verify it independently and look for gaps.
+
+Now I'm examining the two-case-split proof strategy: the prior adversary claims every ZSF set either has an internal weight-p zero-sum (weakly ZSF) or is isomorphic to doubled+e1 (strongly ZSF). The first two parts are solid—the tautology covers all cases and weak ZSF follows by definition—but claims (c) and (d) about strongly ZSF sets being isomorphic to doubled+e1 and that structure guaranteeing shadow saturation are purely computational, not proven.
+
+The real vulnerability is whether there could be another strongly ZSF set with a different fiber structure that's still projectively equivalent to doubled+e1, like using different fiber pairs at p=7 instead of {x1=0} and {x1=1}.
+
+But any choice of fibers or linear forms just amounts to coordinate changes, so they're all projectively equivalent. The key question becomes whether A8 is the only maximal ZSF set in F_p^3, since using a different base set B8 would genuinely produce a non-equivalent strongly ZSF set—and at p=5, A8 is indeed unique.
+
+At p=7, though, I'm not sure if A8 remains the unique maximal ZSF set. If there's an alternative B8 with the right structure, then "doubled B8 + e1" would give me a different strongly ZSF set at rank 4. This feels like the right angle to attack, so I should write code to test whether A8 is still unique at p=7.
+
+============================================================
+BLOCK 11 (517 chars)
+============================================================
+While the alternative base sets search runs in the background, let me work on another important attack: analyzing the STRUCTURE of the shadow gaps. When we remove vectors from S17, the gaps follow a pattern (9 or 6). Let me investigate what the MISSING vectors actually are — this could reveal structural weaknesses.
+
+Also, let me write a targeted attack to find non-doubled+e1 strongly ZSF sets at p=7 using a completely different approach: systematic construction from scratch (not greedy random, not swap from A8).
+
+============================================================
+BLOCK 12 (1711 chars)
+============================================================
+Incredibly rich data! Let me analyze the key findings:
+
+**KEY STRUCTURAL INSIGHT AT p=5:**
+
+1. **Gap overlaps are PERFECTLY SYMMETRIC**: vectors [i] and [i+8] (same position in fiber 0 vs fiber 1) share exactly 3 missing vectors. No other overlaps! This is the fiber-doubling symmetry.
+
+2. **Every gap includes (p-1)*removed**: When you remove vector v from S17, the vector (p-1)*v = -v is ALWAYS missing from the shadow. This makes sense: to reach -v at weight ≤ p-1, you'd typically need coefficient p-1 on v itself. 
+
+3. **Cross-fiber gaps**: Removing a fiber-0 vector creates gaps in fibers {0,1,2,3}. Removing a fiber-1 vector creates gaps in fibers {1,2,3,4}. The gaps spread to fibers NOT containing the removed vector!
+
+4. **Vector [16] (e1)**: Removing e1 eliminates all its scalar multiples and a couple additional vectors, but interestingly leaves some combinations untouched.
+
+At p=7, I'm seeing a clearer pattern: removing a basis vector like [16] creates a gap of 25 vectors (the basis vectors themselves), while non-basis vectors create smaller gaps of 12. The missing vectors when [16] is removed split into two groups—the scalar multiples of e1, and then a second set of vectors that follow a specific structure I'm trying to pin down.
+
+Looking at this second group more carefully, they all have the form (k, 0, a, a) with particular k and a values, and these actually lie on what appears to be a "missing diagonal" structure. This connects to a conjecture I'm working with about the complement of the fiber structure—that the missing vectors should correspond to elements of the form (0, k, k) within a certain range. Now I need to check whether alternative base sets follow this same pattern.
+
+============================================================
+BLOCK 13 (119 chars)
+============================================================
+The alternative bases search is still running (probably the p=7 part is slow). Let me check what it's outputted so far.
+
+============================================================
+BLOCK 14 (338 chars)
+============================================================
+The output file is empty (0 lines). The script is probably still building internal computation before producing output. Let me kill it and run a more targeted version that's faster.Actually, let me check if it's actually running. The p=5 part should be fast, and p=7 with 500 trials might be too slow.Let me run a faster version directly.
+
+============================================================
+BLOCK 15 (10867 chars)
+============================================================
+CRITICAL FINDING: A8 is the UNIQUE maximal 8-vector ZSF set in F_p^3 at both p=5 AND p=7!
+
+At p=5: 200 random trials + 8×23 = 184 single-swaps → ONLY A8 found.
+At p=7: 100 random trials → ONLY A8 found.
+
+This is enormously important:
+- A8 is the unique maximal ZSF set in F_p^3 (for p=5, p=7)
+- Therefore the doubled+e1 construction is the unique "base" for strongly-ZSF sets at rank 4
+
+
+- The proof strategy's uniqueness requirement reduces to: "the only way to build a strongly-ZSF set is doubled + e1"
+
+I realize the greedy random search isn't exhaustive—there could be ZSF sets hiding that my search can't reach. I should run single-swaps at p=7 to match what I did at p=5, and also try growing alternative sets from known non-A8 starting points to see if I can construct anything else. But the most pressing thing right now is to compile my findings into a coherent narrative.
+
+Let me organize what I've tested so far: shadow saturation held at p=3 with all 80 nonzero vectors covered at weight 2, and the ZSF definition discrepancy between weight ≤ p-1 and weight ≤ p turned out to have no practical impact since doubled+e1 consistently has its first zero-sum at weight p+1 regardless.
+
+Now looking at the shadow saturation margin across different primes—at p=5 it's dangerously tight with 44.4% of targets needing exactly weight p-1, but this improves significantly at p=7 where it drops to 26.8%. The threshold detection shows a sharp cliff: the gap between consecutive |S| values collapses from 58 down to 0 right around |S|=17, pinpointing exactly where the saturation breaks.
+
+Every vector in this critical set is essential—removing even one creates gaps. The gap structure reveals something interesting: when I remove a vector, its negation always disappears, and vectors that are 8 positions apart share exactly 3 missing vectors due to fiber symmetry. These missing vectors aren't confined to a single fiber but spread across the structure. The gap sizes vary between 9 and 6 depending on whether the removed vector is a basis element.
+
+Testing alternative base sets at p=5 shows A8 is the unique maximal 8-vector zero-sum-free set—across 200 random attempts and 184 swaps, every search converges to A8.
+
+At p=7, the same uniqueness holds: A8 is the only maximal 8-vector zero-sum-free set found across 100 random trials. This confirms a broader pattern. The shadow saturation property I've been tracking holds consistently at p=3, 5, and 7 for the doubled-plus-e1 construction, extending beyond the originally claimed range. The key distinction is that shadow saturation works for strongly zero-sum-free sets but fails for weakly zero-sum-free ones, which is the fundamental structural divide here.
+
+The gap structure reveals something elegant: when I remove e1 from the construction, the missing vectors follow a (0,k,k) pattern, and the gaps themselves are perfectly symmetric—positions [i] and [i+8] always have exactly 3 missing vectors in common. There's also a sharp threshold: the gap count jumps from 6 when the set size is 16 down to 0 once it reaches 17.
+
+But I haven't exhaustively proved A8's uniqueness for arbitrary primes—my random and swap searches are heuristic, not complete. The shadow saturation property also remains unproven for general p. At p=5 especially, the situation is precarious: nearly half the target vectors are fragile, only achievable through weight-4 combinations. I should check what the background computation has found and then decide whether to pursue a more creative angle or wrap up the analysis.
+
+Actually, I'm wondering about a structural constraint I haven't fully explored: the strong ZSF definition forbids zero-sums at weight ≤ p, but what happens at weight p+1? The doubled+e1 construction has its first zero-sum appearing exactly at weight p+1. If this is universal—if every maximal ZSF of size 17 must have its first zero-sum at weight p+1—that would be a very rigid structural property. Let me trace what form these weight p+1 zero-sums must take, starting with the doubled+e1 case at p=5 where weight 6 zero-sums would need to distribute 6 units of coefficient across the support. - 5 vectors with coeff 1 and 1 with coeff 1 (= same as 6 with coeff 1)
+Wait, at weight 6 with coefficients in {1,...,4}: possible supports are {6, 5, 4, 3, 2, 1}:
+- Support 6: all coeff 1 (sum = 6)
+- Support 5: one coeff 2, rest coeff 1 (sum = 6)
+- Support 4: two coeff 2, rest coeff 1 (sum = 8 > 6), or one coeff 3 rest coeff 1 (sum = 6)
+- Support 3: etc.
+
+The simplest case: 6 vectors with coefficient 1 summing to 0. In F_5^4, this means 6 vectors from S17 whose literal sum is 0 (mod 5). Let me check if S17 actually contains such a subset by examining its structure across the fibers—I'm looking at the vectors organized by their first coordinate, starting with fiber 0 and moving through fiber 1 to see if any 6-vector combination adds to zero. Now I need to verify whether A8 actually permits a 6-element zero-sum. The ZSF condition blocks zero-sums at weight ≤ 5, but weight 6 falls outside that restriction, so it's theoretically possible. Let me check if such a subset actually exists by computing the sum of all 8 vectors in A8. (0,1,1)?
+- (1,0,0) + (4,1,1) = (0,1,1) ✓
+- (0,1,0) + (0,0,1) = (0,1,1) ✓
+- (1,1,0) + (4,0,1) = (0,1,1) but (4,0,1) isn't actually in A8, so let me verify against the actual set.
+
+A8 = [(1,0,0),(0,1,0),(0,0,1),(4,1,1),(1,1,0),(1,0,1),(4,2,1),(4,1,2)]
+
+Now checking which pairs from A8 sum to (0,1,1) modulo 5. I found two valid pairs so far, but the remaining candidates all require elements that aren't in A8.
+
+So there are exactly two pairs that work: {(1,0,0),(4,1,1)} and {(0,1,0),(0,0,1)}. This means the 6-element zero-sum subsets are A8 minus each of these pairs, both achieving weight 6 = p+1. The doubled+e1 construction at p=5 does have multiple zero-sums at this weight, which aligns with the strongly ZSF condition where the first zero-sum appears exactly at weight p+1.
+
+For the proof strategy, I need to determine whether every 18-vector set has a zero-sum at weight ≤ p. If some 17-vector subset is strongly ZSF with a saturating shadow, then yes—the 18th vector gets reached by the shadow at weight ≤ p-1, creating a zero-sum at weight ≤ p. But if no 17-vector subset is ZSF, then some subset of the original 17 vectors must have a weight-≤-p zero-sum, and any zero-sum among the 18 vectors (whether or not it uses all of them) would suffice.
+
+The real question is whether it's even possible for every 17-vector subset to be ZSF—meaning no weight-≤-p zero-sum exists within any of them.
+
+If that were true, then for each vector v_i, removing it leaves 17 vectors with no weight-≤-p zero-sum. But then I need to figure out what happens when I include v_i back in—does the full set of 18 necessarily have a zero-sum?
+
+Let me try a different angle: take any 17 vectors and check if they're ZSF. If not, I'm done. If they are ZSF, then they have a shadow, and I need to see how that shadow constrains the 18th vector.
+
+Actually, I realize the key insight: if a 17-vector subset T is weakly ZSF, it already contains a weight-p zero-sum internally, so I don't need the 18th vector at all. If T is strongly ZSF instead, then T has the doubled+e1 structure, and the shadow saturation argument forces the 18th vector to complete a zero-sum. shadow saturation → 18th vector creates weight-≤-p zero-sum → done.
+
+So the proof structure is:
+1. Take any 17-vector subset T.
+2. If T has a zero-sum at weight ≤ p → done.
+3. If T is strongly ZSF → shadow saturation → done.
+
+This requires: every strongly-ZSF set of size 17 has shadow saturation.
+
+If the doubled+e1 is the ONLY strongly-ZSF set, then shadow saturation needs to be proved only for doubled+e1.
+
+Now I'm seeing the key distinction: a 17-vector subset T is either weakly ZSF (has a zero-sum at weight exactly p) or strongly ZSF (no zero-sum at weight ≤ p). The weakly ZSF case is already done, so I only need the shadow saturation argument for strongly ZSF sets like doubled+e1, which then produces a zero-sum involving the 18th vector at weight ≤ p. weight ≤ p.
+
+But we need: for EVERY 18-vector configuration, there EXISTS a 17-vector subset T such that T is either (1) not ZSF at weight ≤ p, or (2) strongly ZSF with shadow saturation.
+
+Actually, this is simpler: take ANY 17-vector subset T. It falls into one of:
+1. T has a zero-sum at weight ≤ p → done (the zero-sum is within the 18-vector set)
+2. T is ZSF at weight ≤ p → T is strongly ZSF → shadow saturation → 18th vector killed
+
+Case 2 is the ONLY hard case. And all we need is: every ZSF set of size 17 (at weight ≤ p) has shadow saturation.
+
+The computational evidence suggests all such sets are the doubled+e1 construction, and shadow saturation holds for them. So the proof really hinges on two things: showing that every ZSF set of size 17 at weight ≤ p in F_p^4 is projectively equivalent to doubled+e1, and verifying shadow saturation for that construction. Both have strong computational backing. Now I'm trying to break either claim—can I find alternative ZSF sets or a counterexample to shadow saturation? At p=5 and p=7, the base set A8 is unique, which means the doubled+e1 construction is the only way to build a strongly-ZSF set of size 17 using two copies of A.
+
+But wait—what if I use a different fiber decomposition instead? With 3 fibers rather than 2, I could split 17 vectors across fibers like {x1=0}, {x1=1}, {x1=2} with sizes like (6,6,5) or (7,6,4). Each fiber would contain a ZSF set in F_p^3, but the strongly ZSF condition creates additional constraints between fibers that I need to check.
+
+Actually, I realize from the prior exhaustive search at p=5 that the doubled+e1 construction is the only maximal 17-vector strongly-ZSF set possible there, so no 3-fiber alternative exists at that prime. At p=7 the search wasn't exhaustive, so the real question is whether I can find a different 17-vector strongly-ZSF set that doesn't follow the doubled+e1 pattern.
+
+I could try structured variations—twisted embeddings of A8 across fibers, permuted versions, or scaled copies—but if A8 is projectively unique, all these would collapse back to the same construction anyway. Let me think about the projective geometry constraints at p=5 more carefully.
+
+Actually, I think I've hit the limits of what computational search can tell me here. Time to write up what I've found and check whether there's a logical gap in the proof strategy itself—specifically around how the shadow argument handles the antipodal structure. I'm confirming the zero-sum is valid—the coefficients on vectors from S and the coefficient 1 on v18 are all distinct, with total weight at most p, and there's no overlap since v18 isn't in S and isn't proportional to any vector there. Now I need to write up the full adversary report and figure out what to check next.
+
+============================================================
+BLOCK 16 (2748 chars)
+============================================================
+MAJOR FINDING!
+
+**Scale 4 at p=5: A strongly-ZSF set where shadow saturation FAILS!**
+
+Scaling fiber 1's A8 by 4 = p-1 gives a strongly-ZSF set of 17 vectors in F_5^4 where the shadow at weight p-1=4 covers only 620/624 nonzero vectors — 4 vectors are MISSING!
+
+This is a GENUINE COUNTEREXAMPLE to shadow saturation for a strongly-ZSF set!
+
+Wait, let me think about this carefully. Scaling A8 by 4 (=p-1=-1) means the fiber-1 vectors are (1, -x, -y, -z) instead of (1, x, y, z). 
+
+So I have fiber 0 with (0, a) for a ∈ A8, and fiber 1 with (1, -a) for a ∈ A8 plus the extra vector (1,0,0,0). The canonical forms show this is projectively different from the standard doubled+e1 construction. But here's the thing: (1, -a) is projectively equivalent to (p-1, a), and I need to figure out what its canonical form actually is.
+
+When I scale (4, a2, a3, a4) at p=5 by the inverse of 4, which is 4 itself, I get (1, -a2, -a3, -a4). So the standard construction has fiber 1 with canonical form (1, a2, a3, a4), while my scaled version has (1, -a2, -a3, -a4)—these are genuinely different projective points unless a equals -a, which only happens when 2a = 0.
+
+This means the scaled-by-4 construction produces a completely different strongly-ZSF set of 17 vectors, and its shadow doesn't saturate at 620/624. So my proof strategy is fundamentally broken—shadow saturation doesn't always hold even for strongly-ZSF sets, which means the uniqueness claim that doubled+e1 is the only such set is false. Let me double-check whether these are actually projectively distinct or if I'm missing something about the equivalence. I'm listing out all the fiber-1 vectors for the scale-4 set and comparing them to the standard fiber-1 vectors—they're clearly distinct projective points, which confirms scale-4 gives a different set. Now I need to verify whether this scale-4 set actually satisfies the strong ZSF property.
+
+The code confirms ZSF=True up to weight 5, so there are no zero-sums at weight ≤ 5. The shadow at weight 4 covers 620 out of 624 vectors, leaving just 4 missing—which is a genuine counterexample to shadow saturation for a strongly-ZSF set. But this doesn't necessarily break the GRAIL conjecture; even if shadow saturation fails, those 4 missing vectors might still be killed at weight ≤ p through some other mechanism when combined with the 18th vector, rather than through the shadow of the strongly-ZSF set itself.
+
+The real question is whether those 4 missing vectors actually create weight-≤-p zero-sums when added to the scale-4 construction. If even one of them doesn't, then the GRAIL conjecture would be false.
+
+I need to identify those 4 missing vectors from the shadow and test them immediately—this is the critical verification step.
+
+============================================================
+BLOCK 17 (15804 chars)
+============================================================
+EXCELLENT! This is a very important finding:
+
+1. **The scale-4 construction IS a different strongly-ZSF set** (8 projective points differ from the standard doubled+e1). It shares 9 points with the standard (the fiber-0 vectors + e1).
+
+2. **Shadow saturation FAILS** for this set: 620/624, with 4 missing vectors.
+
+3. **BUT THE GRAIL STILL HOLDS**: all 4 missing vectors create zero-sums at weight ≤ p when added. Specifically:
+   - (1,0,3,3) → zero-sum at weight 5 = p
+   - (1,0,4,4) → zero-sum at weight 5 = p  
+   - (3,0,1,1) → zero-sum at weight 3 < p
+   - (3,0,2,2) → zero-sum at weight 3 < p
+
+So the zero-sums exist, just NOT via the shadow mechanism. They use higher coefficients on the 18th vector (c > 1) or a completely different mechanism.
+
+4. **The 4 missing vectors all have the form (x1, 0, k, k)** — they lie on the "missing diagonal" of the construction!
+
+Now I'm seeing that (1,0,3,3) and (1,0,4,4) belong to fiber 1, while (3,0,1,1) and (3,0,2,2) are related by scaling x1. The key insight is that (1,0,4,4) and (3,0,2,2) are projectively equivalent—they reduce to the same canonical form. So there are really only two distinct projective classes among these missing vectors, not four. (1,0,3,3) = (1,0,-2,-2) in F_5, (1,0,2,2) is another, and (1,0,4,4) = (1,0,-1,-1). All three have the form (1, 0, k, k) — they're sitting on the "missing diagonal" {(0, k, k)} but shifted to the first coordinate being 1. This connects to the Missing Diagonal Conjecture about which points are excluded from the variety at each prime, and at p=5 the actual missing diagonal should be {(0,0,0), (0,1,1)}.
+
+But in the scale-4 construction, the missing vectors in F_5^4 are {(1,0,k,k)} for k ∈ {2,3,4}, which doesn't quite align. Let me reconsider — the scale-4 construction negates the fiber-1 A8 while keeping fiber-0 unchanged, so the shadow at weight p-1 misses these cross-fiber vectors. The cross-fiber completeness conjecture suggests that combining the cumulative sums from both fibers should cover all of F_p^3, which might explain why these particular vectors are the gaps.
+
+When I replace one A8 with -A8, the sumset interaction flips: instead of adding the cumulative sums, I'm subtracting them. If A8 has a structural weakness on the diagonal, this subtraction amplifies the missing coverage rather than filling it in. The scale-4 construction fails precisely because the two copies are anti-aligned instead of aligned, which breaks the completeness property.
+
+Now I'm realizing the core issue: different scalar multiples of the same projective vectors can have completely different shadow properties, even though they're technically the same ZSF set in projective terms. The problem fixes us to specific vectors, not equivalence classes, so scale-4 is genuinely a different set with different behavior.
+
+The real question is whether I need the proof to handle all strongly-ZSF sets or just the standard doubled+e1 construction. If scale-4 is strongly ZSF but lacks shadow saturation, then shadow saturation alone can't be the mechanism—I need something else to explain why the GRAIL still produces zero-sums for those four missing vectors.
+
+Let me check whether scale-4 and the standard construction are actually projectively equivalent by looking at whether a linear transformation could map one to the other while preserving the fiber structure.
+
+The key insight is that T = diag(1, -1, -1, -1) is a valid projective transformation in GL(4, F_5), and it maps the standard fiber 1 points {(1, a) : a ∈ A_8} to the scale-4 fiber 1 points {(1, -a) : a ∈ A_8}. Now I need to verify how this transformation acts on fiber 0 to confirm the full equivalence. The shadow depends on the specific vector representatives, not just the projective equivalence class—this is a crucial distinction. The problem asks about specific vectors in F_p^{r+1}, and since linear transformations preserve zero-sums, if T maps the standard construction to the scale-4 version, then any zero-sum configuration in one should correspond to a zero-sum in the other with the same coefficients.
+
+The shadow itself transforms under T as well: if the standard configuration saturates the shadow completely, then T should map that saturated shadow to an equally saturated shadow in the transformed configuration. But my calculations show the standard has full shadow saturation while scale-4 doesn't, which shouldn't happen if they're related by a linear transformation. I need to recheck the transformation T itself. I'm listing out the standard fiber 1 vectors and checking where T maps each one, converting the results to scale-4 coordinates to see if there's a pattern mismatch that explains the shadow size discrepancy. So T actually maps the standard fiber 0 to a scaled version that doesn't match scale-4's fiber 0—the transformation produces (0,4,0,0) where scale-4 expects (0,1,0,0). This means T isn't an isomorphism between these two constructions; it's mapping standard to an entirely different set. The key difference is that scale-4 flips the sign in fiber 1 while keeping fiber 0 the same, whereas T's action doesn't preserve this structure.
+
+Now looking at what T actually produces: fiber 0 becomes {(0, -a)} and fiber 1 stays {(1, -a)} + {e1}. Comparing to scale-4, they share the same fiber 1 but differ in fiber 0—scale-4 has {(0, a)} while T(standard) has {(0, -a)}. These are projectively equivalent since they differ by a factor of -1, but in the ZSF problem we're working with specific vectors, not equivalence classes, so this distinction matters.
+
+The crucial realization is that projective equivalence doesn't preserve shadow properties—two projectively equivalent sets can have different shadow coverages because the shadow depends on which specific vector representatives we choose. However, ZSF itself is preserved under linear transformations since zero-sum relationships are preserved and weights remain unchanged. Now I need to figure out how shadow behaves under these transformations.
+
+If a set has complete shadow saturation, that property is also preserved when we apply a linear transformation. But scale-4 can't be obtained from standard through any linear transformation—they share the same fiber 0 but scale-4 negates the vectors in fiber 1, and there's no linear map that can selectively negate just one fiber while leaving the other unchanged.
+
+Let me check if such a transformation could exist. It would need to keep fiber 0 fixed and negate fiber 1, which means T(e₁) = e₁ and the restriction to the kernel must be identity. Working through the constraints, I'm finding that T would have a specific block structure, but when I apply it to fiber 1 vectors, the arithmetic doesn't work out to give the negation I need.
+
+Actually, I should reconsider what projective equivalence really means here—it allows for scalar multiples, not just linear maps, so let me think about whether these sets could be related through a different notion of equivalence.
+
+For a transformation T to map the standard set to the scale-4 set, I need T(1, a) to be proportional to (1, -a) for each vector (1, a). If T fixes the first coordinate in some sense and acts on the rest, then T(1, a) = T(e₁) + T applied to the remaining components, but this constraint that r₂ = -2a₂ must hold uniformly across all possible a₂ values creates a fundamental incompatibility. kernel of x1]
+Wait, T doesn't have to fix the kernel. Let me be more general.
+
+T is a 4×4 matrix. We need:
+- For each (0, a) ∈ fiber0: T(0, a) ∝ some (0, a') with a' ∈ A8
+- For each (1, a) ∈ fiber1: T(1, a) ∝ some (1, -a') with a' ∈ A8
+- T(1, 0, 0, 0) ∝ (1, 0, 0, 0)
+
+This is a strong constraint. The condition T(0, a) ∝ (0, something) means T maps the x1=0 hyperplane to itself. And T(1, a) ∝ (1, something) means the first coordinate of T(1, a) is nonzero. Since T preserves the x1=0 hyperplane, it has a block structure where the top-left is scalar and the bottom-left is a 3×1 vector, with a 3×3 block M handling the remaining coordinates.
+
+When T acts on (0, a), it produces (0, M*a), so M must permute the projective classes of A8. For (1, a), we get (t11, t21 + M*a), which needs to be proportional to (1, -a'), giving us a relationship between t21, M*a, and the scaling factor t11.
+
+If M maps each a to some λ_a * a', then t21 + λ_a * a' = -t11 * a'. Since t21 is fixed but a' varies over all of A8, this creates a contradiction unless t11 + λ_a = 0 for every a and t21 = 0.
+
+So λ_a = -t11 for all a, meaning M acts as a scalar multiple of a permutation on A8. With this constraint, T takes the form [[t11, 0], [0, -t11 * P]] where P permutes the points in A8, and I can verify this preserves the required structure.
+
+For the fiber at 1, the transformation maps (1, a) to (1, -P(a)), which stays within the scale-4 fiber since P permutes A8. For the fiber at 0, I need to check that (0, a) maps appropriately under the same transformation.
+
+Since P is an automorphism of A8, both fibers are preserved, so the standard and scale-4 configurations are projectively equivalent. This means the shadow of the transformed standard configuration should equal the transformation applied to the shadow of the original, which gives me T(F_p^4 \ {0}).
+
+But here's the subtlety: T maps standard to scale-4 projectively, not as identical sets—each vector v gets scaled by some coefficient λ_v that depends on which vector it is. So while the shadows should be equal in principle, the actual representatives matter because the shadow calculation depends on the specific vectors chosen, not just their projective equivalence class. So the set of reachable vectors at weight 1 is identical whether I use v' or λv' as the representative. But when I move to weight 2, things get trickier—if different vectors in my set have different scaling factors λ, the shadow changes. Let me step back and think about the scale-4 construction more carefully: the transformation T maps (1, a) to a scaled version of (1, -P(a)), and depending on whether that scaling factor equals 1, I get different representatives, which affects what the shadow actually captures. over the same set, but the weight itself changes depending on which representatives I pick. If I replace v_i with λ_i * v_i and want to reach the same target, the coefficients become c'_i = c_i / λ_i, which means the total weight Σ c'_i differs from the original Σ c_i. So the shadow at a given weight isn't invariant under projective equivalence—it actually depends on the specific representatives chosen, not just the projective points themselves.
+
+This means scale-4 fails precisely because those representatives are poorly chosen for shadow saturation, even though the projective configuration matches the standard doubled+e1. The proof can't just work at the projective level; it needs to handle the specific representatives we're given. Since we can't choose the representatives in the original problem, I need a different argument that works regardless of how badly the representatives are scaled. , I showed that the GRAIL still holds for scale-4's 4 missing vectors — they create zero-sums at weight ≤ p via other mechanisms. So the GRAIL itself is not falsified.
+
+This means the proof strategy needs to be:1. If the shadow saturates → done (shadow argument)
+2. If the shadow doesn't saturate → find a different mechanism for the unshadowed targets
+
+This is MORE COMPLEX than the original strategy. The original strategy assumed shadow saturation for all strongly-ZSF sets.
+
+Wait, I realize there's another issue: the problem says we have 18 vectors, and we pick a 17-vector subset. If the 18 vectors are such that one choice of 17-vector subset is the scale-4 construction, and the 18th vector is an unshadowed target, then the shadow argument fails for THIS choice of 17-vector subset.
+
+But I don't need every 17-vector subset to work — just one. So even if the scale-4 subset lacks shadow saturation for certain targets, I could choose a different 17-vector subset that does satisfy the shadow argument. The challenge is that I can't arbitrarily pick any subset; I need to be strategic about which one I select.
+
+This is a genuinely important shift in the proof strategy. Let me reconsider the scale-4 construction more carefully to see if there's something I'm missing about how the vectors interact. Fiber 0: (0, v) for v ∈ A8 (SAME)
+- Fiber 1: (1, 4v) for v ∈ A8 = (1, -v) for v ∈ A8
+- Plus: (1, 0, 0, 0) = e1
+
+Wait, (1, 4v) and (1, v) differ. But they represent DIFFERENT projective points (unless v = 0).
+
+Hmm, but earlier I showed they share 9 projective points (fiber 0 + e1) and differ in 8 projective points. But I also showed that T = diag(1, -1, -1, -1) ∈ GL(4, F_5) maps:
+- (0, a) → (0, -a) ∝ (0, a) projectively (same point since -a = 4a is a scalar multiple)
+- (1, a) → (1, -a) projectively a DIFFERENT point
+
+And T(standard fiber 1) = {(1, -a) : a ∈ A8} = scale-4 fiber 1.
+T(standard fiber 0) = {(0, -a) : a ∈ A8} = {(0, 4a) : a ∈ A8}. Projectively same as fiber 0.
+
+But the VECTORS are different: T(standard fiber 0) has vectors (0, 4, 0, 0), (0, 0, 4, 0), etc., while scale-4 fiber 0 has (0, 1, 0, 0), (0, 0, 1, 0), etc. So T acts differently on the affine fibers even though it preserves the projective structure.
+
+The shadow of T(standard) equals the shadow of standard by linearity, so shadow saturation is preserved. But T(standard) and scale-4 are different as sets of vectors—they're a hybrid construction using standard fiber 0 plus negated fiber 1, which isn't the image of any single linear transformation applied to the standard. This genuinely different vector set has distinct shadow properties, so I'm confident in my findings now.
+
+But I need to reconsider whether scale-4 is actually a valid counterexample or just an equivalent representation under the group's natural equivalences. In zero-sum theory, sequences are equivalent if related by group automorphisms, reordering, or scalar multiplication of individual terms. Under this definition, scale-4 is equivalent to the standard since multiplying fiber-1 vectors by -1 transforms one into the other. However, shadow saturation isn't preserved under scalar multiplication—changing representatives changes the shadow. So the real question is whether the proof needs to hold for all representative choices or just canonical ones.
+
+The answer is all representative choices, since the problem gives us 18 arbitrary nonzero non-proportional vectors without letting us pick the representatives. When we replace vectors with scalar multiples, a zero-sum c_1*v_1 + ... + c_k*v_k = 0 becomes c_1*(λ_1*v_1) + ... + c_k*(λ_k*v_k) = 0, which changes the coefficients and potentially the weight of the sum.
+
+But actually, the zero-sum is about the given vectors themselves—we can't change which representatives we're working with. If the 18 vectors consist of the scale-4 construction's 17 vectors plus one additional vector, and that 18th vector happens to be one of the 4 unshadowed targets, then the shadow argument fails for that particular 17-vector subset. However, removing a different vector might yield a subset where the argument works. The key insight is that adding any of the 4 missing vectors to the scale-4 construction produces a zero-sum with weight at most p.
+
+The real problem is that my proof strategy assumed I could pick ANY 17-vector subset from the 18 and guarantee shadow saturation, but that's not always true. I need to either show that for any 18 vectors there exists at least one 17-vector subset with shadow saturation, or handle the non-saturating cases through a different mechanism—perhaps by proving that the scale-4 construction is the only problematic case and that its unshadowed targets always create zero-sums through alternative means.
+
+Now I'm ready to write up the findings.
+
+============================================================
+BLOCK 18 (7361 chars)
+============================================================
+VERY IMPORTANT:- **p=5, Scale 4 (= -1 mod 5)**: gap=4. Shadow saturation FAILS.
+- **p=7, Scale 6 (= -1 mod 7)**: gap=6. Shadow saturation FAILS.The failing scale is ALWAYS c = p-1 = -1! Scaling by -1 means the fiber-1 vectors are (1, -a) instead of (1, a). This is the NEGATION of the fiber-1 copy.Scales 1 through p-2: shadow saturation HOLDS.
+Scale p-1: shadow saturation FAILS with gap exactly equal to... let me check:- p=5: gap = 4- p=7: gap = 6Pattern: gap = p-1? Or gap = (p-1)? Let me check: p=5 gap=4=p-1. 
+
+So the gap is consistently p-1 when scaling by -1, meaning exactly p-1 vectors vanish from the shadow at that weight. This special case of scaling by -1 creates an anti-symmetric interaction that breaks shadow saturation, while all other scalings from 1 through p-2 preserve it perfectly.
+
+The scale-(p-1) construction is genuinely distinct from the standard one—they diverge at fiber 1 where the projective points are {(1, a)} versus {(1, -a)}, which are different sets since a and -a aren't equivalent projectively. This gives me a concrete counterexample showing shadow saturation doesn't hold universally for strongly-ZSF sets, though the core argument still survives because the missing vectors don't actually undermine the proof's requirements.
+
+Now I need to figure out how to handle this: either show the standard construction is the only one that matters up to projective equivalence (which seems false given the scale-(p-1) case), prove that any strongly-ZSF set produces a weight-≤-p zero-sum regardless of shadow saturation, or treat the scale-(p-1) case as a special case. The real constraint is that we're given 18 arbitrary nonzero non-proportional vectors, and if our chosen 17-vector subset happens to be the scale-(p-1) construction, I need to verify the 18th vector still forces the required zero-sum. hadowed targets, the shadow argument fails.
+
+But can this actually happen? Let me think about when the scale-(p-1) construction arises.
+
+The scale-(p-1) construction has:
+- Fiber 0: (0, a) for a ∈ A8
+- Fiber 1: (1, -a) for a ∈ A8, plus (1, 0, 0, 0)
+
+The corresponding standard construction has fiber 1 as (1, a) instead of (1, -a).
+
+If we have 18 vectors that include BOTH (1, a) AND (1, -a) for some a ∈ A8, we can't form either the standard or scale-(p-1) 17-vector subset (since both share fiber 0 and e1). We'd have to pick one of the two for each position.
+
+Now, the 18 vectors are arbitrary—they could be any 18 nonzero non-proportional vectors—and we're choosing the 17-vector subset to show that some subset has a zero-sum at weight ≤ p. If the 18 vectors happen to contain the scale-(p-1) construction plus one of the p-1 unshadowed targets, the shadow argument breaks down for that particular subset. But the scale-(p-1) construction itself forms a 17-vector subset of the 18, with the 18th vector being an unshadowed target, and I need to find a zero-sum at weight ≤ p. I showed that adding any of the 4 missing vectors produces the required zero-sum.
+
+The mechanism isn't the shadow—it's something else. Looking at the output, the 4 missing vectors create zero-sums at weights 3 and 5, where the weight-3 zero-sums involve 3 vectors from the scale-(p-1) construction plus the 18th vector.
+
+Now I'm checking whether (3, 0, 1, 1) is a scalar multiple of any vector in S17_sc4. It looks like (3, 0, 1, 1) might equal 3 times (1, 0, 2, 2) modulo 5, so I'm verifying the arithmetic: 3·1=3, 3·0=0, 3·2=6≡1 (mod 5), 3·2≡1 (mod 5).
+
+Since S17_sc4 is strongly zero-sum-free up to weight 5, any zero-sum at weight 3 that appears when I add (3, 0, 1, 1) must involve this new vector. This means there's a linear combination of S17 vectors plus a coefficient on (3, 0, 1, 1) that sums to zero at weight 3.
+
+Now I'm checking whether the coefficient on the new vector could be 1 or greater. If the coefficient is 1, then the S17 vectors alone must sum to weight 2 and reach the point (2, 0, 4, 4). If it's 2 or higher, I'd need a single S17 vector that equals (4, 0, 3, 3) mod 5, which I can verify against the set. (4,0,3,3) ≠ 0 mod 5, so c ≠ 3 with support 0. That leaves c=1, where the weight-2 shadow reaches (2,0,4,4), which is actually present in the shadow. The key insight is that the shadow mechanism operates at weight 2 by reaching -(3,0,1,1), and then a coefficient of 1 on (3,0,1,1) produces the weight-3 zero-sum—this is the shadow mechanism working at a lower weight than I initially expected. The weight-4 shadow misses (3,0,1,1), but its negative...
+
+Actually, I'm realizing the pattern: the shadow doesn't need to reach -v at weight p-1 for every nonzero v. Instead, for the zero-sum argument to work, I only need the shadow to reach -c*v at weight p-c for some coefficient c, which gives a zero-sum of weight p-c+1. This explains why (1,0,3,3) and (1,0,4,4) achieve zero-sums at weight p using the full budget, while other vectors use lower weights through this scaled shadow mechanism.
+
+So the actual claim I need is weaker than full shadow saturation: for every nonzero non-proportional v, there exists some c ∈ {1,...,p-1} where -c*v appears in the shadow at weight p-c. This "weak shadow saturation" is sufficient for the GRAIL argument, and it's what the scale-(p-1) construction actually delivers—most targets hit at weight p-1 with c=1, while the p-1 missing targets reach lower weights with larger coefficients.
+
+Now I'm checking whether this weak property holds: for the p=5 case, the four missing vectors all produce weight-≤-p zero-sums, and I need to verify the specific coefficients work. For (1,0,3,3), the zero-sum appears at weight 5, so I'm checking whether the shadow reaches -v at the required weight when c=1. So none of the negatives of the missing vectors appear in the missing list itself—they're all present in the shadow at weight 4. This means I can construct a valid zero-sum combination using these vectors.
+
+But I'm confused about what the code output means: it says "NOT ZSF at weight 5," which I'm interpreting as the first zero-sum involving (1,0,3,3) appearing at weight 5, not earlier. Let me reconsider whether the weight-4 shadow actually gives me a valid zero-sum or if there's a constraint I'm missing. the extended set (S17 + (1,0,3,3)) is at weight 5. The zero-sum is Σc_i v_i + c*(1,0,3,3) = 0 with Σc_i + c ≤ 5.
+
+If -(1,0,3,3) is in the shadow at weight 4 (c=1, shadow at weight 4), then we get a zero-sum at weight 4+1=5. This IS what's happening.
+
+But why not lower? For c=2: -2*(1,0,3,3) = -(2,0,1,1) = (3,0,4,4). Is (3,0,4,4) in shadow at weight 3? It's not in the missing list (which is for weight 4), but the shadow at weight 3 is smaller than at weight 4. Even if (3,0,4,4) were in the weight-3 shadow, that would only give a zero-sum at weight 5 again, not lower. For c=3, I'd get (2,0,1,1), which likely isn't in the weight-2 shadow either.
+
+The crucial insight is that the zero-sum at weight 5 is optimal—the missing vector (1,0,3,3) can't be reached at any lower weight through any coefficient choice, making this the tightest possible construction.
+
+Now I'm wondering if this pattern holds universally: does adding any 18th vector to a strongly-ZSF set always force a zero-sum at weight ≤ p? This is the core of the GRAIL conjecture, and shadow saturation alone won't resolve it for scale-(p-1) cases. I need a different approach for the general proof.
+
+============================================================
+BLOCK 19 (937 chars)
+============================================================
+PERFECT. The findings are now crystal clear:
+
+**STRONG SHADOW SATURATION FAILS** for the scale-(p-1) construction:
+- p=5: 4 missing vectors, all of form (x, 0, k, k) with k = k (diagonal)
+- p=7: 6 missing vectors, all of form (x, 0, k, k) (diagonal)
+- Gap = p-1 at both primes (consistent with the "missing diagonal" conjecture)
+
+**WEAK SHADOW SATURATION HOLDS**: For every missing vector v, -v is reachable at weight ≤ p-1 (coefficient c=1 on v gives weight ≤ p). The negatives of missing vectors are NOT missing.
+ 
+So strong shadow saturation fails for this construction, but weak shadow saturation holds—the negatives of all missing vectors remain reachable at the required weight bound. This is enough to preserve the GRAIL argument. The missing vectors themselves all lie on that diagonal structure, which ties directly back to the Missing Diagonal Conjecture. Now I'm documenting these findings in a comprehensive adversary report.
+
+============================================================
+BLOCK 20 (110 chars)
+============================================================
+Let me read the theorist and computer outputs to see if they've found anything that my findings interact with.
+
+============================================================
+BLOCK 21 (2536 chars)
+============================================================
+Now I have the full picture from all three agents. Let me note the key interactions:
+
+1. **Theorist** found:
+   - Shadow reformulation as Minkowski sums (Lemma 4)
+   - Sumset lower bounds via polynomial avoidance (Theorem A) - gives 56.7% coverage at p=5
+   - Multi-fiber reduction (Theorem B) - promising for induction
+   - Tight counting at rank 3 (Theorem C) - 126 tuples → 125 elements
+   - Key reference: arXiv:2510.08857 on iterated sumset expansion
+   
+2. **Computer** confirmed that the Cauchy-Weil approach breaks down for p ≥ 7 due to degree constraints, fully mapped out the fiber structure, and derived the exact growth formula g(w) = 6w² + 2 for the A8 case. Interestingly, zero-sum-free constructions actually compress shadows rather than expand them, and identified 44 particularly difficult targets that admit only a single representation.
+
+3. My adversarial analysis shows the strong shadow saturation conjecture fails for the scale-(p-1) construction, with the gap pinned at exactly p-1 vectors.
+
+The weak saturation property does hold though, which is what GRAIL actually needs. The A8 configuration turns out to be uniquely optimal at p=5 and p=7, and the p=3 case works as well.
+
+What's striking is how these pieces fit together: the Computer's observation that ZSF shrinks shadows aligns perfectly with my scale-(p-1) construction achieving even tighter shadow bounds (620 < 624). The Theorist's 56.7% coverage bound is just a lower bound—the actual coverage reaches 99.4% or potentially 100%, and those 44 hardest targets the Computer identified are exactly the fragile points my margin analysis exposed. My counterexample directly challenges the Theorist's multi-fiber reduction claim in Theorem B.
+
+Now I need to verify my findings are documented and connect this back to the Computer's A8 growth formula, then examine whether the Theorist's tight counting argument in Theorem C can actually explain what I'm seeing. At rank 4 with 17 vectors, I'm getting roughly 9.6 representations per target on average, which seems to be the critical ratio here.
+
+Looking at the scale-(p-1) construction more carefully, a handful of targets have no representations at weight ≤ 4, while the remaining targets average around 9.65 representations each—barely different from the standard case. The key insight is that the unreachable vectors follow a specific diagonal pattern, but their negatives are always reachable, which is what the proof ultimately needs to establish.
+
+I think I have everything I need for the report now.
+
+============================================================
+BLOCK 22 (297 chars)
+============================================================
+The initial attack script produced no output (timed out before printing anything). But that's fine — I already ran all the attacks individually and got all the results I needed. The comprehensive report is already written.
+
+Let me verify the report file is complete and all artifacts are in place.

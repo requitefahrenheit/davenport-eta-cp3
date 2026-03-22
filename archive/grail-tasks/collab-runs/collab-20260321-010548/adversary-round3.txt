@@ -1,0 +1,176 @@
+[TOOL: ToolSearch]
+[CORTEX SEARCH: grail fiber balance ZSF adversary counterexample]
+[CORTEX SEARCH: alpha maximal zero-sum free weight shadow saturation]
+[CORTEX SEARCH: p=3 cap set eta bound rank 4]
+[TOOL: mcp__claude_ai_cortex__cortex_list]
+[CORTEX SEARCH: zero-sum weight fiber induction]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/ce2d8d45-8433-4fcf-90ae-5f36939e0866/tool-results/toolu_01NDz6iv2qrubFoNArppqNyS.txt]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/ce2d8d45-8433-4fcf-90ae-5f36939e0866/tool-results/toolu_01NDz6iv2qrubFoNArppqNyS.txt]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/ce2d8d45-8433-4fcf-90ae-5f36939e0866/tool-results/toolu_01NDz6iv2qrubFoNArppqNyS.txt]
+
+[BASH] head -100 /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/ce2d8d45-8433-4fcf-90ae-5f36939e0866/tool-results/toolu_01NDz6iv2qrubFoNArppqNyS.txt
+
+[CORTEX SEARCH: shadow saturation proof circular weight budget fiber]
+[CORTEX SEARCH: induction fiber concentration pigeonhole arithmetic gap]
+Cortex has my R2 attacks but nothing new from others. Let me construct my Round 3 attacks — targeting the three pillars the theorist and computer are building on.
+
+---
+
+# ADVERSARY ROUND 3: THREE FATAL STRUCTURAL ATTACKS
+
+## Attack 1: Shadow Saturation "Proof" is CIRCULAR — Cannot Bootstrap η
+
+**Claim under attack:** "Shadow saturation is a proved theorem that can anchor the inductive strategy."
+
+**The circularity:** The theorist's "5-line proof" of shadow saturation proceeds:
+1. Take maximal ZSF set B with |B| = α(r) in F_p^r
+2. For any nonzero u, consider B (multiplicity p−1) + u (multiplicity 1) = α(r)(p−1)+1 = η(C_p^r) elements
+3. By the η bound, a zero-sum of weight ≤ p exists
+4. It must involve u (else B has a zero-sum, contradicting ZSF)
+5. So −u = Σcᵢbᵢ with Σcᵢ ≤ p−1, proving u ∈ Σ_{≤p-1}(B)
+
+**Step 3 assumes η(C_p^r) ≤ α(r)(p−1)+1 — the very bound we're trying to prove.**
+
+Shadow saturation at rank r is a *consequence* of the η bound at rank r. It cannot be used to prove the η bound without circularity.
+
+**What survives:** Shadow saturation at rank r−1 follows from the inductive hypothesis η(C_p^{r−1}) ≤ α(r−1)(p−1)+1. So fiber-level shadow saturation is available. But *global* shadow saturation at rank r is not.
+
+**Impact on proof strategy:** Any argument that invokes "shadow saturation implies the bound" is logically vacuous. The theorist must find an *independent* proof of shadow saturation, or abandon it as a proof tool entirely.
+
+---
+
+## Attack 2: The Inductive Fiber Strategy Has an UNCLOSABLE Arithmetic Gap
+
+**Claim under attack:** "Project to a hyperplane, apply induction within fibers, combine across fibers."
+
+**Setup:** We want to prove η(C_p^r) ≤ (2α(r−1)+1)(p−1)+1. Consider n = 2α(r−1)+2 non-proportional directions with multiplicity p−1 in F_p^r. Project via a linear functional ℓ: F_p^r → F_p. Vectors partition into p fibers.
+
+**The weight-lifting obstruction:**
+
+Within fiber c ≠ 0 containing f_c directions: a zero-sum Σaᵢ(c,tᵢ) = 0 requires c·(Σaᵢ) ≡ 0 (mod p), so Σaᵢ ≡ 0 (mod p). This lifts to a global zero-sum ONLY when the integer weight = p (the minimum positive multiple of p).
+
+- The **η threshold** (≥ α(r−1)+1 directions → zero-sum of weight ≤ p) guarantees *some* zero-sum but NOT weight exactly p. Weight could be 1, 2, ..., p−1, or p.
+- The **s threshold** (≥ α(r−1)+2 directions → zero-sum of weight exactly p) requires ONE MORE direction per fiber.
+
+**Pigeonhole kills concentration:**
+
+With n = 2α(r−1)+2 directions across p fibers, pigeonhole gives max fiber ≥ ⌈n/p⌉.
+
+For rank 4, p=5: n = 18, max fiber ≥ ⌈18/5⌉ = 4. We need ≥ α(3)+1 = 9 for η, or ≥ α(3)+2 = 10 for s. **Pigeonhole gives 4. We need 9 or 10.**
+
+The doubled+e₁ construction concentrates (8 in fiber 0, 9 in fiber 1, 1 in new fiber), reaching the η threshold in fiber 1. But this concentration is a *property of that specific construction*, not a theorem about all configurations.
+
+**Explicit counterexample to fiber concentration:**
+
+18 directions in F_5^4 distributed as (4, 4, 4, 3, 3) across 5 fibers. No single fiber reaches the η threshold of 9. The inductive approach cannot even *start*.
+
+The doubled+e₁ set is essentially 2-fiber under its natural projection. But the *18th direction could go anywhere*. If it creates a third fiber with 1 direction, fiber 1 has 9 → η applies but NOT s. The weight-p zero-sum is not guaranteed.
+
+**Concrete arithmetic failure (p=5, fiber 2 has 1 direction):**
+
+Fiber 1 produces a partial sum w·e₁ with weight w ∈ {1,...,5}. If w = 5: global zero-sum, done. If w < 5: need to combine with fiber 2's single direction (2, t₁₈).
+
+Using j copies of (2, t₁₈): first component 2j must cancel w, so w + 2j ≡ 0 (mod 5), giving j ≡ −w/2 ≡ −3w (mod 5). Total weight = w + j ≤ 5.
+
+| w | j = (−3w mod 5) | w + j | ≤ 5? |
+|---|---|---|---|
+| 1 | 2 | 3 | YES |
+| 2 | 4 | 6 | **NO** |
+| 3 | 1 | 4 | YES |
+| 4 | 3 | 7 | **NO** |
+| 5 | 0 | 5 | YES (already done) |
+
+**For w ∈ {2, 4}, the cross-fiber combination exceeds the weight budget.** The inductive approach fails for half the possible weight values.
+
+And the tail cancellation adds a further constraint (t₁₈ must equal a specific vector determined by the partial sum), making success even less likely.
+
+---
+
+## Attack 3: The Inductive Strategy is STRUCTURALLY CIRCULAR
+
+**Claim under attack:** "The inductive structure mirrors the lower bound and should yield the upper bound."
+
+**The hidden circularity:**
+
+The inductive approach reduces the η upper bound at rank r to proving that any set of 2α(r−1)+2 directions in F_p^r has a *concentrated fiber projection* (most directions in ≤ 2 fibers). But proving fiber concentration for arbitrary ZSF-breaking sets IS equivalent to proving the η bound — the two statements are logically interchangeable.
+
+**Proof of equivalence:**
+
+(⇒) If every 2α(r−1)+2-direction set has a projection with ≤ 2 active fibers, the 2-fiber theorem gives the η bound.
+
+(⇐) If the η bound holds, then any 2α(r−1)+2-direction set has a zero-sum of weight ≤ p. But this tells us nothing about fiber structure — the zero-sum might involve vectors from many fibers.
+
+So (⇒) works but (⇐) doesn't give fiber concentration. The fiber concentration property is *strictly stronger* than the η bound. The inductive strategy proves something stronger than needed, which is why it can't close.
+
+**The causal arrow is backwards.** The lower bound's inductive structure (doubling + e₁) works because it *constructs* a concentrated configuration. The upper bound needs to show that concentration is *forced*, which requires understanding ALL possible configurations — exactly the hard part.
+
+---
+
+## Attack 4: The Fiber Weight Divisibility Lemma is Vacuous
+
+**Claim under attack (Theorist's R3 directive):** "When fiber-c ≠ 0 contains ≥ α(r)+2 vectors, EVERY zero-sum among them has total weight ≡ c·(count) (mod p)."
+
+**Reality:** Any zero-sum in fiber c has Σaᵢ ≡ 0 (mod p) (from the first-coordinate constraint). The "c·(count)" condition: if "count" means the number of terms, then c·(count) is some value in F_p. But the weight Σaᵢ is always ≡ 0 (mod p), and c·(count) has no reason to be 0 (mod p) unless count ≡ 0 (mod p).
+
+The lemma as stated either:
+- Is trivially true (if it just restates Σaᵢ ≡ 0 mod p), OR
+- Is false (if it claims something non-trivial about the count-weight relationship)
+
+Either way, it does not resolve the s-vs-η gap. The real obstruction is: having α(r−1)+1 directions in a nonzero fiber only guarantees zero-sums of weight ≤ p, not weight = p. The s threshold requires α(r−1)+2, one more than the η threshold.
+
+---
+
+## Attack 5: The "Support-4 Ceiling at p ≥ 17" Reveals a Deeper Problem
+
+The theorist notes that support-4 zero-sums can hit at most 16 distinct first-coordinate targets. For p ≥ 17, not all residues are covered.
+
+**This is worse than stated.** The issue isn't just support-4 — it's that the number of achievable first-coordinate targets for any fixed support size k grows polynomially in k (roughly k^{r-1} choices), while p grows independently. For any fixed lifting strategy that uses bounded support, there exists a prime p large enough to defeat it.
+
+**Formal statement:** Fix rank r and support bound k. The number of distinct values achievable as Σ_{i=1}^k a_i c_i (mod p) with a_i ∈ {1,...,p-1} and c_i from a fixed set of ≤ k fiber labels is at most (p-1)^k · |fiber labels|^k / p ≈ p^{k-1}. For this to cover all p residues, need k ≥ 2. But covering all residues also requires the specific *tail* condition, which further restricts the achievable set.
+
+For the inductive strategy, this means: **no bounded-support mechanism can work uniformly across all primes.** The proof, if it exists, must use a mechanism whose support grows with p or is independent of support bounds.
+
+---
+
+## Synthesis: What's Left Standing?
+
+| Component | Status | Why |
+|-----------|--------|-----|
+| Shadow saturation (global) | **CIRCULAR** | Assumes η to prove η |
+| Shadow saturation (fiber-level) | VALID | Follows from inductive hypothesis |
+| Fiber concentration | **UNPROVED** | Stronger than needed; no route to proving it |
+| Within-fiber η → global zero-sum | **INCOMPLETE** | Weight ≤ p ≠ weight = p |
+| Cross-fiber combination | **ARITHMETIC GAP** | Fails for ~50% of weight values |
+| Support-bounded lifting | **PRIME-LIMITED** | Fails for p > support^{r-1} |
+
+**Conclusion:** The inductive fiber strategy has THREE independent fatal flaws:
+1. Circularity (shadow saturation can't bootstrap)
+2. Concentration gap (pigeonhole doesn't force it)
+3. Weight arithmetic (even with concentration, half the weights don't combine)
+
+Any viable proof of the Grail must either:
+- **(a)** Find a completely different proof architecture (not fiber induction), OR
+- **(b)** Prove fiber concentration independently (perhaps via extremal uniqueness — if the doubled+e₁ construction is the ONLY maximal ZSF set up to equivalence, then concentration follows), OR
+- **(c)** Find a cross-fiber mechanism that works for ALL weight values, not just the ones where w + j ≤ p.
+
+Option (b) is the most promising, but extremal uniqueness is itself an open problem of comparable difficulty to the Grail.
+
+[CORTEX STORE] ADVERSARY ROUND 3: THREE FATAL STRUCTURAL ATTACKS ON GRAIL PROOF
+
+## Attack 1: Shadow Saturation Circularity
+The 5-line proof of shadow saturation (Σ_{≤p-1}(B) = F_p^r \ {0}) uses the η bound at rank r — the very thing being proved. Shadow saturation is a CONSEQUENCE of η, not a tool for proving it.
+
+Stored to Cortex. Here are the key takeaways for the coordinator:
+
+---
+
+## THREE INSIGHTS FOR OTHER AGENTS
+
+### 1. Shadow Saturation Cannot Bootstrap — The Proof is Circular
+The "5-line proof" of Σ_{≤p-1}(B) = F_p^r \ {0} assumes η(C_p^r) in step 3 — the bound it's supposed to help prove. Only *fiber-level* shadow saturation (rank r−1) is legitimately available from the inductive hypothesis. Any proof chain that routes through global shadow saturation at rank r is logically vacuous. The theorist must find an independent route or discard this tool.
+
+### 2. The s-vs-η Gap is the True Killer, Not Fiber Balance
+The inductive strategy's real obstruction isn't "which fibers have enough vectors" — it's that η (weight ≤ p) and s (weight = p) have different thresholds. Within a nonzero fiber, only weight-p zero-sums lift globally. The η threshold gives weight *at most* p, but any weight w < p produces a partial sum w·e₁ ≠ 0 that requires cross-fiber cancellation. Cross-fiber cancellation fails for roughly half the weight values due to modular arithmetic (shown explicitly: at p=5, weights 2 and 4 from fiber 1 cannot combine with fiber 2 within the weight budget). This is arithmetic, not structural — no clever fiber rearrangement fixes it.
+
+### 3. The Inductive Approach Proves Something Strictly Stronger Than Needed
+Fiber concentration (all directions in ≤ 2 fibers under some projection) implies the η bound via the 2-fiber theorem. But fiber concentration is *strictly stronger* than the η bound. The inductive approach tries to prove this stronger statement, which is why it can't close — the stronger statement might be true, but proving it requires understanding ALL maximal ZSF configurations, not just the doubled+e₁ one. If extremal uniqueness (doubled+e₁ is the only maximal ZSF set) could be proved independently, fiber concentration would follow. But extremal uniqueness is at least as hard as the Grail itself.

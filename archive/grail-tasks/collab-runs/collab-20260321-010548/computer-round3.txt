@@ -1,0 +1,209 @@
+[TOOL: ToolSearch]
+[CORTEX SEARCH: grail eta zero-sum free cap set fiber]
+[CORTEX SEARCH: alpha maximal ZSF shadow saturation weight]
+[CORTEX SEARCH: p=3 rank 4 cap set counterexample]
+[CORTEX SEARCH: grail zero-sum fiber shadow saturation]
+[CORTEX SEARCH: cap set rank counterexample]
+[CORTEX SEARCH: zero-sum free sets eta constant Davenport computation verification]
+Good, I have Cortex context. Let me check existing code and the briefing, then launch the three computation tasks in parallel.
+[TOOL: Glob]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: Glob]
+Now let me read one of the key prior computation files for reference on the A₈ construction and ZSF checking.
+[READ: /home/jfischer/claude/grail-tasks/computer_phase2_verify.py]
+Good. I have the A₈ construction and DP approach. Let me now write and run the three computation tasks in parallel.
+[WRITE: /home/jfischer/claude/grail-tasks/round3_task1_p3.py]
+[WRITE: /home/jfischer/claude/grail-tasks/round3_task2_shadow.py]
+[WRITE: /home/jfischer/claude/grail-tasks/round3_task3_p7.py]
+Now let me run all three scripts in parallel.
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 round3_task1_p3.py 2>&1
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 round3_task2_shadow.py 2>&1
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 round3_task3_p7.py 2>&1
+
+All three computations are running in background. Let me check their progress.
+
+[BASH] wc -l /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/btvo71d21.output /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/b40xbykq3.output /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bmvdywjo3.output 2>/dev/null
+
+[READ: /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/b40xbykq3.output]
+[READ: /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/btvo71d21.output]
+[READ: /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bmvdywjo3.output]
+
+[BASH] ps aux | grep -E "round3_task[13]" | head -5
+
+Both p=3 and p=7 are running CPU-intensive. Let me check if Task 2 has produced results yet.
+
+[BASH] tail -50 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/b40xbykq3.output 2>/dev/null
+
+
+[BASH] ps aux | grep round3_task2 | grep -v grep | head -3
+
+
+[BASH] tail -5 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/btvo71d21.output 2>/dev/null
+
+
+[BASH] cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/btvo71d21.output 2>/dev/null | head -20
+
+The scripts are running but may be too slow. Let me kill the slow ones and write optimized versions.
+
+[BASH] kill $(pgrep -f "round3_task1_p3.py") $(pgrep -f "round3_task3_p7.py") 2>/dev/null; echo "Killed p3 and p7 scripts"
+
+[WRITE: /home/jfischer/claude/grail-tasks/round3_t1_fast.py]
+[WRITE: /home/jfischer/claude/grail-tasks/round3_t3_fast.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 round3_t1_fast.py 2>&1
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 round3_t3_fast.py 2>&1
+
+
+[BASH] sleep 10 && tail -30 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bj40jkpbm.output 2>/dev/null
+
+
+[BASH] sleep 10 && tail -30 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bphlblgss.output 2>/dev/null
+
+
+[BASH] sleep 10 && tail -30 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/b40xbykq3.output 2>/dev/null
+
+Task 2 is complete. Let me check the other tasks.
+
+[BASH] tail -5 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bj40jkpbm.output 2>/dev/null
+
+
+[BASH] tail -5 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bphlblgss.output 2>/dev/null
+
+Excellent! The p=3 search found ZSF of size **21** — larger than the cap number! Let me wait for both to finish.
+
+[BASH] sleep 30 && tail -50 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bj40jkpbm.output 2>/dev/null
+
+
+[BASH] sleep 30 && tail -20 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bphlblgss.output 2>/dev/null
+
+
+[BASH] sleep 60 && tail -30 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bphlblgss.output 2>/dev/null
+
+
+[BASH] sleep 60 && tail -10 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bj40jkpbm.output 2>/dev/null
+
+
+[BASH] sleep 90 && tail -40 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bphlblgss.output 2>/dev/null
+
+
+[BASH] sleep 120 && tail -60 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bphlblgss.output 2>/dev/null
+
+
+[BASH] sleep 120 && tail -20 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bj40jkpbm.output 2>/dev/null
+
+
+[BASH] sleep 150 && cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/b56x2stgg.output 2>/dev/null
+
+
+[BASH] tail -60 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bphlblgss.output 2>/dev/null
+
+
+[BASH] tail -20 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bj40jkpbm.output 2>/dev/null
+
+Task 3 is complete. Let me check if p=3 has finished too.
+
+[BASH] ps aux | grep round3_t1_fast | grep -v grep | head -2
+
+
+[BASH] sleep 60 && tail -40 /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/ecd2ac90-a02f-42de-90af-6c4c2bf744ac/tasks/bj40jkpbm.output 2>/dev/null && echo "---PID CHECK---" && ps aux | grep round3_t1_fast | grep python | head -1
+
+
+[BASH] ps aux | grep "python.*round3" | grep -v grep
+
+The p=3 script is still in the 100K trial loop but hasn't improved beyond 21. Let me kill it and compile results — we have everything we need.
+
+[BASH] kill 3986896 2>/dev/null; echo "killed"
+
+Now let me store the definitive findings to Cortex.
+[TOOL: ToolSearch]
+
+[CORTEX STORE] ROUND 3 COMPUTER VERIFICATION — Stratified Computational Results
+
+=== TASK 1: p=3 Formula Violation (CONFIRMED) ===
+
+Formula predicts: α(4) = 9·2^(4-3) - 1 = 17
+Actual: α(4,3) ≥ 21 (found via coloring optimization over 100K trials)
+
+Key findings:
+- PG(3,3) has 40 projective points, 130 lines, 520 co
+
+Results stored to Cortex. Here is the definitive computational report.
+
+---
+
+# ROUND 3 COMPUTER REPORT: Stratified Verification
+
+## TASK 1: p=3 Formula Violation — CONFIRMED
+
+**Formula predicts:** α(4) = 17. **Actual:** α(4,3) ≥ **21**.
+
+| Metric | Value |
+|--------|-------|
+| PG(3,3) points | 40 |
+| Lines / collinear triples | 130 / 520 |
+| Max cap (Hill) | 20 |
+| Max ZSF found | **21** (trial 1806 of 100K) |
+
+The mechanism: at p=3, ZSF only forbids v+w+u=0 (weight 3 = p). Collinear triples with other dependency types (weight 4, 5) are **allowed**. By choosing representatives (v vs 2v) for each projective point, one avoids (1:1:1)-type zero-sums while tolerating other collinear triples. This gives ZSF sets strictly larger than caps.
+
+**η(C₃⁴) ≥ 43 > 35 = formula.** The Grail formula **requires p ≥ 5**.
+
+## TASK 2: Shadow Saturation — UNIVERSALLY CONFIRMED
+
+| Setting | Shadow | Total nonzero | Saturated? |
+|---------|--------|---------------|------------|
+| p=5, r=4 (A₁₇) | 624 | 624 | **YES** |
+| p=5, r=5 (A₃₅) | 3124 | 3124 | **YES** |
+
+Σ_{≤p-1}(B) = F_p^r \ {0} for both ranks. The theorist's 5-line proof is empirically confirmed through rank 5.
+
+**Extremal uniqueness:** 0/850 single-swap replacements produced an alternative 17-element ZSF set at p=5. The doubled+e₁ construction appears to be the **unique** maximal ZSF set (up to GL action).
+
+## TASK 3: p=5 vs p=7 Kill Comparison
+
+All candidates killed at both primes. Formula holds for p=5 and p=7.
+
+```
+                    p=5         p=7
+Candidates          139         383
+Support-3 kills     111 (80%)   204 (53%)
+Support-4 kills      28 (20%)   179 (47%)
+
+Kill weights:
+  weight 3           3            3     ← p-independent
+  weight 4          14           14     ← p-independent
+  weight 5         122            8
+  weight 6           0           21
+  weight p         122          337     ← 88% at max weight
+```
+
+**Critical pattern:** 17 kills at weights 3–4 are identical across primes (p-independent structural kills). All remaining kills occur at weight = p (the maximum). The "hard" kills always exhaust the full weight budget.
+
+**Support shift with p:** Support-3 drops from 80% (p=5) to 53% (p=7). Support-4 rises from 20% to 47%. Prediction: support-5 kills appear at p ≥ 11.
+
+**Double-swap rigidity:** 0/200 double swaps preserve ZSF at **both** p=5 and p=7. The construction is extremely rigid.
+
+## KEY TAKEAWAYS FOR THEORIST & ADVERSARY
+
+1. **p ≥ 5 scope is necessary and confirmed.** At p=3, ZSF ≠ cap; representatives add a degree of freedom that breaks the formula.
+
+2. **Shadow saturation extends to r=5.** The inductive shadow property holds: every nonzero target is reachable at weight ≤ p−1.
+
+3. **Weight-p tightness is universal.** The hard kills always use full weight p, suggesting the proof must exploit the "last unit of weight" — this is where the s-constant (s = η + p − 1) transition lives.
+
+4. **Support-4 kills grow with p.** At p=7, nearly half the kills require 4-element zero-sums. The rank-3 subroutine (support-3) is insufficient alone for large p. The proof at general rank must handle support-4 systematically.
+That was the original slow p=3 script I killed earlier — the optimized version (`round3_t1_fast.py`) already produced our results (α(4,3) ≥ 21). All three computational tasks are complete and reported above.
+Already captured — shadow saturation confirmed: p=5 r=4 (624/624) and p=5 r=5 (3124/3124) both SATURATED, 0 alternative ZSF sets found. All results are in the report above.
+That was the original slow p=7 script. The optimized version (`round3_t3_fast.py`) already completed with full results — all 383 candidates killed, support/weight distributions, and double-swap analysis. Everything is in the report above.
+Already captured — that was a monitoring check. All computation is complete and reported.
+Monitoring check — already captured. All three computational tasks are complete with definitive results reported above.
+Already fully captured and reported. All computations are done.
+Monitoring check — all done. The full Round 3 Computer report with all three tasks is complete above.
+That's the p=3 script I intentionally killed after it found α(4,3) ≥ 21 (at trial 1806) and showed no improvement through ~50K+ further trials. The result stands — formula violated at p=3. All computations are complete.

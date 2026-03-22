@@ -1,0 +1,121 @@
+# TARGET: Prove η(C_p³) = 8(p−1)+1 for all odd primes p.
+
+Lower bound: PROVED (Lean 4). Upper bound: partially proved.
+
+---
+
+## CASE B IS SOLVED (complete proof below)
+
+Case B: all 9 support vectors lie on an affine hyperplane {x: w·x=1}.
+Then φ(c) = Σcᵢ ≡ 0 mod p for all kernel vectors c.
+
+**Lemma (Weight-3 Inversion).** Let c be a weight-3 kernel vector
+with nonzero entries a,b,c at positions i,j,k, and a+b+c ≡ 0 mod p.
+Then f(a⁻¹) = p.
+
+*Proof.* Set λ = a⁻¹. Then lift(λa) = 1. Let u = b/a, so c/a = -1-u
+mod p. Since b,c ≠ 0: u ∈ {1,...,p-2} and p-1-u ∈ {1,...,p-2}.
+So lift(u) + lift(p-1-u) = u + (p-1-u) = p-1. Hence f = 1+(p-1) = p. QED.
+
+**Case B, p ≤ 7:** The kernel K (dim 6) is a [9,6] code. Since 9 > p+1,
+no [9,6,4] MDS code exists (Ball's theorem). So K has a codeword of
+weight ≤ 3. Since φ ≡ 0: its entry-sum ≡ 0 mod p. By Weight-3 Inversion:
+f = p. Done.
+
+**Case B, p ≥ 11:** K might be MDS [9,6,4]. Minimum weight = 4.
+The 9 column vectors, all having first coordinate 1 after normalization,
+are (1,tᵢ,zᵢ). If no 3 are collinear, they form a 9-arc in PG(2,p).
+By Segre's theorem (p prime): every arc extends to a conic.
+Parametrize conic: (1, t, t²).
+
+Sidon property of the conic: v(a)+v(b) = v(c)+v(d) implies {a,b}={c,d}.
+Proof: a+b=c+d and a²+b²=c²+d² gives ab=cd. Same quadratic. QED.
+
+A weight-4 codeword with entries (α,β,γ,δ) summing to 0 is "bad"
+(f(λ)=2p for all λ) iff it decomposes as two antipodal pairs:
+{α,β,γ,δ} = {s,-s,t,-t}. This requires v_i+v_j = v_k+v_l for
+some pairing. By the Sidon property: impossible on a conic.
+
+So every weight-4 codeword is "good" (f not constant). Since the
+average of f over F_p* is 2p and f ∈ {p,2p,3p}: f must take the
+value p. Done.
+
+---
+
+## CASE A IS OPEN
+
+Case A: φ is nonzero on K (the 9 vectors do NOT all lie on a hyperplane).
+
+We need: a nonzero kernel vector c with integer sum Σcᵢ ≤ p.
+
+What we know:
+- If two vectors are proportional (vᵢ = λvⱼ, λ≠1): weight-2 kernel
+  vector with integer sum p+1-λ ≤ p-1. DONE.
+- WLOG: all 9 vectors are projectively distinct.
+- For p ≤ 7: some 3 are collinear (9 > max arc p+1 ≤ 8).
+  Weight-3 kernel vector exists. BUT its entry-sum might not be 0 mod p.
+  The inversion trick works only if entry-sum ≡ 0.
+  Computationally: about 10-20% of Case A configs have NO collinear
+  triple with sum-0 kernel vector.
+- The inversion trick FAILS for weight ≥ 4.
+- Pure counting/pigeonhole fails (margin = 1).
+- Chevalley-Warning fails (degree barrier for p ≥ 5).
+
+Computationally: 0 counterexamples in 2500+ exact tests (p=3,5) and
+thousands of random tests (p=7). The theorem is true. We lack the proof.
+
+---
+
+## APPROACHES FOR CASE A
+
+### Approach 1: K₀ reduction
+K₀ = {c ∈ K : φ(c)=0} has dim 5. It's a [9,5] code with a 4×9
+parity check (the original M augmented with the all-ones row).
+
+If K₀ has a weight-3 vector: its sum is 0 mod p. Inversion trick: done.
+
+For p ≤ 7: K₀ is [9,5] with no MDS (Ball: 9 > p+1). So K₀ has d ≤ 4.
+But d ≤ 3 is NOT guaranteed. K₀ might have d = 4 (Griesmer allows it).
+
+If d(K₀) = 3: done via inversion trick.
+If d(K₀) = 4: weight-4 vectors in K₀ have sum ≡ 0 mod p.
+  Need the "weight-4 inversion" trick. But this doesn't always work.
+  Need to use the CODE STRUCTURE (126 weight-4 supports in MDS case,
+  Sidon-type argument). But K₀ is [9,5], not [9,6].
+
+### Approach 2: Projection to C_p²
+Project π: C_p³ → C_p². The sequence S has length 8(p-1)+1 ≥ 3p-2 = η(C_p²).
+So π(S) has a short zero-sum. This gives a subsequence T with
+|T| ≤ p and π(ΣT) = 0, i.e., T sums to (0,0,r) for some r.
+If r = 0: done. If r ≠ 0: "partial zero-sum."
+
+Remaining sequence has length ≥ 7p-8 ≥ 3p-2. Extract more partials.
+Need: partial zero-sums that combine to a full zero-sum.
+
+This connects to the "iterated" or "multi-round" approach used in
+standard upper bound proofs for η. Worth pursuing.
+
+### Approach 3: Combinatorial Nullstellensatz
+The condition "Σcᵢ ≤ p" is hard to encode polynomially.
+But: the condition "Σcᵢ = k" for a specific k can be.
+Alon's CNS might force a solution with Σcᵢ = k for some k ∈ {1,...,p}.
+
+### Approach 4: Additive combinatorics (sumset growth)
+Track S_k = {sums of k distinct support elements}. As k grows from
+1 to 9, |S_k| grows. When does 0 ∈ S_k for k ≤ p?
+Use Cauchy-Davenport: |A+B| ≥ min(p, |A|+|B|-1).
+
+### Approach 5: Character sum estimate
+Show Σ_{c ∈ K, c≠0} χ(f(c)) = o(p⁶) where χ detects f(c) > p.
+This requires Weil-type bounds on character sums over linear varieties.
+
+---
+
+## RULES
+
+1. Every turn: lemma + proof attempt, or precise obstruction.
+2. Case B is SOLVED. Do not re-prove it. Focus entirely on Case A.
+3. Computation only to verify stated conjectures.
+4. Universal results (all primes) valued over case-by-case.
+5. The projection approach (Approach 2) is probably the most tractable.
+   Start there.

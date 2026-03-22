@@ -1,0 +1,331 @@
+
+============================================================
+BLOCK 1 (137 chars)
+============================================================
+Let me start by searching Cortex for relevant findings from other agents, and also read the briefing document and any relevant materials.
+
+============================================================
+BLOCK 2 (86 chars)
+============================================================
+Let me search Cortex for relevant findings and read the briefing document in parallel.
+
+============================================================
+BLOCK 3 (185 chars)
+============================================================
+Excellent. I now have a comprehensive picture from Cortex and the briefing. Let me also search for more specific findings about multi-fiber obstructions and any counterexample attempts.
+
+============================================================
+BLOCK 4 (197 chars)
+============================================================
+Now I have a comprehensive picture from Cortex. Let me also look at the specific approaches proposed by the theorist and computer for this round. Let me search for the most recent session findings.
+
+============================================================
+BLOCK 5 (54848 chars)
+============================================================
+I have enough from Cortex. Let me now synthesize what I know and construct my adversary attacks for Round 2.
+
+Let me review the key findings:
+
+1. **The GRAIL conjecture**: η(C_p^r) ≤ (9·2^{r−3} − 1)(p−1) + 1 for all r ≥ 3, all odd primes p.
+
+2. **What's proposed by the theorist (from Round 1 insights)**:
+   - Weight Flexibility Theorem approach: strengthen the induction to show zero-sums exist at MANY distinct weights
+   - The proof strategy projects down, applies induction within fibers, then uses Weight Flexibility combined with Cauchy-Davenport to merge results across weights
+
+3. **What's proposed by the computer (from Round 1 insights)**:
+   - Exhaustive verification α(4,7) = 17
+   - Multi-fiber structure analysis
+   - Support-4 mechanisms becoming more important at p=7
+
+4. **Critical prior findings**:
+   - α(4,3) ≥ 19, NOT 17. The formula α(r) = 9·2^{r−3} − 1 is WRONG for p=3.
+   - Multi-fiber behavior differs significantly across primes
+
+Now I'm shifting into adversarial mode to stress-test these claims. I need to hunt for specific obstructions and counterexamples—can I break shadow saturation at higher rank, or find cases where Weight Flexibility fails? I should also check whether the approaches that work at p=5 actually hold up at p=7 or p=11, since that's where the CW method collapses and the degree-to-variable ratio becomes problematic.
+
+Let me start by attacking the Grail conjecture directly. The Cortex data shows α(4,3) ≥ 19, but the Grail formula predicts η(C_3^4) should equal 35. If the lower bound from the rank-4 case already exceeds what the formula claims, that's a fatal contradiction—the conjecture as stated can't hold for p=3.
+
+But I need to check the exact scope of the Grail statement. Does it claim to hold for all odd primes, or only for p ≥ 5? Let me look back at what was actually stated in the problem.
+
+The base case gives η(C_p³) = 8(p−1)+1, and there's a critical note that α(4,3) ≥ 19, not 17, which means the conjecture α(r) = 9·2^{r−3}−1 breaks down at certain values. The rank-3 formula appears solid, but the issue is whether the general formula applies to p=3 or only to p ≥ 5. The problem statement says "all odd primes p," which technically includes p=3, but I should verify if there's a restriction I'm missing.
+
+For p=3 specifically, the weight constraint becomes extremely tight—coefficients in {1,2} with weight ≤ 3 severely limits what sequences are possible, so the behavior might differ fundamentally from larger primes. weight ≤ 3 means either a single vector with coefficient 1 or 2 (which can't sum to zero), two vectors that are either proportional or have coefficients summing to weight 3, or three vectors with coefficient 1 each that must sum to zero. So with non-proportional vectors, I need 3-term zero-sums, which means the zero-sum-free condition at p=3 is really just asking for a cap set—no three vectors summing to zero. The cap set problem gives us α(4,3) ≥ 20, which contradicts the Grail's claim that η(C_3^4) would be at most 17.
+
+Now I'm checking whether the base case actually holds: if η(C_3^3) follows the formula 8(p-1)+1, that would give 8·2+1 = 17, but the maximum cap in F_3^3 is only 9 vectors. This suggests the formula might not apply at p=3, or I'm misunderstanding what "non-proportional" means in this context. projective points. Over F_3, each projective point has 2 representatives ({v, 2v}). There are (3^3-1)/2 = 13 projective points. A cap in PG(2,3) has at most 4 points, so 4 projective points = 4 non-proportional vectors. But in AG(3,3), a cap has 9 points, but these include both v and 2v = -v... hmm.
+
+Actually, let me reconsider. The zero-sum condition is about coefficients in {1,...,p-1}. For p=3, that's {1,2}. A "3-term zero-sum of weight 3" means s₁v₁ + s₂v₂ + s₃v₃ = 0 with s₁+s₂+s₃ = 3 and sᵢ ∈ {1,2}, so (1,1,1) gives v₁+v₂+v₃ = 0.
+
+The Cortex entry says α(4,3) ≥ 19, meaning there exist 19 non-proportional vectors in F_3^4 avoiding weight-≤-3 zero-sums. But I should check whether the conjecture even applies to p=3, since the Lean-verified result states η(C_p³) = 8(p−1)+1 only for p ≥ 5, and the general bound for η(C_p^r) appears to have similar restrictions. Looking at the Cortex entry on α(4,3), it seems the rank-3 formula η(C_3^3) = 8(p-1)+1 = 17 still holds for p=3, even though the conjecture breaks down at rank 4—the zero-sum-free sets in F_3^3 behave differently from affine geometry caps due to the proportionality and coefficient constraints. This is a significant finding that suggests the formula's failure at higher ranks is a distinct phenomenon.
+
+Now examining the "Weight Flexibility" approach more carefully: the proof strategy relies on projecting into fibers, applying the inductive hypothesis within each fiber, then using weight flexibility to generate many achievable weights before combining with Cauchy-Davenport. But this requires proving that weight flexibility holds at general rank, which is itself a strengthening of the original claim—we'd need not just α(r)+1 vectors guaranteeing a weight-≤-p zero-sum, but vectors producing zero-sums at many distinct weights. The circularity is that this strengthened property is what the proof needs but hasn't established.
+
+Looking at the double swap behavior across different primes: at p=5, double swaps consistently break zero-sum-free configurations, but this observation only holds for p=5. At p=7 with more weight capacity, double swaps might actually preserve the zero-sum-free property in some cases, which would create more intricate multi-fiber structures that the proof architecture doesn't account for.
+
+Wait, but the test data shows all 128 double swaps at p=5 preserved strongly ZSF with zero failures—that directly contradicts the claim that double swaps break ZSF. Let me reconcile these: one entry says double rescaling two fiber-1 vectors destroys ZSF entirely, while another says double swaps to fiber 2 preserve it perfectly. These can't both be true unless they're describing different operations or different conditions.
+
+Now looking at the projection strategy—it relies on projecting out v₁₈ to get enough nonzero projections in F_p^3 to apply the rank-3 theorem, but the critical claim that choosing v_k = v₁₈ always works is only verified computationally at p=5 and p=7, not proven generally. The whole approach also assumes the 17-vector ZSF set has a specific structure like doubled+e1, which may not hold universally.
+
+At rank 5 and beyond, the problem gets exponentially harder. The construction has 36 vectors spread across multiple fibers, and shadow saturation for A17 in F_p^4 is only verified at a couple of primes—not proven. More fundamentally, with vectors distributed across 3+ fibers, no single fiber is guaranteed to contain enough vectors to trigger the constraints needed for the proof.
+
+The cleanest attack might actually be the p=3 case. The Grail formula gives α(4,3) ≥ 19, which exceeds α(4) = 17, creating a contradiction in the stated formula itself. This suggests the Grail might require p ≥ 5 to even be consistent. gives the wrong answer at p=3, r=4. Period.
+
+This means either:
+(a) The Grail must be restated as "for all p ≥ 5" 
+(b) Or the formula for α(r) is wrong and must be replaced with something p-dependent
+
+If (a), then the base case η(C_p^3) = 8(p-1)+1 for p ≥ 5 is the right starting point. But the question remains: does η(C_3^3) = 8·2+1 = 17? If so, the formula works for p=3 at rank 3 but fails at rank 4. This means the inductive step itself fails for p=3.
+
+If (b), the whole project is about the wrong formula.
+
+Actually, looking at this more carefully: for p=3, the zero-sum free condition is really just asking for no three vectors to sum to zero—which is exactly the cap set problem in F_3^r. The maximum cap in F_3^3 is 9, and in F_3^4 it's 20. But since the zero-sum free condition requires non-proportional vectors, and over F_3 any vector v and 2v are proportional, the actual maximum zero-sum free set is roughly half the cap size.
+
+The key insight is that the cap set problem and the zero-sum free problem are closely related but not identical at p=3, and this discrepancy might be where the formula breaks down. sums with non-proportional vectors are:
+- v₁+v₂+v₃=0, weight 3 (three 1-coefficients)
+- 2v₁+v₂=0 ⟹ v₂=-2v₁=v₁ (since -2≡1 mod 3), so v₂=v₁ which violates non-proportional. So no weight-3 2-sums.
+- v₁+2v₂=0 ⟹ v₁=-2v₂=v₂, same issue.
+- v₁+v₂=0 ⟹ v₂=-v₁=2v₁, proportional. Weight 2.
+
+So the only ZSF constraint at p=3 is avoiding v₁+v₂+v₃=0 among non-proportional triples. From the projective angle, this is equivalent to finding a cap in PG(r-1, 3)—a set of points with no three collinear—since three non-proportional vectors summing to zero correspond exactly to collinear projective points.
+
+Now I need to recall the maximum cap sizes. In PG(2, 3) the max is 4 points. For PG(3, 3) I think it's 20, but let me double-check my reasoning here.
+
+Actually, I'm mixing up projective and affine geometries. In affine geometry AG(n, 3), caps are sets with no three-term arithmetic progressions, and the known maximums are 2 for AG(1, 3), 4 for AG(2, 3), 9 for AG(3, 3), and 20 for AG(4, 3) from Hill's construction. But the non-proportional ZSF sets I'm working with aren't exactly the same as these cap sets.
+
+The key insight is that when I exclude the zero vector and identify v with 2v (since we're in characteristic 3), I'm working with projective points in PG(r-1, 3). For a set of these projective points to be ZSF with no v₁+v₂+v₃=0, they must form a cap where no three points are collinear. In PG(1, 3) there are only 4 points total, and any three of them are automatically collinear since it's a 1-dimensional projective space, so the maximum cap size is just 2.
+
+For higher dimensions, the maximum cap sizes are known: 4 points in PG(2, 3), 10 in PG(3, 3), and 20 in PG(4, 3). But this creates a problem—for r=3 (which corresponds to PG(2, 3)), the cap bound gives 4 non-proportional vectors, yet the formula α(3) = 8 suggests something different is going on. I'm wondering if the formula α(r) = 9·2^{r-3} - 1 might only apply under certain conditions or if I'm misunderstanding the relationship between the cap constraint and the actual bound.
+
+Looking at the rank-3 case more carefully: for p ≥ 5, the formula gives α(3, p) = 8, but at p = 3 specifically, the maximum cap in PG(2, 3) is only 4. This suggests the formula breaks down for p = 3, which means the Grail's claim about "all odd primes p" might be overstated—the base case appears to only hold for p ≥ 5, not including p = 3. This is a potential gap in the stated result.
+
+Now I'm reconsidering whether η(C_3^3) = 17 might actually be correct despite this discrepancy. Let me think through the definition more carefully: η(G) for a finite abelian group is the smallest N guaranteeing that any sequence of N elements contains a zero-sum subsequence of bounded length. The key is understanding what "sequence" means here and how the extremal configurations relate to the actual Davenport constant and its variants. and the sum of coefficients stays at most p. The extremal construction that avoids zero-sum subsequences uses each element with maximum multiplicity p-1, where the elements form a zero-sum-free set. This gives η(C_p^r) - 1 = (p-1)·α(r, p), with α(r, p) being the size of the largest zero-sum-free set. For the specific case of p = 3 and r = 3, I'm looking at the maximum zero-sum-free set in F_3^3—vectors that are non-proportional and avoid any three-term zero-sum, which corresponds to finding a cap in the projective geometry PG(2, 3).
+
+Now I'm checking whether my calculation matches the formula. A cap in PG(2, 3) has maximum size 4, which would give η(C_3^3) = 4·2+1 = 9. But the formula predicts η(C_3^3) = 8·2+1 = 17, so something's off. Let me reconsider—the elements of C_3^3 are vectors in F_3^3, and I need to verify whether the cap size of 4 in the projective space actually corresponds to the right structure here, since PG(2, 3) itself has 13 points total and the maximum arc with no three collinear points is indeed 4.
+
+This discrepancy suggests the formula η(C_p^r) = (9·2^{r-3}-1)(p-1)+1 doesn't hold for p = 3, at least not as stated. Looking back at the briefing, it says the formula for η(C_p³) = 8(p−1)+1 is Lean-verified, but that's probably only valid for p ≥ 5, since the proof likely excludes small primes.
+
+The Grail statement claims the upper bound holds for "all odd primes p," which technically includes p = 3, but that appears to be an oversight in the problem statement rather than a mathematical error. Now I'm examining the lower bound construction using the doubled+e₁ approach: taking a ZSF set A_{α(r-1)} from the lower-dimensional space, placing copies in two fibers, and adding e₁ to get a set of size 2α(r-1)+1. For this to remain zero-sum-free, I need to verify that A_{α(r-1)} itself is zero-sum-free and that the construction doesn't accidentally create any zero-sums across the fibers.
+
+The issue becomes apparent at p = 3: the formula α(r) = 9·2^{r-3} - 1 predicts α(3) = 8 and α(4) = 17, but the actual maximum cap sizes in F_3^3 and F_3^4 are much smaller—α(3,3) = 4, for instance—so the doubled+e₁ construction can't achieve the claimed bound at this prime.
+
+Now I'm realizing the confusion between projective and affine counts: in PG(3,3), each projective point corresponds to 2 nonzero vectors in F_3^4 (since v and 2v represent the same point), so a cap of size 10 in the projective space would give only around 20 vectors in the affine sense, which might explain why α(4,3) ≥ 19 is stated despite the Hill cap being 10. picks at most one from each point. A cap in PG(3,3) picks points with no three collinear. So a non-proportional ZSF set at p=3 is at most the cap number.
+
+Max cap in PG(3,3): let me look this up properly. The maximum cap in PG(3,3) is 20... no, that's AG(4,3).
+
+Actually, I think I'm confusing AG and PG dimensions.
+
+PG(3,3) has (3^4-1)/(3-1) = 40 points. It's 3-dimensional projective space over F_3.
+
+The Hill cap in PG(3,3)... I think there's a result that m₂(3,3) = 20. Let me check:
+
+m₂(n, q) = max cap size in PG(n, q).
+
+So the maximum cap in PG(3,3) is 20 — that's the Hill cap, which corresponds to a quadric. This means α(4, 3) ≤ 20 for the maximum non-proportional ZSF set. The Cortex entry gives α(4,3) ≥ 19, so it's either 19 or 20. The formula yields α(4) = 17 for the Grail, which is a different bound.
+
+So α(4,3) ≥ 19 > 17, which means the formula fails at p=3. This is a solid counterexample, though it's possible the Grail formula is only meant for p ≥ 5 and there's just a typo in the statement.
+
+Now moving to more substantive issues. The Weight Flexibility Theorem proposes that given α(r)+k non-proportional vectors in F_p^r with multiplicity p-1, zero-sums exist for at least f(k) distinct weights. At rank 3 this becomes the Shadow Window Theorem, which checks out. The idea is to use this as a strengthened inductive hypothesis. But proving Weight Flexibility at higher ranks requires more than just induction alone.
+
+The core problem is that the inductive step—projecting to rank r-1, applying Weight Flexibility in fibers, then combining via Cauchy-Davenport—has a structural flaw. Projection maps to F_p^{r-1}, not into a fiber, and the preimage structure matters. When vectors in a fiber get projected down, they land in F_p^{r-1}, but it's unclear whether they satisfy the conditions needed to invoke the inductive hypothesis about zero-sums at multiple weights.
+
+The counting argument makes this worse: with N ≈ 2α(r) vectors distributed across at least 3 fibers, the largest fiber contains at most N/2 vectors, giving an excess over α(r-1) of roughly 1. This means k ≈ 1, so Weight Flexibility only guarantees f(1) weights—possibly just 1 weight. Then Cauchy-Davenport gives |W₁| + |W₂| - 1 ≥ f(1) + f(1) - 1 ≈ 1, which is too weak to be useful.
+
+The fundamental issue is that the vector count is too tight—barely exceeding 2α(r)—leaving almost no room for the inductive machinery to generate enough weights.
+
+Now I'm checking whether Shadow Saturation actually holds beyond the specific constructions I've tested. I've verified it for A8 in F_p^3 and A17 in F_p^4 (p=5), but I need to test whether it breaks down for other zero-sum-free sets at higher rank.
+
+The Session 4 data shows that all 7 single-swap counterexamples achieved full shadow saturation at p=5, covering all 624 targets. But scaling to p=7 is concerning—the target space jumps to 2400 elements, and I'm not confident the shadow will maintain full coverage there.
+
+I'm noticing a critical gap: the adversary found that a general 17-element ZSF set at p=7 only covers 2244 out of 2400 targets at weight p-1, but that was for a weakly ZSF set. The pattern suggests strongly ZSF sets do achieve shadow saturation, yet I haven't seen explicit verification for the multi-fiber strongly ZSF 17-sets at p=7. The rigidity results confirm all 80 strongly ZSF sets at p=7 are trivial fiber shifts of the doubled+e1 structure, but I need to check whether the one-swap variants were actually tested for shadow saturation.
+
+Now I'm looking at the projection strategy for rank 4, which relies on picking one vector, projecting it out to get a lower-dimensional problem, and claiming at least 9 nonzero projections remain. But the reasoning for why step 2 holds—why we're guaranteed those 9 nonzero projections—isn't filled in, and that's where the argument breaks down.
+
+At higher ranks, the same pattern emerges: project out one vector from the set, and you need enough nonzero projections in the lower dimension to apply the inductive bound. The key insight is that a vector projects to zero only if it's proportional to the one being quotiented out, and since non-proportionality was assumed, every remaining vector should give a nonzero projection. But this reasoning feels circular—I'm not actually establishing why the count of nonzero projections meets the threshold needed for the induction to work. Wait, that's not right either. Quotienting out ⟨v_N⟩ (the 1-d subspace) maps F_p^r to F_p^{r-1}. For v not in ⟨v_N⟩, its image is nonzero. Since all vectors are non-proportional to v_N (by the non-proportionality assumption), ALL α(r)+1 remaining vectors project to nonzero elements.
+
+But they might become PROPORTIONAL after projection! Two vectors v, w that are non-proportional in F_p^r might become proportional in F_p^r / ⟨v_N⟩ (if v - λw ∈ ⟨v_N⟩ for some scalar λ).
+
+So the projections give α(r)+1 nonzero vectors in F_p^{r-1}, but some might be proportional. The number of distinct projective points could be less than α(r)+1. For rank 4 → 3, I get 18 vectors projecting to F_p^3, and there are at most p²+p+1 projective points available (31 for p=5), so that's feasible. But determining exactly how many distinct projective points emerge depends on when two vectors become proportional after removing v₁₈—which happens when v - λw is a scalar multiple of v₁₈.
+
+The real question is whether an adversary can construct 18 non-proportional vectors in F_p^4 such that for ANY choice of v₁₈, the 17 remaining projections collapse into fewer than 9 distinct projective classes. Two projections coincide when v_i - λv_j lies in the span of v₁₈, meaning v₁₈ must lie on the 2-plane spanned by v_i and v_j.
+
+Since there are C(17,2) = 136 such constraint planes, and each covers only a small fraction of projective space (roughly 27 points out of 156 for p=5), most choices of v₁₈ avoid triggering any pair-collapses. The adversary's challenge is that they can't force all 139 viable choices to fail simultaneously.
+
+But the adversary doesn't need every choice to fail — they just need to find one v₁₈ that simultaneously lies on multiple coincidence planes, creating many proportionalities at once. If v₁₈ sits at the intersection of several planes ⟨v_i, v_j⟩, it could trigger multiple pair-collapses. The question becomes: how many of these 2-planes can pass through a single point in PG(3,p)? I'm recalculating the incidence structure in projective space—specifically how many planes pass through a given point. Let me work through this more carefully: the number of lines through a point in PG(3,p) equals the number of points in the residual PG(2,p), which is p²+p+1. For planes through a point, I need to think about whether that's also p²+p+1 or something different, since the counting argument doesn't immediately transfer the same way. I'm working through the counting formulas for PG(3,p) — specifically how many planes pass through a fixed point, which should equal the number of lines in PG(2,p). Let me recalculate: the line count in PG(2,p) is (p²+p+1)p/2, not what I initially thought, since I need to account for the p+1 points on each line to avoid overcounting.
+
+Now I'm focusing on the coincidence condition where v₁₈ lies in the plane spanned by v_i and v_j. There are 136 such planes total, and each one through v₁₈ corresponds to a line in the projective plane centered at v₁₈. The key insight is that these coincidence planes intersect the configuration in a specific way that I need to trace through more carefully.
+
+For p=5, the projective plane PG(2,5) has 31 lines, which means at most 31 of the 136 coincidence planes can pass through v₁₈. Each plane that passes through v₁₈ causes a pair-identification, so I'm looking at at most 31 merges. But the reduction in the number of distinct projections isn't straightforward—if these merges form chains or clusters, the actual reduction could be less than 31. I need to think about how the merged projections group together to get the true count.
+
+The real constraint is that a coincidence plane ⟨v_i, v_j⟩ containing v₁₈ means v_i and v_j become proportional after projecting out v₁₈. So the actual number of pairs that merge depends on how many of the 17 vectors lie in common 2-planes with v₁₈. v_i and v_j become proportional in the quotient precisely when v₁₈ lies in the span of v_i and v_j but outside their individual spans. So for each pair, I'm checking whether v₁₈ belongs to ⟨v_i, v_j⟩ while avoiding the degenerate cases.
+
+Counting across all C(17,2) pairs, the dangerous positions for v₁₈ that create coincidences are relatively sparse—roughly 136/p for large p. But the adversary isn't choosing v₁₈ randomly; they're picking both the 17 vectors and v₁₈ together to maximize coincidences. The question becomes whether they can force many collisions by arranging the vectors in a special configuration, like placing them all on a lower-dimensional subspace.
+
+If all 17 vectors and v₁₈ lived on the same 2-flat, projections would collapse to a line and proportionalities would proliferate. But 17 non-proportional vectors can't fit on a 2-flat—it only has about p²+p+1 projective points, which is too small. So the real issue is whether the projection strategy maintains non-proportionality across all ranks: at each rank r, we project out one vector and need the α(r)+1 remaining projections in F_p^{r-1} to stay non-proportional, which requires α(r)+1 = 2α(r-1)+2.
+
+Now I'm checking whether the inductive hypothesis actually applies here. We have 2α(r-1)+2 non-proportional projections in F_p^{r-1}, and the inductive hypothesis guarantees that any α(r-1)+1 of them admit a weight-≤-p zero-sum. Since we have more than α(r-1)+1 projections, the full set must also have a zero-sum.
+
+The challenge is that when we lift this zero-sum back to F_p^r, we get Σs_i·v_i = c·v₁₈ for some c ∈ F_p. If c = 0, we're done—we have our weight-≤-p zero-sum in the original space. But if c ≠ 0, we need to adjust the coefficients. The key observation is that if the coefficient of v₁₈ in our original set is at least c, we can subtract c from it to eliminate the error term and get a genuine zero-sum.
+
+This reveals a real gap: when the coefficient of v₁₈ is smaller than c, or when v₁₈ isn't involved at all, this approach fails. That's the "one inequality gap" that Agent 1 identified—it's not just a technicality, it's a genuine obstruction.
+
+Looking at the empirical data, I'm seeing that as p grows, support-3 alone becomes insufficient. At p=5 it handles 80% of cases, but by p=7 that drops to 51%, and the remaining cases require support-4 or higher. This suggests that for large p with fixed rank, we'd need to invoke support-5, support-6, and beyond to cover all candidates.
+
+The Chevalley-Warning approach also breaks down at p≥7 because the degree of the zero-sum polynomial exceeds the number of variables, violating the theorem's requirements. This aligns with what the literature shows: Olson's methods work only for rank ≤2, and anything higher requires fundamentally different techniques. enough for a comprehensive adversary report. Let me organize the key failures: p=3 invalidates the formula as stated, weight flexibility induction has a surplus problem in the fibers, the projection strategy can't lift weight constraints from the quotient, CW approaches fail entirely for p ≥ 7 due to degree exceeding variables, support-k distributions shift unpredictably with p, and shadow saturation becomes computationally unverifiable at higher ranks. Now let me examine the character sum approach to see if it has similar vulnerabilities.
+
+At rank 3, multiplicative characters pin the generating function to a single level and force a contradiction, but at rank 4 the function has two possible levels, leaving the character sum method underdetermined. The deeper issue is that at rank r, the generating function depends on r-2 level parameters while we only get p-1 equations per character direction. The unknowns grow exponentially with rank as level combinations multiply, but equations scale linearly, so this approach collapses under its own combinatorial weight.
+
+Now I'm wondering if the Grail conjecture could actually fail at some higher rank. The formula α(r, p) = 9·2^{r-3} - 1 checks out at r=3 and r=4, predicting α(5) = 35, but I need to verify whether this holds at rank 5. There's a note about shadow saturation at r=5 in F_5^6, though the dimension seems off since rank 5 should live in F_p^5. So at p=5 I'd need to check 746 candidates and at p=7 there are 2766 candidates—both computationally feasible, but the real problem is that a proof can't depend on checking every prime individually. For the full result across all p ≥ 5, I need a theoretical argument instead. Now I'm wondering if there's a fundamentally better construction than the doubled+e₁ pattern, which gives α(r) = 2α(r-1)+1 and yields α(5) = 35.
+
+The rank-3 bound of 8 vectors is tight for all p ≥ 5, so any rank-4 construction would have to use doubling or something equivalent—if a ZSF set of size 18 exists, the Grail fails. I've verified exhaustively at p=5 and p=7 that no 18th vector works, but larger primes are harder to rule out. Actually, as p grows, the constraint becomes less restrictive in some ways (weight ≤ p is easier), which paradoxically makes it harder to maintain the zero-sum property, so large p should be even more constrained than small p.
+
+For rank 4, the doubled+e₁ construction gives 17 vectors, and it seems α(4, p) ≤ 17 for large p. At rank 5, the construction yields 35 vectors, and the real question is whether 36 non-proportional ZSF vectors could exist in F_p^5—this hasn't been exhaustively checked, though it's theoretically feasible. The key insight is that I only need to verify the construction itself is ZSF to establish the lower bound, which follows from the inductive doubling argument.
+
+Now I'm identifying the most impactful attacks on the conjecture. The p=3 case fundamentally breaks the Grail unless the statement is restricted to p ≥ 5. Beyond that, there's the surplus problem in fiber induction creating an arithmetic obstruction, the Cayley-Witt approach failing for p ≥ 7 when degree exceeds variables, the support-k shift showing no fixed support argument works, the circular dependency if Weight Flexibility is used as an inductive hypothesis, and the projection gap where weight doesn't lift properly. I've already documented attacks 2-4 previously, so for this round I should focus on the new findings.
+
+For fresh contributions, the p=3 attack is the most critical if it hasn't been highlighted yet, along with a deeper dive into the projection gap and whether Weight Flexibility has any quantitative hope. I should also search for constructions that might outperform the doubled+e₁ approach at higher rank. Looking at what the theorist and computer haven't covered yet—the theorist was working on sumset growth and generating functions before hitting token limits, while the computer wants to verify α(4,7) = 17 through structural decomposition, which I can't really attack since that's a computational verification.
+
+For the theorist's sumset approach, the real question is whether the exceptional set E (targets not in the shadow) is actually small. The generating function G_t(x) is a polynomial of degree α(r), and the key insight is that a target t is exceptional only if G_t(x) = 0 for all possible weights. Over F_p, this becomes a question about roots in the cyclotomic quotient ring, and whether the Frobenius structure forces G_t to have roots—this is where I can push back on whether the bound is tight.
+
+Now I'm ready to write this up. But first, let me verify the formula against known cases: the claim that α(3) = 8 at all primes seems inconsistent with the rank-3 cap in PG(2,3) being only 4, so either the formula only applies for p ≥ 5 or there's an error in the Cortex entry. At p = 3 specifically, the zero-sum constraint becomes much more restrictive with such small weights, which might explain the discrepancy. I need to reconsider what's actually happening here. At p=3, the ZSF condition forbids not just three-term zero-sums like v₁+v₂+v₃=0, but also two-term sums with coefficients from {1,2}, so the constraint is actually much tighter than I initially thought—which explains why α(3,3)=4 is smaller than α(3,5)=8. This means no (1,2) giving v₁+2v₂=0, or (2,1), or (1,1) weight 2, or (2,2) weight 4 > 3 (excluded by weight bound). So at p=3:
+- (1,1): v₁+v₂=0 → v₂ = -v₁ = 2v₁, proportional, already excluded
+- (1,2): v₁+2v₂=0, weight 3 ≤ p=3
+- (2,1): 2v₁+v₂=0, weight 3 ≤ p=3
+
+Both of these reduce to v₁ = v₂ when working mod 3, which violates distinctness. So the only meaningful constraint at p=3 is the 3-term zero-sum v₁+v₂+v₃=0, which is exactly the cap condition. For p=5, the constraints multiply significantly—I need to check 2-element sums up through 5-element sums, each with various weights. more conditions to avoid. So it's HARDER to be ZSF at p=5, meaning α(r, 5) ≤ α(r, 3)?
+
+But we computed α(3,3) = 4 < 8 = α(3,5). This is paradoxical.
+
+Wait — at p=5, the coefficients are in {1,2,3,4}. A 2-element zero-sum s₁v₁+s₂v₂=0 with weight ≤ 5 requires v₂ = -(s₁/s₂)v₁ = proportional to v₁. So no 2-element zero-sums for non-proportional vectors (since v₂ ∝ v₁ is excluded). 3-element zero-sums at weight 3 only like (1,1,1), and at weight 4 we get patterns like (1,1,2) and permutations. At weight 5 there are more: (1,1,3), (1,2,2), and their permutations. For 2-element zero-sums with coefficients in {1,2,3,4}, if v₁ and v₂ are non-proportional, the equation s₁v₁+s₂v₂=0 can't hold. 't happen. So no 2-element constraints.
+
+3-element: same argument doesn't apply. v₁+v₂+v₃=0 is possible with non-proportional vectors.
+
+So at p=5 vs p=3, the ZSF conditions are:
+- p=3: no v₁+v₂+v₃=0 (that's it, weight = 3 = p)
+- p=5: no v₁+v₂+v₃=0 (weight 3), no s₁v₁+s₂v₂+s₃v₃=0 with (s₁,s₂,s₃) ∈ {1,2,3,4}^3 and weight ≤ 5, no 4-element sums at weight 4 or 5, no 5-element sums at weight 5.
+
+So p=5 has strictly more constraints than p=3, making it harder to be ZSF. Yet α(3, 5) = 8 > 4 = α(3, 3), which seems contradictory. The key is that the ambient space itself changes—at p=3 we're working in F₃³ with 27 elements, while at p=5 we're in F₅³ with 125 elements. The tighter constraints at p=5 are outweighed by the vastly larger pool of vectors to choose from.
+
+Looking at the data: α(3, p) = 8 for all p ≥ 5, but α(3, 3) = 4, showing a sharp jump between p=3 and p=5. For rank 4, the pattern reverses—α(4, 3) ≥ 19 exceeds α(4, 5) = 17, because at p=3 the cap set effect dominates: the larger cap set size in PG(3,3) allows more ZSF vectors despite the smaller field.
+
+The key insight is that at p=3, you're only avoiding 3-term sums, whereas at p=5 you must avoid all weighted sums up to weight 5, making the constraint set much tighter. The Hill cap in F_3 is an algebraic variety that has no equivalent structure at p=5, which explains why the cap set beats the ZSF set at rank 4.
+
+This suggests the Grail formula α(r) = 9·2^{r-3}-1 might be p-independent.
+
+But wait—the actual bound α(r, p) is p-dependent when p=3, so the Grail formula only holds for p ≥ 5. The base case was only ever proved for those larger primes anyway.
+
+Now I want to find a concrete obstruction to break one of the other approaches. The sumset growth method looks promising to attack: it defines a generating function tracking how many ways each target can be represented at each weight using vectors from the ZSF set, and there's an identity relating the sum of these generating functions to a power of the cyclotomic polynomial...
+
+Actually, let me reconsider the generating function setup. I need to be careful about what "weight" means here—is it the number of vectors used, or the sum of the coefficients? If we're working with coefficient vectors in F_p where each coefficient ranges from 1 to p-1, then the generating function should track the sum of coefficients across all vectors, not just count how many vectors appear. Let me reframe this more carefully for vectors in F_p.
+
+For the zero-sum-free condition, I need to ensure there's no non-trivial linear combination of these vectors that sums to zero with all coefficients having magnitude at most p.
+
+This means f(x, 0) should only have the constant term 1 (from the trivial all-zeros case) and then jump to terms with weight greater than p. Now I'm setting up the character sum formula to extract f(x, 0) using characters on F_p^r.
+
+For the trivial character, the product telescopes to ((x^p - 1)/(x - 1))^n. For non-trivial characters, I need to evaluate what happens to the geometric sum when χ is nontrivial.
+
+The ZSF condition forces f(x, 0) to have no intermediate degree terms, which constrains the character sums severely. This should force f(x, -v_{n+1}) to contain a term in the target range, meaning -v_{n+1} lies in the shadow. The generating function approach works well at rank 3 because the character group is small relative to the vector count, creating an overdetermined system. But at rank 4 and higher, the character group grows exponentially, making the constraints less restrictive.
+
+Actually, I'm reconsidering how the character sum approach functions. At rank 3, the Fourier inversion principle means that the character sum W(ψ) uniquely determines f₃, and the constraint that f₃(μ) = p plus character contributions pins the function to a specific level. With 8 vectors each contributing an additive character, the sum W(ψ) becomes highly constrained.
+
+But at rank 4 with 17 vectors, the product structure becomes much more complex—each of the 17 factors involves a different vector, giving the system too many degrees of freedom for the pinning to work. This is where the approach breaks down quantitatively.
+
+I should focus on the p=3 edge case and where fiber induction fails under surplus analysis. Let me try to construct a concrete scenario where the Grail conjecture might actually fail, even hypothetically—that would expose exactly where the proof needs to be most careful.
+
+If I can find 36 non-proportional vectors in F_p^5 with no weight-≤-p zero-sum, I get the maximum α(5) = 35 plus one more. Projecting down to F_p^4 via some linear form, these 36 vectors distribute across fibers—say 3 fibers with roughly 12 vectors each. Since α(4) = 17, no single fiber reaches the threshold needed for induction to apply, so the whole approach yields nothing.
+
+But if I project out just v₃₆ to F_p^4, I get 35 non-zero, non-proportional projections. That's 2·17 + 1, so by the rank-4 upper bound (which I'm assuming holds inductively), at least 18 of these projections must have a zero-sum at weight ≤ p. Lifting this back gives Σs_i v_i = c·v₃₆ for some scalar c. If c = 0, I'm done; if c ≠ 0, I need to adjust by incorporating v₃₆ itself to cancel the coefficient.
+
+The adjustment works cleanly when v₃₆ participates in the zero-sum with coefficient s₃₆ ≥ c—I just reduce s₃₆ by c and the weight stays ≤ p. But if v₃₆ doesn't participate at all (s₃₆ = 0), then c must be 0 for consistency, which isn't guaranteed. And if v₃₆ does participate but s₃₆ < c, reducing would give a negative coefficient, forcing me to add p to stay in the valid range—but that pushes the weight over p, breaking the bound.
+
+So the projection strategy only works under specific conditions.
+
+Now I'm wondering if I can strategically choose which direction to project along. If I project along v₃₆ itself, then every zero-sum in the quotient space would have v₃₆ as its defining constraint, which might force the coefficient s₃₆ to behave in a way that satisfies my conditions.
+
+But here's the issue: when I project to the quotient space F_p^5/⟨v₃₆⟩, the vector v₃₆ maps to zero, so it doesn't actually appear in the quotient zero-sum at all. The zero-sum only involves the projections of v₁ through v₃₅, and the constant c emerges from how well these projections satisfy the zero-sum condition. So I need to verify whether c is forced to be zero in this setup.
+
+Let me step back and think about the rank 3 to rank 2 case: I'm projecting 9 vectors from F_p^3 down to F_p^2 along v₉, leaving 8 nonzero projections. I need to figure out what α(2) actually is in this reduced problem, since the structure at rank 2 might be fundamentally different from what I'm assuming.
+
+Looking at the rank 2 to rank 1 case: I have 8 nonzero projections and α(2) = 3, so 8 ≥ 4 means a zero-sum definitely exists with weight at most p. The excess of 4 vectors beyond the minimum needed suggests there are many such zero-sums to choose from, and I'm hoping one has c = 0. Moving up to rank 4 to rank 3: projecting 18 vectors gives 17 nonzero projections with α(3) = 8, so 17 ≥ 9 guarantees a zero-sum exists. The excess of 9 is even larger, creating many candidates, but I still need to confirm whether any of them satisfy c = 0.
+
+Computer verification at p = 5 and p = 7 confirms that choosing v_k = v₁₈ works perfectly—100% success rate—yet the underlying reason why c = 0 must occur remains mysterious. For the general inductive step from rank r to r+1, I'm projecting 2α(r)+2 vectors to get 2α(r)+1 nonzero projections, with an excess of α(r) over the threshold α(r)+1. The inductive hypothesis guarantees many zero-sums exist in the quotient space, and I need to find one where c = 0. A probabilistic intuition suggests that each zero-sum corresponds to some c ∈ F_p, and if the distribution is roughly uniform, there's a decent chance of hitting c = 0.
+
+But this randomness assumption is the crux of the problem—the actual structure of the zero-sum set might systematically force c ≠ 0 for every quotient zero-sum, which would break the projection strategy entirely. So I'm trying to construct a counterexample where every zero-sum in the quotient lifts to a vector proportional to v_k but never equal to zero, which would expose the gap in the argument.
+
+The key question is whether the geometry allows this: if the 2α(r)+1 projected vectors are arranged so that all short zero-sums among them correspond to multiples of v_k, then the strategy fails. This is highly constrained, but the constraint depends on the specific configuration of the vectors.
+
+Now I'm realizing the crux: if we require that no short zero-sum among the projections exists unless it comes from v_k, then the original vectors v₁,...,v_{2α(r)+1} must have no zero-sum of weight ≤ p. But that's precisely the zero-sum-free condition we're assuming holds for the full set {v₁,...,v_{2α(r)+2}}. Since v_k isn't even in the original list, any zero-sum among v₁,...,v_{2α(r)+1} would contradict our assumption.
+
+This means c = 0 is impossible—the projection strategy is forced to produce c ≠ 0 because the ZSF assumption blocks any zero-sum among the projected vectors. Yet the computer shows the strategy works perfectly at p=5 and p=7 for rank 4, so I need to revisit what the Cortex entry actually says.
+
+Looking more carefully, the projection strategy here is different from what I was analyzing. It projects 18 vectors down to F_p^3, guarantees at least 9 nonzero projections, applies the rank-3 theorem to find a zero-sum at weight ≤ p, then lifts back—but there's a gap in the weight bound when a_k < μ as integers. I'm working through the threshold calculation: with α+1 = 18 distinct vectors each appearing p-1 times, the total sequence length is 18(p-1), and I need this to be at least η = 17(p-1)+1, which holds for p ≥ 2. But I'm second-guessing the exact model—let me reconsider whether the total count should be (α+1)(p-1)+1 instead, and I need to reread the problem to pin down the precise setup.
+
+Now I'm clarifying the actual problem: we have α(r)+1 distinct nonzero non-proportional vectors in F_p^r, each with multiplicity p-1, and we need to find a nonempty subsequence of length at most p that sums to zero. In the coefficient formulation, I'm choosing coefficients s_i ∈ {0, 1, ..., p-1} for each vector (not all zero) such that the weighted sum is zero and the total coefficient sum is at most p. I'm starting with a projection strategy: pick the last vector v_{α+1} and project the space down to eliminate it. I'm applying the inductive hypothesis to the quotient space: the α non-proportional vectors with multiplicity p-1 admit a zero-sum of weight at most p, which gives me coefficients s_i for i≠k satisfying the required equation. Since v_k projects to zero, I can use this zero-sum directly to construct the solution at the original rank. i v_i = c·v_k for some c ∈ F_p. The weight is Σ_{i≠k} s_i ≤ p. If c = 0, we have a zero-sum in the original space. If c ≠ 0, we can set s_k = -c mod p = p-c (since c ∈ {1,...,p-1}). Then Σ s_i v_i = c·v_k - c·v_k = 0. Weight = Σ_{i≠k} s_i + s_k = (Σ_{i≠k} s_i) + (p - c).
+
+For this to have weight ≤ p, we need Σ_{i≠k} s_i + p - c ≤ p, which means Σ_{i≠k} s_i ≤ c. But here's the problem: c depends on which zero-sum we find in the quotient space, and the inductive hypothesis only guarantees weight ≤ p there, not weight ≤ c. If c is small, we'd need an impossibly light zero-sum in the quotient, but if c is large, the constraint becomes manageable.
+
+The key insight is that we're not locked into a single zero-sum — we can choose among all zero-sums in the quotient space. So the real question is whether there exists at least one zero-sum where the coefficient c is small enough that the weight constraint Σ_{i≠k} s_i ≤ c can actually be satisfied. weight ≤ p in the quotient, is there one where the lift gives c = 0 (weight ≤ p) or c is large enough that the adjustment works?
+
+And I proved above that c = 0 CANNOT occur (because it would be a zero-sum in the original space, contradicting ZSF).
+
+So we need c ≠ 0 and Σ_{i≠k} s_i ≤ c. Since c ∈ {1,...,p-1} and Σ_{i≠k} s_i ≥ 1 (nontrivial sum), we need the quotient zero-sum to have weight ≤ c. We get to choose c by choosing the zero-sum. But different zero-sums give different c values.
+
+The question becomes: among all zero-sums of {π(v_i)} at weight ≤ p, can I find one where the weight of the sum is at most the coefficient c that emerges from that zero-sum? The adversary's goal would be to show this is impossible—that for every quotient zero-sum, the weight always exceeds the corresponding c value. Since c is determined by the zero-sum itself (derived from the coordinates of v_k in the relation), I need to understand whether there's always a mismatch between weight and c, or if I can construct a zero-sum where they align favorably. vector, then c = first coordinate of Σs_i v_i.
+
+The first coordinate of Σ_{i≠k} s_i v_i = Σ_{i≠k} s_i (v_i · e₁) where e₁ = v_k (up to normalization). If v_i = (a_i, tails), then first coord of sum = Σ s_i a_i. And c = this sum mod p.
+
+So the condition is: Σ s_i ≤ Σ s_i a_i (mod p, but as an integer since both are in {0,..., (p-1)·α}).
+
+Actually, c is the REDUCTION mod p of Σ s_i a_i. So c ∈ {0,...,p-1}, and the actual value is Σ s_i a_i = c + kp for some integer k ≥ 0.
+
+The constraint weight ≤ c means Σ s_i ≤ c, which is only feasible when Σ s_i ≤ c ≤ p-1 (since the inductive bound gives Σ s_i ≤ p). However, the minimum weight of a quotient zero-sum can be substantially larger than 1—for instance, the A8 construction at rank 3 has minimum weight p+1 and is strongly ZSF. With 17 projections in the rank-3 quotient (combining A8 fibers and e₁'s projection), the resulting set may not preserve the ZSF property since it exceeds the original 8 elements.
+
+So there ARE zero-sums at weight ≤ p in the quotient. The real issue is that the projection strategy has an unavoidable bottleneck at the lifting stage: every quotient zero-sum produces c ≠ 0, and lifting adds p - c to the weight, giving total weight (quotient zero-sum weight) + (p - c). For this to stay ≤ p, the quotient zero-sum weight must satisfy weight ≤ c, but c itself depends on which zero-sum we're examining. The computer verified this always holds at p=5 and p=7 for rank 4, yet there's no general theoretical guarantee this must work universally—this represents a genuine gap in the argument.
+
+Looking at the computer's specific finding: when projecting the 17 vectors of S17 onto the quotient F_p^3 (after removing v₁₈), at least 9 projections are nonzero. By the rank-3 theorem, these have a zero-sum at weight ≤ p, which lifts to a relation Σs_i v_i = c·v₁₈ among the original vectors. Setting s₁₈ = p - c makes the total sum zero, with total weight equal to the quotient zero-sum weight plus p - c.
+
+The key constraint is that Σs_i ≤ c must hold as integers for this adjustment to produce valid zero-sums. Since the quotient zero-sum has weight Σs_i ≤ p and c = Σs_i a_i mod p, the computer's data at p=5 shows this works in practice—most lifted zero-sums have weight 5, with some at weight 4 or 3, suggesting typical cases where Σs_i ≈ 4 and c ≥ 4.
+
+But this breaks down if Σs_i = 4 and c = 1, giving weight 8 > p. The fact that this never happens at p=5 suggests the structure of S₁₇ (the doubled set plus e₁) and how it projects onto F_p³ along v₁₈ creates a constraint that forces c to be large enough relative to Σs_i. For the general inductive step though, I need to understand whether this is a special property of this configuration or something more fundamental.
+
+Actually, I'm realizing the key issue: when projecting S₁₇'s 17 vectors along v₁₈, I get 17 nonzero projections in the quotient space. The rank-3 upper bound tells me there's a zero-sum among these with weight at most p, but I need to verify this bound actually applies and that the resulting weight constraint is tight enough for the induction to work. So when I lift this back to the original sequence, I'm setting s₁₈ = p - c to make the total sum zero, which gives a total weight of 2p - c. But this exceeds p unless c is large enough, so I need to find a tighter bound or reconsider the approach.
+
+Looking at specific weights in the quotient: at weight p, I'd need c ≥ p, which is impossible since c ∈ {1,...,p-1}. At weight p-1, only c = p-1 works and gives exactly weight p in the lift. For weight p-2, I have c ∈ {p-2, p-1}, and I'm checking whether the total weight stays manageable.
+
+Actually, I see the pattern now—for any weight w in the quotient, I need c ≥ w, and then the total weight in the lift is w + (p-c) ≤ p. So the real constraint is finding a quotient zero-sum of weight w where the corresponding c value satisfies c ≥ w. Since c depends on which specific zero-sum I choose, this becomes a joint optimization problem.
+
+The key insight is that if all the a_i coordinates are at least 1 and their weighted sum Σ s_i a_i stays below p (avoiding modular wraparound), then c = Σ s_i a_i ≥ Σ s_i = w automatically, and I'm done. The challenge is bounding when Σ s_i a_i < p holds—with coefficients up to p-1 and coordinates up to p-1, the sum can grow quite large per term.
+
+For small weights w ≤ √p where all a_i = 1, the sum equals w itself with no reduction, so the condition is satisfied. But when the a_i values are large or heterogeneous, particularly in constructions like the doubled+e₁ variant where some first coordinates are 0, the analysis becomes more delicate.
+
+In that construction, fiber-1 vectors have a_i = 1 while fiber-0 vectors have a_i = 0. If a zero-sum quotient uses only fiber-1 vectors, then Σ s_i a_i = w and the weight adjustment lands at p. But mixing in fiber-0 vectors makes c < w, pushing the adjusted weight above p. The key issue is determining how the choice of the linear form defining the first coordinate affects the projections of fiber-0 vectors.
+
+The projection strategy's success actually hinges on the structure of the quotient zero-sum itself. For the specific doubled+e₁ construction, it works reliably, but the general case gets tangled depending on which vectors participate in the zero-sum.
+
+Let me step back and reconsider the rank-4 setup more carefully. I'm working with 18 non-proportional vectors in F_p^4, each appearing p-1 times, and I'm assuming no zero-sum of weight ≤ p to derive a contradiction. The plan is to pick one vector, project the other 17 down to F_p^3, then apply the rank-3 bound recursively.
+
+The issue is that those 17 projected vectors are arbitrary—they're not some special construction—so the proof has to handle any configuration. I need the projections to be nonzero and non-proportional (which follows from the original vectors being non-proportional), and I need the rank-3 theorem to guarantee a quotient zero-sum of weight ≤ p since 17 ≥ 9. But when I lift that quotient zero-sum back to F_p^4, the weight increases by p minus some error coordinate, and that's where the argument breaks down—I can't guarantee the lifted zero-sum stays within weight ≤ p.
+
+The real problem is that if the quotient zero-sum has weight exactly p, then lifting it requires the error coordinate to be at least p, which is impossible. So I need the rank-3 theorem to produce a zero-sum with weight strictly less than p, but it only guarantees weight ≤ p. The minimum could be as low as 3 or as high as p, and if everything maxes out at weight p, the whole projection strategy collapses. Let me check whether the doubled+e₁ construction at rank 3 actually exhibits this failure case.
+
+When I project 18 arbitrary vectors in F_p^4 down to F_p^3, I get 17 vectors that must have zero-sums by the rank-3 theorem, but they're not a ZSF set themselves. The question is whether all their zero-sums could be concentrated at weight exactly p. If the maximal ZSF set A8 in F_p^3 has minimum zero-sum weight p+1, then adding just one more vector gives 9 vectors with zero-sums at weight ≤ p. With 17 vectors—far more than 9—I'd expect zero-sums at many different weights, making it unlikely they're all stuck at weight p.
+
+To test this concretely at p=5, I'm trying to construct 17 non-proportional vectors in F_5^3 where every zero-sum of weight ≤ 5 has weight exactly 5. I'd start with the 8 ZSF vectors from A8 (which have no low-weight zero-sums) and add 9 more vectors carefully. The key is determining what minimum weight zero-sums appear when I introduce that 9th vector.
+
+Looking at the empirical data from adding an 18th vector to S17 at p=5, I see zero-sums appearing at weights 3, 4, and 5. When I project these 17 vectors, some of them would inherit low-weight zero-sums from the original set. This suggests the projection strategy might fail at p=5 specifically, though this is tied to the doubled+e₁ structure rather than being universal across all 18-vector configurations.
+
+I've found the critical gaps in the argument. Let me now document the attacks I've discovered.
+
+At p=3 with r=4, the bound α(4,3) ≥ 19 exceeds 17, making η(C_3^4) ≥ 39, which contradicts the Grail formula's prediction of 35. The statement needs to be restricted to p ≥ 5.
+
+For the projection strategy, every quotient zero-sum forces c ≠ 0 to avoid violating the zero-sum-free condition. When lifting, the total weight becomes the quotient weight plus p minus c, so achieving weight ≤ p requires the quotient weight to stay at most c.  But this breaks down when the quotient reaches maximum weight p, since c is strictly less than p—and there's no guarantee we can find quotient zero-sums at strictly smaller weights with the necessary constraint that c ≥ weight.
+
+The fiber induction approach distributes roughly 2α(r-1)+2 vectors across k ≥ 3 fibers, leaving each with at most α(r-1)+1 vectors and a surplus of just 1. This minimal surplus yields only about 1 achievable weight through Weight Flexibility, and Cauchy-Davenport's bound of 1 can't generate the p distinct weights needed for cross-fiber combinations.
+
+The CW polynomial method fails for p ≥ 7.  At r=4, the degree r(p-1) stays below the variable count α(r)+1 only when p ≤ 5, and at r=5 this only holds for p ≤ 3, which is already excluded. The approach collapses across all ranks for p ≥ 7.
+
+Character sums also hit a wall at rank 4 and beyond. The function f_r(μ) has 2^{r-3} possible levels, but with only p-1 characters available, the system becomes underdetermined—too many levels relative to the equations that can constrain them, making it impossible to pin down the level function.
+
+The inductive weight flexibility approach just relocates the problem rather than solving it. Strengthening the hypothesis to include weight flexibility at many distinct weights requires proving this strengthened version at the base case and maintaining it inductively, but the base case proof relies on A8-specific structure that doesn't generalize. At arbitrary rank, the strengthened hypothesis needs its own proof, which is essentially the original hard problem in disguise.
+
+I'm also realizing the projection strategy has a fundamental obstruction: achieving c=0 (the clean lift) would contradict the zero-sum-free assumption on the original set, so every projection application necessarily requires weight adjustment.
+
+This adjustment imposes a much tighter constraint than the original inductive hypothesis—we need zero-sums at weight ≤ c for a specific c determined by the geometry, not just at weight ≤ p. No existing theorem covers this requirement, so I need to document this finding and move forward with the writeup.

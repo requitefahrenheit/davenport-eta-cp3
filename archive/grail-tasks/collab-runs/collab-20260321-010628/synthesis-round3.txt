@@ -1,0 +1,79 @@
+# SYNTHESIS: GRAIL HYPOTHESIS VERIFICATION — ROUND 3
+
+## STATUS
+**THEORIST** derives weight-projection formulas and excess criterion; **COMPUTER** confirms prior computational verification (α(4)=17 through p=31, gap hypothesis through p=53); **ADVERSARY** identifies Conjecture L (liftability) as core remaining gap but output truncates mid-analysis.
+
+---
+
+## CONVERGENCE/ESCALATION
+
+### 🚨 **HIGH CONFIDENCE FLAG: Circular Dependency Without Closure**
+
+1. **THEORIST claims**: Excess Criterion (Theorem 2b–c) provides weight bounds under projection.
+   - **Problem**: Does NOT explicitly prove/disprove Conjecture L; only gives *necessary conditions* for weight ≤ p.
+
+2. **ADVERSARY isolates**: Conjecture L (integer weight realization) is "structural, not quantitative"—mod-p surjectivity ≠ integer lattice lifting.
+   - **Problem**: Marks the gap as unfixable by THEORIST's approach, yet THEORIST does not address this directly.
+
+3. **COMPUTER states**: "Directive 3 is DONE," "Directive 1 is DONE" (without showing new computation in this round).
+   - **Problem**: References prior verification but does NOT cross-check THEORIST's new weight formula against computational data.
+
+**VERDICT**: **POSSIBLE FALSE CONJECTURE** — THEORIST's Excess Criterion may be sound locally but insufficient to close the main proof if it cannot resolve the integer-lifting obstruction ADVERSARY identifies.
+
+---
+
+## CROSS-POLLINATION
+
+### Key Insight Transfer (Blocked)
+
+| From | To | Content | Status |
+|------|-----|---------|--------|
+| THEORIST | COMPUTER | Weight formula α(r+1) = 2α(r) + 1 matches Davenport s-recursion | **NOT VERIFIED** computationally |
+| ADVERSARY | THEORIST | Projection non-proportionality collapse (9 → <9 projective classes) | **NOT ADDRESSED** in Excess Criterion |
+| COMPUTER | ADVERSARY | All 383 p=7 candidates killed via fiber analysis | **NOT ANALYZED** for rank-5 generalization |
+
+### Emergent Observation
+**THEORIST's multi-fiber cap-evasion insight** + **ADVERSARY's non-proportionality collapse** suggest:
+- The Partition Dichotomy (force vectors into ≤2 fibers) is the true bottleneck, not weight formulas.
+- COMPUTER should verify: *Do all rank-5 candidates force multi-fiber spread?* (If yes, induction closes by the p=7 argument.)
+
+---
+
+## DIRECTIVES
+
+### **DIRECTIVE 1 → COMPUTER:**
+**"Validate THEORIST's Excess Criterion against p=5, p=7 computational data."**
+- Pick one maximal zero-sum-free set from p=7, r=4.
+- For a candidate 18th vector, compute its (W_q, E, tilde_μ) under three coordinate projections (Theorist's formula).
+- Verify: weight matches Excess Criterion prediction (p−E or 2p−E).
+- **Dependency**: Links THEORIST's derivation to ADVERSARY's gap analysis—if weight formula fails on data, Conjecture L is truly orthogonal.
+
+---
+
+### **DIRECTIVE 2 → ADVERSARY:**
+**"Complete gap analysis: Prove or exhibit counterexample for Conjecture L via rank-4 fiber structure."**
+- Test: Take mod-p zero-sum of weight p (guaranteed by Theorem D) at p=5, r=4.
+- Can you lift it to integer weight w < p such that (w mod p) matches?
+- If **NO** counterexample exists → L is likely true; if **YES** → falsify it and bound the obstruction class.
+- **Dependency**: References THEORIST's weight lifting; output must complete (currently truncated at file-read stage).
+
+---
+
+### **DIRECTIVE 3 → THEORIST:**
+**"Reformulate Excess Criterion via the s-recursion, not α recursion, and prove liftability directly."**
+- Your insight: s(C_p^r) = 2s(C_p^r) − 1 (where s = η + exp − 1) respects doubling better than α.
+- **Conjecture**: Excess Criterion can be restated as a constraint on *which* zero-sums admit integer weight representatives below 2p.
+- Attempt: Use Grynkiewicz + Chevalley–Warning (which COMPUTER has verified for small p) to show Conjecture L follows from the s-recursion.
+- **Dependency**: Requires COMPUTER's confirmation that s-recursion holds for p=7, r=4; requires ADVERSARY to identify exactly which zero-sums violate L (to constrain your proof strategy).
+
+---
+
+## OUTSTANDING QUESTIONS
+
+1. **Is THEORIST's weight formula complete**, or does it only characterize fiber-respecting zero-sums (missing the multi-fiber cap-evaders ADVERSARY warns about)?
+2. **Does Conjecture L actually require new techniques**, or can THEORIST resolve it by reformulating as a dispersed-set constraint (as hinted in the "three-fiber search" codebase)?
+3. **Why does COMPUTER mark directives "DONE" without showing verification in this round?** (Indicates stale output or missing cross-check.)
+
+---
+
+**NEXT STEP**: Resolve DIRECTIVE 2 (ADVERSARY gap analysis completion) to determine if proof obstacles are semantic (reformulation) or fundamental (Conjecture L is independent).

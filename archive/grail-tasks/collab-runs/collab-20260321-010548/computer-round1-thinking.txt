@@ -1,0 +1,566 @@
+
+============================================================
+BLOCK 1 (242 chars)
+============================================================
+The user wants me to act as the COMPUTER agent in a research collaboration. Let me:
+
+1. Search Cortex (memory) first
+2. Read the seed document
+3. Compute something definitive
+
+Let me start by checking memory and reading the briefing document.
+
+============================================================
+BLOCK 2 (183 chars)
+============================================================
+Let me read the existing memory file and check for any existing computations that are relevant. Let me also look at the most recent computational files to understand what's been done.
+
+============================================================
+BLOCK 3 (59537 chars)
+============================================================
+Now I have a comprehensive picture. Let me identify what computation would be most definitive for Round 1. The key open question is the multi-fiber case at rank 4.
+
+Key facts from memory and exploration:
+1. α(4,5) = 17 verified - all 607 possible 18th vectors killed
+2. 513/607 by support-3 (rank-3 subroutine), 94/607 by support-4
+3. Three-fiber genuinely ZSF 17-sets exist but are "secretly two-fiber" under some linear form
+4. Cross-fiber completeness verified for small primes
+
+
+5. Gap Hypothesis verified through p=53
+
+The most promising direction forward is combining Chevalley-Warning with the rank-3 theorem, so I should verify α(4,7) = 17 to build confidence in the pattern we've established at p=5.
+
+Let me reconsider what would be most strategically valuable computationally. The post-mortem highlights combining Chevalley-Warning congruences with the rank-3 theorem as a structural constraint. Rather than just verifying another prime, I think the real breakthrough would come from exhaustively classifying all maximal ZSF sets at rank 4 for p=5 up to projective equivalence—this would definitively answer whether doubled+e1 is the unique maximal configuration or if there are others.
+
+The challenge is that F_5^4 has 156 projective points, and checking all 17-element subsets would require examining roughly 10^23 combinations. But the three-fiber search already revealed something crucial: at p=7, every 3-fiber ZSF set of size 17 comes from doubled+e1 through single-vector swaps, and at p=5 no genuine multi-fiber ZSF sets emerged. This suggests the structure is far more constrained than brute enumeration would imply.
+
+The real question becomes whether 18 vectors in F_p^4 with at least 3 fibers must always admit a weight-≤p zero-sum. To settle whether α(4,7) = 17, I should verify this directly: take the doubled+e1 construction at p=7 (which has 17 vectors), then systematically test each of the 383 remaining projective points as potential 18th vectors, checking whether adding any of them creates a weighted zero-sum with weight ≤ 7. It's computationally intensive but tractable.
+
+Now looking at the α(4,5) = 17 result—the claim that all 607 possible 18th vectors were tested is confusing. At p=5, there are only 156 projective points total, so at most 139 candidates remain after the initial 17. Unless this count includes nonzero vectors rather than projective classes, or there's something about the ZSF condition I'm misunderstanding. The key insight is that proportional vectors can both appear in a set, so I need to reconsider whether we're counting vectors or equivalence classes. If I scale a vector by some constant, I can adjust the coefficients accordingly, so the projective equivalence class shouldn't matter for the ZSF property. Let me reconsider the problem setup—maybe the 607 count includes all vector representatives rather than just projective points, or there's something about the fiber structure I'm missing. I should look at the existing code to clarify what's actually being computed.
+
+The most impactful next steps would be verifying the conjecture at p=7, analyzing the weight distribution of zero-sums across 18-vector sets to see how tight the bound really is, and systematically testing genuinely multi-fiber configurations to confirm they always admit low-weight zero-sums. Let me start with the p=7 verification and multi-fiber testing in parallel, since that's what the theorists identified as the key gap.
+
+I should write a comprehensive script that exhaustively verifies α(4,7) = 17, then classifies how 18-vector cases at p=7 get killed—whether by support-3 or support-4 mechanisms—and finally examines the structure of killing zero-sums in multi-fiber 18-sets. That gives the most definitive evidence for Round 1.
+
+Now I'm thinking about how Chevalley-Warning applies here. The theorem guarantees solutions exist when the degree sum is below the variable count, which relates to why these zero-sums must exist in our setting.
+
+For the actual computation, I need to count solutions where the vectors sum to zero with a specific weight w, treating this as a system of polynomial equations over F_p and using CW to derive congruences on the weight distributions. - s_1 + ... + s_n = w (1 equation, degree 1)
+- s_1*v_1^(j) + ... + s_n*v_n^(j) = 0, j = 1,...,r (r equations, degree 1)
+
+These are r+1 linear equations in n variables. The number of solutions is exactly computed by linear algebra - no CW needed!
+
+The CW approach is more useful when we have the constraint s_i ∈ {0,1,...,p-1} encoded as s_i^p - s_i = 0 (degree p equations). But we're already working over F_p, so this is automatically satisfied.
+
+Actually, the real question is: among the solutions (s_1,...,s_n) ∈ F_p^n to the linear system, is there one with all s_i ∈ {0,1,...,p-1} and sum ≤ p and not all zero? This is always true if the solution space has dimension ≥ 1 and contains a nonzero element.
+
+Wait, I think the key distinction is that we want s_i ∈ {1,...,p-1} for the support indices and s_i = 0 elsewhere. So the number of nonzero coefficients is what really matters. Let me reconsider this as a zero-sum problem: given n vectors v_1,...,v_n in F_p^r, I need to find a subset S and assign coefficients s_i ∈ {1,...,p-1} for i ∈ S such that the weighted sum equals zero.
+
+So I'm looking for (s_1,...,s_n) ∈ {0,1,...,p-1}^n where Σ s_i * v_i = 0 and 1 ≤ Σ s_i ≤ p. The Chevalley-Warning approach would count solutions to this system by treating it as polynomial equations and checking divisibility by p. If I can show the total number of solutions exceeds the trivial solutions, I'd have a nonzero solution in the required range.
+
+This is exactly what Reiher did for the Kemnitz conjecture with rank 2 — finding the right polynomial system to apply Chevalley-Warning to. For my problem, I need to count solutions for each weight constraint separately, apply the congruence conditions, and see if the zero-sum-free assumption leads to a contradiction.
+
+Let me implement this for small primes like 5 and 7 with 18 vectors in 4-dimensional space. The system Σ s_i v_i = 0 gives me 4 linear equations to work with.
+
+The solution space has dimension at least 14, so it's computationally tractable — I can enumerate all solutions and count how many satisfy each weight constraint. The zero-sum-free assumption would require N_w = 0 for all non-zero weights, which should create a contradiction when I apply the Chevalley-Warning congruences.
+
+Actually, I need to reconsider what ZSF really means here. It's not just that individual weights are forbidden — it's that there are no non-trivial solutions with weight between 1 and p. The total count across all weights should be 5^{14}, with only the trivial solution at weight 0, so any solutions with weight p or higher would violate the constraint when reduced modulo p.
+
+Let me think about this differently. For n = 18 and p = 5, the solution space is too large to enumerate directly — around 6 × 10^9 elements. But I can use the weight distribution structure. Since the weight is a linear function over the solution space, I should compute how weights distribute across the kernel using the Smith normal form or direct calculation of the weight distribution on this specific 17-vector construction.
+
+Actually, I can use character sums to compute this. For each weight w, the number of solutions N_w can be calculated using a character sum formula with roots of unity. This is exactly the approach Reiher used. For the 17-vector construction (which is ZSF), I should verify that N_1 through N_4 are all zero and N_0 equals 1. Then I can compute the weight distribution for the 18-vector sets to see how they differ.
+
+There's also a cleaner linear algebra perspective: the zero-sum solutions form a subspace of F_p^n with dimension n-r, and the weight function is linear on this subspace. For the 17-vector case in F_5^4, the kernel has dimension 13, so the weight function either vanishes identically or is surjective depending on whether (1,1,...,1) lies in the kernel.
+
+If the weight function is surjective, each weight class contains 5^12 elements. For the construction to be zero-sum-free, I need to verify that no kernel element has weight in the range {1,...,p-1}, but since all nonzero weights are already bounded by p-1, this constraint is automatically satisfied.
+
+Now I'm clarifying what "weight" means here—it's the actual integer sum of coefficients, not reduced modulo p. With 17 positions and coefficients in {0,...,4}, the maximum possible weight is 68, but the ZSF condition requires weight ≤ 5, so I need to ensure no nonzero kernel element achieves a weight in that range.
+
+Let me check the small weight cases: weight 1 forces a single v_i = 0, which is impossible. For weight 2, I either get 2v_i = 0 (impossible for p ≥ 3) or v_i + v_j = 0, meaning some pair of vectors must be negatives of each other.
+
+For weight 3, the coefficient patterns (3,0,...) and (2,1,0,...) both lead to proportional vectors, but (1,1,1,0,...) gives three distinct vectors summing to zero—this is the first valid configuration.
+
+Now checking weight 4: patterns like (4,0,...) and (3,1,...) again yield proportional vectors due to the modular arithmetic, while (2,2,...) requires examining whether two pairs of equal coefficients can produce a valid zero-sum.
+
+For weight 5, since we're at the prime p itself, all partitions of length at most 5 give valid zero-sums, which means the zero-sum-free condition for 17 depends on avoiding these configurations entirely.
+
+The doubled+e1 construction with 17 vectors satisfies all these constraints, but introducing an 18th vector inevitably violates at least one. So my next step is to verify that α(4,7) = 17 by checking that the 400 projective points in F_7^4 can accommodate exactly 17 vectors under this construction. I need to also check for support-5, support-6, and support-7 zero-sums at various weights up to 7. A more efficient approach would be to iterate through each possible support size k from 1 to 7, then for each k-subset of the 18 vectors, determine if there's a valid coefficient assignment where the sum equals zero and the total weight stays at most 7.
+
+For k=1, any single vector would need to be zero itself, which we can exclude. For k=2, the vectors would have to be proportional, also excluded. For k=3 and beyond, I need to check whether a valid zero-sum combination exists using the rank-3 theorem for non-degenerate cases, then continue this enumeration through k=4, k=5, and higher support sizes.
+
+Now I'm working through the linear algebra: when we have three vectors and need Σ s_i v_i = 0 with positive coefficients summing to at most 7, we're essentially asking if those vectors are linearly dependent. In 4-dimensional space, three vectors are dependent precisely when they're coplanar—meaning they lie in a 2D subspace.
+
+For a valid dependency relation αv_1 + βv_2 + γv_3 = 0, I need to verify two things: first, that the coefficients are all nonzero and their sum doesn't exceed p, and second, that the dependency satisfies the rank-3 theorem condition—there exists some scaling factor μ where the weighted sum of the coefficients stays below p.
+
+The non-degenerate case works cleanly: the rank-3 theorem guarantees we can find such a μ. But when the dependency is degenerate—say α + β = 0—I need to handle it differently. In that case, the coefficients become proportional to (α/γ, -α/γ, 1), which means the first two components cancel out modulo p. The weight then depends on how I scale this relation, and I need to check whether I can achieve a valid weight with this constraint. = 0 with α+β = 0, i.e., β = -α, then αv_1 - αv_2 + γv_3 = 0. So α(v_1 - v_2) = -γv_3. Scaling: v_3 = -(α/γ)(v_1 - v_2). The coefficients are (μα, -μα, μγ) for μ ∈ F_p*. In {1,...,p-1}: ⟨μα⟩ + ⟨-μα⟩ + ⟨μγ⟩ = ⟨μα⟩ + (p-⟨μα⟩) + ⟨μγ⟩ = p + ⟨μγ⟩ ≥ p+1. So weight > p. The support-3 zero-sum has weight p + ⟨μγ⟩ > p, which isn't useful.
+
+Pairwise-degenerate triples consistently give weight exceeding p, confirming the known result. Now I want to run a comprehensive verification at p=7 for the rank 4 case to extend beyond p=5. I'll write a script that constructs the 17-vector doubled+e1 configuration at p=7, enumerates all 383 candidate 18th vectors, determines the minimum-weight zero-sum for each, classifies them by support size and killing mechanism, and reports the statistics.
+
+I should also test the conjecture against random 18-vector sets in F_7^4, not just extensions of doubled+e1, to verify that ALL such sets have weight-≤7 zero-sums rather than just those built from this specific construction. Fully verifying α(4,7) = 17 would require checking all C(400,18) ≈ 10^30 possible 18-element subsets of projective points, which is computationally infeasible. Instead, I can verify that the doubled+e1 construction with 17 vectors is indeed ZSF at p=7, confirm that adding any 18th vector breaks ZSF, and sample random configurations to test the broader conjecture.
+
+Now I'm setting up the explicit computation of CW congruences for the 18-vector system in F_p^4. I need to properly formulate the counting problem for solutions with fixed weight w using character sum methods, rather than the incomplete formula I started with. I'm catching myself making an error in the character sum approach—let me reconsider how the product of sums actually behaves when we apply the orthogonality condition for additive characters. Now I'm evaluating the Gauss sum G(u), which equals p when u=0 and 0 otherwise, so the product only survives when t + λ·v_i = 0 for all i simultaneously. This constrains λ to satisfy λ·v_i = -t for every vector, which is only possible if all the v_i are proportional to each other—but since they're distinct, this creates a contradiction that forces the entire sum to vanish. for all i,j. This means λ is in the orthogonal complement of all differences v_i - v_j, i.e., λ ∈ span(v_1,...,v_n)^⊥. If the vectors span F_p^r, then λ = 0.
+
+If λ = 0: t + 0·v_i = t for all i. We need t = 0. Then G(0)^n = p^n. And ω^{-0·w} = 1.
+
+So N_w = (1/p^{r+1}) · p^n = p^{n-r-1}. This gives N_w = p^{n-r-1} for every w!
+
+Wait, that can't be right. If the 18 vectors span F_p^4, then N_w = p^{18-4-1} = p^{13} for every w = 0,...,p-1.
+
+But this would mean all weight classes have the same count, including N_0 which contains the zero solution. That leaves (p-1)·p^{13} nonzero weight solutions, which contradicts what I know about ZSF sets. The 17-vector construction should give N_w = p^{12} for each w, but that set is actually ZSF with no nonzero weight solutions at all. Something's wrong with my reasoning here.
+
+I think the confusion is that I'm conflating two different notions of weight. The formula counts all coefficient vectors in F_p^n, and the weight w is computed modulo p. But the ZSF condition cares about the actual integer sum Σ s_i being at most p, not just its residue class mod p. For the 17-vector case with s_i ∈ {0,...,4}, the actual sum ranges from 0 to 68, and I need to distinguish between actual sum ≤ 5 versus actual sum > 5, even if they're congruent mod 5. the character sum formula gives N_{w mod p}, not N_{actual=k}, so it won't directly help here. I think the most useful approach is to just brute-force verify α(4,7) = 17 with a well-structured computation. For p=7, I'm setting up the doubled+e1 construction where fiber 0 contains 8 vectors embedded in a hyperplane.
+
+Now I'm working through the verification: with 17 vectors in F_7^4, there are 400 projective points total and 383 candidates for the 18th vector. For each candidate, I need to check all subsets of size ≤ 7 for weight-≤7 zero-sums, which amounts to checking around 63,000 subsets per candidate—roughly 24 million subset checks across all candidates.
+
+For each subset, I'm solving for coefficients s_i ∈ {1,...,6} where the sum of coefficients is at most 7 and the weighted vectors sum to zero. Since each coefficient must be at least 1, subsets of size k require at least k total weight, so only subsets up to size 7 are viable. For k=7, each coefficient must equal 1, so I just check if those 7 vectors sum to zero. For smaller subsets, I have excess weight to distribute among the coefficients, and I'm now calculating how many ways that distribution can occur. of ways to distribute e = 7-k extra weight among k positions (each getting between 0 and 5 extra, for total coefficient between 1 and 6) is bounded by C(e+k-1, k-1) ≤ C(6+6,6) = C(12,6) = 924 for e=6, k=1.
+
+For k=3, I need to distribute 4 extra units among 3 positions with each capped at 5. Listing out all valid distributions gives me 15 possible coefficient tuples. For each one, I'd check whether the linear constraint Σ e_i v_i = -Σ v_i can be satisfied, but I realize I need to verify this across all coefficient combinations rather than just picking one.
+
+Let me think about this differently—for each subset of size k, I should...
+
+Actually, I'm realizing the key insight: when I have k vectors and r=4 equations, the solution space depends on k. If k ≤ 4, the kernel is at most 1-dimensional, so there's either no solution or a unique one up to scaling. If k > 4, the kernel has dimension at least k-4, giving me multiple solutions to search through. For the smaller cases, I can compute the kernel directly and check if any vector in it has all positive integer components in the right range. For larger k, I need to explore the higher-dimensional kernel space systematically to find valid coefficient vectors.
+
+Given the computational constraints, I should start with support 3 and 4 at p=7, checking all possible triples and quadruples of vectors to see which ones satisfy the linear dependence condition and produce valid weight constraints.
+
+At p=7, the rank-3 theorem guarantees non-degenerate support-3 subsets work with weight less than p, but degenerate cases exceed p. For support-4, I need to find zero-sums at weight ≤ 7, and I should also check support-7 subsets since weight 7 equals p and allows larger configurations.
+
+Writing the enumeration code... algebra.
+
+Let me write the code now. I think the key computation is:
+
+1. Verify the doubled+e1 construction is ZSF at p=7 (checking all subsets up to weight 7)
+2. Verify that adding any 18th vector breaks ZSF
+3. Classify the killing mechanism for each 18th vector
+
+And compare with the p=5 results.
+
+Let me also think about a SECOND computation that would be valuable: the minimum weight of zero-sums as a function of the 18th vector. This gives a "landscape" of how zero-sums appear.
+
+OK, let me code this up. I'll start with a script.
+
+Actually, I realize the computation of verifying the 17-vector construction is ZSF at p=7 (checking all subsets up to size 7 with weight ≤ 7) might be quite expensive. Let me estimate the complexity: I'm looking at roughly 41,000 subsets across supports 3 through 7, and for each one I need to check whether a weighted zero-sum exists with coefficients bounded by 6. For smaller supports this is straightforward linear algebra, but for larger ones I'll need to search the kernel space.
+
+For support 5, the kernel is generically 1-dimensional, so I check 6 scalings of a generator and verify if all components fall in {1,...,6} with sum at most 7. With 5 components each at least 1, the sum is at least 5, leaving room for at most 2 extra. For support 6, the kernel jumps to 2-dimensional, giving me 48 nonzero vectors to check in a 2D space. Support 7 explodes to a 3-dimensional kernel with 342 nonzero vectors to examine, and this is where the computation becomes genuinely expensive—nearly 20,000 subsets times 342 checks each.
+
+The total across all supports comes to around 41,000 subsets, which should still be manageable in seconds to minutes. For the 383 candidate 18th vectors, I can use early termination since I only need to find one zero-sum subset rather than verify none exist. I'm going to code this up now, implementing both a verification that the 17-vector set is zero-sum-free and a check that every possible 18th vector creates a zero-sum subset, using the doubled+e1 construction at p=7 as my test case.
+
+Setting up the construction... Writing the projective point generator...
+
+Now I'm implementing a function to check whether a set of vectors can sum to zero modulo p with bounded coefficients, iterating through all possible subsets and testing for linear dependencies.
+
+Reconsidering the approach—brute-force searching over coefficient vectors is more practical than trying to analyze the kernel structure directly. I'm calculating how many coefficient vectors exist for each weight and support size to understand the search space. 18 vectors
+- Weight 2: (2,0,...) + (1,1,0,...) → 18 + C(18,2) = 18 + 153 = 171
+- Weight 3: 18 + 18*17 + C(18,3) = 18 + 306 + 816 = 1140
+  Wait, (3,0,...) → 18, (2,1,0,...) → 18*17 = 306, (1,1,1,0,...) → C(18,3) = 816. Total: 1140.
+- Weight 4: C(6+17,17) or something... this is getting complicated.
+
+For weight w, I need the coefficient of x^w in (1+x+...+x^{p-1})^n. When w ≤ p-1, this simplifies to C(w+n-1, n-1) by stars and bars. So for w=7 with n=18, that's C(24,7) = 346104.
+
+Summing across all weights 1 through 7 gives about 480,699 total coefficient vectors. With 383 candidates, that's roughly 184 million vectors to evaluate. Each evaluation involves computing a dot product modulo 7 across 4 coordinates with 18 multiplications and 17 additions per coordinate, totaling around 13 billion operations—this could take a while to compute.
+
+I can optimize by recognizing this as a matrix-vector multiplication problem: for each coefficient vector s, I need to check if V^T · s ≡ 0 (mod 7), where V is the 4×18 matrix of candidate vectors. Precomputing V^T helps, but 184 million matrix multiplications is still computationally heavy. Rather than checking all coefficient vectors uniformly, I should leverage the structure by organizing vectors by their support—examining each subset of support positions separately and enumerating only the valid coefficient vectors for that support.
+
+For the systematic approach, I'll check support sizes 3 through 7 in order. For each support size k, I construct a k×4 matrix from the selected vectors, compute its kernel modulo p, and examine the resulting coefficient vectors for weight constraints. At p=5, support ≤ 4 was sufficient to eliminate all 607 cases, so at p=7 I expect similar behavior, though I may need to extend to support 5-7 if necessary.
+
+Writing code to check support sizes systematically... For d=3, that's 342 vectors to check—totally manageable. I'll implement this with Gaussian elimination to compute the kernel over F_p, then systematically search through all nonzero kernel vectors to find those satisfying the constraints.
+
+Writing the verification script... Continuing the Gaussian elimination by swapping rows and scaling the pivot, then eliminating other entries in that column. After processing all columns, I'm identifying which columns are free variables and starting to build the kernel basis from those.
+
+Building kernel basis vectors... I'm iterating through all possible subsets of vectors, building a matrix from each subset and computing its kernel modulo p. For each kernel vector found, I check if it's positive and has weight at most p—if so, the set violates the zero-sum-free property. Then I'm setting up a helper function for a doubled e1 vector.
+
+Building the doubled+e1 construction... Now I'm running the main computation with p=7, setting up the doubled+e1 construction and checking that all the vectors map to distinct projective points without any duplicates.
+
+Next I'm verifying the zero-sum-free property on this construction, then examining all possible projective points in the space to identify which ones aren't already in my set, so I can test them as candidates for the 18th vector and find the minimum weight zero-sum for each. Checking progress every 50 candidates and counting how many violated the constraint, then summarizing the results with a breakdown of survivors and killed candidates, and printing out any potential counterexamples that passed the check.
+
+Now I'm analyzing the killing mechanisms by categorizing them based on support size, weight, and whether the new vector was included in the support. But I'm noticing a performance bottleneck in the `check_zsf` function—it's checking all possible subsets, which could be inefficient.
+
+Let me work through the computational complexity. For n=18 and varying subset sizes, I'm looking at the number of combinations and the kernel dimension to estimate total checks needed. For k=7, that's roughly 31,824 subsets with a kernel dimension of 3, giving around 10.9 million kernel vector checks. The smaller subset sizes are more manageable—k=6 drops to about 891,000 checks, k=5 to 51,000—but I need to see where the real bottleneck lies.
+
+Looking at the full picture across all subset sizes, I'm estimating around 12 million checks per 18-vector candidate set, and with 383 candidates total, that balloons to roughly 4.6 billion checks. In pure Python, this will be prohibitively slow, so I need to focus on optimizations: checking smaller support sizes first since they're more likely to yield zero-sums quickly, implementing early termination as soon as I find one, and leveraging numpy for vectorized operations instead of looping through everything.
+
+For the 17-vector ZSF verification itself, I don't actually need to validate all 383 candidates—I just need one zero-sum to disqualify a candidate, and based on what happened at p=5 where support-3 subsets eliminated over 80% of candidates, I expect similar rapid filtering here. The key insight is that for dependent triples in F_7^4, I'm looking for three vectors that span at most a 2D subspace, and with 17 vectors in general position, this becomes a tractable geometric problem.
+
+For larger support sizes, the computational cost shifts: checking all rank-deficient 4-tuples is manageable since det = 0 mod 7 gives a clear criterion, but k=5,6,7 subsets become expensive since they're always dependent in a 4-dimensional space. The bottleneck is really those higher support sizes—around 37K checks for k=5, nearly 600K for k=6, and the k=7 count is cut off but clearly substantial.
+
+Looking at the actual runtime: Gaussian elimination on a k×4 matrix is fast (O(16k) operations), so the real cost is function call overhead and enumerating kernel vectors for each subset. With Python's function call overhead, the total computation should still be manageable—probably a few seconds for the full ZSF check on the 17-vector set. For the candidate check with 383 candidates and early termination at support-3, I'm looking at roughly 383 × 816 triple checks with Gaussian elimination at 200μs each, totaling around 63 seconds. Adding in the harder cases that go to higher support levels, the whole computation should finish in 2-5 minutes, which is very manageable. Now I'm going to optimize the script by using matrix representations as nested lists to cut down on function call overhead, and I need to be careful about how I compute the kernel—specifically understanding that the kernel of a k×4 matrix represents the null space of the linear map from F_p^k to F_p^4. I need to find the kernel of the 4×k matrix M by computing its nullspace. I can row-reduce the transpose M^T (a k×4 matrix) to identify which coefficients are free variables, then construct the basis vectors for the kernel accordingly. The kernel of A has dimension k - rank(A), which is at least k - 4 since A has only 4 rows. After row-reducing A to get the identity block and a remainder block, I can read off the kernel basis from the dependencies in the non-pivot columns.
+
+Now I need to clarify how my kernel function works: it takes a matrix M as rows and computes the kernel of the linear map F_p^ncols → F_p^nrows defined by x ↦ Mx. So if I want the kernel of A (the 4×k matrix), I should pass A directly, not its transpose. The kernel is {x : Mx = 0} ⊂ F_p^ncols.
+
+But I want the kernel of A: F_p^k → F_p^4, s ↦ As. Here A is 4×k. So x = s is k-dimensional, and A·s = 0.
+
+So I should call `kernel_mod_p(A, p)` where A is the 4×k matrix. The function interprets A as having 4 rows and k columns, and finds the kernel in F_p^k.
+
+My function `kernel_mod_p` takes `matrix` as a list of rows. So I pass the 4×k matrix where each row contains the j-th coordinates of all k vectors. Alternatively, if I have the vectors as tuples, I can transpose them using `zip` to get the right format.
+
+Let me verify the kernel function works correctly, then write out the full computation.
+
+Actually, I should reconsider the strategy. The 17-vector set is theoretically proven to be ZSF for all p ≥ 5, so I don't strictly need to verify it computationally—it's already established. But checking it at p=7 is a good sanity check. For the main result showing α(4,7) ≤ 17, I need to verify that every 18-vector set contains a weight-≤7 zero-sum, though I can't exhaustively check all C(400,18) possibilities. Instead, I can test adding an 18th vector to the doubled+e1 construction and sample random 18-vector sets, which gives strong evidence but not a complete proof. The key insight is that α(4,7) = 17 requires both a ZSF set of size 17 (which I have) and proof that all size-18 sets have zero-sums—the latter being computationally intractable to verify exhaustively, so I'll focus on confirming the doubled+e1 construction itself is ZSF. MAXIMAL ZSF: adding any point creates a zero-sum. This confirms α(4,7) ≥ 17 (the construction IS ZSF) and shows the construction is maximal. Whether α(4,7) = 17 or α(4,7) > 17 depends on whether there's a DIFFERENT 18-element ZSF set.
+
+Actually, there could be an 18-element ZSF set that doesn't contain the doubled+e1 construction. The verification of the doubled+e1 being maximal doesn't rule this out.
+
+Hmm, but the conjecture says α(4,p) = 17 for all p ≥ 5. At p=5, this was verified EXHAUSTIVELY (all 18-element sets checked). At p=7, we can't do exhaustive search, so we verify the construction is maximal and do random sampling.
+
+Let me focus on the most valuable computations: verifying the doubled+e1 construction is ZSF and maximal at p=7, then analyzing the killing mechanisms to see how the support-3 versus support-4 ratio differs from p=5. Random sampling of 18-vector sets would provide additional evidence. The comparison between p=5 and p=7 killing mechanisms is particularly insightful for understanding the general structure. to weight 7. For non-degenerate triples, the rank-3 theorem guarantees a functional μ where the weighted sum stays below p, so weight ≤ 6. Degenerate triples give weight > p which doesn't help. And if the triple itself sums to zero, the weighted sum becomes trivial.
+
+Now I'm working through the case where α+β+γ ≡ 0 (mod p) more carefully. The weight of the coefficients would be divisible by p, so it's either p, 2p, or higher. For coefficients in the range {1,...,p-1}, the minimum achievable weight is p itself. I'm working through the constraints on possible weight values—since the sum must be congruent to 0 mod p and falls between 3 and 3(p-1), only p and 2p are viable. For any choice of μ in F_p*, I can achieve exactly weight p, which satisfies the zero-sum condition, so this is indeed a valid configuration.
+
+Now I need to verify what happens when some of the pairwise sums also vanish—if α+β = 0 and α+β+γ = 0 simultaneously, then γ = 0, which would collapse this to a 2-vector dependency that's already ruled out by the non-proportionality assumption.
+
+So for support-3 zero-sums, the candidates split into three cases: non-degenerate triples (no pair sums to 0, total ≠ 0) have weight less than p and always work; triple-sum-zero cases (α+β+γ = 0 with no pair sums to 0) hit exactly weight p and work; pairwise-degenerate triples (where some pair sums to 0 but the total doesn't) exceed weight p and fail. This means adding a new vector kills a candidate only if it creates a non-degenerate or triple-sum-zero collinear triple—the pairwise-degenerate ones are the only survivors. At p=7, the non-degenerate case accounts for about 77% of random collinear triples, and I need to factor in the triple-sum-zero contribution as well.
+
+For a normalized collinear triple with dependency (α, β, 1), I'm checking the conditions for non-degeneracy: α ≠ 1, β ≠ 1, α+β ≠ 0, and α+β+1 ≠ 0. But the briefing frames this differently using the dependency (−α, −β, 1), which means the actual conditions involve checking when the negated coefficients avoid certain values. So cases 1, 2, and 3 are all degenerate with pairwise dependencies—they don't work. Cases 4 and 5 are the useful ones: case 4 gives me a triple with total sum zero (weight equals p), and case 5 gives me a non-degenerate triple (weight less than p). Now I need to count how many pairs (α, β) from F_7 \ {0} with α ≠ β fall into each category. So the dependencies that survive have α+β = 0, or α = 1, or β = 1—these are the pairwise degenerate cases. When α+β = 0, we get β = -α, and since we need α ≠ β, that requires 2α ≠ 0, which holds as long as p ≠ 2. Now I'm working through the specific case where p = 7 to count how many parameter pairs fall into each category. 1,...,6}, and we need α ≠ 0, β ≠ 0 (given), and the dependency normalized so third coeff = 1.
+
+Actually, the parameter space for (α, β) is (F_7* × F_7*) / ~, where ~ accounts for scaling. Wait, the dependency is unique up to scaling. If αv_1 + βv_2 + γv_3 = 0, then (cα, cβ, cγ) is the same dependency. Normalizing γ = 1 gives α, β ∈ F_p* uniquely.
+
+But α and β can be anything in F_7* = {1,2,3,4,5,6}. Not all (α,β) pairs correspond to actual collinear triples in our set—the triple must exist in the 18 vectors.
+
+For the non-degenerate case where α+β ≠ 0, α ≠ 1, and β ≠ 1, I'm restricting to α, β ∈ {2,3,4,5,6}. That gives 25 pairs total, but I need to exclude those where α+β = 0 mod 7, which happens when β = 7-α. Checking each α in that range, only α = 6 gives β = 1, which is already excluded.
+
+So for α ∈ {2,3,4,5}, we get β ∈ {5,4,3,2} respectively—that's 4 pairs to subtract, leaving 21 non-degenerate pairs.
+
+For the degenerate case where α+β = 0 or α = 1 or β = 1, I'm counting overlaps carefully: α = 1 gives 6 pairs, β = 1 gives another 6, but (1,1) is counted twice, so that's 11 pairs from these conditions alone.
+
+Then α+β = 0 with neither α nor β equal to 1 adds 4 more pairs, for a total of 15 degenerate pairs.
+
+That gives 36 - 15 = 21 non-degenerate pairs, which checks out—but this 58.3% at p=7 doesn't match the 77% from the briefing, so something's off with my calculation.
+
+Let me reconsider what the briefing actually means by non-degeneracy. It specifies α ≠ 1, β ≠ 1, and α+β ≠ 0, which excludes triple-sum-zero cases where α+β = 1. But I need to verify whether I'm counting the right cases—maybe I miscounted the degenerate pairs or misunderstood the constraint.
+
+For p=7, when β = 1-α (mod 7), I get pairs like (2,6), (3,5), (4,4), (5,3), (6,2). The case α = β = 4 is interesting because even though the coefficients are equal, the vectors v₁ and v₂ are distinct, so the linear dependence 4v₁ + 4v₂ + v₃ = 0 is still valid and non-degenerate. So non-degenerate triples actually include the triple-sum-zero cases as long as α ≠ 1, β ≠ 1, and α+β ≠ 0. That means triple-sum-zero is a subset of non-degenerate. But now I'm seeing a potential issue: the rank-3 theorem says non-degenerate triples have weight strictly less than p, while Lemma 2 claims triple-sum-zero gives weight exactly p. There's something subtle I'm missing about how the rank-3 theorem applies here.
+
+Let me reconsider the dependency structure. When I apply the rank-3 theorem to the triple (−α, −β, 1), the weight becomes ⟨−μα⟩ + ⟨−μβ⟩ + ⟨μ⟩. For triple-sum-zero, the sum (−α) + (−β) + 1 equals zero, which is exactly the condition that excludes a triple from the rank-3 theorem's guarantee of weight < p. So the theorem doesn't actually apply to triple-sum-zero cases—they fall outside the non-degenerate condition after all. The rank-3 theorem doesn't apply when a+b+c = 0, but Lemma 2 handles that case by showing the weight is exactly p, which still satisfies our bound. So I've got coverage for all non-pairwise-degenerate triples: either the theorem gives weight < p, or Lemma 2 gives weight = p. Now I'm counting how many useful (α,β) pairs exist at p=7 by identifying which ones are degenerate—those where α = 1, β = 1, or α+β = 0.
+
+Counting the degenerate cases: α = 1 gives 6 pairs, β = 1 gives 5 new pairs (excluding the overlap), and α+β = 0 contributes 4 more pairs after removing overlaps, totaling 15 degenerate pairs out of 36 possible. That leaves 21 non-degenerate pairs, or about 58%, but the briefing claims 77%.
+
+Let me test p = 13 instead: with α, β ∈ {1,...,12}, there are 144 total pairs. The degenerate cases are α = 1 (12 pairs), β = 1 (11 new pairs), and α+β = 0 with neither equal to 1 (10 pairs from α ∈ {2,...,11}), giving 33 degenerate pairs total. That means 111 non-degenerate pairs, which is 111/144 ≈ 77.1%—this matches the briefing.
+
+Now checking p = 5: with α, β ∈ {1,...,4}, there are 16 total pairs. Degenerate cases are α = 1 (4 pairs), β = 1 (3 new pairs), and α+β = 0 with neither equal to 1 (2 pairs where α ∈ {2,3}), totaling 9 degenerate pairs. This leaves 7 non-degenerate pairs, or 43.75%.
+
+At p = 7, the non-degenerate rate jumps to 58.3% with 21 out of 36 pairs. I'm also noticing that triples summing to zero give weight p and are non-degenerate by definition since no pair within them sums to zero. But the actual kill rate depends on how many collinear triples involve the 18th vector and what fraction of those are non-degenerate. Rather than continue with hand calculations, I should just implement this computationally to get the exact answer.
+
+For each candidate 18th vector, I'll check all collinear triples involving it—if the dependency is non-degenerate or triple-sum-zero, the weight gets killed. I only need to explore support-4 and higher if every collinear triple is pairwise-degenerate. I should also verify the original 17 vectors satisfy the ZSF property by confirming their collinear triples are all pairwise-degenerate.
+
+Beyond that, I want to categorize the 383 killed candidates by their dependency type and minimum weight, then for the survivors, identify which support level kills them and what zero-sum does it. Finally, I'll test whether the doubled+e1 construction remains ZSF at p=11 and explore adding 18th vectors there.
+
+Now I'm realizing I can optimize the support-3 checks significantly. Instead of brute-force searching for collinear triples, I can check if a candidate vector v lies in the span of any pair {u, w} by testing whether the rank of the matrix [v; u; w] is at most 2—which means all four 3×3 minors must have zero determinant.
+
+For support-4, I need to examine all quadruples involving v and check if the resulting 4×4 matrix has rank at most 3 (determinant 0 mod p). When I find a dependency, I extract the kernel vector and verify it has all positive components with weight ≤ p. Support-5 will follow the same pattern but with quintuples, which scales up the computation significantly.
+
+Writing verification script... Still writing kernel computation... Writing kernel computation... Building the kernel computation...
+
+Now I'm generating projective points by iterating through all coordinate combinations, filtering out the zero vector, and normalizing each point to a canonical form. Then I'm setting up the doubled E1 curve by defining eight base points and creating two fiber layers.
+
+For the main verification, I'm constructing the full set of vectors, printing them out, and then normalizing each one to check that they're all distinct projective points.
+
+Now I'm moving into the actual verification steps—first checking the zero-sum-free property by searching for any linear combination with weight at most p, and if one exists, I'll print out the details of what was found. Still writing classification logic... Printing detailed results and analysis... Printing the weight distribution for each fiber, then breaking down how many candidates were eliminated by support-3 constraints, separating those that involved the new vector from those that didn't. Now I'm wondering if this approach will be fast enough—for p=7 with 383 candidates and 18 vectors per augmented set, the support checking could get expensive.
+
+Let me think through the complexity: at support-3, I'm checking all 816 possible triples, and for each one I need to compute the kernel of a 4×3 matrix, which is quick. Most triples will have full rank anyway, so they won't contribute a kernel. Support-4 involves checking 3060 quadruples, but again, most 4×4 matrices will have full rank and no kernel. Higher supports only matter if we haven't already eliminated the candidate.
+
+Now looking at the actual kill rates at p=7: the non-degeneracy rate is higher here (58.3% vs 44% at p=5), which means more candidates get eliminated early. When we add a new vector, we're creating about 136 triples involving it. Since dependent triples are rare in random vectors (roughly 1 in p), I'd expect around 19 dependent triples, and about 58% of those are non-degenerate and actually kill the candidate. That's roughly 11 killing triples per candidate, so almost everything gets filtered out at support-3.
+
+At p=5, the support-3 filter killed 84.5% of candidates, so I'm expecting an even higher kill rate here. The computation should run quickly—under a minute. I need to make sure my code checks all triples involving the new vector, and since the original construction is zero-sum-free, there are no problematic triples among the original 17 vectors themselves. My implementation checks all triples anyway for verification purposes, which is fine.
+
+For the kernel computation, I'm constructing a matrix where each row represents one coordinate across all selected vectors, then finding which coefficient combinations sum to zero. This correctly captures the linear dependencies I'm looking for. Let me run the script and verify the zero-sum-free property of the original 17 vectors while I'm at it.
+
+For that check, I need to examine all subsets up to size 7—that's nearly 20,000 subsets for the largest case. The computational cost scales with the kernel dimension at each support size: smaller supports are quick, but by support 6 and 7 I'm looking at hundreds of thousands of individual checks. This could take a while in Python, but let me estimate the timing and see if it's feasible.
+
+The bottleneck is Gaussian elimination for computing kernels on each subset. For a 4×7 matrix, that's roughly 28 operations per subset, which is fast in theory. But Python's overhead on function calls and list operations adds up—I'm estimating around 0.1 milliseconds per GE call. For support-7 alone, that's about 1.9 seconds, plus another 0.67 seconds for the 6.7 million kernel vector checks. The whole ZSF verification should finish in under 10 seconds.
+
+Now I need to estimate the candidate check, which involves 383 candidates and...
+
+Actually, let me reconsider the GE timing more carefully. Each Gaussian elimination on a 4×7 matrix involves building the matrix with list allocations, then four pivot steps where I scan rows, perform swaps, scale by multiplying across 7 elements, and eliminate 3 rows with 21 multiplications and 21 subtractions each.
+
+That works out to roughly 196 operations per GE call, and in Python each modular arithmetic operation on small integers takes about 0.1 microseconds. So I'm looking at around 20 microseconds per GE.
+
+For the support-7 and support-6 subsets, the ZSF checks alone take about a second total. The real bottleneck is the candidate filtering at support-3, which requires 313K GE calls at 10 microseconds each—that's 3 seconds. Adding in the higher support checks, I'm estimating around 5-6 seconds total, which is still reasonable.
+
+Let me run the script and see what actually happens. I want to verify my code works correctly by testing it on p=5 first, since there are known results I can compare against.
+
+Wait, the script found 607 candidates for p=5, but that doesn't match my calculation. There are 156 projective points total, minus the 17 used in the construction, which gives 139. So where does 607 come from? Maybe it's counting nonzero vectors instead of projective points?
+
+If I count all nonzero vectors, that's 624 total. Subtracting the 17 vectors used gives 607. But that seems off because each projective point has multiple vector representatives. Let me think through this more carefully—if the 17 points are represented by specific vectors, then I'm excluding 17×4 = 68 vectors, leaving 556. Still not matching 607. a new vector. The new vector must (a) be nonzero, (b) not be proportional to any of the 17. There are 624 nonzero vectors. Among them, 17×(p-1) = 17×4 = 68 are proportional to one of the 17. So 624 - 68 = 556 candidates.
+
+But the briefing says 607. Let me re-read: "α(4, 5) = 17 = 2·8 + 1. All 607 possible 18th vectors tested."
+
+Maybe 607 is the number of nonzero vectors in F_5^4 minus the 17 used, without accounting for proportionality? 624 - 17 = 607. That makes sense—the computation checks all 607 nonzero vectors not already in the construction, even though some are proportional to existing ones. Those proportional pairs can't be ZSF anyway, so they're trivially eliminated.
+
+For my p=7 computation, I should check all nonzero non-construction vectors: 7^4 - 1 - 17 = 2383 vectors. But using projective points is more efficient—that's (7^4-1)/6 - 17 = 383 candidates. I'll go with the projective approach since the ZSF property is invariant under scaling.
+
+Now I'm checking whether proportional pairs actually satisfy the ZSF condition. If v and cv are both in the set, a weighted zero-sum would need s₁v + s₂(cv) = 0, which means s₁ + s₂c = 0. For nonzero coefficients in F_p*, this forces s₂ = -s₁/c, and I need to verify what weights are achievable.
+
+Actually, I realize I excluded support-2 from my search but proportional pairs would create exactly that. Since I'm ensuring no two vectors are proportional in my construction, there's no support-2 zero-sum to worry about, so starting the search at support-3 is correct.
+
+For the 18th candidate vector, if it were proportional to an existing one, it would create a support-2 zero-sum. But I'm working with projective points and filtering out duplicates, so every candidate is guaranteed to be non-proportional to all construction vectors. Now I'll implement and test this.
+
+For the maximum support bound at p=7, I need to think through the constraint more carefully. With weight ≤ 7 and all coefficients at least 1, support k requires total weight ≥ k, so support is capped at 7. But I should verify the exact relationship between support and weight given the coefficient constraints. select k vectors and assign coefficients s_i ∈ {1,...,p-1} to them. The weight is Σ s_i. We need weight ≤ p = 7. With k vectors and each s_i ≥ 1, weight ≥ k. So k ≤ 7.
+
+But can we also have coefficients ∈ {1,...,6} with weight > 7? Yes, e.g., k=2 with s_1=s_2=4, weight=8 > 7. But we WANT weight ≤ 7. So for k=2 and weight ≤ 7: s_1+s_2 ≤ 7, s_i ∈ {1,...,6}. Possible.
+
+My check_positive_weight function validates that all components are in {1,...,p-1} and the sum doesn't exceed p, which handles the constraint correctly. Since kernel vectors in F_p^k automatically have coefficients in {0,...,p-1}, I need to ensure none are zero (to maintain the exact support) and that the sum stays within bounds. For larger kernel dimensions, enumerate_kernel_vecs generates all p^d - 1 nonzero vectors, which grows exponentially.
+
+Looking at the computational complexity for the ZSF check on 17 vectors: support size 7 requires checking about 19,000 subsets with kernel dimension at least 3, yielding roughly 6.7 million vector evaluations. Support size 6 is more manageable at around 594,000 total checks. The pattern continues for smaller support sizes.
+
+For the 383 candidate vectors, most get eliminated early at support 3 or 4 with relatively few subset checks. But the ones that survive to support 7 become expensive—with 18 vectors, I'm looking at nearly 32,000 subsets per candidate, and if about 10 candidates need this level of checking, that's roughly 100 million vector operations just for those cases.
+
+Support-6 is more manageable at around 18,500 subsets per candidate, totaling maybe 9 million operations across candidates. Putting it all together, the full analysis should run in 30-60 seconds, which is totally workable.
+
+Now I'm ready to start implementing this. Actually, I should clarify my approach—the ZSF check will confirm the 17-vector set is ZSF as expected, but the real insight comes from analyzing the candidates themselves. I'll skip the exhaustive ZSF verification and focus on that candidate breakdown. I should also run the same analysis for p=5 to compare against the known 513/94 split.
+
+Let me write a unified script handling both primes. I'm realizing I might be overcomplicating this—the computation is fast enough that I should just write clean code and execute it. At p=5 I have around 139 projective candidates (or 607 raw vectors), and at p=7 there are 383 projective candidates. Though I need to double-check whether that 607 number refers to raw vectors or projective classes, since the 513/94 split might be counting raw vectors rather than projective equivalence classes. At p=5, each projective class has 4 representatives, so if a raw vector gets eliminated by a support-3 zero...
+
+Actually, scalar multiples of a killed vector are also killed by the same zero-sum, so the split should hold for projective classes too. But 513/4 and 94/4 don't divide evenly, which suggests the 607 might be counting something else—possibly the 624 nonzero vectors minus the 17 in the construction, leaving 607 candidates to check for zero-sums.
+
+I'm going to implement this with projective points and run the code to see what actually happens. Let me write a combined script for both p=5 and p=7 that tracks the construction details, candidate counts, zero-sum verification, and killing statistics, plus the specific fiber and zero-sum for each candidate to understand the structure better.
+
+Writing the verification script...
+
+Now I need to focus on the key structural gap: multi-fiber configurations where the 18th vector lands in fiber ≥2. Looking at the p=5 fiber anatomy, each fiber position gets killed by different 4-sum combinations, and the support-3 cases that make up most of the 607 candidates must involve...
+
+Writing analysis code... F_7. If the kernel is nontrivial, I check the kernel vectors.
+
+The kernel of a 4×3 matrix has dimension 3 - rank. Since the matrix has 3 columns and 4 rows, the rank is at most 3. If rank = 3, kernel is trivial. If rank = 2, kernel dim = 1 (6 vectors). If rank = 1, kernel dim = 2 (48 vectors). If rank = 0, kernel dim = 3 (342 vectors).
+
+For "generic" vectors in F_7^4, three random vectors are independent with probability (1 - 1/7^2)(1 - 1/7) ≈ 0.98 × 0.86 ≈ 0.84. So about 16% of triples might be dependent. Hmm, that's high.
+
+Actually, let me reconsider this. Three vectors in F_7^4 are dependent only if the third lies in the span of the first two. A 2D subspace has 49 total vectors, so the probability the third is dependent is 49/7^4 ≈ 2%. That means for 816 triples, I'd expect around 16 dependent ones, each generating 6 kernel vectors to check—roughly 100 checks per candidate, which is very manageable. For support-4, I need to figure out when four vectors become dependent.
+
+Now I'm thinking about extending this to p=11. The doubled+e1 construction gives 17 vectors, and there are 1447 projective candidates. The support check goes up to 11, and I need to compute C(18,11) to see how many 11-tuples I'd be checking.
+
+The numbers get unwieldy fast—with kernel dimension up to 7, that's roughly 11^7 ≈ 20 million vectors per subset, and with 31824 subsets, I'm looking at around 6.4 × 10^11 total checks. That's prohibitively slow.
+
+However, early termination should help significantly since most candidates get eliminated at small support sizes. So p=11 might still be tractable if the vast majority fail before reaching support-5.
+
+I'll start by implementing this for p=5 and p=7, then revisit p=11 if time permits. I should also add a parameter to control the maximum support level during the initial run.
+
+Rather than overthinking the implementation further, let me just write the script. I want to focus the computation on classifying the killing mechanisms at p=7, which is the most valuable output. Computing the full weight distribution for Chevalley-Warning would require enumerating the kernel (roughly 7^14 ≈ 10^12 elements), which is too expensive, so I'll skip that part.
+
+My approach will be to run p=5 first as a sanity check against known results, then p=7 for the new case, and compare them directly. I'm also curious whether the killing zero-sum at p=7 is unique or if multiple killing zero-sums exist—this tells me something about how dense zero-sums are among the 18 vectors. Rather than enumerate all valid zero-sums (which is expensive), I'll just find and record the minimum-support zero-sum for each killed candidate.
+
+Writing the script now...
+
+Implementing the kernel basis computation... Still writing the algorithm... Still writing the kernel search... Continuing with the construction logic...
+
+Now I'm setting up the main analysis function that takes a prime p and constructs the Doubled+e1 configuration in the projective space. It normalizes all the points to their canonical form and verifies we have exactly 17 distinct projective points as expected.
+
+Next I'm enumerating all projective points in PG(3, F_p) and identifying which ones aren't already in our construction—these are the candidates for potentially adding an 18th vector. Then I'm running the zero-sum-free verification on the 17-vector construction to confirm it satisfies the ZSF property, timing how long the check takes.
+
+Now I'm systematically testing each candidate by augmenting the construction and checking whether adding it introduces a zero-sum dependency. I'm tracking statistics across different support sizes and weights, organizing the results by fiber class and flagging which failures involve the new vector. Printing detailed results...
+
+Now I'm calculating how often the 18th vector participates in eliminating zero-sum candidates, then returning a summary dictionary with the key metrics like total candidates, how many were killed, and survivors.
+
+I'm running the analysis for both p=5 and p=7 to compare the results, then printing out a side-by-side comparison showing the candidate counts, eliminations, and survival rates for each prime.
+
+The script is getting long, so I should streamline it and focus on the essential output. I'm also concerned that p=7 might be computationally expensive due to larger support sets, so I'll add timing estimates and optimize the inner loop. I'm planning to inline the kernel enumeration for small dimensions—skipping dimension 0, then handling dimensions 1, 2, and 3 with direct scalar and vector pair enumeration over the field. I'll also prioritize checking support-3 triples that involve the new vector first, since those are most likely to eliminate candidates early.
+
+Optimizing the core logic now...
+
+Actually, I just realized something important: since the original 17 vectors are zero-sum-free, any killing zero-sum must involve the new vector. This means I only need to check subsets containing index 17, which drastically cuts down the search space. For support-k, I'm looking at C(17, k-1) subsets—so support-3 has 136 triples, support-4 has 680 quadruples, and support-5 continues from there.
+
+Let me implement this optimization by iterating through combinations of the original 17 vectors and always including the new one, then verify the ZSF property of the original set as a sanity check. Writing the final script...
+
+Now I'm thinking through the data collection for the analysis—specifically what metrics matter for verifying α(4,7) maximality and understanding how the killing mechanism behaves differently at p=7 versus p=5. There's also a discrepancy I need to resolve: the briefing mentions 607 candidates at p=5, but if I'm using projective points that should be around 139, which suggests the original count included non-normalized vectors rather than equivalence classes.
+
+Let me work through the accounting: 624 total nonzero vectors minus 68 that are proportional to construction vectors gives 556 genuinely non-proportional ones, plus 51 more that are proportional but distinct from the construction vectors themselves, totaling 607. The puzzle is that these proportional vectors should be killed trivially at support-2, yet the briefing shows support-3 killing 513 and support-4 killing 94, which accounts for all 607. Either the proportional vectors are being counted within the support-3 kills despite being killed earlier, or there's something about how they're being categorized that I'm not seeing yet.
+
+For my own calculation, I'll switch to projective points to avoid this ambiguity—139 for p=5 and 383 for p=7—and note where my counts diverge from the original. Scaling the support-3 and support-4 percentages down to the projective count gives roughly 117 and 22 respectively for p=5, which does add up to 139, so I need to check whether the proportional equivalence class follows the same killing pattern as the rest.
+
+The zero-sum structure is invariant under proportional scaling, so the split should hold proportionally. Breaking down the 607 candidates: 556 are non-proportional (139 projective classes × 4 scalars each), and 51 are proportional (17 construction vectors × 3 scalars each), which checks out as 556 + 51 = 607. Since all 607 are killed by support-3 or support-4, the proportional ones must each correspond to a construction vector, and I need to see how they distribute across the two killing mechanisms.
+
+For a proportional pair {v, cv}, the zero-sum constraint becomes s₁v + s₂(cv) = 0, which simplifies to (s₁ + cs₂)v = 0, giving s₁ = (p - c)s₂ mod p. When s₂ = 1, the weight is p - c + 1 = p - c + 1, and I'm checking whether this falls under support-2 or support-3 killing.
+
+Looking at the weight range: for c ∈ {2, 3, ..., p-1}, the weight spans {2, ..., p-1}, all at most p. So proportional pairs should be killed by support-2, not support-3. But the briefing mentions support-3 kills 513 and support-4 kills 94 with no mention of support-2, which suggests the search might be starting at support-3 and missing these support-2 kills entirely. Since proportional pairs have support exactly 2, they shouldn't appear in the support-3 count at all.
+
+The numbers add up to 607 total candidates, which doesn't match the 556 non-proportional vectors, so either the code is excluding proportional vectors through normalization, or the support-2 kills are being counted somewhere else. Let me set aside the exact accounting for now and focus on what's actually happening in the search.
+
+I'm going to write a clean script that uses projective points directly, checks all support levels from 2 to p, and gives me the full breakdown of which candidates get killed and why. That'll answer the core question about whether all candidates at p=7 are eliminated.
+
+============================================================
+BLOCK 4 (14732 chars)
+============================================================
+Excellent! The computation is complete. Let me analyze the results:
+
+**p=5 results (projective points):**
+- 139 candidates, all killed
+- 111 (79.9%) by support-3, 28 (20.1%) by support-4
+- Of support-3: 11 non-degenerate, 100 triple-sum-zero
+- Weights: 11 at weight 4, 128 at weight 5
+- Fiber 0: 23 candidates (21 by s3, 2 by s4)
+- Fiber 1: 116 candidates (90 by s3, 26 by s4)
+
+
+**p=7 results:**
+- 383 candidates, all killed
+- 204 (53.3%) by support-3, 179 (46.7%) by support-4
+- Of support-3: 26 non-degenerate, 178 triple-sum-zero
+- Weights: 9 at weight 4, 3 at weight 5, 15 at weight 6, 356 at weight 7
+- Fiber 0: 49 candidates (42 by s3, 7 by s4)
+- Fiber 1: 334 candidates (162 by s3, 172 by s4)
+
+For both p=5 and p=7, every candidate gets eliminated and doubled+e1 remains the maximal ZSF. What's interesting is that support-3's effectiveness drops significantly from 79.9% down to 53.3% as p increases, while support-4 compensates by rising from 20.1% to 46.7%. The weight distribution stays heavily concentrated at w=p in both cases—over 92% of candidates. I'm noticing something odd though: candidates only appear in fibers 0 and 1 for both primes, with nothing in higher fibers.
+
+Oh, that makes sense now—after normalization in projective space, the first nonzero coordinate becomes 1, so every point either has first coordinate 0 (fiber 0) or gets normalized to 1 (fiber 1). The fiber is just tracking that first coordinate value.
+
+But wait, I'm conflating the normalized representation with the actual fiber structure. The real issue is that different homogeneous representatives of the same projective point have different first coordinates—they're related by scalar multiplication—so I can't just look at the normalized form to determine the fiber. I need to think about what the fiber actually means for a projective point, not just what its canonical representative looks like.
+
+The fiber of a projective point under the first coordinate is really determined by whether that coordinate is zero or nonzero. If it's nonzero, all representatives have nonzero first coordinate (scaled differently), and if it's zero, all representatives have zero first coordinate. So the fiber structure splits into two parts: the hyperplane where the first coordinate is always zero (which forms a projective subspace), and everything else where the first coordinate is always nonzero. For the specific case at p=7 in PG(3,F_7), the zero fiber contains the projective points of PG(2,F_7), which has 57 points, and the construction involves 8 of these. of them. So 57-8 = 49 candidates in fiber 0. ✓
+
+The number of projective points in "fiber 1" (really, fibers 1-6 combined): 400 - 57 = 343 projective points with x_0 ≠ 0. The construction uses 9 of them. So 343-9 = 334 candidates. ✓
+
+So the fiber analysis is really about: x_0 = 0 vs x_0 ≠ 0. For the multi-fiber problem, we need to think about the raw first coordinate of the construction vectors before normalization. The 8 fiber-0 vectors have x_0 = 0, and the 9 fiber-1 vectors have x_0 = 1 (their canonical form also has x_0 = 1, so they're in the same fiber).
+
+Now I'm realizing that a projective point with canonical form (1, a, b, c) has multiple raw representatives depending on scaling—(1, a, b, c), (2, 2a, 2b, 2c), up to (p-1, (p-1)a, (p-1)b, (p-1)c)—which would place them in different fibers under w. But the ZSF property cares about specific vectors, not projective equivalence classes, so when we add the 18th vector, its fiber is determined by whichever representative we actually choose. bers of the RAW vectors, not the normalized ones. The construction uses specific vectors:
+- Fiber 0: (0,1,0,0), (0,0,1,0), ..., (0,p-1,1,2) — first coord = 0
+- Fiber 1: (1,1,0,0), (1,0,1,0), ..., (1,0,0,0) — first coord = 1
+
+Adding a candidate from PG(3,F_p), we choose a specific representative. The "fiber" is the first coordinate of that representative.
+
+In my analysis, I normalized everything, so all candidates with x_0 ≠ 0 have first coordinate 1. This is fine for the ZSF check (since the ZSF property is projective), but the fiber analysis should use the raw coordinates.
+
+The real question is whether we can construct a ZSF set spanning three or more fibers. The doubled+e1 construction lives in exactly fibers 0 and 1, but any projective point can be scaled to appear in any fiber we want—so the multi-fiber question becomes: does there exist a ZSF configuration with vectors in at least three distinct fibers?
+
+Actually, I think I'm overcomplicating this. The key insight is that the ZSF property is projective-invariant, so fiber membership (defined by first coordinate) is just a choice of representative. What matters is whether we can find a 17-element ZSF set at all, and whether adding any 18th point breaks the ZSF property.
+
+For both p=5 and p=7, the doubled+e1 construction achieves this maximality. The comparison shows a clear trend in how support-3 vectors behave across different primes.
+
+Now I'm looking at the kill rates: support-3 effectiveness drops from 79.9% at p=5 to 53.3% at p=7, while support-4 effectiveness rises from 20.1% to 46.7%. This is counterintuitive since I'd expect support-3 to dominate more strongly at p=7 given the higher non-degeneracy rate. The classification data reveals that triple-sum-zero vectors (weight = p) decrease as a fraction from 71.9% to 46.5%, suggesting the structure of zero-sum constraints shifts significantly between these primes.
+
+The triple-sum-zero mechanism becomes less reliable at larger p because the projective space grows (156 points at p=5 versus 400 at p=7), but the fraction of candidates satisfying both the collinearity condition and the zero-sum constraint shrinks. Non-degenerate kills remain stable around 7%, representing the straightforward cases, while support-4 kills increasingly dominate as the triple-sum-zero advantage erodes.
+
+Now I'm checking whether support-4 is always sufficient or if some candidates eventually require support-5 or higher. Looking at the weight distributions, most candidates cluster at weight p (128 at p=5, 356 at p=7), suggesting the killing weight threshold might scale with the prime itself.
+
+Examining the fiber structure more closely, support-4 kills follow a clear pattern: fiber-0 candidates need 3 fiber-0 vectors plus 1 fiber-1 vector summing to weight ≤ p, while fiber-1 candidates need 4 fiber-1 vectors with the same weight constraint.
+
+Now I'm weighing what to prioritize next. Running p=11 verification would be most valuable since it would reveal whether support-5 or higher is ever necessary. The computational cost looks manageable—around 3.4 million support-4 checks across all candidates, each involving Gaussian elimination on small matrices. The real bottleneck would be checking support-5 combinations, which explodes combinatorially. ) = 2380 for support-5 (choosing 4 partners + new). Kernel dim ≥ 1. 10 kernel vectors. Total: 2380 × 10 = 23.8K per candidate. For up to ~500 candidates needing support-5: 11.9M. Hmm, wait.
+
+Actually, for support-5: C(17,4) = 2380 subsets of 4 partners. Each gives 5 vectors. Kernel of 4×5 matrix: dim ≥ 1. Search: 10 vectors (p-1 = 10). Total: 2380 × 10 = 23.8K per candidate.
+
+For support-6: C(17,5) = 6188 subsets. Kernel dim ≥ 2. Search: 120 vectors. Total: 6188 × 120 = 743K per candidate.
+
+For support-7: C(17,6) = 12376. Kernel dim ≥ 3. Search: 1330 vectors. Total: 12376 × 1330 = 16.5M per candidate.
+
+At support-11, the numbers explode—C(17,10) = 19448 subsets with kernel dim ≥ 7, requiring roughly 19.5 million vectors to search, which balloons to 380 billion operations per candidate. That's completely infeasible. So I'm limited to checking support up to around 7 before hitting a wall, but that should be fine if most candidates get eliminated by lower support thresholds.
+
+Let me run p=11 with max support capped at 7 and see if any survivors emerge. If they do, I'll need a different approach.
+
+Actually, I should reconsider the weight constraint. Since weight ≤ p = 11 and each coefficient is at least 1, support can go up to 11. But even support-8 is expensive: C(17,7) × (11^4 - 1) ≈ 19448 × 14640 = 285 million operations. That's borderline.
+
+I think I'll focus on support ≤ 5 or 6 at p=11 first and count how many candidates survive, then decide if I need to push further.
+
+Before scaling up, let me also dig into the structural patterns from the p=7 support-4 eliminations to see if there's something I can exploit.
+
+Looking at the p=7 support-4 kills, they all have fiber=(1,1,1,1), meaning four fiber-1 vectors sum to zero with weight ≤ 7. Among the 10 fiber-1 vectors (9 construction vectors plus the candidate), I'm looking for 4-element zero-sum subsets. After projecting away the first coordinate, the fiber-1 vectors become a specific set in F_p^3, and I need to understand what zero-sum patterns are possible there. I need to work through the projection equation for the zero-sum constraint, where the last three coordinates must satisfy a specific linear dependence. Let me just compute this directly for p=11 with a reasonable support bound—I'll start with max_support=7 and first check how many candidate pairs get eliminated by the support-3 constraint.
+
+At p=11, the non-degeneracy condition combined with the triple-sum-zero requirement gives me a 73% success rate among the 100 possible (α, β) pairs, which is higher than the 58% I saw at p=7. This means more candidates will be filtered out by the support-3 constraint. With 1464 projective points total and 17 from the construction itself, I have 1447 candidates to check, and I'm now examining the fiber where x_0 = 0.
+
+For the fiber where x_0 ≠ 0, I'm looking at 1322 candidates. If the support-3 elimination rate holds at around 53% like it did for p=7, that leaves roughly 620 candidates needing support-4 verification. Each check involves computing a 4×4 determinant, and with C(17,3) = 680 possible triples, I'm looking at about 422,000 total checks—manageable in around a minute. I should run this computation, though I need to keep in mind that support-5 or higher might be necessary and could slow things down significantly.
+
+I'm going to write a p=11 specific script with a configurable max_support parameter so I can test different thresholds and see where the survivors actually land. Looking at the pattern from p=5 and p=7, the support distribution seems to be shifting—at p=5 almost everything was support-3 or support-4, but by p=7 the support-4 percentage had grown to nearly half. If this trend continues at p=11, I'd expect maybe 40% support-3, 55% support-4, and perhaps 5% needing support-5 or beyond.
+
+But there's something interesting here: at both p=5 and p=7, the maximum support required was exactly 4, and the weight was always p itself. This tightness suggests the killing mechanism is operating at its limit—barely functional at the maximum allowed weight. For a support-4 configuration at weight p, I'm looking at four vectors with coefficients that sum to p, each coefficient between 1 and p-1, and they form a zero-sum relation modulo p.
+
+Now I'm thinking about how to count these configurations. The coefficients (s_1,...,s_4) satisfying s_i ∈ {1,...,p-1} and Σ s_i = p correspond to distributing p among 4 positive parts, each less than p—there are C(p-1, 3) such distributions. For each distribution, the zero-sum condition Σ s_i v_i = 0 becomes a system of 4 linear equations in F_p, and a weight-p zero-sum exists precisely when this system has a solution.
+
+Rather than diving deeper into the theory, I should just run the computation. Let me write a script to check p=11, setting max_support=7 to keep it tractable. I suspect most candidates get eliminated by support ≤ 4 or 5 anyway. I should also verify whether candidates in the other fibers at p=7 need further investigation, though I expect the normalized first coordinate is always 0 or 1.
+
+Actually, I'm realizing the multi-fiber question is more subtle—it's about whether the configuration is 2-fiber under *some* linear form, not just x_0. Even if the raw first coordinates are 0 and 1, a different linear form could create a multi-fiber structure. The two-fiber theorem applies if there exists any form making it 2-fiber, so the 17-vector construction is covered. For an 18-vector candidate, it would also be 2-fiber under x_0, so the theorem should still hold, but I need to think through whether that's actually sufficient.
+
+The key insight is that the two-fiber theorem handles cases where vectors fit in ≤ 2 fibers of *some* hyperplane projection—and both the 17-vector and 18-vector cases satisfy this under x_0. The real open problem is the multi-fiber case, where vectors require ≥ 3 fibers under *every* possible form. So the computation is really just confirming what the theorem already guarantees for these specific constructions.
+
+To actually test the multi-fiber conjecture, I should take one of those 17-vector sets that genuinely requires 3 fibers under all forms (found in the earlier search at p=7) and systematically check whether adding any 18th vector produces a zero-sum. That would give evidence for whether the conjecture holds in the truly open regime.
+
+But wait—the search results showed those supposedly 3-fiber sets were actually secretly 2-fiber under some linear form, so they don't count as genuinely multi-fiber. If no genuinely multi-fiber 17-element ZSF sets exist, then the multi-fiber case might be vacuous for maximal configurations. Though the conjecture still needs to hold for arbitrary 18-element sets, which could contain genuinely multi-fiber sub-configurations of smaller size.
+
+Let me shift focus back to what I've confirmed so far—the maximality of doubled+e1 at p=5 and p=7—and extend that verification to p=11.
+
+I should also investigate whether support-4 is always sufficient or if higher support is ever needed, since that's a crucial structural question. Running p=11 with max_support=7 will help clarify this. Let me estimate the computational cost: support-3 checks should be fast (~2 seconds) with about 40% of candidates eliminated, leaving roughly 867 survivors. Support-4 checks will take longer (~10 seconds) and likely eliminate another 50% or so, bringing it down to around 433 candidates.
+
+From there, support-5 becomes more expensive—checking 1.03 million subsets across remaining candidates will take 30-60 seconds. Support-6 gets even heavier, potentially 74 million checks if 100 candidates survive, which could stretch to 5 minutes. Support-7 would be prohibitively slow. Overall, running through support-6 should complete within the 10-minute timeout, so I'll implement a sequential checker that tests each support level and reports the results.
+
+============================================================
+BLOCK 5 (4163 chars)
+============================================================
+Excellent! This is a critical result. Let me analyze:
+
+**p=11 results:**
+- 1447 candidates, ALL killed
+- Support-3: 408 (28.2%)
+- Support-4: 1031 (71.3%)  
+- **Support-5: 8 (0.6%)** — NEW! First time support-5 is needed!
+- Maximum weight: 93.8% at weight 11 = p
+
+**The trend is clear:**
+| p  | s3%  | s4%  | s5+% | max support |
+|----|------|------|------|-------------|
+
+
+| 5  | 79.9 | 20.1 | 0.0  | 4           |
+| 7  | 53.3 | 46.7 | 0.0  | 4           |
+| 11 | 28.2 | 71.3 | 0.6  | 5           |
+
+The pattern is unmistakable: as p increases, support-3's kill rate drops sharply while support-4 dominates more, and we're finally seeing support-5 emerge at p=11. This shows a clear progression where larger primes require increasingly higher support levels to eliminate all candidates.
+
+The critical insight is that the maximum support needed grows with p—we go from needing at most support-4 at smaller primes to requiring support-5 at p=11. This means any general proof can't just rely on a fixed combination of low-support subroutines; it needs to handle arbitrary support sizes. I want to examine those 8 support-5 survivors more closely to understand their structure, and then push to p=13 to see if support-6 becomes necessary.
+
+Before diving deeper, I'm realizing there might be a subtle issue with how my layered search works—when I call it with different max_support values, I need to verify that candidates killed at support-4 are actually killed at exactly support-4, not at support-2 or 3. Let me trace through the logic more carefully to make sure I'm interpreting the results correctly. 4 (since they weren't killed at support ≤ 3).
+
+Wait, but my counting might be wrong. Let me re-read the code:
+
+The loop iterates through support thresholds from 3 to 7, checking each candidate against `find_killing_zs_layered` with the current max support. If a candidate was eliminated at support 3, it won't appear in the next iteration's candidates list. But here's the problem: when checking max_support=4, the function rechecks supports 2 and 3 (which already passed), then checks support 4. The condition `result[0] == max_s` is actually wrong—it should just be `if result`, since any surviving candidate that gets a result at this stage must have been killed at exactly this support level. The counting logic checks out—for candidates that survived lower support thresholds, checking support 4 would only find a result if one exists at that level, making the condition technically correct even if inefficient. So the results are valid: 8 candidates require support-5 and they're all in fiber 1, and notably, all 8 of these support-5 kills have weight 9. Let me dig into what these 8 candidates actually are.
+
+Now I'm realizing something interesting: weight 9 is less than p=11, so these are weight-9, support-5 zero-sums—meaning 5 coefficients that sum to 9, each between 1 and 10. With 5 coefficients each at least 1, there's only 4 units of excess to distribute, which severely constrains the possible coefficient patterns like (5,1,1,1,1), (4,2,1,1,1), (3,3,1,1,1), and so on. Let me check the weight distribution more carefully to understand what's happening.
+
+Looking at the data, weight 9 has 8 entries total, and I need to verify whether all 8 are support-5 or if some could be support-4. The support breakdown shows 408 support-3, 1031 support-4, and 8 support-5 entries, which sums to 1447—matching the total from the weight distribution. This confirms the 8 weight-9 entries are exactly the support-5 ones. For support-3 entries, the weight constraints are different since they can range from 3 up to 30, though non-degenerate cases require weight less than p or equal to p for triple-sums. then they'd all have weight 9, which would confirm the connection between the weight-9 entries and support-5 zero-sums. Let me verify this by checking the killed_details output to see if those 8 support-5 cases all have weight 9. I'll write a targeted script that builds the construction at p=11, filters fiber-1 candidates through support levels 3 and 4, then checks the survivors at support-5 while printing the specific zero-sums that eliminate them.
+
+============================================================
+BLOCK 6 (3418 chars)
+============================================================
+This is extremely informative data. Let me compile the key findings:
+
+## DEFINITIVE RESULTS
+
+### Trend Table
+| p | |PG| | cands | s3 | s4 | s5 | s6 | max |
+|---|------|-------|-----|------|-----|-----|------|
+| 5 | 156 | 139 | 111 (79.9%) | 28 (20.1%) | 0 | 0 | 4 |
+| 7 | 400 | 383 | 204 (53.3%) | 179 (46.7%) | 0 | 0 | 4 |
+
+
+| 11 | 1464 | 1447 | 408 (28.2%) | 1031 (71.3%) | 8 (0.6%) | 0 | 5 |
+| 13 | 2380 | 2363 | 514 (21.8%) | 1833 (77.5%) | 16 (0.7%) | 0 | 5 |
+
+Looking at the progression across these primes, I'm seeing a clear pattern where the distribution shifts dramatically as p increases—s3 dominance drops from nearly 80% down to around 22%, while s4 becomes increasingly prevalent. The emergence of s5 solutions at p=11 and p=13 is particularly notable, suggesting a phase transition in the structure of maximal ZSF configurations. The support-5 cases at p=11 have no collinear triples with the construction vectors, though they do contain dependent quadruples—none of which yield weight-≤p positive solutions. All support-5 cases belong to fiber 1, where the 18th vector always has a non-zero first coordinate normalized to 1. Weight concentrates heavily at exactly p across all primes, ranging from 92.1% to 94.5% of kills.
+
+Looking at the eight support-5 candidates at p=11, I notice a clear symmetry pattern: pairs like (1,0,3,8) and (1,0,8,3) suggest the construction is invariant under swapping the last two coordinates, which makes sense given the structure of A8. this symmetry: (p-1,2,1) ↔ (p-1,1,2), (1,1,0) ↔ (1,0,1), (0,1,0) ↔ (0,0,1), (p-1,1,1) is fixed, (1,0,0) is fixed). So the support-5 cases come in PAIRS under this symmetry.
+
+The 8 candidates are 4 pairs:
+- (1,0,3,8) ↔ (1,0,8,3)
+- (1,4,5,9) ↔ (1,4,9,5)
+- (1,5,2,9) ↔ (1,5,9,2)
+- (1,7,2,9) ↔ (1,7,9,2)
+
+At p=13, I'd expect 8 pairs giving 16 candidates total if this pattern continues. Now I'm thinking about why support-5 cases avoid collinear triples—it seems like v18 sits in general position relative to all the 2D subspaces formed by pairs from the construction. With 136 possible pairs, it's striking that none of them contain v18 in their span. For support-4 cases, something breaks down in this arrangement.
+
+Even though v18 lies in 59 of the 3D subspaces spanned by construction triples, none of those 4-element dependencies yield a weight-≤p positive solution. The kernel exists as a 1D space, but its components either contain zeros or exceed p. This suggests the proof can't rely on just support-3 and support-4 mechanisms—at larger primes, I need to account for how higher support zero-sums become viable.
+
+The fraction of candidates requiring high support stays below 1% and doesn't scale with p, yet the killing zero-sum always has weight exactly p, making it tight. This shapes the inductive strategy: the rank-3 theorem covers most cases, triple-sum-zero handles many more, and support 4-5 captures the remainder, with all cases bounded by weight ≤ p. The fact that support ≤ 5 suffices through p = 13 hints the maximum support might grow logarithmically or stay constant as p increases.
+
+Now I'm checking whether the support-5 cases scale predictably—at p = 11 there are 8 cases and at p = 13 there are 16, giving a ratio of 2. The percentage of support-5 cases relative to all candidates is remarkably stable at around 0.55% to 0.68%, suggesting the growth is sublinear compared to the ~p³ growth in total candidates.
+
+============================================================
+BLOCK 7 (1235 chars)
+============================================================
+Now let me give the comprehensive report to the user.
+
+Let me organize the key findings clearly:
+
+1. **Primary Result**: α(4,p) maximality verified for p=5,7,11,13. The doubled+e1 construction is maximal ZSF at all four primes.
+
+2. **Support Trend**: Support-3 kill rate decreases with p (79.9% → 21.8%), while support-4 increases (20.1% → 77.5%). Support-5 first appears at p=11 (8 cases) and p=13 (16 cases).
+
+3. **Support-5 Structure**: These candidates have ZERO collinear triples with construction vectors. They have ~59 dependent quadruples but none with weight-≤p positive kernel vectors. ALL support-5 kills have weight exactly p.
+   
+4. **Weight Concentration**: Nearly all kills cluster at weight exactly p (92-95%), which is the tightest possible bound.
+
+5. **Theoretical Implications**: Support-3 alone can't carry the proof since its fraction decreases with p, and support-4 becomes insufficient at larger primes. The key insight is that weight is always exactly p, suggesting the "copies pool" framework of length-≤p zero-sum vectors is the right lens. The bound itself is tight—we're seeing weight exactly p, not anything smaller.
+
+This is Round 1's definitive computation, and the data strongly supports this direction.

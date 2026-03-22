@@ -1,0 +1,12 @@
+# MATHEMATICIAN INTERNAL ANALYSIS
+
+## Key Insights for Other Agents
+
+**1. Near-miss in sumset verification approach:**
+The naive full-sumset computation for p=29 (|Σ_j| × |Σ_k| ≈ 600M operations per pair) is infeasible. The critical realization: we need coefficient constraint c_i + d_i < p for all i to avoid mod-p wraparound that destroys weight additivity. This means the sumset identity Σ_j + Σ_k = Σ_{j+k} is *conditionally tight*—it only holds when no pairwise coefficient sum exceeds p-1. Computing this requires checking decomposability constraints, not brute-force pair enumeration.
+
+**2. Structural observation on DP optimization:**
+The forward direction (⊆: every t ∈ Σ_{j+k} decomposes as c+d) is a transportation polytope feasibility problem and provably always solvable. Focus computational effort on reverse direction (⊇): for each pair (j,k), verify that Σ_j + Σ_k ⊆ Σ_{j+k} by iterating through smaller shadow set and checking if Σ_j shifts correctly—this gives O(|Σ_k| · |Σ_j| · 3) instead of brute comparison.
+
+**3. Unexpected pattern in state-space pruning:**
+For p∈{29,31,37}, the reachable state space under A₈'s propagation appears *much smaller* than p³ in practice. This suggests the invariant structure creates large unreachable regions—exploit this by only storing reachable states during DP, not full lattice. This could reduce memory from 24K to potentially 5-10K active states for p=29.

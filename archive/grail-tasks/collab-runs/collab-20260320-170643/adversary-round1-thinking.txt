@@ -1,0 +1,311 @@
+
+============================================================
+BLOCK 1 (439 chars)
+============================================================
+The user wants me to act as the ADVERSARY in a mathematical research collaboration. My job is to try to break things - find counterexamples, disprove lemmas, and find boundaries where things fail. Let me start by:
+
+1. Searching Cortex for existing findings
+2. Reading the seed document/briefing
+3. Then attacking the Window Structure and trying to construct counterexamples
+
+Let me begin by searching Cortex and reading the relevant files.
+
+============================================================
+BLOCK 2 (86 chars)
+============================================================
+Let me search Cortex for existing findings and read the briefing document in parallel.
+
+============================================================
+BLOCK 3 (127 chars)
+============================================================
+Good. Let me now read the u1_analysis.md file and look at the prior collaboration files to understand the current state better.
+
+============================================================
+BLOCK 4 (166 chars)
+============================================================
+Let me read the key files - the u1_analysis.md, the prior adversary round outputs, and some of the existing adversary scripts to understand what's already been tried.
+
+============================================================
+BLOCK 5 (86 chars)
+============================================================
+Now let me read the prior adversary round findings more carefully and the key scripts.
+
+============================================================
+BLOCK 6 (2109 chars)
+============================================================
+Now I have a good picture of what was done previously. Let me now focus on my specific adversary tasks for this round:
+
+1. **Attack the Window Structure** - Try to find a prime p where the window formula fails
+2. **Construct a 3-fiber ZSF configuration** - Try to build a set that has no weight-≤-p zero-sum with 3+ fibers
+3. **Check non-A₈ sets** - See if U1 depends on A₈ uniqueness
+
+Let me also retry the Cortex searches and then write targeted computational attacks.
+
+Key things to attack:
+1. The window formula: j ∈ Σ_w(A₈) iff ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ - test at larger primes
+
+
+2. The sumset completeness: Σ_k(A₈) + Σ_l(A₈) = Σ_{k+l}(A₈)
+3. Try to construct a 3-fiber strongly ZSF set
+4. Check if a non-A₈ maximal ZSF set exists at any prime and test window structure for it
+
+I'm writing comprehensive attack code to verify or break these properties at larger primes like 29, 31, and 37, construct 3-fiber configurations that might block all zero-sums, and explicitly test the cross-fiber constraints.
+
+Now I'm setting up the precise mathematical representation of A₈ in F_p³ with its eight specific vectors defined by their coordinate tuples.
+
+I need to find which linear combinations of these vectors land on the invariant line L = {(0,j,j) : j ∈ F_p*}, where the coefficients are non-negative integers summing to w and each bounded by p-1. This means examining the first coordinate constraint where the weighted sum of the first components must equal zero modulo p. I'm checking that the second and third coordinate constraints are consistent by setting them equal and simplifying, which confirms the relationship c₁ - c₂ + c₄ - c₅ + c₆ - c₇ ≡ 0 (mod p), and now I need to express j in terms of these coefficients.
+
+For the window structure claim, I'm testing whether j ∈ Σ_w(A₈) ∩ L holds exactly when ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋, which requires p ≥ 2w+1 to avoid modular wraparound. My strategy is to compute Σ_w(A₈) ∩ L directly for several primes and weights, verify the formula at p=29, 31, 37, and probe for edge cases where it might fail, especially at extreme weights near p-1.
+
+Writing code to test this...
+
+============================================================
+BLOCK 7 (507 chars)
+============================================================
+Cortex is mostly empty/broken. Let me go straight to computation. I'll write targeted attack scripts:
+
+1. **Attack 1**: Verify/break the window formula at large primes (p=29, 31, 37)
+2. **Attack 2**: Try to construct a 3-fiber configuration that blocks ALL weight-≤-p zero-sums
+3. **Attack 3**: Check if the sumset completeness Σ_k + Σ_l = Σ_{k+l} fails at any prime
+4. **Attack 4**: Test the window formula at weights CLOSE to p-1 where modular arithmetic kicks in
+
+
+5. Writing comprehensive test script...
+
+============================================================
+BLOCK 8 (1948 chars)
+============================================================
+Excellent findings! Let me analyze what I got:
+
+1. **Window structure**: HOLDS perfectly at p=5,7,11,13,17,19,23 in the p-independent regime (p >= 2w+1). The gap at weight p-1 matches the prediction {1,...,(p-3)/2} at every prime tested. I could not break it.
+
+2. **Sumset completeness**: I BROKE IT! The claim "Σ_k(A₈) + Σ_l(A₈) = Σ_{k+l}(A₈)" is FALSE when restricted to the line L. The sumset on L is STRICTLY SMALLER than Σ_{k+l} on L.
+   
+Actually, I need to reconsider—the original claim was about the full shadow, not just points on L. My test only checked sums of L-restricted points, but Σ_{k+l} on L could include contributions from non-L points in Σ_k and Σ_l that happen to sum back onto L, which I wasn't accounting for. So the issue is that I was testing the sumset property only on the line L, but the actual claim is about the full 3D space—most sums of L-points escape L entirely, which is why my restriction failed. The real observation is that Σ_1 + Σ_1 = Σ_2 should hold in the full space, and the cardinality check works out: |Σ_2| = 30 is well within the bound of |Σ_1|² = 64. I see the issue now—I was testing the sumset property on the restricted L-values, but the claim is actually about the full 3D sumsets in F_p^3, so my test was fundamentally invalid. The restriction to L doesn't preserve the sumset structure, which is an important observation. I need to rewrite the test to check the complete shadows in the full space rather than their L-projections.
+
+Now I'm shifting focus to push the window verification up to p=29 and trying harder to find counterexamples to the 3-fiber configuration at p=7. At p=5, the 3-fiber attack produced zero survivors—U1 holds completely for the (8,8,1) configuration. Looking at the shadow sizes across different weights, I'm noticing that at w=4 (which equals p-1), the shadow covers nearly all nonzero vectors except for a single gap, and I'm tracking which specific vector that is.
+
+============================================================
+BLOCK 9 (977 chars)
+============================================================
+CRITICAL FINDING! I found 2 potential "survivors" in the (8,7,2) attack at p=5. But I need to verify these carefully - my fast check only tests individual extra vectors, not their combined contribution. Let me look at these closely:
+
+Survivor 1: remove a8[1] = (0,1,0) from fiber 1, c=3, b1=(0,1,0), b2=(1,1,4)
+- Fiber 0: full A8 (8 vectors)
+- Fiber 1: A8 minus (0,1,0) = {(1,0,0), (0,0,1), (4,1,1), (1,1,0), (1,0,1), (4,2,1), (4,1,2)} (7 vectors)
+
+
+- Fiber 3: {(0,1,0), (1,1,4)} (2 vectors)
+
+Now I'm checking whether b1=(0,1,0) that was removed from fiber 1 and placed in fiber 3 maintains the proportionality relationship in 4D - specifically whether (1,0,1,0) and (3,0,1,0) are proportional or if this breaks the structure.
+
+But I realize my verification was incomplete - I only checked individual vectors for zero-sums, not whether combinations of both extra vectors could create a zero-sum together. I should do a full DP check to confirm these are genuinely strongly ZSF.
+
+============================================================
+BLOCK 10 (10500 chars)
+============================================================
+OK, so the (8,7,2) "survivors" were FALSE POSITIVES — my fast check only tested individual extra vectors, not their combined contribution. The full DP shows both configs have zero-sums at weight 4, which is even LESS than p=5.
+
+This confirms my fast check was flawed: with two extra vectors in fiber c, there can be zero-sums involving both that I wasn't catching. The weight-4 zero-sum uses both extra vectors.
+
+Now let me think about what else to attack. The key findings so far:
+
+1. **Window structure**: UNBREAKABLE. Holds at every prime from 5 to 29. Zero exceptions.
+
+
+2. **Sumset completeness (full F_p^3)**: HOLDS at p=5,7,11. 
+3. **Gap at weight p-1**: EXACTLY matches {1,...,(p-3)/2} at every prime.
+4. **U1 for (8,8,1)**: HOLDS at p=5 AND p=7. Zero survivors.
+5. **(8,7,2)**: Zero real counterexamples at p=5 (false positives from incomplete check).
+
+Everything the theorist proposed is holding up computationally. Let me explore some different angles to see if I can find any cracks.
+
+What if I test the fiber decomposition using a different linear form instead of just the first coordinate? If U1 truly holds for all hyperplane projections, then any choice of weights should preserve the property. But the doubled+e1 construction was specifically designed with the first coordinate in mind—a different linear form might reveal more than two fibers in the same set, which could break the claim.
+
+Actually, wait. U1 doesn't require all linear forms to work—it just needs one. So the real attack would be finding a strongly ZSF set of 17 vectors where every possible linear form produces 3 or more fibers. That's a much tougher constraint to satisfy.
+
+I should also explore whether the window structure depends on the A8 basis being special. Maybe there's a different maximal ZSF set in F_p^3 for some other prime where the window behaves differently—the uniqueness results at p=5 and p=7 don't necessarily extend to p=11. And the most promising angle might be examining the proof logic itself to see if there's a gap in how the claim is actually established.
+
+Now I'm looking at the core argument: the window structure combined with cross-fiber analysis is supposed to prove U1, but I need to check if the reasoning is airtight. The proof relies on the constraint that cross-fiber zero-sums satisfy W_1 + c*W_c ≡ 0 mod p, and when W_c = 1, this forces W_1 = p-c, which then bounds W_0. The shadow analysis claims that for every element b, there exist weight pairs that eliminate it. But here's the issue—this whole argument assumes the extra vector contributes coefficient 1, which might not always hold.
+
+Let me reconsider: if the coefficient u is larger than 1, then W_1 = -c*u mod p, and the total weight shifts to W_0 + W_1 + u, which opens up different reachability patterns. My earlier check did iterate over all coefficients u from 1 to p-1, so that part was sound, but I only tested individual extra vectors, not combinations of them.
+
+I should try a more direct attack: what if there's a ZSF set in F_p^3 that doesn't match the A8 structure at all? Let me test this at p=11 by constructing a three-fiber configuration from scratch at p=7 without forcing A8 into the fibers.
+
+The real insight is examining the window formula behavior when weights approach p-1, especially in the "near-p" regime where 2w+1 > p. Looking at the actual data from p=7, the windows match the no-wrap predictions, so I need to pin down exactly what happens when modular arithmetic becomes active. =6, the formula predicts [3,6] but the actual result is [3,4,5,6] — so there's a discrepancy. Let me trace through more carefully to see where the formula breaks down or if I'm miscalculating the actual values. For odd primes, when w equals p-1, the formula yields a window from (p-1)/2 to p-1 with size (p-1)/2, and the gap is exactly {1, ..., (p-3)/2}—which matches what I verified earlier. This suggests the formula holds across all weights, not just in the p-independent regime. But since the formula uses ordinary integers while we're working modulo p, I need to figure out when wraparound actually occurs. I'm realizing the formula [ceil(w/2), 2*floor(w/2)] actually works for all weights from 1 to p-1, not just when p is large enough—the conservative bound was unnecessary. This makes the theorem much cleaner and the proof simpler, since I don't need to worry about modular wraparound given that 2*floor(w/2) stays below p. are at most 8 terms, j can be at most 8(p-1) in the worst case. But mod p, j ∈ {0,...,p-1}. The key is that for the specific constraints on the c_i's (given by the window structure), j is always between ceil(w/2) and 2*floor(w/2), which is always in {0,...,p-2}. So no modular reduction is ever needed!
+
+Let me verify this claim: 2*floor(w/2) ≤ p-1 for all w ≤ p-1.
+  w even: 2*(w/2) = w ≤ p-1. ✓
+  w odd: 2*((w-1)/2) = w-1 ≤ p-2. ✓
+
+And ceil(w/2) ≥ 1 for w ≥ 2, so the interval [ceil(w/2), 2*floor(w/2)] stays within {1,...,p-1} for w ≥ 2. At w=1, the interval [1, 0] is empty. So the formula holds universally without any modular reduction needed—this is actually a stronger result than I initially thought.
+
+The window structure appears solid, sumset completeness checks out, and U1 holds for (8,8,1) at both p=5 and p=7. The (8,7,2) survivors turned out to be false positives. Let me explore a different angle: what if I try a non-standard approach?
+
+The U1 claim states that any strongly ZSF set lives in at most 2 fibers under some linear form. My attacks have focused on the first coordinate, but what about other linear forms? For the doubled+e1 construction, different linear forms might reveal 3+ fibers. Actually, wait—the construction already has 2 fibers under x_1, and U1 says all strongly ZSF sets have at most 2 fibers under some linear form. The real attack would be finding a strongly ZSF set with 3+ fibers under every possible linear form, but I've verified no such set exists at p=5 or p=7 since all 3-fiber configurations contain zero-sums.
+
+Let me try testing the window formula at w=1 to see what the sum formula produces.
+
+Now I'm checking whether any elements of A8 actually lie on the line L by testing each of the eight points against the condition (0,j,j) for j in F_p*—none of them match.
+
+Moving to weight 2, I need to find which points on L are reachable by summing two vectors with coefficient 1 each, or doubling a single vector. Let me systematically check the doubling case first.
+
+When I double individual vectors, none of them land on L. For pairs of distinct vectors, a_1 + a_2 gives me (0,1,1), which corresponds to j=1 on L. But checking other combinations like a_3 + a_4 yields (0,2,1), which doesn't satisfy the constraint that the second and third coordinates must be equal. Let me continue checking the remaining pairs. = (1+p-1,0+2,0+1) = (0,2,1) NO.
+  a_4 + a_7 = (1+p-1,1+1,0+2) = (0,2,2) → j=2. ✓
+  a_5 + a_6 = (1+p-1,0+2,1+1) = (0,2,2) → j=2. ✓
+  
+So at w=2, the L-values are {1, 2}. And the formula predicts [1, 2]. ✓
+
+Now let me also think about attacking the LOGICAL structure of the proof. The key chain is:
+1. Window structure (proved for all tested primes, needs analytical proof)
+2. Cross-fiber coverage: for any extra vector b in fiber c, the shadow analysis shows a weight-≤-
+
+I'm checking a few more pairwise sums to verify the pattern holds, and it does—the L-values match the formula's predictions. Now I need to think about how to rigorously prove the underlying logical structure, particularly establishing the window structure analytically and showing how cross-fiber coverage guarantees completeness.
+
+The real challenge is whether this generalizes beyond the (8,8,1) case I've been testing. With (8,7,2), the fiber-1 shadow becomes weaker with only 7 vectors, potentially losing some cross-fiber zero-sums that existed before, but the 2 extra vectors in fiber c create new interactions to compensate. My computations for p=5 with (8,7,2) found no counterexamples, so the pattern seems robust. I'm curious whether this holds at larger primes like p=11 with the original (8,8,1) distribution.
+
+The task asks me to verify at p=29 and p=31, and the window check works at p=29, but running the full 3-fiber verification would be computationally prohibitive. Instead, I should think about whether the underlying structure could fail at large p—as p grows, the shadows become sparser relative to the field size, which might create room for a counterexample, but the cross-fiber constraints from the weight equation seem to tighten rather than loosen. (w^2) for small w relative to p).
+- For c = 2: W_0 ≤ 1. Σ_1(A8) = A8 (8 vectors), Σ_{p-2}(A8) is large. The sumset A8 + Σ_{p-2}(A8) should cover all of F_p^3 for large p.
+
+Actually, the sumset completeness says Σ_1 + Σ_{p-2} = Σ_{p-1}. And from the gap analysis, Σ_{p-1} covers all of F_p^3 except vectors on L with j < (p-1)/2. So the sumset doesn't cover those. But we also have the u=2 option, giving W_1 = p-2c and different weight allocations.
+
+This is getting intricate. I should write some code to check specific cases like p=11 and p=13 to see if the pattern actually holds. I also need to verify the exact gap structure on L more carefully and test whether the low-weight cross-fiber mechanism actually reaches those gap vectors.
+
+Let me refocus on what I'm trying to accomplish here. The task asks me to find a prime where the window formula fails, construct a strongly ZSF 3-fiber configuration, or break U1 for a non-A₈ set. I've already verified that the window formula holds across p=5,7,11,13,17,19,23,29 with no counterexamples so far.
+
+I've also checked that no 3-fiber strongly ZSF configuration exists at p=5 or p=7 for the (8,8,1) case. For the third part, A₈ is unique at p=5 and p=7, so there's no alternative maximal ZSF set to test at those small primes. At larger primes, A₈ is defined the same way (it's independent of p), though I haven't verified uniqueness beyond p=7.
+
+The most promising direction now is to search for a different maximal ZSF set at p=11 or p=13 and see if it exhibits a different window structure. I should also investigate whether the window formula extends beyond line L—what does the shadow pattern look like on other 1-dimensional subspaces?
+
+My immediate priorities are checking if the window formula holds on other invariant lines, attempting to construct a 3-fiber configuration at p=11 where shadows are larger, and examining the proof gap to see if the argument remains valid even if the formula does hold.
+
+============================================================
+BLOCK 11 (1192 chars)
+============================================================
+MAJOR FINDING: **94 alternative ZSF sets exist at p=11!** This is huge. At p=5 and p=7, A8 was unique, but at p=11, there are MANY alternatives. This means the proof strategy cannot rely on A8 uniqueness at large primes.
+
+Now the critical question: do these alternative ZSF sets also satisfy the window structure? If they don't, then the proof approach based on A8's window structure is FUNDAMENTALLY INCOMPLETE.
+
+Let me check:
+1. Do the alternative ZSF sets have the same window structure on L?
+2. If they have different window patterns, does U1 still hold for the doubled+e1 construction built from them?
+
+
+---
+
+I need to examine whether these alternative ZSF sets preserve the window structure that makes A8 work. The key vulnerability is that if an alternative base set has a different window pattern, the cross-fiber coverage in the (8,8,1) construction could break down. But there's something deeper here: L=(0,1,1) appears to be the only line that satisfies the exact window formula, making it a fixed point under the (2↔3) coordinate symmetry that defines A8. This special property might be what forces all valid ZSF sets—alternative or not—to maintain the same window structure on L.
+
+============================================================
+BLOCK 12 (10582 chars)
+============================================================
+MAJOR COUNTEREXAMPLES FOUND! U1 is BROKEN for non-A8 base sets at p=11!
+
+Wait - I need to be very careful here. Let me re-read what my check is doing.
+
+The check_u1_for_alt function checks: for the doubled+e1 construction built from this alternative 8-vector set, and for (8,8,1) distribution with a 3rd fiber, are there vectors b in fiber c that DON'T have a cross-fiber zero-sum at weight ≤ p?
+
+But wait - this is the cross-fiber check using the SHADOW of the alternative set. 
+
+If the alternative set has a weaker shadow, there are more gaps where survivors can't be killed by cross-fiber mechanisms. But the GRAIL doesn't care about cross-fiber zero-sums specifically—it asks whether the full 17-vector set has any weight-≤-p zero-sum at all, including same-fiber ones. Since the alternative set is already ZSF at weight ≤ p-1, I need to reconsider what my fast check is actually validating.
+
+The real problem is that my cross-fiber check only catches zero-sums involving vectors from different fibers, but the full 17-vector set could have zero-sums in other configurations I haven't verified. The survivors just mean the cross-fiber mechanism didn't find anything—I need a complete DP check to be sure.
+
+Actually, I'm getting confused about what U1 is really claiming. The conjecture states that any strongly ZSF set of size 17 in F_p^4 must live in at most 2 hyperplane fibers. So the question is whether the doubled alternative plus e1 construction satisfies the strongly ZSF property, not whether arbitrary 3-fiber configurations have zero-sums.
+
+The right approach is to first verify that the doubled+e1 construction from the alternative base is itself strongly ZSF, and then check that it naturally fits within 2 fibers under the first coordinate—which it does by design.
+
+Now I need to step back and ask the core question: can I actually construct a 17-vector strongly ZSF set that uses 3 or more fibers? My earlier "U1 broken" claim was based on checking arbitrary 3-fiber extensions, but U1 is really asking whether a set that's *already* strongly ZSF can have 3+ fibers. So the real test is whether such a set exists at all, and if it does, whether the doubled+e1 variant from an alternative base is strongly ZSF. Let me check: is the doubled+e1 from the alternative bases strongly ZSF?
+
+For alternative "a8[0] -> (0,1,1)":
+The alternative set in F_11^3 is: {(0,1,1), (0,1,0), (0,0,1), (10,1,1), (1,1,0), (1,0,1), (10,2,1), (10,1,2)}
+Note: (0,1,1) replaces (1,0,0).
+
+The doubled+e1 in F_11^4 would be:
+Fiber 0: (0, 0,1,1), (0, 0,1,0), (0, 0,0,1), (0, 10,1,1), (0, 1,1,0), (0, 1,0,1), (0, 10,2,1), (0, 10,1,2)
+Fiber 1: (1, 0,1,1), (1, 0,1,0), (1, 0,0,1), (1, 10,1,1), (1, 1,1,0), (1, 1,0,1), (1, 10,2,1), (1, 10,1,2)
+Plus e1 = (1, 0,0,0)
+Total: 17 vectors
+
+Now I'm checking if any vectors are proportional—specifically whether (0, 0,1,1) and (1, 0,1,1) could be scalar multiples of each other, which would require a λ satisfying λ*(0,0,1,1) = (1, 0,1,1). Now I need to determine whether this 17-vector set is strongly zero-sum-free at p=11, since that determines whether the construction is valid—if it is strongly ZSF, then U1 is automatically satisfied, but if there's a weight-≤-11 zero-sum, the alternative base fails and U1 becomes irrelevant. The shadow not saturating suggests there might be room to add vectors without creating zero-sums, though that's more relevant for rank 3; at rank 4, the doubled+e1 construction could still work even if the base isn't shadow-saturating, so the critical question is whether the 17-vector set itself avoids low-weight zero-sums. in F_11^4 has a weight-≤-11 zero-sum.
+
+Actually, wait. The doubled+e1 construction has 17 vectors in F_p^4 with 2 fibers. The claim (from the post-mortem) says "Doubled+e1 is Strongly ZSF" was PROVED (Theorem A). But that proof assumes A8 is the base. For an alternative base, the proof might not apply.
+
+Let me check computationally: is the doubled+e1 from the alternative base strongly ZSF?
+
+If it IS, then:
+- We have a 17-vector strongly ZSF set with 2 fibers (good for U1)
+- But this alternative set has different shadow properties
+- U1 is still trivially satisfied (it's 2-fiber)
+
+If it is NOT:
+- The alternative base's doubled+e1 construction has a zero-sum at weight ≤ p, which means only A8 and its equivalents produce strongly ZSF doubled+e1 sets.
+
+Now I'm checking whether a 3-fiber configuration using the alternative base can avoid zero-sums entirely. My computational results showed 10-12 survivors for alternative bases, but I need to clarify what that means: these are (c, b) pairs where the 3-fiber configuration has no cross-fiber zero-sum, not necessarily that the full 17-vector set is strongly ZSF, since the complete set includes the 8 vectors in fiber 0 plus the 7+1 vectors distributed across other fibers.
+
+The alternative ZSF sets at p=11 have broken window structures and their shadows don't saturate, suggesting the cross-fiber mechanism fails for certain parameter pairs. The real question is whether you can construct a strongly ZSF 17-vector set in F_11^4 using 3 or more fibers. Rather than brute force, I'm trying specific constructions—taking an alternative ZSF base from F_11^3 and placing it in a fiber to see if the resulting configuration avoids all zero-sums.
+
+I'm exploring a split configuration where the base vectors are distributed across multiple fibers: 8 vectors in fiber 0, 8 vectors in fiber 1 (with a shift), and 1 remaining vector in a third fiber. This creates a genuinely different structure than the standard (8,8,1) distributions I checked at p=5 and p=7.
+
+My earlier findings showed that all standard 3-fiber configurations using the A8 base had zero-sums, but the "U1 broken" result came from alternative bases where the cross-fiber shadow check failed. The real question is whether any of these alternative 3-fiber 17-vector sets are actually strongly zero-sum-free—I only did a partial check on the cross-fiber shadows, not the full Fourier analysis. Running the complete DP check on the configurations that passed the fast filter would be definitive, but computing the full Fourier transform for 17 vectors in F_11^4 at weight ≤ 11 is computationally prohibitive given the space size of 11^4.
+
+Instead, I can incrementally verify whether the 17-vector set is strongly zero-sum-free by checking for zero-sums directly. The survivors from my cross-fiber check mean those specific (c, b) pairs don't have cross-fiber zero-sums, but I need to also look for same-fiber zero-sums within the alternative base itself at weight p, and other cross-fiber combinations I haven't examined yet.
+
+Let me reconsider the structure: with the (8,8,1) split using the alternative base, I have 8 vectors in fiber 0, 8 in fiber 1 plus e1 making 9 total in fiber 1, and 1 in fiber c—that's 17 vectors. But I'm getting confused about whether e1 is already counted as one of the fiber-1 vectors or separate, so I need to clarify the actual construction.
+
+The real question for U1 is whether any arbitrary 17-vector set spread across 3+ fibers in F_11^4 must contain a zero-sum, not just this specific construction. I should test this by taking a 17-vector set that uses multiple fibers and checking if it's strongly zero-sum-free.
+
+My approach was to build a configuration with fiber 0 and fiber 1 each containing the alternative base B (8 vectors each), then add one extra vector (c, b) to reach 17 total. The "survivors" are vectors (c, b) where the cross-fiber mechanism doesn't immediately force a zero-sum, but I need to verify whether the full (8,8,1) configuration is actually strongly zero-sum-free by checking both same-fiber and cross-fiber constraints.
+
+My cross-fiber check was incomplete—it only examined zero-sums mixing vectors from different fibers up to weight p, but missed same-fiber zero-sums at weight p and potentially other cross-fiber patterns. Also, I realize this 3-fiber setup with B in fibers 0 and 1 plus one extra vector is structurally different from the standard doubled+e1 configuration, so I need to verify the constraints from scratch.
+
+For strong ZSF, I need to confirm that B has no weight-≤-p zero-sums in either fiber, and that there are no cross-fiber zero-sums at weight ≤ p. The tricky part is weight exactly p: B is ZSF at weight ≤ p-1, but the strong ZSF definition requires checking weight p as well, so I need to determine whether B admits a same-fiber zero-sum at that boundary weight. the Erdős-Ginzburg-Ziv bound tells me that any 8p-7 elements from Z_p^3 must contain a zero-sum subsequence. Since B only has 8(p-1) = 8p-8 copies available when using coefficients up to p-1, we're just below that threshold—so B can avoid zero-sums at weight ≤ p-1. But at weight p, we're asking whether those same 8 vectors can form a zero-sum with coefficients summing to exactly p, which is a different constraint I need to analyze.
+
+For the alternative base that's ZSF at weight ≤ p-1, I'm wondering if it might fail at weight p. Rather than work through the theory further, I should just implement a direct check: take the 17-vector configuration with the alternative base and run a full dynamic programming zero-sum search up to weight p to see if any solutions actually exist. The computational cost is steep though—checking 17 vectors in F_11^4 at weight 11 involves...
+
+Computing the complexity of the DP... , we add one vector to the DP table. The DP table is weight × points. Points in F_11^4 = 14641. Weight goes up to 11. So the table has 11 * 14641 ≈ 161K entries per step. With 17 vectors, each with coefficients 0-10: each step multiplies by 11 (coefficient choices). Total work is roughly 17 * 11 * 161K ≈ 30M operations. That's feasible!
+
+Let me write this.
+
+Actually wait, I realize my u1 check might be wrong. Let me re-examine.
+
+In check_u1_for_alt, I'm checking: for the 8-vector alternative base B, and a 3-fiber config with fiber 0 = B, fiber 1 = B, extra = (c, b):
+
+The cross-fiber zero-sum constraint requires the first coordinate to satisfy Σ s1_j + c * u ≡ 0 mod p, which gives S1 = -c*u mod p. The remaining coordinates need Σ s0_i * b_i + Σ s1_j * b_j + u * b ≡ 0 mod p, with total weight S0 + S1 + u ≤ p. This correctly validates cross-fiber zero-sums, but I'm missing same-fiber zero-sums in fiber 0 at weight p where S0 = p. So cross-fiber configurations without the extra vector only produce same-fiber zero-sums. Now I need to check whether the base B itself contains a weight-p zero-sum at p=11, since that would immediately give a zero-sum in the 17-vector configuration from fiber 0 alone.
+
+============================================================
+BLOCK 13 (788 chars)
+============================================================
+This is a key finding. ALL 5 alternatives that "broke" U1 in the fast cross-fiber check actually have SAME-FIBER zero-sums at weight exactly p=11. So they're NOT strongly ZSF as 3-fiber configs — they have zero-sums from the base set alone.
+
+This means:1. The alternative ZSF bases ARE ZSF at weight ≤ p-1 (by construction)
+2. But they ALL have weight-p zero-sums (weight = p)
+3. So their doubled+e1 constructions are NOT strongly ZSF
+4. Only A8 (the standard base) avoids weight-p zero-sums
+
+
+5. U1 isn't actually broken — this is good news for the proof, since it shows A8's special property is precisely avoiding weight-p same-fiber zero-sums. But I need to verify whether all 94 alternatives share this weight-p zero-sum property, or if some escape it and could genuinely threaten U1.
+
+============================================================
+BLOCK 14 (2860 chars)
+============================================================
+STUNNING RESULT! At p=11:
+
+1. A8 has NO zero-sum at weight ≤ 11 (strongly ZSF) ✓2. ALL 94 alternative 8-vector ZSF sets (obtained by single swaps from A8) have zero-sums at weight EXACTLY 11 (= p)
+3. This means A8 is the UNIQUE strongly ZSF set among all single-swap alternatives
+
+So while A8 is NOT unique among sets that are ZSF at weight ≤ p-1, it IS unique among sets that are STRONGLY ZSF (weight ≤ p). This is a crucial distinction!
+
+
+The 94 alternatives are weakly ZSF but fail the strong condition by having zero-sums appear exactly at weight p, which is what distinguishes A8. This suggests U2 might actually hold for strongly ZSF sets at p=11, meaning the proof framework is more robust than expected—alternative bases can't break U1 because they lack this strong property. Now I'm wondering whether there could be a strongly ZSF set in F_p^3 that isn't obtained through these single-swap modifications.
+
+The exhaustive swap search covers A8's immediate neighborhood, but a fundamentally different construction using multiple vector replacements might exist. However, the evidence is compelling: every single-swap alternative fails at weight p. Let me check if this pattern repeats at p=7 and p=5 to see if it's universal.
+
+Actually, at those smaller primes A8 was already proven unique among all ZSF sets, so the weak versus strong distinction doesn't apply there. But at p=11, the finding is striking—94 weakly ZSF alternatives exist, yet zero strongly ZSF ones. This is a significant structural observation worth documenting.
+
+Now I should write up the comprehensive report with this discovery, but first let me verify the pattern holds at p=13 to strengthen the claim. Though the ZSF computation took 73 seconds per prime, so p=13 would be prohibitively slow. I'll skip that and focus on synthesizing the key results instead.
+
+The window structure formula holds perfectly across all tested primes without exception, and the sumset completeness property extends to the full F_p^3 space, contradicting my earlier concerns about failures.
+
+Line L is uniquely characterized by this window pattern while other lines deviate, and the strongly ZSF property for A8 at (8,8,1) is confirmed across multiple primes with no survivors. The (8,7,2) case shows false positives in the initial screening, and among the 94 alternative ZSF sets at p=11, all contain weight-11 zero-sums, making A8 the sole strongly ZSF set up to single element swaps. Most of these alternatives preserve the window structure pattern as well.
+
+After exhaustive testing across different weights and primes, I haven't found any counterexamples—the conjecture holds consistently. The critical distinction is that A8's uniqueness operates at the strongly ZSF level (weight ≤ p) rather than the weakly ZSF level (weight ≤ p-1), and this separation is essential for establishing the proof.

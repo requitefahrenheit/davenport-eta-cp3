@@ -1,0 +1,10 @@
+# MATHEMATICIAN'S INTERNAL THINKING — KEY INSIGHTS FOR ROUND 3
+
+## INSIGHT 1: The "Strongly ZSF" Constraint is Sharper Than Initially Apparent
+**Near-miss:** The doubled+e₁ construction avoids identical vectors by design (fiber coords differ), but same-tail swaps can accidentally create pairs with identical tails—which then require weight ≥ p to zero-sum. The strong ZSF condition forbids weight ≤ p zero-sums, so identical vectors are *automatically* excluded, but this only works if we never create duplicates during enumeration. **Action for others:** When enumerating variants, deduplicate before the ZSF check; this reduces search space significantly.
+
+## INSIGHT 2: The Window Formula Verification Has Already Saturated for A₈ at Small Primes
+**Structural observation:** The A₈ orbit formula has been confirmed through p=23, and extension to p=29, 31, 37 is computationally expensive (shadow DP on F_p³ scales as p³). The real bottleneck is whether **non-A₈ maximal ZSF 8-sets** obey the same window structure at p=7. If they don't, the universality claim collapses; if they do, it's a deeper structural fact than A₈-specific. **Action for others:** Prioritize the non-A₈ search at p=7 over large-p verification—falsification risk is higher and payoff more definitive.
+
+## INSIGHT 3: GRAIL Closure Verification Reveals the True Constraint Space
+**Unexpected connection:** Checking GRAIL closure (adding any 18th vector forces weight-≤p zero-sum) operationalizes why 17 is maximal. The fact that *all* p=7 CEs satisfy GRAIL suggests 17-sets form a tight algebraic boundary, not just a combinatorial one. If GRAIL fails for even one CE, it points to a gap in the orbit-size formula. **Action for others:** Use GRAIL closure failures as diagnostic signals—they indicate hidden symmetries or misclassifications in the fiber signature counts.

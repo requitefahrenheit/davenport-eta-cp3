@@ -1,0 +1,128 @@
+
+============================================================
+BLOCK 1 (313 chars)
+============================================================
+Let me start by searching Cortex for what's been stored so far, and then read the briefing material to understand the current state. I'm the ADVERSARY - my job is to find counterexamples, break proposed lemmas, and stress-test the theoretical claims.
+
+Let me search Cortex and read the relevant files in parallel.
+
+============================================================
+BLOCK 2 (210 chars)
+============================================================
+Good, I have the briefing. Let me now search Cortex more carefully and also look at what the theorist and computer agent have been producing. Let me search with simpler queries and also look at the Cortex list.
+
+============================================================
+BLOCK 3 (8395 chars)
+============================================================
+Good. Now I have a comprehensive view of what's in Cortex. Let me focus on the key entries relevant to my adversary role:
+
+1. **U1 IS FALSE** (19d0dd9fa3b) - Already found counterexamples to U1
+2. **Multi-fiber strongly ZSF sets exist** (19d0ba2bcf9) - Critical finding
+3. **Shadow Saturation FALSE for weak ZSF** (19d09171574) - Important structural result
+4. **A8_known is NOT unique** (19d0ba2c3d2) - Correction about uniqueness
+
+
+5. **Cross-fiber completeness proved** (19d0ca8fe85) - Minkowski identity result
+
+Now I'm examining what the theorist and computer agent are establishing. The theorist is pointing out that fiber projection creates proportionality constraints, and that single-fiber zero-sums must have weight exactly p rather than at most p, which means cross-fiber cancellation is essential. The computer is exploring whether multi-fiber ZSF sets can actually exist at small primes, which seems to be where the real tension lies.
+
+As the adversary here, I need to stress-test these claims. The doubled+e₁ construction being unique up to equivalence is one target—can I construct alternative maximal ZSF sets without the two-fiber structure? But more critically, there's a direct contradiction: the computer claims multi-fiber ZSF sets may not exist, yet cortex entry 19d0ba2bcf9 explicitly documents multi-fiber strongly ZSF 17-element sets in F_5^4 with no two-fiber linear form. That's a hard contradiction I need to resolve.
+
+For the inductive approach, the real vulnerability is proportionality collapse during projection—when vectors become proportional across fibers during the F_p^{r+1} to F_p^r reduction, the inductive hypothesis breaks down because the number of non-proportional projections within a fiber can shrink dramatically. And there's a weight-p bottleneck that might be the actual obstruction preventing the approach from working. fatal for naive induction**
+
+The theorist correctly identified that within a non-kernel fiber, the minimum weight of a zero-sum is exactly p. This means you can't use a single fiber's zero-sum and then combine it with anything else (you'd exceed weight p). 
+
+But wait - can we combine PARTIAL sums (not zero-sums) from different fibers? The theorist suggests this, but here's the attack: the number of ways to partition weight p across fibers grows, and there's no guarantee that the RIGHT partition exists.
+
+**Attack 3: Can I construct a multi-fiber configuration that has NO zero-sum of weight ≤ p?**
+
+Actually, the whole point is that we're trying to PROVE this can't happen. So as adversary, I should try to construct one. If I succeed, the conjecture is false!
+
+From the computational results, multi-fiber strongly ZSF 17-element sets do exist, but when I check whether an 18th vector can be added at p=5, all 607 candidates get eliminated. That's only testing extensions of the standard construction though—there might be completely different 18-element sets that are strongly ZSF.
+
+**Attack 4: The "uniqueness implies two-fiber suffices" argument is flawed**
+
+Even if the doubled+e₁ construction is unique among maximal 17-element sets, that doesn't guarantee the two-fiber bound works for ALL 18-element sets. The upper bound needs to hold universally, not just for extensions of one particular configuration—there could be an entirely different 18-element ZSF set that doesn't contain the standard 17-element set at all.
+
+**Attack 5: The fiber induction approach has a counting problem**
+
+Projecting 2α(r)+2 vectors from F_p^{r+1} down to F_p^r distributes them across at most p fibers, giving an average fiber size of (2α(r)+2)/p. But for the inductive hypothesis to work within a fiber, I need at least α(r)+1 vectors there—and when p is large relative to α(r), the average falls well short. For r=4 with α(4)=17, I have 18 vectors averaging 3.6 per fiber at p=5, but I'd need α(3)=...
+
+Actually, let me recalculate this more carefully. The recurrence gives 2α(r)+2 = 4α(r-1)+4 total vectors, and I need α(r-1)+1 vectors in a fiber to apply the inductive step. With 2(α(r)+1) vectors spread across p fibers, the average is 2(α(r)+1)/p. For r=4 where α(3)=8 and α(4)=17, I have 36 vectors but need to check whether any single fiber can guarantee enough.
+
+Wait, I'm mixing up the induction. The actual step assumes η(C_p^{r-1}) ≤ α(r-1)(p-1)+1 and tries to bound η(C_p^r) ≤ (2α(r-1)+1)(p-1)+1. So I'm working with N = (2α(r-1)+1)(p-1)+1 vectors in F_p^r, projecting them onto F_p^{r-1}, where each fiber is a coset of a 1-dimensional subspace.
+
+The average vectors per fiber is roughly 2α(r-1)+1, but the inductive hypothesis needs α(r-1)(p-1)+1 ≈ α(r-1)p vectors in some fiber—that's about p/2 times the average, which seems impossible for large p. But I'm not projecting to a single coordinate; I'm using a hyperplane projection that creates p cosets of a line as fibers.
+
+With N ≈ 2α(r-1)(p-1) total vectors, if they're all in one fiber I have enough to apply the inductive hypothesis, but spreading them across multiple fibers could make individual fibers too small. The key insight is that the two-fiber bound handles the case where vectors concentrate in at most two fibers, so I only need to worry about the case with three or more occupied fibers.
+
+When there are at least three fibers, the largest one contains at most around N/3 ≈ 2α(r-1)(p-1)/3 vectors, which falls short of the α(r-1)(p-1)+1 threshold needed for the inductive hypothesis to apply directly within that fiber. This is the core obstruction: the standard inductive approach can't work on individual fibers when the configuration is sufficiently spread out. I recognize this was already flagged in the failed approaches, but now I see exactly why it fails and what I need to overcome.
+
+Let me explore whether combining partial sums across different fibers could work around this. If I take partial sums from separate fibers with different coordinate-sum values and first-coordinate sums, I'd need their combined weight to stay under p while the first coordinates align to zero modulo p. But this requires careful balance in how the weights distribute across fibers, and I'm not sure the constraints allow it. So the sum w1+w2 is either p or 0 mod p, but since both weights are positive, the minimum is p. Let me test this with a concrete example: if c1=1 and c2=2 with p=5, then w1=1 gives w2=2, so w1+w2=3, which is actually less than p. This means the constraint doesn't always force the sum to equal p—it depends on the specific coefficients. The real question is whether we can always find partial sums satisfying the modular constraint with weight at most p.
+
+The issue is that partial sums aren't arbitrary; they're determined by which vectors we actually select from each fiber. In a fiber with first coordinate c≠0, any partial sum has first coordinate c times the sum of our coefficients. To get a specific residue value, we need control over the weight, but the additive combinatorics involved here is subtle. Let me focus on what strategy would be most effective for the adversary.
+
+I should check whether the key claims from earlier rounds still hold up, and see if I can construct a multi-fiber ZSF set that resists the proposed techniques. The Cortex entry mentions that multi-fiber strongly ZSF sets exist at p=5 in F_5^4 with 17 elements, and the two-fiber linear form doesn't apply to them, though they still get killed at 18 elements. The real question is whether at higher rank—say r=5—multi-fiber configurations become harder to eliminate. At rank 5, α(5)=35, and the construction uses 35 vectors across 2 fibers, but if we spread 36 vectors across 3 or more fibers, the kill mechanisms from rank 3 might not carry over as cleanly.
+
+My strategy here is to expose the logical gap in the computer agent's "uniqueness implies two-fiber suffices" claim, which feels like a non-sequitur, and then probe whether the cross-fiber combination approach hits structural obstructions when the weight constraint creates unsolvable Diophantine conditions. I also need to verify whether the inductive structure can actually close—the theorist's induction mirrors the lower bound, but the lower bound is constructive while the upper bound requires a destructive argument, and those are fundamentally different approaches.
+
+Now I'm searching for known counterexamples in the literature to related conjectures that might inform this problem.
+
+============================================================
+BLOCK 4 (189 chars)
+============================================================
+Let me get the critical Cortex entries about multi-fiber ZSF sets and the U1 counterexamples, and also search for relevant mathematical literature on counterexamples to similar conjectures.
+
+============================================================
+BLOCK 5 (185 chars)
+============================================================
+Excellent findings. Now let me focus on the adversary attacks. Let me search for more specific things - especially about whether the inductive approach has been tried before and failed.
+
+============================================================
+BLOCK 6 (7460 chars)
+============================================================
+Excellent. Now I have a very rich picture. Let me synthesize my adversary attacks. Let me look at the key findings:
+
+1. **From the literature**: The straightforward induction that works for rank ≤ 2 is KNOWN to fail for rank ≥ 3. This is a major warning sign for the theorist's Approach 1.
+
+2. **From Cortex**: Multi-fiber strongly ZSF 17-element sets DO exist in F_5^4. The computer agent's suggestion that "multi-fiber ZSF sets may not exist at small primes" contradicts established findings.
+
+
+3. The ti(G) = η(G) conjecture holds for rank 2 but breaks down at rank 3, and similarly D(G) = D*(G) fails at C_3 × C_3 × C_3 × C_6—both concrete examples of how zero-sum conjectures collapse at higher ranks.
+
+Now I'm formulating my counterarguments. The computer agent's claim about multi-fiber ZSF sets not existing at small primes is demonstrably false—Cortex already found them in F_5^4.
+
+The second attack targets a critical logical flaw: even if the doubled+e₁ construction is uniquely maximal, that doesn't mean any 18-vector set breaking ZSF must contain it, so the uniqueness argument doesn't actually justify dropping the multi-fiber analysis from the upper bound proof.
+
+I'm reconsidering whether the uniqueness approach could work after all—if an 18-element set either lacks a 17-element ZSF subset (giving us a zero-sum immediately) or contains one equivalent to the standard construction (where the 18th vector's behavior is constrained by the two-fiber structure), then maybe the argument does hold. But that reasoning itself hinges on establishing uniqueness of the 17-element maximal set, which brings us back to the original problem.
+
+Looking at the Cortex entries though, I'm seeing that multi-fiber strongly ZSF 17-element sets actually do exist in F_5^4, which directly contradicts the uniqueness claim. There are multiple non-equivalent maximal ZSF sets, not just the standard two-fiber construction. So the uniqueness approach is fundamentally flawed—I can't rely on T always having a particular structure.
+
+The rigidity data shows that the doubled+e₁ construction can't be modified by single swaps while preserving strong ZSF, but that's a local property, not a global uniqueness statement. More critically, A8 itself isn't unique—there are roughly 640,000 alternative strongly ZSF 8-element sets at p=5. If the rank-3 base case has multiple extremal sets, then any argument built on uniqueness is going to collapse.
+
+Now I'm looking at the counting obstruction for the inductive step. When we project N = (2α(r)+1)(p-1)+1 vectors from F_p^{r+1} onto F_p^r, we get p fibers, each a translate of a line. For the inductive hypothesis to work inside a fiber, we need at least α(r)(p-1)+1 non-proportional vectors there. But with three or more fibers, the largest fiber can have at most N-2 vectors, and that's where the constraint tightens—we need some fiber to actually hit that threshold.
+
+The issue is that having roughly half the vectors in a single fiber is possible but not guaranteed by pigeonhole alone. More generally, with F fibers, the largest contains at most N-(F-1) vectors, so I need to determine when this bound forces enough vectors into one fiber to trigger the inductive hypothesis.
+
+But even if one fiber has enough vectors, there's a deeper problem: within a non-kernel fiber, the vectors have a constrained structure that reduces the effective rank, so the inductive hypothesis doesn't directly apply. Let me think through this more carefully.
+
+When I project down to the first coordinate, the fibers F_c consist of vectors with first coordinate equal to c. For the zero-sum-free property to fail within F_c, I'd need coefficients s_i summing to at most p such that the vectors combine to zero. But if the first coordinate is c for all vectors in F_c, then the first coordinate of the sum is c·Σs_i, which must be zero mod p. For c ≠ 0, this forces Σs_i ≡ 0 mod p, and since each s_i ≥ 1, the sum is already at least r, so it must be at least p to satisfy the congruence.
+
+This means within any non-kernel fiber, zero-sums must have weight exactly p—there's no flexibility. The kernel fiber (c = 0) is fundamentally different though, since there the first coordinate contributes nothing, allowing the coefficients to sum to anything up to p. So kernel vectors have much more freedom in forming zero-sums, while non-kernel fibers are rigidly constrained.
+
+Now I'm looking at how combining partial sums across different fibers might be more restricted than it initially appears.
+
+If I pull vectors from multiple fibers with weights w₁, w₂, ..., w_K, the first coordinate constraint becomes c₁w₁ + c₂w₂ + ... + c_Kw_K ≡ 0 (mod p), and the total weight must satisfy w₁ + w₂ + ... + w_K ≤ p. Since each weight is at least 1 when we use vectors from that fiber, this creates a tight coupling between the linear congruence and the inequality that severely limits what combinations are actually possible. c₁w₁ + c₂w₂ ≡ 0 mod p with w₁ + w₂ ≤ p has solutions—for instance, w₁ = c₂ and w₂ = p - c₁ works when c₂ ≤ c₁, otherwise I can swap to w₁ = p - c₂ and w₂ = c₁. With K=3 fibers there's more flexibility, so weight constraints should be satisfiable. The real challenge is that within each fiber, I need to find coefficients that sum to the required weight while making the partial sums in the remaining coordinates align perfectly to zero—the first coordinate is determined by the weights and c values, but the projections onto coordinates 2 through r+1 must also vanish, which is the constraint that actually matters.
+
+This becomes a prescribed-weight sumset problem: given a fiber with vectors, I need the set of all weighted sums with a fixed total weight to hit a specific target vector. If a fiber has only a few vectors, its sumset is limited and can't reach arbitrary targets, which creates the fundamental obstruction to combining fibers successfully.
+
+Now I'm trying to construct an explicit example where this obstruction appears. I'll use r=4, p=5, and distribute 6 vectors across each of 3 fibers for 18 total vectors.
+
+Since 6 vectors is below the threshold needed for rank-3 zero-sums within a single fiber, I can't find solutions internally. For cross-fiber combinations, I need weights w₁, w₂, w₃ satisfying both a modular constraint and a sum bound, but the limited fiber sizes prevent hitting the required target. I'm continuing to check the remaining weight combinations, and I've found that (1,3,1) and (2,1,2) both satisfy the modular constraint. Now I need to verify that the projection coordinates actually sum to zero for these cases, since that's an additional requirement I haven't fully addressed yet. The computational approach is getting unwieldy, so let me step back and focus on the most damaging contradictions in the adversary's argument. The claim about multi-fiber zero-sum-free sets contradicts established Cortex data, the uniqueness argument has a fatal logical flaw since even if maximal sets were unique it wouldn't resolve the upper bound gap, and the literature already documents that induction fails at rank 3 or higher—this isn't speculation but a known obstruction. The weight-p constraint within non-kernel fibers appears to be the real killer for any fiber-based approach.
+
+The core difficulty boils down to solving constrained sumset problems across small fiber configurations, which is where the combinatorial hardness actually lives. I should document these key findings now.
+
+============================================================
+BLOCK 7 (140 chars)
+============================================================
+Let me now formulate my adversary attacks systematically. I have all the information I need. Let me organize my findings into clear attacks.

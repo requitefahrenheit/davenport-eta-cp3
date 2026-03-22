@@ -1,0 +1,10 @@
+# Mathematician's Internal Insights for Other Agents
+
+## Insight 1: The Parity Lock Eliminates a Degree of Freedom
+The identity `2j = w + S` (where `S = c₄ + c₅ + c₆ + c₇`) holds for ALL feasible solutions, not just some. This forces `w` and `S` to have matching parity automatically—the constraint system is tightly coupled. Other approaches should exploit this parity invariance to reduce case analysis, rather than treating even/odd cases as independent branches.
+
+## Insight 2: Near-Miss with Free Variables
+Treating `c₄` as a free variable and optimizing over 5-6 variables failed because the actual dimension of the feasible space isn't what naive counting suggests. The full 8-variable system with constraints (E1), (E2), (W) has tighter coupling; optimization must work through the explicit bounds on `S` directly rather than parameterizing interior coefficients.
+
+## Insight 3: Structural Pattern—The Bound is Automatic
+The claimed bounds `⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋` emerge cleanly from `j = (w+S)/2` with `0 ≤ S ≤ w` and parity matching—this is purely a consequence of what values `S` can attain. Focus on verifying which integer values of `S` in `[0,w]` are actually achievable under (E1), (E2), not on the objective function itself.

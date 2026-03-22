@@ -1,0 +1,187 @@
+[TOOL: ToolSearch]
+[CORTEX SEARCH: grail zero-sum fiber counterexample adversary]
+[CORTEX SEARCH: multi-fiber ZSF weight induction upper bound]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: mcp__claude_ai_cortex__cortex_list]
+[CORTEX SEARCH: grail upper bound induction]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/085c9fba-e3b2-47aa-b01e-9a28fab5a7f1/tool-results/mcp-claude_ai_cortex-cortex_list-1774082096319.txt]
+
+[BASH] cat /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/085c9fba-e3b2-47aa-b01e-9a28fab5a7f1/tool-results/mcp-claude_ai_cortex-cortex_list-1774082096319.txt | python3 -c "
+import json, sys
+data = json.loads(sys.stdin.read())
+result = json.loads(data['result'])
+for entry in result['entries']:
+    tags = ', '.join(entry.get('tags', []))
+    content_preview = entry['content'][:120].replace('\n', ' ')
+    print(f\"ID: {entry['id']} | Tags: {tags}\")
+    print(f\"  {content_prev
+
+Now I have the full picture from Cortex. Let me read the critical entries and launch my attacks.
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_cortex__cortex_get]
+[TOOL: mcp__claude_ai_cortex__cortex_get]
+[TOOL: mcp__claude_ai_cortex__cortex_get]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+Now I have a comprehensive picture. Let me formulate my adversary attacks.
+[TOOL: ToolSearch]
+[TOOL: TodoWrite]
+---
+
+# ADVERSARY ROUND 2: Five Attacks on Proposed Approaches
+
+## ATTACK 1: Computer Agent's Multi-Fiber Claim is Contradicted by Our Own Data
+
+The computer agent claimed in Round 1:
+
+> "Multi-fiber ZSF sets may not exist at small primes... we haven't verified that any distinct maximal ZSF set of size 17 exists in F_p^4"
+
+**This is FALSE.** Cortex entry `19d0ba2bcf9` from the previous session's adversary (Round 2) explicitly states:
+
+> "Multi-fiber strongly ZSF 17-element sets exist in F_5^4 with no two-fiber linear form."
+
+And Cortex entry `19d0ba2c3d2` states:
+
+> "A8_known is NOT unique. ~640K alternative strongly ZSF 8-element sets at p=5."
+
+So not only do multi-fiber maximal ZSF sets exist, but even the rank-3 building blocks (A8 alternatives) are far from unique. The computer agent's suggestion that uniqueness might eliminate the multi-fiber gap is built on a false premise.
+
+**Verdict: The multi-fiber gap is REAL and cannot be wished away by uniqueness.**
+[TOOL: TodoWrite]
+## ATTACK 2: The "Uniqueness Implies Two-Fiber Suffices" Argument is a Non-Sequitur
+
+The computer agent argues: "If the doubled+e₁ construction is unique (up to equivalence), then the two-fiber bound alone suffices for the proof, eliminating the multi-fiber gap entirely."
+
+**This has a critical logical gap.** The argument implicitly assumes:
+
+1. Take any 18-vector set S in F_p^4
+2. S must contain a 17-vector ZSF subset T
+3. If T is unique (up to equivalence), it's the two-fiber construction
+4. So the 18th vector can be analyzed relative to that structure
+
+**Step 2 is wrong.** An 18-vector set S might have the property that EVERY 17-element subset already contains a zero-sum of weight ≤ p. In that case, we're done trivially — but we never needed uniqueness. The interesting case is when some 17-element subset IS zero-sum-free. But even then:
+
+**The premise of Step 3 is false.** We know from Cortex that multi-fiber strongly ZSF 17-element sets exist. So T need NOT be the standard two-fiber construction. A proof strategy that only handles extensions of the two-fiber construction leaves the multi-fiber maximal sets unaddressed.
+
+**More precisely:** Suppose T is a multi-fiber 17-element strongly ZSF set (no linear form puts it in 2 fibers). Adding an 18th vector v₁₈ to get S = T ∪ {v₁₈}. We need a zero-sum of weight ≤ p in S. The two-fiber machinery gives us nothing here because T itself isn't two-fiber.
+
+**Verdict: Uniqueness is both false and insufficient. The multi-fiber case requires a genuinely different argument.**
+[TOOL: TodoWrite]
+## ATTACK 3: The Fiber Counting Obstruction Kills Naive Induction (Sharpened)
+
+The theorist proposes Approach 1: inductive upper bound mirroring the lower bound. Project F_p^{r+1} → F_p^r, apply η(C_p^r) within fibers.
+
+**Here is the precise arithmetic showing this CANNOT work naively when ≥ 3 fibers are occupied.**
+
+Setup: We have N = (2α(r)+1)(p−1)+1 vectors in F_p^{r+1}, with α(r) = 9·2^{r−3}−1. Project by first coordinate into fibers F_0, F_1, ..., F_{p-1}.
+
+For the inductive hypothesis within fiber F_c, we need:
+- |F_c| ≥ η(C_p^r) = α(r)(p−1)+1 non-proportional projected vectors
+
+With F ≥ 3 occupied fibers, **the critical ratio is:**
+
+N / η(C_p^r) = [(2α(r)+1)(p−1)+1] / [α(r)(p−1)+1] ≈ 2 + 1/α(r)
+
+So the total vectors are barely more than TWICE the inductive threshold. With 3+ fibers, at most one fiber can exceed the threshold, and only if the distribution is extremely lopsided.
+
+**Worse: the non-proportionality constraint bites.** Within a non-kernel fiber F_c, vectors have the form (c, v'). Two such vectors are proportional in F_p^{r+1} iff they're proportional overall, which means (c, v₁') ~ (c, v₂') iff v₁' = v₂' (since the first coordinates are equal and nonzero). So non-proportionality is preserved in projection for non-kernel fibers. Good.
+
+**But the kernel fiber F_0 is different.** Vectors (0, v') are proportional iff v' ~ v''. The projection loses no information about proportionality. But in F_0, zero-sums have no first-coordinate constraint, so any weight ≤ p works. If |F_0| ≥ η(C_p^r), we immediately get a zero-sum of weight ≤ p. So the hard case is when **F_0 is small**.
+
+**The actual hard case:** F_0 small (say |F_0| < η(C_p^r)), and the remaining vectors spread across ≥ 2 non-kernel fibers. In each non-kernel fiber, zero-sums have weight EXACTLY p (the theorist's Insight 2). So within a single non-kernel fiber, we can only get weight-p zero-sums — and those already satisfy our bound. But each non-kernel fiber has < η(C_p^r) vectors, so we can't even guarantee a zero-sum exists within it.
+
+**The bottleneck:** With F ≥ 3 fibers and none having η(C_p^r) vectors, fiber induction gives us NOTHING. We need a fundamentally different mechanism to combine information across fibers.
+
+**Verdict: Fiber induction is dead for the multi-fiber case unless supplemented by a cross-fiber combination theorem that does not yet exist.**
+[TOOL: TodoWrite]
+## ATTACK 4: Cross-Fiber Combination Hits a Constrained Sumset Wall
+
+The theorist's Insight 3 proposes: find partial sums in different fibers with complementary residues that cancel. Let me stress-test this with explicit arithmetic.
+
+**The weight-residue constraint system.** Using vectors from fibers c₁, ..., c_K with respective coefficient sums w₁, ..., w_K:
+- First coordinate zero: c₁w₁ + c₂w₂ + ... + c_Kw_K ≡ 0 (mod p)
+- Total weight bound: w₁ + w₂ + ... + w_K ≤ p
+- Each w_j ≥ 1
+
+This system is satisfiable (many solutions exist). **But that's the EASY part.**
+
+**The HARD part:** For each fiber c_j, the partial sum using vectors {v_i : v_i ∈ F_{c_j}} with coefficients summing to w_j must hit a SPECIFIC target in F_p^r (the remaining r coordinates). This is:
+
+> Given m vectors in F_p^r and a target weight w and target vector t ∈ F_p^r, find coefficients s_i ∈ {0, 1, ..., p−1} with Σs_i = w and Σs_i·π(v_i) = t.
+
+This is a **prescribed-weight affine sumset problem**. The sumset Σ_w(V) = {Σs_i·v_i : s_i ≥ 0, Σs_i = w} has size at most p^{min(m, r)} (bounded by the ambient dimension). For the cross-fiber approach to work, we need:
+
+> The sumsets Σ_{w₁}(V₁), ..., Σ_{w_K}(V_K) to "interlock" — meaning Σ_{w₁}(V₁) + ... + Σ_{w_K}(V_K) ∋ 0.
+
+**When fibers are small, sumsets are small.** If fiber c_j has only m_j vectors and we use weight w_j, the sumset has at most p^{min(m_j, r)} elements in F_p^r. For the sumsets to cover F_p^r (guaranteeing a hit), we need:
+
+∏_j |Σ_{w_j}(V_j)| ≥ p^r (heuristically)
+
+With K = 3 fibers, each of size ~N/3, in F_p^r with N = (2α(r)+1)(p−1)+1:
+
+For r = 4 (the first open case), p = 5: N = 18, so ~6 vectors per fiber. Each sumset lives in F_5^3 (after projecting out the fiber coordinate). Max sumset size: 5^3 = 125. Three such sumsets: 125^3 = ~2M covering 5^3 = 125 targets. Ratio ~16000:1. Looks generous.
+
+**But the catch:** The sumset Σ_w(V) for a SPECIFIC weight w over m = 6 vectors in F_5^3 is typically much smaller than 5^3. With w = 1, it's just {v₁, ..., v₆} — exactly 6 points. With w = 2, it's {v_i + v_j : i ≤ j} ∪ {2v_i} — at most 6 + 15 = 21 points. Still far from 125.
+
+**Explicit worst case for (w₁, w₂, w₃) = (1, 3, 1):**
+- Σ₁(V₁) = V₁ itself: 6 points
+- Σ₃(V₂): weighted sums of V₂ with coefficients summing to 3. Size bounded by ~56 (choosing 3 of 6 with repetition) but after projection, much smaller.
+- Σ₁(V₃) = V₃ itself: 6 points
+
+We need −Σ₁(V₁) − Σ₁(V₃) to intersect Σ₃(V₂). That is, for some v₁ ∈ V₁, v₃ ∈ V₃: −v₁ − v₃ ∈ Σ₃(V₂). There are 36 candidate targets. If |Σ₃(V₂)| ≈ 56, and F_5^3 = 125, the probability of a random hit is 36 × 56/125 ≈ 16. So generically we expect hits.
+
+**But "generically" is not "always."** The adversary's question: can V₂ be arranged so that Σ₃(V₂) avoids all 36 targets? With 6 vectors in F_5^3, this is a constrained design problem. It seems hard but not impossible for a carefully chosen V₂.
+
+**Verdict: Cross-fiber combination is plausible heuristically at p = 5, r = 4 due to density. But this argument gives no clean proof — it requires either (a) a Chevalley-Warning-type existence theorem for prescribed-weight sumsets, or (b) an explicit structural analysis of what constraints ZSF imposes on the fiber content. Neither exists.**
+[TOOL: TodoWrite]
+## ATTACK 5: The Literature Confirms Induction Fails at Rank ≥ 3
+
+This is not just my theoretical analysis — **the published literature explicitly documents this obstruction.**
+
+From the web search results on higher-rank EGZ constants:
+
+1. **For rank ≤ 2, η(G) is computed by induction** (Olson's method). "An easy induction then yields the value of η(G) for all 1 < m | n." This is SPECIFIC to rank 2.
+
+2. **For rank ≥ 3, the same induction FAILS.** The papers by Elsholtz, Gao, and others state: "In fact, the authors are unable to prove the conjecture for r = 3." The methods that work at rank 2 do not extend.
+
+3. **Analogous conjectures fail at higher rank.** The conjecture ti(G) = η(G) holds for rank 2 but has **known counterexamples for rank 3** groups. This is a concrete warning: zero-sum properties that hold uniformly at rank 2 can break at rank 3+.
+
+4. **The D(G) = D*(G) conjecture** (that the Davenport constant equals the cross-number-based lower bound) also has counterexamples at higher rank: G = C₃ × C₃ × C₃ × C₆ satisfies D(G) > D*(G).
+
+**The pattern is clear:** In zero-sum theory, rank 2 is "paradise" where clean inductive formulas hold. Rank ≥ 3 is where things break. Our problem (η(C_p^r) for all r) is asking to prove something in exactly the regime where analogous results are known to fail.
+
+**This does NOT mean our conjecture is false** — the lower bound construction gives strong evidence it's true. But it means **the proof technique must be genuinely novel**, not a routine extension of rank-2 methods. Any approach that "feels like" rank-2 induction should be viewed with extreme suspicion.
+
+**Verdict: The literature validates our difficulty. The approach that eventually works will likely need the polynomial method (Chevalley-Warning/Nullstellensatz), a cap-set connection (Fox-Sauermann style), or a completely new structural argument. Incremental fiber-based induction is almost certainly the wrong path.**
+[TOOL: TodoWrite]
+Now let me store the key findings to Cortex.
+
+[CORTEX STORE] ADVERSARY SESSION 5 ROUND 2: FIVE ATTACKS ON PROPOSED APPROACHES
+
+## Attack 1: Multi-Fiber ZSF Sets DO Exist (Computer Agent Wrong)
+Computer agent claimed multi-fiber ZSF sets "may not exist." This is contradicted by Cortex entry 19d0ba2bcf9: multi-fiber strongly ZSF 17-element sets exist in F_5^4 w
+
+[TOOL: TodoWrite]
+---
+
+## SYNTHESIS: What Survived and What Didn't
+
+| Proposed Approach | Status | Named Obstruction |
+|---|---|---|
+| Fiber induction (Approach 1) | **DEAD** for multi-fiber case | Fiber counting: N/η ≈ 2, no fiber reaches threshold with ≥ 3 fibers |
+| Uniqueness → two-fiber suffices | **DEAD** | Multi-fiber maximal ZSF sets exist; A8 not unique |
+| Cross-fiber partial sum combination | **BLOCKED** | Requires prescribed-weight sumset existence theorem (none known) |
+| Polynomial method (Approach 2) | **UNTESTED but promising** | No specific obstruction identified — this should be the priority |
+| Cap-set/Fox-Sauermann connection | **UNTESTED but promising** | Bypasses fibers entirely; may handle all ranks uniformly |
+| Character sum generalization (Approach 3) | **DEAD** for support ≥ 4 | W(χ) = 0 for even characters (documented dead end) |
+
+**Bottom line for Round 3:** Stop trying to make fiber induction work. The multi-fiber gap is real, the fibers are too small, and cross-fiber combination lacks the necessary sumset theorems. The polynomial method (Nullstellensatz/Chevalley-Warning) and the cap-set connection are the only approaches without a named obstruction. Push those hard.
+
+Sources:
+- [Erdős-Ginzburg-Ziv constant of high rank groups](https://www.sciencedirect.com/science/article/pii/S0022314X11001107)
+- [Higher Degree EGZ Constants (Fox-Sauermann)](https://arxiv.org/abs/2207.08682)
+- [EGZ by avoiding 3-term APs](https://arxiv.org/abs/1708.09100)
+- [Zero-sum problems survey](https://cfc.nankai.edu.cn/_upload/article/files/c6/e1/a2c52bf04b1896f59003b5993582/5c9e49ea-af5b-44ac-b153-5dbb6d8ae9a3.pdf)
+- [Weighted EGZ for higher rank](https://link.springer.com/article/10.1007/s12044-022-00671-w)
+- [Direct zero-sum problems for rank 3 (Girard)](https://arxiv.org/abs/1806.07636)

@@ -1,0 +1,369 @@
+
+============================================================
+BLOCK 1 (455 chars)
+============================================================
+Let me understand the situation. I'm the THEORIST agent in a multi-agent research setup, working on proving shadow saturation for ZSF sets. This is Round 3 of 3 - the final round. Let me:
+
+1. Search Cortex for prior findings
+2. Read the briefing document
+3. Focus on the coordinator's directive: verify/correct A8 internal zero-sum claim, and if A8 is strongly ZSF, present algebraic proof
+
+Let me start by searching Cortex and reading relevant materials.
+
+============================================================
+BLOCK 2 (157 chars)
+============================================================
+Let me now search Cortex for more specific information about the A8 internal zero-sum question and the fiber bound theorem, as well as my own prior theorems.
+
+============================================================
+BLOCK 3 (62021 chars)
+============================================================
+Now I have a comprehensive picture of the state of affairs. Let me synthesize what I know and what the coordinator is asking me to do:
+
+## My Round 2 results (stored in Cortex):
+1. **Theorem 1**: Shadow saturation from η - PROVED. If η(C_p^r) = α(r)(p-1)+1 and A is ZSF of size α(r), then Σ_{p-1}(A) = F_p^r \ {0}.
+2. **Theorem 2**: Shadow reduction - PROVED. If shadow saturates in F_p^r, it saturates for doubled+e1 in F_p^{r+1}.
+
+
+3. **Theorem 3**: Shadow saturation for doubled+e1 at rank 4 - PROVED (using η(C_p^3) which is Lean-verified).
+4. **Theorem 4**: Conditional Grail (given uniqueness).
+5. **Theorem 5**: Inductive structure (no circularity).
+
+## Coordinator's directive for Round 3:
+The coordinator wants me to immediately check whether A8 contains a zero-sum at weight ≤ p-1, since if it does, doubled+e1 becomes weakly ZSF and the Grail collapses to something trivial.
+
+## Key facts from Cortex:
+A8 has no zero-sums below weight p+1—the first zero-sum appears exactly at weight p+1, a pattern confirmed across multiple primes. This happens because internal sum relations like v_a = v_b + v_c generate zero-sums at weight (p-1)+1+1 = p+1. A8 is the unique strongly ZSF 8-element set in F_5^3, and Computer's dichotomy result shows that any other configuration either fails or trivializes the Grail.
+
+For Round 3, I need to establish the algebraic proof that A8 is strongly ZSF by showing the doubled+e1 construction has no internal zero-sum at weight ≤ p—this is the computational verification I need to formalize. Then I should close the uniqueness gap, which is the final piece needed for an unconditional proof. The complete proof architecture ties these together: the construction's algebraic properties, the uniqueness of A8 among 8-element sets, and the dichotomy that any 9 nonzero vectors in F_p^3 must contain a weight-p zero-sum in their copies pool.
+
+Now I'm examining the structure of the doubled+e1 construction more carefully. It has two fibers of copies from the maximal ZSF set A, plus the special vector e1, and I need to characterize what any potential zero-sum would require in terms of coefficients across these three components. Now I need to pin down the value of e from the first coordinate constraint—since d + e must be congruent to 0 mod p, e is determined as p - d when d is positive, or 0 when d equals 0. The weight then becomes the sum of all non-negative integer coefficients: the c_i^0 and c_i^1 values plus e, all constrained to lie in {0, 1, ..., p-1}. I can choose e based on whether d is positive or zero, which determines the total weight w. But I'm realizing this setup isn't quite right—I need to reconsider how the zero-sum problem actually works, since each vector should be used with multiplicity 0 or 1, with coefficients from {1,...,p-1} when included.
+
+Now I'm setting up the constraint more carefully: each of the 2α(r)+1 vectors gets a coefficient from {0,...,p-1}, the weighted sum must equal zero, and the total of all coefficients is bounded by p. I'm defining coefficients for the pairs (0, a_i) and (1, a_i) separately, plus the special vector e_1, then working through what the zero-sum condition requires for the first coordinate.
+
+The key insight is that if e_1 doesn't appear in the zero-sum (e = 0), then the first coordinate constraint forces either all d_i to be zero or the sum Σ d_i must equal p, which severely limits the possibilities.
+
+When all d_i = 0, the zero-sum lives entirely in fiber 0, giving us Σ c_i · a_i = 0 with weight at most p. But I need to reconsider what the ZSF property actually guarantees—it prevents zero-sums of weight up to p-1, not weight exactly p, so a weight-p zero-sum could theoretically exist.
+
+For the copies pool where each vector appears p-1 times, the ZSF condition means no nontrivial choice of coefficients a_i ∈ {0,...,p-1} can sum to zero, and the weight is just the sum of those coefficients. I'm trying to pin down what η(G) actually measures—it should be related to the smallest sequence length guaranteeing a zero-sum of bounded weight, but I need to reread the definition carefully.
+
+Now I'm clarifying the formal setup: a sequence over G is really a function tracking multiplicities, and a zero-sum subsequence respects those multiplicities while summing to zero. I'm realizing I need to clarify the definitions here—being zero-sum-free means no nonempty zero-sum subsequence exists at all, whereas η(G) specifically requires a zero-sum of length in [1, p]. These are related but distinct conditions, and I should double-check the standard terminology around the Davenport constant and related invariants. So "zero-sum free at weight w" means no zero-sum combination where the coefficients sum to at most w, which translates to no zero-sum subsequence of length ≤ w in the copies pool. "Strongly ZSF" requires no zero-sum up to weight p (length ≤ p), meaning the copies pool has size less than η(G), while "weakly ZSF" allows a zero-sum at exactly weight p but not before—so the copies pool has a zero-sum of length p but nothing shorter.
+
+Now I need to verify whether the construction S_{17} in F_p^4 has an internal zero-sum at weight ≤ p. The coordinator is asking if the doubled+e1 construction avoids this. A zero-sum among the 17 vectors would require coefficients satisfying constraints on the first coordinate (the sum of d_i coefficients plus e must be zero mod p) and on the tail (the weighted sum of the a_i vectors must be zero mod p), with total weight being the sum of all coefficients.
+
+For a nontrivial zero-sum with weight ≤ p, I'm checking different cases based on whether e is zero or nonzero. If e = 0, then the d_i coefficients must sum to either 0 or p (since they're bounded by p total). If they sum to 0, all d_i are zero, leaving only the c_i coefficients to form a zero-sum in the original A8 set—but A8's first zero-sum has weight p+1, so this is impossible at weight ≤ p.
+
+If the d_i sum to p instead, then all c_i must be zero, and I need to check whether Σ d_i · a_i = 0 is achievable with Σ d_i = p.
+
+This is equivalent to finding a zero-sum in the rank-3 setting using exactly p copies from the pool {a_1^{p-1},...,a_8^{p-1}}, which is precisely what "strongly ZSF" captures. The computer confirms no such zero-sum exists—the first one appears at weight p+1. Since the pool has length 8(p-1), which is less than the Davenport constant η(C_p^3) = 8(p-1)+1, the pool indeed has no zero-sum of weight p.
+
+Now I see the key insight: the copies pool A^{p-1} is ZSF at weight ≤ p because its size α(r)(p-1) equals η(C_p^r) - 1, which by definition of the Davenport constant means it contains no zero-sum of length in [1, p]. This is the algebraic theorem that proves A8 is strongly ZSF.
+
+For the case where e ≥ 1, I'm analyzing when Σ d_i + e ≡ 0 (mod p) with total weight C + D + e ≤ p, where D + e must equal p (since other values are impossible given the constraints on D and e).
+
+This forces C = 0, so the weight equals p exactly. The zero-sum condition becomes Σ d_i · a_i = 0 with Σ d_i = p - e < p, but this contradicts the fact that A^{p-1} has no zero-sum of length less than p, which completes the proof.
+
+So the doubled construction with the extra element has no zero-sum of weight ≤ p, confirming the result under the assumption about η(C_p^r). Now I'm curious about the structure of the first zero-sum that appears at weight p+1, which seems to arise from additive relations among the elements.
+
+When we have a_j = a_k + a_l, we can construct a zero-sum by taking (p-1) copies of (0, a_j) along with one copy each of (0, a_k) and (0, a_l), giving us a total weight of p+1 and summing to zero. This matches the involution-type zero-sum the Adversary identified.
+
+Now I need to tackle the uniqueness question. The coordinator wants me to address whether strongly ZSF sets at weight ≤ p are unique, and I'm starting to think through what this property means structurally.
+
+A set S of 2α(r)+1 vectors in F_p^{r+1} is strongly ZSF if its (p-1)-fold copy pool has no zero-sum of length ≤ p. This pool has length (2α(r)+1)(p-1), which equals η(C_p^{r+1}) - 1 if the Grail conjecture holds, making S^{p-1} an extremal sequence for η. The inverse problem for η asks what extremal sequences of length η(G)-1 look like when they avoid short zero-sums, and for rank 3 groups like C_p^3, these extremal sequences have length 8(p-1).
+
+For C_p^3, the computer verified exhaustively at p=5 that A8 is the unique extremal set with 8 elements each appearing p-1 times. Similarly, for C_p^4 where η should be 17(p-1)+1 under the Grail, the doubled+e1 construction is the unique extremal set at p=5,7. This uniqueness question is really an inverse problem for the η constant itself, and I'm trying to establish it algebraically through a fiber structure theorem.
+
+If S is a strongly ZSF set of size 2α(r)+1 in F_p^{r+1} and I apply a linear form w to partition S into fibers, then whenever the zero fiber has at least α(r)+1 elements, projecting those elements down to ker(w) gives enough vectors that their multiset must contain a zero-sum of length at most p, which lifts back to a zero-sum in the original set.
+
+For non-zero fibers, the calculation is tighter—the multiset size (α(r)+1)(p-1) falls just short of what's needed to guarantee a zero-sum, so I need to reconsider this case more carefully.
+
+Let me think about what strongly ZSF actually constrains here. If a non-zero fiber F_c has a zero-sum in its copies pool, that means some weighted combination of its elements sums to zero, where the weights are bounded by p and sum to a multiple of p. The first coordinate immediately forces the weights themselves to sum to a multiple of p, which with the size constraint means they either sum to 0 or p.
+
+For a nontrivial zero-sum, the weights must sum to exactly p. This means I'm looking at zero-sums of the tail projections at weight p specifically. The question becomes whether such a zero-sum exists in the copies pool of tails, where each tail element has multiplicity p-1. This connects to the Davenport constant of the tail group—I need to figure out what s(G') tells us about whether weight-p zero-sums are guaranteed to exist.
+
+The Davenport constant for C_p^r works out to α(r)(p-1) + p. So if the copies pool has length at least this value, a weight-p zero-sum must exist, which would contradict the strongly zero-sum-free property. This means I need m(p-1) < α(r)(p-1) + p, which simplifies to m < α(r) + 2 for p ≥ 5. If |F_c| = α(r) + 1, then the copies pool length falls just short of the Davenport threshold, so I can't guarantee a weight-p zero-sum from the tail group alone.
+
+For the zero fiber, if |F_0| ≥ α(r) + 1, the copies pool reaches the Olson constant threshold, guaranteeing a weight-≤-p zero-sum that lifts directly to a contradiction. So |F_0| ≤ α(r), and each nonzero fiber satisfies |F_c| ≤ α(r) + 1. This means the nonzero fibers collectively contain at least α(r) + 1 vectors out of the total 2α(r) + 1.
+
+Now I need to count how many nonzero fibers are possible. If there's just one nonzero fiber c, then |F_0| = α(r) and |F_c| = α(r) + 1 to reach the total. But if there are two or more nonzero fibers, the constraints become tighter—I need to work through what happens when a nonzero fiber has exactly α(r) + 1 vectors and examine its copies pool more carefully.
+
+The copies pool has length at least η(C_p^r), which means by the pigeonhole principle there must exist a zero-sum among the tails with length at most p. This zero-sum has weight Σ d_i ≤ p, and since the first coordinate gives c · Σ d_i ≡ 0 (mod p), we get Σ d_i ≡ 0 (mod p). So either Σ d_i = 0 (trivial) or Σ d_i = p (which would contradict the strong zero-sum-free property). I'm trying to figure out what happens if the zero-sum has a different weight structure. So the η bound guarantees a zero-sum of length at most p among the tails, and the modular constraint forces this to have length exactly p, giving us a weight-p zero-sum. But I need to check whether this is actually what I'm looking for—the tail pool has length (α(r)+1)(p-1), and I'm trying to understand what the η bound tells us about this specific sequence. be at length exactly p, which means the fiber creates a weight-p zero-sum—contradicting strong ZSF. So actually |F_c| ≤ α(r) for every nonzero fiber, not α(r)+1 as I initially thought. But wait, let me reconsider: if |F_c| = α(r)+1, the tails pool has (α(r)+1)(p-1) elements from F_p^r \ {0}, except I need to be careful about whether tails can be zero. A vector like (c, 0, ..., 0) has tail 0, which gets excluded from the copies pool, so I'm not actually counting all the elements I thought I was.
+
+The key issue is that in a fiber F_c, at most one vector can have a zero tail—specifically (c, 0, ..., 0) up to scaling—since vectors are pairwise non-proportional. So I need to separate the vectors with nonzero tails from that single zero-tail vector and recount carefully.
+
+The pool of nonzero tails from F_c has at least (m-1)(p-1) elements, and for the η condition to hold, I need this to be large enough: (m-1)(p-1) ≥ α(r)(p-1) + 1, which gives m ≥ α(r) + 2.
+
+When |F_c| = α(r) + 1, there are two cases. If there's one zero-tail vector, the nonzero tails give a copies pool of exactly η(C_p^r) - 1, which is one short of what's needed for a guaranteed zero-sum. But if all vectors in F_c are nonzero, the copies pool reaches η(C_p^r), and the η argument produces a zero-sum of length at most p—but the mod p constraint forces it to have length exactly p, leading to a weight-p zero-sum that contradicts our setup. So a nonzero fiber can contain α(r) + 1 vectors only under specific conditions.
+
+The doubled+e1 construction realizes this boundary perfectly: F_0 contains α(r) vectors all with nonzero tails, while F_1 has α(r) + 1 vectors split between α(r) with nonzero tails and one with zero tail. This shows that to avoid violating the strongly ZSF condition when a fiber reaches α(r) + 1 vectors, one of them must be a zero-tail vector—essentially "wasting" a slot to prevent the copies pool from triggering a contradiction.
+
+For F_1 specifically, the nonzero tails form the set A with α(r)(p-1) = η(C_p^r) - 1 copies total, sitting just below the threshold where a zero-sum is guaranteed. Whether a weight-p zero-sum actually exists among these copies depends on the specific choice of A, and the key insight is that A8 is constructed precisely to avoid one—this is what "A8 is strongly ZSF in F_p^3" means. A weight-p zero-sum in F_1 would require the coefficients to sum to p, but the structure prevents this from happening. Σ d_i · a_i = 0. Weight ≤ p-1 zero-sum among A's copies pool.
+
+For d_0 ≥ 1, the bound from η ensures no zero-sum of length ≤ p-1 exists in the nonzero elements since the copies pool has length less than η. But for d_0 = 0, I need a weight-p zero-sum among the vectors in F_p^r, which η doesn't directly exclude.
+
+Actually, the copies pool A^{p-1} has length α(r)(p-1) < η, so it contains no zero-sum of any length in [1, p], including weight-p. This rules out zero-sums within a single fiber, but I need to check whether combining vectors across different fibers could create a zero-sum—that's what the fiber structure analysis addresses.
+
+Now I'm setting up the main theorem: if A is a ZSF sequence of size α(r) in F_p^r, then the doubled construction S (which pairs each element with both fiber labels 0 and 1, plus adds e_1) should also be ZSF. The proof will assume a zero-sum exists in S^{p-1} and derive a contradiction by analyzing how the fiber coordinates must balance. In Case A, if all the d_i and e vanish, I'm left with a zero-sum Σ c_i · a_i = 0 of weight w ≤ p in A^{p-1}, which contradicts my assumption. For Case B where Σ d_i + e = p, the coefficients c_i must all be zero, giving weight exactly p. When e = 0, this yields a weight-p zero-sum in A^{p-1}, again contradicting the hypothesis that no such zero-sum exists. I'm clarifying what a zero-sum of length ≤ p in A^{p-1} means: each element can appear up to p-1 times, and the total count of appearances must be between 1 and p, with the weighted sum equaling zero. In Case A, the coefficients c_i directly give such a zero-sum, and in Case B with e = 0, the coefficients d_i similarly form a zero-sum of the required type.
+
+For Case B with e ≥ 1, the sum of coefficients d_i equals p - e, which falls in the valid range [1, p-1], so this also yields a valid zero-sum. The proof holds because the condition |A^{p-1}| < η(C_p^r) ensures no such zero-sums exist, and for rank 3 specifically, η(C_p^3) = 8(p-1)+1 has been verified, matching the size of A.
+
+Now I need to tackle the uniqueness question—the main remaining challenge. I'm examining what the "strongly ZSF at weight ≤ p" condition actually constrains. For a set S of 2α(r)+1 pairwise non-proportional vectors in F_p^{r+1} that satisfies this property, I'm analyzing the fiber structure across all linear forms to understand how this forces a specific configuration. | = α(r)+1 (the only possibility given the constraints).
+- F_1 must have exactly one zero-tail vector (otherwise α(r)+1 all-nonzero-tail vectors would violate constraint 2).
+- The nonzero tails in F_0 are α(r) elements of F_p^r.
+- The nonzero tails in F_1 are α(r) elements of F_p^r.
+
+Moreover, the strongly ZSF condition requires that the tails in each fiber, separately, form an η-extremal configuration.
+
+Now I'm wondering whether the tails in F_0 and F_1 must be identical. The doubled+e1 construction has them as the same set, but I need to check if that's actually forced by the constraints or just one possibility. Let me denote the F_0 tails as A = {a_1,...,a_{α(r)}} and explore what happens if F_1 has a different tail set.
+
+The strongly ZSF condition breaks down into checking that A and B each avoid zero-sums of length ≤ p individually, plus a cross-fiber constraint: any zero-sum involving vectors from both fibers must have length > p. For a cross-fiber zero-sum combining (0, a_i) vectors with (1, b_j) vectors and possibly (1,0), the first coordinate forces a relationship between the coefficients of the b_j terms and the (1,0) term.
+
+When the first coordinate sums to p with all c_i = 0, I get a zero-sum in the b_j terms with total weight ≤ p, which is blocked by B being ZSF. When it sums to 0 with all d_j and e equal to 0, I get a zero-sum in the a_i terms, blocked by A being ZSF. But wait—these are exactly the same cases I already covered, so the cross-fiber condition doesn't actually impose anything new beyond what the single-fiber conditions already guarantee. Let me think more carefully about what happens when the zero-sum genuinely mixes both fibers.
+
+The first coordinate acts as a barrier: to involve both fibers at weight ≤ p, I'd need Σ d_j + e to be nonzero modulo p but still ≤ p, which is impossible since being ≡ 0 (mod p) forces it to equal 0 or p. So any truly cross-fiber zero-sum either stays within one fiber or requires the fiber 0 contribution to be nonzero, which costs weight that cuts into the budget. I should verify whether I can actually construct a mixed case with Σ d_j + e = p and some nonzero c_i terms.
+
+If Σ d_j + e = p and Σ c_i ≥ 1, the total weight exceeds p, so that's ruled out. If Σ d_j + e = 0 instead, that's just a pure fiber-0 zero-sum, which case A already covers. This confirms that at weight ≤ p, every zero-sum in S is either entirely within fiber 0 or entirely within fiber 1—the two fibers don't genuinely interact at this weight threshold. That means A and B are independent and can each be any ZSF-extremal set in F_p^r.
+
+The Adversary's computational discovery that only the doubled+e1 construction works isn't actually mandated by the strongly ZSF condition alone—it's the shadow saturation requirement that forces it. The doubled+e1 must achieve Σ_{p-1}(S) = F_p^{r+1} \ {0} for the Grail proof to succeed. My shadow saturation theorems work for any doubled+e1 with A satisfying η, regardless of whether A equals B, but I should verify whether Theorem 2 actually requires that equality.
+
+Looking at Theorem 2's proof more carefully: when the two fibers have different tail sets A and B, the representation for targets in the first fiber uses elements from both A and B combined, which changes whether the shadow can actually saturate the full space. These are different elements! The combined representation Σ f_i · a_i + ... doesn't make sense if the tails are different.
+
+Actually, let me re-examine. In the doubled+e1 with different tails:
+S = {(0, a_1), ..., (0, a_n)} ∪ {(1, b_1), ..., (1, b_n)} ∪ {(1, 0)}
+
+For target (x_0, y):
+Need Σ c_i (0, a_i) + Σ d_j (1, b_j) + e (1, 0) = (x_0, y).
+
+First coord: Σ d_j + e = x_0.
+Tail: Σ c_i · a_i + Σ d_j · b_j = y.
+Weight: Σ c_i + Σ d_j + e ≤ p-1.
+
+This constraint system is much messier when A ≠ B—I can't cleanly combine coefficients across the two fiber sets. So shadow saturation actually requires A = B, which is a stronger condition than what's needed for strongly ZSF. Now I'm wondering whether A = B is truly necessary for shadow saturation, or if there's another approach. I'm also realizing there are two separate uniqueness questions here: whether A8 is the unique maximal ZSF set in F_p^3, and whether the doubled+e1 construction forces A = B.
+
+If A8 is unique up to GL conjugacy, then A = B follows automatically—any strongly ZSF set with a 2-fiber structure must use A8 in both fibers, and GL conjugacy ensures they match. So the uniqueness of A8 itself is what guarantees the full construction's uniqueness. Now I want to explore whether strongly ZSF sets can have three or more nonempty fibers, given the size constraint of 2α(r)+1.
+
+For three or more fibers with sizes bounded by α(r) each (except possibly one nonzero fiber with a zero-tail vector that could reach α(r)+1), the sum n_0 + n_1 + n_2 + ... = 2α(r) + 1 becomes problematic—with at least three terms, each bounded above, I need to check whether this constraint can actually be satisfied.
+
+The computational evidence suggests that multi-fiber configurations achieving strong ZSF properties simultaneously with shadow saturation don't exist; every tested example with three or more fibers exhibits weak ZSF behavior instead. Let me work through whether a strongly ZSF multi-fiber set can satisfy both conditions. So the critical fiber F_1 in the doubled+e1 construction has exactly 8 nonzero tails with 1 zero tail—right at the boundary before triggering a weight-p zero-sum. For a multi-fiber setup with 2α(r)+1 vectors spread across at least 3 fibers, I'm wondering if it's possible that every linear form keeps every fiber at ≤ 8 nonzero tails, though the Computer's tests suggest this never actually occurs. Let me focus on what I can solidly establish: A8 and doubled+e1 are both strongly ZSF through algebraic arguments, and I can work out the shadow saturation properties.
+
+The harder pieces are proving the fiber structure is forced for any strongly ZSF set and establishing uniqueness of A8 across all primes p. Maybe I should tackle the two-fiber lemma instead—whether any strongly ZSF set of size 2α(r)+1 must fit into at most 2 fibers for some linear form. This connects to the s constant, which relates η and the prime p in a specific way.
+
+Looking at the fiber structure: the zero fiber F_0 has a tail pool of at most α(r)(p-1) elements, which is smaller than η(C_p^r), so no zero-sum of length ≤ p can exist there. For nonzero fibers F_c with |F_c| = α(r), the tail pool is also α(r)(p-1), still below the threshold. The critical observation is that s(C_p^r) = (α(r)+1)(p-1) + 1, which bounds how long a sequence can be before it must contain a zero-sum.
+
+When I look at the full copies pool with length (2α(r)+1)(p-1), I need to check if this guarantees a zero-sum of length p. But comparing to s(C_p^{r+1}) suggests this bound is too weak—I'm not making progress this way. Let me shift to a projection argument instead: I'll pick an arbitrary element v from S and quotient by the subgroup it generates, which should help establish uniqueness more directly. I'm verifying that the inequality holds for the relevant parameter ranges, which means the quotient's copies pool is large enough to contain a zero-sum of length p. This zero-sum lifts back to the original space as a linear combination of the vectors, and I'm now considering what happens when the coefficient is zero versus nonzero.
+
+When the coefficient is zero, I get a direct contradiction with the zero-sum-free property. When it's nonzero, the weight becomes too large to be useful, but I'm exploring whether choosing the quotient vector carefully could force the coefficient to always be zero across the multiple choices available, which would yield the contradiction I need. The lifted zero-sums from this approach have weight 2p - μ_k, which falls in the range [p+1, 2p-1], so they don't help us find weight-p zero-sums. The real insight is that by quotienting by different v_k, we get different quotient spaces with different available zero-sums, which is the Gao-Geroldinger strategy—and the crux is figuring out how to control μ effectively. Let me reconsider what's actually achievable here.
+
+For Round 3, I want to focus on three concrete contributions: first, a complete algebraic proof that doubled+e1 is strongly ZSF without relying on computation; second, a Two-Fiber Forcing Theorem stating that any strongly ZSF set of size 2α(r)+1 in F_p^{r+1} has at most 2 nonempty fibers under some linear form; and third, I'm trying to verify whether this theorem holds by examining whether a set of 2α(r)+1 vectors in F_p^{r+1} must concentrate in a small number of fibers.
+
+I'm exploring whether assuming a vector proportional to e_1 exists in S and using the linear form w = (1,0,...,0) gives me the fiber structure I need, but this feels like it's imposing too much structure. Instead, I'm looking at the total copies pool of S, which has (2α(r)+1)(p-1) elements, and trying to connect this to what we know about D(C_p^{r+1}) without circular reasoning.
+
+Since D(C_p^{r+1}) = (r+1)(p-1)+1 by Reiher's work, any sequence of that length must contain a nonempty zero-sum subsequence. The copies pool is much larger than this threshold for r ≥ 3, so it definitely contains many zero-sums, but the strongly ZSF condition restricts them to have weight > p. This suggests focusing on the rank 3 case and proving that A8 is the unique extremal set.
+
+To establish uniqueness, I'd need to extract structural constraints from the upper bound proof—specifically how the involution pinning and Fourier analysis force any ZSF set of size 8 in F_p^3 to have a particular form. The construction A8 appears to be the only configuration satisfying these constraints.
+
+Now I'm looking at the explicit coordinates of A8 in F_p^3: eight specific elements including basis vectors and carefully chosen sums, with the key property that no four-element subset sums to zero.
+
+I'm realizing that proving uniqueness of this construction would be substantial work on its own, so I should focus on what I can actually establish and present the overall framework clearly. Let me shift to exploring whether a two-fiber structure is actually necessary—whether any set of this size with the required zero-sum-free property must decompose into exactly two fibers.
+
+I'll attempt a proof by contradiction: assume every linear form sees at least three fibers of S. Since S spans the space, I can pick three vectors that don't lie on any common hyperplane and assign them distinct values under some linear form. But this approach is getting tangled. Maybe instead I should think about what constraints the fiber sizes themselves must satisfy.
+
+For any linear form w, the fibers partition S, and I can bound their sizes: the zero fiber has at most α(r) elements by the rank-r hypothesis, while nonzero fibers are constrained depending on whether they contain vectors with zero projection onto the kernel of w. This gives me a total of at most 2α(r)+1 vectors across all fibers. Now I'm splitting into cases based on which fiber achieves its maximum size.
+
+If some linear form w has |F_0| = α(r), then the nonzero fibers sum to α(r)+1. With just one nonzero fiber, I get the 2-fiber structure directly. With two or more nonzero fibers, each is bounded by α(r), but their sum is only α(r)+1, so I could have something like (1, α(r)). The concrete example of the doubled+e₁ construction shows that a linear form can produce fibers of sizes (α(r), α(r)+1), which is promising. But I need to verify whether I can always find such a linear form for an arbitrary strongly ZSF set, rather than just for this specific example.
+
+Let me try a different angle using dimension arguments. If S contains 2α(r)+1 vectors spanning F_p^{r+1}, I can extract a basis of r+1 vectors from S, leaving 2α(r)-r vectors that are linear combinations of the basis. For the base case r=3, that's 17 vectors total with 4 basis vectors and 13 non-basis vectors. The ZSF condition severely restricts which linear combinations are actually present. Rather than chase uniqueness further, I should focus on laying out the cleanest proof structure and being explicit about what I've established versus what remains conjectured.
+
+Actually, maybe I can sidestep the uniqueness question entirely. If I can show that every strongly ZSF set of size 2α(r)+1 automatically has shadow saturation, then I don't need to prove uniqueness at all. Let me explore this: take any strongly ZSF set S of size 2α(r)+1 in F_p^{r+1} and try to show that Σ_{p-1}(S) covers all nonzero elements. My Theorem 1 gives me a handle on this—it says that if a set A of size α(r) in F_p^r has A^{p-1} be ZSF with no zero-sum at...
+
+For S in F_p^{r+1}, the sequence S^{p-1} has length (2α(r)+1)(p-1), and I want to show Σ_{p-1}(S) hits every nonzero vector. Using the η approach: for any nonzero v, I form S^{p-1} · (-v), which has length (2α(r)+1)(p-1)+1. If this length meets or exceeds η(C_p^{r+1}), I'm done—but that's exactly the threshold I'm trying to reach, so I'm going in circles.
+
+I know D(C_p^{r+1}) = (r+1)(p-1)+1, which is much smaller than (2α(r)+1)(p-1)+1, so I can't apply D directly. The Davenport constant gives long zero-sums, but I need to find a way to leverage this lower bound on η without assuming what I'm trying to prove.
+
+Approach (B) seems circular—it requires knowing η(C_p^{r+1}) already. So I need to focus on approach (A) with the doubled+e1 uniqueness argument instead, or find a completely different method to establish shadow saturation for all strongly ZSF sets.
+
+Let me explore a counting argument. For a set S of size n = 2α(r)+1 with coefficients in {0,...,p-1}, I need to count how many coefficient tuples satisfy Σ c_i ≤ p-1, which is more intricate than a simple stars-and-bars calculation since each c_i is bounded above by p-1. and s) with c_i ≥ 0 and Σ c_i + s = 4 gives C(21, 4) = 5985 tuples. These map to F_p^4 via the linear combination Σ c_i v_i, targeting a space of 625 elements. By pigeonhole, if we avoid zero, we'd average about 9.6 repetitions per nonzero target—but that doesn't guarantee every target is actually hit. The computational data shows what's really happening.
+
+At p=5, all 624 nonzero targets do get hit, with representation counts ranging from 1 to around 46, and the minimum of 44 targets with exactly one representation is tight. Proving this requires something stronger than pigeonhole—character theory approaches break down for support ≥ 4, but I think the key is showing shadow saturation at rank r+1 follows from two things: shadow saturation at rank r via the η map, and the structure of the doubled+e1 fiber. That's exactly what Theorems 1 and 2 establish.
+
+Now I see the real structure: shadow saturation for the doubled+e1 construction is proved using only η at the previous rank, so uniqueness isn't needed for that part. Uniqueness serves a different purpose—it ensures every strongly ZSF set is actually a doubled+e1, so the shadow saturation proof applies universally. The full argument chains together: η(C_p^3) gives the base case, shadow saturation propagates through the doubled+e1 construction at each rank, and the algebraic proof that doubled+e1 is strongly ZSF closes the loop.
+
+The inductive pattern repeats at higher ranks: once I establish η(C_p^4) = 17(p-1)+1, the same machinery generates shadow saturation for A17 and then for doubled+e1(A17) in F_p^5, and so on. The only missing piece is proving uniqueness at each rank—that every strongly ZSF set of the required size must be doubled+e1—which has been verified computationally at p=5 but remains conjectural in general.
+
+Now I'm exploring whether the fiber structure lemma can pin down uniqueness. The key insight is that for any strongly ZSF set of size 2α(r)+1, the fiber distribution is heavily constrained: the zero fiber has at most α(r) vectors, each nonzero fiber with all nonzero tails has at most α(r) vectors, and at most one nonzero fiber can reach α(r)+1 vectors (only if it contains a zero-tail element). This forces the most favorable configuration to be exactly (α(r), α(r)+1)—the doubled+e1 pattern. I'm checking whether a 3-fiber structure could exist, like sizes (α(r), α(r), ...), but the constraints seem to rule it out. For a 3-fiber setup with total size 2α(r)+1, I need fibers of sizes that sum correctly—something like (α(r), ⌈(α(r)+1)/2⌉, ⌊(α(r)+1)/2⌋)—but the actual constraint on nonzero fibers is stricter than just the bound α(r) per fiber, since the copies pool has limited capacity based on the number of all-nonzero-tail vectors in each fiber.
+
+The tails from these fibers are zero-sum-free but not extremal, leaving room for zero-sums at larger weights. When multiple fibers interact, they create additional constraints through cross-fiber zero-sums at intermediate weights.
+
+I'm working toward a key observation: if a set S has 3 or more nonempty fibers under every linear form, then S must contain a zero-sum of weight at most p, which would force strongly zero-sum-free sets into a 2-fiber structure.
+
+For the proof, I'm picking three distinct fibers and selecting one vector from each, then analyzing linear combinations. When the first coordinate sums to zero modulo p, I get a constraint equation in the coefficients—one equation with three unknowns gives many solutions, and the minimal weight case occurs when one fiber has coordinate 0, forcing the other two coefficients to be negatives of each other.
+
+The weight bound depends on the specific ratio of the nonzero coordinates, and choosing γ = 1 gives a weight around p minus that ratio plus 1. But this two-vector zero-sum structure only works if the vectors satisfy particular conditions, so the general argument for multiple fibers producing weight-≤-p combinations isn't straightforward—it likely hinges on the rank-4 structure and using the rank-3 case as a subroutine for handling collinear triples.
+
+Now I'm seeing how this connects to the broader strategy: when vectors from three different fibers (say fibers 0, 1, and c where c ≥ 2) happen to be collinear in projective space, the dependency (c-1, -c, 1) is non-degenerate and the rank-3 theorem immediately gives a weight-≤-p zero-sum. The challenge is that collinearity is rare for random triples, but with enough vectors across the fibers, some collinear triple must eventually appear.
+
+For the specific case at r = 3 with 17 vectors in F_p^4 distributed across multiple fibers, if we can find even one collinear triple spanning three different fibers, we get our zero-sum. The empirical data showed 462 out of 556 candidates working, suggesting this approach is quite effective in practice.
+
+However, the remaining 94 cases that require support-4 zero-sums indicate that collinear triples alone won't always force the 2-fiber structure—some configurations might form caps that avoid collinearity entirely. This means proving the uniqueness of the doubled+e1 structure from pure geometry is trickier than I initially thought.
+
+I'm now focusing on three key pieces: establishing that doubled+e1 is strongly ZSF with a complete proof, deriving algebraic constraints on fiber sizes for any strongly ZSF set, and building the inductive chain that connects everything together.
+
+I should also examine whether the first zero-sum appearing at weight p+1 gives me additional leverage—the Adversary confirmed this is sharp for doubled+e1, so maybe I can formalize this as a structural theorem that further constrains what sets are possible. exactly p+1, achieved through involution-type relations—this is the "margin of exactly 1" the Adversary observes. So A must avoid additive triples at weight ≤ p, though it can contain them since they only activate at weight p+1, like in the A8 set. Now let me carefully revisit the Theorem 2 proof about shadow reduction when the sumset covers all nonzero elements of F_p^r.
+
+For any target (x_0, y) with y ≠ 0, the hypothesis gives us coefficients c_i where their weighted sum equals y with total weight between 1 and p-1, and I need to decompose each c_i across the two fibers and find the right contribution e so the weighted sum in the augmented set S reaches the target.
+
+The key insight is that the total coefficient on each a_i across both fibers must equal c_i, and the overall weight constraint Σ c_i^0 + Σ d_i + e ≤ p-1 simplifies nicely when I set c_i^0 = c_i - d_i, which collapses to just Σ c_i + e.
+
+Now I need to figure out how to choose the d_i values and e to satisfy the modular constraint Σ d_i + e ≡ x_0 (mod p). Since d_i can range from 0 to c_i, the sum Σ d_i can be anything from 0 to Σ c_i, which means Σ d_i + e can hit any residue class modulo p. To minimize weight, I want to minimize e, so I should pick the smallest e ≥ 0 such that some choice of d_i makes the constraint work. I need to be careful here—x_0 is an element of F_p, so it's a residue class, but I'm working with actual integer coefficients. The constraint is that Σ d_i + e ≡ x_0 (mod p), where e ranges from 0 to p-1, and I want to minimize the total weight Σ c_i + e. So I should choose Σ d_i to be the representative of x_0 that minimizes e. I need to figure out which values of e allow x₀ - e (mod p) to fall within the valid range [0, Σ c_i]. Since x₀ is a representative in {0,...,p-1}, I'm checking whether the modular difference stays within our constraint—if e ≤ x₀, the difference is non-negative, but I need to verify it doesn't exceed Σ c_i. Now I'm checking the case where e exceeds x₀, which means x₀ - e mod p wraps around to x₀ - e + p. For this to work, I need x₀ - e + p to fit within the sum of coefficients, but this becomes increasingly difficult to satisfy when the sum is bounded by p-1 and the constraint x₀ ≤ e-1 creates a contradiction.
+
+Let me work through both cases more carefully instead of getting tangled in the algebra.
+
+I need to find values of e and a sum Σd such that their combination satisfies the modular constraint while keeping the total weight bounded by p-1. Setting W as the sum of the c_i values, I'm looking for e in the range {0,...,p-1-W} and Σd in {0,...,W} where Σd ≡ x₀ - e (mod p).
+
+Since Σd can only take values from 0 to W, the residue x₀ - e (mod p) must fall within this range. This splits into two cases depending on whether e is at most x₀ or exceeds it—in the first case I need e ≥ x₀ - W, and I'm working through the constraints for each scenario. So the interval is always nonempty under these conditions. Now I need to verify that the e values actually satisfy the upper bound constraint e ≤ p-1.
+
+When x₀ ≤ W, I set e = 0, which clearly works. When x₀ > W, I set e = x₀ - W, and this satisfies e ≤ p-1-W exactly when x₀ ≤ p-1, which holds. So in both cases the weight stays at most p-1, and I can handle the target (x₀, 0) with x₀...
+
+For the target (x₀, 0) with x₀ ≠ 0, I use e = x₀ and set all c_i and d_i to 0, giving weight x₀ ≤ p-1. Now I need to verify that the representation is actually achievable—that I can distribute the desired total D among bins with capacities c_i. This is feasible whenever 0 ≤ D ≤ Σ c_i, which is satisfied here. The proofs check out, so I'm ready to write up the final report.
+
+Now the coordinator flagged a potential logical contradiction in A8's zero-sum structure. The Computer found weight-3 zero-sums in S17, the full 17-vector set over F_p^4. I need to verify whether a weight-3 zero-sum—three vectors each with coefficient 1 summing to 0—actually exists in the construction. Let me trace through the fiber structure to see if the vectors involved are actually in S17. I'm checking whether (0,p-1,p-1,0) actually belongs to the fiber 0 vectors—it doesn't, since the tail (p-1,p-1,0) isn't among the valid tails. At p=5 specifically, this would be (0,4,4,0), which would require tail (4,4,0), but that's not in our list of fiber 0 tails.
+
+Now I'm reconsidering what the Computer meant by "weight-3 zero-sums"—maybe it's referring to linear combinations where the coefficients sum to 3, like 2·v_i + 1·v_j = 0, rather than just single vectors.
+
+Let me test a few candidates: 2·(0,4,1,1) + 1·(0,4,1,2) gives (0,2,3,4) mod 5, not zero. And checking cross-fiber combinations like (0,1,0,0) + (0,0,1,0) + (0,4,4,0) = 0 fails because (0,4,4,0) isn't even in S17. I'm starting to think the Computer's claim about weight-3 zero-sums might be incorrect or based on a different interpretation.
+
+Actually, looking at what the Computer and Adversary said—that S17 has zero zero-sums at weight ≤ p and the first one appears at weight p+1—that's exactly what strongly ZSF means. So the "weight-3 zero-sums" reference might be about S17 failing ZSF at weight p-1 when you introduce a target element, allowing weight-≤-4 representations that aren't actually zero-sums of S17 itself. Or maybe the coordinator confused this with the existence of collinear triples in S17.
+
+My algebraic argument settles it: S17 has no zero-sum of weight ≤ p given the bound on η(C_p^3), which clears up the confusion. Now I want to see if I can push the uniqueness result further by proving that any strongly ZSF set of size 2α(r)+1 must lie in exactly 2 fibers of some linear form. The set spans the full space (otherwise it's trapped in a lower-dimensional subspace), so I need to show this fiber constraint follows from the ZSF property. w_j has a fiber structure where the basis vectors are distributed across fibers with size constraints—specifically, the zero fiber F_0 can contain at most α(r) vectors. For r = 3 with n = 17, I have 13 remaining vectors to place after choosing a basis of 4, and I need to count how many can fit in each fiber given these size bounds.
+
+The key constraint is whether I can construct a linear form where one basis vector sits in a nonzero fiber while the rest distribute between fibers—this would give me the two-fiber structure I'm looking for, with one fiber containing just the special vector and another containing the remaining basis vectors.
+
+Let me test this on the doubled+e₁ example: the first coordinate function partitions the 17 vectors into 8 in fiber 0 and 9 in fiber 1, which is exactly the (α(r), α(r)+1) split I need.
+
+But for an arbitrary set S, I'm not sure this always works. Maybe I should try a different angle using the η bound—if I remove one vector v from S and project the rest down to F_p^r, I get 2α(r) vectors in the lower dimension, and the fiber structure might force a large fiber to appear.
+
+Actually, the pigeonhole principle here is stronger than I thought. The number of possible zero-sum combinations in the projected space is 2α(r)(p-1), which exceeds the bound s(C_p^r) = α(r)(p-1) + p. So there must exist a zero-sum of length exactly p among the projected vectors, and when I lift this back up, I get a linear dependence involving v_k with a specific coefficient.
+
+Let me refocus on what's actually tractable for this round: I should present the clean algebraic argument that doubled+e1 satisfies the strong zero-sum-free property, establish the Fiber Bound constraints rigorously, and then work through the Two-Fiber Forcing Lemma as far as I can push it before wrapping up with the conditional proof structure.
+
+Now I'm checking whether the Davenport constant can help here. For C_p^3, I have s(C_p^3) = 9p - 8, which means any sequence of that length over nonzero elements must contain a zero-sum of length exactly p. The fiber-1 tails give me only 8(p-1) nonzero vectors, which falls short of this threshold, so that avenue doesn't immediately yield a contradiction.
+
+Even with 9 distinct nonzero tail vectors, I get 9(p-1) = 9p - 9 copies total—still one element shy of the Davenport bound. This suggests the structure of the tails alone won't force the length-p zero-sum I need.
+
+But the computer's verification shows that 9 nonzero vectors in F_p^3 always produce a weight-p zero-sum, which contradicts what the bound predicts. This means the actual threshold for guaranteeing such a zero-sum is tighter than s(C_p^3) = 9p - 8, and I need to reconcile where the discrepancy lies.
+
+The key insight is that the computer's claim might be restricted to sets of 9 distinct vectors each with multiplicity p-1, whereas a sequence of length 9(p-1) could have different multiplicity distributions—some vectors appearing more than p-1 times, or fewer than 9 distinct vectors total—which might avoid the length-p zero-sum property. So the key insight is that A8^{p-1} has length 8p-8, which falls short of the 9p-9 we need to construct a counterexample to the s bound. I need to extend this sequence by adding carefully chosen copies of an element to reach the target length while maintaining the property that no length-p zero-sum exists. might not have length-p zero-sums, but the computer verified they actually do for any set of 9 distinct vectors. This suggests the theoretical bound isn't tight when elements have uniform multiplicity p-1. I'm reconsidering what an extremal sequence would look like—if I take 8 vectors with multiplicity p-1 and add a 9th vector, the counts don't quite work out to reach the threshold, so I need to think more carefully about how the Davenport constant actually behaves for these specific group structures. With 8 elements at multiplicity p-1, I get length 8p-8, which falls short of the needed 9p-9. Nine elements each with multiplicity p-1 gives exactly 9p-9, but the computer confirms this always contains a length-p zero-sum. So the extremal sequence must use unequal multiplicities instead—perhaps mixing different multiplicity values to avoid triggering the zero-sum condition while still reaching the target length. I'm hitting a contradiction here—every sequence of length 9p-9 over C_p^3 \ {0} should contain a length-p zero-sum, which would mean s(C_p^3) ≤ 9p-9, but that contradicts the claim that s(C_p^3) = 9p-8. Let me reconsider whether my reasoning about the multiplicity constraints is actually correct. ults ≤ p-1 and length = 9p-9: number of distinct elements ≥ ⌈(9p-9)/(p-1)⌉ = 9. So ≥ 9 distinct elements. Computer says any 9 distinct nonzero elements in F_p^3 with mult p-1 have a length-p zero-sum. But the sequence might have some elements with mult < p-1. Does that matter?
+
+If the 9+ distinct elements have mults that are at least... hmm, having lower mults could make it easier to avoid zero-sums. So the extremal sequence (hardest to force a zero-sum) would have mults as high as possible, which is p-1.
+
+So the extremal case is 9 elements at mult p-1. If the Computer says this always has a length-p zero-sum, then s(C_p^3) ≤ 9(p-1) = 9p-9.
+
+But wait, the standard formula gives s(C_p^3) = η(C_p^3) + p - 1 = 8p - 7 + p - 1 = 9p - 8, which is one less than my bound. Let me verify this is actually established—the briefing confirms s(C_p^r) = η(C_p^r) + p − 1 for all r ≥ 1, and η(C_p^3) = 8(p-1), so the formula checks out.
+
+This creates a contradiction: either the formula s(C_p^3) = 9p - 8 is incorrect, or the Computer's claim about 9 elements is wrong, or I'm making an error in my reasoning.
+
+Looking back at my argument, I see the flaw—I incorrectly assumed all 9 distinct elements must have multiplicity exactly p-1, but they could have varying multiplicities. The Computer's result specifically applies to 9 vectors each with multiplicity p-1, which gives a sequence of length 9p-9. However, a sequence of length 9p-9 could instead be composed of more than 9 distinct elements with smaller multiplicities, and I haven't verified that such configurations always contain a length-p zero-sum. I'm realizing there's a fundamental issue here—to get length 9p-9 with 9 distinct elements, every element needs multiplicity p-1, which the Computer's result says always fails. But that contradicts the claim that s(C_p^3) = 9p-8, since sequences of length 9p-9 should exist. Let me reconsider what this actually means for the bound. has a length-p zero-sum, AND there exists a sequence of length 9p-9 WITHOUT a length-p zero-sum.
+
+The extremal sequence (length 9p-9, no length-p ZS): 
+- If any element has mult ≥ p: p copies give a length-p zero-sum. Contradiction.
+- So all mults ≤ p-1. # distinct ≥ ⌈(9p-9)/(p-1)⌉ = 9.
+
+Case a: Exactly 9 distinct elements, all with mult p-1. Computer says: always has length-p ZS. Contradiction.
+
+Case b: More than 9 distinct elements, some mults < p-1. I need to be careful here—I'm mixing up what happens when I look at the full sequence versus just picking 9 vectors. The Computer's result applies to 9 vectors each appearing p-1 times, but my sequence might have some vectors appearing fewer times, so I can't directly apply that result to conclude a length-p zero-sum exists. I need to reconsider the definition of s(C_p^3) from scratch. Using the known identity s(G) = η(G) + exp(G) - 1 for abelian p-groups, I can compute s(C_p^3) = η(C_p^3) + p - 1, which gives me 8p rather than 9p-8.
+
+But I'm realizing there's a critical distinction I need to be careful about: η counts sequences over G \ {0} while s counts over all of G including the identity element, and this difference affects how the identity applies.
+
+When constructing an extremal sequence for s, I can include copies of 0 without affecting the zero-sum condition—they contribute to length but not to the actual sum. So if I take a length-(9p-9) sequence with no length-p zero-sum and pad it with p-1 copies of 0, I get length 9p-9 total, but any potential length-p zero-sum would still need the nonzero elements to balance out, meaning the 0 copies don't help satisfy the zero-sum constraint. i = 0. This is a length-≤-p zero-sum of A8^{p-1}. Since |A8^{p-1}| < η, no such zero-sum exists. ✓
+
+So A8^{p-1} ∪ {0^{p-1}} is an extremal sequence for s(C_p^3)! Length = 8(p-1) + (p-1) = 9(p-1) = 9p-9 = s - 1. And it has no length-p zero-sum (since the 0 copies are inert).
+
+This resolves my confusion! The extremal sequence for s includes copies of 0, which is why it avoids length-p zero-sums despite having 9 "slots" (8 nonzero + 0).
+
+So the Computer's result is consistent: any 9 nonzero vectors in F_p^3 with multiplicity p-1 must contain a length-p zero-sum, but the extremal sequence for s sidesteps this by replacing that 9th nonzero element with copies of 0 instead. This reveals the key structural difference: η requires all 9 nonzero elements at multiplicity p-1 to force a zero-sum, while s can stretch further by padding with zeros. The doubled+e1 construction connects to this through its fiber structure, where the fiber-1 tails form exactly this extremal pool.
+
+So any strongly ZSF set of size 2α(r)+1 must have a 2-fiber structure with fiber sizes α(r) and α(r)+1, where the larger fiber contains exactly one zero-tail vector and both fibers share the same nonzero tail set—which must be the unique η-extremal set. This forces the construction to be projectively equivalent to doubled+e1.
+
+Now I'm working through why the 2-fiber structure is actually forced. The key insight is that when I project S \ {v} onto the quotient F_p^r for any v ∈ S, the proportionality structure of the images is tightly constrained by the no-proportional-pairs condition in the original set. ⟨v⟩ for some c ∈ F_p^*, i.e., v_i ∈ ⟨v, v_j⟩. The number of such pairs depends on how many vectors of S lie on each plane through v.
+
+The zero image: v_i maps to 0 iff v_i ∈ ⟨v⟩, i.e., v_i is proportional to v. Since S has no proportional pairs, no v_i maps to 0.
+
+So: 2α(r) nonzero images in F_p^r, possibly with proportional pairs.
+
+Each fiber of the linear form w that kills v corresponds to a set of vectors in S whose "v-component" is a fixed scalar.
+
+Let me reconsider this using a linear form w where w(v) = 1 for some fixed v ∈ S. This partitions S into fibers based on the value of w: vectors in the kernel where w equals 0, affine hyperplanes at each nonzero level c, with v itself in the fiber at level 1. The fiber F_0 in the kernel is bounded by α(r) vectors, which limits the total number of proportional copies. The remaining vectors spread across nonzero fibers, and if they're distributed appropriately, this constrains the structure significantly. in F_1: |F_1| = 2α(r)+1-|F_0|. With |F_0| = α(r): |F_1| = α(r)+1. This gives the 2-fiber structure (α(r), α(r)+1). ✓
+
+But if they're spread across multiple nonzero fibers, the analysis is more complex.
+
+To force all into one nonzero fiber: we need to show that for some choice of v and w, all other vectors have the same w-value.
+
+This is equivalent to: there exists a hyperplane H and a vector v ∈ S such that S \ {v} ⊂ H ∪ (H + v). I.e., S lies in two parallel hyperplanes plus one extra point.
+
+Hmm, this is closely related to the "two cosets" structure.
+
+For the doubled+e1 example, S consists of the 8 vectors in the hyperplane {x_1 = 0} and the 9 vectors in {x_1 = 1}, so it naturally splits into two cosets. The question is whether strongly ZSF actually forces this two-coset structure. I suspect it does for rank 4, though a rigorous proof requires careful analysis of how the fiber size constraints propagate across different linear forms. v ∈ S contributes to exactly one fiber for each linear form w. When two vectors v and u are in the same fiber, that happens precisely when w(v) = w(u), which constrains w to a codimension-1 subspace. This means the fraction of forms placing both v and u in the same fiber is roughly 1/p. So for any given form w, I'd expect around C(n,2)/p pairs of vectors to land in the same fiber.
+
+With n = 17 at r = 3, that's about 136/p expected same-fiber pairs. Now, if I want to minimize the actual number of same-fiber pairs across all fibers, by convexity the best case is when fibers are balanced—each containing n/p vectors. That gives me p fibers of equal size, yielding p · C(n/p, 2) = n(n-p)/2 same-fiber pairs total.
+
+For n = 17 and p = 5, this minimum is about 20.4 pairs, which means the largest fiber can have at most size 6 or so. But I need the maximum fiber to be at least 9 to match the structure I'm looking for. Since no random form achieves this, the 2-fiber structure appears to be a special property of S rather than something typical.
+
+Looking at the doubled+e1 construction, the form w = (1,0,0,0) produces fibers of sizes 8 and 9, hitting that target of 9. Other forms give smaller maximum fibers, and the computer search confirms only 1 out of 156 forms achieves a fiber of size 9.
+
+Now I'm wondering whether the strongly ZSF condition actually forces this special geometry. I think I can establish a weaker result: for any strongly ZSF set S of size 2α(r)+1 in F_p^{r+1}, there must exist some linear form w where the largest fiber has size at least α(r)+1. If I assume the opposite—that every form has max fiber ≤ α(r)—then with total size 2α(r)+1, I'd need at least 3 nonempty fibers. The copies pool would contain (2α(r)+1)(p-1) elements, and I need to show this forces a weight-bounded zero-sum, but I'm still working through the details.
+
+The key insight is that while each individual fiber's copies pool might be too small to force a zero-sum on its own, the interactions between fibers could create one. With at least 3 fibers and at most α(r) vectors per fiber, I'm trying to determine whether a weight-≤-p zero-sum must exist across these fiber boundaries.
+
+For a cross-fiber zero-sum with support 2, I'd have two vectors from different fibers whose coefficients satisfy a constraint on the first coordinate and whose tails must also sum to zero—this is where the structure becomes restrictive. tail(v_b) to be proportional with ratio -c_2/c_1. If they ARE proportional: c_1/c_2 = -tail(v_b)/tail(v_a). First coord: c_1·a + c_2·b = 0, so c_1/c_2 = -b/a. For compatibility: tail(v_b)/tail(v_a) = b/a. And weight: c_1 + c_2 ≤ p. Minimized by: let c_2 = 1, c_1 = ⟨-b/a⟩ = p - b/a. Weight = p - b/a + 1.
+
+For b/a ≥ 2, this gives weight at most p - 1, achieving the zero-sum bound. But this requires the tails across fibers to be proportional, which is quite restrictive.
+
+Looking at the doubled+e1 case: both fibers have identical tails, so any pair of corresponding vectors should have proportional tails with ratio 1. But the first coordinate constraint c_1 · 0 + c_2 · 1 = 0 forces c_2 = 0, leaving only trivial solutions. The zero first coordinate in fiber-0 vectors makes the proportionality condition incompatible with the linear constraint, which is why cross-fiber support-2 zero-sums fail here.
+
+Now considering 3 or more fibers with different first coordinates... I'm working through the weight calculation for vectors with proportional tails—when a = 1 and b = 2 in F_5, the weight comes out to 4, which is less than p. But this approach assumes proportional tails exist, which isn't guaranteed in the general multi-fiber case, so I think I should present this as a conjecture supported by computational evidence rather than a complete proof.
+
+Now I need to write up the final report with a clean algebraic proof for the doubled+e1 case, the fiber structure constraints, the s-extremal observation, and a precise statement of where the uniqueness gap lies. Before I do that, though, I should tackle whether I can prove the case where all fibers have at most α(r) vectors. The computational evidence suggests this might be vacuous—every tested ZSF set seems to have some fiber with 9 or more vectors—but let me try a counting argument to see if I can rule it out directly.
+
+I'm setting up a moment method argument: for a set S of size 2α(r)+1 in F_p^{r+1}, I'll sum the maximum fiber sizes across all projective linear forms. Using Cauchy-Schwarz on the fiber sizes for each form, the sum of squares of fiber sizes is at least n²/p, which means the maximum fiber must be at least (2α(r)+1)/p in size. This gives me a lower bound on how large the largest fiber must be, which should help constrain whether the "all fibers small" case is actually possible.
+
+For concrete examples like r=3 with p=5, this bound gives max fiber ≥ 4, but that's much weaker than the α(r)+1 = 9 bound I'm trying to establish. The averaging argument alone isn't tight enough. I need to look at specific forms that actually achieve large fibers—for instance, in the doubled+e₁ configuration at p=5, the form w=(1,0,0,0) gives a fiber of size 9, while most other forms give smaller fibers. This suggests I should focus on forms with special structure rather than averaging over all forms.
+
+The real constraint comes from the strongly ZSF condition forcing a doubled structure, which then guarantees the large fiber. The projection strategy is also promising—when I remove any element v_k from S and project to the quotient, I get a zero-sum of length p, which lifts back to a relation involving μ_k. This gives me a concrete way to extract information about the fiber structure without needing to control μ directly.
+
+Now examining what happens when I adjust coefficients: if μ_k is nonzero, I can set the coefficient on v_k to cancel it out, creating a zero-sum with weight between p+1 and 2p-1 depending on μ_k's value. The strongly ZSF condition then restricts which weights are actually possible, which should force μ_k into a very specific range.
+
+For the 18th vector, I'm trying to use a projection argument: if I remove one vector from my set and project to F_p^r, I can find a zero-sum relation. The bound from the cardinality of S tells me a length-p zero-sum must exist, but this doesn't directly resolve the constraint on μ_k—that's still the bottleneck I need to work through.
+
+I think I've hit the limit of what I can push forward with right now. Let me consider one more angle: can the EGZ theorem or Reiher's generalization about the Davenport constant for C_p^r help me pin down uniqueness? The inverse problem—characterizing which sequences achieve the extremal bound—is what I really need, and that's been studied but the details are intricate.
+
+For lower-rank groups like C_p and C_p², the extremal sequences are essentially unique up to automorphism, but for C_p³ the picture gets murky. If I can show that any sequence of length 8(p-1) avoiding short zero-sums must have a very specific structure, that would nail down uniqueness for η(C_p³).
+
+I've verified computationally at p=5 and p=7 that this structure appears to be unique, but I suspect this is actually an open problem in the literature since η(C_p³) itself was only recently established. So my honest take is: the computational evidence strongly suggests uniqueness, but proving it for all p remains unresolved.
+
+For the report, I'm organizing it around resolving the strongly zero-sum-free question first with a clean algebraic argument, then moving into the structural results about extremal sequences. I'm also looking at computational evidence supporting these uniqueness claims, and there's a connection to inverse problems involving η. Beyond the main proof strategy, I'm considering alternative approaches that could potentially sidestep the uniqueness question entirely—like directly establishing shadow saturation for all strongly ZSF sets, or leveraging CW-equidistribution.
+
+============================================================
+BLOCK 4 (280 chars)
+============================================================
+Let me now construct the complete Round 3 theorist report. I have all the ingredients from Cortex and the briefing. Let me write up the key new results and the complete proof architecture.
+
+Let me organize my thoughts and write the final report. I'll track my progress with todos.
+
+============================================================
+BLOCK 5 (107 chars)
+============================================================
+Now let me write the complete Round 3 Theorist report. This is the final round, so I need to make it count.
+
+============================================================
+BLOCK 6 (113 chars)
+============================================================
+Good, stored the main results. Let me also check on the literature search agent and store any remaining insights.
+
+============================================================
+BLOCK 7 (521 chars)
+============================================================
+Good, the literature search confirms that the inverse problem for η(C_p^3) is OPEN for odd primes p. The closest result is Girard-Schmid 2020 for groups C_2 + C_2 + C_{2n}, which is a different setting. The "doubled construction" is novel. The uniqueness of A8 as a 4-sum-free set is not addressed in the literature.
+
+This confirms that our Conjecture U is a genuinely new open problem, and our conditional proof framework is the state of the art.
+
+Let me store the literature findings and then present the final summary.

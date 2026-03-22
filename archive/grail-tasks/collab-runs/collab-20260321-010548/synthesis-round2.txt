@@ -1,0 +1,100 @@
+# SYNTHESIS REPORT: GRAIL CONJECTURE ROUND 2
+
+## STATUS
+The investigation has identified a **critical scope restriction** (p ≥ 5 only, not "all odd primes"), achieved convergence on **universal shadow saturation**, but exposed a **fatal fiber-balance bottleneck** in the inductive lifting strategy that defeats the two-fiber decomposition approach.
+
+---
+
+## CONVERGENCE/ESCALATION
+
+### HIGH CONFIDENCE — Shadow Saturation Theorem (Universal)
+**THEORIST** and **COMPUTER** converged independently on: For ANY strongly ZSF α(r)-set B in F_p^r,
+```
+Σ_{≤p-1}(B) = F_p^r \ {0}
+```
+- **THEORIST**: 5-line proof using η bound with coefficient multiplicity t=1 (fixing prior t=p−1 bug)
+- **COMPUTER**: Empirical verification across rank-4, p=5 configurations
+- **Status**: Resolves ADVERSARY Attacks 2–3 on shadow saturation universality
+
+### 🚩 POSSIBLE FALSE CONJECTURE — Two-Fiber Decomposition as Universal Property
+**THEORIST** and **COMPUTER** independently converged on the **same failure mechanism**:
+- **THEORIST**: Induction fails when "each nonzero fiber has ≤ α(r)+1 vectors (= exactly s−1 copies, one short of the s threshold)"
+- **COMPUTER**: "2-fiber result was an artifact... normalized vectors trivially satisfy condition... 2-fiber theorem alone doesn't suffice"
+- **Joint Diagnosis**: Fiber-balance constraints are **category errors**—fibers 0 and c≠0 have fundamentally different zero-sum mechanics (tails proportional in fiber-0 directly; proportional tails in fiber-c require aligned coefficients)
+
+### 🚩 CRITICAL SCOPE ERROR — Grail Formula Invalid at p=3
+**ADVERSARY** identified explicit contradiction:
+- Formula claims: η(C_3^4) ≤ 9·2¹−1 = **17** (for "all odd primes p")
+- Reality: α(4,3) ≥ **19** via cap set theory (Hill cap has 20 points in PG(3,3))
+- Mechanism: At p=3, ZSF ≡ cap set (no 3-term zero-sums); cap sets grow faster than formula predicts
+- **Conclusion**: Formula requires **p ≥ 5 restriction**; all claims using "all odd primes" are vacuously invalid
+
+### 🚩 POSSIBLE FALSE CONJECTURE — Projection Lifting Completeness
+**ADVERSARY** identified arithmetic gap that **neither THEORIST nor COMPUTER addressed**:
+- Quotient zero-sum Σs_i·π(v_i) = 0 lifts to Σs_i·v_i = c·v_k with c ≠ 0
+- To close globally requires s_k = p−c, but completing weight = (quotient weight) + (p−c)
+- **Unresolved**: Inductive hypothesis only guarantees quotient weight ≤ some bound; cannot guarantee quotient weight ≤ c for arbitrary c
+- **Impact**: Lifting strategy may be incomplete for general rank-r induction
+
+---
+
+## CROSS-POLLINATION: Synthesized Insights
+
+### From THEORIST → COMPUTER & ADVERSARY
+1. **Weight Mod-p Invariance** (proved): Zero-sum perturbations change integer weight by multiples of p only — explains why weights cluster at exactly p. This suggests fiber-weight constraints are not just structural but **number-theoretic**.
+2. **Universal Shadow via η alone** (proved): No structural knowledge of B needed. Implication: proof should work mod-p theoretically without requiring special constructions.
+
+### From COMPUTER → THEORIST & ADVERSARY
+1. **Fiber multiplicity creates hidden constraints**: When fiber 1 reaches α(r)+2 vectors, ALL zero-sums among them have coordinates summing to 1(α(r)+2) = 1 (mod p), forcing weight divisibility check—the induction needs **simultaneous existence AND weight-divisibility**, not just existence.
+2. **Extremal uniqueness is verifiable via neighbor swaps**: Rather than exhaustive enumeration, test whether the doubled+e₁ construction is structurally isolated by swap-preservation; if all 139 candidate swaps break ZSF-ness, the construction is proven extremal.
+
+### From ADVERSARY → THEORIST & COMPUTER
+1. **p=3 is a hard boundary**: The formula fails at p=3 due to cap set growth rate. This suggests the true bottleneck is **p-dependent**, not just rank-dependent—proofs must stratify by p.
+2. **Double-swap behavior varies non-monotonically**: At p=5, all 128 double swaps preserve ZSF; at p=7, weight capacity increases, allowing new fiber compositions. Proof techniques cannot assume monotonicity in p.
+3. **Weight Flexibility needs circular strengthening**: Cannot use "many achievable weights" to apply Cauchy-Davenport without first proving the many-weights property—hidden dependency in proof chain.
+
+---
+
+## DIRECTIVES
+
+### 🎯 THEORIST → (reference COMPUTER findings on fiber multiplicity)
+**Task**: Prove **Fiber Weight Divisibility Lemma**: When fiber-c ≠ 0 contains ≥ α(r)+2 vectors, EVERY zero-sum among them has total weight ≡ c·(count) (mod p). Then prove that the **s-constant (weight exactly p)** is the only achievable weight for such fibers.
+
+**Dependency on COMPUTER**: Use COMPUTER's empirical identification of which fiber counts trigger weight-p-only behavior (from computer_r2_analyze.py results) to guide the algebraic proof structure. Verify the divisibility constraint doesn't create gaps in the proof for rank 5.
+
+**Why this matters**: This resolves the "s−1 short" bottleneck by proving that fiber-level weight constraints **force** the η-to-s transition automatically, without requiring manual fiber-balance counting.
+
+---
+
+### 💻 COMPUTER → (reference THEORIST's weight mod-p invariance + ADVERSARY's scope restriction)
+**Task**: Run **stratified computational verification** across THREE regimes:
+1. **p=3, r=4**: Construct explicit 19–20 element cap sets in F_3^4; verify they violate the universal formula (proving p=3 exclusion necessary).
+2. **p=5, r=4,5**: Verify shadow saturation holds for ALL maximal ZSF sets found (not just doubled+e₁), using THEORIST's 5-line proof as oracle.
+3. **p=7, r=4**: Check whether fiber-composition behavior changes (testing ADVERSARY's claim that double-swap preservation is p-dependent).
+
+**Dependency on THEORIST & ADVERSARY**: Use THEORIST's weight mod-p invariance to design weight-sampling strategy (only test weights ≡ 0 (mod p) for completion checks). Exclude p=3 per ADVERSARY's contradiction finding.
+
+**Why this matters**: Validates the p≥5 restriction and tests whether weight divisibility lemma (from THEORIST) holds empirically across primes.
+
+---
+
+### ⚔️ ADVERSARY → (reference THEORIST's universal shadow + COMPUTER's fiber multiplicity finding)
+**Task**: Construct or disprove the existence of a **rank-4, p=5 maximal ZSF set that does NOT satisfy fiber-0 ≥ α(4)+1 AND nonzero fibers ≥ α(4)+2 simultaneously**. If such a set exists, it defeats the inductive bottleneck; if none exist, prove why the extremal structure FORCES this fiber balance.
+
+**Dependency on THEORIST & COMPUTER**: Use THEORIST's universal shadow theorem to explain why ANY set avoiding fiber imbalance must have shadow = F_5^4 \ {0} (confirming the imbalance is the actual constraint, not just a convenient assumption). Cross-check against COMPUTER's double-swap enumeration to see if swaps preserve or violate the balance property.
+
+**Why this matters**: Determines whether the fiber-balance constraint is a **theorem** (all maximal ZSF sets satisfy it) or an **artifact** (only special constructions like doubled+e₁ satisfy it). If the latter, the inductive proof strategy needs fundamental restructuring.
+
+---
+
+## ESCALATION SUMMARY
+
+| Finding | Confidence | Resolution Owner | Dependency |
+|---------|-----------|------------------|------------|
+| Shadow saturation universal | **HIGH** | None (theorem proved) | — |
+| Two-fiber decomposition universal | **LOW** | ADVERSARY (fiber-balance theorem?) | THEORIST + COMPUTER |
+| Grail formula valid at p≥5 only | **HIGH** | COMPUTER (verify p=3 bounds) | ADVERSARY finding |
+| Projection lifting completes | **UNKNOWN** | THEORIST (fiber weight divisibility) | COMPUTER stratification |
+| Double-swap uniqueness at p=5 | **MEDIUM** | COMPUTER + ADVERSARY | THEORIST weight lemma |
+
+**Next cycle priority**: Resolve fiber-balance status (ADVERSARY directive) + verify weight divisibility (THEORIST directive). These two are blocking convergence on whether the inductive strategy is salvageable.

@@ -1,0 +1,24 @@
+# Research Briefing (ALGEBRAIC thread)
+
+**Goal:** Construct the longest possible short-zero-sum-free sequence in C_7³ = (Z/7Z)³. The standard {0,1}³ construction gives length 42 = 7×6. For p=5, the true extremal has length 32 = 8×4, beating the {0,1}³ bound of 28. Can you beat 42 for p=7? Try algebraic constructions, non-uniform multiplicities, and systematic DFS search. Report the longest verified sequence, its support structure, and multiplicities.
+
+---
+
+### Round 1  (18:38)
+
+We aimed to beat the {0,1}^3 baseline of 42 in the group (Z/7Z)^3 by building a sequence with no nonempty zero-sum subsequence of length ≤7; the worker tested a natural algebraic support (the 6 nonzero points on the “moment curve” t↦(t,t^2,t^3) in F7^3) and tried the uniform multiplicity construction that repeats each of those 6 points six times (total length 36), then exhaustively checked all coefficient combinations with total weight ≤7; the check found a definitive short zero-sum of weight 6 (one copy of each of the 6 points sums to 0), so this candidate fails and in any case the uniform 6×6 construction would not reach 42—useful information was gained (moment-curve supports have an unavoidable short relation of length 6), and the plan is to pivot to systematic searches that allow non-uniform multiplicities on larger supports with a DP/pruning short-zero-sum test to seek sequences >42; (yellow) = working but unclear if productive.
+
+**Cost so far: $0.03** | Tokens: 16,957 in / 885 out
+
+### Round 2  (18:40)
+
+Goal was to beat the 42-length benchmark in C_7^3 (the standard {0,1}^3\{0} support of 7 nonzero vertices, each with multiplicity 6, giving 7×6=42). After Turn 2 the best verified short-zero-sum-free sequence remains that 42-element {0,1}^3\{0}×6 construction (support = the 7 nonzero cube vertices, multiplicities all 6); my attempted systematic improvement via an exact-length DP/greedy extension timed out because my code recomputed full Σ_k sets from scratch after every tentative add, so the obstruction is implementation performance rather than a mathematical blockage. I have a concrete, implementable plan to fix it next: represent each Σ_k as a 343-bit bitset, precompute for every group element the translation permutation, and implement shifts as block cyclic rotations (e.g. store bitset as 7 slices of 49 bits or similar) so that adding an element becomes a fast permutation/shift instead of per-bit iteration; with that incremental bitset DP I can run a bounded DFS with pruning and test non-uniform multiplicities and algebraic support choices systematically. No improved sequence found yet—this is a computational-methods hurdle, not a proof of impossibility—so next turn I will implement the fast translation operator and resume the search. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.07** | Tokens: 37,774 in / 2,350 out
+
+### Round 3  (18:43)
+
+Goal was to beat the standard {0,1}^3\{0} construction in C_7^3 (length 42) by trying algebraic tweaks, nonuniform multiplicities, and a systematic DFS; on Turn 3 I carried out and fully certified one concrete baseline: the sequence S0 that places multiplicity 6 (p−1) on each of the seven nonzero vertices of {0,1}^3 (support = the seven vectors (0/1,0/1,0/1)\{0}) has length 42 and is short-zero-sum-free in C_7^3 — certification used an exact dynamic-program over achievable sums with exactly k terms (1 ≤ k ≤ p) and the check ran in ~0.008 s on my implementation; I therefore have a verified best-known construction of length 42 with uniform multiplicities 6 on that 7-point support, and the next planned work is to reuse this DP as a fast predicate inside a controlled DFS that allows non-uniform multiplicities and larger supports to try to reach 43+. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.11** | Tokens: 62,256 in / 3,415 out
+

@@ -1,0 +1,176 @@
+[TOOL: ToolSearch]
+Let me search Cortex for prior results and read the seed document.
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+Let me check available MCP resources and search for relevant literature.
+[TOOL: ListMcpResourcesTool]
+[TOOL: WebSearch]
+[TOOL: WebFetch]
+[TOOL: WebSearch]
+[TOOL: WebFetch]
+Now let me develop the theory. After carefully reading the seed document, post-mortem, and Reiher's technique, I'll pursue a new angle.
+
+---
+
+# Theoretical Analysis: The Grail Problem
+
+## Cortex Status
+No Cortex MCP tools found in this environment. Proceeding with direct analysis.
+
+## Strategy
+
+I'll pursue **Approach 4 (Fiber Induction with Cross-Fiber Structural Constraints)** combined with elements of the **Polynomial Method**. The key new idea is a **Cross-Fiber Degeneracy Constraint** that limits how vectors can avoid zero-sums across multiple fibers.
+
+---
+
+## NEW RESULT 1: The Projection Decoupling Obstruction (Named)
+
+Before proving new theorems, let me name the central difficulty precisely.
+
+**Obstruction (Projection Decoupling).** Within a single nonzero fiber $F_c$, the inductive hypothesis ($\eta(C_p^r) \le \alpha(p-1)+1$) yields a zero-sum of projections with weight $w \le p$. But this produces first-coordinate sum $wc$, which vanishes mod $p$ only when $w = p$. The $s$-constant ($s = \eta + p - 1$) guarantees $w = p$ but requires **one more term** than $\eta$: precisely, $(α+1)(p-1)$ terms in a fiber provide $\eta$ but fall short of $s$ by exactly 1.
+
+**The off-by-one:** $(\alpha+1)(p-1) = \alpha(p-1) + (p-1) = s - 1$.
+
+This is the reason single-fiber arguments fail in the multi-fiber case.
+
+---
+
+## NEW RESULT 2: Cross-Fiber Degeneracy Constraint
+
+This is the main new theorem of this round.
+
+**Theorem (Cross-Fiber Degeneracy Determines Projections).** Let $v_a = (0, u)$, $v_b = (1, w)$, $v_c = (c, z)$ be three nonzero non-proportional vectors in $\mathbb{F}_p^{r+1}$ with $c \ge 2$, lying on a common projective line. Their unique (up to scaling) dependency is:
+
+$$\alpha v_a + \beta v_b + \gamma v_c = 0$$
+
+Normalizing $\gamma = 1$: the first-coordinate equation gives $\beta = -c$, so the dependency is $(\alpha, -c, 1)$ and:
+
+$$z = cw - \alpha u$$
+
+The degeneracy condition (some pair of coefficients sums to zero) requires:
+- (i) $\alpha + \beta = \alpha - c = 0$, i.e., $\alpha = c$, giving $z = c(w - u)$; or
+- (ii) $\alpha + \gamma = \alpha + 1 = 0$, i.e., $\alpha = -1$, giving $z = cw + u$; or
+- (iii) $\beta + \gamma = -c + 1 = 0$, i.e., $c = 1$, **impossible** since $c \ge 2$.
+
+**Proof.** Direct computation from the dependency $\alpha \cdot 0 + (-c) \cdot 1 + 1 \cdot c = 0$ (first coordinate) and $\alpha u - cw + z = 0$ (projection). Case (iii) would force $c = 1$, contradicting $c \ge 2$.  $\square$
+
+**Corollary.** If **all** cross-fiber collinear triples involving fibers $0$, $1$, and $c$ ($c \ge 2$) are degenerate, then every element $z$ in fiber $c$ that is collinear with some $u \in F_0$ and $w \in F_1$ satisfies:
+
+$$z \in c(W - U) \cup (cW + U)$$
+
+where $U = \{u_i\}$ and $W = \{w_j\}$ are the projection sets of fibers 0 and 1 respectively.
+
+**Key consequence:** $|F_c| \le |c(W-U) \cup (cW+U)| + \text{(elements not collinear with any } u_i, w_j \text{ pair)}$
+
+---
+
+## NEW RESULT 3: Chevalley-Warning Weight Congruence
+
+**Theorem (CW Weight Congruence).** Let $v_1, \ldots, v_n$ be nonzero vectors in $\mathbb{F}_p^{r+1}$ with $n > r + 2$. Then the number of solutions $(x_1, \ldots, x_n) \in \mathbb{F}_p^n$ to:
+
+$$\sum x_i v_i = 0 \text{ in } \mathbb{F}_p^{r+1}, \quad \sum x_i \equiv 0 \pmod{p}$$
+
+is $\equiv 0 \pmod{p}$. Since $(0,\ldots,0)$ is a solution, there are $\ge p - 1$ **nonzero** solutions. Each nonzero solution has integer weight $\sum x_i \in \{p, 2p, 3p, \ldots\}$.
+
+**Proof.** The system consists of $r + 2$ linear equations of degree 1 in $n$ variables over $\mathbb{F}_p$. The sum of degrees is $r + 2 < n$. By the Chevalley-Warning theorem, $|V| \equiv 0 \pmod{p}$.  $\square$
+
+**Application to our problem:** For $n = 2\alpha + 2$ and $r + 1 = 4$ (so $r + 2 = 5 < 18 = n$): there are $\ge 4$ nonzero zero-sums with weight divisible by $p$. The question is whether any has weight **exactly** $p$.
+
+[VERIFY: For the 17-vector extremal construction at $p = 5$, $r + 1 = 4$: count the number of nonzero solutions $(x_1, \ldots, x_{17}) \in \mathbb{F}_5^{17}$ to $\sum x_i v_i = 0$ and $\sum x_i \equiv 0 \pmod{5}$. What is the minimum integer weight among these solutions? Is it always $5$, or can it be $10$ or higher?]
+
+---
+
+## NEW RESULT 4: Grynkiewicz Lift — Weight Isolation via $p$-adic CW
+
+**Theorem Attempt (Weight-$p$ Isolation).** Using Grynkiewicz's generalization of CW to $\mathbb{Z}/p^2\mathbb{Z}$ (Combinatorica 2023):
+
+Consider the system over $\mathbb{Z}/p^2\mathbb{Z}$:
+- $f_j(x) = \sum x_i v_{i,j} \equiv 0 \pmod{p}$ for $j = 1, \ldots, r+1$ (each modulo $p$, so $m_j = 1$)
+- $g(x) = \sum x_i \equiv p \pmod{p^2}$ (modulo $p^2$, so $m_g = 2$)
+
+The Grynkiewicz degree bound requires:
+
+$$n > \sum_{j=1}^{r+1} \frac{p^{m_j} - 1}{p - 1} \deg f_j + \frac{p^{m_g} - 1}{p - 1} \deg g = (r+1) \cdot 1 + (p+1) \cdot 1 = r + p + 2$$
+
+For $r = 3$, $p = 5$: need $n > 10$. We have $n = 18 > 10$.  $\checkmark$
+
+For $r = 3$, $p = 11$: need $n > 16$. We have $n = 18 > 16$.  $\checkmark$
+
+For $r = 3$, $p = 13$: need $n > 18$. We have $n = 18$. **Boundary case** — depends on $\ge$ vs $>$ in Grynkiewicz's statement.
+
+For $r = 3$, $p \ge 17$: need $n > r + p + 2 \ge 22 > 18$. **Fails.**
+
+**Conclusion:** The Grynkiewicz $p$-adic CW approach isolates weight-$p$ solutions for **bounded primes** ($p \le 11$ at rank 4, $p \le 13$ borderline). It does NOT work for all primes.
+
+[VERIFY: Check the exact inequality in Grynkiewicz 2023 (Theorem 1.1 or Theorem 1.3): is it $n >$ or $n \ge$? Also check whether the "box" $\mathcal{B}$ formulation gives any additional flexibility.]
+
+**Partial result:** For $r = 3$ and $p \in \{5, 7, 11\}$, the Grynkiewicz bound shows the number of solutions with $\sum x_i \equiv p \pmod{p^2}$ is $\equiv 0 \pmod{p}$. Since $x = 0$ gives $\sum x_i = 0 \not\equiv p \pmod{p^2}$, there are either 0 or $\ge p$ such solutions.
+
+A nonzero solution with $\sum x_i \equiv p \pmod{p^2}$ has integer weight in $\{p, p + p^2, p + 2p^2, \ldots\}$. For $p = 5$: weight $\in \{5, 30, 55\}$ (since max weight = $18 \cdot 4 = 72$). For $p = 7$: weight $\in \{7, 56\}$ (max = $18 \cdot 6 = 108$).
+
+---
+
+## NEW RESULT 5: The Fiber Induction Framework (Clean Statement)
+
+**Theorem (Fiber Induction — Conditional).** Assume:
+1. $\eta(C_p^r) = \alpha(p-1) + 1$ where $\alpha = 9 \cdot 2^{r-3} - 1$
+2. $s(C_p^r) = \eta(C_p^r) + p - 1 = \alpha(p-1) + p$
+3. **Weight Completeness Hypothesis (WCH):** For any sequence of $\ge (\alpha+1)(p-1)$ elements over $C_p^r \setminus \{0\}$ (mult $\le p-1$), there exists a weighted zero-sum of weight **exactly** $p$.
+
+Then $\eta(C_p^{r+1}) \le (2\alpha + 1)(p - 1) + 1$.
+
+**Proof (assuming WCH).** Given $N = (2\alpha+1)(p-1)+1$ elements. Choose linear form $w$.
+
+- If $|F_0| \ge \alpha(p-1)+1 = \eta$: done by (1).
+- If $|F_c| \ge (\alpha+1)(p-1)$ for some $c \ne 0$: by WCH, there's a zero-sum of projections of weight exactly $p$, giving first-coord sum $pc \equiv 0$. Done.
+- Otherwise: $|F_0| \le \alpha(p-1)$ and $|F_c| \le (\alpha+1)(p-1) - 1$ for all $c \ne 0$.
+
+In the third case: $N \le \alpha(p-1) + (p-1)((\alpha+1)(p-1) - 1) = \alpha(p-1) + (p-1)(\alpha(p-1) + p - 2)$. Computing: $= \alpha(p-1) + (p-1)\alpha(p-1) + (p-1)(p-2) = \alpha(p-1)p + (p-1)(p-2)$.
+
+Need $N = (2\alpha+1)(p-1)+1 > \alpha p(p-1) + (p-1)(p-2)$:
+$(2\alpha+1)(p-1)+1 > (p-1)(\alpha p + p - 2)$
+$(2\alpha+1)(p-1)+1 > (p-1)((\alpha+1)p - 2)$
+
+For $p = 5$, $\alpha = 8$: LHS = $69$. RHS = $4 \cdot 43 = 172$. LHS $<$ RHS. **No contradiction.**
+
+So the third case is NOT vacuous. WCH alone doesn't close the gap.  $\square$
+
+**The WCH is false in general.** With $(\alpha+1)(p-1) = s - 1$ terms, we are one term short of the $s$-constant. The $s$-constant guarantees weight exactly $p$, but $s - 1$ terms may not.
+
+---
+
+## MAIN CONJECTURE (New, Precise Statement)
+
+**Conjecture (Cross-Fiber Zero-Sum Principle).** Let $S$ be a set of $2\alpha + 2$ nonzero non-proportional vectors in $\mathbb{F}_p^{r+1}$ ($r \ge 3$, $p \ge 5$, $\alpha = 9 \cdot 2^{r-3} - 1$) spanning $\ge 3$ fibers under every linear form. Then $S$ contains either:
+
+(A) A non-degenerate collinear triple (yielding weight $< p$ by the rank-3 theorem), or
+
+(B) A subset of $\le p$ elements summing to zero with all coefficients 1 (weight $= |\text{subset}| \le p$).
+
+**Evidence:** At $p = 5$, $r = 4$: all 607 possible 18th vectors satisfy (A) (513 cases) or (B) (94 cases with 4-element zero-sums).
+
+---
+
+## VERIFICATION REQUESTS
+
+[VERIFY: For the 17-vector extremal construction in $\mathbb{F}_5^4$ (8 vectors in fiber 0, 9 in fiber 1), compute the minimum-weight nonzero solution to $\sum x_i v_i = 0$, $\sum x_i \equiv 0 \pmod{5}$ with $x_i \in \{0,1,2,3,4\}$. Is the minimum weight always 5?]
+
+[VERIFY: For $p = 7$, $r = 4$: how many non-proportional nonzero vectors are there in $\mathbb{F}_7^4$? Construct the 17-vector extremal set (8 in fiber 0, 9 in fiber 1 using the A8 set over $\mathbb{F}_7$) and test how many 18th vectors are killed by support-3 vs support-4 vs other.]
+
+[VERIFY: In Grynkiewicz 2023 (Theorem 1.1 of arXiv:2208.12895), what is the exact degree condition? Is it strict ($>$) or non-strict ($\ge$)? Fetch the paper and extract the precise statement.]
+
+---
+
+## OBSTRUCTION IDENTIFIED
+
+The **named obstruction** for the full inductive proof is:
+
+**The Weight Selection Problem:** Within a nonzero fiber of size $(\alpha+1)(p-1)$ (one short of $s$), the $\eta$-constant guarantees a zero-sum of weight $\le p$, but NOT of weight exactly $p$. And weight exactly $p$ is required for the first-coordinate condition to vanish. The Grynkiewicz $p$-adic CW method can force weight-$p$ solutions but only when $n > r + p + 2$, which fails for large $p$ at fixed rank.
+
+**What would break through:** Either (1) a proof that weight-$p$ zero-sums exist from $s-1$ terms (a "near-$s$" theorem), or (2) a cross-fiber argument that avoids the weight selection problem entirely, such as the Cross-Fiber Zero-Sum Principle conjectured above.
+
+Sources:
+- [Grynkiewicz, Chevalley-Warning-Ax-Katz generalization (Combinatorica 2023)](https://link.springer.com/article/10.1007/s00493-023-00057-0)
+- [Grynkiewicz, arXiv preprint](https://arxiv.org/abs/2208.12895)
+- [Reiher, Kemnitz Conjecture proof](https://arxiv.org/abs/1603.06161)

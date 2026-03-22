@@ -1,0 +1,582 @@
+
+============================================================
+BLOCK 1 (384 chars)
+============================================================
+Let me start by understanding the problem and searching for any existing results in Cortex, then read the seed document carefully.
+
+The goal is to prove η(C_p^r) ≤ (9·2^{r−3} − 1)(p−1) + 1 for all r ≥ 3, all odd primes p.
+
+The base case r=3 is proved. The inductive step is open. The key challenge is the multi-fiber case.
+
+Let me search Cortex first, then read the briefing document.
+
+============================================================
+BLOCK 2 (597 chars)
+============================================================
+Let me start by searching Cortex for any existing results, then read the seed document carefully. Let me also check what's in my memory files.
+
+Actually, I don't have access to Cortex tools (cortex_store, cortex_semantic_search) - those would be MCP tools. Let me check what tools I have available. I have the standard tools plus TodoWrite. Let me search for any cortex-related tools.
+
+Let me focus on what I can do:
+1. Read the seed document
+2. Read my memory files
+3. Think deeply about the mathematics and try to prove something new
+
+Let me start by reading the briefing and my existing memory.
+
+============================================================
+BLOCK 3 (85516 chars)
+============================================================
+Now let me carefully digest what I've read and think about what's the most promising approach.
+
+The problem: Prove η(C_p^r) ≤ (9·2^{r−3} − 1)(p−1) + 1 for all r ≥ 3, all odd primes p.
+
+What's proved:
+- Base case r=3: η(C_p³) = 8(p−1)+1
+- Lower bound all ranks
+- Two-fiber upper bound
+- Translation trick
+
+The gap: multi-fiber case (≥3 fibers).
+
+From the memory, the Gap Hypothesis for A8 has been verified, and there's a Weight Interval Theorem. But this is specific to the rank-4 case and specific to the structure of A8.
+
+
+The most promising path forward seems to be the inductive approach, which naturally mirrors the recursive structure of the lower bound where α(r+1) = 2α(r)+1. The two-fiber bound already covers configurations with at most two fibers, so the real challenge is handling three or more fibers simultaneously. I should explore whether fiber induction combined with sumset bootstrapping—pulling zero-sums from different fibers and combining them—can close this gap.
+
+For the inductive step, I'm setting up the framework: assuming the bound holds for C_p^r, I need to show it for C_p^{r+1}. With N = 2α(r)+2 nonzero non-proportional vectors, I'll use a linear form to partition them into fibers. The two-fiber case is already handled, so I need to focus on when vectors span three or more fibers and figure out how to extract a weighted zero-sum of weight at most p from that configuration. Let me think about what the inductive hypothesis gives us within fibers.
+
+Each fiber F_c consists of vectors v with w(v) = c. The projections π(v) (dropping the w-coordinate, or more precisely, projecting to F_p^r) give us vectors in F_p^r. But these projections might be proportional even if the original vectors aren't, since vectors in different fibers could become proportional after projection.
+
+Actually wait - within a single fiber F_c, two vectors v, v' have w(v) = w(v') = c. If their projections π(v) and π(v') are proportional, say π(v') = λπ(v), then v' - λv has w-component c - λc = c(1-λ). If λ ≠ 1, then v' and λv differ in the w-component, so they're not proportional in F_p^{r+1}. But this creates an issue for applying the inductive hypothesis to the projections, which requires non-proportionality there.
+
+The key insight is that F_0, the kernel of w, sits as a rank-r subspace where non-proportionality is preserved: if v, v' are non-proportional in F_p^{r+1}, they remain non-proportional within F_0. So the inductive hypothesis applies directly—if |F_0| ≥ 9·2^{r-3}, I get a weighted zero-sum of weight at most p. For the other fibers, I need to think through the structure more carefully. F_0 is contained in a rank-r subspace, while for the non-zero fibers I can apply the s-constant bound. Let me step back and think about this more carefully using a projection argument instead.
+
+If I take N = 2α(r)+2 vectors in F_p^{r+1} and project them onto F_p^r by dropping the first coordinate, I need to handle cases where projections become proportional. When v_i and v_j project to proportional vectors, there's a constraint on how they relate in the original space.
+
+This is getting messy, so let me try a cleaner approach using a multi-fiber partition strategy. The key insight is that when we have three or more fibers, we should be able to construct a zero-sum with weight at most p by carefully analyzing the weighted combinations across these fibers.
+
+For vectors drawn from multiple fibers with distinct first-coordinate values c_{i_1}, ..., c_{i_k}, a zero-sum requires the weights s_1, ..., s_k to simultaneously satisfy the first-coordinate constraint Σ s_j c_{i_j} ≡ 0 (mod p) and the remaining-coordinate constraint Σ s_j π(v_j) ≡ 0 (mod p), where the total weight is w = Σ s_j.
+
+Now, within a single non-kernel fiber F_c where c ≠ 0, any zero-sum forces the weights to sum to a multiple of p, and since each weight is between 1 and p-1, the minimum achievable weight is exactly p. This means we can only construct zero-sums of weight p within a single fiber, which is already at our bound. is equivalent to finding a zero-sum subsequence of length exactly p among (p-1) copies of each vector—essentially applying the s(G) constant to the projections in F_c. Now I'm working through the bound: s(C_p^r) = η(C_p^r) + p - 1, and by the inductive hypothesis, η(C_p^r) ≤ α(r)(p-1) + 1, which gives me s(C_p^r) ≤ α(r)(p-1) + p, but I need to recalculate this more carefully to get the right form.
+
+After simplifying, I get s(C_p^r) ≤ (α(r)+1)(p-1) + 1. The issue is that the s-constant requires enough vectors in the fiber F_c—specifically, I need |F_c| · (p-1) to be at least s(C_p^r), which means |F_c| must be large enough to satisfy this constraint. = α(r) + 1 + 1 = α(r) + 2... Hmm, that's not quite right.
+
+Actually, the Davenport constant D(C_p^r) is the smallest d such that any sequence of d elements from C_p^r has a nonempty zero-sum subsequence. And s(C_p^r) is the smallest s such that any sequence of s elements has a zero-sum subsequence of length exactly p.
+
+For our fiber F_c (c ≠ 0) with |F_c| non-proportional vectors (each with multiplicity p-1), the total number of elements in the sequence is |F_c| · (p-1). We need this to be ≥ s(C_p^r) to guarantee a zero-sum subsequence of length p, which gives a weighted zero-sum of weight p.
+
+Working through the inequality: if |F_c| · (p-1) ≥ s(C_p^r) and using the inductive hypothesis that η(C_p^r) = α(r)(p-1) + 1, I can derive that |F_c| ≥ α(r) + 2. That's quite a lot of vectors needed in a single non-kernel fiber, so now I need to consider what happens in the kernel.
+
+For the kernel fiber F_0, I need |F_0| ≥ α(r) + 1 to apply the η bound directly. The total number of vectors is N = 2α(r) + 2, and I'm checking three cases: either the kernel has enough vectors, or some non-kernel fiber has enough, or both are small. If both are small, the total would exceed N, which is a contradiction.
+
+Now I'm verifying the pigeonhole constraint: with p ≥ 5 and α(r) ≥ 8, the inequality 2α(r) + 3 ≤ p(α(r) + 1) holds, so the counting argument works. But the real problem is that individual fibers might be too small to apply induction within them—I need to find a way to combine information across different fibers to make progress.
+
+If I can find partial zero-sums in different fibers that complement each other, I might be able to combine them into a full zero-sum. For instance, if one fiber yields vectors summing to some nonzero vector v with weight w₁, and another fiber gives a sum to u with weight w₂, and if v + u = 0 with w₁ + w₂ ≤ p, that would work. The challenge is that this requires finding short sums to specific targets rather than zero-sums within a single fiber. I should look at the Davenport constant D(C_p^r), which characterizes the threshold for guaranteed zero-sum subsequences in groups like C_p^r.
+
+For C_p^r with p prime, the Davenport constant is r(p-1)+1, a classical result from Olson using the Chevalley-Warning theorem. But the weighted version η is a different beast entirely. Let me try a different angle: instead of projecting down to a single rank-r hyperplane, what if I project to a rank-3 subspace? With 2α(r)+2 vectors in F_p^{r+1}, I can apply a linear projection π to F_p^3 and see if the rank-3 case gives me enough structure to work with.
+
+Actually, the projection approach seems unwieldy—the images could scatter in unpredictable ways. Let me refocus on the sumset bootstrapping strategy with a weighted linear form. I'll decompose each vector as v = (c, π(v)) where c is the weight and π(v) lives in F_p^r, then think about weighted sums targeting a specific value.
+
+For a set S of vectors, I can define the reachable targets at weight w as all vectors of the form Σ s_i v_i where the coefficients s_i are nonzero and sum to w. The key insight is that the η condition guarantees something stronger: for any sufficiently large set of non-proportional vectors, there's always a weight w where we can hit zero, and this property extends to other target values as well.
+
+Now I'm thinking about how to apply this to the kernel fiber and non-kernel fibers separately. If the kernel fiber has enough vectors, I can invoke η directly to find a weighted zero-sum. But even with fewer vectors, I can still construct weighted sums to nonzero targets, which can then be combined with contributions from other fibers. For the non-kernel fibers, a weighted sum of vectors (c, u_i) produces (c·Σs_i, Σ s_i u_i), so achieving a zero-sum requires the first coordinate to vanish, which imposes constraints on the weights.
+
+When combining sums from different fibers F_{c_1} and F_{c_2}, the key insight is that the first coordinates add modulo p, so I need c_1 w_1 + c_2 w_2 ≡ 0 (mod p) while the remaining coordinates must also cancel out. Now I'm wondering how large these reachable sets actually are—if they're big enough, they'd have to overlap by a pigeonhole argument. There's a verified result about sumset saturation for the extremal set that suggests when the total weight reaches p, the combined reachable targets cover everything, but I need to figure out if this generalizes beyond that specific case.
+
+Let me try formalizing the inductive approach more carefully. I want to prove an upper bound on η(C_p^{r+1}) in terms of η(C_p^r), and I'm working through what the Schur number constraint actually gives me—it looks like the bound should work out to (α(r)+1)(p-1) + 1 when I account for the p-1 term properly.
+
+Now I'm reconsidering what η and s actually measure: s(G) tells me the sequence length needed to guarantee a zero-sum subsequence of length p, while η(G) is about finding a nonempty zero-sum subsequence of bounded length when I have a sequence from G\{0} with controlled multiplicities. Let me recheck the precise definition of η(C_p^r) to make sure I'm working with the right constraint. So the problem is asking: given α(r)+1 = 9·2^{r−3} nonzero non-proportional vectors in F_p^r, each appearing p−1 times, there must exist a nonempty zero-sum subsequence of length at most p. This translates to finding coefficients in {0, 1, ..., p-1} for each vector, not all zero, where the sum of coefficients is at most p and they combine to zero. Now I'm setting up the induction argument to prove this.
+
+For the inductive step with 2α(r)+2 vectors in F_p^{r+1}, I'll use a hyperplane H to partition them into fibers based on a linear form. If the kernel fiber contains at least α(r)+1 vectors, I can apply the inductive hypothesis directly since they lie in a copy of F_p^r. Otherwise, if the kernel has at most α(r) vectors, the remaining fibers must contain enough vectors to force a zero-sum by a counting argument.
+
+For non-kernel fibers, I'm using a rescaling trick: any vector in fiber F_c can be normalized by multiplying by c^{-1}, which lets me work with affine subspaces more systematically. When comparing vectors from different non-kernel fibers F_{c_1} and F_{c_2}, I can form linear combinations like c_2 v - c_1 u to extract useful structure.
+
+Now I'm realizing that such combinations actually land in the kernel fiber F_0, since the first coordinate becomes c_2 c_1 - c_1 c_2 = 0. The key insight is that the "weight" of this combination relates to c_1 + c_2, which constrains what relationships are possible between different fibers.
+
+Let me reconsider this through a normalization lens. For each nonzero c, I can express any v ∈ F_c as v = c · w_v where w_v is a normalized vector with first coordinate 1. When I have a weighted zero-sum involving elements from different fibers, the actual coefficients acting on these normalized vectors become products of the original coefficients and the fiber indices, which transforms the problem into a cleaner form where I can track the constraints more systematically.
+
+Now I'm trying to identify what the core theoretical result should be. Let me attempt to formulate a key lemma about reducing multiple fibers simultaneously.
+
+If I can show that any zero-sum-free set of sufficient size must concentrate in just two fibers under any linear form, that would directly complete the proof. The computational evidence at p=5 with 17 vectors in F_5^4 supports this—the extremal construction uses exactly two fibers, and adding an 18th vector anywhere creates a zero-sum. So the pattern holds in that case, though I'm not yet certain it generalizes across all ranks and primes.
+
+But I need to be careful about the claim's scope. The extremal construction uses two fibers specifically for the first coordinate projection, but a different linear form might spread those same vectors across more fibers. So the structural lemma would need to assert that there exists at least one projection where the set stays within two fibers, not that every projection has this property.
+
+Let me test this by projecting the rank-4 extremal set through a different coordinate—say the second one—and tracking how the vectors distribute across the resulting fibers. I'm organizing the fibers under the projection w = x_2, and I can see that the extremal set actually spans across three distinct fibers—F_0, F_1, and F_{p-1}—with 5, 6, and 6 vectors respectively.
+
+This means my multi-fiber reduction lemma as stated doesn't hold for sets of size α(r+1) = 2α(r)+1. I need to revise the approach: either there exists some projection that keeps things to at most 2 fibers for these extremal sets, or I should focus on sets of size α(r+1)+1 = 2α(r)+2 instead, where the two-fiber bound might be sufficient. For cases with 3 or more fibers, I'll need a different argument that handles cross-fiber zero-sums.
+
+Let me try using the Davenport constant instead. When I project F_p^{r+1} down to F_p via some linear functional w, the vectors map to fiber labels in F_p. Since the Davenport constant for C_p is p itself, any sequence of p elements from F_p contains a nonempty subsequence summing to zero. With n = 2α(r)+2 vectors and α(r) ≥ 8 for r ≥ 3, I have n ≥ 18, which exceeds p for p ≥ 5, guaranteeing a zero-sum among the fiber labels.
+
+But I need to be careful about what this actually gives me. A zero-sum subsequence of the fiber labels only constrains the first coordinate—I still need the remaining coordinates to sum to zero as well. So this becomes a two-stage problem: first use Davenport to find subsets whose fiber labels cancel mod p, then among those subsets, locate one where the full vector projections also sum to zero. This is essentially a weighted version of the Davenport constant idea.
+
+Let me try a more direct approach instead. I'll attempt to prove that η(C_p^{r+1}) is bounded by (2α(r)+1)(p-1)+1 using induction. Given 2α(r)+2 nonzero non-proportional vectors in F_p^{r+1}, each appearing p-1 times, I can choose a hyperplane H and a linear form w whose kernel is H, then partition the vectors by their w-values. If the kernel fiber has at least α(r)+1 vectors, the inductive hypothesis applies directly. Otherwise, the non-kernel fibers must contain at least α(r)+2 vectors, which constrains what's possible.
+
+Now I want to leverage those non-kernel vectors. The key idea is that among α(r)+2 vectors with nonzero w-values, I should be able to find coefficients s_i in {1,...,p-1} summing to at most p such that their weighted sum lands back in the kernel H. If I can construct such a partial sum, I can combine it with vectors from the kernel fiber to force a zero-sum relation.
+
+But finding coefficients that simultaneously satisfy the weight constraint and produce a kernel element is tricky. Let me pivot to something more classical—Olson's approach using Chevalley-Warning. Olson showed that D(C_p^r) = r(p-1)+1 by exploiting the fact that a zero-sum system has degree r, and if no solution exists, Chevalley-Warning gives a contradiction. The question is whether I can adapt this to handle the additional constraint that Σs_i ≤ p. for vectors v_1, ..., v_n ∈ F_p^{r+1},
+Σ_{i=1}^n x_i v_{i,j} = 0 for j = 1, ..., r+1 (r+1 equations)
+x_i ∈ {0, 1, ..., p-1} for each i (but this is automatic in F_p)
+Σ x_i ≤ p (the weight constraint)
+
+The weight constraint is the hard part. In F_p, Σx_i ≤ p means Σx_i ∈ {0, 1, ..., p}, but since we're working mod p, Σx_i mod p ∈ {0, 1, ..., p}. Since 0 ≤ Σx_i ≤ n(p-1), and I want Σx_i ≤ p, this isn't a polynomial condition mod p. But I can encode this constraint by noting that when x_i ∈ {0,...,p-1}, the sum Σx_i ≤ p exactly when Σx_i takes a value in {0, 1, ..., p}, which I can express through a polynomial relation involving the sum modulo p.
+
+Actually, the key insight is that Σx_i ≤ p is equivalent to saying the "carry" in base-p representation is at most 1—meaning Σx_i = a + bp where b ∈ {0, 1} and a ∈ {0,...,p-1}. This means floor(Σx_i / p) ≤ 1, but encoding this as a polynomial constraint is still tricky.
+
+Now looking at the Grynkiewicz 2023 result on generalized Cauchy-Davenport with weights. Kemnitz conjecture: any 4p-3 elements in Z_p^2 have a zero-sum subsequence of length p. Reiher proved this using the multivariate polynomial method with CW-type congruences by counting zero-sum subsequences of length exactly p, applying CW to get congruences modulo p, then using structural arguments to show this count must be positive. For our weighted problem, I'd count zero-sums with weight at most p and use similar CW congruences combined with the rank-3 theorem to force a solution to exist.
+
+But this is speculative. Let me focus on something more concrete instead—the fiber induction approach with the η/s relationship seems most promising. For rank r+1 with N = 2α(r)+2 vectors, I'll partition by a linear form like the first coordinate. If the zero-fiber has at least α(r)+1 vectors, induction applies directly. Otherwise, the non-kernel vectors number at least α(r)+2, and I need to analyze what happens when some fiber contains enough vectors to apply induction within that fiber.
+
+Now I'm checking whether projections preserve non-proportionality: if two vectors in the same fiber are non-proportional in the full space, are their projections non-proportional in the lower dimension? The key observation is that if the projections become proportional, the difference between the original vectors must lie in the kernel direction, which constrains their relationship.
+
+This means within a single fiber, multiple vectors could project to proportional images, so the number of distinct projective classes might be smaller than the fiber size. For the zero-sum argument to work, I need enough non-proportional vectors in the projection—specifically, if I have α(r)+2 of them each with multiplicity p-1, the total sequence length is (α(r)+2)(p-1), and I need to verify this exceeds the Davenport constant s(C_p^r) = (α(r)+1)(p-1)+1.
+
+The inequality holds for p ≥ 3, so I can extract a length-p zero-sum from the projections. The key insight is that this zero-sum of projections lifts back to vectors in F_p^{r+1} that sum to something on the first coordinate axis, and the length-p condition ensures the first coordinates themselves sum to zero mod p, giving me an actual zero-sum in the full space.
+
+Now I'm considering what happens when the projections aren't all non-proportional—if two vectors v and v' have proportional projections, then v = λv' + c(1-λ)e_1, so they're related through the first coordinate vector.
+
+Even with these proportionalities, I can think of the sequence of projections as having fewer distinct elements but higher multiplicities, where each original vector contributes up to p-1 copies. The challenge is determining whether the total sequence length is sufficient to guarantee a zero-sum, especially when working with arbitrary coefficients and the proportionality constraints. be exactly p.) So within fiber F_c, I need Σ s_i = p and the projections to sum to zero in F_p^r — this is asking for a zero-sum subsequence of length exactly p among the projected vectors. The key issue is that some projections might be zero (like when v = c·e_1), and the Davenport constant s(C_p^r) applies to sequences in the group, which can include zero elements.
+
+Actually, at most one vector in my set can project to zero, since no two vectors are proportional and any multiple of e_1 would be proportional to any other multiple of e_1. So I'm dealing with at most one zero projection and the rest nonzero. If one vector does project to zero, I need to account for how that affects the zero-sum condition in F_c.
+
+Let me step back and state this more cleanly. I'm claiming that if a fiber F_c with c ≠ 0 has at least α(r)+2 vectors, then I can find a weighted zero-sum of weight at most p. The key is looking at how the projections of vectors in F_c behave.
+
+When I project these vectors onto F_p^r, I get a sequence where each projection appears with multiplicity p-1. This gives me a total sequence length of |F_c|(p-1), which is at least (α(r)+2)(p-1). Now I need to verify this sequence is long enough to apply the inductive hypothesis on C_p^r. Since (α(r)+2)(p-1) exceeds (α(r)+1)(p-1)+1 for p ≥ 3, the length condition is satisfied.
+
+By the definition of s(C_p^r), I can extract a zero-sum subsequence of exactly length p from these projections. This corresponds to choosing coefficients s_i ∈ {0,...,p-1} for elements in F_c such that the projections sum to zero and the total coefficient sum equals p. When I lift this back to the original vectors, the first coordinate becomes c·p ≡ 0 mod p, while the remaining coordinates vanish from the zero-sum condition, giving me a zero-sum subsequence in F_c itself.
+
+Now I'm realizing there's a subtlety with how I'm counting multiplicities—the projections might be proportional rather than identical, which means they're distinct group elements in (Z/pZ)^r and shouldn't be conflated in the multiplicity count.
+
+But actually, if two vectors from different fibers happen to project to the exact same element (not just proportionally), that would be a problem. However, if they're in the same fiber with the same first coordinate but different vectors, their projections must be distinct. So within each fiber, all the vectors project to different elements, each appearing with multiplicity p-1, which respects the constraint that each group element appears at most p-1 times.
+
+Now I'm questioning whether the definition of s(G) actually imposes a multiplicity constraint at all, or if it just applies to arbitrary sequences. Let me reconsider the Erdős–Ginzburg–Ziv theorem and what it says about sequences of integers. I'm realizing the standard definitions of these constants don't impose multiplicity constraints on sequences—they allow any element to appear any number of times. So when I apply the formula s(G) = η(G) + exp(G) - 1 to C_p^r, I need to be careful about whether the problem's specific constraint (each nonzero element at most p-1 times) changes the analysis. I need to clarify what η actually means in the standard definition — it's the smallest N such that any sequence of N elements from the nonzero projective classes contains a zero-sum subsequence of length between 1 and p, and I should work directly with this rather than getting tangled up in the multiplicity constraints of the specific problem.
+
+Now I'm seeing how the pieces fit together: if we have α(r)+1 distinct vectors each appearing p-1 times, that gives us a total sequence length of (α(r)+1)(p-1), which exceeds η(C_p^r) = α(r)(p-1)+1, so we're guaranteed to find a zero-sum subsequence. This means the Davenport constant s(C_p^r) relates to η through the formula s(C_p^r) = η(C_p^r) + p - 1.
+
+For any non-zero fiber F_c, if we have |F_c| distinct vectors each with multiplicity p-1, we need |F_c|(p-1) to be large enough to guarantee a zero-sum, which requires |F_c| ≥ α(r)+2. This confirms the Fiber Threshold Lemma holds as stated.
+
+Now I'm verifying the two key cases: if the kernel fiber F_0 has at least α(r)+1 vectors, those nonzero non-proportional vectors with multiplicity p-1 produce enough elements to guarantee a zero-sum of weight at most p entirely within the kernel. For any non-kernel fiber F_c with c ≠ 0, if |F_c| ≥ α(r)+2, the Fiber Threshold Lemma gives us a zero-sum of exactly weight p. Both cases check out.
+
+Now I'm looking at how these fibers distribute: with 2α(r)+2 total vectors, if the kernel fiber has at most α(r) vectors, then the non-kernel fibers collectively have at least α(r)+2 vectors. By pigeonhole principle across at most p-1 non-kernel fibers, at least one fiber must contain at least ⌈(α(r)+2)/(p-1)⌉ vectors, which triggers the non-kernel case.
+
+But this only works when p is small—for p ≥ 5, the vectors spread too thinly across multiple fibers, and neither the kernel bound nor the single non-kernel fiber bound gives us what we need. The real obstacle is when |F_0| ≤ α(r) and every other fiber has at most α(r)+1 vectors, with multiple non-kernel fibers present. This is the multi-fiber gap: I need to find a zero-sum that crosses between fibers rather than staying within one.
+
+For cross-fiber zero-sums, I can use the rank-3 theorem on collinear vectors. If three vectors lie on a projective line with a dependency αv₁ + βv₂ + γv₃ = 0 where α + β + γ ≡ 0 mod p, and the dependency is non-degenerate, then there exists a scalar μ such that the weighted sum of their Hamming weights stays bounded by p.
+
+When these three vectors come from different fibers, this gives me a cross-fiber zero-sum. The key question becomes whether I can always find such a non-degenerate collinear triple among the 2α(r)+2 vectors distributed across multiple fibers. At rank 4 with p = 5, collinear triples handle most cases, but some configurations require looking at 4-tuples instead.
+
+The challenge is that not every set contains a non-degenerate collinear triple—the extremal construction might specifically avoid them. However, since I have α(r)+1 vectors rather than just α(r), this extra vector should force either a non-degenerate collinear triple or a short zero-sum to appear. Looking at the extremal structure, the rank r+1 construction has α(r) vectors in the kernel fiber and α(r)+1 vectors in the other fiber, totaling 2α(r)+1. When I add the (2α(r)+2)-th vector, it must necessarily break the zero-sum-free property.
+
+If the new vector lands in the kernel fiber, that fiber reaches α(r)+1 vectors and inductively contains a zero-sum. If it lands in the other fiber, that fiber reaches α(r)+2 vectors and the Fiber Threshold Lemma guarantees a zero-sum. But if it creates an entirely new fiber with just one vector, neither bound applies, so I need to find a different argument to handle this case.
+
+Let me think about whether I can combine vectors across multiple fibers. The new vector v_new = (c, u) has first coordinate c ∉ {0, 1}, and if I try to form a zero-sum using it alongside vectors from F_0 (which have first coordinate 0), the first coordinate constraint forces the weight on v_new to be zero, which is a contradiction.
+
+But what if I mix v_new with vectors from F_1 or use all three fiber groups together? The first coordinate equation becomes s_0 c + Σ s_i ≡ 0 mod p, which gives me flexibility in how the weights distribute. The total weight across all vectors would then be s_0(1-c) plus contributions from F_0 and F_1 vectors, and I need to check whether this can actually yield a valid zero-sum.
+
+This is getting unwieldy. Let me step back and think about what the ZSF property really constrains. I should formulate a structural lemma that captures the key insight: if S has no weighted zero-sum of weight ≤ p, then the fiber sizes must satisfy a specific bound. The idea is that if any non-kernel fiber gets too large (say, ≥ α(r)+2 vectors), I can construct a zero-sum that violates the ZSF property, which means the fibers can't be that big.
+
+So in any ZSF set, the kernel fiber has at most α(r) elements and every other fiber has at most α(r)+1 elements. Now if I'm trying to build a ZSF set of size 2α(r)+2, I can fit at most α(r) vectors in the kernel and at most α(r)+1 in each of the p-1 non-kernel fibers, giving a total capacity of pα(r) + p - 1. But I need 2α(r)+2 vectors, so this is only possible if 2α(r)+2 ≤ pα(r) + p - 1, which gives me a constraint on how large α(r) can be relative to p.
+
+The key insight is that even though the fibers have room to grow, with only 2α(r)+2 vectors total, they're actually quite constrained—most non-kernel fibers will be nearly empty, averaging around α(r)/p vectors each for large p.
+
+Now I'm shifting to an additive combinatorics approach. I'll define reachable sets within each fiber based on weighted sums of their projections, then analyze what cross-fiber zero-sums are possible when combining vectors from multiple fibers with controlled total weight.
+
+For two fibers specifically, the weight constraint becomes a modular equation—once I fix the weight in one fiber, the other is determined up to the bound that their sum stays at most p. Then I need to verify that elements from each reachable set can actually cancel across fibers.
+
+The key question is whether these reachable sets have any overlap when negated. The size of R_c(w) depends on how many vectors project into the fiber and how many ways I can sum them to hit the target weight.
+
+For small weights like w = 1 or w = 2, the reachable set stays manageable, but as w grows or k increases, the sumset expands significantly—though it's still bounded by the ambient space size p^r. This direct approach seems limited, so I need to reconsider what actually changes structurally when moving from rank r to rank r+1.
+
+The real insight is that at rank r+1, we have roughly twice as many vectors as the extremal bound for rank r. The lower bound construction uses two copies of the rank-r extremal set plus one extra vector, totaling 2α(r)+1. Adding a (2α(r)+2)-th vector should force a contradiction, but the doubled structure creates ambiguity—any hyperplane projection either concentrates vectors in the kernel or spreads them across fibers, yet the new vector could still land in a fresh fiber. The key might be that we can strategically choose the hyperplane projection after seeing all vectors to force the contradiction.
+
+Since 2α(r)+2 vectors in F_p^{r+1} must span the full space (otherwise they'd live in a rank-r subspace, and by induction we'd already have a zero-sum), I need to find a hyperplane w such that the resulting fiber structure violates the rank-r bound.
+
+The pigeonhole argument alone isn't strong enough—distributing 2α(r)+2 vectors across p fibers gives roughly (2α(r)+2)/p vectors per fiber, which is too small. But the key insight is that different linear forms w produce different fiber distributions, and I should be able to find one where some fiber has enough vectors to force a zero-sum by the inductive hypothesis. The hyperplane constraint w(v_i - v_j) = 0 forms a codimension-1 subspace in the dual space, but this geometric approach isn't yielding clean results. Let me pivot to a probabilistic argument instead—I'll show that for a random choice of coefficients from {0, 1, ..., p-1}, the expected number of weighted zero-sums is positive, which would guarantee at least one exists.
+
+By linear algebra, the total number of solutions to Σs_i v_i = 0 with coefficients in {0, ..., p-1} is p^{n-r-1} (since the vectors span F_p^{r+1}). Now I need to count how many of these satisfy the constraint 1 ≤ Σs_i ≤ p.
+
+The sum Σs_i acts as another linear form on the coefficient vector. If the vectors v_1, ..., v_n together with the all-ones vector are in general position, then among the p^{n-r-1} solutions, the weight Σs_i should be uniformly distributed modulo p. To be rigorous, I'm treating this as a system of r+2 equations in n unknowns: the r+1 equations from Σs_i v_i = 0, plus the constraint Σs_i = w for some weight w.
+
+The extended coefficient matrix has dimensions (r+2) × n. If this matrix has full rank r+2, then for each value of w ∈ F_p, the solution set forms a coset of dimension n - r - 2, giving exactly p^{n-r-2} solutions per weight value.
+
+For weights in the range {1,...,p}, I'd get p · p^{n-r-2} = p^{n-r-1} solutions total, but the linear algebra here is working over F_p, not capturing integer weight bounds directly. The probabilistic approach isn't yielding clean results, so I need to step back and reconsider the strategy.
+
+The most promising direction seems to be establishing a reduction theorem. If I can assume the bound holds for C_p^r, then I should be able to show it propagates to C_p^{r+1} under a specific structural condition—namely, that any sufficiently large set of non-proportional vectors spanning the space contains a weighted zero-sum with bounded weight. This would let me build up the result inductively rather than trying to analyze all cases at once.
+
+Now I'm working through the proof by cases. When S doesn't span the full space, it lives in a lower-dimensional subspace where the inductive hypothesis already applies, so that case is straightforward. The harder part is when S actually spans F_p^{r+1}—I need to show that either the zero-sum condition is satisfied directly, or I can find a linear form that forces the desired bound.
+
+The key realization is that I shouldn't just look at individual fibers in isolation. Instead, I can combine multiple fibers and apply the η bound to their union, which might give me more leverage when vectors are spread across many fibers. I see that combining vectors with opposite coefficients creates kernel elements, but negative coefficients aren't allowed in this framework. If I restrict to positive coefficients where c₁ + c₂ ≤ p, then v + u gives a fiber value of c₁ + c₂ within budget, though the sum itself is generally nonzero. I'm now shifting toward a more sophisticated approach using weighted zero-sums across multiple fibers with a total weight constraint, where the first coordinate must satisfy a modular condition and the remaining coordinates need to satisfy their own constraints across the F_p^r projections.
+
+For each fiber c with vectors v₁, ..., v_k, I'm defining a partial sum set at weight w that captures all possible projection sums achievable by taking weighted combinations where the weights sum to exactly w. Then for a cross-fiber zero-sum spanning multiple fibers with their own weights, I need both the fiber coordinates to satisfy the modular condition and the projections from each fiber to combine into a zero-sum overall.
+
+Now I'm analyzing the two-fiber case where the fiber indices sum to at most p. Given the modular constraint on the weights, I can solve for one weight in terms of the other, and there's a specific formula for the minimal positive weight depending on whether the product term is zero or nonzero.
+
+For the case where w₁ = 1, I'm checking that the resulting w₂ stays within bounds and confirming this works for any pair of valid fiber indices.
+
+Now I need to verify whether the projection sets P_{c₁}(1) and -P_{c₂}(w₂) actually intersect—this is the core question. When w₂ = 1, the projection set P_{c₂}(1) simply consists of the projections of all vectors in the second fiber.  As w₂ increases to 2, the set grows to include both doubled projections and pairwise sums of distinct projections. The intersection is nonempty precisely when some projection from the first fiber equals the negative of an element in the second projection set.
+
+For sufficiently large sets, a counting argument via pigeonhole principle guarantees intersection: if the combined sizes exceed p^r, they must overlap. However, since |P_{c₁}(1)| equals the fiber size and p^r is enormous, this only applies when the partial sum sets themselves are large enough.
+
+Now I'm considering how partial sum sets grow in F_p^r using Cauchy-Davenport bounds, which give a lower bound on sumset size, though the standard bound is too weak for this analysis.
+
+The growth rate of partial sum sets really hinges on the vector configuration—if they're in general position, the sets expand rapidly. For nonzero vectors with no two proportional, I'd expect the partial sum sets to grow at least polynomially in the number of vectors, but this intuition needs to be made rigorous.
+
+Rather than working in full generality, let me narrow focus to the rank 4 case and try to establish the bound there first, which might reveal how the argument scales to higher ranks.
+
+For rank 4, I need to show that η(C_p^4) ≤ 17(p-1)+1. Starting with 18 nonzero non-proportional vectors, I'll project along the first coordinate. If the kernel fiber has at least 9 vectors, I can apply the rank 3 bound and finish. If any other fiber has 10 or more vectors, the fiber threshold lemma handles it since 10(p-1) exceeds the rank 3 threshold. Otherwise, the 18 vectors spread across at least 3 fibers with the kernel having at most 8 and each other fiber at most 9. Now I'm checking the computational data at p=5 to see how this case actually behaves.
+
+Looking at the p=5 data, all 94 multi-fiber addition failures were eliminated by weight-4 zero-sums. The fiber compositions reveal a pattern: when v₁₈ lands in fiber 2, it combines with three vectors from fiber 1 to form a zero-sum; in fiber 3, it takes one from F_0 and two from F_1; in fiber 4, it takes two from F_0 and one from F_1. Each configuration produces exactly a weight-4 zero-sum with support size r+1, which is within the bound for p=5.
+
+Now I'm noticing these are "simple" zero-sums where every coefficient equals 1, meaning the weight matches the support size. This connects to the Davenport constant for C_p^r: any sequence of r(p-1)+1 elements must contain a nonempty zero-sum subsequence. The key insight is that finding k ≤ p vectors that sum to zero (each with multiplicity 1) is sufficient, and this constraint becomes tighter as rank increases.
+
+For the specific case of r = 3 and p = 5, the Davenport constant D(C_5^4) = 17, which is less than the 18 vectors we have available. So a zero-sum subsequence definitely exists among our vectors, but I need to verify whether its length stays within the bound of p = 5.
+
+When p gets large, the Davenport constant grows as 4p - 3, which quickly exceeds 18. This means the Davenport constant approach breaks down for larger primes—we can't guarantee a zero-sum just from the group structure alone. The real power comes from the specific constraint that our vectors are non-proportional with multiplicity p - 1, which forces a zero-sum of the right length.
+
+The η constant is what captures this: with 17(p-1) + 1 elements total (17 distinct vectors, each repeated p-1 times, plus one more), we're guaranteed a zero-sum subsequence of bounded length.
+
+So with 18 distinct vectors each appearing p-1 times, I have 18(p-1) total elements, which exceeds η(C_p^4) ≤ 17(p-1) + 1 for p ≥ 3, confirming that 18 vectors suffice.
+
+Now I'm thinking about what I can actually prove rigorously versus what remains open. The Fiber Threshold Lemma is something I can formalize cleanly: if some fiber has size at least α(r) + 2, then...
+
+Actually, let me lay out the concrete results I can establish. Beyond the fiber threshold approach, I can prove that if vectors don't span the full space, the lower-rank η bound handles it. For any zero-sum-free set of size 2α(r) + 2, the Adaptive Hyperplane Lemma tells me that every linear form produces a specific fiber structure: the kernel fiber has size at most α(r), non-kernel fibers have size at most α(r) + 1, and at least three fibers are nonempty. Then for any pair of non-kernel fibers, I can construct compatible weights that...
+
+Now I'm exploring whether three vectors from different fibers can always be arranged to form a collinear triple with the right properties. The idea is that if we have vectors distributed across multiple fibers under a linear form, we should be able to find three that satisfy both a collinearity condition and a zero-sum constraint simultaneously. I'm trying to pin down the exact non-degeneracy conditions for the rank-3 theorem—specifically what constraints on a, b, c ∈ F_p* guarantee the existence of μ with the desired property, and whether the condition is a+b+c ≡ 0 mod p or something else entirely. I see the apparent contradiction now—the rank-3 theorem covers the case where a+b+c ≠ 0 with weight strictly less than p, while the collinear triple case with a+b+c ≡ 0 gives weight exactly p, so both fit within the ≤ p bound. This means any collinear triple without pairwise degeneracies yields a weight-≤-p zero-sum, and the only real obstruction occurs when two coefficients sum to zero.
+
+When α = -β, the zero-sum relation simplifies so that v₃ becomes a scalar multiple of the difference v₂ - v₁, which characterizes pairwise degeneracy geometrically. If every collinear triple in S has this property, that's an extremely restrictive structural condition—it forces a very specific combinatorial arrangement in projective space. generate is called... hmm, I don't know a standard term. Let me think about what it means.
+
+If v₁, v₂, v₃ are collinear with v₃ ∝ v₂ - v₁ (after appropriate normalization), this means the projective point [v₃] is determined by [v₁] and [v₂]. Specifically, [v₃] is the "difference point" of [v₁] and [v₂] on the line through them.
+
+For a line L in PG(r, F_p) containing q+1 = p+1 points (it's PG(1, F_p)): the pairwise degeneracy condition means that for any three points on L ∩ S, one is the "difference point" of the other two.
+
+So what does this constraint actually look like for a subset of PG(1, F_p)? If I think of the line as F_p ∪ {∞}, then for any three points a, b, c in my subset, one of them must be a nonzero scalar multiple of the difference between the other two. In the affine chart, this means c = λ(b-a) for some λ ∈ F_p*, or equivalently, the three points satisfy one of the cyclic difference relations. This is getting intricate, so let me work through what this actually constrains. α(r) + 1, which means f is bounded by how many fibers can be nonempty given these constraints. I'm analyzing the structure of these fibers to understand how the dependency constraints propagate through the projection.
+
+Now I'm exploring whether I can use a different projection to merge two non-kernel fibers together. If I can find a linear form that assigns the same value to vectors in both F_{c₁} and F_{c₂}, I could combine them and apply the sumset bounds more effectively.
+
+But I'm running into a problem—there's no linear form that's constant across both fibers simultaneously unless they happen to lie in the same hyperplane, which they don't. Changing the projection doesn't actually merge the fibers in the way I need.
+
+Let me step back and try something different. Instead of working with fiber induction, I'll apply the polynomial method more directly to count weighted zero-sums of weight at most p among my 2α(r)+2 vectors.
+
+I'm constructing a polynomial that evaluates to 1 precisely when the vectors sum to zero modulo p, and I need to incorporate the weight constraint—that the sum of coefficients is at most p. The key insight is using a polynomial that detects when the coefficient sum satisfies this bound, then counting how many coefficient vectors make the entire expression nonzero.
+
+The challenge is that "Σ xᵢ ≤ p" isn't naturally expressible as a polynomial condition over F_p, since it's an integer inequality rather than a modular arithmetic property. I'm realizing the polynomial method has fundamental limitations here—it works beautifully for detecting linear dependencies modulo p, but integer bounds require a different approach.
+
+Maybe I can leverage Alon's Combinatorial Nullstellensatz instead. The idea is to construct a polynomial that vanishes on all "bad" solutions—those where either Σxᵢvᵢ ≠ 0 or the sum Σxᵢ falls outside the range [1, p]—and then show this polynomial must have a nonzero coefficient on some monomial with bounded degree, which would contradict the assumption that all solutions are bad.
+
+Actually, let me think about this differently: I can partition the solutions by their weight w = Σxᵢ and count how many solutions exist for each weight where Σxᵢvᵢ = 0, then show that at least one of these counts must be positive. p}. Since Σxᵢ = p ≡ 0 mod p, this is the number of zero-sum subsequences of length exactly p (in the sequence sense). This is what the s constant counts.
+
+For w < p: N_w = #{x : Σxᵢvᵢ = 0, Σxᵢ = w (as integers)}. Since w < p and xᵢ ∈ {0,...,p-1}, Σxᵢ = w as integers iff Σxᵢ ≡ w mod p.
+
+So N_w counts solutions where the vectors sum to zero in F_p^{r+1} and the coordinates sum to w in F_p. This gives me r+2 linear constraints over n variables, and the number of solutions depends on the rank of the coefficient matrix formed by the vector coordinates and the all-ones row. Generically this matrix has full rank r+2 when the all-ones vector isn't in the span of the original vectors, which means the number of solutions is p^{n-r-2}. span of the v-rows.
+
+The v-rows have rank r+1 (since the vectors span F_p^{r+1}). The all-ones vector (1,...,1) is in the row span iff there exists a linear functional ℓ ∈ (F_p^{r+1})* with ℓ(vᵢ) = 1 for all i. This means all vectors lie on the affine hyperplane {x : ℓ(x) = 1}. If n ≥ 2 and the vectors span, this is possible but restrictive.
+
+If rank(M) = r+2, then for each weight w ∈ F_p, the system Σxᵢvᵢ = 0, Σxᵢ = w has exactly p^{n-r-2} solutions. Summing over all weights gives p^{n-r-1} total solutions, and excluding the trivial zero solution means there are at least p^{n-r-1} - 1 nontrivial weighted zero-sums when n ≥ r+2. Let me verify this is actually correct.
+
+The key insight is that N_0 (solutions with Σxᵢ ≡ 0 mod p) contains p^{n-r-2} solutions, but these include the zero solution at integer weight 0, plus solutions at integer weights p, 2p, 3p, and so on. The remaining weights 1 through p-1 each contribute p^{n-r-2} solutions as well.
+
+Now I'm working through the constraint that for weights w ∈ {1,...,p-1}, if Σxᵢ ≡ w mod p and Σxᵢ ≤ p, then Σxᵢ must equal w exactly. So when w = 0 mod p, the sum can only be 0 or p given the constraint Σxᵢ ≤ p. The case Σxᵢ = 0 forces all xᵢ = 0 since they're non-negative. For the general count, I need N_w to represent solutions where Σxᵢ ≡ w mod p and the actual sum equals w, but I'm realizing that N_w as I've defined it counts all solutions congruent to w mod p, not just those with sum exactly w. , not just those with Σxᵢ = w. Some of these have Σxᵢ = w + p, w + 2p, etc. So the actual count of integer-weight-w solutions is:
+
+N_w^{exact} = #{x ∈ {0,...,p-1}^n : Σxᵢvᵢ = 0, Σxᵢ = w (as integer)}
+
+And N_w (mod p) = Σ_{k=0}^{⌊n(p-1)/p⌋} N_{w+kp}^{exact}.
+
+So N_w^{exact} ≤ N_w (mod p) = p^{n-r-2}. And N_w^{exact} could be much smaller.
+
+For w = 1, I need exactly one coordinate equal to 1 and the rest 0, which means Σxᵢvᵢ = vⱼ for some j. Since all vᵢ are nonzero, there's no solution, so N_1^{exact} = 0. This shows the linear algebra approach over F_p conflates solutions with different integer weights, overestimating the true count, and finding the exact answer requires more careful analysis.
+
+The polynomial method doesn't directly apply to η because integer inequalities don't translate to polynomial conditions over F_p. This is the core difficulty mentioned in the original document. So I need a different approach—specifically, I'm exploring whether we can adaptively choose a projection that guarantees at most 2 nonempty fibers for any ZSF set, which would let the two-fiber bound finish the problem.
+
+The extremal construction achieves this for its natural projection, but I'm trying to determine if every ZSF set of size 2α(r)+2 admits such a projection. I'm attempting to construct a counterexample by taking the extremal set and adding one more vector to see if all projections then produce at least 3 fibers.
+
+When I add a vector outside the original two fibers, the first coordinate projection splits into 3 fibers, but other linear projections might compress this back down to 2. The challenge is whether I can always find such a projection, or if there's a configuration where every linear form necessarily creates 3 or more fibers—and with roughly p^4 possible linear forms to check, this becomes a computational question about whether at least one of them works. The question becomes whether 18 points in projective 3-space over F_p can always be covered by 2 hyperplanes. Since each hyperplane contains p²+p+1 points, two of them cover 2(p²+p+1) points, which exceeds 18 for p ≥ 5—so it's theoretically possible but not guaranteed for a generic configuration. This suggests the Projection Choice Lemma needs a different approach.
+
+Rather than relying on projection arguments, I need to develop a more refined inductive framework that directly identifies where the obstruction occurs and reduces everything to a specific combinatorial condition on zero-sum-free sets. The key structural constraint is that for a ZSF set S of extremal size, the fiber sizes are tightly bounded: the zero fiber has at most α(r) points, while nonzero fibers have at most α(r)+1 points, and this constraint is what drives the whole argument. Now I need to think about what happens when vectors from different fibers combine in a zero-sum. If I take vectors from fibers c₁, ..., c_k with coefficients s₁, ..., s_k, the first coordinate gives me a constraint: the fiber indices must sum to zero mod p. For a simple case where all coefficients equal 1, this means I need the fiber indices themselves to sum to zero mod p.
+
+I'm realizing I've been going in circles here. Let me try a completely different angle using the slice rank method from additive combinatorics—the same technique Ellenberg and Gijswijt used to solve the capset problem. This bounds the size of sets that avoid certain patterns, and it might give me the leverage I need here.
+
+The issue is that slice rank typically produces exponential bounds that are sub-exponential in the dimension, whereas I already have an exponential bound in terms of p. Plus, the method works best over small fields like F₃ and doesn't naturally give bounds parametrized by p the way I need. So this probably isn't the right path either.
+
+What I should focus on instead is a multi-fiber induction strategy using Davenport-like arguments—that seems like my most concrete option right now. I'm realizing the key insight is that when two non-kernel fibers have enough vectors combined—at least α(r)+2—we can force a weighted zero-sum using elements from both fibers and possibly the kernel fiber. Let me think about how the projection map from F_p^{r+1} down to F_p^r could help establish this. When v and u share the same projection but differ in their first coordinates, I can construct linear combinations to find vectors in the kernel. The combination c₂v - c₁u gives a nonzero vector since c₁ ≠ c₂, and another linear combination v + (-c₁/c₂)u produces a vector with zero first coordinate, which constrains what π(v) can be.
+
+For this to work out, I need π(v) = 0, which forces both v and u to be multiples of e₁. But that contradicts my assumption that they're non-proportional—if they're both multiples of e₁, they must be proportional. So vectors from different fibers can't have the same projection without violating the non-proportionality condition, meaning projections from distinct fibers are always different.
+
+Actually, wait—I'm confusing myself. If π(v) = π(u) for v in one fiber and u in another, that just means v - u is in the kernel, so v = u + (c₁ - c₂)e₁. That doesn't force v and u to be proportional at all. Let me check with a concrete example: v = (2, 1, 0, 0) and u = (3, 1, 0, 0) have the same projection but aren't proportional since there's no single scalar that works for both coordinates.
+
+So when I'm looking at the union of two fibers, the distinct projections could overlap significantly—the minimum number of distinct projections across both fibers is just the size of the larger set if all smaller projections match up with larger ones.
+
+Now I'm trying to apply the η or s bounds to this union, but the complication is that these fibers have different first coordinates, so any zero-sum constraint needs to satisfy the modular condition on the first coordinate sum. Let me step back and think about the two-fiber bound more directly—when vectors come from just fibers F₀ and F_c, the bound shows that 2α(r)+2 vectors must contain a zero-sum, and the proof handles this by splitting into cases depending on whether |F₀| exceeds α(r)+1 or stays smaller.
+
+For three fibers, I can extend this case analysis: if |F₀| ≥ α(r)+1 or either of the non-kernel fibers has size at least α(r)+2, I'm done. Otherwise, all three fiber sizes are bounded by α(r), α(r)+1, and α(r)+1 respectively, which sums to at most 3α(r)+2—but I only need 2α(r)+2 vectors to guarantee a zero-sum, so there's room to work with here.
+
+The crucial insight is that with two fibers, the total capacity 2α(r)+1 is too tight to accommodate 2α(r)+2 vectors, which forces one fiber to be large. But with three fibers, the bound 3α(r)+2 is loose enough that individual fiber sizes don't create a contradiction. This means I need to look across fibers instead—I should try combining two non-kernel fibers into a single effective fiber and reapply the two-fiber argument.
+
+I'm exploring whether a change of basis could merge F_{c₁} and F_{c₂} into the same fiber level. The issue is that a linear form w' would need to assign the same value to all vectors in both fibers, but since w' depends on the vector itself and not just its w-value, this doesn't work directly. I'm thinking about whether I can regroup the fibers differently to force a tighter constraint. different linear form w' and check whether F_{c₁} and F_{c₂} (under the original w) merge into the same fiber under w'?
+
+For a specific pair v ∈ F_{c₁}, u ∈ F_{c₂}: w'(v) = w'(u) iff w'(v-u) = 0. Since v-u has first coordinate c₁-c₂ ≠ 0 and other coordinates depending on v, u, this is a condition on w'.
+
+For ALL pairs to merge: w' must vanish on all differences within F_{c₁} and within F_{c₂}, and take the same value on both fibers. When a₁ = 1, the single vector in F_{c₁} automatically satisfies the constancy condition, so I just need to check the compatibility with F_{c₂}.
+
+This is getting quite involved, so let me refocus on what I can actually prove cleanly. The key insight is that for small fibers, merging becomes feasible, and I should formulate a theorem that captures this inductive progress.
+
+The condition I need is that when we have enough vectors spread across multiple non-kernel fibers, one of three things must happen: either a single fiber becomes large enough to apply my threshold argument, or I can find an alternative linear form that collapses everything into just two fibers, or I can extract a non-degenerate collinear triple from different fibers.
+
+But I'm realizing I can't establish (b) and (c) rigorously without additional constraints. Let me step back and think about what's actually provable here, and more importantly, what the underlying structure of this problem really demands.
+
+The key insight is that the extremal construction has a very particular form: two copies of the rank-(r-1) extremal set plus the vector e₁. The recurrence α(r+1) = 2α(r)+1 captures this exactly—each copy contributes α(r) vectors and e₁ contributes one more. The upper bound should match because any ZSF set achieving 2α(r)+1 vectors must essentially replicate this doubled structure, and adding even one more vector would destroy that structure.
+
+This points toward an extremal uniqueness argument: if I can show that the doubled construction is the only way (up to equivalence) to reach 2α(r)+1 vectors, then the upper bound follows automatically—the (2α(r)+2)-th vector would necessarily create a zero-sum. At rank 3, the extremal set is computationally verified to be unique up to GL action. At rank 4, the 17-vector extremal set is exactly the doubled A₈ plus e₁, and computational verification shows all 607 possible 18th vectors produce a zero-sum. If this extremal uniqueness holds inductively at every rank, the proof would be complete, but establishing this rigorously remains the challenge.
+
+Let me shift to a more direct approach using fiber structure. With 2α(r)+2 vectors and a chosen weight w = x₁, I partition into the kernel fiber F₀ and non-kernel fibers with sizes n₁ ≥ n₂ ≥ ... ≥ n_f. The Fiber Threshold Lemma handles the case where the largest fiber exceeds α(r)+2, so I focus on the harder case where n₁ ≤ α(r)+1.
+
+Now I'm exploring whether I can apply the s-constant across multiple fibers simultaneously rather than within a single fiber. The idea is to find a "linking" vector in the kernel fiber that creates a zero-sum spanning multiple non-kernel fibers, which would give me the cross-fiber structure I need. Linking idea**: For v₁ ∈ F_{c₁} and v₂ ∈ F_{c₂}, consider the combination s₁v₁ + s₂v₂ with s₁c₁ + s₂c₂ ≡ 0 mod p. The result is a vector in F_0 (first coordinate zero). If this vector is the NEGATIVE of a weighted sum of vectors in F_0 with weight ≤ p - s₁ - s₂, we win.
+
+Setting s₁ = c₂ and s₂ = p - c₁ satisfies the modular constraint, but the weight becomes p + c₂ - c₁, which exceeds p when c₂ > c₁. I need to find a better approach that keeps the weight manageable. c₂, weight = p - (c₁ - c₂) < p. Then the projection is c₂ π(v₁) + (p-c₁) π(v₂) = c₂ π(v₁) - c₁ π(v₂). This is a specific vector in F_p^r.
+
+For this to be a zero-sum, we need the remaining weight budget p - (p + c₂ - c₁) = c₁ - c₂ to "cancel" c₂ π(v₁) - c₁ π(v₂) using vectors from F_0. But c₁ - c₂ could be small (even 1), making it hard.
+
+OK I think I need to try a smarter choice of s₁, s₂.
+
+For s₁c₁ + s₂c₂ ≡ 0 mod p, I can set s₁ = 1 and solve for s₂ = p - c₁c₂^{-1}. When c₁ = c₂ (same fiber), this gives weight p, recovering the single-fiber case. For distinct fibers, the weight becomes 1 + p - c₁c₂^{-1}.
+
+When c₁c₂^{-1} ranges from 2 to p-1, the weight is p + 1 - c₁c₂^{-1}, leaving a remaining budget of c₁c₂^{-1} - 1 to work with. Using one vector from each fiber with these coefficients gives a partial sum in F_0, but I need to check if the projection constraint can be satisfied with the leftover weight. ₂^{-1} - 1 is large enough, we might represent -h, but when c₁c₂^{-1} = 2, the budget shrinks to just 1, meaning we'd need some u ∈ F_0 with u = -h exactly—a very restrictive constraint. The real question is whether I can choose v₁ and v₂ from their fibers such that -h actually lies in F_0, which depends entirely on the specific vectors involved. Alternatively, I could use larger coefficients for s₁ to expand the weight budget available in the kernel.
+
+Let me set s₁ = k and work out the weight: s₂ = p - kc₁c₂^{-1}, giving total weight p + k(1 - c₁c₂^{-1}). When c₁c₂^{-1} > 1, this ratio becomes negative, so I need to reparameterize. Let me define d = c₁c₂^{-1} (mod p) as an element of F_p*, then s₂ = p - s₁d (mod p), and for s₂ to stay in {1,...,p-1}, I need s₁d to also land in that range modulo p.
+
+Since both s₁ and d are nonzero in F_p*, the product s₁d is always nonzero, so s₂ = ⟨p - s₁d⟩ is well-defined and stays in {1,...,p-1}. The weight becomes s₁ + s₂ = s₁ + ⟨-s₁d⟩, where the angle brackets denote reduction modulo p to {1,...,p-1}.
+
+Now I'm reconsidering whether two vectors alone can produce a zero-sum. Since v₁ and v₂ are non-proportional (they come from different fibers), they span a 2-dimensional subspace with the zero vector, so a relation s₁v₁ + s₂v₂ = 0 would require proportionality—which doesn't hold. What I'm actually looking at is partial sums of the form s₁v₁ + s₂v₂ = h where h lies in some subspace F_0.
+
+To complete the zero-sum, I need to cancel h using kernel vectors from F_0. The real question becomes: given h ∈ F_0 and a weight budget w₀, can I represent -h as a sum of vectors from F_0 with bounded total weight? This is the η-representability problem—whether -h decomposes as Σt_j u_j with u_j ∈ F_0 and Σt_j ≤ w₀. If F_0 is sufficiently large and w₀ is large enough, the η bound at rank r should guarantee this is possible.
+
+But the η bound actually characterizes zero-sums, not arbitrary target vectors. For general targets, I need a representation version of η that asks: given nonzero non-proportional vectors u₁, ..., u_m ∈ F_p^r, what's the maximum weight w₀ where not everything in F_p^r is representable as Σt_j u_j with Σt_j ≤ w₀? When w₀ = p and m ≥ α(r)+1, the η bound guarantees 0 is representable, but -h might not be for small w₀. This approach is getting unwieldy and I'm not converging on a clean result, so I should step back and reconsider the whole strategy.
+
+Let me focus on what I can actually prove cleanly: a complete reduction showing that the multi-fiber case is the unique obstruction, paired with a specific sufficient condition that makes it tractable. I'm formulating a theorem that says for r ≥ 3 and odd primes p ≥ 5, if η(C_p^r) satisfies a certain bound in terms of α(r), then η(C_p^{r+1}) is bounded by (2α(r)+1)(p-1)+1 if and only if a specific multi-fiber condition (MF_r) holds for sets of 2α(r)+2 nonzero non-proportional vectors.
+
+The condition requires that for any such set and any linear form partitioning the space into fibers with controlled sizes, we can find a weighted zero-sum with weight at most p. I can further restrict this to sets that span the full space and have at least three nonempty fibers, which makes the condition more concrete. Now I'm working through the forward direction of the proof, starting with a set S of the required size and showing how the multi-fiber condition forces the desired bound on η(C_p^{r+1}).
+
+For the first case, when S doesn't span the full space, it lives in a lower-dimensional subspace where I can apply the inductive hypothesis. Since α grows strictly for r ≥ 3, the size of S exceeds what's needed in the lower dimension, and the total sequence length from multiplying by p-1 surpasses the bound for that dimension.
+
+Now I'm checking the base cases for smaller dimensions. The formula α(d) = 9·2^{d-3}-1 applies for d ≥ 3, but I need to handle d < 3 separately since those follow from the EGZ variant and have their own bounds.
+
+For the main argument, I'm verifying that when S spans the full space F_p^{r+1}, the size condition |S| = 2α(r)+2 is sufficient because α grows exponentially, making α(d)+2 always less than 2α(r)+2 for d ≤ r.
+
+Now I'm working through the remaining cases systematically: when |F_0| exceeds α(r)+1, I apply the kernel argument; when some nonzero fiber |F_c| ≥ α(r)+2, the Fiber Threshold Lemma handles it; and when all fibers stay bounded by α(r)+1, I use the main result (MF_r). I'm also checking the edge case where there are only two nonempty fibers with limited sizes, which requires careful accounting of the total cardinality. = α(r)+1. The constraint max |F_c| ≤ α(r)+1 is satisfied with equality, so this works as a Case (iv) scenario. Now I need to verify this against the two-fiber bound: if all vectors fit in at most 2 fibers, then α(r+1) ≤ 2α(r)+1, meaning 2α(r)+2 vectors distributed across 2 fibers must have a zero-sum. The key insight is that this bound holds regardless of whether the kernel is empty, so let me check if the proof applies here.
+
+For any two fibers F_{c₁} and F_{c₂} with c₁ ≠ c₂, I can shift the linear functional w to w' = w - c₁, which transforms the fibers to {0, c₂ - c₁}. This means the two-fiber bound actually applies to any pair of fibers, not just those containing the kernel. So I can safely restrict (MF_r) to sets with at least 3 nonempty fibers.
+
+Now moving to Direction 2 and examining η(C_p^{r+...
+
+The implication from the η bound to (MF_r) is straightforward—(MF_r) is just a special case where any set meeting those hypotheses has 2α(r)+2 vectors, and the η bound guarantees a zero-sum exists. This establishes that the reduction is an equivalence, pinpointing (MF_r) as the exact gap in the problem.
+
+So what can I actually say about (MF_r)? I'm looking for sufficient conditions that would make it tractable, particularly focusing on how cross-fiber interactions might force zero-sums to exist.
+
+I'm defining a cross-fiber sumset that captures all possible projection sums from pairs of vectors in two different fibers, where the first coordinates cancel out and the total weight is controlled. A cross-fiber zero-sum using these fibers and the zero fiber would exist if I can find compatible weights that satisfy certain balance conditions.
+
+Now I'm working through a lemma about the size of these cross-fiber sumsets—specifically, for two fibers with sizes a₁ and a₂, I'm trying to establish a lower bound. When w = 2, the sumset includes specific linear combinations of projections from both fibers, and I'm applying Cauchy-Davenport to analyze how the projections interact.
+
+But I realize Cauchy-Davenport only works in F_p itself, not in higher-dimensional spaces like F_p^r. For sumsets in vector spaces, I need to use Kneser's theorem instead, which handles the case where the sumset is smaller than expected by relating it to periodic structures. In F_p^r, those periodic structures are sub-vector spaces, and Kneser's theorem tells me how the sumset size relates to these subgroups.
+
+Let me refocus on what I can actually prove that's new. I'm thinking about a fiber merging lemma: if I have a set of nonzero, non-proportional vectors in F_p^{r+1} that span the whole space, then for any two vectors that aren't proportional to each other, there should be many linear forms that can distinguish them in a useful way.
+
+Actually, I'm realizing this approach isn't quite working either. Let me step back and think about the core problem differently—I need to figure out what structure I can guarantee when I have 2α(r)+2 nonzero non-proportional vectors in F_p^{r+1}.
+
+The Davenport constant for C_p^{r+1} is (r+1)(p-1)+1, which bounds the length of any sequence guaranteed to contain a zero-sum subsequence. If I treat each of my vectors as having multiplicity p-1, then my total sequence length is (2α(r)+2)(p-1). For the Davenport constant to guarantee a zero-sum, I need this to exceed the bound, which simplifies to requiring 2α(r)+1 ≥ r+1 when p ≥ 3. Since α(r) grows sufficiently large, this condition should hold.
+
+But here's the issue: the Davenport constant only guarantees existence of a zero-sum subsequence, not control over its length. The subsequence could be as long as D itself, which is much larger than p for r ≥ 2. The η constant is what I actually need—it's the length-controlled analogue of D.
+
+Looking at how the Olson-type proofs establish D(C_p^r) = r(p-1)+1, they rely on the Chevalley-Warning theorem. The argument shows that if no zero-sum exists, a certain polynomial system would have no nontrivial solutions, which contradicts CW. The degree counting works out perfectly: r equations of degree p-1 in r(p-1)+1 variables gives a total degree of r(p-1), which is strictly less than the number of variables, making the CW theorem applicable.
+
+For η, I need zero-sums of weight at most p, which adds a length constraint. The challenge is whether I can incorporate a weight constraint as a polynomial equation and still maintain the degree count that makes CW work. Over F_p, the weight constraint Σxᵢ ≤ p is tricky to encode directly, so I'm thinking about a two-stage approach: first handle zero-sums of weight exactly p (the s(G) problem), then address zero-sums of smaller weight using integer constraints.
+
+For the exact weight case, I know s(C_p^r) = η(C_p^r) + p - 1, and by induction s(C_p^r) ≤ (α(r)+1)(p-1)+1. With 2α(r)+2 distinct vectors giving a total sequence length of (2α(r)+2)(p-1), this exceeds the threshold for guaranteeing a length-p zero-sum. But I'm conflating sequence length with the number of distinct elements—η is defined for sequences, not sets. Let me clarify what η(C_p^{r+1}) actually represents: it's the smallest N such that any sequence of N elements from C_p^{r+1} contains a zero-sum subsequence.
+
+Given the bound η(C_p^{r+1}) ≤ (2α(r)+1)(p-1)+1, any sequence of that length must have a zero-sum of length at most p. Since elements in C_p^{r+1} have order p, if any element appears p or more times, those p copies form a zero-sum immediately. So I can assume each element appears at most p-1 times in the sequence.
+
+With N = (2α(r)+1)(p-1)+1, this forces at least 2α(r)+2 distinct elements to appear. Now for the s-constant: since s(C_p^{r+1}) = η(C_p^{r+1}) + p - 1, proving the η bound gives me s ≤ (2α(r)+2)(p-1).
+
+For a single fiber F_c under the inductive hypothesis, s(C_p^r) ≤ (α(r)+1)(p-1)+1, which means I need |F_c|(p-1) ≥ (α(r)+1)(p-1)+1 to guarantee a length-p zero-sum—so |F_c| ≥ α(r)+2. This validates the Fiber Threshold Lemma.
+
+The key insight is that I can leverage the s-constant from lower-rank groups within each fiber, using the projections to establish tighter constraints. are in a low-dimensional subspace of F_p^r. So there's a dual relationship: smaller fiber size constrains the dimensional span of projections, while lower-dimensional spans reduce the fiber size threshold needed for a zero-sum.
+
+The critical observation is that each fiber becomes "maximal" when its projections span dimension d but contain exactly α(d)+1 vectors—just shy of triggering the zero-sum bound. Counting across all non-kernel fibers, I can bound the total number of vectors by summing the maximum fiber sizes weighted by their span dimensions.
+
+For the bound to hold at 2α(r)+2 - |F_0| ≥ α(r)+2, I need enough full-rank fibers (dimension r) to reach this threshold. Since α(r)+1 = 9·2^{r-3}, nearly all fibers must achieve full rank, requiring roughly 1 + 1/α(r) such fibers—essentially one full-rank fiber plus a negligible fractional contribution.
+
+This approach isn't yielding clean results, so let me refocus on what I can actually establish rigorously. I'll state the theorems I can prove cleanly and mark the remaining pieces as precise conjectures to verify.
+
+I have four solid theorems: the inductive reduction that ties the problem to a multi-fiber condition, a result about weighted zero-sums in sufficiently large fibers, a rank reduction argument, and a two-fiber bound. These are all established or follow directly from existing work.
+
+Beyond that, I'm working on a cross-fiber weight budget proposition that would show for any pair of non-kernel fibers and any weight choice in one fiber, there's a compatible weight in the other fiber, though I haven't completed this argument yet. = s₁ + ⟨-s₁c₁c₂^{-1}⟩ = s₁ + p - ⟨s₁c₁c₂^{-1}⟩. I'm trying to apply the Rank-3 theorem here, but I realize I need to work with the identity that ⟨x⟩ + ⟨-x⟩ = p for nonzero elements in F_p, which gives me the weight bound directly for the two-element case.
+
+Now checking the constraint: this sum is at most p when s₁ ≤ ⟨s₁d⟩. When s₁ = 1, I get 1 + p - ⟨d⟩ ≤ p, which holds whenever ⟨d⟩ ≥ 1—always satisfied. So the weight is p + 1 - ⟨d⟩, leaving a remaining budget of ⟨d⟩ - 1. Now I need to examine what happens when d = 1.
+
+When d equals 1 (same fiber), the budget drops to 0 since the weight is exactly p. For d ≠ 1, the budget is at least 1 if ⟨d⟩ ≥ 2, otherwise 0. But I should explore whether choosing s₁ > 1 could yield a better budget. For any s₁, the weight becomes s₁ + p - ⟨s₁d⟩, so the budget is ⟨s₁d⟩ - s₁. To improve the budget, I need to maximize this difference.
+
+Since ⟨s₁d⟩ ranges from 1 to p-1, the difference ⟨s₁d⟩ - s₁ varies from 1 - s₁ to p - 1 - s₁. The best case is when ⟨s₁d⟩ = p-1 and s₁ = 1, giving a budget of p - 2, or if I can find an s₁ where ⟨s₁d⟩ = p-1 exactly, the budget reaches p - 1.
+
+But here's the key insight: when I sum the budget across all possible values of s₁, the total is zero because the sum of ⟨s₁d⟩ over all s₁ equals the sum of s₁ itself. This means the budget values balance out—some are positive, some negative—and I need enough budget to represent the residual vector using kernel vectors.
+
+Now looking at the distribution: roughly half the cases give positive budget in the range {1,...,p-2}, while the other half would require weight greater than p, making them invalid. So I'm working with about half the possible values of s₁. For each valid choice, I can construct a partial sum combining the two vectors with the corresponding budget, and then I need to check whether the negative of this sum can be represented within the available budget.
+
+The real question is whether there's always at least one value of s₁ that makes this work. This hinges on the specific kernel vectors and how the partial sums distribute—it's not obvious. I think the key insight here is to establish a clean reduction theorem paired with a new lemma about extending representations across fibers. The lemma would state that given a sufficiently large set of nonzero non-proportional vectors spanning the space and a linear form with multiple nonempty fibers, we can extend representations from one fiber to another under certain conditions. } → F_p (possibly different from w) such that S has at most 2 nonempty fibers under w', then S contains a weighted zero-sum of weight ≤ p.
+
+**Proof**: Apply the Two-Fiber Bound to the projection w'. ✓
+
+This is trivial. The real content is: when does such a w' exist?
+
+**Lemma (Existence of Two-Fiber Projection)**: For a set S of 2α(r)+2 nonzero non-proportional vectors in F_p^{r+1} with r ≥ 3 and p ≥ 5, if every linear form gives ≥ 3 nonempty fibers, then S contains a weighted zero-sum of weight ≤ p.
+
+THIS would complete the proof! But can I prove it?
+
+If every linear form gives ≥ 3 fibers, that means S avoids being contained in any union of two parallel hyperplanes—what I'd call a thick hyperplane, which is an algebraic set of degree 2. With 2α(r)+2 ≥ 18 points spread out enough to avoid all such thick hyperplanes, S is highly constrained. The question is whether such a spread-out configuration can actually be zero-sum-free, given how restrictive the ZSF condition already is.
+
+The doubled construction (F_0 ∪ F_1 under x₁) is contained in a thick hyperplane, so it's "far" from satisfying the ≥3-fiber condition. This suggests that anything avoiding all thick hyperplanes might be forced to contain a zero-sum. But I need to make this rigorous.
+
+Let me try: if S has ≥ 3 fibers under every projection w, then for any w, the fibers partition S with at least 3 nonempty parts. Each non-kernel fiber has ≤ α(r)+1 vectors, the kernel has ≤ α(r), and the total is 2α(r)+2. So there must be at least 2 non-kernel fibers. But I have ≥ 3 fibers total, and...
+
+Actually, let me think about this differently. Olson's approach for D(C_p^r) = r(p-1)+1 uses a clever structural argument: he shows that if a sequence has no zero-sum, then restricting to cosets of a rank-(r-1) subgroup forces each coset to have ≤ p-1 elements, with exactly r cosets represented. This rigid structure then yields a contradiction. Maybe I can adapt this framework to work with the thick hyperplane condition and the η-bound.
+
+The extremal sequences in Olson-Davenport theory are straightforward—just p-1 copies of each basis vector—but for η, the extremal sets are much more intricate, involving the α(r) parameter and sequences of length (9·2^{r-3}-1)(p-1). Let me check how α(r) scales with r: at r=3, we have α=8, which suggests the bound grows exponentially.
+
+Now I'm noticing something crucial: for the inductive step, I only need to find a zero-sum with weight exactly p, not just at most p. This observation might be the key to unlocking the proof structure. Now I'm working through the relationship between s(G) and η(G) using the formula η(G) = s(G) - exp(G) + 1, which means if I can bound s(G) appropriately, I can derive the desired bound on η(G). I'm working through the algebra more carefully now. If η equals (2α(r)+1)(p-1)+1, then substituting into s = η + p - 1 gives me s = (2α(r)+2)(p-1) + 1, which establishes the equivalence I need.
+
+The key insight is that proving the η bound is equivalent to proving the s bound through this translation, and the s bound claims that any sequence of (α(r+1)+1)(p-1)+1 elements contains a zero-sum subsequence of exactly length p.
+
+But wait—with 2α(r)+2 distinct elements each appearing p-1 times, I only get (α(r+1)+1)(p-1) total elements, which is one short of what the s bound requires. So the equal multiplicity approach alone doesn't work; I need one additional element to reach the threshold, which aligns with why the η bound specifies (2α(r)+1)(p-1)+1 elements total.
+
+Once I have that extra element, either some element appears p times (giving an immediate zero-sum), or all multiplicities stay at p-1, forcing me to work with 2α(r)+2 distinct elements where I must find a zero-sum of length at most p. This confirms the framework matches the problem setup.
+
+Now I'm stepping back from the technical details to identify what's actually provable here. The key insight is that the bound η(C_p^{r+1}) ≤ (2α(r)+1)(p-1)+1 reduces to a precise geometric condition: any set of 2α(r)+2 nonzero non-proportional vectors spanning F_p^{r+1} that distribute across at least 3 fibers under every linear form must contain a zero-sum of bounded length.
+
+The constraint about 3-fiber coverage is quite restrictive—it rules out sets that fit neatly into thick hyperplanes. But I'm realizing the extremal construction actually violates this condition by concentrating in just 2 fibers under certain linear forms, which suggests the 3-spread requirement is doing real work in limiting the size of S.
+
+The Two-Fiber Extension lemma turns out to be straightforward, so the actual challenge is whether 3-spread sets of this magnitude must necessarily contain zero-sums. That's where the open problem lies.
+
+I should consolidate what I've established: the inductive reduction gives a complete equivalence between the η bound at rank r+1 and the multifiber condition, and I have a threshold result on fiber cardinalities that constrains the structure further.
+
+The most interesting finding is the cross-fiber weight budget—for any pair of non-kernel fibers, I can construct valid cross-fiber weights with a specific budget constraint on kernel vectors. Combined with a cancellation lemma for cross-fiber interactions, this might be the key to forcing zero-sums in the 3-spread case. The residual vector needs to be expressible as a weighted combination of kernel vectors within the budget of ⟨d⟩ - 1, and the total weight across all components must stay under p. The critical question is whether, given at most α(r) kernel vectors and a budget up to p-2, I can always construct v₁ and v₂ along with the right kernel combination to achieve a zero-sum. The best-case scenario occurs when ⟨d⟩ = p-1, which happens when d ≡ -1 mod p, giving me the maximum budget of p-2 to work with.
+
+Now I'm examining whether the kernel vectors can represent the negation of the cross-fiber part. If the kernel vectors span the entire space (requiring at least r of them), then any element is representable, but the weight constraint becomes the limiting factor—I need the representation to use weight at most p-2, and I'm trying to understand how representability works for arbitrary sets of kernel vectors. p^r of nonzero vectors, define the "reachability at weight w":
+R(U, w) = {Σ t_j u_j : t_j ∈ {0,...,p-1}, Σ t_j = w}
+
+For w = 1: R(U, 1) = U, size m.
+For w = 2: R(U, 2) ⊇ {u_i + u_j : i < j} ∪ {2u_i : i}, size ≥ m + C(m,2) (if no collisions).
+
+In general, R(U, w) grows with w. For w ≥ D(C_p^r) = r(p-1)+1: R(U, w) ⊇ {0}, so 0 is reachable. But the real question is whether we can hit arbitrary targets, not just zero.
+
+I'm wondering if there's a general principle here: if U spans F_p^r and we have at least r vectors, does every element become reachable once w is large enough? Let me test this with a standard basis. If U = {e₁, ..., e_r}, then at weight w = r, I can form any vector (t₁,...,t_r) where the coordinates sum to r and are all non-negative. This gives me a lot of flexibility in what I can construct.
+
+But checking a concrete example: for r = 3 and w = 3 with p = 5, the reachable targets are only those where coordinates sum to 3, which is just 10 vectors out of 125 total. So clearly not everything is reachable at that weight. For instance, (4,0,0) would need t₁ = 4, but that already uses up the entire weight budget.
+
+Let me reconsider the problem. Maybe the claim only holds when w is large enough relative to m. If I have m spanning vectors and I want to hit every element, I need w to be at least m so I can use each vector once. But even then, I'm constrained to exactly weight w, not at most w, which makes this trickier. Let me think about what happens when I map coefficient tuples to elements—with m ≥ r+1 vectors, the map should be surjective if w is sufficiently large.
+
+Actually, looking at this more carefully: when I impose the weight constraint Σt_i = w, I'm intersecting the fiber of the surjection with a hyperplane. For m ≥ r+2, this intersection should be large enough to guarantee solutions exist for every target and every weight. When m = r+1, I get exactly one solution generically, which means every target is still reachable but with a unique representation.
+
+The key issue I'm realizing is that the "weight" in the algebraic setting is Σt_j mod p, but for the η problem I actually need the integer weight—the sum of the t_j values as integers, where each t_j ∈ {0,...,p-1}. So I need to figure out what integer weights are achievable when representing a given target with m = r+1 vectors.
+
+When the solution is unique modulo p, the integer weight ranges from a minimum (when the F_p solution happens to have small coefficients) up to (r+1)(p-1) in the worst case. For any non-zero target, at least one coefficient must be ≥ 1, so the weight is at least 1. This means with r+1 spanning kernel vectors, I can represent any target in F_p^r, but the integer weight of that representation varies depending on the specific target and solution.
+
+With m ≥ r+2 spanning vectors, I gain additional degrees of freedom—each extra vector introduces a free parameter in the solution space, giving me p different solutions to choose from. The key insight is that among these p solutions, the integer weights will differ, so I can select the one with the smallest weight. For m = r+2 specifically, I'm examining how the solution space behaves when I impose both the target constraint and a weight constraint simultaneously.
+
+As the free parameter λ ranges over F_p, each solution component varies affinely as a_j + b_j λ, and the integer weight becomes a sum of sawtooth functions. By analyzing how these sawtooth functions behave across all choices of λ, I can bound the minimum weight achievable.
+
+This connects directly to the rank-3 theorem from the original proof—which states that for three nonzero elements a, b, c ∈ F_p with a+b+c ≢ 0, there exists a multiplier μ ∈ F_p* such that ⟨μa⟩ + ⟨μb⟩ + ⟨μc⟩ < p. That's precisely this minimization problem: as μ varies, we're minimizing a sum of integer representatives, and the theorem guarantees a bound strictly below p. So the rank-3 result is actually a special case of this broader weighted Davenport-type phenomenon.
+
+Now I'm wondering if this generalizes. For n elements a₁, ..., a_n ∈ F_p*, can we always find some μ ∈ F_p* that keeps Σ⟨μa_j⟩ below some constant C? For n = 3 with a+b+c ≢ 0, we get C = p. When the sum is zero, we hit exactly p. For larger n, the expected value by symmetry is n(p-1)/2, which grows linearly with n.
+
+This means for n ≥ 3, the average weight exceeds p, so we can't guarantee staying below p for all choices of elements. For n = 3 specifically, the average is 3(p-1)/2, which is already at least 6 for p ≥ 5.
+
+Now I'm wondering whether the rank-3 theorem can be extended to handle n = 4. The current proof relies on techniques like Bernoulli numbers and character sums that are specific to three summands, but if I could generalize this approach, it would directly address the support-4 zero-sums I need for the multi-fiber case. For n = 4, the average weight is 2(p-1), which exceeds p even for p = 5, so the minimum could fall either above or below p depending on the specific elements.
+
+Let me examine what happens when a, b, c, d sum to zero modulo p. The weighted sum Σ⟨μa_j⟩ must be a multiple of p, which means it can only take values like p, 2p, 3p, or 4p-4.
+
+Now I'm checking whether we can always find some μ that gives exactly p. If every choice of μ yields a sum of at least 2p, then we'd fail to achieve the minimum of p. Let me test this with p = 5 to see if it's possible for all four values of μ to give sums ≥ 10. I'm verifying that for the example (1,2,3,4) in F_5, every value of μ produces the same sum of 10, which exceeds p=5, suggesting this might be a counterexample to the conjecture.
+
+But I realize this doesn't rule out other dependencies among these four vectors—there could be a different linear combination with smaller coefficients that achieves a weight ≤ p, even if this particular one doesn't. I think there might be another dependency lurking in the larger system that could work. Anyway, I've spent enough time exploring this angle—let me step back and organize what I've actually found into clear, presentable results. I'm going to formulate the key theorems I've developed: an inductive reduction theorem connecting rank-(r+1) η bounds to multi-fiber configurations, a fiber threshold lemma using the s-constant, and a cross-fiber weight budget formula for kernel vectors across non-kernel fibers.
+
+============================================================
+BLOCK 4 (198 chars)
+============================================================
+Good, I found the Grynkiewicz paper. Let me now look up the specific techniques from Reiher's proof of the Kemnitz conjecture and see if there's anything about the η constant for higher-rank groups.
+
+============================================================
+BLOCK 5 (10103 chars)
+============================================================
+Good. Now I have the context on Reiher's proof and Grynkiewicz's generalization. Let me now think deeply and formulate my results.
+
+The key insight from Reiher's proof: he used CW to get congruences on the number of zero-sum subsequences of length p, then combined this with combinatorial counting to show the number must be positive.
+
+For our problem, we want to extend this to higher rank. The difficulty is that CW gives underdetermined systems for higher rank.
+
+Let me now focus on formulating my main results.
+
+## Main Results to Present
+
+### 1. Complete Inductive Reduction Framework
+
+
+The core strategy is to reduce the problem inductively: if I assume the bound holds for rank r, I can establish it for rank r+1 by showing that any ZSF set of sufficient size spanning the full space and distributed across multiple fibers must contain a weighted zero-sum within the weight bound. This transforms the problem into a more tractable geometric condition about fiber distribution.
+
+The Threshold Lemma provides the critical leverage—if any non-kernel fiber concentrates enough vectors, I can immediately construct a zero-sum of weight exactly p. For cases where fibers are more balanced, I use cross-fiber combinations where choosing two fibers with ratio d allows me to construct a weighted zero-sum with total weight p+1-⟨d⟩, staying within budget. The remaining weight capacity ⟨d⟩-1 can then absorb kernel vectors if needed.
+
+The obstruction case with n=4 in F_5 reveals why naive approaches fail: the vector (1,2,3,4) resists weight minimization under rescaling, always forcing weight 2p or higher, which shows the bound is tight and can't be improved without additional structure.
+
+Now I'm considering whether an iterative projection strategy could strengthen the argument. Instead of projecting once and analyzing fibers, what if I project down through dimensions repeatedly—from F_p^{r+1} down to F_p^r, then F_p^{r-1}, and so on until reaching F_p^3 where the η theorem is already established? At each level, I partition into fibers and apply the inductive hypothesis, building up from a proven foundation at the bottom.
+
+The key question is whether I can always choose these projections strategically so that enough vectors survive through all the iterated kernels to reach the rank-3 level with sufficient density to invoke the η theorem there.
+
+Looking at how vectors distribute through the projection sequence: starting with 9·2^{r-2} vectors total, at each projection step k, the iterated kernel accumulates at most α(r-k+1) vectors. After r-2 successive projections, I'm left with vectors in a rank-3 space, and I need to verify this final count is large enough. at rank 3. The iterated kernel has at most α(3) = 8 vectors.
+
+But 8 < 9 = α(3)+1, so the rank-3 η bound doesn't apply (we need α(3)+1 = 9).
+
+So the iterated kernel doesn't accumulate enough vectors. The "excess" vectors are lost to non-kernel fibers at each step.
+
+**However**, the non-kernel fibers at each step also contribute vectors. The total at each step is:
+- Top: 9·2^{r-2}
+- After removing non-kernel (leaving kernel): ≤ α(r) = 9·2^{r-3}-1
+
+So the kernel shrinks by a factor of roughly 2 at each step, which matches the halving of α.
+
+The vectors in non-kernel fibers at each step are trapped there, but I could also project them further and analyze their sub-fibers. This creates a tree structure where each node represents vectors in some affine subspace, and I'm recursively decomposing them into kernel and non-kernel parts at each level. The question then becomes whether zero-sums can be combined across different branches of this tree—which is essentially the standard inductive approach for proving Davenport constant bounds.
+
+The cross-fiber arguments needed to combine zero-sums across branches are the real difficulty here, and I'm not sure this tree perspective yields anything beyond what we already know.
+
+Let me pivot to the saturated kernel approach instead. If the kernel has exactly α(r) vectors—the maximum possible without containing a zero-sum—then by extremal structure results, these vectors form a near-extremal ZSF set in F_p^r. The inductive hypothesis tells us such a set has very constrained structure, and if extremal uniqueness holds, the kernel vectors must essentially be the unique extremal configuration for rank r.
+
+This means the remaining α(r)+2 non-kernel vectors face strict constraints to avoid creating zero-sums with the kernel. The Gap Hypothesis suggests the extremal set has specific gaps in its sumset, and vectors filling those gaps could trigger zero-sums—but I'm speculating without proof at this point.
+
+Let me focus on what I can actually formalize. I've identified three theorems worth stating precisely: an inductive reduction that formalizes known ideas cleanly, a new fiber threshold lemma using s(C_p^r), and a third result that's still taking shape.
+
+Now I need to flesh out the dimensional fiber threshold theorem more carefully, particularly how the fiber projections' dimensionality affects the threshold. } → F_p be a linear form, and F_c a non-kernel fiber with projections spanning a d-dimensional subspace of F_p^r (where 1 ≤ d ≤ r). If |F_c| ≥ α(d)+2, then S contains a weighted zero-sum of weight exactly p using only vectors from F_c.
+
+**Proof**: Within F_c, the projections π(v) lie in a d-dimensional subspace V_d ≅ F_p^d. The s constant for C_p^d is s(C_p^d) = η(C_p^d) + p - 1 ≤ (α(d)+1)(p-1)+1 (using the bound for rank d, which we assume by induction; for d = 3, this is proved).
+
+Since each projection appears with multiplicity p-1, the total sequence length is at least (α(d)+2)(p-1), which exceeds the s-constant threshold. By the zero-sum property, there's a subsequence of length exactly p where the projections cancel out. Since all first coordinates equal c, their sum is c·p ≡ 0 mod p, completing the argument. ✓
+
+**Corollary**: The fiber thresholds by dimension:
+- d = 1: |F_c| ≥ 3 (since α
+
+(1) = 1, and we need 3 to guarantee a zero-sum of length p). For d = 1, the s-constant is 2p-1 by the Erdős-Ginzburg-Ziv theorem, so |F_c|(p-1) must exceed this; |F_c| = 2 gives 2p-2, which falls short, but |F_c| = 3 gives 3p-3 ≥ 2p-1 for p ≥ 3.
+
+For d = 2, Kemnitz's result gives s(C_p^2) = 4p-3, requiring |F_c| ≥ 5 since 4(p-1) = 4p-4 is still insufficient but 5(p-1) = 5p-5 works for p ≥ 2. Now I'm wondering what η represents in this context.
+
+Ah, η(C_p^2) is the standard Davenport constant at 3p-2, so the Olson constant s(C_p^2) = η(C_p^2) + p - 1 = 4p-3 checks out. This gives α(2) = 3, confirming we need |F_c| ≥ 5. For d = 3, the pattern continues with s(C_p^3) = 9p-8 requiring |F_c| ≥ 10, and in general for d = r, the Olson constant follows s(C_p^r) = (α(r)+1)(p-1)+1.
+
+The key insight is that this creates a hierarchy of thresholds based on the dimensional span of the projections—a fiber with many vectors but low-dimensional projections gets a lower threshold, which is powerful. For instance, if a non-kernel fiber has 5 vectors whose projections only span a 2-dimensional subspace, the Kemnitz threshold kicks in and guarantees a zero-sum. In the multi-fiber case at rank 4 over F_5, a fiber with 5 vectors projecting into just F_5^2 would be quite concentrated and trigger this threshold. The dimensional constraint could potentially reduce the multi-fiber case to situations where all fibers achieve full-dimensional coverage.
+
+This dimensional reduction principle means each non-kernel fiber is bounded by the threshold corresponding to its projection dimension—so a fiber projecting onto a line holds at most 2 vectors, a plane at most 4, and so on up to r dimensions. The total across all non-kernel fibers must still exceed α(r)+2, and now I'm examining how these individual fiber bounds interact with that global constraint. size is bounded by α(d_j)+1 where d_j is its projection dimension. Can we use this to get a contradiction?
+
+**Attempt**: Suppose we have f non-kernel fibers with projection dimensions d₁ ≥ d₂ ≥ ... ≥ d_f and sizes n₁, ..., n_f with n_j ≤ α(d_j)+1.
+
+Constraint: Σn_j ≥ α(r)+2.
+
+Also: the projections of ALL fibers together must span F_p^r (if the original vectors span F_p^{r+1}... actually, the projections together with the kernel vectors span F_p^r).
+
+The maximum total is Σ(α(d_j)+1). For this to be ≥ α(r)+2:
+
+If d₁ = r, a single full-rank fiber gives at most α(r)+1 vectors, which falls short of the required α(r)+2 — this is the Fiber Threshold. But with two full-rank fibers, I get 2(α(r)+1) = 2α(r)+2, which easily exceeds α(r)+2. The kernel contributes at most α(r) additional vectors, so the total across kernel and two full-rank fibers is bounded by 3α(r)+2.
+
+Now I'm exploring whether low-rank fibers could create a tighter constraint. If two non-kernel fibers project onto low-dimensional subspaces V₁ and V₂, their combined span dim(V₁ + V₂) might be large enough to force a contradiction. If the combined dimension d = dim(V₁ + V₂) is small enough and we have sufficient vectors from both fibers—at least α(d) + 3 or so—then a cross-fiber zero-sum should exist. But I'm not certain how to prove this rigorously. The challenge is that for a two-vector zero-sum across fibers, we'd need the vectors to be proportional, which is a very restrictive condition.
+
+For multiple vectors from each fiber, the structure becomes more interesting: we're looking for a linear combination from F_{c₁} and another from F_{c₂} that sum to zero, with the first coordinates satisfying c₁Σsᵢ + c₂Σtⱼ = 0 and the projections canceling out, all while keeping the total weight bounded by p. I'm setting up the notation to track these sums more carefully. Now I'm organizing my results for presentation—I have the fiber threshold lemma and its dimensional generalization proven, plus the complete inductive reduction to the multi-fiber case, and I can state the precise cross-fiber weight budget formula along with the proposition showing why the rank-3 technique fails for n=4. I'll lay out the main conjecture on multi-fiber representation and include computational verification tags throughout.

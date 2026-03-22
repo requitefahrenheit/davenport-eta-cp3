@@ -1,0 +1,60 @@
+# Research Briefing (SDGR thread)
+
+**Goal:** Deep-dive research report on three AI-pharma stocks: SDGR (Schrodinger), RLAY (Relay Therapeutics), RXRX (Recursion Pharmaceuticals).
+
+Horizon: September 2026. Retail investor. Medium risk tolerance.
+
+"Done" = markdown file written to ~/claude/multi-agent/sdgr-rlay-rxrx-report.md containing:
+
+  For EACH of the three stocks:
+    1. Current price + market cap (timestamped, sourced)
+    2. Cash, debt, EV — from latest SEC filing with URL
+    3. All confirmed catalysts before Sept 2026 with exact dates and source URLs
+    4. Pipeline summary — what's in clinic, what's AI-driven vs conventional
+    5. Valuation: is it early, fair, or expensive vs the bull case? Show the math.
+    6. Bear case: single most lethal kill condition, probability, source
+    7. Position sizing recommendation with rationale
+
+  Cross-stock section:
+    8. Which one is the best risk-adjusted entry right now and why
+    9. Correlation risk: do these three move together or independently?
+
+  Special focus:
+    - RLAY: What happened at ESMO TAT on March 16, 2026? Zovegalisib data — what was the readout? How did the stock react?
+    - RXRX: $312M convertible note maturity — what is the current refinancing status? Has it been addressed?
+    - SDGR: SGR-3515 Phase 1 — any updates beyond the Q2-2026 guidance?
+
+Every factual claim must have a source URL. No invented numbers. Flag anything unverified.
+
+---
+
+### Round 1  (21:43)
+
+In this research round I scoped the full report and started the special-focus checks: I confirmed Relay’s ESMO TAT session for zovegalisib on Mar 16, 2026 (company press release/globenewswire) and documented that as a scheduled source, but I was not able to locate the actual ESMO abstract, slide deck, press release with the post-presentation data, or any timestamped market quote that would verify the readout or same-day stock reaction — those items are currently unverified and must be pulled from ESMO’s abstract book/platform, Relay’s Mar 16–17 press releases/8-Ks/slides, and exchange/price-history snapshots (concrete next steps: (1) download ESMO TAT 2026 abstract book and session materials for Mar 16, (2) scrape Relay press releases and EDGAR filings for Mar 16–18, (3) pull timestamped price and volume data from Nasdaq/Yahoo/Refinitiv for those dates, and (4) for SDGR and RXRX, retrieve each company’s latest 10-Q/10-K (for cash, debt, EV), investor decks, clinicaltrials.gov records, and any press releases on SGR-3515 and RXRX convertible note refinancing status — I will flag every claim that lacks a direct source URL and avoid estimating figures until I have the SEC/clinical/ESMO artifacts and market snapshots; currently progress is real but incomplete — vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.08** | Tokens: 33,089 in / 1,522 out
+
+### Round 2  (21:46)
+
+We searched company press releases, the SEC filings, Relay’s website, and other retrieved materials and found schedule mentions of a Mar 16, 2026 ESMO TAT presentation for zovegalisib but no primary artifact containing the numerical readout (no ESMO abstract/PDF, no Relay slide deck with the 400 mg BID fed cohort numbers); we also caught one mistaken investor deck for a different company, so the corpus we pulled contains either schedule-only notes or different cohort cuts, not the Mar 16 dataset itself. The evaluator asked for a concrete next step rather than restating the blockage, so I will now go directly to the ESMO 2026 TAT program/abstract system and retrieve the official Mar 16, 2026 abstract/PDF (or session materials) for Relay’s zovegalisib presentation and cross-check any Relay press release or slide deck posted on or immediately after Mar 16 to capture the primary numerical readout and associated stock reaction. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.16** | Tokens: 72,381 in / 3,022 out
+
+### Round 3  (21:50)
+
+I tried to pull Relay Therapeutics’ investor materials to find the March 16, 2026 ESMO TAT slide deck (the most likely primary source for the zovegalisib readout); Relay’s GlobeNewswire PR points to their IR “events‑presentations” page (https://www.globenewswire.com/news-release/2026/02/23/3243021/0/en/Relay-Therapeutics-to-Participate-in-Two-Upcoming-Investor-Conferences-in-March.html), but that IR page returned a 403 Forbidden from this environment so I couldn’t fetch the deck directly; because of that I pivoted to SEC EDGAR (companies often file conference decks as EX‑99 exhibits) and identified an EDGAR exhibit path for a Feb 26, 2026 Relay presentation (https://www.sec.gov/Archives/edgar/data/1812364/000119312526076617/rlay-ex99_1.htm) and will now search EDGAR for any March 2026 8‑K/EX‑99 filings that could contain the post‑ESMO slides/readout; this is a clear, mechanical access blocker (not a content absence) so the next step is targeted retrieval via EDGAR and third‑party mirrors to confirm the March 16 readout (currently unverified). (yellow)
+
+**Cost so far: $0.23** | Tokens: 107,869 in / 3,903 out
+
+### Round 4  (21:52)
+
+I tried to pull Relay Therapeutics’ March‑2026 filings and ESMO TAT readout but ran into a tooling problem: the SEC’s new EDGAR entity page for CIK 0001812364 returned “no filings” even though direct accession pages exist, so I diagnosed the new‑UI endpoint as unreliable for this issuer and decided to stop using it and instead use classic EDGAR (cgi‑bin) and direct accession URLs — that’s real progress on the tooling front, but I didn’t yet fetch the March 16, 2026 ESMO TAT data or the specific 8‑K, so this round was more about fixing the lookup path than producing the report content. Evaluator correctly flagged this as “spinning” — to be concrete, my next proof step is to (1) run a classic EDGAR query for CIK 1812364 with output=atom/count=100 and pull any filings dated March 2026, (2) search sec.gov and Relay’s IR press releases for March 16, 2026 material (ESMO presentation, 8‑K, press release) and download the exact accession and press URLs, and (3) cross‑check ESMO’s official abstract/presentation pages for the TAT/zovegalisib slides; I will capture and paste those exact URLs and timestamps in the next commit so nothing is handwavy. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.27** | Tokens: 141,661 in / 4,756 out
+
+### Round 5  (21:55)
+
+I was assigned to produce a deep-dive markdown report on SDGR, RLAY, and RXRX through Sept 2026, but after five turns the effort ran into a tooling limitation: a worker discovered that this environment blocks direct SEC/EDGAR query URLs unless they first appear via a search result, so we must use an accession-index (search-first → open accession-index → open exhibits) workflow; they proved the constraint with a failed direct-EDGAR attempt and adjusted the retrieval plan. The evaluator aborted the run because, although that operational constraint is now identified (real progress on method), we still failed to retrieve critical primary documents and the March 16, 2026 ESMO TAT readout for RLAY, so the requested markdown report was not produced and continued turns risked repeating access-debugging rather than extracting data. Bottom line: we’ve learned an important, actionable limitation and a new workflow to work around it, but we do not yet have the SEC filings, ESMO readout, or other source URLs needed to complete the report; next steps are to resume using search-first accession URLs or have you supply the specific SEC/IR URLs or PDFs to bypass the block. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.33** | Tokens: 175,331 in / 5,537 out
+

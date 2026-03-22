@@ -1,0 +1,44 @@
+# Team Research Briefing
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+**Threads:** constructor, analyst, theorist
+**Max turns per thread:** 10
+
+---
+
+### CONSTRUCTOR Round 1
+
+I implemented the bitset-DP approach (using 343-bit integers for C7^3) and used it to test short-zero-sum-freeness for candidate supports with multiplicity 6; contrary to the random-search report, the standard 8-element construction A8 (an explicit 8-tuple I tested) is short-zero-sum-free when each element is repeated 6 times, so a sequence of length 48 with no short zero-sum does exist (this supports the lower bound η(C7^3) ≥ 49 rather than refuting it). The code is a straightforward DP over subset-sizes 1..6 updating reachable sums via fast bitset shifts; I also sanity-checked the same construction for p=5 and attempted p=3 but ran into an inconsistency/bug in the p=3 checks that I will clean up. I have not yet done the exhaustive confirmation over all 8-element supports (that search is combinatorially huge and still pending), nor the extended searches (mixed multiplicities, 9-element supports, DFS extensions) or the full upper-bound proof trying to show all sequences of some length must contain a short zero-sum. Progress is real (we found a working 8-support), but more systematic/complete searches and sanity-checking are needed before we can settle η(C7^3): (yellow)
+
+### ANALYST Round 1
+
+The round made real coding progress but is not yet conclusive: the worker implemented the intended 343-bit (bitset) dynamic programming routine and used it to test candidate supports; they report a working DP and that a specific 8-element support A8 was found to be short-zero-sum-free with multiplicity 6 (which, if correct, is exactly the extremal support that justifies the proven lower bound η(C7^3) ≥ 49 and contradicts your earlier random-search failure). However, the transcript does not show the explicit support, the DP witness, or an exhaustive verification, and no systematic proof was produced that either (a) every 8-element support fails (which was your first task) or (b) that the reported A8 has been independently validated; exhaustive checking of all 8-subsets is infeasible directly (choose(342,8) is astronomically large), so the immediate next steps are (1) produce and independently re-run the bitset DP on the reported A8 and dump the bitset states (or a short certificate) so we can fully confirm the discovery, (2) if A8 checks out, try to classify it up to linear automorphism/translation to reduce search space, and (3) otherwise run a structured (not purely random) search / orbit-based enumeration or greedy DFS extensions to find the longest zero-sum-free sequences and to bound the upper threshold; at present the result is promising but unverified. (yellow) = working but unclear if productive.
+
+### THEORIST Round 1
+
+I implemented and tested a fully general “bitset DP” verifier that checks whether a given multiset over C7^3 (the 343-element group (Z/7Z)^3) contains any nonempty subsequence of length ≤7 summing to zero: elements are encoded as integers 0..342, I precomputed the group addition table, and I maintain 343-bit Python integers sets[0..7] where a 1-bit indicates a reachable sum with exactly k terms; as we add copies of a support element we update these bitsets downward from k=7 and immediately reject if 0 becomes reachable. Using this independent implementation I reran random tests (200 fresh random 8-element supports with multiplicity 6) and again found no witness (0/200), corroborating the earlier 0/3000 empirical negative evidence; the verifier is fast (roughly sub-millisecond per 48-term sequence on my laptop) so it’s ready for exhaustive or symmetry-reduced searches. Next I will (1) enumerate 8-point support candidates up to GL(3,7) symmetry and apply geometric filters (e.g. antipodal pairs, affine caps, plane profiles) to get a tractable canonical list to check exhaustively, and (2) in parallel search for longer zero-sum-free sequences via 7-point supports at multiplicity 6, 8-point supports with mixed multiplicities, 9-point supports, and DFS extensions from known length-42 sequences to track the maximum attainable length; if no 8-support survives exhaustive symmetry-reduced checking that would refute η(C7^3) ≥ 49, otherwise finding a witness would be a major discovery. Overall: (yellow) = working but unclear if productive.
+

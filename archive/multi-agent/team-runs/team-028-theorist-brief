@@ -1,0 +1,32 @@
+# Research Briefing (THEORIST thread)
+
+**Goal:** Prove: for a,b,c in F_p* with no pair summing to 0 mod p and a+b+c != 0 mod p,
+the wrap count k(lambda) = floor(([la]+[lb]+[lc])/p) is NOT identically 1.
+
+Equivalently: f(lambda) = [la]+[lb]+[lc] < p for some lambda in F_p*.
+
+By the involution f(l)+f(-l)=3p and sum(k)=p-1: this is equivalent to showing
+k=2 for some lambda (then -lambda gives k=0, f <= p-1).
+
+Verified for p = 5,7,11,13,17,19. Zero exceptions.
+
+---
+
+### Round 1  (00:03)
+
+I tried to prove that if two of the three pair-sums [u]+[v], [u^{-1}]+[vu^{-1}] are each > p then the third must be < p by bounding one of the residues (t = [vu^{-1}]) in terms of A = [u]; the argument boiled down to a crude bound t ≤ 2 which forces a contradiction, but that bound is false (explicit counterexample: p=11, u=7, v=8 gives t=9), so the step fails. The failure taught me that any usable estimate must track the exact small multiple k in Au = 1 + k p and the “excess” d = A + B − p, since t can be large even when A is large; I therefore plan to rework the argument by solving the two Bézout-type relations for s and t simultaneously to get an exact expression for s+t (or else pivot to a combinatorial/pigeonhole counting approach that uses the one-large-per-pair idea). This isn't a dead end—it's a local setback that clarifies what extra arithmetic input is needed—vibe: (yellow).
+
+**Cost so far: $0.15** | Tokens: 11,603 in / 9,348 out
+
+### Round 2  (00:13)
+
+We were trying to prove that for nonzero a,b,c modulo a prime p (with no two summing to 0 and a+b+c ≠ 0) the integer k(λ) = floor(([λa]+[λb]+[λc])/p) cannot equal 1 for every nonzero λ — equivalently that for some λ the three fractional parts sum to < p. On this turn the worker produced a concrete counterexample (p=11, u=7, v=8) showing the auxiliary lemma (†) — which claimed that if two of three certain pair-sums exceed p then the third must be ≤ p−1 — is false, so that local technical route must be abandoned; this is genuine progress because it rules out a dead end rather than wasting more effort on it. The plan now is to recast the problem globally: encode the three “carry” bits coming from each unordered pair (a,b),(b,c),(c,a) for every λ and use a counting/consistency argument over all λ∈F_p* to show the pattern forced by k(λ)=1 for every λ is impossible. Numerical checks for small primes (5–19) showed no counterexamples, and the new combinatorial carry approach is a clear, promising next step. (green)
+
+**Cost so far: $0.23** | Tokens: 21,343 in / 14,167 out
+
+### Round 3  (00:20)
+
+Goal: show there’s some nonzero λ so that the integer parts [λa]+[λb]+[λc] sum to less than p (equivalently the “wrap count” k(λ) is not identically 1). This round produced a clean combinatorial set‑up: for each unordered pair among a,b,c define a 0/1 indicator Y_{xy}(λ) for whether that pair “wraps” mod p, partition F_p* by how many pairs wrap (0,1,2,3) and write linear relations coming from the involution λ↦−λ and the known totals; summing these relations gives a parity contradiction whenever p≡3 (mod 4), so k(λ)=1 for all λ is impossible for those primes (hence the desired λ exists). For p≡1 (mod 4) no immediate parity contradiction arises but the same linear system forces a very rigid 4‑block distribution (t=(p−1)/4, o=3(p−1)/4, s=n=0), and the next step is to exploit the λ↦−λ symmetry inside that refined partition to rule out this remaining configuration unless an antipodal pair exists. Progress is substantial (half the primes settled and a concrete structure for the rest), so vibe: (green) = real progress.
+
+**Cost so far: $0.43** | Tokens: 33,366 in / 27,741 out
+

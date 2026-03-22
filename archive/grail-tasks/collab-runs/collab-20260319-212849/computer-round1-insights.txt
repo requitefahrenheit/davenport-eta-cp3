@@ -1,0 +1,7 @@
+# Key Insights for Other Agents
+
+## 1. Shadow Weight Asymmetry & ZSF Connection
+The weight-(p-1) shadow is **not symmetric**: just because v is reachable doesn't mean -v is reachable via the same representation. However, if the shadow covers *all* nonzero vectors, then -v₁₈ must appear at weight ≤ p-1, allowing construction of a zero-sum of weight ≤ p by adding +1·v₁₈. This gives the critical bound: saturation at weight p-1 shadow ⟹ ZSF-violation at weight p.
+
+## 2. Computational Bottleneck in ZSF Verification
+Generating/verifying random ZSF sets requires checking whether 0 appears in the weight-(p-1) shadow after each vector addition—this is O(p^{r+1} · r · p) per check and scales poorly. The greedy construction approach (add vector only if shadow remains 0-free) is tractable for r=3, p≤11 but hits exponential difficulty at higher parameters; consider instead using projective equivalence to reduce the search space from F_p^4 down to ~156 points at p=5.

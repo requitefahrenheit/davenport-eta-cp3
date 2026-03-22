@@ -1,0 +1,35 @@
+# Research Result
+
+**Goal:** Produce an AI-pharmaceutical stock strategy report for a retail investor with a 6-12 month horizon (target: September 2026).
+
+Core thesis: AI is dramatically compressing drug discovery timelines. The investment question is whether this translates to stock returns before September 2026 — or whether FDA bottlenecks, overvaluation, and hype cycles defer the payoff.
+
+"Done" = a markdown strategy document saved to ~/claude/multi-agent/pharma-strategy-2026.md containing:
+  1. Executive summary (one paragraph, no hedging)
+  2. Tiered watchlist table with columns: Ticker | Company | Tier | AI Thesis | Nearest Catalyst + Date | Bear Case | Position Size %
+  3. Regulatory section: FDA pathway reality vs bull case — with specific 2025-2026 policy references and URLs
+  4. Valuation section: are key names (RXRX, EXAI, others) already priced for the bull case? Actual numbers.
+  5. Final verdict: early, on time, or late to this thesis?
+
+Every factual claim must include a source URL. No unsourced assertions.
+Do NOT pad with generic big pharma unless there is a specific AI-driven catalyst before September 2026.
+Focus where AI is the actual driver of the thesis, not a marketing footnote.
+**Arch:** gpt
+**Turns:** 12
+**Cost:** $0.5076
+
+## Log
+
+
+[Turn 1] The worker listed three catalysts with sources and proposed adding more later, but did not advance toward a specific deliverable beyond assembling a list. No mathematical/proof progress to evaluate; the process is drifting into a “menu/next steps” plan rather than executing one concrete next action. Approaches tried: 0; failures: none; Lakatos threshold not applicable.
+[Turn 2] Turn 2 adds ABSI catalysts with dated windows and sources, but the worker is still only accumulating examples and deferring the actual deliverable (a structured watchlist/table with inclusion rules and “before Sep 2026” filtering). Approaches tried: 0; failures: none; Lakatos threshold not applicable.
+[Turn 3] Turn 3 finally committed to one concrete addition and executed it: added a new, explicitly dated catalyst (XtalPi Q1 2026 Phase I start) with primary-source URLs, and identified a specific obstruction (lack of dated 2026 guidance in primary sources for some Western AI-pharma tickers). Approaches tried: 1 (primary-source catalyst extraction); failures: none; Lakatos threshold not applicable.
+[Turn 4] Turn 4 attempted to build a watchlist skeleton with market caps and catalyst ranges, but left the primary-source URL cells blank and deferred core required columns (cash/debt/EV) while describing a vague “search sweep” blockage. Progress is partial but not self-contained or verifiable as presented. Approaches tried: 1 (primary-source extraction); failures: none; Lakatos threshold not applicable.
+[Turn 5] Turn 5 unblocked a concrete column by extracting RXRX cash from a specific 10‑K balance sheet line and SDGR liquidity from an SEC-filed earnings release exhibit, with citations. The remaining obstruction is now precisely scoped to (i) consistent definition of cash for SDGR and (ii) total debt line items for RXRX/SDGR/ABSI plus ABSI cash. Approaches tried: 1 (primary-source SEC extraction); failures: none; Lakatos threshold not applicable.
+[Turn 6] Turn 6 extracted ABSI cash and debt directly from an SEC 10‑Q and defined total debt explicitly as current + noncurrent portions, enabling EV computation per a clear formula. The remaining work is now to standardize SDGR/RXRX cash definitions from SEC balance sheets and extract their total debt line items to complete EV (and later EV/Revenue) across the watchlist. Approaches tried: 1 (SEC primary extraction); failures: none; Lakatos threshold not applicable.
+[Turn 7] Turn 7 extracted RXRX total debt from two explicit 10‑K balance sheet line items and computed the summed amount, removing another key EV input ambiguity. Only SDGR remains to be standardized (cash & equivalents and total debt from SEC balance sheet) before EV can be computed consistently for RXRX/ABSI/SDGR. Approaches tried: 1 (SEC primary extraction); failures: none; Lakatos threshold not applicable.
+[Turn 8] Turn 8 extracted SDGR cash & equivalents but from the 2024 10‑K, leaving the key target (FY2025 cash & equivalents and debt) still missing and thus still blocking consistent EV computation. The worker identified the obstruction (can’t locate SDGR 2025 10‑K HTML) but did not resolve it or produce an alternative citable extraction path (e.g., XBRL or filing index). Approaches tried: 1 (SEC extraction); failures: none; Lakatos threshold not applicable.
+[Turn 9] Turn 9 precisely diagnosed a technical access blocker: the SDGR FY2025 10‑K exists (index found) but HTML content is inaccessible due to JS/URL safety/fetch limitations. The worker proposed a concrete workaround (use non-JS XBRL instance XML from the same index) but hasn’t yet executed it because they need the correct retrieval/parsing method and tag names. Approaches tried: 1 (SEC extraction) with 1 local technical failure mode; Lakatos threshold not applicable.
+[Turn 10] Turn 10 successfully found a concrete workaround: SEC extracted-XBRL JSON APIs on data.sec.gov with citable documentation, plus the relevant US-GAAP concept names (CashAndCashEquivalentsAtCarryingValue, DebtCurrent, DebtNoncurrent). This resolves the earlier tool/JS blocker and provides a clear path to compute SDGR cash/debt at the 2025-12-31 instant. Approaches tried: 2 (HTML scraping failed due to environment; API-based XBRL extraction now enabled); failures: 1 technical access failure; Lakatos threshold not applicable.
+[Turn 11] Turn 11 reports another environment/tool constraint (can’t open data.sec.gov API URLs) and proposes yet another pivot, but it also contains a likely erroneous accession/index link and still doesn’t execute the promised extraction from SDGR’s accession attachments. This is now a pattern: repeatedly documenting blockers without producing the missing SDGR cash/debt numbers. Approaches tried: 2; failures: 2 technical access constraints; Lakatos threshold not applicable.
+[Turn 12] Turn 12 attempted the concrete extraction step (fetch SDGR EX‑101 instance XML) and hit a hard 500 fetch-layer error; combined with earlier JS and safe-URL restrictions, SDGR FY2025 cash/debt extraction is currently infeasible here. Approaches tried: 3 (HTML/iXBRL, data.sec.gov API, EX‑101 instance) with 3 consistent access failures; Lakatos not applicable (this is an infrastructure dead end, not a conjecture).

@@ -1,0 +1,54 @@
+# Research Briefing (PATTERN thread)
+
+**Goal:** Find the correct general formula for η(C_p³) (the short Davenport constant for rank-3 elementary p-groups). Known: η(C_2³)=8, η(C_3³)=17, η(C_5³)=33. The formula 8(p-1)+1 fits p=3,5 but may fail for p≥7. Compute η(C_7³) to test. Then identify the correct formula and prove it (or prove it for specific primes). If no clean closed form exists, characterize the growth rate and structural regime changes.
+
+---
+
+### Round 1  (18:24)
+
+You want to test whether the short Davenport constant η(C_p^3) follows the simple formula 8(p−1)+1 by computing the p=7 case (so checking whether a “short-zero-sum-free” multiset in C_7^3 of length 48 exists, since η = max length + 1), and the worker’s first round built a fully rigorous, checkable search framework to do that: they recast C_p^3 as F_p^3 and gave an exact dynamic-program/bitset invariant that tracks all k-term sums (k≤p) as elements are added, with an immediate early-rejection rule so a DFS can backtrack as soon as a forbidden short zero-sum appears; they validated the logic on the trivial p=2 case (recovering the known η(C_2^3)=8) and are now set to run a targeted DFS for p=7 to try to realize the 48-length construction or else determine the true maximum length. Overall this is a solid, verifiable first step (framework + validation) but the crucial computation for p=7 hasn’t been done yet, so I’d rate the vibe: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.04** | Tokens: 17,206 in / 1,330 out
+
+### Round 2  (18:27)
+
+You’re trying to determine the exact short Davenport constant η(C_p^3) for elementary p-groups (especially to test whether the conjectured 8(p−1)+1 holds for p=7), and in this round the worker turned a theoretical DP/bitset condition into running code: they implemented sets B_k of achievable sums (B_0={0}, update B_k ← B_k ∪ (B_{k−1}+x) when adding an element x) and validated the routine on the known p=2 case, reproducing η(C_2^3)=8 and correctly detecting the “no short zero-sum” condition (no zero and no repeats for p=2); they’ve logged the DP logic and sample outputs and observed the current implementation will be too slow for p=7, so the next concrete move is to speed it up by precomputing translation tables T_x on bitsets and running a structured DFS to exhaustively compute η(C_7^3); no p=7 value or proof has been produced yet, but the implementation is correct at the base case and there is a clear, realistic plan to scale it up. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.08** | Tokens: 38,793 in / 2,654 out
+
+### Round 3  (18:29)
+
+You replaced a slow brute-force DP over all vectors in (Z/pZ)^3 by a compact “block” bitset encoding that groups coordinates (a,b) into p^2 blocks each holding the p possible c-values as bits, so translating a set by a vector becomes just permuting those blocks and cyclically rotating the bits in each block — an O(p^2) operation with a tiny constant instead of iterating over each set bit, which should make p=7 feasible; you implemented this, cross-checked it against the original slow DP for p=3 on 50 random sequences and a known small test, and it agreed every time; next you’ll embed the fast DP in a DFS to search maximal short-zero-sum-free sequences in C_7^3 and thereby compute η(C_7^3) (equal to that maximal length plus one). Overall this is solid technical progress toward the computation but you haven’t produced the p=7 value or a general formula yet, so I’d rate the vibe: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.14** | Tokens: 65,590 in / 4,563 out
+
+### Round 4  (18:31)
+
+We tested the p=7 case of the short Davenport constant η(C_p^3) (previously η(C_2^3)=8, η(C_3^3)=17, η(C_5^3)=33, and the ansatz 8(p−1)+1 gave 49 for p=7) by searching for short-zero-sum-free sequences in C_7^3: using a randomized greedy construction plus a dynamic-programming certificate, the worker produced an explicit 8-point support A ⊂ F_7^3 whose 6-fold multiplicity multiset A^{[6]} has length 48 and was verified to contain no zero-sum subsequence of length ≤7, so η(C_7^3) ≥ 49 (and this overturns earlier negative heuristics). This is strong evidence that the 8(p−1)+1 formula still holds at p=7, but we do not yet have the matching upper bound (a certified search/DP proof that no short-zero-sum-free sequence of length ≥49 exists), so the exact value is not fully settled. Vibe check: (green) = real progress.
+
+**Cost so far: $0.19** | Tokens: 98,000 in / 6,162 out
+
+### Round 5  (18:33)
+
+Goal: test whether the short Davenport constant η(C7^3) follows the guess 8(p−1)+1 by trying to find a short-zero-sum-free sequence of length 49 in C7^3. What I did: ran an automated backtracking/counts search that models multiplicities ≤6 for each of the 342 nonzero vectors and uses a fast DP to check for short zero-sums; with a 10 s budget it failed to find any length-49 example and only built up to length 38 (it also could not rediscover a known length-48 construction in that time). What that means: the negative search result is algorithmic, not mathematical — the raw DFS over all vectors is astronomically large and hopelessly unstructured, so failure does not prove length 49 is impossible. What I learned and will do next: the right attack is to exploit structure (use the standard reduction that extremal sequences have tiny support, fix GL(3,7) symmetry to cut support types, and enumerate supports of size ≤8–9 and test multiplicity/kernel constraints with the DP), or else pursue theoretical bounds (EGZ-style, isoperimetric/kernel arguments) to get an upper bound; implementing a support-enumeration + symmetry-fixing DP is the committed next step. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.24** | Tokens: 135,544 in / 7,814 out
+
+### Round 6  (18:35)
+
+You made concrete progress toward deciding whether the “8(p−1)+1” guess holds at p=7: using the obvious multiplicity bound (no element can appear ≥7 times) any short-zero-sum-free sequence of length ≥49 would have support size ≥9, so the whole upper-bound question η(C_7^3)≤49 is reduced to ruling out a 9-point-supported short-zero-sum-free configuration; a convenient sufficient test is to check whether every 9-point set A (with the maximal allowed multiplicity 6 on each point, i.e. A^[6]) already forces a short zero-sum. You ran 200 random 9-sets in F_7^3 and found 0/200 that are short-zero-sum-free under that uniform-multiplicity test, so counterexamples (if any) look rare and must be highly structured; the next concrete plan—enumerate 9-sets up to GL(3,7) normalization and run an exact DP check—would either produce a genuine 9-support counterexample (showing η(C_7^3)≥50 and refuting the simple formula) or certify η(C_7^3)=49 and thus support the 8(p−1)+1 pattern at p=7. Vibe check: (yellow) = working but not yet a proof; the reduction is sharp and promising but the exhaustive classification/enumeration step remains to be completed.
+
+**Cost so far: $0.30** | Tokens: 178,450 in / 9,476 out
+
+### Round 7  (18:37)
+
+They aimed to decide whether η(C_7^3) = 49 (so the conjectured linear formula 8(p−1)+1 would still hold at p=7) and made real headway but not a full proof: by bounding multiplicities (≤6) they showed any length‑49 candidate must have support size ≥9 and observed that if the support size is exactly 9 the only way to make 49 with parts ≤6 is the unique pattern “eight elements each repeated 6 times and one element once” (6^8·1^1), so the problem reduces to ruling out that specific pattern; exploiting the GL(3,7) symmetry they normalized three basis vectors and ran 2000 randomized completions of the 9‑set, using a dynamic‑programming test for short zero‑sums of length ≤7, finding no counterexamples, which makes η(C_7^3)=49 plausible; what’s still missing is either an exhaustive symmetry‑reduced enumeration of all 9‑sets (or a structural lemma forcing a short zero‑sum in the 6^8·1^1 case) and, critically, a justified exclusion of possibilities with support size ≥10 (the current reduction only fixes the 9‑support case), so the work is poised between useful computational evidence and an unfinished rigorous exclusion—next concrete step is a fully symmetry‑reduced exhaustive search or a short combinatorial argument eliminating the 6^8·1^1 pattern (or handling larger supports). Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.37** | Tokens: 227,132 in / 11,365 out
+
+### Round 8  (18:37)
+
+Goal was to test whether the apparent pattern η(C_p^3)=8(p−1)+1 holds at p=7 by finding or excluding a short-zero-sum-free sequence of length 8(p−1)=48 (so that one more gives η=49). This round proved a clean rigidity lemma: any short-zero-sum-free sequence of length 8(p−1) whose support has exactly 8 distinct nonzero elements must be exactly uniform (each of the 8 elements occurs p−1 times), so the entire extremal problem reduces to classifying 8-point subsets A of C_p^3 for which A repeated p−1 times is zero-sum-free. That is useful but doesn’t yet resolve the main obstruction (we still must either find such an 8-set for p=7 or prove none exist, and we haven’t completed that check). One concrete next step I will do is an exhaustive, symmetry-reduced computer search over GL(3,7)-orbits of 8-element subsets of C_7^3 to test whether any A^{[6]} is short-zero-sum-free (if none are found we get η(C_7^3)=49; if one is found it refutes the 8(p−1)+1 upper bound), and I will run and report that computation next. Vibe: (yellow) — solid progress (a useful reduction) but the decisive computation/upper bound is still pending.
+
+**Cost so far: $0.43** | Tokens: 281,239 in / 12,601 out
+

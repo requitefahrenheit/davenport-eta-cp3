@@ -1,0 +1,54 @@
+# Research Briefing (CLASSIFIER thread)
+
+**Goal:** Classify ALL extremal short-zero-sum-free supports in C_p³ up to GL(3,p) equivalence, for p=3 and p=5. An 8-element set A ⊂ F_p³\{0} is extremal if A^{[p-1]} has no short zero-sum. How many GL-orbits of extremal supports exist? What geometric/algebraic property characterizes them? Does the characterization explain why extremal supports exist for p=3,5 but possibly not for p=7?
+
+---
+
+### Round 1  (18:47)
+
+We made concrete progress on p=3 but are far from a finished classification: “extremal” means an 8-point subset A of F_p^3\{0} whose multiset of (p−1)-fold sums has no nontrivial short zero-sum, and for p=3 that reduces to forbidding any 2-term (scalar multiple) or 3-term relation a+b+c=0 among the eight points. A randomized computer search over 200k samples already produced on the order of 30 projectively distinct 8-point supports that satisfy this no-small-dependency condition, so there is not a single GL(3,3)-orbit of extremal supports — projective geometry (points in PG(2,3) avoiding certain 3-point sum relations) is the right language to describe them. I stopped short of a full GL(3,3)-orbit enumeration and have not yet treated p=5 or explained (or disproved) existence for p=7; the immediate next steps are (a) implement canonicalization under GL(3,p) to count actual GL-orbits for p=3, (b) run the analogous search/enumeration for p=5, and (c) try to distill a clean geometric/algebraic property (e.g. an “arc-like” avoidance of triple sums) that explains why small p allow extremals while larger p may not. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.14** | Tokens: 45,977 in / 5,463 out
+
+### Round 2  (18:52)
+
+Goal: find all 8-point supports in F_p^3 (nonzero vectors) that are “extremal” meaning no short linear combination of them (with total coefficient sum ≤ p−1) gives zero, up to change-of-basis in GL(3,p). In this round I wrote a GL-canonicalization: for each ordered independent triple in an 8-set apply the unique linear map sending it to the standard basis, sort the transformed points, and take the lexicographically smallest sorted list as the canonical form; two supports are GL-equivalent iff they have the same canonical form. For p=3 I ran 50,000 random 8-sets, tested the simple extremality criterion (for p=3 this just rules out 2-term collinear pairs and 3-term triples summing to 0), and found 22 extremal sets which all collapsed to a single GL-canonical form — strong computational evidence that there is exactly one GL(3,3)-orbit of extremal 8-supports, though it is not yet a proof because exhaustive enumeration timed out. Next steps are to extract the canonical representative, express its clean geometric description in PG(2,3) and prove uniqueness, then run the same workflow for p=5 and investigate structurally why p=7 might fail; overall progress is promising but not conclusive. (yellow)
+
+**Cost so far: $0.31** | Tokens: 120,234 in / 10,993 out
+
+### Round 3  (18:54)
+
+In this round the worker made concrete progress on the p=3 case by finding an explicit 8-point example in F_3^3 that appears to represent the sole GL(3,3)-equivalence class of “extremal” supports (these are 8-point subsets of the nonzero vectors with the forbidden short zero-sum property), giving a canonical representative after fixing an independent triple to the standard basis; concretely the set is {(0,0,1),(0,1,0),(0,1,1),(1,0,0),(1,0,1),(1,1,2),(1,2,2),(2,1,2)}. The next planned steps are to compute simple projective incidence invariants (how many projective lines meet the set in 0,1,2,3 points) and use those to build a rigidity/uniqueness argument that any extremal support must have the same incidence data and hence be GL-equivalent to this model; the worker attempted brute-force and random searches (some timed out) but now has a clean normal form to work from and will try to extend the same strategy to p=5 and to understand obstructions at p=7. Vibe check: (yellow) = working and showing concrete progress for p=3, but the full classification (proof of uniqueness and the p=5/p=7 picture) is not yet complete.
+
+**Cost so far: $0.38** | Tokens: 173,677 in / 13,133 out
+
+### Round 4  (18:56)
+
+We were trying to classify all 8-point “extremal” supports in the 3-dimensional vector space over F_p (meaning the 8-point sets whose (p−1)-fold multi-set has no short zero-sum), focusing on p=3 and p=5; the worker restated a coordinator-provided computation that for p=3 there is a single GL(3,3)-orbit (a canonical model is the seven 0/1-cube nonzero points together with the opposite corner (2,2,2)), gave a proposed projective/incidence fingerprint (three full projective lines and a specific multiset of plane intersection sizes) and stabilizer size 6, but did not derive these facts independently or add a new lemma or verified computation—so the round largely repackaged known data rather than advancing a proof; the evaluator asked for one new concrete thing and for it to be carried out, but the worker did not deliver that, so the next concrete move should be either (A) prove an invariant combinatorial lemma that “no short zero-sum” forces the claimed line/plane incidence counts (thus implying uniqueness up to change of basis), or (B) run an independent, certified search over GL-orbits for p=3 and p=5 to validate the coordinator’s counts and extend/negate existence for p=7; as it stands the work is stuck at repackaging without independent verification or a new lemma, so Vibe check: (red) = stuck or spinning.
+
+**Cost so far: $0.41** | Tokens: 210,819 in / 14,266 out
+
+### Round 5  (18:58)
+
+I verified that a concrete 8-point candidate in F_5^3 — A_8 = {(1,0,0),(1,0,1),(1,1,0),(1,1,1),(2,0,1),(2,1,0),(2,1,2),(2,2,1)} — is indeed extremal (no nontrivial combination of its points with coefficients in {0,…,4} summing to at most 5 gives 0), and I computed a full affine-plane intersection signature for it across all 155 affine planes: counts of points per plane are 0:29, 1:40, 2:60, 3:16, 4:10 (none with ≥5). This gives a concrete GL-invariant to test orbit membership and use in a geometric/algebraic characterization; it also exposed a mismatch with an earlier reported signature (which likely counted a different family of planes or was miscomputed), so that prior confusion is resolved. Methods were a direct short-relation search plus exhaustive counting over affine planes; next steps are to GL-canonicalize and cluster supports by such invariants to enumerate GL-orbits for p=5, finish the analogous p=3 work, and then try to use the resulting geometric description to explain why p=7 may fail to admit extremal supports. Vibe check: (green) = real progress.
+
+**Cost so far: $0.51** | Tokens: 274,427 in / 16,175 out
+
+### Round 6  (19:00)
+
+We made a concrete structural advance: for p=5 the verified 8-point extremal support is an affine cap in AG(3,5) (no three points collinear), checked by enumerating the 28 lines determined by point-pairs and finding each meets the set in exactly two points (so max collinear = 2); this is a GL(3,p)-invariant geometric condition and is therefore a promising classifier for p=5, in contrast to p=3 where extremal configurations necessarily contain collinear triples per earlier invariants. Practically, this means the p=5 classification should start by restricting to 8-point affine caps with a specific plane-intersection distribution (the worker’s code verified the cap property and tested the short-zero-sum condition), and it gives a plausible reason why larger primes like p=7 might fail to admit extremal supports: the cap/zero-sum constraints become incompatible as p grows and more low-weight relations are forced. That said, the full GL-orbit classification for p=5 (and a rigorous nonexistence proof for p=7) is not yet complete—this is a promising structural lead but more work is needed to turn it into a full classification. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.59** | Tokens: 343,851 in / 17,649 out
+
+### Round 7  (19:02)
+
+We resolved a key confusion in this round: the “plane signature” used to identify GL(3,p)-orbits for the p=5 extremal support refers to intersections with the 2D linear subspaces through the origin (projective lines), not all affine planes, and computing both types showed the coordinator’s reported signature {0×7,1×4,2×16,3×4} matches exactly for the linear planes; that means the plane-intersection multiset is a genuine GL-invariant and gives a strong, computable handle for filtering and classifying candidate 8-point supports, the worker produced verifying code and concrete counts, and the next concrete steps are to enumerate GL-orbits of 8-point subsets for p=3 and p=5, check which orbits realize that projective-line signature (and any equivalent algebraic descriptions), and then test whether analogous projective configurations can exist for p=7; Vibe check: (green) = real progress, (yellow) = working but unclear if productive, (red) = stuck or spinning. Current: (green).
+
+**Cost so far: $0.67** | Tokens: 418,500 in / 19,196 out
+
+### Round 8  (19:04)
+
+In this round the researcher re-checked and verified a concrete computational fact about the p=5 candidate: the eight-point support A_8 has no nonzero linear relations whose coefficients lie in {0,…,4} and sum to ≤5 — in other words, the kernel of the 3×8 matrix has no bounded-weight codewords of weight ≤5 — and they re-confirmed the projective/plane intersection signature 0^7,1^4,2^16,3^4 for that support; however no genuinely new invariant or theoretical constraint was derived beyond this verification, and the stated next move (use absence of weight-3,4,5 relations to deduce deterministic constraints on line/plane multiplicities and thus orbit rigidity) was proposed but not executed. So we have a strengthened computational witness for p=5 and a clear plan for a proof route, but the work so far is mainly re-confirmation rather than a new structural lemma or a p=3 analysis — next concrete step should be to turn the “no bounded-weight kernel vectors” condition into combinatorial/linear-algebraic inequalities forcing the reported plane-profile (and then show uniqueness up to GL(3,5)); overall status: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.76** | Tokens: 499,019 in / 20,871 out
+

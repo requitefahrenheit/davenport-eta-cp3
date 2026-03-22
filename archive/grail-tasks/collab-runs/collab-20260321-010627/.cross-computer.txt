@@ -1,0 +1,24 @@
+
+From theorist's reasoning last round:
+# THEORIST ROUND 2: KEY INSIGHTS FOR OTHER AGENTS
+
+## Insight 1: Polynomial Method Degree Bottleneck
+**Near-miss:** The Chevalley-Warning approach (encoding zero-sum via linear + weight constraints) hits degree p-1 when adding weight bounds. For r=3, p=5, this still satisfies the degree bound, but the weight constraint over F_p becomes degenerate—any nonzero coefficient vector trivially satisfies "weight ≠ 0 mod p". The real barrier: enforcing weight ∈ {1,...,p} requires lifting to Z or Z_p with explicit interval arithmetic, losing the clean polynomial structure. **Implication:** CW alone doesn't directly yield η bounds; the weight encoding is the obstruction.
+
+## Insight 2: η vs s Reduction Is Lossy
+**Structural observation:** The relation η(G) = s(G) - p + 1 (zero-sum length exactly p) seems natural but obscures the multi-fiber geometry. The 54 multi-fiber ZSF sets at p=5 aren't directly visible in the s-constant framing because s-constant counts *specific-length* zero-sums, while η counts *minimum-weight* across all lengths. **For other approaches:** Reframing via the weight filtration (zero-sums of weight ≤ k for each k) may separate the obstruction source better than the length-based s-constant reduction.
+
+## Insight 3: Orbit Coverage Gap at p≥11
+**Adversary's valid point:** The 8-tail confusion in the A₈ window structure doesn't scale—once p≥11, the fiber orbit structure becomes too fragmented for the "threshold containment" strategy that worked at p=5. The projection decoupling obstruction is *not* vacuous; it blocks uniform inductive arguments across all p. **For exploiting this:** Either restrict to small p explicitly (p∈{2,3,5,7}) with case-by-case analysis, or develop a "p-adaptive" bound that degrades gracefully (e.g., η ≤ O(p·α(r)) instead of O(α(r)·p)).
+
+From adversary's reasoning last round:
+# Internal Thinking: Key Insights for Other Agents
+
+## **INSIGHT 1: The Zero-Surplus Regime Breaks Core Induction**
+
+When 2α(r)+2 vectors distribute across three fibers with sizes (α(r-1), α(r-1), 2), each large fiber has exactly zero surplus relative to the induction threshold α(r-1)+1. The Weight Flexibility Theorem guarantees zero-sums only when surplus k>0, yet the hardest case has k≤0. This is not a minor edge case—it's the bottleneck configuration that the entire cross-fiber reduction depends on, and the proof provides no mechanism to handle it.
+
+## **INSIGHT 2: Minkowski Identity Doesn't Generalize Beyond Doubled+e₁**
+
+The shadow saturation proof via Minkowski identity is specific to the doubled+e₁ construction at rank 3. The 54 maximal ZSF sets verified computationally at (p=5, r=4) are assumed to satisfy saturation by analogy, but there's no proof that arbitrary maximal ZSF sets achieve full shadow coverage at weight p−1. The upper bound claim (that ANY α(r)+1 vectors contain a zero-sum) rests entirely on this unproven generalization.
+

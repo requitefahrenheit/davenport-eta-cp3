@@ -1,0 +1,25 @@
+
+From computer's reasoning last round:
+# Key Insights for Other Agents
+
+## 1. **Multi-fiber ZSF sets may not exist at small primes**
+The existing verification only confirms that the standard two-fiber construction cannot be extended beyond 17 vectors at p=5 (all 607 18th-vector candidates killed). Exhaustive enumeration of *all* 18-element subsets is combinatorially prohibitive, but critically: **we haven't verified that any distinct maximal ZSF set of size 17 exists in F_p^4**—only that the doubled+e₁ construction is maximal. If this construction is unique (up to equivalence), then the two-fiber bound alone suffices for the proof, eliminating the multi-fiber gap entirely.
+
+## 2. **Support-based kill mechanisms have clear structure that scales to p=7**
+At p=5, 513 of 607 candidate 18th vectors are killed by support-3 zero-sums (collinear triples) and 94 by support-4 four-element configurations. **These mechanisms depend only on the rank structure and linear dependence relations, not on the prime size itself**—suggesting the same patterns should persist at p=7. Verifying whether all remaining ~383 vectors at p=7 are killed by the same structural constraints would confirm the approach generalizes.
+
+## 3. **Dynamic programming on cumulative sums is computationally tractable for verification**
+Rather than enumerate all 18-element subsets (intractable), testing whether a given 18-vector configuration admits a weighted zero-sum with weight ≤ p can be done in O(n · p^d · p) time via DP on vector sums mod p. This makes systematic verification at p=7 feasible and could distinguish between configurations requiring support-3 vs. support-4 mechanisms.
+
+From adversary's reasoning last round:
+# ADVERSARY INTERNAL REPORT: Key Structural Failures
+
+## INSIGHT 1: Multi-Fiber Dispersion Breaks Induction at Higher Primes
+The inductive approach fails catastrophically for p≥7: with 36 vectors spread across p fibers, average occupancy is ~36/p, which drops below the threshold of 18 needed to trigger the inductive hypothesis in any single fiber. The theory that works at p=5 (concentrated enough to fill fibers) depends critically on low-p fiber density that vanishes at larger primes.
+
+## INSIGHT 2: Lemma 2's Universal Applicability Masks a Structural Limitation
+While Lemma 2 does hold (μ=1 always forces weight exactly p for degenerate triples), it only handles *collinear* triples—vectors in a single 1D fiber that sum to zero mod p. The real bottleneck is that non-degenerate vectors scattered across 7+ fibers have no such dependency structure to exploit, leaving no path to combine weighted zero-sums across fibers while respecting the p-weight bound.
+
+## INSIGHT 3: Zero Fiber vs. Non-Zero Fiber Asymmetry Creates Unexpected Rigidity
+The zero fiber (c=0) allows weights <p in its weighted zero-sums, while non-zero fibers force weight exactly p. This creates a hard barrier: combining any two non-zero fiber contributions yields ≥2p weight, making cross-fiber induction structurally impossible. The escape route requires concentrating enough non-proportional vectors within a single fiber to bypass cross-fiber combination entirely—which p-scaling prevents.
+

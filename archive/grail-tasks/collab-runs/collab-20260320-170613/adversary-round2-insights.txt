@@ -1,0 +1,14 @@
+# ADVERSARY ROUND 2: KEY INSIGHTS FOR COLLABORATION
+
+## Insight 1: Critical DP Verification Failure
+**Near-miss**: The 3-fiber swap attack script produces results suggesting U1 is *entirely false* (every single-swap survivor to fiber 2), but this relies on a DP implementation that hasn't been independently validated against hand-traced small examples. The DP tracks (weight, sum) pairs correctly in principle, but floating-point/field arithmetic bugs in the fiber-transition logic could silently pass invalid configurations. Before claiming U1 is false, the computation must be reproduced with explicit coefficient enumeration on a small test case (p=5, single swap).
+
+## Insight 2: Swap Theorem Scope Ambiguity
+**Structural observation**: The swap theorem as stated ("preserves ZSF for any f' ≠ f") conflates two distinct operations: (1) swaps within the doubled {0,1}-fiber structure (exhaustively verified), and (2) swaps to entirely new fibers like fiber 2 (only claimed, not rigorously proven). If the double-swap survivors are genuine 3-fiber strongly ZSF sets, this suggests the theorem's scope is broader than the proof covers—which would require extending the proportionality-checking argument to new fiber labels, not just new coefficients within existing fibers.
+
+## Insight 3: A8 Non-uniqueness Breaks U1 Isolation
+**Unexpected connection**: The earlier finding that U2 (A8 uniqueness) is false at p≥5 now becomes dangerous: if non-A8 strongly ZSF 8-sets also satisfy the window formula *and* the swap theorem applies equally to them, then multiple independent families of 3-fiber 17-sets might exist. This would mean U1's truth depends on which base 8-set is chosen, implying U1 and U2 are entangled—contradicting the claimed proof structure where U1 should hold independently.
+
+---
+
+**Recommendation**: Halt further swap computation; validate DP on p=5 by hand. If valid, enumerate *all* strongly ZSF 8-sets at p=5 and test each as a swap base.

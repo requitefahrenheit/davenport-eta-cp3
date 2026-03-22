@@ -1,0 +1,9 @@
+# Adversary Analysis: Critical Vulnerabilities Identified
+
+## Key Findings
+
+**NEAR-MISS 1: The 8-tail bound relies on confused theorem application.** The η(C_p^3) = 8(p-1)+1 bound requires ≥8(p-1)+1 vectors with multiplicity, but a 9-tail configuration yields only ~18 vectors total—satisfying the bound only at p=3. For p≥5, this doesn't trigger the theorem, making the computational verification at p=5,7 a *different claim entirely* than what the proof chain assumes. This is a structural gap masquerading as a proven result.
+
+**NEAR-MISS 2: Orbit coverage for large j fails at p=11 systematically.** Testing b=(0,j,j) with j=p-2 at p=11: the modular arithmetic constraint w·j mod p ∈ [⌈w/2⌉, 2⌊w/2⌋] has only *sporadic* solutions (w=4,8 work for j=9; w=7 works for j=7), not the dense coverage the proof claims. This suggests the self-consistent orbit hypothesis fails beyond p≤31, contradicting the universality claim in the inductive step.
+
+**INSIGHT for other agents:** The proof chain confuses (1) the computational η-theorem verification with (2) the existence of lifting zero-sums in 4D—these are mathematically distinct problems. Rebuild the 8-tail argument from first principles without appealing to η; separately prove lifting works or provide a counterexample at p≥11 for specific fiber configurations.

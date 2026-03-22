@@ -1,0 +1,469 @@
+
+============================================================
+BLOCK 1 (421 chars)
+============================================================
+The user wants me to act as the ADVERSARY agent in a multi-agent research setup. My job is to try to break things - find counterexamples, disprove lemmas, find boundaries where things fail. Let me start by:
+
+1. Searching Cortex for what others have found
+2. Reading the seed document
+3. Then systematically trying to break the proposed approaches and lemmas
+
+Let me start by searching for Cortex and reading the briefing.
+
+============================================================
+BLOCK 2 (28970 chars)
+============================================================
+Good. Now I have a comprehensive picture. Let me read the previous adversary reports to understand what's already been broken and what's still standing.
+
+Key findings from Cortex:
+1. U1 is FALSE - 7 counterexamples found
+2. U2 is also dead
+3. A₈ is NOT unique - 4 distinct GL classes of strongly ZSF 8-sets at p=5
+4. Tail rigidity (local) holds
+5. Window formula holds universally
+6. Shadow saturation 624/624 across all GL classes
+
+As the ADVERSARY, my job in this round is to:
+
+
+1. Attack the things that haven't fallen yet
+2. See if the p=5 results break down at p=7 or higher primes
+3. Hunt for counterexamples to the main conjecture or the lemmas from the post-mortem
+4. Pinpoint exactly where the theory starts to fail
+
+The main conjecture at higher rank or larger p is my target - can I construct 18 non-proportional vectors in F_p^4 that are ZSF for all weight ≤ p? This works at p=5 computationally, but what happens at p=7?
+
+Now I'm looking at whether the inductive approach breaks down - can I find a case where fibers have zero-sums individually but can't be combined to stay within weight ≤ p? I should also examine whether the polynomial method actually proves CW is insufficient, verify that Lemma 2 about Triple-Sum-Zero really holds at weight exactly p, and test Lemma 3's claim that ≥9 vectors in a fiber must have a zero-sum, especially given the constraint that η(C_p³) = 8(p-1)+1 and we're working with at most 18 vectors total across all fibers. non-proportional vectors in a fiber of F_p^4 doesn't automatically satisfy η(C_p³). But the weighted zero-sum condition is really about finding coefficients s_i ∈ {1,...,p-1} where Σs_i·v_i = 0 and Σs_i ≤ p, which translates to a zero-sum subsequence of length ≤ p when each vector appears p-1 times. So with 9 non-proportional vectors in a fiber, I get 9(p-1) total elements, and since η(C_p³) = 8(p-1)+1, this should be enough to guarantee the weighted zero-sum.
+
+Actually, I need to be careful here. The 9 vectors project to 9 non-proportional directions in F_p³, each with multiplicity p-1, giving 9(p-1) copies total. Since 9(p-1) ≥ 8(p-1)+1 for p ≥ 2, the η bound does apply and Lemma 3 checks out. But there's a catch—the η constant counts elements needed for arbitrary multisets, whereas here all 9(p-1) copies come from just those same 9 directions, which might impose additional structure.
+
+Actually, that's fine. The η bound works for any 8(p-1)+1 elements in (Z/pZ)³, regardless of whether they come from a restricted set of directions. So I get a zero-sum subsequence of length at most p from these copies. When I lift this back to the original vectors, the weights give a weighted zero-sum, and the first coordinate automatically sums to zero since all fiber vectors share the same first coordinate c, and the weight sum w satisfies c·w ≡ 0 (mod p), which forces w ≡ 0 (mod p) when c ≠ 0. So if the fiber has c ≠ 0, the first coordinate contributes c times the number of terms to the sum, which means w must be a multiple of p for the sum to vanish mod p. Combined with the constraint w ≤ p from η, this forces w = p exactly. For the zero fiber where c = 0, there's no such constraint, so w could be smaller. This confirms Lemma 3 holds up.
+
+Now I'm thinking about what else might break in the argument. Let me focus on the inductive approach—the idea of projecting from F_p^{r+1} down to...
+
+The core issue is that when I combine zero-sums from different fibers, each non-zero fiber's zero-sum has weight exactly p, so combining two of them gives weight 2p, which exceeds p. That's a genuine obstruction to naive induction. But if a fiber has enough non-proportional vectors, the inductive hypothesis should give me a zero-sum within that fiber's projection to F_p^r.
+
+For the zero fiber (c = 0), there's no constraint on the first coordinate, so a weight ≤ p zero-sum works directly. For non-zero fibers, the weight must be divisible by p, forcing it to be exactly p. The real problem emerges when no single fiber contains enough vectors to trigger the inductive hypothesis—then I can't construct a zero-sum within any individual fiber, and I'm stuck trying to combine across fibers where the weights don't cooperate. the multi-fiber gap is the real issue—when vectors scatter across many fibers, none of them accumulate enough to trigger the inductive step. At p=7, I have 18 vectors spread across 7 possible fibers instead of just 2, so they'd be even more dispersed and harder to concentrate in any single fiber.
+
+Now I'm testing whether Lemma 2 itself can be broken. The lemma claims that for any collinear triple with a dependency summing to zero mod p, there's always some scalar multiple that forces the triple-sum to equal p. Let me check this with concrete values at p=5.
+
+Taking α=1, β=1, γ=3, I verify the conditions hold: the sum is 5≡0 mod 5, and no pair sums to zero. Then I test different scalars—μ=1 and μ=2 both give the triple-sum equal to p, but μ=3 breaks the pattern, giving 2p instead. So the lemma doesn't hold universally for all scalars, which is interesting. The lemma only requires that *some* μ achieves weight p, not all of them, so the degenerate case is covered. The Rank-3 Theorem demands strictly less than p for non-degenerate triples, but Lemma 2 handles the degenerate case where α+β+γ ≡ 0 by guaranteeing weight exactly p, which satisfies our bound. Now I need to verify whether Lemma 2 actually holds for all primes p.
+
+Let me test p=7 with α=1, β=2, γ=4 (which sum to 0 mod 7 and have no pair summing to zero). Checking different values of μ: when μ=1 the sum is 1+2+4=7, and when μ=2 the sum is 2+4+1=7, both hitting weight p exactly.
+
+But μ=3 gives 3+6+5=14, which is 2p—a failure. Similarly μ=5 and μ=6 both yield 14. So this triple works for μ∈{1,2,4} but fails for μ∈{3,5,6}.
+
+Now I'm realizing that whenever α+β+γ ≡ 0 mod p with all three in {1,...,p-1}, the sum must land in either {p, 2p}. If μ=1, then ⟨α⟩+⟨β⟩+⟨γ⟩ = α+β+γ, which is exactly that sum—so it's always p or 2p. This means μ=1 always gives weight p, guaranteeing the lemma holds. So at μ=p-1, the weight is also p. Lemma 2 is confirmed—it always works by choosing μ=1 when α+β+γ = p and μ=p-1 when α+β+γ = 2p.
+
+Now I'm shifting focus to a more promising direction: proving the general bound η(C_p^r) ≤ (9·2^{r-3}-1)(p-1)+1 for all r ≥ 3, rather than just handling the r=4 case.
+
+For rank 5, I need 36 non-proportional vectors and a weighted zero-sum of weight at most p. Using the doubled+e₁ construction with 17 vectors in each of two fibers plus e₁ gives 35 vectors, so adding a 36th forces a weighted zero-sum. If I project down to rank 4 and apply the inductive hypothesis, any fiber with at least 18 non-proportional vectors must contain a weighted zero-sum of bounded weight.
+
+But here's the problem: spreading 36 vectors across p fibers means roughly 36/p vectors per fiber on average. At p=5 that's only about 7 per fiber, and at p=7 it's about 5—both far below the threshold of 18 needed to invoke the inductive hypothesis. For large p, most fibers might have just 1 vector, making the inductive approach completely ineffective.
+
+This reveals a fundamental issue: the number of vectors grows exponentially with rank (as 2^r) while the number of fibers stays fixed at p, so the inductive hypothesis becomes useless at higher ranks. Pure fiber induction cannot overcome this scaling problem without additional structural constraints.
+
+Looking at the math more carefully, at rank r+1 we have roughly 2α(r)+2 vectors distributed across k fibers. For any single fiber to have enough vectors to trigger the inductive hypothesis, we'd need k ≤ 2, meaning fiber induction only works when there are at most two fibers—which is precisely the case already covered by the two-fiber bound. So this approach fundamentally cannot extend to the multi-fiber setting.
+
+But maybe a more sophisticated version could work—what if we try multiple hyperplane projections, or combine partial zero-sums across fibers, or apply projection iteratively? The key question is whether we can construct 2α(r)+2 non-proportional vectors such that every possible hyperplane projection spreads them across at least 3 fibers. If such a configuration exists and is zero-sum-free, then fiber induction would fail simultaneously for all projections.
+
+At rank 4, this becomes the multi-fiber problem. The computational search found that those 51 same-tail swap variants at p=5 actually spread across 3+ fibers under all 156 projective linear forms, not just the specific projection w = x₁. So 17-element zero-sum-free sets can achieve this universal 3+ fiber property. The remaining question is whether 18-element sets can simultaneously be zero-sum-free and maintain this property across all projections.
+
+At p=5, I've verified computationally that no 18th vector avoids creating zero-sums, so the answer there is no. But what if the bound itself isn't tight? The lower bound suggests η(C_p^4) = 17(p-1)+1, but the upper bound is unproven. Could it actually be 18(p-1)+1 or higher? At p=5 this checks out—α(4,5) = 17 gives η(C_5^4) = 69. The real test is p=7: if α(4,7) turns out to be larger than 17, that would suggest the bound could be improved.
+
+The most promising angle is trying to construct an 18-element zero-sum-free set at p=7 in rank 4. The doubled+e₁ construction gets me to 17 vectors, so I need to find an 18th that doesn't trigger any weighted zero-sum with weight ≤ 7. The search space at p=7 is much larger than at p=5, and the weight constraint is more relaxed, giving more room to maneuver—though I'm still working in F_7^4.
+
+Wait, I need to reconsider the trade-offs here. The weight bound is indeed ≤ 7 instead of ≤ 5, but now the coefficients range from 1 to 6 instead of 1 to 4, which means there are actually more possible weighted combinations to avoid. That should make it harder to stay zero-sum-free, not easier. On the other hand, I have 6 copies per direction instead of 4, so the pool of available vectors is larger. The scaling relationship η(C_p^r) = α(r)(p-1)+1 suggests the fundamental difficulty should be independent of p. Let me verify whether the A₈ doubled+e₁ construction actually remains zero-sum-free when I move it to p=7.
+
+For A₈ at p=7, I need 8 non-proportional vectors in F_7³ that avoid weighted zero-sums with weight ≤ 7. Since η(C_7³) = 49 and the copies pool has only 48 elements when each of 8 directions appears 6 times, I'm just barely below the threshold—one element short of guaranteeing a zero-sum. But being below the threshold doesn't automatically mean no zero-sum exists; I need to check whether the specific A₈ configuration actually avoids all weighted zero-sums. The bound from η(C_7³) = 49 doesn't quite rule it out since we only have 48 elements, so a zero-sum might still exist. Let me think about what strategy makes sense here—I should either formalize why naive fiber induction fails for three or more fibers, attempt to construct a counterexample at p=7, or challenge the polynomial method directly. But the constraint is pure theory only, no computation, so I can't just calculate whether those vectors admit a zero-sum. Instead, I'll work on proving structural obstructions or reductions that don't require explicit computation.
+
+Now I'm examining Lemma 4 more carefully—the Two-Fiber Bound claims that if all 18 vectors have weights in {0, c}, then the bound holds. The argument splits on whether |F₀| ≥ 9 (which gives a zero-sum within F₀ by Lemma 3) or |F₀| ≤ 8 (forcing |F_c| ≥ 10). For the second case, those 10 vectors in F_c project to 10 non-proportional vectors in F_p³, each with multiplicity p-1, and I need to see where this argument actually produces the zero-sum. The η bound in F_c gives weight exactly p, and checking the s constant—which equals 9(p-1)+1—confirms that the Two-Fiber Bound also produces zero-sums of weight exactly p. So the bound is tight: it guarantees weight p but not anything lighter, which is the key constraint for the adversary.
+
+Now I'm trying to formalize why extending to 3+ fibers breaks the inductive approach. The idea is that with r ≥ 3 and k ≥ 3 fibers, distributing N = 2α(r)+2 vectors across multiple fibers means no single fiber gets enough vectors to trigger the inductive η bound—but I need to be more careful about how the fiber sizes actually distribute. right. With k ≥ 3 non-empty fibers, the largest has at most N - (k-1) ≤ N - 2 = 2α(r) vectors. We need α(r)+1 to trigger the inductive hypothesis. Since α(r) ≥ 8 for r ≥ 3, having 2α(r) ≤ 2·17 = 34 in a fiber is well above α(r)+1 = 18 at r = 4. Wait, that doesn't obstruct!
+
+Let me reconsider. At r+1 = 4, r = 3: N = 18 vectors, α(3) = 8. With k = 3 non-empty fibers: largest fiber ≤ 16. Since α(3)+1 = 9, if the largest fiber has ≥ 9 vectors, we trigger the inductive hypothesis. And 16 ≥ 9. So the real constraint is when all fibers stay at or below α(r) vectors. With 18 vectors distributed across at least 3 fibers with each capped at 8, we can fit them (like 8+8+2 or 6+6+6), which means the fiber induction only works if we can guarantee finding a fiber exceeding α(r)+1. The question becomes whether there exist configurations where every fiber has at most α(r) vectors.
+
+Now I'm wondering if among 18 non-proportional vectors in F_p^4, there must exist some hyperplane projection where at least one fiber reaches 9 vectors. This is really about whether 18 points in projective space can always be covered by at most 2 fibers under some hyperplane, or if adversarial configurations can force ≥ 3 fibers across all possible projections. The earlier adversary session found 17-point sets that resist 2-fiber coverage under any hyperplane, but I need to determine if 18 points have the same property.
+
+I'm trying to use a counting argument: if I look at how many of the 18 points must lie in some single hyperplane, that could give me a lower bound on the maximum fiber size. Each point lies in many hyperplanes, and the total incidence count should force at least one hyperplane to contain a substantial portion of the 18 points. differently. In PG(3, F_p), any 4 points in general position (no 3 collinear, no 4 coplanar) form a frame. If our 18 points include 4 in general position, then... still not immediately useful.
+
+Here's a cleaner approach. Consider the dual: each hyperplane corresponds to a point in the dual PG(3, F_p). For each of our 18 points, the hyperplanes through it form a plane in the dual. The question is: what's the maximum intersection of our 18 points with any hyperplane?
+
+By a result in combinatorics (Heger-Takáts type bounds or just pigeonhole on the incidence structure):
+
+Number of point-hyperplane incidences = 18 · (number of hyperplanes through a point) = 18 · (p²+p+1).
+
+Now I'm using the basic counts: PG(3,p) has p³+p²+p+1 points and the same number of hyperplanes by duality. Each point lies on p²+p+1 hyperplanes, and each hyperplane contains p²+p+1 points. So the total incidences between our 18 points and all hyperplanes is 18(p²+p+1), which means on average each hyperplane contains 18(p²+p+1)/(p³+p²+p+1) of our points.
+
+At p=5 this is about 3.58, at p=7 about 2.57. But I need the maximum, not the average. The pigeonhole principle tells me the maximum is at least the average, so at p=5 it's at least 3.6, meaning at least 4 points on some hyperplane. But I need to show at least 9 points on some hyperplane, which seems much harder.
+
+Let me think about this differently. If I could choose 18 points that form a cap—where no three are collinear—then any plane would intersect the cap in at most 6 points. Since 18 points from a cap would have maximum coplanarity of 6, that's still far below the 9 I need. So if such a configuration exists, it would contradict what I'm trying to prove.
+
+But Claude-018 found that actual caps in F_5^4 do contain zero-sums, specifically weight-5 zero-sums, which means they're not zero-sum-free. The real question is whether configurations with multiple fibers across all projections—not just caps—could still be zero-sum-free when restricted to weights ≤ p.
+
+At p=5 with 18 vectors, computational verification shows the answer is no. So I need to focus on what theoretical obstruction actually prevents zero-sum-free configurations. The fiber induction approach seems promising: if I can show that combining partial zero-sums from different fibers always yields a zero-sum of weight ≤ p, that would be the key. The constraint is that within any non-zero fiber, zero-sums must have weight divisible by p, so they're at least weight p. But partial zero-sums within fibers might still be combinable across fibers to create the obstruction I'm looking for.
+
+Let me examine what happens with mixed-fiber zero-sums more carefully. If I take elements from complementary fibers where the first coordinates cancel mod p, the remaining coordinates might not align. The real question is whether I can always find a small zero-sum by mixing elements strategically across fibers, or if there's a configuration that avoids this. 2 elements from different fibers.
+
+Two elements v₁ ∈ fiber c₁, v₂ ∈ fiber c₂. With coefficients s₁, s₂ ∈ {1,...,p-1}: s₁v₁ + s₂v₂ = 0, s₁+s₂ ≤ p. This means s₁(c₁, tail₁) + s₂(c₂, tail₂) = 0. So s₁c₁ + s₂c₂ ≡ 0 (mod p) and s₁·tail₁ + s₂·tail₂ = 0. The second condition means tail₁ and tail₂ are proportional: tail₂ = -(s₁/s₂)·tail₁.
+
+If the tails are proportional with tail₂ = t·tail₁, then the coefficient constraint forces s₂ = -s₁/t, which in turn requires c₁ = c₂/t, making v₁ and v₂ proportional—a contradiction. So non-proportional vectors from different fibers can't form a 2-element zero-sum.
+
+Now checking the 3-element case.
+
+3-element zero-sums reduce to collinear triples, which the rank-3 subroutine handles when non-degenerate. The 4-element case is where the 94 residual cases at p=5 actually live.
+
+Let me step back. The most impactful thing here is to pinpoint exactly where and why each proposed approach fails, stating these as clear, proven obstructions. This gives a theorist concrete targets: either circumvent these obstructions or pursue an entirely different strategy.
+
+Cataloging the obstructions now.
+
+**Obstruction 1: Fiber induction breaks on balanced multi-fiber configurations.** When vectors spread across 3 or more fibers with at most α(r) vectors each, no single fiber triggers the inductive hypothesis, and combining across fibers requires satisfying the weight constraint globally.
+
+**Obstruction 2: Cap configurations defeat all hyperplane projections.** The 18 points from a PG(3,5) ovoid sub-cap distribute at most 6 per hyperplane, which blocks fiber induction regardless of which linear form I choose. Though notably, caps at p=5 aren't zero-sum-free—they do contain support-4 zero-sums.
+
+**Obstruction 3: The Chevalley-Warning degree bound alone is too weak.** For rank 4, the polynomial system involves coefficients and variables whose total degree relates to the number of variables, and with α(r)+1 variables the bound becomes loose enough that it doesn't constrain the solution count sufficiently.
+
+Now I'm working through the actual degree calculation: the system has r+1 coordinate equations plus a weight constraint, each of degree p-1, giving total degree (r+2)(p-1). With 2α(r)+2 variables, I need to check whether this exceeds the variable count for the Chevalley-Warning theorem to apply. At r=3 with p=5, I'm getting 18 variables against a degree of 20, which is borderline.
+
+For p≥5 at rank 4, the degree bound consistently exceeds the variable count—the Chevalley-Warning approach doesn't give me useful information here. But I'm realizing the seed document mentions Grynkiewicz and Reiher used weighted generalizations of Chevalley-Warning, so I should reconsider what made their approaches work differently.
+
+Looking at Reiher's Kemnitz proof, he had n = 4p-3 variables scaling with p, just two coordinate equations of degree p-1, and the Chevalley-Warning condition 4p-3 > 2(p-1) always holds. The key insight is that his variable count grew with p, whereas my problem has a fixed n = 18 regardless of p—so the constraint-to-variable ratio works against me as p increases. I'm conflating two different problem formulations here, so I need to be more careful about which setup actually applies.
+
+In the copies pool version, each direction gives p-1 copies, making the total "variables" equal to α(r+1)(p-1), where each is binary. But the Chevalley-Warning approach uses continuous variables s₁, ..., sₙ ∈ F_p and constructs a polynomial that vanishes exactly when certain linear combinations hit target values—the second product term enforces constraints on the sum Σsⱼ, which complicates the analysis. Let me work through this more carefully.
+
+The standard CW setup for zero-sum problems uses variables s₁, ..., sₙ ∈ F_p and linear equations Σsᵢvᵢ,ⱼ = 0 for each coordinate. The weight constraint Σsᵢ ≤ p is the real obstacle—without it, CW trivially finds nontrivial solutions when n > r+1, but adding the weight constraint requires encoding it as a polynomial condition, which is where the difficulty emerges.
+
+The fundamental issue is that CW operates over F_p and can only encode modular conditions like "weight ≡ 0 mod p," not integer constraints like "weight ≤ p." This is an inherently non-algebraic constraint over the field. Reiher's approach was more sophisticated than directly encoding the weight constraint.
+
+Now I'm reconsidering the degree obstruction more carefully. Even setting aside the weight constraint, the CW theorem requires the sum of polynomial degrees to be less than the number of variables. With rank 4, 18 variables, and 4 equations of degree p-1, the total degree is 4(p-1), which exceeds 18 when p ≥ 6. So the degree condition fails for p = 7 and beyond, which is where we'd need CW to work.
+
+Let me reconsider the standard CW application to zero-sum problems. The idea is to define polynomials that vanish exactly when we have a nontrivial solution, then use the degree condition to force a solution to exist.
+
+For the unweighted case, I'm setting up linear equations fⱼ(s) = Σᵢ sᵢvᵢ,ⱼ for j = 1,...,4, which define a linear subspace of dimension at least 14. This gives p^14 - 1 nontrivial solutions.
+
+But the η problem requires a weight constraint, so I need to incorporate that into the polynomial system. One approach is to use a polynomial g(s) = 1 - (Σᵢ sᵢ)^{p-1} that detects when the weight equals zero, then combine this with the zero-sum equations to enforce both constraints simultaneously.
+
+Now I'm checking whether the Chevalley-Warning theorem applies to this combined system. The total degree becomes p+3, which means CW works when p ≤ 13. Under this bound, the number of solutions N₀ satisfying both the zero-sum and weight constraints must be divisible by p. Since the trivial solution s = 0 is always included, we have N₀ ≥ p, guaranteeing at least p nontrivial solutions.
+
+However, the weight constraint only guarantees solutions with weight ≡ 0 (mod p), which could be 0, p, 2p, etc. For a nontrivial solution, the weight is at least 1, so if weight = p we're done, but if weight = 2p or higher, we haven't pinned down exactly what we need. I'm wondering if we can refine the approach by looking at different residue classes modulo p instead of just the zero-sum condition.
+
+So I'm defining a modified polynomial that tracks the sum of coordinates modulo p, and applying Chevalley-Warning to count solutions where both the zero-sum condition and a specific coordinate sum c are satisfied. For c = 0, the trivial solution exists, so there must be at least p solutions total. For c ≠ 0, the count could be 0 or a multiple of p. Now I need to figure out how the nontrivial zero-sums distribute across these residue classes.
+
+The sum across all nonzero c values equals the total zero-sums minus N_0, which is p^14 - N_0. Since each N_c is divisible by p and they sum to p^14, I can use this divisibility constraint to argue that at least one nonzero c must have N_c > 0, guaranteeing a nontrivial solution exists. we get (p-1) + 1 equations relating the N_c. Since each N_c is a multiple of p and they sum to p^14, there must be many nonzero N_c. 
+
+Specifically: Σ_{c=0}^{p-1} N_c = p^14. Each N_c = p · m_c for some non-negative integer m_c. So p · Σm_c = p^14, giving Σm_c = p^13. With p terms, by pigeonhole, some m_c ≥ p^13/p = p^12 > 0. So at least one N_c ≥ p > 0.
+
+But this just tells us that for SOME c, there exist zero-sums with weight c (mod p). The actual weight as an integer is Σsᵢ where sᵢ ∈ {0, 1, ..., p-1}, which can range up to 18(p-1) with 18 variables. Any zero-sum with weight ≡ c (mod p) could have weight c, c+p, c+2p, and so on within that range. For the η problem specifically, I need a nontrivial zero-sum with weight in {1, 2, ..., p}, but the Cauchy-Davenport result only guarantees that N_c ≡ 0 (mod p) for each c—it doesn't distinguish between different residue classes or constrain the actual weight values.
+
+The real obstruction is that I can't encode the integer constraint weight ≤ p using only modular arithmetic. Reiher's approach worked for the Davenport constant because the relevant constraint was different. Here, the weight-≤-p constraint is what blocks the argument.
+
+Actually, let me reconsider whether I can argue that a nontrivial zero-sum with weight ≡ c (mod p) must have weight exactly c rather than c + kp for some k.
+
+If the support is at most 18 and each nonzero coefficient is in {1,...,p-1}, then the weight is bounded by 18(p-1). For k ≥ 1, the weight would be at least c + p. But if I require weight ≤ p, then c + p ≤ p implies c ≤ 0, which contradicts c ∈ {1,...,p-1}. So k must equal 0.
+
+When Σsᵢ ≡ c (mod p) with c ∈ {1,...,p-1} and weight ≤ p, the weight must be exactly c. For c = 0, nontrivial solutions have weight ≥ 1, so weight ≥ p, meaning weight = p when bounded by p. The key insight is that Cayley-Wigner counts all solutions regardless of weight, but I need to isolate those with minimal weight—either weight = c for c ∈ {1,...,p-1}, or weight = p for c = 0.
+
+The challenge is that solutions with weights c, c+p, c+2p, ... all get counted together. To separate them, I could restrict to a small subset of the 18 vectors and apply Cayley-Wigner with fewer variables, which bounds the weight tightly. For instance, taking k = 2 vectors gives weight ≤ 2(p-1) = 2p-2, so any solution falls into either weight c or weight c+p for c < p. This would require computing Cayley-Wigner on 2 variables with 4 equations, giving degree p+3.
+
+But this degree bound is impossible to satisfy—I'd need p+3 < 2, which can't happen. For Cayley-Wigner to work at all, I need k ≥ p+4, so at p=5 I'd need at least 9 vectors. Even then, the weight bound becomes 36, which is still 7.2 times p and doesn't give me the fine control I'm looking for. Using all 18 vectors pushes the weight bound to 72, which is even worse. It seems Cayley-Wigner just isn't the right tool to pin down which weight residue class contains a small representative for this problem.
+
+The real obstacle is that I need to encode "weight ≤ p" as a polynomial constraint over F_p, which Cayley-Wigner doesn't naturally handle. Let me try a different angle: instead of finding a single zero-sum, I'll use Cayley-Wigner to count zero-sums stratified by weight and derive a contradiction from the assumption that no small-weight zero-sum exists. I'll define N_w as the count of solutions where the vectors sum to zero and the coefficients sum to exactly w (as an integer, not modulo p). Then I need to show that the sum of N_w over w from 1 to p is positive. Cayley-Wigner tells me that the partial sums grouped by residue class modulo p are all divisible by p, but I'm running into issues when I try to analyze individual N_w values.
+
+Without additional structure on how N_w varies across different w in the same residue class, I can't separate them out—this approach seems to hit a wall.
+
+Let me refocus on what's actually productive. I should prove that fiber induction is fundamentally limited by constructing explicit configurations where every projection yields at least three fibers with none reaching the required threshold, which the cap construction already demonstrates. For the polynomial method, I need to show that the weight constraint genuinely can't be encoded in a way that works. Then I can pivot to analyzing the extremal structure more carefully, keeping in mind that A₈ isn't unique—the adversary already found counterexamples in earlier sessions.
+
+The key obstructions to document are: fiber induction fails on cap-like configurations, the CW approach can't handle the integer weight constraint, and extremal uniqueness doesn't hold since multiple GL classes of 8-sets exist. That leaves character sums and sumset bootstrapping as the remaining viable directions. Before writing this up, I should check whether prior adversary reports already identified these same dead ends.
+
+============================================================
+BLOCK 3 (29107 chars)
+============================================================
+Now I have a thorough picture. Let me summarize what's been done and what's still standing:
+
+**Dead:**
+- U1 (Two-Fiber Forcing) — FALSE
+- U2 (A₈ Uniqueness) — FALSE (4 GL classes at p=5)
+- Global Tail Rigidity — FALSE
+- Character theory for support ≥ 4
+- k=4 parity theorem
+- Cross-fiber collinear triples
+- Combining pairwise-degenerate kernel vectors
+
+**Unbroken:**
+- Window formula ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ (tested through p=43)
+
+
+- Shadow saturation across all configurations
+- Local tail rigidity
+- The main conjecture η(C_p^4) = 17(p-1)+1
+
+I still have three open questions: whether the window holds for non-A₈ cases at larger primes, if kernel weight gaps follow a universal pattern, and what determines the invariant line. Now I need to shift into adversarial mode and systematically attack both the five theoretical approaches from the research goal and the surviving invariants to find where they break.
+
+My strategy is to target three main areas: first, demonstrate provable obstructions in each theoretical approach; second, test whether I can break the window, shadow saturation, or local tail rigidity at higher rank or larger p; and third, show that the inductive step fails when moving from rank 4 to rank 5. Since I'm working purely theoretically, I'm focusing on structural arguments rather than computation.
+
+Starting with fiber induction—I can show it's fundamentally insufficient for configurations spread across three or more fibers. At rank 4 with 18 vectors, a cap-like arrangement keeps at most 6 vectors in any hyperplane, but caps at p=5 in rank 4 always contain zero-sums with support 4 and weight p. The real question is whether this obstruction is universal across all such configurations.
+
+Now I'm formalizing this: for any hyperplane projection, I can construct 18-element subsets that map into at least 3 fibers with at most 8 elements per fiber—this is straightforward by distributing points across generic hyperplanes. But the critical issue is whether such configurations always admit a bounded-weight zero-sum, and whether fiber induction can actually locate it. The fiber induction approach requires at least one fiber to contain enough vectors to apply the inductive hypothesis, which creates a bottleneck I'm trying to exploit.
+
+The adversary's earlier examples showed that even highly constrained 5-fiber configurations at p=5 exhibit shadow saturation, meaning zero-sums do exist—but fiber induction fails to find them. So the real question becomes: what alternative method can recover these zero-sums when fiber induction breaks down?
+
+Turning to the polynomial method, I'm realizing that the Cauchy-Davenport approach works modulo p but can't distinguish between weights that differ by multiples of p, which fundamentally prevents it from enforcing the η bound alone. I should explore whether more refined techniques like weighted Cauchy-Davenport or slice rank methods could handle the weight constraint more effectively.
+
+The slice rank method (developed for cap set problems) counts solutions to linear equations like x+y+z=0, but our problem is fundamentally different—we need variable-length weighted sums bounded by p, which doesn't naturally fit into the slice rank framework. The algebraic structure here is too complex for those standard tools.
+
+Now I'm considering whether the character sum approach from the rank-3 case could extend to rank 4. The rank-3 proof used multiplicative characters and generating functions to show that for any collinear triple avoiding certain zero-sum conditions, there exists a character where the sum of character values stays below p. For rank 4, I'd need an analogous result for support-4 zero-sums—four vectors summing to zero—but the argument becomes significantly more intricate.
+
+The core issue is that at rank 4, the function summing four character values can take on two distinct levels, whereas the rank-3 case was constrained to a single level, making it impossible to apply the same pinning argument. This suggests the character sum method might not directly generalize without substantial modifications. ∈ {1,...,3(p-1)} and ≡ 0 mod p (since av+bv+cv=0). So ⟨μa⟩+⟨μb⟩+⟨μc⟩ ∈ {p, 2p}. Two levels. But the rank-3 theorem proves we can always achieve the lower level p (except for pair-degenerate cases).
+
+For 4 summands: ⟨μa⟩+⟨μb⟩+⟨μc⟩+⟨μd⟩ ∈ {1,...,4(p-1)} and ≡ 0 mod p. So ∈ {p, 2p, 3p}. Three levels. We need to achieve the lowest level p (i.e., weight ≤ p).
+
+At p=5, the possible levels are {5, 10, 15}, and I need to show there exists some μ achieving the minimum weight of 5. The rank-3 argument relied on summing f_3(μ) over all μ using character sums, which gave a total that contradicts assuming f_3 is always 2p. For the 4-summand case, I'm computing the sum of all f_4(μ) values across all μ to establish a similar contradiction if the minimum weight can't be achieved. So the sum works out to 2p(p-1), giving an average of 2p across all values of μ. If f_4(μ) is always at least 2p and never drops to p, then the sum must be at least 2p(p-1), with equality only when f_4 is constantly 2p.
+
+Since the sum equals exactly 2p(p-1), this means f_4(μ) ≡ 2p is actually consistent with the averaging argument—unlike the k=3 case where the average 3p/2 falls strictly between p and 2p, forcing some μ to achieve the lower level. For k=4, the average lands exactly on the middle value, so the averaging constraint can't rule out the uniform case.
+
+Now I'm wondering whether f_4(μ) ≡ 2p is actually achievable—that would require ⟨μa⟩+⟨μb⟩+⟨μc⟩+⟨μd⟩ = 2p for every character μ, which is an extremely restrictive condition on the tuple (a,b,c,d).
+
+Actually, it turns out this is possible: if I set a=b=1 and c=d=p-1, then the sum becomes 2⟨μ⟩+2(p-⟨μ⟩) = 2p regardless of μ. But this construction relies on having two proportional pairs among the coefficients, whereas the proportionality lemma applies to non-proportional vectors—though the dependency coefficients themselves can still be equal. 2(p-μ) = 2p for all μ, so the weight is always 2p, which exceeds p. This means I can't construct a zero-sum with weight ≤ p using these four vectors with their fixed dependency coefficients. Even if I tried different scaling factors, the original dependency structure with coefficients (1,1,p-1,p-1) wouldn't change—the constraint v₁+v₂ = v₃+v₄ remains the fundamental limitation. = 0, or v₁+v₂+(p-1)v₃+(p-1)v₄ = 0 in F_p), then the only zero-sums involving exactly {v₁,v₂,v₃,v₄} with all nonzero coefficients are scalar multiples of (1,1,p-1,p-1). And each has weight μ + μ + μ(p-1) + μ(p-1) = 2μp ≡ 0 mod p, with integer value 2μ + 2(p - μ) = 2p when μ ∈ {1,...,p-1}. Weight 2p > p.
+
+So this 4-element dependency CAN'T produce a zero-sum of weight ≤ p!
+
+This doesn't invalidate the conjecture though — it just means that while this particular 4-element zero-sum is inherently heavy at weight 2p, the conjecture only requires that *some* zero-sum exists with weight ≤ p among any 18 vectors, not that every zero-sum is light. There could be other zero-sums with different supports or sizes that achieve the bound. The obstruction here is specifically to proof strategies that rely on always finding a support-4 zero-sum, since some 4-element dependencies are fundamentally too heavy. The proof would need to handle these cases by identifying alternative zero-sums instead. Looking at the scalar multiples of (1,1,4,4) modulo 5, each one—whether μ=2 giving (2,2,3,3), μ=3 giving (3,3,2,2), or μ=4 giving (4,4,1,1)—has weight 2p=10, so none produce a low-weight dependency. This means if these four vectors are linearly independent, the only dependency among them would be trivial, which contradicts the existence of any non-trivial zero-sum. they're linearly DEPENDENT. 4 vectors in F_5^4 can be linearly independent (in fact generically are), in which case there's NO dependency and no 4-element zero-sum.
+
+If 4 vectors in F_5^4 are linearly dependent, they have a 1-dimensional dependency space: all dependencies are scalar multiples of one basic dependency (a,b,c,d). So the weight of ANY 4-element zero-sum using these vectors is determined by the dependency (up to scalar multiple).
+
+If the dependency is (1,1,4,4) [which sums to 10 ≡ 0 mod 5], all scalings give weight 2p=10. No weight ≤ 5 zero-sum.
+
+This means: if 18 vectors in F_5^4 have a 4-element dependency only of type (1,1,4,4) with no collinear triples and no other support-≤5 zero-sums, could this be ZSF? Actually no—the 94 residual cases at p=5 all had zero-sums found, and they used dependencies of weight 4, not the heavier (1,1,4,4) type. So the question becomes whether weight-4 dependencies are always sufficient for finding zero-sums. case?
+
+**Here's the key question: among 18 non-proportional vectors in F_p^4, must there always exist a zero-sum with weight < p (not just ≤ p)?**
+
+Actually, the conjecture is weight ≤ p, not < p. And weight = p is fine (it's achieved by support-p zero-sums from the η bound in a single fiber).
+
+But the post-mortem's Claim 5 says: "A weighted zero-sum with coefficients s_i ∈ {1,...,p-1} and ∑s_i ≤ p is equivalent to finding a zero-sum subsequence of length ≤ p in the copies pool." This is correct. A length-k zero-sum subsequence (all coefficients 1 in the copies pool) has weight k. So weight ≤ p is equivalent to length ≤ p.
+
+For support-4 zero-sums with dependency (1,1,4,4) in the copies pool, that's 1 copy each of v₁ and v₂, plus 4 copies each of v₃ and v₄—totaling length 10, which equals 2p when p=5. Since this exceeds p, it doesn't qualify. But using the relation v₁+v₂ = v₃+v₄, I could construct a length-p zero-sum by taking 1 copy of v₁, 1 of v₂, and p-1 copies each of v₃ and v₄.
+
+That gives length 2p, which is still too long. Any linear combination μ·v₁ + μ·v₂ + (p-μ)·v₃ + (p-μ)·v₄ yields length 2p regardless of μ. So this dependency can't produce a zero-sum of length ≤ p, meaning I need to look for other zero-sums elsewhere.
+
+Now I'm formalizing the key attacks. For the fiber induction approach with 18 vectors spread across multiple fibers, the constraint is tight—no single fiber can have 9 or more vectors if they're balanced. The PG(3,p) ovoid structure limits any hyperplane to at most 6 points, which falls short of the 9 needed for fiber induction to work. That avenue is closed.
+
+The character sum averaging technique also breaks down for 4-element dependencies. While 3-element dependencies have average weight 3p/2 (strictly between p and 2p, guaranteeing some μ works), the 4-element case doesn't offer the same flexibility.
+
+For the inductive step at rank r+1, the construction with doubled vectors in two fibers plus e₁ is manageable via the two-fiber bound, but extending to the multi-fiber case creates a gap—even if η(C_p^r) = α(r) holds, the argument doesn't cleanly propagate to higher ranks.
+
+The real issue is that when vectors distribute across multiple fibers, the ratio of what induction requires versus what's available per fiber stays constant at 3/2 regardless of rank. This means each fiber consistently has only 2/3 of the vectors needed to apply the inductive hypothesis, and this obstruction doesn't diminish as rank increases—it's a structural barrier, not a rank-dependent one.
+
+Now I'm shifting focus to shadow saturation as the actual target. The claim is that for a strongly ZSF 17-set in F_p^4, the sumset up to p-1 covers everything except zero. This connects to covering radius in coding theory—if the kernel has minimum weight at least p+1, can I use that to bound the covering radius by p-1? The standard bound relates covering radius to the code's dimension and length, but I need to figure out how the ZSF structure constrains things here.
+
+I'm hitting a wall though. Shadow saturation holds empirically across all cases I've tested, but I can't construct a proof with the existing tools. The "code" isn't linear in the classical sense, so the usual bounds don't apply cleanly. Let me explore whether the invariant line structure that works at rank 3 can scale up to rank 5 and beyond.
+
+The problem is that at rank 5, I'm building on a rank-4 component where I don't even have a proof yet. The whole proof strategy seems to require the window property at every intermediate rank, which creates a circular dependency—I'd be proving the η bound at rank r+1 from the η bound at rank r, but those are essentially the same thing I'm trying to establish inductively.
+
+Unless there's a way to prove shadow saturation directly without relying on the window formula. The adversary session suggested exploring a kernel weight gap argument based on minimum distance properties.
+
+But here's the issue: a ZSF set already guarantees minimum kernel weight ≥ p+1 by definition—that's what zero-sum-free means. So while this isn't circular, it doesn't give us new information either. The real question is whether this minimum weight property actually forces the covering radius down to p-1 for codes of this specific structure.
+
+In general coding theory, minimum distance and covering radius don't have a tight relationship—the Plotkin bound is too loose for what we need. And I'm realizing our set isn't a linear code in the traditional sense. We have a set of 17 vectors in F_p^4, and the kernel is the set of all 17-tuples that sum to zero when applied to these vectors. This kernel is actually linear—it's the kernel of the matrix formed by these vectors—giving us a length-17 code with dimension 13 (assuming the vectors span the full 4-dimensional space).
+
+Now I'm checking what bounds apply to this [17, 13, p+1] linear code. The covering radius satisfies R ≤ n - k = 4, but that's the general bound for linear codes over F_p. What I really need is R ≤ p - 1 in the weight metric, and since n - k = 4, for p ≥ 5 this becomes a tighter constraint. I'm realizing the covering radius bound R ≤ n-k does hold over any field, and the key insight is that for any vector, we can find a codeword such that their difference has weight at most n-k by choosing a representative of minimal weight from each syndrome class—though this is straightforward for binary codes but requires more care in the general case.
+
+For our [17, 13] code over F_p, if R ≤ 4 and p ≥ 5, then the covering radius is at most p-1, which would immediately imply shadow saturation. But I need to be careful here: covering radius measures Hamming distance (number of nonzero positions), whereas shadow saturation requires that for every nonzero target vector in F_p^4, we can find a codeword achieving that exact coordinate sum, which is a different constraint altogether.
+
+The standard coding theory bound R ≤ n-k applies to Hamming covering radius, but what we actually need is the Lee metric covering radius—the maximum L1 weight needed to reach any target. These are related but distinct: if the Hamming covering radius is at most 4, then any target can be reached by changing at most 4 coordinates, and since each coordinate can be any value in {1,...,p-1}, the L1 weight is bounded accordingly.
+
+However, this bound is too loose for our purposes. With 4 nonzero coefficients each in {1,...,p-1}, the minimum possible L1 weight is 4 (when all coefficients equal 1), but we need the sum to be at most p-1. For p=5, this means we need Σs_i ≤ 4 with 4 nonzero s_i, which is only achievable if all coefficients equal 1—a very tight constraint that likely won't work for arbitrary targets.
+
+For larger primes like p=7, we have more flexibility: Σs_i ≤ 6 allows us to distribute the weight across the 4 nonzero coefficients in multiple ways. The key insight is that for p=5, the shadow saturation property becomes equivalent to asking whether every nonzero vector in F_5^4 can be expressed as a sum of at most 4 of our 17 vectors using only unit coefficients.
+
+Now I'm reformulating this more precisely: the shadow saturation at p=5 is really about whether the set of all weighted sums—where we pick subsets of the 17 vectors, assign each a coefficient from 1 to 4, and keep the total weight at most 4—covers all nonzero vectors. This connects to the Hamming covering radius, where we're asking if every target vector can be reached within a certain distance. So the covering condition requires every nonzero vector in F_5^4 to be expressible as a linear combination with coefficients summing to at most 4, using at most 4 basis vectors. The adversary's computational verification showed all 624 nonzero vectors satisfy this for the ZSF 17-sets, but I should actually be trying to find a counterexample rather than just confirming the result works.
+
+Let me reconsider whether the covering radius argument holds up. For a [17, 13, d≥6] code over F_5, I'm checking if the Hamming covering radius is at most 4 using the sphere-covering bound. Computing the volumes: R=1 gives only 69, which is far too small, but R=2 yields 2245, which exceeds the required 625. This suggests the covering radius could be as low as 2, though the bound itself doesn't pin down the exact value. -k = 4 is an upper bound. But maybe the actual covering radius is ≤ 2?
+
+Wait, for our specific code (kernel of [v₁|...|v₁₇]), the covering radius depends on the specific vectors. The sphere-covering lower bound gives R ≥ 2 (since the size of the code is 5^13, and 5^13 · V(17,1) = 5^13 · 69 < 5^17... hmm, let me recalculate).
+
+Volume of Hamming ball of radius R in F_5^17: V(R) = ∑_{i=0}^R C(17,i)·4^i.
+V(0) = 1.
+V(1) = 1+68 = 69.
+V(2) = 69+2176 = 2245.
+V(3) = 2245 + 680·64 = 45765.
+V(4) = 45765 + 2380·256 = 655045.
+
+Now checking if the sphere-covering bound is satisfied: with |C| = 5^13 and |F_5^17| = 5^17, I need |C|·V(R) ≥ 5^17. At R = 4, this gives roughly 7.9·10^11, which is just barely enough to cover the space.
+
+Actually, let me be more careful. The bound says R ≥ 2 and R ≤ 4 based on these calculations. So the covering radius is somewhere in that range.
+
+Now I'm thinking about what this means for the actual problem: if R ≤ 4, then every syndrome can be corrected by a vector of Hamming weight at most 4. But I need to be more precise about what kind of vector achieves this—specifically, whether the coset leader can have all coordinates equal to 1 (giving L1 weight exactly 4) versus having mixed nonzero values.
+
+This reveals a real issue with the approach: the Hamming metric covering radius doesn't guarantee what I need in the Lee metric. The Lee covering radius is what actually matters here, and those bounds are significantly harder to work with.
+
+Let me reframe the problem differently. What I actually need is: for every nonzero v ∈ F_p^4, I can find coefficients (s_1,...,s_17) from {0,...,p-1}^17 such that their weighted sum equals v and the sum of coefficients stays at most p-1.
+
+Now I'm realizing there's a subtle distinction between the "positive" weight (just summing the coordinates) and the Lee weight (which treats s_i and p-s_i symmetrically). The positive weight is what my problem uses, but they're fundamentally different metrics, and I need to be careful about which bounds apply.
+
+Let me step back and assess where I actually stand. The fiber induction approach fails because cap-like arrangements can evade projections. The character sum averaging breaks down for support ≥ 4 since the average weight lands at the middle level, and I can construct examples like (1,1,p-1,p-1) that stay consistent with any constant function at that level. The CW approach has fundamental obstructions I haven't fully resolved.
+
+The inductive strategy hits a permanent wall: balanced 3-fiber distributions only give each fiber 2/3 of what's needed to push the induction forward, and this ratio doesn't improve at higher ranks. Shadow saturation and the window formula seem robust, but the coding-theoretic machinery to prove them runs into Lee-metric covering radius problems I can't bypass. What's worse, extremal non-uniqueness is now propagating—I've found multiple GL classes at rank 4 that arise from the rank-3 extremals, which means any proof strategy anchored to a single extremal configuration is doomed.
+
+I should write up the full report now.
+
+Wait—let me push Attack 2 harder. I established that the dependency (1,1,p-1,p-1) always yields weight 2p regardless of scaling. What if I can construct an 18-element set where paired dependencies of this form are the *only* way to achieve a zero-sum? If I can ensure no collinear triples exist (blocking the rank-3 subroutine) and force every 4-element dependency into the paired form, then no shorter zero-sum could exist, and the conjecture would be false.
+
+To block collinear triples, I need a cap in PG(3,p)—a set where no three points are collinear. Since the maximum cap in PG(3,5) is 26, finding 18 such points is feasible. For any four coplanar points in this cap, their dependency is unique up to scaling, and I need to verify whether it must take the paired form (a=b, c=d or similar permutations).
+
+Let me examine ovals in PG(2,5), which have 6 points with no three collinear. For any four points on an oval, there's a dependency, but I'm checking if it's always paired. I'm working through the Veronese embedding (t, t², t³) for t ∈ F₅ to test this concretely.
+
+Setting up the parametrization as (1, t, t², t³) for t ∈ F₅ gives me five points, and any four of them will have a unique linear dependency arising from the Vandermonde structure. Now I'm computing the specific dependency for the first four points using the Vandermonde matrix. So with 5 vectors from the moment curve, any linear dependency must involve all of them since every 4-subset is independent. I can find this unique dependency using Lagrange interpolation—the coefficients follow the pattern a_t = c·∏_{s≠t}(t-s)^{-1}, which I'm now computing explicitly for the field F_5. Now I'm computing the remaining coefficients: a₁ works out to c since 6 ≡ 1 in F_5, and a₂ = 4c. Let me reconsider this more carefully by looking at the moment curve [1, t, t², t³] evaluated at the points 0, 1, 2, 3, 4 in F_5, which gives me a 5×4 matrix where each entry is a power of the row index.
+
+Since this matrix has full rank 4 (any four rows are linearly independent by Vandermonde's determinant), the kernel is one-dimensional. The kernel vector (a₀, a₁, a₂, a₃, a₄) must satisfy four linear constraints: the sum of all coefficients equals zero, the weighted sum with weights i equals zero, the weighted sum with weights i² equals zero, and the weighted sum with weights i³ equals zero.
+
+Now I'm trying to find this kernel vector more directly. In F₅, the polynomial x⁵ - x vanishes at all five elements, but I need to think about what polynomial relationship the coefficients themselves satisfy. Rather than constructing Lagrange basis polynomials explicitly, I should just solve the system of four equations in five unknowns to find the one-dimensional solution space. -(a₂+a₂+a₂+a₂) = -4a₂ = a₂ (mod 5).
+
+So the dependency is (a₂, a₂, a₂, a₂, a₂) = a₂·(1,1,1,1,1).
+
+The dependency is (1,1,1,1,1): all equal coefficients! Weight = 5 = p. This is a weight-p zero-sum!
+
+v₀+v₁+v₂+v₃+v₄ = (5, 0+1+2+3+4, 0+1+4+4+1, 0+1+3+2+4) = (5, 10, 10, 10) = (0,0,0,0) in F₅.
+
+Finishing the calculation: a₀ = a₂ as well, so all coefficients equal a₂. This gives me the relation (1,1,1,1,1), meaning all five vectors sum to zero—exactly a weight-p zero-sum, which is what I was looking for.
+
+Now I'm realizing that while the moment curve avoids collinear triples, it still contains this weight-5 dependency among all five points. But I need to work with 18 vectors, not just 5, and a moment curve only has 5 finite points in F₅⁴. So I need a larger configuration—a projective cap in PG(3,5) with at least 18 points, like an ovoid with 26 points.
+
+Within such a cap, any 4 coplanar points form an arc with no 3 collinear, and those 4 points in a 2-dimensional plane must satisfy a linear dependency. Whether that dependency is "paired" depends on the specific configuration, but I'm getting bogged down in computational details when I should be focusing on the theoretical approach.
+
+Let me shift to documenting my adversarial findings. I've identified several decisive attacks: fiber induction fails for multi-fiber cases, character sum averaging breaks down at support size 4 or higher, CW constructions can't encode integer weights, the multi-fiber gap remains scale-invariant across different ranks, and the coding-theoretic path to shadow saturation runs into metric obstructions.
+
+Now I'm wondering whether I can actually break the window formula or local tail rigidity at rank 5—specifically, whether the extremal set structure (doubled plus a 17-element ZSF set in F_p^4, which itself decomposes as doubled plus an 8-element ZSF set in F_p³) reveals a fundamental weakness in the framework.
+
+I'm checking whether the window formula holds for this 17-element set and whether shadow saturation actually achieves full coverage of F_p^4 minus the origin. The rank-5 case would require shadow saturation for a 35-element ZSF set in F_p^5, which means working with a copies pool of 140 elements and conjecturing that η(C_5^5) equals 141—but I haven't verified this yet.
+
+The conjecture predicts η(C_p^r) = (9·2^{r-3}-1)(p-1)+1, which at rank 5 and p=5 gives exactly 141, meaning any 36th vector added to the extremal 35-element set should force a zero-sum of weight at most 5. This hasn't been tested computationally at rank 5 since the space is much larger. I'm wondering if I can construct a counterexample by finding 36 non-proportional ZSF vectors in F_5^5, perhaps by extending the doubled+B₁₇+e₁ construction that currently yields 35 vectors.
+
+With 3125 total elements in F_5^5 and about 746 projective candidates not proportional to the existing 35, checking whether any 36th vector remains ZSF requires verifying that no weighted zero-sum of weight ≤ 5 appears among all 36 vectors—a computationally intensive task. The key insight is whether the shadow saturation property holds: if the sums of weight ≤ 4 from the 35 vectors already cover all nonzero elements of F_5^5, then any additional vector would necessarily create a zero-sum.
+
+To test this theoretically, I'm treating the 35 vectors as a code with parameters [35, 30] and minimum distance ≥ 6, which gives a Hamming covering radius of at most 5. The question becomes whether the Lee covering radius is at most 4 (one less than p), which would confirm that shadow saturation fails and a 36th vector can be added. Now I'm computing the sphere-covering bound by calculating the volume at radius 1 and radius 2. At radius 1, the volume is 141, and multiplying by the code size gives roughly 1.3·10^23, which is less than the total space of 5^35 ≈ 2.9·10^24, so the covering radius must be at least 2. At radius 2, the volume jumps to 9661, making the product nearly equal to the full space, which suggests the covering radius is around 2. So the sphere-covering bound tells me R could be 2, but that's just a necessary condition—the actual covering radius depends on the specific code structure. For a random code, R typically hovers near this bound, though our ZSF-derived code might behave differently. The real constraint is that even if the Hamming covering radius is 2, the L1 weight would be at most 8, but I need it to be at most 4, which creates a tighter restriction than the sphere-covering bound suggests.
+
+I'm going in circles with the coding theory approach. Let me pivot to writing up the clearest attacks instead. The character sum averaging argument is the most rigorous one—I can show that for k=3, the average of f_k(μ) across all nonzero μ lands between p and 2p, which forces some μ to achieve level p, and for k=4 the bound gets even tighter.
+
+The fiber induction gap is also solid: at each rank, I need roughly 50% more vectors per fiber than the structure actually provides, and this shortfall persists regardless of rank. And the CW/polynomial method fundamentally can't distinguish weights below p since it only works modulo p, so it can count solutions matching a weight class mod p but can't enforce strict upper bounds on the actual weight.
+
+For the coding-theoretic approach, there's a metric mismatch: the shadow saturation constraint requires L1 covering radius at most p-1, but standard linear code bounds only guarantee Hamming covering radius around n-k, which at rank 5 falls far short of what's needed.
+
+All five major theoretical angles have hit fundamental obstructions—induction gets stuck on permanent gaps, polynomials can't encode integer constraints, character methods fail at support 4, fiber-sumset combinations lack the right arithmetic tools, and extremal approaches collapse under non-uniqueness. The only path forward is a direct proof of shadow saturation that bypasses these structural barriers.
+
+I'm wondering if the saturation property could emerge from expansion properties of the Cayley graph generated by the ZSF set on F_p^r—if the set has good expansion, the sumsets might grow fast enough to cover all nonzero elements by weight p-1. Though with only 17 generators in F_5^4, the set is quite small for typical expansion results.
+
+Time to write up the report.
+
+============================================================
+BLOCK 4 (423 chars)
+============================================================
+The Cortex log doesn't have the actual entries visible - it's just server logs. Let me check if there's a cortex database or if I can access it via the dual-server script. But this isn't critical for my analysis. I have enough from the previous reports.
+
+Let me now write my adversary report. I'll focus on five precise, rigorous attacks on the five theoretical approaches, plus structural observations about what survives.
+
+============================================================
+BLOCK 5 (11847 chars)
+============================================================
+Now let me store the key findings to Cortex. The instructions say to "Store counterexamples and near-misses to Cortex." Let me check if there's a way to write to cortex.
+
+Actually, looking at the setup, the Cortex is an MCP server. Let me check if I have MCP tools available.
+
+Let me also check: did I miss anything important? Let me re-read my report to make sure the arguments are rigorous.
+
+Actually, I want to double-check my variance argument for f_4. I said:
+
+"If Var(f_4) > 0, then f_4 is NOT constant, so it takes values both above and below 2p"
+
+
+But I need to be more careful here. If f_4 isn't constant, it takes at least two distinct values from {p, 2p, 3p}. Since the mean is 2p, the distribution must include both values below and above 2p to balance out—so f_4 must take p for some inputs and 3p for others, possibly with 2p as well.
+
+Let me count how many times each value appears. If n_1, n_2, n_3 represent the frequencies of p, 2p, and 3p respectively, then the total count is n_1 + n_2 + n_3 = p-1, and the sum constraint gives n_1 + 2n_2 + 3n_3 = 2(p-1). Subtracting these equations yields n_2 + 2n_3 = p-1, which means n_3 = (p-1-n_2)/2.
+
+For this to work with odd p, n_2 must be even since p-1 is even. This forces n_1 = n_3, so the frequency of p equals the frequency of 3p. If f_4 isn't constant, then both values must appear at least once, guaranteeing that p occurs as a value.
+
+The only way to avoid weight p entirely is if f_4 is identically 2p, which requires the paired structure {a, b, p-a, p-b}. So any non-paired 4-element dependency will produce weight p for some character. The real question becomes whether every 4-element dependency in an 18-vector ZSF set can be paired.
+
+A dependency is paired when its elements form a multiset closed under x → p-x, meaning {a,b,c,d} = {a, p-a, b, p-b}. Now I need to think about what constraints this places on four vectors with such a dependency.
+
+If αv_1 + (p-α)v_2 + βv_3 + (p-β)v_4 = 0, I can rearrange this as α(v_1 - v_2) + β(v_3 - v_4) = 0, which means the differences v_1 - v_2 and v_3 - v_4 must be proportional. So a paired dependency imposes a strong geometric constraint: it forces the vectors to split into two pairs whose differences are aligned.
+
+In affine terms, this is exactly a parallelogram condition—the four points form a parallelogram. The question becomes whether 18 non-proportional vectors in F_p^4 can satisfy this parallelogram property for every possible 4-element dependency, which seems like an extremely restrictive condition on the point set.
+
+I'm suspecting that sets with this property must have some underlying algebraic structure—perhaps they're cosets of subgroups or follow some translation pattern. Let me test this by considering 5 points in general position where no 4 are coplanar, which would mean there are no coplanar 4-tuples to constrain.
+
+But with 18 points, the combinatorics shift dramatically—there are thousands of possible 4-tuples, and if they form a cap with no 3 collinear, then every coplanar 4-tuple must satisfy the parallelogram condition. In a plane, any 4-point cap that forms a parallelogram has a very specific geometric constraint: one pair of opposite sides must be proportional to the other pair.
+
+When I look at 5 points in a planar arc (the maximum is 6 in PG(2,5)), all C(5,4) = 5 of the 4-tuples need to be parallelograms simultaneously. This is extremely restrictive—each 4-tuple has a unique linear dependency, and requiring all of them to satisfy the pairing condition across all 5 subsets seems nearly impossible unless the configuration is trivial. Let me test this with a concrete example using points in F_5^2.
+
+Taking (1,0), (0,1), (1,1), (1,2), I need to verify they form an arc and then compute their linear dependency. Setting up the equation a(1,0)+b(0,1)+c(1,1)+d(1,2)=0 and solving the coordinate equations gives me the relationship between the coefficients.
+
+Now I'm checking whether the dependency vector (a, a-1, 4-a, 1) in F_5 satisfies the pairing condition—specifically, whether the multiset of coefficients can be partitioned into pairs {x, 5-x}.
+
+With a=2, I get the dependency (2,1,2,1), which has multiset {1,1,2,2}. This doesn't match any valid paired partition like {1,4,2,3}, so it's not paired. Let me compute the weight f_4(μ) by taking the inner product of the dependency vector with the weight vector μ=(1,0), (0,1), (1,1), (1,2) in F_5 coordinates.
+
+The calculation gives (5,5) = (0,0) in F_5, which checks out, but the sum of coefficients is 6 ≡ 1 (mod 5), not 0. I realize I made an error—this isn't a zero-sum dependency at all. For a valid 4-element dependency in the copies pool formulation, the coefficients need to sum to 0 mod p, and I need to reconsider what the weight constraint actually requires. what we're trying to minimize.
+
+The dependency a(1,0)+b(0,1)+c(1,1)+d(1,2)=0 has a+b+c+d not necessarily 0. In fact, a+b+c+d ≡ 1 mod 5 with a=2,b=1,c=2,d=1. So this is a weight-1 zero-sum... wait, no. Weight = a+b+c+d = 6, which as an integer is 6 > p = 5. In F_p: 6 ≡ 1. So weight 6 mod p = 1. But as an integer, weight = 6 > 5 = p.
+
+Hmm, I'm getting confused between the two formulations. Let me be careful.
+
+In the copies pool formulation, I need to select coefficients from {0,...,p-1} that sum to zero in the vector space, but I want their sum as integers to stay at most p. The tuple (2,1,2,1) gives a sum of 6, which exceeds p=5, so it doesn't work. Let me try scaling this by different values modulo 5 to see if I can find a valid zero-sum with smaller integer weight. I'm checking whether this dependency actually satisfies the constraint—the sum a+b+c+d should be 0 mod p, but here it equals 6, which means this isn't a valid dependency for the function f_4 I'm trying to use.
+
+Let me reconsider what I'm looking for: a zero-sum of 4 vectors requires linear dependence among them, which generically gives a 1-dimensional space of dependencies (a,b,c,d) where av_1+bv_2+cv_3+dv_4=0, and I need to figure out what additional constraints make such a dependency valid.
+
+For a valid dependency with all nonzero coefficients, I need a,b,c,d ∈ F_p*, and the weight is their sum as integers in {1,...,p-1}. The minimum weight is 4 (all ones) and maximum is 4(p-1). When the sum is divisible by p, the possible weights are p, 2p, or 3p—for p=5, that gives weights of 5, 10, or 15, all of which fall within the feasible range.
+
+Now I'm considering what happens when we scale by different values of μ. The weight changes with each scaling, and averaging across all possible scalings gives 10. For the distribution of weights to average to 10, I need equal numbers of dependencies with weight 5 and weight 15. This constraint forces n_1 = n_3. If the dependency isn't paired (not of the form {a, p-a, b, p-b}), then f_4 isn't constant, which means both n_1 and n_3 must be at least 1.
+
+When the coefficient sum isn't divisible by p, the possible weights depend on how the coordinates transform under scaling. The weight isn't simply the sum of the original coefficients—each coordinate becomes a value in {1,...,p-1} after scaling, and I need to carefully track which weight values are actually achievable given the constraints on the coordinate ranges. is guaranteed since μ,a_i ∈ F_p*).
+
+So ⟨x⟩ = x mod p in {1,...,p-1} for x ∈ F_p*. The weight f_4(μ) = Σ⟨μa_i⟩. And Σa_i ≡ c (mod p) for some fixed c. Then f_4(μ) ≡ μc (mod p).
+
+Case c = 0: f_4(μ) ≡ 0 mod p, so f_4(μ) ∈ {p, 2p, 3p}. Average 2p.
+Case c ≠ 0: As μ ranges over F_p*, the product μc cycles through all nonzero residues mod p, meaning f_4(μ) hits each value in {1,...,p-1} modulo p exactly once. For weights bounded by p, I need f_4(μ) ∈ {4,...,p} since each summand is at least 1, and the residue class determines which specific values are achievable. The average value of f_4 across all nonzero μ is still 2p even when c ≠ 0, so it's theoretically possible for all f_4(μ) to exceed p. But I need to check whether there's actually some μ where f_4(μ) ≤ p, or if the constraint forces all weights above that threshold.
+
+Looking at the modular arithmetic: since f_4 ≡ μc mod p and c ≠ 0, the residues of f_4 cycle through all nonzero elements of F_p. So f_4 can only take values in {4, 5, ..., p} when restricted to the range where f_4 ≤ p, giving roughly p-4 possible residues out of p-1 total. The proportion of achievable values below p grows as p increases.
+
+For p=5 specifically, only one residue (4) satisfies f_4 ≤ p, and this occurs when f_4 = 4, which forces all the a_i to be equal—meaning the dependency is (1,1,1,1) up to scaling. The case f_4 = 5 would require c ≠ 0 but leads to a contradiction.
+
+So for p=5 with c ≠ 0, achieving weight ≤ 5 forces weight = 4, which requires the all-equal dependency v_1+v_2+v_3+v_4 = 0. This is exactly the unit coefficient case, and the 94 residual cases at p=5 all have killing zero-sums with weight exactly 4, confirming that all first coordinates sum to 0.
+
+Now I'm clarifying the fiber anatomy: when it says "v₁₈ in fiber 2: 4-sum = (1,1,1,2)", those numbers represent the first coordinates of the four vectors themselves—three vectors from fiber 1 and v₁₈ from fiber 2—not the coefficients in the linear dependence.
+
+With all coefficients equal to 1, the first coordinates sum to 1+1+1+2 = 5 ≡ 0 mod 5, confirming this is a valid zero-sum with weight 4, which is less than p=5. All 94 residual cases at p=5 follow this pattern of all-unit-coefficient dependencies among four vectors. At p=7, the same all-unit weight-4 dependencies still work, but dependencies with weight 7 like (1,1,1,4) would require scaling by 2 to reduce the weight.
+
+For the (1,1,1,4) dependency, scaling by 2 gives (2,2,2,1) with weight 7, and only μ=1,2 keep the weight at or below 7. The (1,1,2,3) dependency also has weight 7 and is a Case 0 type that isn't paired, so it guarantees n_1 = n_3 ≥ 1 with some scaling factor achieving weight p=7.
+
+Now looking at (1,1,5,5), which is a Case c=5 dependency with sum ≡ 5 mod 7. The scaling function f_4(μ) ≡ 5μ mod 7 cycles through {5,3,1,6,4,2} as μ ranges from 1 to 6, and I need to check which of these residues correspond to weight ≤ 7.
+
+When f_4 ≡ 4 mod 7, I can solve for μ: 5μ ≡ 4 mod 7 gives μ = 5. But computing the actual weight with μ = 5 yields 5+5+4+4 = 18, which exceeds 7 even though the residue matches. This reveals a gap between the modular constraint and the actual weight bound.
+
+The residue 4 could correspond to any value in the sequence 4, 11, 18, 25, etc., but I need f_4 ≤ 7, so the residue analysis alone isn't sufficient for larger p values. I need to reconsider my approach since the integer constraints matter as much as the modular ones.
+
+Looking back at my work, I realize the n_1 = n_3 observation for Case 0 is actually a meaningful structural finding that I should highlight in my report.
+
+For Case 0 where Σa_i ≡ 0 mod p, I've found that f_4 takes values in {p, 2p, 3p} with average 2p, and crucially, the number of μ with weight p equals the number with weight 3p. This gives me a clearer picture: f_4 ≡ 2p exactly when the dependency has that paired parallelogram structure, and when f_4 doesn't equal 2p, I get n_1 = n_3 ≥ 1, which provides weight-p support. The real obstruction to finding weight-p zero-sums is just this paired structure.
+
+For Case ≠ 0, the analysis becomes significantly more intricate, though empirically I'm seeing patterns emerge.
+
+The key insight is that empirically at p=5, all the killing zero-sums use unit coefficients with weight 4, which is below p. This is actually quite significant because it refocuses the problem: in an 18-element ZSF set, I need to determine whether there must exist either a non-degenerate collinear triple, a non-paired 4-element Case-0 dependency, or a unit-coefficient 4-element zero-sum. Let me incorporate this into my report.
+
+============================================================
+BLOCK 6 (428 chars)
+============================================================
+Now let me try to store the key findings to Cortex if possible, and summarize for the user.
+
+Actually, I should also check: is there a way to store to Cortex via the MCP server? Let me check the dual-server.py to understand the Cortex API.
+
+Actually, the user might not have the Cortex MCP server running. Let me just write my findings to a summary and present them to the user.
+
+Let me now write a concise summary for the user.
+
+============================================================
+BLOCK 7 (462 chars)
+============================================================
+The Cortex MCP tools aren't available through the deferred tool search. Let me check if there's a way to write to cortex via a file or the dual-server script. Let me look at the cortex directory structure.
+
+Actually, looking at the Cortex setup, it seems like the Cortex MCP server might not be running or accessible. The log showed port binding errors. Let me just present my findings to the user directly.
+
+Let me give a concise summary of my adversary report.

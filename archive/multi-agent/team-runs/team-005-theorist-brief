@@ -1,0 +1,48 @@
+# Research Briefing (THEORIST thread)
+
+**Goal:** Classify ALL extremal short-zero-sum-free supports in C_p³ up to GL(3,p) equivalence, for p=3 and p=5. An 8-element set A ⊂ F_p³\{0} is extremal if A^{[p-1]} has no short zero-sum. How many GL-orbits of extremal supports exist? What geometric/algebraic property characterizes them? Does the characterization explain why extremal supports exist for p=3,5 but possibly not for p=7?
+
+---
+
+### Round 1  (18:50)
+
+The worker focused on p=3 and made a useful reduction: an “extremal” 8-point support (meaning the multiset formed by repeating each point twice has no nonempty zero-sum subsequence of length ≤3) cannot contain an element and its negative and cannot contain three distinct collinear points, so any extremal 8-set is an 8-point “cap” in the 3-dimensional affine space over F3. They initially conjectured such sets are exactly complements of affine planes (which would give a single GL(3,3)-orbit), but then realized that claim runs into contradictions and has not been completed — so the complement-of-plane description is likely false or at least unproved here. In short: solid progress on necessary structural constraints (reduction to 8-caps) but the full classification up to GL-equivalence for p=3 is unfinished, and no work on p=5 or the p=7 obstruction has been carried out yet. (yellow)
+
+**Cost so far: $0.06** | Tokens: 11,893 in / 3,666 out
+
+### Round 2  (18:53)
+
+You’re trying to list, up to change-of-coordinates, every 8-point subset of the nonzero vectors in F_p^3 that is “extremal” (no short zero-sum after taking (p−1)-fold multisets), for p=3 and p=5. In this round the worker made a clear structural reduction for p=3: any extremal set must be a classical 8-cap (no three collinear) that spans the space, so after a linear change of basis we can assume three basis vectors lie in the set and one convenient fourth point is present; the remaining four points were shown to lie in a small explicit pool (the proposed “Omega”) subject to no-line constraints, which reduces the classification to a finite symmetry check. However the key verifications were not completed: they did not prove every 8-cap avoids antipodal pairs (A ∩ −A = ∅) nor did they finish the finite orbit enumeration or the final short-zero-sum checks, and the reviewer flagged the writeup as stalled rather than finished. Next concrete steps are modest and mechanical: finish the small-case combinatorial check of the remaining 4-point choices under the stabilizer, verify the short-zero-sum condition for each representative, then repeat the analogous (but larger) analysis for p=5 and compare patterns to explain why such extremal supports might fail for p=7 (likely because larger primes give more additive relations so an 8-set cannot avoid short zero-sums or antipodal pairs). Progress is real but incomplete — (yellow) = working but unclear if productive.
+
+**Cost so far: $0.10** | Tokens: 29,847 in / 6,042 out
+
+### Round 3  (18:56)
+
+We tried several structural proofs for the p=3 case (guessing complements of planes, doing orbit/normal-form reductions, and then a “cap + antipodal-free” nonexistence claim) and they all got stuck on small finite verifications that look easiest to settle by computation; the evaluator therefore told us to stop proving and instead enumerate every 8-element subset A of F_3^3\{0} and test the extremal condition directly (for p=3 this means forming the multiset A with each element doubled and checking there is no short zero-sum subsequence), then classify any surviving supports up to GL(3,3)-equivalence and produce an explicit example if one exists. This is a completely finite, tractable computation (26 nonzero vectors give C(26,8) = 1,562,275 candidate sets and GL(3,3) has size 11,232, so orbit-reduction is straightforward), so the next concrete deliverable will say (i) whether any extremal 8-supports exist for p=3, (ii) how many GL-orbits they form, and (iii) one representative example; this approach will decisively confirm or refute the cap+antipodal-free claim and unlock the small-case classification needed to inform p=5 and p=7 work. (green)
+
+**Cost so far: $0.16** | Tokens: 53,341 in / 9,250 out
+
+### Round 4  (18:57)
+
+Turn 4 recap: The worker clarified the exact finite verification needed for p=3 by giving an unambiguous extremal test (work in V=F_3^3, take an 8-element A⊂V\{0}, form A^{[2]}, and require no nonempty zero-sum subsequence of length ≤3, equivalently A∩(−A)=∅ and no distinct x,y,z∈A with x+y+z=0), and then formulated a concrete COMPUTER-thread task to enumerate all 8-sets, count those passing the test, and compute GL(3,3)-orbits with representatives and stabilizers; however no actual enumeration, example, or orbit classification was produced in this round—the worker effectively delegated the finite search instead of proving existence/nonexistence or giving an explicit extremal A, and the evaluator asked to reframe: either prove there is no such 8-set or construct and verify one explicitly. So we have a clean, implementable verification plan for p=3 (and by analogy p=5) but no completed classification yet—work is organized but still waiting on computation or a hand-proof. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.20** | Tokens: 81,872 in / 10,488 out
+
+### Round 5  (18:59)
+
+Turn 5 focused on an explicit test of a natural candidate: take the affine slice x1=1 in F3^3 and remove the origin to get an 8-point set A; this A is automatically antipodal-free (no 2-term zero-sums) because all first coordinates are 1, but reducing the 3-term condition to F3^2 shows A inherits 3-term zero-sums from the plane—indeed (1,1,0)+(1,0,1)+(1,2,2)=0 in F3^3—so this candidate fails to be extremal. The step was useful because it gave a concrete counterexample to the “affine-slice” construction and reduced the length-3 check to a tractable 2D combinatorial question, narrowing which geometric patterns might work; several other avenues (normal-form/orbit reduction, parallelogram/nonexistence arguments) remain to pursue. Vibe check: (green) = real progress.
+
+**Cost so far: $0.23** | Tokens: 113,583 in / 11,996 out
+
+### Round 6  (19:01)
+
+We made concrete progress on p=3 by recasting the  8-point extremal-support problem as a very explicit two-slice packing problem: put four points in the “first-coordinate = 1” slice and four in the “first-coordinate = 2” slice, enforce antipodal-freeness between slices (no point in slice 2 is the negative of a point in slice 1), and note that any 3-term zero-sum must lie entirely inside one slice, so each 4-set projects to a 4-point subset of F_3^2 with no three summing to zero — equivalently a 4‑cap (no three collinear) in the affine plane over F_3. Thus the classification reduces to listing 4-caps in F_3^2 up to GL(2,3) and pairing them by the antipodal-avoidance condition; I produced an explicit 4-cap for one slice and wrote down the exact pairing obstruction that any candidate for the other slice must avoid. That turns the existence/count problem into a finite, checkable combinatorial search (and suggests why small fields like p=3 and p=5 can admit such extremal configurations while a larger field like p=7 may fail for size/packing reasons), but the other slice constructions and the final GL(3,p)-orbit count are not yet completed. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.28** | Tokens: 149,944 in / 14,501 out
+
+### Round 7  (19:03)
+
+We aimed to classify all 8-point “extremal” supports in the 3-dimensional vector spaces over F_3 and F_5 up to linear change of coordinates; in this round the worker pursued a concrete two-slice construction for p=3 (splitting the 8 points into two 4-point slices with fixed first coordinate) and showed the idea removes all cross-slice 3-term zero-sums and can be made antipodal-free, and they found an explicit good choice for the first slice while trying several candidate second slices; however each hand-picked second slice produced an unavoidable 3-term zero-sum inside that slice, and after several trials the process began to loop: the remaining bottleneck is not a new insight but the need for a definitive finite enumeration/orbit computation (or a clean algebraic/ geometric invariant) to decide which 8-point supports actually avoid short zero-sums, so continued ad‑hoc manual search is unlikely to finish the classification. Vibe check: (red) = stuck or spinning.
+
+**Cost so far: $0.31** | Tokens: 191,320 in / 16,348 out
+

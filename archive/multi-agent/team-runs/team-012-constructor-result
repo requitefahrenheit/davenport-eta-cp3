@@ -1,0 +1,43 @@
+# Research Result
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+**Arch:** gpt
+**Turns:** 9
+**Cost:** $1.1619
+
+## Log
+
+
+[Turn 1] The worker produced a working DP/bitset-style computation and verified that the 48-term sequence (8 vectors each repeated 6 times) in \((\mathbb{Z}/7\mathbb{Z})^3\) is short-zero-sum-free up to length 7. No theorem/lemma or conceptual obstruction was stated; this is purely computational progress. Approaches tried: 1 (direct computation/DP); no proof attempts yet; Lakatos threshold not reached.
+[Turn 2] The worker articulated a concrete structural conjecture (“binary-cube” support with multiplicity 6 is one-element maximal) and backed it with computation, including debugging an initial misread (the only missing representable element was 0, which is handled separately). They also began exploratory computation toward alternative 8-element supports avoiding 3-term zero sums. Approaches tried: (1) DP/bitset verification of short-zero-sum-freeness; (2) reachability/enumeration argument for maximality plus random search for other supports; no proof yet, but a clear candidate property and verified extremal example for \(p=7\). Lakatos threshold not reached.
+[Turn 3] The worker produced a genuine lemma (Lemma 1) proving that no nonempty multiset of up to 6 elements from the 0/1-cube support \(B\subset C_7^3\) can sum to 0, giving a clean conceptual justification for short-zero-sum-freeness up to length 6 for sequences supported on \(B\) with multiplicities ≤6. However, the next-step plan is vague and appears inconsistent with computation: they found an 8-distinct-element set with no zero-sum subset of size ≤7, undermining the proposed “any 8 distinct elements force a short zero-sum” direction. Approaches tried: (1) DP verification; (2) maximality reachability; (3) arithmetic lemma on 0/1 supports; (4) random counterexample search to a potential lemma. Lakatos threshold not reached (not 3 failed proof approaches yet), but a key intended lemma is already refuted by computation.
+[Turn 4] The worker clarified the true bottleneck by reformulating it as a kernel/low-“7-weight” vector problem for a 9×3 matrix over \(\mathbb F_7\), and noted the kernel has dimension ≥6. But they did not execute a specific bound or lemma; instead they outlined multiple prospective strategies (counting/probabilistic vs structural classification) without committing, and relied on an unproven “crude estimate” plus a uniform-distribution heuristic. Approaches tried remain: DP verification, maximality enumeration, Lemma 1, and now a linear-algebra reformulation; no concrete progress on the 9-support question yet; Lakatos threshold still not reached.
+[Turn 5] The worker attempted randomized computation to test whether every 9-set has a short (≤7) zero-sum, but the code is not aligned with the actual model: it sampled supports from all 343 vectors (including 0), ignored multiplicity constraints, and used a very inefficient multiset enumeration; then they got only “no counterexample in 500 random tests,” which is not a theorem. They also started but abandoned a DP for repetition and a counting calculation. Approaches tried: (1) DP/bitset; (2) reachability maximality; (3) Lemma 1; (4) kernel reformulation; (5) random testing with flawed/unfinished code. No Lakatos threshold yet, but they are drifting into ad hoc computation without a crisp, exact target.
+[Turn 6] The worker improved the computation and verified: (i) any 9-set obtained by adding one point to the canonical affine 8-cap forces a ≤7 zero-sum; (ii) no random 9-set counterexamples found in up to 20k trials. However, they incorrectly concluded “Fraction = 1” without enumerating all 9-subsets, and they introduced an unproven and likely false claim (“every 9-point subset contains an affine 8-cap”). They also still haven’t aligned the test with the multiplicity≤6 model (though length≤7 makes this mostly moot except for 7 repeats of one element). Approaches so far: multiple computational probes + one lemma; still no decisive theorem or exhaustive enumeration. Lakatos threshold not reached, but there is a clear logical gap between sampled evidence and a universal claim.
+[Turn 7] The worker attempted a “rank ≤2 implies short zero-sum” lemma via partial sums/line pigeonhole, but the argument is not concretely executed (step 4–6 is unclear/incorrectly justified: “at least one line contains exactly two partial sums” doesn’t force a length-7 block, and distinctness isn’t contradicted). They then reverted to broad planning about rank-3/orbit enumeration without committing to a single actionable step. Approaches tried: several computational experiments plus attempted combinatorial lemma for rank≤2 that is not yet a solid deliverable; still no resolution for rank-3 case or exact fraction. Lakatos threshold not reached.
+[Turn 8] The worker ran targeted random tests restricted to rank-3 9-point supports and found no counterexample in 5000 samples; a larger run hit timeout. This is additional empirical evidence but no new lemma or obstruction, and it doesn’t advance the proof or the “exact fraction” claim. Approaches tried now include repeated randomized testing in addition to earlier DP and partial theoretical work; still no rigorous resolution for rank-3. Lakatos threshold not reached, but computation is not being converted into a falsifiable structural conjecture/lemma.
+[Turn 9] This turn continued ad hoc computation: random tests of reachability by length 4 and checks of 3-sums, with code resets/errors and no theorem-level insight extracted. The results are contradictory/uncalibrated (3-sum zero not always present; length-4 reachability seems always present in small samples but not tied to the target property), and no structural conjecture was clearly stated. Across 9 turns, the process has drifted into repeated randomized experiments without converging to a proof strategy or a definitive counterexample; terminating to avoid further budget waste.

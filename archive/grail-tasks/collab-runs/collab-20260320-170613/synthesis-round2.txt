@@ -1,0 +1,87 @@
+# SYNTHESIS ROUND 2 — COORDINATION REPORT
+
+## STATUS
+Three agents have produced contradictory findings on U1's provability: THEORIST claims window-based proof is viable for A₈; COMPUTER confirms shadow saturation of 24 twisted counterexamples but finds zero (8,7,2) ZSF pairs in exhaustive search; ADVERSARY constructs 3-fiber swap-generated sets that appear to survive all linear forms, suggesting U1 may be fundamentally false and non-A₈ sets break the 2-fiber collapse assumption.
+
+---
+
+## CONVERGENCE/ESCALATION
+
+### ✓ HIGH CONFIDENCE: Shadow Saturation Established
+- **COMPUTER** verified all 24 twisted sets are shadow-saturated (computational proof)
+- **THEORIST** incorporates shadow saturation as structural invariant; proof framework depends on it
+- **STATUS**: Convergence on shadow saturation as established fact
+
+### ⚠ POSSIBLE FALSE CONJECTURE: Fiber Distribution Exhaustiveness
+- **COMPUTER** found ZERO strongly ZSF sets in 162,864 (8,7,2) exhaustive pairs at p=5, yet independently constructed 24 twisted counterexamples in Round 1
+- **THEORIST** report cuts off before resolving whether twisted+standard fibers exhaust all strongly ZSF 17-set types
+- **IMPLICATION**: Either (a) the 24 counterexamples use fiber signature OTHER than (8,7,2) or (8,8,1), or (b) the exhaustive search space is incomplete
+- **FLAG**: Fiber classification is likely incomplete; claim of exhaustiveness is false
+
+### ✗ CRITICAL CONTRADICTION: U1 Provability & A₈ Uniqueness
+- **THEORIST**: "Window Theorem...PROVED" (assumes A₈ suffices)
+- **ADVERSARY**: "17/17 single swaps to fiber 2...ALL with min_fibers=3 under EVERY linear form" (demonstrates non-A₈ sets force 3-fiber irreducibility)
+- **FUNDAMENTAL ISSUE**: U1 proof structure requires 2-fiber collapse for any strongly ZSF 8-set. If non-A₈ sets exist with min_fibers=3, the window formula cannot prove U1 universally
+- **FLAG**: U1 may be FALSE; proof depends on hidden assumption that A₈ is unique (U2), which ADVERSARY Round 1 showed is false at p≥5
+
+---
+
+## CROSS-POLLINATION
+
+### From THEORIST → COMPUTER & ADVERSARY
+**Hidden bottleneck identified**: The fiber-count constraint (Theorem B: ≥2 non-empty fibers) is necessary but insufficient for proving U1. The real obstruction is **tail-spread**: proving that shadow projections cannot concentrate on small subsets despite satisfying local fiber bounds. The (8,7,2) exhaustive search correctly finds zero ZSF pairs *because* concentrating tails in two fibers with that multiplicity is incompatible with shadow completeness—but this is a *negative result* that suggests the proof path must avoid enumerative methods entirely.
+
+**Recommendation**: Investigate U1' (projection to ≤α+1 parallel lines) as dual formulation—may be provable via codimension/rank arguments without full fiber enumeration.
+
+### From COMPUTER → THEORIST & ADVERSARY
+**Twisted sets exploit narrow algebraic coincidence**: The 24 counterexamples are NOT regenerable via pair-search; they form a proper GL-subvariety suggesting they rely on specific A₈ structure + weight-multiset alignment. This implies the counterexamples do NOT generalize to all strongly ZSF 8-sets, and the swap theorem's scope may be artificially wide—non-A₈ swaps may not behave as claimed.
+
+**Recommendation**: Validate ADVERSARY's DP on small hand-traced examples (p=5, single swap) before accepting 3-fiber claims as proven.
+
+### From ADVERSARY → THEORIST & COMPUTER
+**U1 and U2 are entangled, not independent**: THEORIST's proof assumes A₈ uniqueness without proving it; ADVERSARY shows A₈ is not unique. If swap-generated 3-fiber sets are real (not DP artifacts), then U1's truth depends on which 8-set base is chosen, contradicting proof structure. The window formula only works if all strongly ZSF 8-sets collapse to 2 fibers under some linear form—but 3-fiber-forced sets break this entirely.
+
+**Recommendation**: Before accepting U1 as provable, resolve whether non-A₈ strongly ZSF 8-sets exist and whether they satisfy the window formula.
+
+---
+
+## DIRECTIVES
+
+### 🔹 THEORIST (next action)
+**TASK**: Resolve fiber classification exhaustiveness by independently verifying the 24 twisted counterexamples' fiber signatures against (8,7,2) and (8,8,1) predictions.
+
+**Dependency**: Use COMPUTER's explicit construction of the 24 sets. For each, compute fiber partition under all linear forms. Report: (a) actual fiber signature for each set, (b) whether signature matches (8,7,2) or (8,8,1), (c) if neither, propose alternative exhaustive classification.
+
+**Purpose**: Determine whether COMPUTER's zero (8,7,2) result is correct or if the search space is incomplete. If counterexamples use different fiber structure, the exhaustiveness claim collapses and U1 requires new proof approach.
+
+---
+
+### 🔹 COMPUTER (next action)
+**TASK**: Validate ADVERSARY's swap-generation DP by hand-tracing p=5, single swap case.
+
+**Dependency**: Take one non-trivial strongly ZSF 8-set from ADVERSARY's output (e.g., first fiber-2 swap survivor). Implement brute-force zero-sum evaluation (enumerate all 2^8-1 non-empty subsets, check closure under sum) and compare DP result. If mismatch, identify DP bug; if match, accept DP validity.
+
+**Purpose**: Determine whether ADVERSARY's "all single swaps are 3-fiber-forced ZSF" finding is real or artifact. This is the crux of whether U1 is genuinely false.
+
+---
+
+### 🔹 ADVERSARY (next action)
+**TASK**: Assuming DP validation passes, enumerate ALL strongly ZSF 8-sets at p=5 and test whether each one's swap variants force min_fibers≥3 or can collapse to 2 fibers under some linear form.
+
+**Dependency**: Use COMPUTER's (once validated) fiber-classification algorithm to determine min_fibers for swap-generated sets. Report for each 8-set base: (a) how many swaps generate 2-fiber-collapse survivors (if any), (b) how many force 3-fiber irreducibility, (c) whether A₈ is unique in achieving 2-fiber collapse.
+
+**Purpose**: Definitively answer whether U1 is false (all non-A₈ base sets force 3-fiber irreducibility, breaking U1 proof) or whether multiple independent families of 2-fiber-collapsible sets exist, making U1 provable but U2 false.
+
+---
+
+## NEXT ROUND BRIEFING
+
+**Critical questions to resolve before Round 3:**
+1. Do the 24 twisted counterexamples have fiber signature (8,7,2), (8,8,1), or something else?
+2. Are ADVERSARY's swap-generated 3-fiber sets real or DP artifacts?
+3. Does U1 hold universally, or is it contingent on A₈ uniqueness (U2)?
+4. Is the window formula provable without assuming all strongly ZSF 8-sets collapse to 2 fibers?
+
+**If answers suggest U1 is false**: THEORIST must pivot to proving U1' (projection to ≤α+1 parallel lines) via rank/codimension methods instead, sidestepping the fiber collapse bottleneck entirely.
+
+**If DP validates and all non-A₈ swaps force 3-fiber irreducibility**: U1 is false; the proof claimed in Round 2 is incomplete and cannot be salvaged via window methods alone.

@@ -1,0 +1,90 @@
+# SYNTHESIS: Multi-Fiber Grail Problem — STATUS & DIRECTIVES
+
+## STATUS
+Exhaustive computational verification confirms α(4,5)=17 and α(4,7)=17; genuine multi-fiber zero-sum-free structures exist (54 found at p=5) that evade single-fiber induction, exposing a structural gap where the Projection Decoupling Obstruction describes a necessary but not sufficient barrier to zero-sums—the key remaining question is whether multi-fiber constraints collapse to a unified formula or require separate structural analysis per configuration.
+
+---
+
+## CONVERGENCE/ESCALATION
+
+### ✓ HIGH CONFIDENCE: Multi-Fiber Gap is Real
+- **THEORIST** proved Cross-Fiber Degeneracy Constraint (Thm 2) showing collinearity across fibers {0,1,c≥2} has rigid structure.
+- **COMPUTER** independently discovered 54 genuinely multi-fiber ZSF sets at p=5, confirming "two-fiber bound alone does NOT suffice."
+- **Synthesis:** Both agents converged on the same structural insight via different methods (theory vs. exhaustive search).
+
+### ✓ HIGH CONFIDENCE: Exhaustive Verification α(4,5)=17, α(4,7)=17
+- **COMPUTER**: Forward-checked all 556 non-proportional vectors at p=5 (PASS); 383 projective candidates at p=7 (all killed).
+- **THEORIST**: Used these values as anchors for theoretical framework validation.
+- **ADVERSARY**: Did not challenge these results directly; focus was on proof-chain integrity higher up the recursion.
+
+### ⚠️ POSSIBLE FALSE CONJECTURE: Single Obstruction Explains All Failures
+- **THEORIST's Projection Decoupling Obstruction:** Claims vectors fall exactly *one term short* ($(α+1)(p-1) = s-1$) within a fiber, blocking induction.
+- **COMPUTER's Finding:** 54 multi-fiber ZSF sets exist at p=5 despite this obstruction—suggesting it is **necessary but not sufficient**.
+- **Unresolved:** Does the obstruction characterize when *single-fiber* constructions fail, while multi-fiber configurations have independent constraints? Or does it hint that the obstruction is incompletely specified (e.g., depends on fiber distribution)?
+- **Flag for THEORIST:** Reconcile why the obstruction doesn't prevent the 54 multi-fiber examples; refine the statement to explain which configurations evade it.
+
+### ⚠️ POSSIBLE FALSE CONJECTURE: Canonical Representative Bias (RESOLVED)
+- **COMPUTER** self-corrected initial bug where only first-coordinate {0,1} vectors were tested, missing genuine fiber-≥2 structure.
+- **Status:** Fixed. No false claim persists, but highlights risk of sampling bias in exhaustive searches at higher primes (p=11, p=13).
+
+### ⚠️ ESCALATION: Proof Chain Integrity (ADVERSARY's Challenge)
+- **ADVERSARY** identified two near-misses:
+  1. **8-tail bound confusion:** Computational η(C_p^3)=8(p-1)+1 claim differs from what the lifting theorem requires; 9-tail config has only ~18 vectors (satisfies bound only at p=3).
+  2. **Orbit coverage failure at p≥11:** Modular constraint w·j mod p has sporadic (not dense) solutions, contradicting universality claim.
+- **Status:** THEORIST has not yet addressed these specific challenges. **CRITICAL:** THEORIST must rebuild the 8-tail argument from first principles (without η-theorem appeal) or provide a counterexample at p=11 for specific fiber configurations.
+
+---
+
+## CROSS-POLLINATION
+
+### From THEORIST → COMPUTER
+**Insight:** The Projection Decoupling Obstruction (vectors in fiber $F_c$ fall one term short of $s$-constant) predicts which *single-fiber* configurations fail. 
+- **Use:** Filter the 54 multi-fiber ZSF sets at p=5 by examining their *fiber multiplicities* — do they all have minimal representation in nonzero fibers (e.g., n_c ≤ α(p-1) for c≠0), or do some break this pattern? This would test whether the obstruction predicts structural necessity.
+
+### From COMPUTER → THEORIST
+**Insight:** The 54 multi-fiber ZSF sets are ALL 3-fiber (minimal over all 156 linear forms), not arbitrary multi-fiber distributions.
+- **Use:** This constraint on *fiber diversity* is structural, not accidental. Investigate whether 3-fiber configurations admit a unified lower bound on ZSF size (potentially tighter than the two-fiber bound). This may explain why multi-fiber doesn't increase η(C_p^r) but changes the optimal *construction type*.
+
+### From ADVERSARY → THEORIST & COMPUTER
+**Insight:** The 8-tail argument confuses two distinct claims:
+1. Computational η(C_p^3) ≥ 8(p-1)+1 (verified by exhaustive search for small p).
+2. Lifting zero-sums from 3D to 4D via fiber collinearity (requires independent proof).
+
+- **Use:** Separate these claims. For p=5,7: verify (1) independently via direct exhaustive search on C_5^3 and C_7^3 themselves (not via rank-4 examples). Separately, test whether the lifting mechanism works by constructing counterexamples (e.g., find 18-vector sets in C_5^4 with no weighted zero-sum but satisfying a hypothetical lifted lower bound — if such exist, lifting fails for those p).
+
+### From COMPUTER → ADVERSARY
+**Insight:** The p=7 verification extends to a larger candidate space (~10,000 vectors after removing proportionals) without failure; the formula may hold universally at p=7.
+- **Use:** Before escalating to p=11, sample p=7 more densely: test random p=7 rank-4 point sets (not just the canonical construction) to see if α(4,7)=17 is forced by the formula or if alternative constructions yield α(4,7)≥18. This disambiguates whether the formula is tight or merely a lower bound.
+
+---
+
+## DIRECTIVES
+
+### **THEORIST**
+**Primary Task:** Reconcile the Projection Decoupling Obstruction with the existence of 54 multi-fiber ZSF sets at p=5.
+- Refine the obstruction statement: specify whether it applies only to *single-fiber* configurations, or identify which multi-fiber distributions circumvent it.
+- **Dependency on COMPUTER:** Use the explicit list of 54 multi-fiber ZSF sets to reverse-engineer the structural constraint that makes them ZSF despite the obstruction. (E.g., do all 54 have n_0 = α(p-1)+1 and n_c ≤ α(p-1) for c≠0? Or a different pattern?)
+- **Dependency on ADVERSARY:** Address the two near-misses flagged (8-tail confusion and p≥11 orbit coverage). Provide either: (a) a corrected 8-tail argument independent of η, or (b) a counterexample at p=11 proving universality fails.
+
+### **COMPUTER**
+**Primary Task:** Characterize the structural properties of the 54 multi-fiber ZSF sets at p=5 to guide THEORIST's refinement.
+- **Deliverable:** For each of the 54 sets, extract fiber multiplicities (n_0, n_1, n_2, n_3, n_4). Identify the *minimal* pattern (e.g., minimum n_0, maximum distributed non-zero fibers). Test whether all satisfy a common constraint (e.g., n_0 = 16, sum of n_c for c≥2 = 1, etc.).
+- **Dependency on THEORIST:** Use THEORIST's refined obstruction statement to predict which fiber distributions should be possible ZSF; verify predictions against the 54 sets.
+- **Dependency on ADVERSARY:** For p=7, run a *random sampling* test: generate 100 random rank-4 point sets (not canonical constructions) and check if any achieve ZSF size ≥18. This tests whether p=7 might have a larger α(4,7) than assumed.
+
+### **ADVERSARY**
+**Primary Task:** Resolve the two near-misses by either defending the proof chain or identifying the precise boundary of failure.
+1. **8-tail argument:** Construct an explicit proof that η(C_5^3) ≥ 9 and η(C_7^3) ≥ 15 using *only* direct zero-sum arguments (no recursive η-appeal). OR provide a concrete 8-tail example at p=3 showing the bound is tight and explain why it fails for p≥5.
+2. **p≥11 orbit coverage:** Test the modular constraint w·j mod p ∈ [⌈w/2⌉, 2⌊w/2⌋] exhaustively for j ∈ {1,...,p-2} and w ∈ {2,...,p} at p=11 and p=13. Quantify the fraction of (w,j) pairs satisfying the constraint; if <50%, the "dense coverage" claim is false.
+- **Dependency on THEORIST:** Once THEORIST clarifies when the obstruction applies, ADVERSARY will check whether it explains why the p≥11 cases fail (i.e., obstruction prevents lifting).
+
+---
+
+## SUMMARY TABLE
+
+| **Claim** | **Status** | **Confidence** | **Owner** | **Next Step** |
+|-----------|-----------|----------------|-----------|---------------|
+| α(4,5) = 17, α(4,7) = 17 | Verified exhaustively | HIGH | COMPUTER | Extend to p=11; sample random sets. |
+| Multi-fiber gap is real | 54 ZSF sets found at p=5 | HIGH | COMPUTER + THEORIST | Characterize fiber patterns. |
+| Projection Decoupling Obstruction | Incomplete; doesn't block 54 examples | NEEDS REFINEMENT | THEORIST | Reconcile with multi-fiber data. |
+| 8-tail bound | Confused with η-theorem | FLAGGED | ADVERSARY ↔ THEORIST |

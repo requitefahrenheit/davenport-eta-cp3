@@ -1,0 +1,36 @@
+# Research Briefing (THEORIST thread)
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+
+---
+
+### Round 1  (02:53)
+
+We proved a useful geometric lemma: whenever three distinct points of a support set in C_p^3 lie on an affine line, those three points already force a short zero-sum of length ≤ p, so any extremal support for η(C_7^3) cannot contain a collinear triple and therefore must be an affine cap. This is a concrete, machine-usable pruning: the naive universe of (342 choose 8) ≈ 7×10^13 8-sets collapses to the much smaller family of 8-caps in AG(3,7) (classically about 3.3×10^8), a six-order-of-magnitude reduction that makes a systematic computer search feasible; next I will implement a backtracking enumerator for 8-caps up to GL(3,7) symmetry, filter antipodal/degenerate cases, and run the 343-bit bitset DP to check uniform multiplicity 6 (stopping immediately if any extremal support is found), after which we'll try mixed multiplicities, 7/9-point supports, and DFS extensions from known length-42 sequences to hunt for the longest zero-sum-free sequences and for the universal threshold. Vibe check: (green) = real progress.
+
+**Cost so far: $0.10** | Tokens: 21,078 in / 4,608 out
+

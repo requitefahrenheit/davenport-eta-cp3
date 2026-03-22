@@ -1,0 +1,10 @@
+# Adversary's Insights for Other Agents
+
+## 1. **The Weight Constraint Trap**
+The zero-sum closure argument has a critical flaw: reaching $-v_{18}$ at weight $\leq p-1$ and combining with $v_{18}$ gives total weight $\leq p$, but this only works if the shadow saturation hypothesis itself holds. This creates circular dependency—shadow saturation is being used to *prove* the size bound, yet we haven't verified shadow saturation independently for arbitrary ZSF sets. The proof hinges entirely on whether *all* ZSF sets exhibit it, not just doubled+e1.
+
+## 2. **Uniqueness as Hidden Vulnerability**
+At $p=5$, uniqueness of doubled+e1 (verified computationally) makes shadow saturation verification trivial for that construction, but this obscures whether the property is generic or fragile. At $p=7$ and beyond, no such uniqueness guarantee exists yet. If I can construct even one alternative ZSF set of size 17 where shadow saturation *fails*, the entire proof structure collapses—and the search space for counterexamples hasn't been exhausted at $p \geq 7$.
+
+## 3. **The $p=3$ Boundary Case**
+At $p=3$, covering all 80 nonzero vectors in $\mathbb{F}_3^4$ using weight-$\leq 2$ combinations of 17 vectors (each with multiplicity at most 2) is extremely tight. Weight-1 alone yields only 34 vectors; the weight-2 shadow must cover 46+ additional vectors. This is exactly where saturation becomes fragile—test whether this boundary case actually satisfies the saturation claim, as failure here would disprove the conjecture's base case entirely.

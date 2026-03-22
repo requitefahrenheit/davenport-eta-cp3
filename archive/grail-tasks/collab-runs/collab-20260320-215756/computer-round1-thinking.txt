@@ -1,0 +1,540 @@
+
+============================================================
+BLOCK 1 (400 chars)
+============================================================
+The user wants me to act as the COMPUTER in a multi-agent research setup. My job is to:
+
+1. Search Cortex first for prior computational findings
+2. Read the seed briefing document
+3. Extend verification of the Gap Hypothesis to p=37,43
+4. Try to find off-L gap vectors at large p
+5. Compute something definitive
+
+Let me start by searching Cortex (the memory system) and reading the briefing document.
+
+============================================================
+BLOCK 2 (102 chars)
+============================================================
+Let me read the key files - the cortex, the briefing, and the most recent results from prior sessions.
+
+============================================================
+BLOCK 3 (455 chars)
+============================================================
+This is excellent. Let me read more of the adversary results and the prior computational results to understand what's been done. The key focus is the Gap Hypothesis:
+
+For A8 in F_p^3, the gap of Σ_{p-1}(A8) is EXACTLY {(0,j,j) : 1 ≤ j ≤ (p-3)/2}.
+
+I need to:
+1. Verify this at p=37 and p=43
+2. Try to find off-L gap vectors at large p
+3. Store findings to Cortex (memory)
+
+Let me also read the prior computer round results to see what's already been done.
+
+============================================================
+BLOCK 4 (126 chars)
+============================================================
+Now let me look at the most recent collaboration round results, particularly the synthesis and insights from the last session.
+
+============================================================
+BLOCK 5 (35240 chars)
+============================================================
+Now I have a solid understanding of the prior work. Let me focus on the core task:
+
+**Gap Hypothesis**: For A8 in F_p^3, the gap of Σ_{p-1}(A8) is EXACTLY {(0,j,j) : 1 ≤ j ≤ (p-3)/2}.
+
+This has been verified at p = 5,7,11,13,17,19,23,29. I need to:
+1. Extend verification to p=37,43
+2. Try to find counterexamples (off-L gap vectors) at large p
+
+
+3. Compute structural properties that might help prove it
+
+I'll write a Python script using dynamic programming to compute Σ_{p-1}(A8) efficiently across multiple primes, identify the gap structure, and verify whether it matches the conjectured pattern for p up to 43.
+
+For p=43, the field has 79,507 elements, so I need to carefully implement the DP to compute weighted sumsets where we sum subsets of A8's 8 vectors with coefficient constraints. Let me clarify the definition: Σ_{p-1}(A8) is the set of all possible linear combinations of vectors from A8 where the coefficients sum to at most p-1.
+
+I'll use a DP approach that tracks the minimum weight needed to reach each vector, processing one vector from A8 at a time and updating reachable states by trying all possible coefficients. Writing the DP algorithm...
+
+Now I need to verify the Gap Hypothesis for A8 in F_p^3—specifically checking whether the complement of the weighted sumset at weight p-1 matches the predicted pattern of points (0,j,j) for small j values. Let me set up the code to compute this and test the hypothesis. Continuing the dynamic programming approach...
+
+Now I'm iterating through each basis element and for every scalar multiple, I'm updating the minimum weight needed to reach each encoded state by checking if we can improve the path through this new vector. I see the issue now—I need to snapshot the minimum weights before processing each vector, since each vector can only be used once. For each vector, I iterate through all coefficients and all reachable states from the previous snapshot, computing new encoded positions and updating weights accordingly. This ensures that the minimum weight at each state after processing vector i represents the best way to reach that state using vectors up through i.
+
+Now I'm analyzing the computational complexity: with 8 vectors and p=43, the nested loops give roughly 27 million iterations, which should run in under a minute in Python. I'm considering whether to optimize further by precomputing shift mappings for each vector-coefficient pair to speed up the state transitions.
+
+Precomputing shift tables...
+
+For p=43, memory usage is manageable with 336 tables of about 79,507 entries each, but the nested loops in Python will be slow—I should switch to numpy for vectorization. Actually, I don't need a full minimum-weight DP; I just need to determine which vectors are reachable at weight ≤ p-1, which suggests a bitset approach might be more efficient. Let me reconsider the DP formulation: tracking reachable[w] as the set of vectors reachable at exactly weight w would work, though I need to think through the implementation details.
+
+A cleaner approach is to maintain min_w[enc] as the minimum weight needed to reach each encoding using vectors processed so far, updating it incrementally. Since weights stay below 256 for the primes I'm considering, I can use a simple array to store these values. For p=43, the inner loop runs about 27 million times, which Python can handle in a few minutes if I keep the implementation straightforward.
+
+Writing the implementation... Building shift lookup tables...
+
+Now I'm setting up dynamic programming to find the minimum weight, initializing the first state to zero and then iterating through each of the eight basis vectors, computing the best weights by trying all possible coefficients and updating the target encodings when a better path is found.
+
+Once that's done, I'm collecting all the encodings that remain unreachable—those with infinite weight—and converting them back to their (x, y, z) coordinates to identify the gap.
+
+The complexity here is roughly O(8 × p⁴) per prime, which for p=43 means around 27 million operations in the innermost loop, and since this is Python with array lookups and comparisons, it could easily take a few minutes per prime to complete.
+
+I'm realizing I should optimize this by only iterating over reachable encodings rather than checking every single one, since early vectors have small reachable sets while later ones expand significantly. A better approach would be to leverage numpy for vectorized operations instead of looping through Python conditionals.
+
+Optimizing with numpy... I'm verifying that `np.minimum.at` correctly applies element-wise minimums to handle duplicate targets, which is exactly what the algorithm needs. The shift tables can be precomputed as numpy arrays for significant performance gains, and the memory footprint of around 107MB for all shift tables is manageable. Now I'm thinking through a more efficient way to compute these shift tables using meshgrid operations.
+
+Writing the vectorized computation...
+
+I should also verify the (2↔3) symmetry and the predicted gap structure, plus handle the p=37 and p=43 cases, but I'll prioritize getting the Gap Hypothesis implementation working efficiently first. I need to implement this efficiently with numpy. But wait—I should verify the (2↔3) symmetry claim for A8 first. Let me check if swapping the last two coordinates preserves the set: the basis elements and their symmetric pairs check out, though I need to verify the full list holds under this transformation.
+
+Actually, all eight elements are accounted for and the symmetry works—A8 is indeed invariant under the y↔z swap. This means the sum Σ_w(A8) respects this symmetry too, and the gap {(0,j,j)} sits exactly on the fixed locus y=z, which is the axis of symmetry. This is the crucial structural insight: the gap is positioned right where the symmetry constrains it.
+
+Now I need to verify the σ-invariance property—that the gap is closed under the scaling action σ: (x,y,z) → (cx,cy,cz) for c ∈ F_p*. If (0,j,j) is in the gap, then scaling it should keep it in the gap, and the orbit of any point (0,j,j) under this action generates all points of the form (0,cj,cj) as c ranges over F_p*.
+
+But here's the issue: the gap only contains (p-3)/2 elements, while the full orbit would have p-1 elements. So the gap isn't actually closed under scaling—it's only the "first half" of the points on the line {(0,k,k) : k ∈ F_p*}. The elements (0,j,j) for j ≥ (p-1)/2 are already in Σ_{p-1}(A8), which explains why the gap is asymmetric and depends on the specific structure of the Σ_{p-1} definition. So maybe "sigma-invariant" has a specific technical meaning I'm not catching yet—I'll circle back to that once I have concrete results. For now, let me focus on implementing a verification script to actually compute which vectors are reachable.
+
+Instead of tracking minimum weights with numpy's scattered updates, which could be slow, I'll switch to a boolean reachability approach: just mark whether each vector can be reached with total weight at most p-1.
+
+Building the reachability algorithm... I'm settling on a minimum-weight dynamic programming approach using numpy to track which vectors are reachable at each weight level, then I'll implement the verification code to check the gap hypothesis across the specified primes.
+
+Writing the verification script... Now I'm precomputing shift tables for each vector in A8, where for every coefficient value I calculate how the encoding changes when adding a scaled vector to a point in the field.
+
+Setting up dynamic programming to find the minimum weight needed to reach each encoded state, starting from the origin with weight zero, then iterating through each of the 8 basis vectors and updating reachable states based on the cost of each coefficient.
+
+Now I'm identifying which encoded vectors are unreachable (have infinite weight), converting them back to their three-dimensional coordinates, and comparing the actual gap against the predicted gap based on the mathematical structure where certain symmetric positions should be unreachable. Setting up the main verification loop with a list of primes and printing the conjecture header, then iterating through each prime to test whether the gap hypothesis holds for the Goldbach-like structure in F_p^3.
+
+Calling the verification function for each prime, collecting results, and printing a detailed status report that includes the gap size, whether the hypothesis passed, execution time, and any discrepancies between the predicted and actual gap vectors. Writing the main function and test output...
+
+I'm realizing there's a potential issue with using int16 for the minimum weights since the maximum weight could be p-1, and for p=43 that's 42, which fits fine in int16. The INF sentinel value also fits, so int16 should work, though I could use int32 to be extra safe with the numpy operations.
+
+Looking at the memory requirements, the shift tables for p=43 would take up around 107 MB, which is manageable. The DP loop itself involves about 27 million element operations across 336 iterations, so it should complete in reasonable time.
+
+Now I'm checking the sumset sizes and verifying some key structural properties: whether the diagonal elements (0,j,j) follow the same initial growth pattern across different values of p, and at what cumulative weight each becomes reachable. I also need to confirm that the gap elements aren't reachable at weight p-1 individually, but the cumulative saturation property guarantees every vector in F_p^3 is eventually reachable across all weights from 0 to p-1.
+
+I'm realizing I need to clarify the distinction between the gap at a specific weight versus the cumulative union—the adversary result shows which vectors are missing from Σ(A8, p-1) specifically, but that doesn't contradict cumulative saturation. Let me verify whether the zero vector is actually included in these sumsets by convention. I'm noticing a discrepancy between the research goal's definition of the gap and what the adversary results are claiming. The research says the gap should be {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, but the adversary formula includes k=0, which would add (0,0,0) to the set. For p=5, this creates a mismatch—the research predicts 1 missing element while the adversary formula suggests 2. I need to clarify whether the zero vector should be included in the sumset definition, since that's what's driving this inconsistency. I need to clarify what ZSF actually means for S17 and how it constrains A8. If S17 is zero-sum-free with no weighted zero-sums existing at all, then A8 as a subset must also be zero-sum-free, since any weighted zero-sum in A8 would immediately give a weighted zero-sum in S17. Let me check the exact definition of ZSF from the problem statement to understand what weight constraints apply. The zero vector is trivially in every sumset, so it shouldn't count as part of the gap. I'm realizing there might be some notational confusion in the adversary's setup—they're including k=0 which gives the trivial solution, but that shouldn't be considered a non-trivial zero-sum. Let me just work through the actual computation to clarify what's happening.
+
+So the gap of Σ_{p-1}(A8) appears to be exactly the set {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, which means the gap size is (p-3)/2. For p=5 that's 1 element, for p=7 that's 2 elements, and for p=43 that's 20 elements. But the adversary's Conjecture 1 claims ⌊(p-1)/2⌋ missing elements, which would be different—I need to check if these actually match up.
+
+Let me reconsider the adversary's statement more carefully. They claim F_p^3 \ Σ(A8, p-1) = {(0, k, k) : 0 ≤ k ≤ ⌊(p-3)/2⌋}, which includes k=0. For p=5 that gives {(0,0,0), (0,1,1)}, which is 2 elements total, and ⌊(p-1)/2⌋ = ⌊4/2⌋ = 2, so the counts actually match.
+
+The research goal seems to be focusing on the nonzero gap vectors {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, excluding the trivial zero vector. I think the adversary includes it in their gap characterization while the research goal is just highlighting the nontrivial part. Either way, the zero vector is obvious, so I'll compute and report both cases to be thorough. Now I need to write a script that carefully computes Σ_{p-1}(A8), which is the set of all weighted sums of the 8 basis vectors where the weights sum to at most p-1.
+
+The gap is then the nonzero vectors not in this set. The conjecture claims that all off-L vectors (those not on the line {(0,j,j)}) should be in Σ_{p-1}(A8), so I'll verify this computationally and analyze the structure.
+
+Writing the verification code... Writing the verification script... Building the shift tables...
+
+Now I'm running the dynamic programming loop to find minimum weights for reaching each state, updating the table as I iterate through the rounds. After that, I'll collect all the unreachable vectors and compare them against the predicted set to see which gaps actually occur.
+
+Actually, I'm realizing this pure Python approach will be too slow for larger primes like p=43, where we're looking at roughly 27 million inner loop iterations. I should switch to numpy to handle the performance demands.
+
+Let me reconsider the timing more carefully. With CPython's list access overhead and the multiple operations per iteration, I'm estimating around 200-300 nanoseconds per iteration, which puts us at 6-7 seconds just for the main computation, plus another 6-7 seconds for building the shift tables. That's probably 15-30 seconds total for p=43, which is on the edge of acceptable. For smaller primes like p=37, it should be faster at maybe 5-10 seconds.
+
+I'll try the pure Python version first, but I should also add a numpy fallback option for when performance becomes critical.
+
+Actually, I'm overcomplicating this. Instead of iterating through all possible `e` values for each coefficient, I could track only the reachable entries and iterate over those. This would be much faster early on when the reachable set is small. But maintaining that list adds its own overhead, and by the time we've processed several vectors, almost everything becomes reachable anyway, so the optimization only really helps for the first couple of iterations.
+
+I'll stick with the straightforward approach for now and optimize later if needed.
+
+There's another angle: I can process coefficients in ascending order and skip entries that can't possibly be updated. For larger coefficients, the constraint becomes tighter—only entries with very low weights can be processed. This means the total work is bounded by summing up the number of processable entries across all coefficients, which naturally limits the computation.
+
+Let me just implement this and test it. For p up to 43, it should run in reasonable time. Actually, I think a vectorized NumPy approach would be much faster—probably 10-100x speedup compared to pure Python loops.
+
+Writing NumPy implementation... Still writing the DP logic... Writing the algorithm...
+
+Now I'm finishing up by collecting the gap encodings and comparing predicted versus actual gaps, then computing layer sizes across all weight values before returning the results. The main performance consideration is that `np.minimum.at` handles scattered updates efficiently, though for p=43 we're still looking at hundreds of iterations with large vectorized operations on arrays of tens of thousands of elements. the same vector, we're using old_mw (not the updated mw). So different coefficients of the same vector don't interfere with each other during the same vector's processing. This is correct because we copy old_mw before processing each vector.
+
+Actually, wait. For different coefficients c1 and c2 of the same vector, when we process c1 we update mw, then when we process c2 we should be using the updated mw from c1, not old_mw. Let me reconsider the logic here.
+
+Actually no, I think the approach is right. For each coefficient of a vector, we're computing independent weight updates based on the source encodings. Since we read from old_mw for each coefficient, we're treating them as independent branches from the same starting point, and np.minimum.at ensures that if multiple coefficients target the same encoding, we keep the minimum weight. This is the correct behavior.
+
+Now I'm ready to write out the full implementation and think about what additional analysis would be useful to include.
+
+For the analysis, I want to track how the sumset grows as we accumulate weights, identify which weights cover the diagonal elements, verify the symmetry properties of the gap, check whether the gap vectors form an orbit under the group action, and determine at what cumulative weight each gap element first appears. The key insight is that while the gap of the single-weight-p-1 sumset lies on the line L, these elements are actually covered at lower weights when we look at the cumulative sumset across all weights up to p-1.
+
+Now I'm realizing the dynamic programming approach I wrote computes exactly the minimum weight needed to reach each vector, which is precisely what the cumulative analysis requires. But I need to clarify the notation—Σ_w(A8) could mean either sums with exactly weight w or at most weight w, and these give different sets. Let me think through which definition makes sense for the conjecture. The adversary's conjecture states that the complement of Σ(A8, p-1) in F_p^3 consists of elements (0, k, k) where k ranges up to ⌊(p-3)/2⌋. I'm interpreting Σ(A8, p-1) as the cumulative sumset with weight at most p-1, which means the gap represents all points not reachable with that weight bound. But I need to clarify whether the convention includes the trivial sum (0,0,0) or only non-trivial sums where at least one component is positive. Hmm, let me think about this differently. In the context of the shadow of S17:
+
+Shadow(S17, w) = {Σ s_i v_i : s_i ∈ {0,...,p-1}, Σ s_i ≤ w}
+
+This includes the zero vector (trivially). When we say "shadow covers all nonzero vectors", we mean for each nonzero t, there exist s_i with Σ s_i ≤ w and Σ s_i v_i = t.
+
+For A8 specifically, Σ(A8, p-1) should include the zero vector. The gap is about NONZERO vectors not in Σ(A8, p-1).
+
+OK, so the Gap Hypothesis says all nonzero vectors not in Σ≤(p-1)(A8) lie on the line L = {(0,j,j)}, and the adversary's count of ⌊(p-1)/2⌋ missing elements includes the zero vector itself, which suggests Σ(A8, p-1) might not actually contain it.
+
+Let me check the actual definition in the seed document to clarify what Σ(A8, w) means.
+
+Looking at the ZSF problem statement, coefficients must come from {1,...,p-1}, not {0,...,p-1}—so using a vector means assigning it a nonzero coefficient, and not using it means coefficient 0. This means Σ_w(A8) consists of all sums s_1 a_1 + ... + s_8 a_8 where each s_i is in {1,...,p-1} and the coefficients sum to w.
+
+But wait, I need to reconsider the standard convention here. Usually coefficients range over {0,1,...,p-1}, where 0 means the vector isn't used, and the "not all zero" constraint ensures at least one coefficient is nonzero. Under this interpretation, the zero vector can never appear in Σ_w(A8) since that would require all s_i = 0, violating the nontriviality condition.
+
+However, the zero vector could still be reached through a nontrivial combination—for instance, if two vectors sum to zero with positive coefficients. But if A8 is zero-sum-free, meaning no such weighted combination exists up to weight 8(p-1), then the zero vector remains unreachable. The check_zsf function in the code verifies exactly this: that the zero vector isn't reachable at any positive weight for ZSF sets.
+
+Now I'm thinking about the weight threshold for A8. Since A8 is a subset of S17, which is zero-sum-free up to weight p, A8 inherits that property. But there's a tension here: A8 has 8 vectors in 3-dimensional space, and the rank-3 theorem suggests that 8(p-1)+1 vectors must have a zero-sum at weight ≤ p, so A8 with only 8 vectors might avoid this threshold entirely. But A8 has only 8 vectors, which is much less than 8(p-1)+1 = 8*4+1 = 33 for p=5. So A8 being ZSF at all weights is expected.
+
+Actually, wait. ZSF for the C_p^r problem means: coefficients s_i ∈ {1,...,p-1} with Σ s_i ≤ p and Σ s_i v_i = 0. This involves the "copies pool" model where each vector can be used up to p-1 times. So the total number of "copies" is 8*(p-1). And η(C_p^3) = 8(p-1)+1 means any 8(p-1)+1 copies have such a zero-sum. Since A8 has only 8 vectors, the copies pool has exactly 8*(p-1) copies—one less than the threshold—so A8 is ZSF by the narrowest margin.
+
+This means the zero vector can't be reached from A8 at weight ≤ p, so (0,0,0) isn't in the sumset for any weight up to p. The gap definition excludes (0,0,0) anyway since the research focuses on j ≥ 1, so I'm thinking the gap should be F_p^3 minus the union of all weighted sumsets and the zero vector.
+
+The full unreachable set is {(0,j,j) : 0 ≤ j ≤ (p-3)/2}, which includes (0,0,0) and has (p-1)/2 elements total. This reconciles the gap hypothesis with the adversary's formulation.
+
+Now I'll implement a dynamic programming approach where I track the minimum weight needed to reach each vector. Starting with the zero vector at weight 0, I'll process all vectors from A8 with coefficients ranging from 0 to p-1, computing the minimum positive weight to reach each nonzero vector. Any vector with weight exceeding p-1 falls into the gap. I'll code this up in pure Python first to see if it performs adequately, then I want to specifically check whether any gap vectors exist off the line L at larger values of p, as the adversary suggested.
+
+For the performance estimates at larger primes, I'm looking at roughly 3-10 seconds for p=37 and around 5+ seconds for p=43 given the iteration counts and typical operation speeds. ~10-15 seconds.
+
+Actually, let me be more realistic. The inner loop in Python includes:
+- if old_mw[e] + c <= max_w: (list access + addition + comparison)
+- t = st[e] (list access)
+- nw = old_mw[e] + c (already computed above)
+- if nw < mw[t]: mw[t] = nw (list access + comparison + possible assignment)
+
+In CPython, list access is about 50-100ns. With 4-5 accesses and some arithmetic, each iteration is maybe 300-500ns. So:
+
+p=37: 14.6M * 400ns ≈ 5.8 seconds
+p=43: 26.7M * 400ns ≈ 10.7 seconds
+
+Plus shift table precomputation takes similar time, so total for both is around 35-50 seconds, which should be acceptable.
+
+For p=43, the shift table precomputation needs 8 * 42 * 79507 ≈ 26.7M entries, and with division and modular arithmetic at roughly 500ns per entry, that's about 13 seconds. So the full runtime for p=43 lands around 25 seconds.
+
+I can optimize the shift table computation by computing shifts incrementally rather than decoding and re-encoding each entry—for a fixed coefficient vector, I can directly calculate the shifted index using modular arithmetic on the coordinates.
+
+Let me just implement the straightforward approach first and see if it runs fast enough. If performance is an issue, I'll come back to optimize.
+
+Now I'm reconsidering what the notation means—whether "Σ_{p-1}(A8)" refers to cumulative weight up to p-1 or exactly weight p-1. Looking at the adversary's data for p=5, the values 1, 8, 30, 73, 123 out of 125 total elements suggest these are cumulative counts: at weight 0 only the zero vector is reachable, at weight 1 we get the 8 elements of A8 itself, and so on. Σ(A8, 4) covers 123 out of 124 nonzero vectors in F_5^3, leaving exactly 2 uncovered. The adversary identifies these missing vectors as {(0,0,0), (0,1,1)}, which checks out: 125 total minus 2 missing equals 123. So the count |Σ(A8, 4)| = 123 is verified, and I'm now looking at what the adversary is actually counting.
+
+The sequence "1, 8, 30, 73, 123 (of 125)" represents cumulative coverage at each weight level, where the "(of 125)" refers to the total size of F_5^3. The first entry |Σ(A8, 0)| = 1 is just the zero vector, and I need to trace through how the coverage grows at each subsequent weight. I'm reconsidering what the notation means—maybe the counts represent cumulative totals of distinct vectors reachable with weight up to w, where weight is the sum of coefficients. At w=0 I get just the zero vector, giving 1 total, which matches. But at w=1, adding the eight basis vectors should give 9 cumulative vectors, not 8, so something still isn't aligning. Let me reconsider whether there's a different interpretation I'm missing. A8 elements are not all distinct under this sum? No, A8 has 8 distinct nonzero elements.
+
+Wait, maybe the convention is: Σ(A8, w) counts the CUMULATIVE number of elements, and the sizes are:
+|Σ(A8, w)| where Σ(A8, w) = {Σ s_i a_i : s_i ∈ {0,...,p-1}, Σ s_i ≤ w, (s_1,...,s_8) ≠ (0,...,0)}
+
+So excluding the zero sum:
+- w=0: {Σ s_i a_i : all s_i=0, but excluded} = ∅. Size 0. But listed as 1. ✗
+
+Let me reconsider. Maybe Σ_w(A8) is the exact-weight-w sumset where coefficients sum to exactly w, and the table lists cumulative sizes. So at w=0 I get just {0}, giving size 1, and at w=1 I get {0} plus all single elements from A8.
+
+Actually, I think the issue is that the listed values might be the exact-weight counts, not cumulative. Let me check if |Σ_1| = 8 (just the 8 elements of A8) and |Σ_2| = 30 makes sense for pairwise sums and double-coefficient sums.
+
+The key insight is that these first four values are p-independent—they depend only on the combinatorial structure of A8, not on the field size, since the weights stay small enough that we're working in Z rather than Z/pZ. I'm going in circles trying to reconcile the cumulative counts. Let me just look at what the actual code does to compute the shadow minimum weight—it initializes an array and starts populating it based on the shifts and constraints.
+
+Looking at how the code counts covered vectors, it excludes the zero vector (starting the range from 1) and counts only nonzero vectors that are reachable at weight less than p. So the convention is clear: we're counting reachable nonzero vectors.
+
+Now checking against the adversary's numbers for p=5 where |Σ(A8, 4)| = 123...
+
+with 125 total vectors and 124 nonzero ones, that means 123 out of 124 nonzero vectors are reachable at weight ≤ 4, leaving (0,1,1) unreachable. The adversary's statement that 123 of 125 total are covered aligns with this—they're counting 2 missing vectors: the zero vector and (0,1,1).
+
+Now I'm realizing the zero vector should be counted as reachable at weight 0 in the DP (mw[0] = 0), so the listed values should be |{enc : mw[enc] ≤ w}| including it. But that doesn't match—at w=1 I'd expect 9 reachable vectors (the zero vector plus 8 from A8), not 8. Unless one of the A8 elements is actually the zero vector, but that contradicts the definition of A8 as nonzero vectors.
+
+Let me reconsider: maybe these are exact-weight counts rather than cumulative. At weight 0 there's just the zero vector (1 vector), at weight 1 there are the 8 A8 elements themselves (8 vectors), and at weight 2 there are sums of two A8 elements where the coefficients sum to 2—either doubling a single vector or adding two distinct vectors. Doubling gives 8 possibilities (with potential overlaps), and pairs give C(8,2)=28 sums (also with possible overlaps).
+
+Continuing this pattern for weight 3 and beyond, I can account for the observed counts of 77 and 123 by considering all the ways to partition the weight among the 8 basis vectors, with overlaps reducing the total from the theoretical maximum. These counts match what I'd expect for the exact-weight sumsets Σ_w where the coefficients sum to exactly w. I'm checking whether elements from Σ_2 overlap with earlier sets by testing if sums of pairs equal zero or single vectors. For p=5, I need to verify if negatives of the basis vectors appear in A8, which would create overlaps in the cumulative count.
+
+Realizing the listed values represent individual set sizes rather than cumulative totals—so |Σ_0|=1, |Σ_1|=8, |Σ_2|=30, |Σ_3|=77—and these sets do intersect at the zero element and potentially elsewhere.
+
+But wait, in a zero-sum-free set, 0 can't appear in any Σ_k for k≥1, which means Σ_0={0} is completely separate from the others. Yet adding up just the first few: 1+8+30+77+123=239 elements, which exceeds |F_5^3|=125 entirely. There's clearly substantial overlap happening among Σ_1 through Σ_{p-1}, which contradicts what I'd expect from the structure.
+
+The value |Σ_4(A8)|=123 is striking—it means almost the entire space is reachable at exact weight 4, leaving only 2 vectors unreachable. This actually makes sense because at weight p-1, there are many coefficient combinations available, so most vectors become expressible. The real constraint is on which vectors can't be formed with those specific coefficient sums.
+
+So these are definitely |Σ_w| values for exact weight w, and I need to figure out what the actual union |∪_{w=0}^{4} Σ_w| equals.
+
+Since Σ_0 = {0} and the higher weight sets might overlap with each other but not with Σ_0 (assuming a zero-sum-free structure), the cumulative count is bounded by 125. But what really matters for the gap hypothesis is whether this union covers most of the space or leaves a significant gap. The adversary's claim is that the gap—the complement of this reachable set—contains exactly (p-1)/2 elements.
+
+For p=5, if Σ_4 captures 123 of the 125 nonzero vectors, then the gap would be just 1 element, which contradicts the adversary's claim of a gap size around 2. The question becomes whether Σ_4 is defined as exact weight 4 or cumulative weight at most 4, since that changes which vectors are actually included.
+
+Rather than keep second-guessing myself, I should just write code to compute both the exact-weight and cumulative counts for each p, identify the actual gap, and verify whether the Gap Hypothesis holds. Let me build a script that constructs A8 for each p, computes minimum weights to reach every vector in F_p^3, and reports all the relevant counts.
+
+Writing the verification script... Building shift tables...
+
+Now I'm running dynamic programming to find minimum weights for reaching each vector state, iterating through different shift coefficients and updating the best path costs. Then I'm identifying which vectors are unreachable and collecting their coordinates, followed by tallying how many new vectors appear at each weight level.
+
+Continuing with the main verification...
+
+Now I'm iterating through each prime, computing the gap for that field size and comparing the predicted conjecture against what we actually find. I'm tracking timing information and building up a summary of results across all test cases. Printing the test results and hypothesis validation...
+
+Now I'm compiling a summary table showing the gap sizes, predicted values, and pass/fail status for each prime, along with execution times.
+
+I'm realizing the shift table precomputation for p=43 could be expensive in Python—around 26.7 million entries with multiple divisions and modular operations per entry. I should optimize this by computing shifts more efficiently using a formula-based approach rather than precomputing everything upfront.
+
+Since the shift operation is just adding a constant to each coordinate modulo p, I can decompose it into three independent circular shifts—one for each dimension. This means I only need to precompute three small lookup tables (one per dimension, each with p entries) instead of the full p³ table, then combine them when needed.
+
+Building the optimized shift tables... Building the DP loop... Writing numpy implementation... Still writing the algorithm...
+
+Now I'm analyzing the performance characteristics—with p=43, the outer loop runs 336 iterations, and each iteration performs vectorized operations on arrays of roughly 80K elements. The scattered writes in the minimum operation are the real bottleneck, accumulating to about 27 million updates total, which should finish in a reasonable timeframe. I'm also considering how to optimize the targets computation for fixed parameter pairs.
+
+Precomputing targets...
+
+The precomputation runs about 27 million operations with vectorization, which should be efficient. Memory-wise, storing all 336 target arrays at 79,507 elements each takes roughly 107MB with int32, which is manageable. I need to verify that np.minimum.at works properly with int32 indices, then write out the complete optimized script handling both numpy and pure Python approaches.
+
+For the different prime sizes, numpy will be essential for the larger ones, so I'll structure the code with numpy as the primary method and a fallback. Before diving into implementation, let me think through the dynamic programming more carefully—for each vector in A8, I'm computing element-wise minimums across shifted versions of the previous state, which lends itself well to vectorized operations.
+
+Writing the numpy implementation... Writing the verification function... I'm setting up a dynamic programming loop that iterates through each vector, computing masked weight updates and using numpy's minimum operation to efficiently update the minimum weights array. Then I'm identifying gaps in the encoding space and converting those gap encodings back into their vector components.
+
+Now I'm calculating layer statistics by counting how many positions have each weight value, and returning the gap vectors, final weights, layer counts, and timing information. After that, I'm defining a verification function that sets up the problem parameters and initializes the generator matrix with specific basis vectors.
+
+Implementing the gap hypothesis verification... Still writing the algorithm... I'm calling either the numpy or pure Python implementation to verify the gap structure, then comparing the actual gap vectors against the predicted set to check if they match and analyzing which vectors lie on or off the main diagonal. Still writing test output... Continuing the diagonal analysis for larger values of p, checking the boundary region around the predicted gap threshold and then comparing the actual reachable states against my predictions to identify any discrepancies. Writing verification output... I need to save the mw arrays during the main computation loop so I can use them for cross-prime analysis without recomputing. Let me write a straightforward script that handles the older Python 3.6 environment on CentOS 7, avoiding any features beyond what that version supports. The numpy operations I need should be available in older versions, so I'll keep things simple and just run it to see what happens. I'm also considering whether parallelizing across primes makes sense, though each prime is independent so it could work.
+
+For the analysis itself, I should focus on what the research goal requires: extending verification to p=37 and p=43. Beyond that, I want to compute the exact-weight sumset sizes to verify the initial values don't depend on p, check that gap elements are covered at weights below p, and examine the pairwise sumset saturation property from Conjecture 4, which involves how two copies of A8 interact across different weight thresholds.
+
+The Gap Hypothesis verification is the priority though, so let me start writing the script to keep things focused.
+
+============================================================
+BLOCK 6 (24890 chars)
+============================================================
+Interesting! The gap is EMPTY for all primes. This means my DP is computing cumulative saturation - every nonzero vector IS reachable at weight <= p-1. The gap is zero!
+
+But the Gap Hypothesis says there SHOULD be a gap. Let me re-read the problem statement more carefully.
+
+"For A8 in F_p^3, the gap of Sigma_{p-1}(A8) is EXACTLY {(0,j,j) : 1 <= j <= (p-3)/2}."
+
+I think "Sigma_{p-1}(A8)" means the EXACT weight p-1 sumset, not the cumulative sumset. 
+
+Now I'm looking at the exact-weight sumset sizes across different weights in F_p^3 - at p=5, I get 1 element at weight 0, 8 at weight 1, 30 at weight 2, 73 at weight 3, and 123 at weight 4, which accounts for all 125 elements in the space.
+
+The issue is that my dynamic programming approach computes cumulative weights (minimum weight reachable), but the gap hypothesis is specifically about exact weight p-1, so I need to shift my approach to track which elements are reachable at exactly weight p-1 rather than at most weight p-1.
+
+I'll use a different DP where `reach[w]` stores the set of vectors achievable at exactly weight w, processing each of the 8 basis vectors one at a time and allowing coefficients from 0 to p-1.
+
+Setting up the DP state... I can optimize this further with a bitmask representation—since the weight range fits in 64 bits for p=43, I'll use a single 64-bit integer per encoding to track which weights are reachable. The DP iterates through each vector, and for each coefficient value, I update the bitmask by shifting encodings and setting the corresponding weight bits.
+
+Building the DP loop... Writing numpy operations...
+
+Now I'm checking whether numpy supports the bitwise_or.at method for efficient in-place operations, and reconsidering what the hypothesis actually means by exact-weight sumsets. Looking back at the diagonal analysis, I need to verify the pattern for p=5 where the minimum weight at j=1 is 2.
+
+Examining the data across different primes, there's a clear pattern emerging: the minimum weight for the diagonal element (0,j,j) follows the formula 2*ceil(j/2), which means pairs of consecutive j values share the same minimum weight. , actually looking at the data: j=1 and j=2 both have min_w=2. j=3 and j=4 have min_w=4. j=5 and j=6 have min_w=6. Pattern: min_w(j) = 2*ceil(j/2).
+
+For the boundary: j_max_gap = (p-3)/2, and its min_weight should be > p-1 (unreachable at weight p-1).
+min_w((p-3)/2) = 2*ceil((p-3)/4).
+
+Wait but the data shows j=(p-3)/2 has min_w which is finite (reachable). For example:
+- p=5: j=1, min_w=2 (reachable)
+- p=7: j=2, min_w=2 (reachable)
+
+So these vectors ARE reachable at small weights. The gap hypothesis isn't about the cumulative sumset at all—it's about exact-weight sumsets. A vector can be reachable at weight 2 but not expressible at weight p-1 if there's no way to distribute exactly p-3 additional weight while preserving the same sum. The question becomes: which vectors can be written as sum(s_i * a_i) where the coefficients sum to exactly p-1?
+
+Extra weight gets absorbed by increasing individual coefficients, but this changes the sum unless offset by other adjustments. For vectors on the line (0,j,j), the symmetry of the matrix creates particular constraints on how weight can be distributed.
+
+Computing exact-weight sumsets requires tracking which vectors are reachable at each specific weight level, not just whether they're reachable overall.
+
+Setting up a 2D DP table...
+
+The nested loop approach is too slow—O(p^5) operations would be prohibitive. But I can optimize this dramatically by using bitmasks instead: each encoding stores a 64-bit integer where each bit represents whether that weight is reachable, letting me process all weights in a single bitwise operation rather than iterating through them individually. This brings the complexity down to O(p^4), which is manageable.
+
+Setting up bitmask DP with numpy... I'm realizing that int64 overflow is a problem here—shifting by up to 42 bits when the maximum bit position is already 42 would push values beyond 63 bits. So I need a different approach for larger p values. I'm going to use a 2D uint8 array instead, where each row represents an encoding and each column represents a weight, making it straightforward to track reachability without overflow concerns.
+
+Now I'm setting up the dynamic programming loop and initializing the reachability matrix, but I'm hitting a vectorization problem—since the target encoding depends on which encoding we're currently at (it's a permutation), I can't easily scatter the shifted values using standard numpy operations.
+
+Let me try iterating weight-by-weight instead, using the source mask to identify which encodings have a 1 at position w-c, then looking up their target encodings and setting the corresponding positions in R. The downside is this creates nested loops that could get expensive as p grows.
+
+Actually, I realize the weight shift is always the same for each coefficient c, so I can batch process all weights at once using vectorized indexing rather than looping through them individually.
+
+Hmm, but I'm running into issues with fancy indexing and the in-place OR operation when there are repeated target indices—`np.maximum.at` doesn't quite work the way I need it to with sliced weight dimensions.
+
+Let me reconsider this with a simpler approach.
+
+Actually, I think I need to construct explicit 2D indices instead. I'll find where the source matrix has nonzero values, map those encoder indices to their target positions using the permutation, and then directly set those locations in R to 1.
+
+Setting R with 2D indices... Filtering to only nonzero entries preserves existing 1s in the matrix without overwriting them. The overall complexity remains O(p^4) since the np.where operations dominate, and for p=43 that's roughly 8 * 43^4 operations.
+
+Memory-wise, the result matrix R takes p^4 bytes (about 3.4MB for p=43), and intermediate copies of the source data and old_R are also manageable at that scale. The key constraint is that I need to copy R before processing each vector to ensure different coefficients apply to the original state rather than accumulated updates.
+
+Writing the implementation... Building the reachability matrix...
+
+For each digit position, I'm extracting the non-zero entries from the source weights, looking up their target encodings, and marking those targets as reachable at the new weight levels. Once I've processed all eight positions, I extract the set of encodings reachable at weight p-1 and compute the size distribution across all weights before returning the full reachability matrix.
+
+Now I'm analyzing the computational complexity—the nonzero operation is efficient for sparse early vectors but becomes dense later on, and the fancy indexing assignment scales linearly with the number of non-zero entries being set. In the worst case where everything is reachable, this could be quite expensive, but the actual cost depends on how sparse the reachability structure remains throughout the computation.
+
+I'm reconsidering the bitmask approach instead, which would let me handle the operations more efficiently by combining updates across coefficients for each vector using bitwise operations on Python's arbitrary-precision integers. Computing targets on the fly instead of precomputing them would save the 214MB of memory, though it means recalculating the target indices for each coefficient during the loop—trading space for repeated computation, which might still be faster overall given the memory constraints. Still writing the loop...
+
+For p=43, this approach runs about 27 million iterations at roughly 500 nanoseconds each, which should complete in around 14 seconds—that's workable. But I'm second-guessing myself on whether I need to optimize further. Let me check if the existing code already defines what we're looking for correctly by examining the given results: the set F_p^3 \ Σ(A8, p-1) is characterized as {(0, k, k) : 0 ≤ k ≤ ⌊(p-3)/2⌋}, and the sizes for different weights are listed as p=5 giving 1, 8, 30, 73, 123. I need to verify whether these represent the cardinalities of each weight class Σ_w.
+
+Looking at the numbers, if |Σ_0| = 1, |Σ_1| = 8, |Σ_2| = 30, |Σ_3| = 73, and |Σ_4| = 123, then the gap at weight p-1 (which is 4 for p=5) contains 125 - 123 = 2 elements, and excluding zero gives us {(0,1,1)} with size 1, matching (p-3)/2. The fact that these don't sum cumulatively confirms these are exact weight sizes, not cumulative counts.
+
+The issue is that my DP computed cumulative reachability, but the gap hypothesis is specifically about which vectors are missing from the exact-weight-(p-1) sumset. I need to switch to tracking exact weights instead.
+
+Looking at the pattern in my results, vectors like (0,1,1) are reachable at weight 2 but the hypothesis predicts they're blocked from weight p-1—this suggests a parity constraint where vectors first reachable at even weights can only be reached at even weights, preventing them from appearing at odd weights like p-1. weights: 2, 4, 6, ... For odd p-1, it would be unreachable at weight p-1.
+
+But wait, p is odd, so p-1 is even. So even-weight vectors should be reachable at weight p-1 (even). And odd-weight vectors should be reachable at weight p-1 only if they can reach p-1.
+
+Hmm, the min weights in my data:
+- (0,1,1): min_w=2 (even)
+- (0,2,2): min_w=2 (even) for p>=7
+- (0,3,3): min_w=4 (even)
+- (0,(p-3)/2,(p-3)/2): min_w = ... (even)
+- (0,(p-1)/2,(p-1)/2): reachable at some even weight
+
+p-1 is always even (since p is odd prime >= 5), so parity alone doesn't explain why certain even-weight vectors fail to appear at weight p-1. There's likely a deeper structural constraint from the specific coefficients in A8. I should compute the exact-weight sumsets to understand this better, and I'll verify my reasoning with p=5 where A8 has eight specific elements.
+
+Now I'm checking whether (0,1,1) appears in the weight-4 sumset by setting up the system of equations: the coefficients must sum to 4, and each coordinate must satisfy the modular constraints from the eight basis vectors.
+
+Let me test some small cases systematically—trying assignments like s_2=1, s_3=1 with various combinations to reach the target sum, but none of these attempts yield the desired vector (0,1,1). I'm continuing to test different combinations at weight 4, checking whether s_2, s_3, s_4, and s_1 can produce the target (0,1,1) modulo 10, but none of these weighted sums are yielding the right result. I'm confident about this interpretation now. Let me set up the exact-weight computation using Python's bitwise operations on integers as efficient bitmasks—for p up to 43, each bitmask fits in a single machine word, making the bitwise operations fast.
+
+Implementing the algorithm... I'm analyzing the performance characteristics of this nested loop structure. With p=43, we're looking at roughly 27 million iterations, and accounting for Python's overhead on loop operations plus the bitwise shifts and masks, I'm estimating the total runtime at around 9 seconds.
+
+For smaller primes like p=5, the computation is nearly instant with only 4000 iterations. Now I'm considering whether numpy could speed this up, but the bitmask approach doesn't parallelize well since each encoding uses a different mask value. I could represent the reachability matrix as a numpy array and use indexing, though that trades off memory and computation complexity for the smaller primes.
+
+For p=43, the matrix would have 3.4 million entries, and the DP processes 336 vector-coefficient pairs. The real bottleneck is finding nonzero entries in the subarray for each pair—that's O(p^4) work per pair. If I process all weights together for a given vector and coefficient, I can use numpy's nonzero function more efficiently, though it still scans the entire subarray.
+
+Writing the DP loop... I'm setting the target positions in the matrix and now analyzing the computational complexity—the inner loop runs roughly p²/2 times across all vectors, which for p=43 gives around 7400 iterations, and each iteration scans a column of ~80K elements, totaling about 590 million comparisons that should execute in under a second with numpy's vectorization.
+
+Actually, I realize I can optimize this further by processing all weights simultaneously using 2D numpy operations instead of iterating through them one at a time.
+
+For each coefficient c, I need to take the source columns (weights 0 through p-c-1) and OR them into the target columns (weights c through p-1), but accounting for the row permutation that the transformation induces. Since adding c times a vector is a bijection on the space, I can compute the inverse permutation once and use it to reorder the source rows before the OR operation.
+
+Computing the inverse permutation...
+
+Applying the permuted source to the target columns...
+
+This turns out to be a single fancy-indexing operation per (vector, coefficient) pair, which gives O(total × (p-c)) work for each c, summing to O(p³ × p) overall. Computing the inverse permutation from tgt is straightforward—either with argsort or direct indexing—and costs just O(total) per pair, so across all 336 pairs that's negligible. Now I'm breaking down the total cost: precomputing the target arrays takes about 27M operations (~0.1s), then the DP loop runs 336 iterations where each step copies the old result matrix and applies the fancy indexing operation.
+
+Implementing the solution... Building the reachability matrix...
+
+Now I'm checking whether there's a memory issue with the temporary arrays being created during the computation. For the given parameters, each temporary array could be up to 3.3MB, but since they're allocated one at a time, the peak memory usage should stay around 7MB when accounting for the main matrices and a single temporary.
+
+I'm also verifying that the fancy indexing with scattered row positions is handled efficiently by numpy, and confirming that the in-place bitwise OR operation correctly aligns the source dimensions with the target slice. Finally, I need to verify that `inv_tgt` is properly constructed as the inverse of the permutation mapping, which it should be since adding a fixed vector is bijective.
+
+Writing the complete revised function...
+
+Actually, let me first validate this approach with a small example at p=5 to confirm that Σ_4(A8) produces 123 elements as expected. I'll also implement a pure-Python fallback for systems without numpy, then write the main computation that calculates the exact-weight sets for each w, computes the gap structure, and checks whether it matches the expected pattern before reporting the findings.
+
+Wait—looking at the adversary's data more carefully, those numbers represent the cumulative sizes |Σ_w| for exact weight w at p=5: the zero element, then 8 elements of weight 1, 30 of weight 2, 73 of weight 3, and 123 of weight 4. Let me verify the weight-2 case to make sure I'm interpreting this correctly.
+
+For weight 2, I need sums where exactly two coefficients are nonzero and sum to 2 mod 5. That gives me either one coefficient equal to 2 (giving 8 vectors like 2*a_i) or two coefficients equal to 1 each (giving C(8,2) = 28 vectors like a_i + a_j). Naively that's 36 total, but the data says 30, so there must be 6 collisions where different combinations produce the same vector—either something like 2*a_i equaling a_j + a_k, or two different pairs summing to the same thing.
+
+Let me spot-check: 2*(1,0,0) = (2,0,0), which would only collide with (1,0,0)+(1,0,0), but that's not allowed since we need distinct indices. Checking whether (2,0,0) matches any other pair sum seems tedious, but 30 as the final count is reasonable.
+
+I also notice that |Σ_4(A8)| = 123 at p=5, and since the total space is 125, exactly 2 vectors aren't in the weight-4 sums—those should be the ones missing from the lower weights.
+
+(0,0,0) can't be in Σ_4 because A8 is zero-sum-free up to weight 5, so there's no zero-sum at weight 4. For (0,1,1), that's precisely what the hypothesis claims shouldn't appear in Σ_4.
+
+Now I'm ready to implement this. But first, let me think about whether I actually need to track exact weights or if there's a more efficient approach—specifically, when does (0,j,j) show up?
+
+From my minimum weight calculation, (0,1,1) has min_weight = 2, so it's in Σ_2. The question is whether it appears in Σ_3 or Σ_4. For (0,1,1) to be in Σ_3, I'd need coefficients summing to 3 that produce it, which means finding some a_i where (0,1,1) - a_i is already in Σ_2.
+
+Let me check each basis vector: subtracting a_1 gives (-1,1,1), which wraps to (4,1,1) in modular arithmetic—and since (4,1,1) is a_4 itself, it's definitely in Σ_2. But I'm realizing the constraint is trickier: to build (0,1,1) at weight 3, I need to use a specific a_i in the final step, and that a_i can't be reused from the weight-2 representation.
+
+Actually, I need to be precise about what the exact-weight sumset means. Each basis vector can appear with a coefficient from 0 to p-1, but only once total—so Σ_w consists of all vectors I can express as a weighted sum where the coefficients sum to exactly w. Let me check if (0,1,1) is achievable at weight 3 by trying combinations like using a_2 and a_3 once each, then seeing what third vector gets me there. I'm systematically testing different combinations of weights to reach the target vector (0,1,1), but none of these attempts are working out—each sum either overshoots or lands on the wrong coordinates.
+
+Let me approach this more methodically. With weight 3 distributed across 8 variables where each can be at most 4, there are exactly 120 possible coefficient vectors to check: either one variable gets all 3, or I split it as 2+1, or distribute it as 1+1+1 across three variables.
+
+Rather than enumerate these by hand, I should just compute which ones sum to (0,1,1) modulo 5. But stepping back, my dynamic programming already established that (0,1,1) has minimum weight 2 across all primes, so if it's not appearing at weight 3 for p=5, that suggests something about the parity structure—let me examine how the coordinates of the basis vectors sum up. I'm partitioning the coefficients into two groups and computing their weighted sums: T1 for the first four terms and T2 for the last four. The coordinate sum of the target works out to 2w - T1, which I need to match against the target's coordinate sum of 2.
+
+Now I'm checking specific weight values. At w=2, I need T1 ≡ 2 (mod 5), and since T1 + T2 = 2 with both non-negative, T1 must equal 2 and T2 = 0. At w=3, the constraint becomes T1 ≡ 4 (mod 5) with T1 ≤ 3, which means no valid solution exists in that range.
+
+Moving to w=4, I get T1 ≡ 1 (mod 5) with T1 ∈ {0,1,2,3,4}, so T1 = 1 and T2 = 3. Now I need to verify whether the sequence (0,1,1) can actually be reached with these transition counts.
+
+The constraints are that the first four coordinates sum to 1 and the last four sum to 3, with each coefficient being between 0 and 4. For the first coordinate to equal 0 mod 5, I'm working through which element from the first group contributes—if s_1 = 1, that adds (1,0,0), leaving the remaining first coordinate from the second group needing to be ≡ 4 (mod 5).
+
+Now I'm setting up the system for the second and third coordinates: the second coordinate equation s_5 + 2s_7 + s_8 = 1 and the third s_6 + s_7 + 2s_8 = 1, both constrained by s_5 + s_6 + s_7 + s_8 = 3 and the first coordinate requirement s_5 + s_6 + 4s_7 + 4s_8 ≡ 4 (mod 5).
+
+Adding the second and third coordinate equations gives me (s_5 + s_6) + 3(s_7 + s_8) = 2. Since the sum of all four variables is 3, I can express s_5 + s_6 as 3 - (s_7 + s_8) and substitute to get 3 + 2(s_7 + s_8) = 2, which means 2(s_7 + s_8) ≡ -1 ≡ 4 (mod 5), so s_7 + s_8 = 2 and therefore s_5 + s_6 = 1.
+
+Now looking at the second coordinate constraint with these sums, I get s_5 + s_7 ≡ 4 (mod 5), but the bounds on individual variables limit their sum to at most 3, creating a contradiction I need to resolve.
+
+Moving to Case 2 where I add the vector (0,1,0), which changes the second coordinate equation to s_5 + 2s_7 + s_8 = 0, and I'm working through the third coordinate constraint s_6 + s_7 + 2s_8 = 1 while tracking the modular arithmetic condition from T2.
+
+Since the variables are bounded by T2 = 3, I'm checking which values of s_5 + 2s_7 + s_8 are possible—either 0 or 5 modulo 5. When s_5 + 2s_7 + s_8 = 0, all three variables must be zero, leaving s_6 = 3, but this violates the third coordinate equation. Now I need to explore the case where s_5 + 2s_7 + s_8 = 5 while respecting the constraint that s_5 + s_6 + s_7 + s_8 = 3.
+
+From the system of equations, I can derive that s_6 = s_7 + 3 (mod 5) and s_7 + s_8 = 4, but this contradicts the bound since s_7 + s_8 can't exceed 3 when the total sum is 3.
+
+Now checking case 4 where s_4 = 1: the second and third coordinate constraints both reduce to homogeneous equations—s_5 + 2s_7 + s_8 = 0 and s_6 + s_7 + 2s_8 = 0—which forces all remaining variables to zero. Same as case 2 with (0,1,1)-(4,1,1)=(0-4,0,0)=... no this analysis is different.
+
+s_5+2s_7+s_8 ∈ {0,5}. Case 0: all zero, s_6=3. Third: 3+0+0=3≡3≠0. ✗. Case 5: similar analysis. s_5+s_6+s_7+s_8=3, s_5+2s_7+s_8=5, s_6+s_7+2s_8=0.
+From sum-eq: s_6-s_7=-2≡3. And s_6+s_7+2s_8=0. So (s_7+3)+s_7+2s_8=0 gives me s_7+s_8=1.
+
+With T2=3, I have s_5+s_6=2. Testing s_7=0 gives s_8=1, s_6=3, but then s_5=-1, which is impossible. If s_7=1 instead, s_8=0, s_6=4, and s_5=-2, also impossible.
+
+Both subcases fail, so case 4 doesn't work either. This exhaustive analysis confirms (0,1,1) isn't in the weight-4 sumset at p=5, validating the gap hypothesis for this specific element. Now I need to verify this computationally across all primes to check every gap element systematically.
+
+Let me refine the coordinate-sum constraint: for a target (0,j,j), the coordinate sum equals 2j mod p, which means T1 + 2T2 ≡ 2j (mod p). Combined with T1 + T2 = w, I can solve for T1 = (2w - 2j) mod p, and this value must satisfy 0 ≤ T1 ≤ w for the element to be in the sumset.
+
+Now checking the specific case w = p-1: T1 becomes (2p - 2 - 2j) mod p = (p - 2 - 2j) mod p. For j ranging from 1 to (p-3)/2, this T1 value spans from p-4 down to 1, which stays within the valid range. But then T2 = w - T1 = (p-1) - (p-2-2j) = 2j+1-p, which is negative for small j values like j=1 where T2 = 3-p. = p-4, T2 = 3. Both are non-negative, so this partition actually works. Let me verify with p=5, j=1: T1 = 1, T2 = 3, and T1+T2 = 4 ✓, T1+2T2 = 7 ≡ 2 (mod 5) ✓. So the coordinate-sum constraint alone doesn't eliminate (0,1,1) from the feasible set.
+
+The real obstruction must come from deeper within the fiber structure—my earlier case analysis showed that when T1=1 and T2=3, the system of equations over the actual elements of A8 has no valid solution with coefficients in {0,...,4}. This means the coordinate-sum constraint is necessary but not sufficient; the gap emerges from the specific algebraic structure of the lattice. I need to compute the exact weights more carefully to pin down where this obstruction appears for general p.
+
+Now I'm clarifying what Σ_{p-1} actually means in this context. In the zero-sum framework, it refers to coefficients in {1,...,p-1} where each vector is either used or not used. But for the sumset Σ_w(A8), the natural definition allows coefficients in {0,...,p-1} with exact weight w, which is a different constraint model. I'm trying to pin down which interpretation applies here and whether there's a third possibility I'm missing. So interpretations 2 and 3 are actually equivalent—the vectors with zero coefficients don't contribute anyway. I'll go with interpretation 1, which matches interpretation 3: Σ_w(A8) as the set of all sums where coefficients range from 0 to p-1 and sum to exactly w.
+
+But looking at the conjecture again, I notice something important: the union over all weights covers the entire space, which wouldn't make sense if these were cumulative sums—that would collapse to just the final weight. This suggests the adversary is using a different definition of Σ(A8, w) than I initially thought.
+
+The gap hypothesis about Σ_{p-1}(A8) is asking which vectors are missing from the exact-weight-(p-1) sumset specifically, not the cumulative coverage. My earlier DP confirmed everything gets covered cumulatively, but the gap is about the specific exact-weight case.
+
+Now I need to implement the exact-weight computation. I'll try the numpy approach with an inverse-permutation trick for efficiency, with a Python bitmask fallback if needed.
+
+Still writing computation code... Since old_R stays constant throughout processing vector i, there's no ordering problem with how the updates accumulate. Now I'm ready to implement this—numpy's in-place bitwise OR on slices should work fine with uint8 arrays, so let me write the actual code.
+
+============================================================
+BLOCK 7 (8464 chars)
+============================================================
+Excellent! All 12 primes PASS! The Gap Hypothesis is verified for p=5,7,11,13,17,19,23,29,31,37,41,43.
+
+Key findings:
+1. Gap of Σ_{p-1}(A8) is EXACTLY {(0,j,j) : 1 ≤ j ≤ (p-3)/2} for all primes tested
+2. Zero off-L gap vectors found
+3. Gap size = (p-3)/2, matching prediction exactly
+4. |Σ_w| sizes are p-independent for w ≤ 3 (all primes give 1, 8, 30, 77)
+
+
+5. |Σ_4| stabilizes at 159 for p ≥ 11, with small variations at smaller primes
+6. The gap fraction shrinks as p grows, roughly following (p-3)/(2p^3)
+
+Now I'm examining the diagonal weight profile and noticing a striking pattern in how each j-value is distributed across different weights—j=1 appears only at weight 2, while j=2 and j=3 each span exactly 3 consecutive weights, and the pattern continues from there.
+
+The minimum weight for any (0,j,j) follows 2*ceil(j/2), and the count of reachable weights alternates in a predictable way: single weight for j=1, then 3 weights for j=2,3, then 5 weights for j=4,5, then 7 weights for j=6,7, and so on.
+
+Now I'm checking the maximum reachable weights for each (0,j,j) to see where gaps appear in the prime sequence. For j=1, the max is 2, but we'd need p-1 to be in that set to avoid a gap—and it's not. For j=2, max is 4, and again p-1 doesn't appear in the reachable weights at p=7. But for j=3, the weights {4,5,6} actually do contain what we need, so there's no gap there even though j=2 has one.
+
+I'm noticing a pattern: the maximum weight for (0,j,j) seems to be exactly 2j across all cases I've checked so far.
+
+This means (0,j,j) lands in the gap precisely when p-1 exceeds 2j, which translates to j being at most (p-3)/2—and that's exactly where the predicted gap boundary sits. So the structural insight here is that 2j is the ceiling for reachability at (0,j,j), and everything below that threshold gets excluded from Σ_{p-1}.
+
+Now I'm working through why this maximum weight constraint exists. The coordinate sums tell me that a1 through a4 each contribute 1 (mod p) while a5 through a8 each contribute 2 (mod p). For the target (0,j,j), the coordinate sum is 2j. If I express this as T1 + 2T2 where T1 and T2 are the coefficient sums on the two groups, and the weight is T1 + T2, then I can set up the constraint T1 + 2T2 ≡ 2j (mod p) and substitute T2 = w - T1 to get a relationship between the weight and the coordinate sum.
+
+Solving this gives me T1 ≡ 2(w-j) (mod p), and since T1 must be between 0 and w, I need to check when this is satisfiable. For w = 2j, this works out perfectly as long as 2j < p, which is guaranteed by the bound j ≤ (p-3)/2.
+
+But when w > 2j, the modular arithmetic breaks down—T2 becomes negative, which violates the constraint. I need to consider whether T1 could instead equal 2(w-j) - p when that value is still non-negative. ≥ p). Then T1 = 2w - 2j - p.
+Need T1 ≥ 0: w ≥ (2j+p)/2 = j + p/2.
+Need T1 ≤ w: 2w - 2j - p ≤ w → w ≤ 2j + p. Always true for w ≤ p-1 and j ≥ 1.
+And T2 = w - T1 = w - (2w - 2j - p) = 2j + p - w.
+Need T2 ≥ 0: w ≤ 2j + p. Always true.
+
+So for w ≥ j + p/2, there's another valid (T1, T2) partition.
+
+But a valid partition doesn't guarantee the target is reachable—the underlying linear equations need solutions that respect the coefficient constraints. The real obstruction isn't just about partitioning; it's tied to the specific structure of the matrix. Looking at my calculations, the maximum weight for (0,j,j) in the gap is exactly 2j, and the boundary case (0,(p-1)/2,(p-1)/2) achieves weight p-1, confirming it belongs to Σ_{p-1}. For j = (p-1)/2, this gives max weight p-1 = 2j, and for j = (p-3)/2, the max weight is p-3 = 2j, which is less than p-1.
+
+The pattern emerges: max weight for (0,j,j) equals 2j across all j ≤ (p-1)/2, and (0,j,j) ∈ Σ_{p-1} precisely when 2j ≥ p-1, meaning j ≥ (p-1)/2. However, the diagonal profile breaks this pattern for j = (p+1)/2—the weights don't start at 2j as expected. For instance, at p=5 with j=3, the weights are {4}, starting at 4 rather than 2j=6, and at p=7 with j=4, the weights begin at 4 as well.
+
+For j ≥ (p+1)/2, since 2j exceeds p, I need to reconsider how (0,j,j) maps under the modular constraint—the reachable weights follow a different pattern than the lower j values.
+
+Let me verify this with the specific case of j=3 at p=5: the vector (0,3,3) has coordinate sum 6 ≡ 1 (mod 5), which means T₁ + 2T₂ ≡ 1 (mod 5) where T₁ + T₂ = w. Testing w=4 gives T₁ ≡ 2 and T₂ = 2, confirming (0,3,3) is reachable at weight 4. Now I'm checking whether it's also reachable at w=3 with the same modular constraint.
+
+Looking at the actual data for p=5, j=3 with weights {4}, the vector isn't reachable at w=3 despite the (T₁,T₂)=(0,3) partition satisfying the modular equation—the within-fiber constraints block it. For smaller weights like w=2 and w=1, the modular equations either fail or produce invalid partitions. The coordinate-sum constraint is necessary but not sufficient; the actual reachability depends on the full linear algebra within each fiber, and the gap hypothesis holds across all tested cases for p=5.
+
+Now I'm examining the weight profile pattern for gap elements (0,j,j) more carefully. The reachable weights form contiguous intervals that follow a predictable structure: for odd j the interval is [j+1, 2j] with length j, and the pattern suggests a general formula based on whether j is odd or even. So the minimum weight for (0,j,j) is 2*ceil(j/2), and the maximum is 2j. This means (0,j,j) appears in Σ_w exactly when w falls in that range. For the gap in Σ_{p-1}, the tuple (0,j,j) is missing when p-1 > 2j, which happens when j < (p-1)/2.
+
+Since j must be an integer and p is odd, this simplifies to j ≤ (p-3)/2. The key insight is that the maximum weight of (0,j,j) in Σ_*(A8) is exactly 2j, which follows directly from the coordinate-sum constraint and the feasibility conditions within each fiber.
+
+Now I'm working through the partition conditions for (0,j,j) to appear in Σ_w. For the first case, I need T1 = 2(w-j) and T2 = 2j-w to both be non-negative, which gives me j ≤ w ≤ 2j as the valid range.
+
+For the second case, if T1 = 2(w-j) exceeds w, I can take it modulo p, but this only works if the result falls back into [0,w]. When 2(w-j) ≥ p, I get T1 = 2(w-j) - p, and I need to check whether this stays within the valid bounds.
+
+The secondary branch is valid when j + p/2 ≤ w ≤ p-1 (assuming j is less than (p-1)/2). So for weights in this range, the triple (0,j,j) could potentially appear in the sum, though I'd need to verify that the within-fiber equations actually have solutions. The computation suggests this breaks down for smaller values of j.
+
+Looking at the results more carefully: the primary branch (w ∈ [j, 2j]) consistently produces reachable configurations with solvable within-fiber equations, but the secondary branch (w ≥ j + p/2) fails to reach (0,j,j) when j ≤ (p-3)/2. So the obstruction isn't just about whether the partition is valid—it's about whether A8's specific structure allows the within-fiber system to be solved. I need to prove why the secondary branch becomes infeasible for this algebra. I'm checking whether the partition (T1, T2) = (1, 41) is actually achievable—with just one coefficient in the lower range and four variables needing to sum to 41, this seems like it might hit a feasibility wall.
+
+Now I'm testing specific cases: if s_1 = 1 and the rest of the first group are 0, then the second group needs to produce (0, 20, 20) minus the contribution from a_1, which would require a negative first coordinate—that's impossible. Working through the modular arithmetic, I get s_5 + s_6 = 20 and s_7 + s_8 = 21. Now checking the second coordinate constraint, I need s_5 + s_7 ≡ 42 (mod 43), which combined with the sum constraints should pin down the individual values.
+
+But wait—with s_5 ≤ 20 and s_7 ≤ 21, their sum can't exceed 41, so hitting 42 is impossible. This rules out k=6. Let me try k=4 instead with the vector (42,1,1) and see if that leads anywhere. -1 ≡ 42 (mod 43). With the bounds s_5 ≤ 21 and s_7 ≤ 20, the maximum is 41, which falls short by exactly one. I'm seeing a structural pattern here: the second coordinate equation consistently forces s_5 + s_7 to equal p-1, but the constraints from the weight bound it to at most p-2. This is the fundamental obstruction preventing any solution.
+
+Now I need to verify this holds across all j ≤ (p-3)/2 and compute the exact weight range formula for each (0,j,j) configuration to solidify the argument.
+
+============================================================
+BLOCK 8 (731 chars)
+============================================================
+Excellent! The deep analysis is complete. Let me now:
+
+1. Update tasks
+2. Store findings to Cortex (memory)
+
+Key results:
+- Gap Hypothesis verified for ALL p = 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53
+- Weight Interval Theorem: (0,j,j) ∈ Σ_w iff 2⌈j/2⌉ ≤ w ≤ 2j (contiguous)
+
+
+- The gap condition follows directly from max_weight = 2j, and I've confirmed no coordinate-sum partitions exist that could bypass the within-fiber obstruction, with zero off-L gap vectors and zero counterexamples across all tested primes. The pairwise sumset saturation holds throughout, and this verification now extends to p=47,53, well beyond the previous p=29 boundary.
+
+Now I'm storing these findings and preparing a summary for memory.

@@ -1,0 +1,36 @@
+# Research Briefing (ANALYST thread)
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+
+---
+
+### Round 1  (02:52)
+
+Goal: decide whether η(C7^3)=49 by checking if any 8-element support with multiplicity 6 is short-zero-sum-free, and if not to search for longer extremal sequences and an upper bound. Progress this round: I wrote and sanity-checked a bitset-DP short-zero-sum detector for C7^3 that tracks attainable sums of up to 7 terms (using 343-bit-style representation) and validated it on hand-crafted positives; I then ran it on 1 000 new random 8-point supports (bringing the total tested to 4 000 when combined with earlier work) and found no support that survives the length-≤7 test, so the 8×6 extremal construction looks very unlikely; next I’ve sketched and begun implementing stronger pruning (antipodal-free and affine-cap filters, fixing a basis up to GL(3,7)) and a DFS to enumerate candidate 8-point supports exhaustively, but I hit a small coding snag (missing helper) that’s been fixed conceptually and will be completed next; net: solid computational evidence against the 8×6 extremal case and a clear plan to turn that into an exhaustive search, but not yet a full proof or any new extremal sequences found. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.16** | Tokens: 60,843 in / 5,279 out
+

@@ -1,0 +1,74 @@
+# Research Briefing (CRITIC thread)
+
+**Goal:** Prove: for u, v in {1,...,p-2} with u+v not congruent to 0 mod p and u+v != p-1 mod p,
+min([u]+[v], [u^{-1}]+[vu^{-1}], [v^{-1}]+[uv^{-1}]) <= p-1.
+
+This is a pure arithmetic statement about F_p. It says: given two "non-antipodal" elements,
+at least one of three "inversions" produces a pair summing to at most p-1.
+
+Verified for all (u,v) pairs at p = 5, 7, 11, 13, 17, 19. Zero failures.
+
+This single lemma completes the proof of eta(C_p^3) = 8(p-1)+1.
+
+---
+
+### Round 1  (23:23)
+
+You set out to prove a clean arithmetic lemma about F_p: for non-antipodal u,v in {1,…,p-2} at least one of the three two-term sums formed from u,v and their multiplicative inverses (with residues chosen in the usual 1..p range) is ≤ p−1. The worker ran several brute-force Python experiments (slightly different ways of mapping representatives) and printed a “best min” statistic for primes up to 43 (examples: p=5 →3, 7→5, 11→12, 13→15, 17→20, 19→24, …), but the runs used inconsistent representative conventions (0 vs p) and one routine crashed before completion; importantly no mathematical lemma, structural claim, or proof strategy was proposed — just computation — and the evaluator rightly flagged this as “calculator, not proof.” In short: the numeric checks are a useful sanity test but the implementation ambiguity means the computed outputs don’t yet settle the statement, and no conceptual reason or pigeonhole/inversion symmetry argument was given to explain why one of the three sums must always be ≤ p−1; next steps are to fix the representative convention, state the exact structural property you expect (e.g. partition residues into “small/large” halves and show the three natural pairings cover a small sum), then use computation only to test that precise claim while working toward a short combinatorial proof. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.15** | Tokens: 52,445 in / 5,279 out
+
+### Round 2  (23:26)
+
+Round summary: In Turn 2 the worker extracted a clear, small structural lemma about modular “carries”: for an odd prime p the number of ordered pairs (a,b) with 1≤a,b≤p−1 and a+b≥p equals N_p = Σ_{a=1}^{p-1} a = p(p−1)/2, and they checked this on small primes; this is a correct and useful fact about when sums wrap around mod p. However, this is an additive-only observation and doesn’t yet address the stated goal about the three residue-sum expressions involving multiplicative inverses (so it’s only a partial step); also the provided compute snippet mistakenly printed a wrong comparator value even though the counted values matched the correct formula. The worker’s proposed next move—develop a similar “wrap-around” analysis for multiplication and for expressions with inverses, then do casework on which of the three sums wraps—looks like the right direction but hasn’t been carried out yet. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.19** | Tokens: 63,786 in / 7,524 out
+
+### Round 3  (23:29)
+
+This round established a useful identity and closed-form statistic that could feed into the main lemma: by the classical “Gauss” floor-sum argument we showed for every 1≤a≤p−1 that Σ_{b=1}^{p−1}⌊ab/p⌋ = (a−1)(p−1)/2, and summing over a gives an exact formula for the total multiplicative carry mass S_p = Σ_{a,b}⌊ab/p⌋ = (p−1)^2(p−2)/4, so the average carry is (p−2)/4; small-p computations (p = 5,7,11,13) exactly match these formulas and the explicit counts of pairs with given carry k were displayed for further study. These are tidy, rigorously checked steps toward understanding the distribution of multiplicative carries (the next explicit goal is an exact formula or sharp bounds for N_k = #{(a,b):⌊ab/p⌋=k}), but they do not yet deliver the specific inversion-sum lemma about min([u]+[v], [u^{-1}]+[vu^{-1}], [v^{-1}]+[uv^{-1}]) ≤ p−1 — so progress is solid and gives promising tools, yet the key target remains unproven. (yellow)
+
+**Cost so far: $0.26** | Tokens: 87,505 in / 10,387 out
+
+### Round 4  (23:32)
+
+We tried to attack your arithmetic lemma by exploring the distribution of quotients when multiplying two nonzero residues mod p (thinking of floor(ab/p) as a “carry” or quotient), and verified by brute force for small primes that the counted sequences look like long descending runs (for p=11 we saw [27,21,15,11,9,7,4,3,2,1], etc.), which is consistent with your reported tests. After that I attempted to derive a closed formula for those counts as a sum over divisors/intervals and implemented it, but that formula was wrong (the implemented expression produced sequences that disagree substantially with the brute-force counts), and I did not diagnose the mistake or fix the derivation before stopping; the current state is exploratory computation plus an incorrect analytic guess and no clear reduction to the three-term inversion inequality you want. Next concrete steps would be to either (a) fix and prove a correct counting identity for the quotient distribution (carefully checking interval endpoints and multiplicities), or (b) switch to a more direct combinatorial/pigeonhole or modular inversion argument attacking the three-term minimum directly; at the moment the round is making progress in data gathering but is stalled on the analytic step, so: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.38** | Tokens: 135,373 in / 14,515 out
+
+### Round 5  (23:36)
+
+You proved a clean, purely arithmetic lemma: for any prime p ≥ 5 and any nonzero residue u ≠ −1 (i.e. [u] ≠ p−1) the residues [u] and [u⁻¹] cannot both lie in the upper half { (p+1)/2,…,p−1 } of {1,…,p−1}; the short proof assumes [u]=p−a, [u⁻¹]=p−b with 1≤a,b≤(p−1)/2, uses u·u⁻¹≡1 to get ab≡1 (mod p), then ab<p so ab=1 and hence a=b=1 which forces u=−1 and contradicts the hypothesis.  This gives a simple dichotomy that one of [u] or [u⁻¹] is ≤(p−1)/2 and therefore supplies the missing control on lift sizes used to bound sums like [u]+[u⁻¹] (and, by symmetry and the same reasoning, the other two inversion-sums that appear in your min statement); you also checked exhaustively for small primes up to 19 with no counterexamples.  In short: you have a natural, elementary structural ingredient that either completes or at least strongly advances the final stitch-up of the min([u]+[v], [u⁻¹]+[vu⁻¹], [v⁻¹]+[uv⁻¹]) ≤ p−1 claim — what remains is to write the final integration of this lemma into the prior combinatorial/inequality framework and verify boundary cases — overall (green).
+
+**Cost so far: $0.44** | Tokens: 146,333 in / 17,864 out
+
+### Round 6  (23:38)
+
+The worker tried a short contradiction: for each of u, v, u+v they split the residue and its inverse into a “large” lift (≥(p+1)/2) and a “small” lift (≤(p−1)/2), set D_i = p − L_i, assumed all three lift+inverse sums exceed p so S_i ≥ D_i+1, summed those three inequalities to get S_sum ≥ D_sum+3, and then appealed to the crude bounds S_sum ≤ 3(p−1)/2 and D_sum ≤ 3(p−1)/2 to claim a contradiction. The evaluator correctly pointed out the logical gap: those bounds are too weak and in the wrong direction to force S_sum < D_sum+3, so the supposed contradiction does not follow. What’s blocking us now is the need for a sharper link between the three pairs (they are not independent) — we must either extract a stronger inequality tying the D_i’s to the S_i’s using the relation u, v, u+v in F_p (for example by exploiting exact sum identities or case analysis on which of u,v,u+v are large), or revert to a more combinatorial/modular counting argument; computational checks up to moderate p support the claim, so the path is promising but the current shortcut fails. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.51** | Tokens: 159,817 in / 21,581 out
+
+### Round 7  (23:41)
+
+Goal: show that for two non-antipodal residues u,v mod p at least one of the three sums [u]+[u^{-1}], [v]+[v^{-1}], [u^{-1}]+[v u^{-1}] is ≤ p−1, which would finish the combinatorial proof of eta(C_p^3)=8(p−1)+1. What happened in this round: the worker tried to patch the previously excluded special case u = −1 by splitting into “large/small” representative cases for residues and their inverses and claiming a contradiction if two of the three sums exceed p, but the writeup mismanages modular representatives and inequalities in ways the evaluator flagged as fatal (notably: incorrect description of the lift of w = v−1 as “either V−1 or V−1+p” when we must choose representatives in 1..p−1, misuse of upper/lower bounds that do not actually contradict the asserted lower bounds, and inconsistent case arithmetic leading to non sequiturs about parameters like k). Status: no valid proof yet for the u=−1 (and symmetric) cases — small-prime computations support the lemma, but the analytic argument supplied contains logical gaps and cannot be accepted as a proof. Suggested next concrete steps: fix the representative conventions (choose canonical lifts [x]∈{1,…,p−1} and handle the exceptional subcases [x]=1 separately), rewrite the relations between [v] and [v−1] cleanly (with exact equalities or explicitly handled wrap-around), and re-derive sharp inequalities (or try an invariant/averaging argument that treats the three sums symmetrically) before claiming the contradiction; alternatively, search for a clean short combinatorial/number-theoretic lemma (e.g. pigeonhole on pairs {t,t^{-1}}) that yields the desired bound. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.57** | Tokens: 176,636 in / 24,531 out
+
+### Round 8  (23:46)
+
+You set out to prove that for non-antipodal u,v in F_p at least one of three inversion-sums is ≤ p−1, and early brute-force checks were reported to hold for several primes, but further computation and attempted analytic bounds uncovered explicit counterexamples (for example p=7 with u=v=3 gives each sum = 8 > 7), and similar failures appear for many odd primes (11, 13, 17, 19, 23, ...); attempted global inequalities and special-case fixes broke down in the same way, so the lemma as stated is false and the right next step is to compute the smallest counterexample(s) and search for the correct corrected bound or hypothesis. (green)
+
+**Cost so far: $0.73** | Tokens: 246,366 in / 29,947 out
+
+### Round 9  (23:48)
+
+You set out to prove that for non-antipodal u,v in F_p one of three specific inversion-related sums is at most p-1, and you ran a set of computer checks, but the numerical work drifted off-target: the scripts set w = (uv)^{-1} instead of w = u+v, so the computed minima and maxima do not address the original triple (u, v, u+v) and therefore give no evidence for the lemma; the evaluator also notes a reported counterexample for the correct formulation that hasn’t been reconciled. Right now the blocking issue is purely diagnostic — fix the code to compute S = { [u]+[u^{-1}], [v]+[v^{-1}], [u+v]+[(u+v)^{-1}] } (using least positive residues), exhaustively search small primes (start with p=7 where the evaluator asks for the true extremal behavior), and only then attempt structural arguments (use symmetry, inversion pairing [x]+[x^{-1}] = p when x is its own inverse, and pigeonhole-type counting across residues) if no counterexamples appear; until you correct the computation and either find a counterexample or convincing pattern/proof, the project is spinning rather than progressing. (red) = stuck or spinning.
+
+**Cost so far: $0.82** | Tokens: 289,166 in / 32,873 out
+
+### Round 10  (23:51)
+
+You set out to prove a purely arithmetic lemma in F_p about two non-antipodal residues u,v implying that at least one of three specific residue-pair sums is ≤ p−1 (a result needed to finish a larger combinatorial proof), and the worker ran a sequence of Python checks but got off-track: first they tried to use sympy and hit a sandbox ImportError, then reimplemented a basic is_prime and printed some diagnostic lists of u and u^{-1} for primes up to 31, but those computations only investigated an unrelated “large u implies small inverse” pattern rather than the original triple (u,v,u+v) inequality; a later routine raised a NameError (is_prime undefined in that scope) and the session was aborted by the evaluator for drifting away from the core task instead of computing the correct extremal cases or proposing a corrected lemma. In short: the attempt produced some low-level diagnostics and revealed environment/import issues, but it did not address the required triple-check computations or produce a mathematical correction or proof — red (stuck/spinning).
+
+**Cost so far: $0.93** | Tokens: 340,662 in / 36,342 out
+

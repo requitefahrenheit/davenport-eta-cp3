@@ -1,0 +1,190 @@
+[TOOL: ToolSearch]
+[CORTEX SEARCH: alpha zero-sum free maximal ZSF fiber weight]
+[CORTEX SEARCH: adversary counterexample obstruction upper bound]
+[CORTEX SEARCH: proof that alpha(4) cannot exceed 4, zero-surplus induction failure, weight dichotomy contradiction]
+[CORTEX SEARCH: zero-surplus bottleneck fiber induction weight flexibility]
+[CORTEX SEARCH: shadow saturation uniqueness strongly ZSF doubled]
+[CORTEX SEARCH: cap assumption false collinear triples weight dichotomy]
+[CORTEX SEARCH: cap assumption false weight dichotomy pairing identity 3p collinear triples]
+[CORTEX SEARCH: 324 54 tail replacement multi-fiber discrepancy]
+Now let me check for the most recent entries from this session.
+[CORTEX SEARCH: round 3 session 6 theorist computer new proof uniqueness shadow fiber]
+[CORTEX SEARCH: session 6 round 3]
+Now let me verify the lift theorem rigorously — this is the most attackable piece of the proof chain.
+[TOOL: ToolSearch]
+# ADVERSARY ROUND 3: FINAL REPORT
+
+## 1. THE LIFT THEOREM IS CORRECT — I CANNOT BREAK IT
+
+I attempted to find a gap in the theorist's Theorem 2 (shadow saturation lifts from rank r to doubled+e1 at rank r+1). After extensive analysis, the theorem is **SOUND**. Here is the clean proof:
+
+**Theorem (Shadow Lift).** If A is a ZSF set of size α(r) in F_p^r with Σ_{≤p-1}(A) = F_p^r \ {0}, then doubled+e1(A) in F_p^{r+1} also has Σ_{≤p-1}(doubled+e1(A)) = F_p^{r+1} \ {0}.
+
+**Proof.** Target (c, t) ∈ F_p^{r+1} \ {0}. Three cases:
+
+- **c = 0, t ≠ 0:** Use fiber-0 copy of A. Since Σ_{≤p-1}(A) = F_p^r \ {0}, represent t at weight ≤ p-1. First coordinate = 0. ✓
+
+- **c ≠ 0, t = 0:** Use e₁ with coefficient c. Weight = c ≤ p-1. ✓
+
+- **c ≠ 0, t ≠ 0:** The representable targets include Σ_{≤c}(A₁) + Σ_{≤p-1-c}(A₀) where A₀, A₁ are the fiber-0 and fiber-1 copies of A. The key algebraic fact:
+
+  **Claim:** Σ_j(A) + Σ_k(A) = Σ_{j+k}(A) whenever j+k ≤ p-1.
+
+  *Proof of claim:* (⊇) Given f_i with Σf_i = j+k, decompose f_i = u_i + w_i with Σu_i = j, Σw_i = k. This is always possible: greedily assign j units of u-weight. Since u_i + w_i = f_i ≤ j+k ≤ p-1, both u_i and w_i are in {0,...,p-1}. ✓
+  (⊆) Given u_i with Σu_i = j and w_i with Σw_i = k: f_i = u_i + w_i satisfies Σf_i = j+k and f_i ≤ j + k ≤ p-1. ✓
+
+  **Consequence:** For any m ∈ {1,...,p-1}, pick j = min(m, c) and k = m - j ≤ p-1-c. Then Σ_m(A) = Σ_j(A) + Σ_k(A) ⊂ Σ_{≤c}(A) + Σ_{≤p-1-c}(A). Taking union over m: F_p^r \ {0} = Σ_{≤p-1}(A) ⊂ the representable set. ✓ □
+
+**My initial attack hypothesis** — that targets representable only at low weight (e.g., a₁ ∈ Σ_1(A) but a₁ ∉ Σ_{p-1}(A)) would create gaps at first coordinate c = p-2 — **fails** because the decomposition Σ_j + Σ_k = Σ_{j+k} means we can always redistribute weight between the two fiber copies.
+
+**Verdict: The lift theorem is UNBREAKABLE.** The proof chain η(rank r) → shadow saturation(rank r) → shadow saturation(doubled+e1, rank r+1) is fully rigorous.
+
+---
+
+## 2. THE SOLE SURVIVING OBSTRUCTION: UNIQUENESS
+
+The complete proof chain is now:
+
+```
+η(C_p^3) = 8(p-1)+1         [PROVED, Lean-verified]
+     ↓
+Shadow saturation, rank 3     [PROVED, 3-line argument from η]
+     ↓
+Shadow saturation of           [PROVED, lift theorem above]
+  doubled+e1, rank 4
+     ↓
+  UNIQUENESS AT RANK 4   ←←←  [**NOT PROVED**, verified p=5,7 only]
+     ↓
+η(C_p^4) = 17(p-1)+1
+     ↓
+Shadow saturation, rank 4
+     ↓
+Shadow saturation of
+  doubled+e1, rank 5
+     ↓
+  UNIQUENESS AT RANK 5   ←←←  [**NOT PROVED**, not even computed]
+     ↓
+η(C_p^5) = 35(p-1)+1
+     ↓  ⋮
+```
+
+**Uniqueness is needed at EACH rank independently.** Proving it at rank 4 does not imply it at rank 5. The proof must be re-established at every step of the induction.
+
+---
+
+## 3. WHY UNIQUENESS CANNOT BE BYPASSED
+
+I investigated three bypass strategies. All fail.
+
+### Bypass attempt A: Prove shadow saturation directly (without uniqueness)
+
+Shadow saturation at rank r+1 says: any ZSF set B of size α(r+1) in F_p^{r+1} has Σ_{≤p-1}(B) = F_p^{r+1} \ {0}.
+
+The ONLY known proof uses the three-line argument: for nonzero v, form B^{p-1} · (-v) of length η, get zero-sum involving -v, conclude v ∈ shadow. This **requires knowing η at rank r+1**, which is what we're proving. **Circular.**
+
+The lift theorem avoids circularity by using η at rank r (not r+1). But it only applies to the SPECIFIC construction doubled+e1. For a general ZSF set B with arbitrary fiber structure, the lift doesn't apply.
+
+### Bypass attempt B: Fiber induction without uniqueness
+
+Project B to F_p^r. Each fiber has ≤ α(r) nonzero tails (by rank-r η bound). To prove B has full shadow:
+
+For target (c, t) with c ≠ 0, we need t in the "cross-fiber shadow." This requires combining partial sums from different fibers. By the **Weight-p Barrier** (my Round 2 theorem): any within-fiber zero-sum in a non-kernel fiber has weight ≡ 0 (mod p), hence ≥ p. So within-fiber zero-sums are useless for building cross-fiber representations at weight < p.
+
+The cross-fiber combination requires the **prescribed-weight sumset theorem**: given ZSF tails in multiple fibers, prove that specific targets are representable at specific weights. This is an integer constraint (Σs_i = w) that falls outside modular tools. **No known technique handles this.**
+
+### Bypass attempt C: Prove all maximal ZSF sets have 2-fiber structure
+
+The U1 conjecture (every ZSF set collapses to 2 fibers under some form) is **FALSE** — I proved this in Round 1 with 7 explicit counterexamples. However, all counterexamples are GL-equivalent to doubled+e1 (same-tail swaps are linear rearrangements). So U1-failure doesn't threaten the proof — but it means we can't use 2-fiber structure as a proxy for uniqueness.
+
+---
+
+## 4. ATTACK ON UNIQUENESS ITSELF: FAILED
+
+I attempted to construct a non-doubled-e1 ZSF set of size 17 in F_p^4 for p ≥ 5.
+
+**Structural constraints on hypothetical alternatives:**
+- Each fiber has ≤ 8 nonzero tails (by rank-3 η bound)
+- Each fiber with exactly 8 nonzero tails has tails = A8 (by rank-3 uniqueness, which IS proved)
+- Fiber distributions like (8, 8, 1), (8, 7, 2), (7, 7, 3) are possible in principle
+- Same-tail swaps give multi-fiber distributions but are GL-equivalent to doubled+e1
+
+**Why I can't construct a counterexample:**
+- At p=5: Computer exhaustively verified zero alternatives (2,363 single-swap checks)
+- At p=7: Computer verified zero alternatives (6,511 checks, 39,066 candidates)
+- At p=11+: Computation infeasible, but no structural mechanism for creating alternatives is apparent
+
+**Why I can't prove uniqueness either:**
+- The rank-3 uniqueness proof uses character sums specific to 3D (W(χ) ≠ 0 for odd characters)
+- At rank ≥ 4: W(χ) = 0 for ALL even characters, killing the character approach
+- No alternative proof technique for uniqueness is known at any rank
+
+---
+
+## 5. BASE CASE ANOMALY: THE RANK 2→3 DISCONTINUITY
+
+The recurrence α(r+1) = 2α(r)+1 holds for r ≥ 3 but **fails at r = 2**:
+
+| r | α(r) | 2α(r-1)+1 | Match? |
+|---|------|-----------|--------|
+| 2 | 3    | —         | base   |
+| 3 | 8    | 7         | **NO** |
+| 4 | 17   | 17        | yes    |
+| 5 | 35?  | 35        | conj.  |
+
+The rank-3 value α(3) = 8 exceeds the doubling prediction by 1. This extra vector comes from the character sum miracle specific to rank 3. At rank ≥ 4, the miracle vanishes (even characters contribute zero), and doubling becomes tight.
+
+**Implication for uniqueness:** The rank-3 uniqueness proof uses rank-specific techniques. Any rank-4+ uniqueness proof must use a DIFFERENT argument. No such argument is known.
+
+---
+
+## 6. SCOPE RESTRICTION: p ≥ 5 IS MANDATORY
+
+Reconfirming my Round 2 finding: at p = 3, ZSF = cap sets, and α(4, 3) ≥ 20 > 17 via the Hill cap. The Grail formula fails at ALL ranks for p = 3.
+
+The statement must be: η(C_p^r) = (9·2^{r-3}−1)(p−1)+1 for all r ≥ 3, all primes **p ≥ 5**.
+
+---
+
+## 7. ADVERSARY'S FINAL VERDICT
+
+**The Grail proof architecture is TIGHT and CORRECT, modulo one conjecture.**
+
+| Component | Status |
+|-----------|--------|
+| η(C_p^3) = 8(p-1)+1 | **PROVED** (Lean-verified) |
+| Shadow saturation from η | **PROVED** (3-line argument) |
+| Shadow lift theorem | **PROVED** (decomposition Σ_j+Σ_k = Σ_{j+k}, verified above) |
+| Uniqueness at rank 4 | **UNPROVED** (verified p=5,7) |
+| Uniqueness at rank r ≥ 5 | **UNPROVEN, UNCOMPUTED** |
+| Weight-p barrier | **PROVED** (kills fiber induction bypass) |
+| CW / character sum bypass | **DEAD** at all ranks for p ≥ 5 |
+
+**The entire Grail reduces to one conjecture:**
+
+> **Uniqueness Conjecture (UC_r):** For all primes p ≥ 5, every ZSF set of size 2α(r-1)+1 in F_p^r is GL(r,p)-equivalent to the doubled+e1 construction.
+
+If UC_r holds for all r ≥ 4, the Grail follows by induction. If UC_r fails for some r, the proof chain breaks at that rank and all subsequent ranks.
+
+**I cannot break UC_r.** I cannot prove it. This is the hard core of the problem.
+
+The adversary rests.
+
+[CORTEX STORE] ADVERSARY SESSION 6 ROUND 3: FINAL OBSTRUCTION REPORT
+
+## Lift Theorem VERIFIED CORRECT
+
+Shadow saturation lifts from rank r to doubled+e1 at rank r+1. Key algebraic fact: Σ_j(A) + Σ_k(A) = Σ_{j+k}(A) whenever j+k ≤ p-1 (decomposition of coefficient vectors is always possible by greedy allocation). 
+
+
+[CORTEX STORE] PROVED: Sumset Decomposition Theorem for ZSF Shadows
+
+Theorem: Σ_j(A) + Σ_k(A) = Σ_{j+k}(A) for any j,k with j+k ≤ p-1, where A is any set of vectors in F_p^r and Σ_w(A) = {Σ s_i a_i : s_i ∈ {0,...,p-1}, Σ s_i = w}.
+
+Proof: (⊇) Given f_i with Σf_i = j+k and each f_i ≤ p-1, decompose f_i = u_i + w_i 
+
+
+[CORTEX STORE] PROVED: Sumset Decomposition Theorem for ZSF Shadows. Sigma_j(A) + Sigma_k(A) = Sigma_{j+k}(A) for j+k <= p-1. Proof by greedy coefficient allocation. This is the algebraic engine of the shadow lift theorem: for target (c,t) in F_p^{r+1}, any t in Sigma_m(A) decomposes as Sigma_j(A_1) + Sigma_k(A_0)
+
+Both findings stored to Cortex. The adversary's work is done.
+
+**Summary for the coordinator:** I tried to break every component of the proof chain. The lift theorem (shadow saturation propagates from rank r to doubled+e1 at rank r+1) is **correct** — I verified it by proving the Sumset Decomposition Theorem (Σ_j + Σ_k = Σ_{j+k}). All bypass strategies for avoiding the uniqueness conjecture fail: direct shadow saturation is circular, fiber induction is killed by the weight-p barrier, and the prescribed-weight sumset problem has no known tools. I cannot construct a counterexample to uniqueness at any tested prime. **The Grail reduces to a single conjecture: UC_r (doubled+e1 is the unique maximal ZSF set at each rank).** The adversary cannot break it, cannot prove it. This is the irreducible hard core.

@@ -1,0 +1,50 @@
+# MULTI-AGENT SYNTHESIS: GRAIL CONJECTURE INVESTIGATION
+
+## STATUS
+Computer discovered η-ZSF is far more restrictive than weak-ZSF (greedy reaches only 15-16 vectors vs. claimed 17), while Adversary reports shadow saturation survives at rank r=4 but found anomalous collinear triples contradicting the rank-3 theorem—**both lines of inquiry are incomplete and potentially at cross-purposes on the same falsehood.**
+
+## CONVERGENCE/ESCALATION
+
+**🚨 POSSIBLE FALSE CONJECTURE (HIGH EVIDENCE)**
+
+**Critical Contradiction Identified:**
+- **Computer finding**: Random greedy η-ZSF construction maxes at 15-16 vectors; only the standard "doubled+e₁" reaches 17
+- **Adversary finding**: 12 non-degenerate collinear triples exist within S17, ALL with weight > p
+- **The trap**: If η-ZSF 17-sets are nearly *unique*, then the proof strategy's claim that "every 17-element subset either isn't ZSF OR has internal weight-p zero-sum" rests on uniqueness—which hasn't been proven exhaustively above p=11
+
+**Logical Chain Failure (Adversary's insight):**
+The proof conflates "weakly ZSF (no zero-sum at weight ≤p-1)" with "guarantees weight-p internal zero-sum exists." But if only ~1 configuration of 17 η-ZSF vectors exists (the standard construction), then testing "does S17 avoid weight-p zero-sums?" isn't the same as proving "all 17-element subsets must have one." The collinear triple anomaly suggests the rank-3 theorem may have a **sign convention or weight-counting error**.
+
+---
+
+## CROSS-POLLINATION
+
+**Computer → Adversary:**
+The representative-sensitivity discovery (η-ZSF condition depends on which of p-1 representatives you pick for each projective point) means Adversary's "uniqueness" claim needs refinement: doubled+e₁ may be unique *modulo projective equivalence* but have ~(p-1)^r variants in raw vectors. This could explain why Attack B (non-doubled+e₁ search) found nothing—the search space wasn't normalized.
+
+**Adversary → Computer:**
+The collinear triple anomaly (weight > p everywhere in S17) directly tests Computer's shadow saturation claim. If ALL triples have weight > p, then the weight-(p-1) shadow should have *gaps*—vectors not reachable via any 2-subset. This contradicts "shadow saturation" unless Computer's definition of saturation is narrower than suspected.
+
+**Theorist's Contribution (latent):**
+Both agents assume the "doubled+e₁ construction" is well-defined, but Theorist should clarify: Is it the standard basis multiset scaled by 2, with e₁ appended? Over which field p is it canonical? The representative-sensitivity suggests the construction itself is **ambiguous** until fixed modulo projective action.
+
+---
+
+## DIRECTIVES
+
+### **COMPUTER (verify representative-safety):**
+Complete shadow_sat_v3.py by testing ALL (p-1) representatives of each projective point in doubled+e₁. For each point class, count how many representatives maintain η-ZSF (no zero-sum at weight 1...p). **Reference Adversary's collinear triple count**: if all triples have weight > p, explain why the (p-1)-shadow is claimed saturated. **Report**: Do all representatives saturate identically, or is saturation tied to a specific choice? If tied, you've found the hidden uniqueness assumption.
+
+---
+
+### **ADVERSARY (isolate the anomaly):**
+Recompute the 12 collinear triples in S17 (doubled+e₁ at p=5) and report their exact weight distribution. Cross-check: does Computer's shadow_sat_v2.py output confirm these triples exist? **Then test the converse**: Manually construct a weight-(p-1)=4 shadow from S17 and verify whether 0 appears in it. **Reference Computer's finding**: if greedy reaches only 15-16 η-ZSF vectors, are those 12 triples exclusive to the 17-set, or do they appear in 16-subsets too? This will isolate whether the anomaly is rank-3-theorem-specific or a general counting error.
+
+---
+
+### **THEORIST (resolve definitions):**
+Write a formal statement of the three pillars and identify which depend on *uniqueness up to projective equivalence* vs. *uniqueness in raw vectors*. Specifically: 
+1. Does "shadow saturation" require the weight-(p-1) shadow to hit every nonzero vector, or just "enough" vectors to force a weight-p zero-sum when -v₁₈ is added? 
+2. Does the rank-3 theorem (Computer's framework) use signed weights (±1 coefficients) or unsigned (0/1)? 
+
+**Report**: A 1-page clarification of where representative-sensitivity and sign conventions enter. This will let Computer and Adversary test the *same* conjecture rather than variants thereof.

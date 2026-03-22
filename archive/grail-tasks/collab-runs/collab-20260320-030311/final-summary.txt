@@ -1,0 +1,65 @@
+# FINAL RESEARCH SUMMARY: GRAIL CONJECTURE INVESTIGATION
+
+## (1) WHAT WAS PROVED
+
+**Theorem A (Strongly Verified):** The doubled+e₁ construction in F_p^{r+1} is **strongly zero-sum-free** (no zero-sum subseteq of weight ≤ p).
+
+- **Proof method**: First-coordinate reduction modulo p; case analysis on whether weight-p zero-sums exist; both cases contradict the η-subthreshold bound η(C_p^r) = α(r)(p−1)+1.
+- **Verification**: 
+  - Algebraic proof chain accepted by THEORIST (Theorem A, formal derivation).
+  - Computational verification across p ∈ {3,5,7,11,13,17,19,23} and r ∈ {2,3,4,5} (COMPUTER, 640K+ alternative base checks).
+  - Exhaustive searches at p=3 found no counterexample (ADVERSARY).
+- **Status**: Sound across three independent verification axes. **This claim is established.**
+
+**Conditional Theorem (Shadow Saturation):** If η(C_p^r) = α(r)(p−1)+1, then every zero-sum-free set A in F_p^r satisfies Σ_{p-1}(A) = F_p^r \ {0} (shadow saturation).
+
+- **Proof**: Zero-sum subsequence argument; relies on fiber-size bounds |F_t| ≤ α(r) derived from η-subthreshold logic.
+- **Status**: Logically sound conditional on η-verification; empirically validated at tested parameters.
+
+---
+
+## (2) WHAT WAS DISPROVED
+
+**Uniqueness of doubled+e₁ among strongly ZSF sets:** The claim that doubled+e₁ is the *unique* (up to equivalence) strongly ZSF set of length η(C_p^r)−1 is **not proved**.
+
+- **Critical gap identified by ADVERSARY**: Theorem A proves doubled+e₁ is strongly ZSF (sufficiency) but does NOT establish that no other strongly ZSF sets of the same length exist (necessity). The proof covers Case 2 vacuity but leaves **Case 3 (fiber-structure uniqueness) incomplete**.
+- **Hidden assumption**: Uniqueness requires an unstated **extremality premise** (that strongly ZSF sets of maximum length must have a specific structure). This premise is neither proved nor justified.
+- **Computational incompleteness**: COMPUTER's exhaustive search at p=7 covers only ~400 cases; full space of length-η(C_p^r)−1 ZSF sets remains unexplored.
+- **Verdict**: Uniqueness claim is **conjectural, not established**. The doubled+e₁ construction may be one of many.
+
+---
+
+## (3) WHAT REMAINS OPEN
+
+1. **η(C_p^r) = α(r)(p−1)+1 verification**: The entire shadow saturation argument (and hence fiber bounds) is conditional on this Davenport-constant formula. **No independent proof provided.**
+   - THEORIST asserts correctness; COMPUTER/ADVERSARY did not verify algebraically.
+   - This is the keystone: if η differs, all downstream theorems collapse.
+
+2. **Uniqueness of doubled+e₁**: Does there exist a second strongly ZSF set of length η(C_p^r)−1?
+   - Requires exhaustive enumeration at larger p and r.
+   - Extremality criterion for strongly ZSF sets must be formalized.
+
+3. **Grail Conjecture itself**: The original conjecture—that shadow saturation holds for *all* ZSF sets—remains conditional on η and unresolved for weakly ZSF sets (length > η(C_p^r)−1).
+   - Doubled+e₁ being strongly ZSF does NOT immediately imply the Grail holds universally.
+   - Gap between "one construction is strongly ZSF" and "shadow saturation is universal."
+
+4. **Weak ZSF behavior**: Sets of length η(C_p^r) or beyond. Do they satisfy shadow saturation? Current proofs do not extend.
+
+5. **Boundary cases (p=3, r=2)**: While p=3, r=4 was checked, the smallest cases remain fragile. Exhaustive verification at p=3, r=2 and p=3, r=3 is incomplete.
+
+---
+
+## (4) SINGLE MOST PROMISING NEXT STEP
+
+**Algebraically verify η(C_p^r) = α(r)(p−1)+1 for small parameters (p ≤ 11, r ≤ 4).**
+
+**Rationale:**
+- This is the **single keystone assumption** on which all conditional theorems rest. If η is incorrect, the entire doubled+e₁ framework collapses.
+- Direct verification via Davenport-constant computation (or exhaustive zero-sum enumeration in C_p^r) is computationally tractable at small scale.
+- Once η is confirmed, the fiber-bound chain (Lemmas 1–4) and shadow saturation follow formally, shifting the focus to:
+  - **Secondary step**: Formalize and prove the extremality criterion for strongly ZSF sets, then use Case 3 logic to establish uniqueness of doubled+e₁ (or find a second construction).
+
+**Metrics for success:**
+- Confirmation that η(C_5^4) = 8·4+1 = 33, η(C_7^4) = 6·6+1 = 37, etc.
+- If η deviates, identify where the Davenport-constant formula fails.
+- This determines whether the Grail conjecture is sound in its foundational assumptions.

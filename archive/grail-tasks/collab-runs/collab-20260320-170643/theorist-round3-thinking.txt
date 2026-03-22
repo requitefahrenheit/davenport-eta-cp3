@@ -1,0 +1,721 @@
+
+============================================================
+BLOCK 1 (266 chars)
+============================================================
+Let me start by searching Cortex for relevant prior results and then reading the key files to understand the current state of the problem. I need to focus on proving something new in this final round.
+
+Let me search for the key topics mentioned in the research goal.
+
+============================================================
+BLOCK 2 (124 chars)
+============================================================
+Let me search Cortex for relevant prior results on this problem, and also read the key files mentioned in the research goal.
+
+============================================================
+BLOCK 3 (42993 chars)
+============================================================
+Good, I now have the context. Cortex isn't available in this environment, but I have the key files. Let me now focus on the THEORIST task for Round 3.
+
+The coordinator's directive for me is:
+**Prove or refute: "The set of all strongly ZSF 17-sets at p=5 with tail-projection A₈ ∪ {0} is precisely the same-tail-swap orbit of doubled(A₈) + e₁, with cardinality 324."**
+
+But more importantly, the core theoretical task remains:
+1. Prove the Window Structure analytically
+
+
+2. Prove that U1' (with tail-projection constraint) preserves the Grail
+
+I need to focus on what I can actually establish in this final round. The key insight is that U1 fails with 324 counterexamples at p=5, all sharing the identical tail projection A₈ ∪ {0}. The Fiber-Flexible Shadow Saturation Theorem tells me that shadow saturation at weight p-1 is independent of fiber assignments when the tail projection is fixed. So the real question is whether U1' with its geometric line constraint can salvage the preservation property for the Grail.
+
+The core task is proving the Window Structure—that for A₈ in F_p³, the claim about which j values appear in Σ_w(A₈) based on the ceiling and floor bounds. This connects directly to the orbit uniqueness that the Coordinator emphasized, and ultimately to whether U1' preserves the Grail despite the counterexamples to U1.
+
+Now I'm working through the linear constraints more carefully. The zero-sum condition (0, j, j) imposes two equations on the coefficients c₀ through c₇, leaving six free variables to work with. Let me trace out what these constraints actually are and how they restrict the possible weights. Now I'm substituting the expressions for c₀ and c₁ back into the formulas for j and w to simplify them in terms of the remaining six free variables, which gives me j = c₂ + c₃ + c₅ + c₆ + 2c₇ and a similar reduction for the weight constraint. Let me work through the expansion more systematically. I'm substituting the expressions for c₀ and c₁ into the sum, then collecting like terms across all the components to simplify the result. I'm combining these coefficients to express w and j in terms of the free variables, then setting up constraints to ensure c₀ and c₁ stay within the valid range of 0 to p-1.
+
+Now I need to find which j values are achievable for each w, so I'm looking at the relationships between w and j by computing their differences to isolate specific variable combinations.
+
+I can see that w - 2j simplifies to -(c₄ + c₅ + c₆ + c₇), which is always non-positive, giving me the lower bound j ≥ ⌈w/2⌉. Now I need to work out the upper bound using w - j to constrain j from above.
+
+For the upper bound, I'm checking whether j can equal 2⌊w/2⌋. When w is even (w = 2k), this would mean j ≤ 2k, and when w is odd (w = 2k+1), it would mean j ≤ 2k. So the constraint becomes j ≤ w for even w and j ≤ w-1 for odd w. Let me verify this by testing whether j = w is actually achievable when w is even.
+
+If j = w, then the constraint 2j - w = c₄ + c₅ + c₆ + c₇ becomes w, and I can express c₄ in terms of the other variables. This is feasible when the variables stay sufficiently bounded. However, when w is odd and j = w, I get a contradiction—the equation w = c₄ + c₅ + c₆ + c₇ combined with the definition of w leads to an inconsistency, so j cannot actually reach w in that case. I need to verify whether j can actually equal w when w is odd. If j = w, then from my earlier equations, c₄ + c₅ + c₆ + c₇ must equal w, but this leads to a contradiction with the constraint that c₄ = c₂ + c₃ + c₇, which suggests j = w is impossible for odd w. Now I'm working through the constraints on c₀ and c₁. From the expressions I derived, I need c₆ ≥ c₂ + c₅ for c₀ to be non-negative, and c₅ ≥ c₃ + c₆ for c₁ to be non-negative. These two constraints together create a tension I need to resolve.
+
+Substituting the first inequality into the second gives me c₅ ≥ c₃ + c₂ + c₅, which simplifies to 0 ≥ c₂ + c₃. Since all variables are non-negative, this forces c₂ = c₃ = 0. With these values, the two inequalities become c₆ ≥ c₅ and c₅ ≥ c₆, so c₅ and c₆ must be equal.
+
+This means j = 2c₅ + 2c₇, which is always even, and w must equal j.
+
+Now I'm establishing the bounds on j. Since j is even, if w is odd, then j = w is impossible, giving me j ≤ w - 1. For the lower bound, I've already shown that 2j - w = c₄ + c₅ + c₆ + c₇ ≥ 0, which means j ≥ w/2. For even w this gives exactly j ≥ w/2, and for odd w = 2k+1, this gives j ≥ k+1 = ⌈w/2⌉.
+
+So I have the bounds: j ≥ ⌈w/2⌉ and j ≤ 2⌊w/2⌋. But now I need to verify that every value in this range is actually achievable—that there are no gaps in what j can equal.
+
+The key insight is that I haven't yet leveraged the specific structure of the A₈ vectors themselves. The problem gives me explicit linear constraints on the coefficients c₀,...,c₇, and I need to use those to show completeness. Let me look at what those constraints actually are and see how they restrict which j values are possible. When j = w, the constraints force c₂ = c₃ = 0 and c₅ = c₆, making j even. But I need to think more carefully about whether j and w always have the same parity, or if there are cases where they differ. Let me work through the relationship between j and w more systematically using the constraint equations. I'm going in circles with the algebra, so let me take a different approach. I'll use the constraint that w is fixed and try to express j directly in terms of w and the non-negative variables, then figure out what maximizes j given those constraints. I'm deriving the upper bounds on c₄ from the non-negativity constraints on c₀ and c₁, which gives me c₄ ≤ min(c₃ + c₆ + c₇ - c₅, c₂ + c₅ + c₇ - c₆). This algebraic approach is getting unwieldy, so I'm switching to thinking about the problem differently—since we're working with integers and the modular constraints only matter when p is small relative to 2w, maybe I can ignore those constraints for large enough p and find a cleaner solution. So I have two inequality constraints from requiring c₀ and c₁ to be non-negative, and I'm expressing j and w in terms of the six free variables. The lower bound on j follows from these constraints, and now I need to verify the upper bound by showing that w - j has the right form.
+
+To maximize j relative to w, I'm minimizing the gap c₂ + c₃ + c₇ - c₄ subject to the constraints on c₄. When I set the non-negative variables c₂, c₃, and c₇ to zero, the constraints force c₅ = c₆ for c₄ to exist, which pins down the maximum value of j.
+
+Now if I instead set c₇ = 1 while keeping c₂ and c₃ at zero, the constraints relax slightly, allowing c₄ to reach 1 - |c₅ - c₆|, which means j can exceed w when c₅ and c₆ differ.
+
+Let me explore what happens when c₅ = c₆: then c₄ maxes out at 1, giving j = w = 2c₅ + 2, so they remain equal.
+
+Now I'm testing a different configuration with c₃ = 1 and c₂ = 0, c₇ = 0, which introduces new constraints on c₄ based on the relationship between c₅ and c₆. Now I'm checking the case where w is even, and I've found that j = w - 1 satisfies the constraint j ≤ w. For odd w, I need to explore how to maximize j by adjusting the coefficients, particularly looking at what makes w odd in the first place.
+
+I'm rewriting the expression for w to isolate the parity condition: w is odd precisely when c₄ + c₅ + c₆ + c₇ is odd. Since 2j - w equals this sum, that means 2j - w must be odd when w is odd.
+
+Now I'm working out the bounds on j: since 2j - w is a positive odd number, it's at least 1, which gives j ≥ ⌈w/2⌉. For the upper bound, I need to figure out how large 2j - w can be while keeping w fixed, which is really asking how to maximize c₄ + c₅ + c₆ + c₇ under the constraint that w stays constant.
+
+Let me check whether j = 2⌊w/2⌋ is always achievable. For even w = 2k, I need j = 2k = w, which requires specific constraints on the coefficients: c₂ = c₃ = 0, c₅ = c₆, c₄ = 0, c₇ = 0, and then j = 2c₅ = w means c₅ = k. This works as long as k ≤ p-1. For odd w = 2k+1, I need j = 2k, so 2j - w = 2k - 1, meaning c₄ + c₅ + c₆ + c₇ = 2k - 1. I'm also tracking the constraint w - j = c₂ + c₃ + c₇ - c₄ to see what other conditions this imposes.
+
+Setting c₂ = 1, c₃ = 0, c₇ = 0, c₄ = 0 gives me 1 = c₂ + c₃ + c₇ - c₄. Now I'm checking the constraints from the c₀ and c₁ coefficients: c₆ ≥ c₅ and c₅ + 1 ≥ c₆, which means c₅ ≤ c₆ ≤ c₅ + 1. Combined with c₅ + c₆ = 2k - 1, I can solve for the valid values.
+
+If c₆ = c₅ + 1, then 2c₅ + 1 = 2k - 1, giving c₅ = k - 1 and c₆ = k. This yields j = 2k and w = 2k + 1, both of which check out. So for all k ≥ 1 (odd w ≥ 3), the upper bound of 2k is achievable, and I need to verify the boundary case where w = 1.
+
+For w = 1, the constraint becomes j ≥ 1 and j ≤ 0, which is impossible—an empty range. This suggests no vector from A₈ actually lies on the line L = {(0,j,j)}, which makes sense if A₈ was specifically constructed to avoid it. The computational evidence supports this working for all p ≤ 23, and the same logic applies when w = 0.
+
+Now I need to verify that every integer j in the achievable range [⌈w/2⌉, 2⌊w/2⌋] can actually be constructed. For even w = 2k, this range is [k, 2k], and for odd w = 2k+1, it's [k+1, 2k]. Let me set up a parametrization using d = 2j - w to show that for any target j in the valid range, I can find non-negative integers satisfying all the constraints. , d = c₄ + c₅ + c₆ + c₇ ≥ 0. And m = w - j = j - d... no.
+
+m = w - j = c₂ + c₃ + c₇ - c₄
+
+So w - j = 2k - j = c₂ + c₃ + c₇ - c₄ and 2j - 2k = c₄ + c₅ + c₆ + c₇.
+
+For j = k + t where t ∈ {0, 1, ..., k}:
+2j - 2k = 2t = c₄ + c₅ + c₆ + c₇
+2k - j = k - t = c₂ + c₃ + c₇
+
+Now I'm checking whether I can always construct valid non-negative coefficients. Let me try setting c₇ = c₃ = c₄ = 0, which gives me c₅ + c₆ = 2t and c₂ = k - t. Then I need c₀ = c₆ - c₅ ≥ 0 and c₁ = (k-t) + c₅ - c₆ ≥ 0, so c₆ ≥ c₅ and c₆ - c₅ ≤ k - t. If I set c₅ = c₆ = t, then c₂ = k - t and c₀ = 0, which works.
+
+Now for odd w = 2k + 1, I have j = k + t where t ranges from 1 to k, and I'm computing 2j - w = 2(k+t) - (2k+1) = 2t - 1.
+
+I'm setting up the constraint equations: c₅ + c₆ = 2t - 1 and c₂ = k + 1 - t, with c₇ = c₃ = c₄ = 0. Then I need c₀ = c₆ - c₅ ≥ 0 and c₁ = (k+1-t) + c₅ - c₆ ≥ 0, which means I'm choosing c₅ strategically to satisfy these bounds.
+
+Now I'm verifying that c₅ = t - 1 and c₆ = t works: this gives c₀ = 1 and c₁ = k - t, which is non-negative when t ≤ k. Then I'm checking that j = k + t and w = 2k + 1 as required.
+
+This construction holds for all values of t from 1 to k, so the completeness proof is established. Now I'm organizing everything into a formal theorem statement about the window structure for A₈ on the invariant line L.
+
+The key insight is that the representation constraints reduce to a system where most variables are free, while the others are determined by linear combinations—specifically, the weight constraint forces w = 2c₂, which means c₂ = w/2, and the coordinate j is expressed as a linear combination of the remaining free variables. This gives me the bounds on j in terms of w. + 2c₃ - c₄ + c₅ + c₆ + 3c₇
+
+Step 2 (Lower bound): 2j - w = c₄ + c₅ + c₆ + c₇ ≥ 0, so j ≥ w/2, hence j ≥ ⌈w/2⌉.
+
+Step 3 (Parity constraint): Since 2j - w = c₄ + c₅ + c₆ + c₇ is a non-negative integer, 2j and w must have the same parity iff c₄ + c₅ + c₆ + c₇ is even.
+
+When j = w, the constraints force c₂ = c₃ = c₄ = c₇ = 0 with c₅ = c₆, making j even, so j = w only works when w is even. For the upper bound, j ≤ 2⌊w/2⌋, which equals w for even w but drops to 2k for odd w = 2k+1.
+
+Now I'm verifying that every integer j in the achievable range can actually be constructed. For even w = 2k, I can hit any j = k + t by adjusting the coefficients appropriately. For odd w = 2k+1, the same approach works for j = k + t within the valid range.
+
+The constructions all maintain non-negative coefficients, so the proof is complete. This establishes the Window Structure theorem for p ≥ 2w+1. Now I need to examine what happens at the boundary case where w = p-1, since that's where the modular arithmetic effects become relevant.
+
+When w = p-1, the window covers j ∈ [(p-1)/2, p-1], but there's a significant gap on the left side—specifically j ∈ {1, 2, ..., (p-3)/2} are missing, which accounts for (p-3)/2 values out of p-1 total.
+
+The coordinator wants me to verify a specific claim about strongly ZSF 17-sets at p=5 with tail-projection A₈ ∪ {0}, showing they form a single orbit under same-tail-swap with cardinality 324. This is fundamentally about understanding the symmetries and orbit structure when we apply the doubling operation to A₈.
+
+When we double A₈, we're creating pairs (0, a_i) and (1, a_i) for each vector, then shifting everything by e₁ to get 17 vectors total. The same-tail-swap operation allows us to permute which fiber each tail belongs to while preserving the tail set itself—so instead of the fixed pairing (0, a_i) and (1, a_i), we can reassign them to different first coordinates while keeping A₈ ∪ {0} as the tail-projection. The standard doubled(A₈) + e₁ has:
+- 8 vectors (0, a_0), ..., (0, a_7) in fiber 0
+- 8 vectors (1, a_0), ..., (1, a_7) in fiber 1
+- 1 vector (1, 0, 0, 0) = e₁ (fiber 1, tail 0)
+
+A "tail-swap" replaces one pair: drop (f, a_i) from fiber f and add (f', a_i) to fiber f' where f' ≠ f. But we can also change the fiber label of the extra vector.
+
+The 324 configurations at p=5 likely arise from 7 base configurations that generate multiple instances through A₈ symmetries, though I'd need computational verification to establish this orbit structure rigorously. What I can focus on instead is proving the key analytical result: shadow saturation at weight p-1 is independent of fiber assignments whenever the tail projection is A₈ ∪ {0}. Let me work through the formal setup where each vector in our 17-set has a fiber label and a tail in the tail projection. A₈ ∪ {0}. The fiber distribution could be (8,8,1) as in the standard case, or (8,7,2) etc.
+
+The claim: Σ_{p-1}(S) = F_p⁴ \ {0} regardless of how the fiber labels are assigned.
+
+This follows from the Window Structure! Here's the argument:
+
+For any target vector v = (f, b) ∈ F_p⁴ with b ∈ F_p³, we need to find coefficients c_i with Σ c_i ≤ p-1 such that Σ c_i s_i = v.
+
+The tail projection gives Σ c_i tail(s_i) = b, and the first coordinate gives Σ c_i fiber(s_i) = f.
+
+Since the tail projection of S is A₈ ∪ {0}, the tail constraint becomes a weighted zero-sum problem in A₈ ∪ {0} with the appropriate weight bounds. The window structure guarantees that Σ_{≤p-1}(A₈) = F_p³ \ {0}, which is the Shadow Saturation property I proved earlier. Combined with the sumset completeness property Σ_k + Σ_l = Σ_{k+l}, this means I can distribute the weight flexibly between the fiber coordinates and tail coordinates to hit any target in F_p⁴ \ {0}.
+
+Actually, wait—I need to be more precise about what I'm trying to prove here. For the Grail, the question is about zero-sum subsequences in sequences over C_p^{r+1}, not about sumsets. Let me refocus: I need to show that every sequence of length (2α+1)(p-1)+1 contains a zero-sum subsequence of length p, or equivalently, that every zero-sum-free set has size at most (2α+1)(p-1).
+
+The strategy is to use a projection argument: if S is a maximal zero-sum-free set, then projecting onto lower dimensions should give me a bound via induction. But there's a critical issue—when vectors span three or more hyperplane fibers, the induction breaks down. U1 claimed this can't happen for maximal strongly zero-sum-free sets, but that's actually false, so I need a different approach to handle the multi-fiber case.
+
+The key insight is that instead of counting fibers, I should focus on the structure of the tail projection—specifically, that it lives on at most 9 parallel lines through A₈ ∪ {0}. This gives me a tighter constraint. For the concrete (8,8,1) case with 8 vectors in fiber 0, 8 in fiber 1, and 1 in some other fiber c, I can use the window structure to identify a gap at weight p-1 in the restricted set, then leverage cross-fiber interactions to force a zero-sum at weight ≤ p.
+
+But stepping back, the real claim I'm working with is that while 17 vectors distributed across 3+ fibers don't always yield a zero-sum of weight ≤ p, the counterexamples all have this special A₈-shaped tail structure. The Grail conjecture survives because every strongly zero-sum-free set of size 17 must satisfy the condition that Σ_{p-1}(S) covers all nonzero elements, which reduces to a statement about η(C_p³).
+
+Now I'm realizing the actual gap: U1 is what's needed to prove the general formula for η(C_p^{r+1}) across all r ≥ 3, not just the r=3 case. For r=3 specifically, I need to establish the upper bound on η(C_p⁴).
+
+The two-fiber approach would work if every maximal ZSF set stayed within two fibers—that's what U1 was supposed to guarantee—but since U1 fails, I need to pivot to the U1' constraint instead, which uses tail-projection reasoning. Now I'm working through what the Fiber-Flexible Shadow Saturation Theorem actually requires to keep the proof chain intact.
+
+The core argument for r+1 (assuming it holds for r) starts by taking a maximal strongly ZSF set S in F_p^{r+1}, projecting it down to F_p^r to get a multiset T of tail values, then checking whether S can be confined to just two first-coordinate values. When U1 fails and S uses three or more first-coordinate values, the counterexamples at p=5 show T has 9 tail values with 17 total vectors—so the key constraint becomes: any 18th vector added to S must create a zero-sum triple.
+
+I need to verify whether these maximal counterexamples to U1 actually satisfy the Grail bound, since if they do, the induction still works. The confusion is whether the 17 refers to the spine 2α(3)+1 that then scales by (p-1) in the general case, or if it's already the full count for p=5. I'm connecting this to the Davenport constant framework—a sequence in C_p⁴ of length 17(p-1) where each element appears at most p-1 times since p copies sum to zero. The strongly ZSF condition means no non-empty subsequence of weight ≤ p sums to zero, and the 17 base vectors from F_p⁴ \ {0}, each repeated p-1 times, determine whether the sequence satisfies this property. For the upper bound, I need to show that any such set of 17(p-1)+...
+
+Now I'm thinking about the fiber structure—projecting F_p⁴ down to F_p via the first coordinate, where each fiber maps to a subset of F_p³. But I'm realizing this approach is getting too complicated. Let me narrow my focus to what I can actually prove rigorously right now: the Window Structure Theorem as the core sub-problem, then using that to establish fiber-flexible shadow saturation when the tail projection is fixed to A₈, with the orbit structure and uniqueness claim requiring more computational work.
+
+For the (8,8,1) distribution case specifically, I need to verify whether the Window Structure directly implies U1—that is, whether a configuration with 8 vectors in fiber 0 (tails = A₈), 8 vectors in fiber 1 (tails = A₈), and 1 vector in some other fiber c ∈ {2,...,p-1} necessarily contains a zero-sum of weight at most p.
+
+To check this, I'm setting up the zero-sum equations by assigning multiplicities to each vector: αⱼ for the vectors in fiber 0, βⱼ for those in fiber 1, and γ for the isolated vector (c, b). The zero-sum condition then splits into constraints on the first coordinate and on the tail components, which I need to analyze to see if a solution with bounded weight always exists. I'm checking whether -γb can be expressed as a sum from the combined fibers, where each element aⱼ can appear up to 2(p-1) times total across both fibers. For γ = 1, I need W₁ = p - c and W₀ ≤ c - 1 to keep the total weight within bounds, then verify the tail equation holds with these constraints.
+
+Since Σ_{≤p-1}(A₈) covers all nonzero elements in F_p³, I can find some weight w' ≤ p-1 where -γb appears, but I also need to ensure the weight distribution across the two fibers is compatible with the original constraints.
+
+Let me reorganize this approach using the window structure more directly. I think the cleanest path forward is to establish three key results: a rigorous proof of the Window Structure Theorem itself, how it combines with sumset completeness to guarantee coverage, and then analyze the orbit structure that emerges from this framework. I should also refine the Fiber-Flexible Shadow Saturation Theorem statement more carefully to capture exactly what we need about sets in F_p^{r+1}.
+
+The theorem should specify that when we have 2α+1 nonzero vectors whose tail-projections form a maximal α-sum-free set plus zero, the sumset Σ_{p-1}(S) covers all of F_p^{r+1} except possibly zero, independent of how we assign the first coordinates. But I need to think through the distribution more carefully—with 2α+1 vectors mapping to 9 distinct tail values, the doubled construction places each element strategically across these fibers.
+
+The key insight is that the tail-projection shadow already saturates F_p^r \ {0}, and the fiber assignments give us enough freedom to control the first coordinate and ensure we hit everything except zero. For any target (f, b) ∈ F_p^{r+1} \ {0}, we need to represent it as a weighted sum of elements of S with weight ≤ p-1.
+
+Since the tail-projection satisfies Shadow Saturation, there exist weights c_i such that Σ c_i tail(s_i) = b with Σ c_i = w ≤ p-1.
+
+Now, Σ c_i fiber(s_i) = f' for some f'. If f' = f, done. If not, we need to modify the weights to adjust the first coordinate.
+
+The key insight is that when two vectors share the same tail but have different fiber labels, transferring weight between them adjusts the first coordinate sum without changing the tail or total weight. In the doubled A₈ + e₁ construction, each tail appears in both fibers 0 and 1, giving us the flexibility to shift weight and hit any target first coordinate while maintaining our constraints. critical constraint: the transfer must keep all multiplicities in [0, p-1].
+
+If the original representation uses weight w ≤ p-1 for the tail, and the first-coordinate sum is f', we need to add (f - f') to the first coordinate. By transferring weight between fiber pairs with the same tail, we can add any value in F_p to the first coordinate... but at the cost of potentially needing to go beyond the [0, p-1] bounds.
+
+Actually, this is more subtle. Let me think about it more carefully.
+
+For each tail a_k ∈ A₈, suppose s_k^0 = (f_k^0, a_k) and s_k^1 = (f_k^1, a_k) are the two vectors with tail a_k, where f_k^0 ≠ f_k^1.
+
+In any representation of (f, b), I assign c_k^0 to s_k^0 and c_k^1 to s_k^1 (plus γ on the e₁ vector). The tail constraint gives me d_k = c_k^0 + c_k^1 for each fiber pair, which determines how the tail weight is split. The first-coordinate sum then becomes Σ_k (c_k^0 f_k^0 + c_k^1 f_k^1) + γ f_e₁ = f, and I need to figure out what freedom I have in choosing c_k^0 and c_k^1 given the constraint d_k.
+
+Since c_k^1 = d_k - c_k^0, the first-coordinate contribution is c_k^0 (f_k^0 - f_k^1) + d_k f_k^1. Summing over all fibers, I get Σ_k c_k^0 (f_k^0 - f_k^1) + F_0, where F_0 = Σ_k d_k f_k^1 + γ f_e₁ is determined by the tail representation.
+
+So the question becomes: given the constraints 0 ≤ c_k^0 ≤ d_k for all k, what values can Σ_k c_k^0 (f_k^0 - f_k^1) take?
+
+For the standard doubled construction where f_k^0 = 0 and f_k^1 = 1, the differences collapse to -1 for each k, so I'm looking at -Σ_k c_k^0 and need this to equal f - F_0.
+
+Rearranging, I need Σ_k c_k^0 = F_0 - f, where each c_k^0 is bounded by [0, d_k]. Since the sum of all d_k is at most w - γ ≤ p - 1, the achievable range for Σ c_k^0 is [0, Σ d_k]. This means I need 0 ≤ F_0 - f ≤ Σ d_k to have a solution.
+
+The constraint might not always hold for a single tail representation, but I can select among multiple possible tail representations to satisfy it.
+
+Actually, let me think about this more directly. The key claim is that if the tail set T achieves shadow saturation at weight p-1, and each tail value appears in at least two distinct fibers, then I can achieve full saturation at weight p. The proof would involve finding a tail representation for the second coordinate, then splitting the multiplicities between the two fiber copies to hit the desired first coordinate, and the flexibility in how I distribute these multiplicities should let me reach any target.
+
+For the standard two-fiber case, the first coordinate is determined by how much weight I put in fiber 1 versus fiber 0, and since the tail weight w can vary appropriately, I should be able to hit any value. But when I generalize to arbitrary fiber assignments, the structure becomes more subtle—it's not just about two choices per tail value, but about how the fiber-label differences interact across all the tail elements.
+
+The key insight is that the fiber differences should generate all of Z/pZ since they're nonzero and p is prime. If I have enough flexibility in the c_k^0 values (meaning at least some d_k ≥ 1), I can adjust the first coordinate by any fiber difference, which means I can reach any target value. The constraint is that w ≤ p - 1, which limits how large the d_k can be, so I need to verify this gives me enough degrees of freedom to actually achieve the full range. ), this doesn't help.
+
+Hmm, the issue is that each "knob" has a limited range [0, d_k], and we need the image of Σ c_k^0 Δ_k (where Δ_k = f_k^0 - f_k^1) as c_k^0 varies over [0, d_k] to cover all of F_p.
+
+For the standard construction (Δ_k = -1 for all k), this image is {-s : 0 ≤ s ≤ Σ d_k} mod p. Since Σ d_k = w - γ, and if w - γ ≥ p - 1, the image covers all of F_p.
+
+For w = p-1 and γ = 0: Σ d_k = p - 1, so s ranges from 0 to p-1, covering all of F_p. ✓
+
+But smaller weights won't give full coverage, which is why we need to use multiple weight levels. Since any nonzero element appears in some Σ_w(tail) for w ≤ p-1, the key insight is that we're actually using all weights up to p-1 together, allowing the total weight to vary from 1 to p-1 and ensuring we hit every element in F_p^{r+1} \ {0}.
+
+So the real question is whether at some weight w ≤ p-1, the fiber constraints are satisfiable while still covering the needed range in the first coordinate.
+
+Let me step back and think about this more carefully. For a sequence of length 17(p-1) where each base vector appears exactly p-1 times, the constraint is that in any zero-sum subsequence of weight p, we need the sum to vanish in C_p^{r+1}. Since each base vector has multiplicity p-1, the coefficient c_s for any base vector s can range from 0 up to p-1 in a valid zero-sum.
+
+I'm getting caught up in the details of the fiber-flexible theorem, so let me refocus on what I can actually prove cleanly. My plan is to establish the Window Structure Theorem as the core result, then derive the consequences about gaps at weight p-1 and sumset completeness, work through the orbit-uniqueness characterization, and finally state the Fiber-Flexible Shadow Saturation Theorem with either a complete proof or a clear verification tag. I need to make sure the completeness argument in the window proof is solid before moving forward.
+
+Now I'm verifying that the upper bounds on c₀ and c₁ hold across my constructions—checking that for even and odd window widths, these coefficients stay within the required limits of p-1, which they do.
+
+I need to reconsider whether the condition p ≥ 2w+1 is actually necessary for the window structure to work over the integers without modular reduction, since the maximum intermediate values are bounded by (p-1)/2 and the j formula itself operates within F_p. up to p-1, which keeps everything in the valid range. But when I look at the lower bound, ⌈w/2⌉ reaches (p-1)/2 when w = p-1, and the formula j = c₂ + c₃ + c₅ + c₆ + 2c₇ could wrap around modulo p for larger values of w. I need to check whether the condition p ≥ 2w+1 actually prevents wrap-around across the full range, or if I'm missing something about how the formula behaves.
+
+The key insight is that for even w = 2k, my constructions give j = k + t with maximum j = 2k = w ≤ p-1, so no wrap-around there. But if c₅ and c₆ get close to p-1, the integer value of j could exceed 2⌊w/2⌋ and land in a different residue class modulo p—and that's exactly where p ≥ 2w+1 comes in to prevent this from creating spurious solutions.
+
+Now I'm realizing the constraint is tighter than I initially thought: since all eight coefficients sum to w and each is non-negative, every cᵢ is bounded by w itself. That means j = c₂ + c₃ + c₅ + c₆ + 2c₇ is at most 5w, not unbounded by p.
+
+For the modular arithmetic side, when p is large enough relative to w—specifically when p > 5w—there's no wraparound and the modular analysis perfectly matches the integer case. But once p gets close to w, the mod-p effects start distorting things. The problem statement confirms this: the window structure is p-independent in the stable regime where p ≥ 2w+1, matching the integer analysis exactly. Below that threshold, mod-p effects kick in and the window can shift. At the boundary case w = p-1, I need to check whether the stability condition even holds.
+
+Since p < 2(p-1)+1 always, we're definitely in the unstable regime at w = p-1, so mod-p wraparound could theoretically create extra solutions. But the computational data shows the gap is exactly {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, which matches what the integer window formula predicts for w = p-1. This suggests the integer analysis is actually giving the right answer despite being in the unstable regime. Let me verify whether mod-p effects could generate additional solutions beyond what the integer analysis finds. = 4 and the linear constraints.
+
+Since Σ cᵢ = 4 and each cᵢ ≥ 0, the maximum of c₂ + c₃ + c₅ + c₆ + 2c₇ (as integers) is at most c₂ + c₃ + c₄ + c₅ + c₆ + 2c₇ ≤ Σcᵢ + c₇ = 4 + c₇ ≤ 4 + 4 = 8.
+
+For j = 1 mod 5 with integer j ∈ {1, 6}:
+- j = 1: already shown impossible (in the gap).
+- j = 6: need c₂ + c₃ + c₅ + c₆ + 2c₇ = 6, but the maximum is 8, so this might be achievable. Let me check if there's a valid distribution of the cᵢ values that sums to 4 and produces this weighted sum.
+
+With the constraints c₀ = c₃ - c₄ - c₅ + c₆ + c₇ ≥ 0 and c₁ = c₂ - c₄ + c₅ - c₆ + c₇ ≥ 0, along with w = 2c₂ + 2c₃ - c₄ + c₅ + c₆ + 3c₇ = 4 and j = 6, I can derive that c₂ + c₃ - c₄ + c₇ = -2, which is impossible since all variables are non-negative. But w - j = -2 < 0, meaning c₄ > c₂ + c₃ + c₇ + 2.
+
+And 2j - w = c₄ + c₅ + c₆ + c₇ = 8.
+
+So c₄ + c₅ + c₆ + c₇ = 8, with Σ all 8 cᵢ = 4. Since c₀ + c₁ + c₂ + c₃ + c₇ = 4 - (c₄ + c₅ + c₆) = 4 - (8 - c₇) = c₇ - 4.
+
+For this to be non-negative: c₇ ≥ 4. But then c₀ + c₁ + c₂ + c₃ = 4 - 8 = -4, which is impossible. So j = 6 doesn't work, confirming that j ≡ 1 (mod 5) is unachievable when w = 4 and p = 5.
+
+The window structure persists even in the unstable regime because the total weight constraint w = p - 1 limits how large the higher harmonics can be. Since c₄ + c₅ + c₆ + c₇ ≤ p - 1, we get 2j - w ≤ p - 1, so j ≤ p - 1. Any j ≥ p would require the upper coefficients to sum beyond the available weight, which is impossible.
+
+Now I'm verifying this more carefully: j = c₂ + c₃ + c₅ + c₆ + 2c₇ as an integer, and since all coefficients are non-negative with Σ cᵢ = w, I can rewrite j as (c₂ + c₃ + c₅ + c₆ + c₇) + c₇, which shows j stays bounded by w and never needs modular reduction. I've established that j stays within [0, w], which means there's no modular wraparound for any prime p—the integer value of j is preserved directly in F_p. This seems to suggest the window structure works universally, but the problem specifies p ≥ 2w+1, so I'm wondering if that restriction exists to ensure additional constraints from the digit bounds are satisfied, or if it's just the threshold where the formula becomes exactly correct. and each cᵢ ∈ {0,...,p-1}: since each cᵢ ≤ w (because Σ cᵢ = w and all non-negative), and w ≤ p-1, the constraint cᵢ ≤ p-1 is automatically satisfied!
+
+So the window formula ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ holds for ALL primes p, not just p ≥ 2w+1!
+
+Wait, that contradicts the problem statement saying "p-independent for p ≥ 2w+1." Unless the problem statement is being conservative, or there's a subtlety I'm missing.
+
+I think the key might be in the notation A₈^{p-1} — this could mean each element of A₈ appears with multiplicity p-1, which would allow individual cᵢ values up to p-1 rather than just w. But if Σ cᵢ = w with all cᵢ ≥ 0, then each cᵢ is still bounded by w, and since w ≤ p-1, the multiplicity constraint is satisfied automatically. So the window structure holds for all p ≥ w+1 since w ≤ p-1 is automatic. I'm clarifying what Σ_w(A₈^{p-1}) means—it's the set of weighted sums Σ cᵢ aᵢ where the coefficients sum to exactly w as an integer constraint, with each cᵢ in {0,...,p-1}. This is the relevant interpretation for the Davenport/zero-sum problem, and under this reading my proof holds for all p ≥ w+1.
+
+The characterization on the line L is that j lies in Σ_w(A₈) ∩ L precisely when ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ for each w ∈ {2,3,...,p-1}, with the edge cases Σ₁ and Σ₀ being empty. While the shadow structure in the full space F_p^3 might behave differently for small p, the analysis on L is tight and p-independent for p ≥ 2w+1. I'm satisfied with this window structure argument now.
+
+Turning to orbit uniqueness at p=5: the doubled construction yields 17 vectors in F_5^4 from the original 8 in A₈. The counterexamples to U1 come from same-tail swaps—taking a pair (f, aᵢ) and replacing it with (f', aᵢ) where f' ranges over {2,3,4} instead of just {0,1}. I'm trying to count these: choosing which aᵢ to swap gives 8 options, and choosing the new fiber gives 3 options, but that only yields 24, not the 324 I'm seeing.
+
+I'm exploring whether there's a more complex combinatorial structure at play—maybe involving multiple simultaneous swaps or a group action on configuration types. The number 324 factors as 4 × 81 or 18², but I'm not immediately seeing how that connects to the 7 distinct counterexample configurations I've identified. All of them do share the same tail projection structure, so there's definitely something unified about them, but the exact counting formula isn't clear to me yet.
+
+Let me approach this differently by thinking about the fiber assignments in F₅⁴. For the 17-element sets with tail projection A₈ ∪ {0}, I have 8 tail values from A₈ (each appearing twice in different fibers) plus one zero-tail vector. The key constraint is how I assign these vectors to the 5 available fibers—specifically, the A₈-tail vectors must map to distinct fiber pairs, which gives me a combinatorial count that might explain where 324 comes from. each of the 8 tail values. I.e., for each i ∈ {0,...,7}, we choose (f_i^0, f_i^1) with f_i^0 ≠ f_i^1.
+
+The number of such assignments is (5 × 4)^8 / 2^8 (unordered pairs) = 10^8 / ... no, this is too many.
+
+But only 324 are strongly ZSF. Let me think about what constraints make a fiber assignment strongly ZSF.
+
+For the standard doubled(A₈) + e₁: f_i^0 = 0, f_i^1 = 1 for all i, and the zero-tail vector is in fiber 1.
+
+A "same-tail swap" on index i means changing one of the fiber pairs—say replacing (1, aᵢ) with (c, aᵢ) for some c ∈ {2, 3, 4}. Each index has 3 such choices, and ADVERSARY found that only 7 out of the 24 possible single swaps preserve the strongly ZSF property. The 324 count likely includes all valid multi-swap configurations along with the action of S_5 permuting the fibers themselves.
+
+Now I'm checking whether the sumset completeness property holds: Σ_k(A₈) + Σ_l(A₈) = Σ_{k+l}(A₈). The forward containment is immediate from concatenating representations, but I need to verify the reverse direction.
+
+For any point in Σ_{k+l}(A₈), its j-value falls in a specific range, and I need to decompose this j as a sum of two j-values from the individual ranges for Σ_k and Σ_l. This reduces to an interval arithmetic question: whether the interval for k+l can be expressed as a sum of the intervals for k and l.
+
+The sum of two intervals [a,b] + [c,d] gives [a+c, b+d], so I'm checking if the ceiling sum ⌈k/2⌉ + ⌈l/2⌉ is at least ⌈(k+l)/2⌉. This inequality holds in general, though the gap between them can be 1 when k and l have different parities.
+
+Let me verify this with specific cases: when k is odd and l is even, ⌈k/2⌉ + ⌈l/2⌉ equals ⌈(k+l)/2⌉ since k+l is odd. Similarly, when both are even, the ceiling of half their sum equals half their sum directly.
+
+But when both k and l are odd, their sum is even, so ⌈(k+l)/2⌉ is just (k+l)/2, while the individual ceilings add up to one more than that. So the relationship depends on whether both numbers are odd—in that case there's an extra 1.
+
+Now for the lower bound with floors: I'm checking when 2⌊k/2⌋ + 2⌊l/2⌋ equals 2⌊(k+l)/2⌋. When both are even or when one is odd and one is even, they're equal. When both are odd, I need to finish the calculation to see what happens. The interval for the sum when both k and l are odd is strictly contained within the expected range—specifically missing the boundary values—which contradicts the computational claim that the sumsets should be equal. This suggests the sumset completeness property might hold for the full shadow in the larger space but breaks down when restricted to this particular line.
+
+Let me verify my interval arithmetic by checking the concrete case where k = l = 1: the intersection with L should be empty since the window collapses, yet Σ₂ ∩ L contains {1}, so the sum of two empty sets can't produce a non-empty result. I need to reconsider what Σ₁ actually represents—it's not just an empty set but rather a collection of vectors from the A₈ basis.
+
+I'm realizing the key distinction: the sumset property Σ_k + Σ_l = Σ_{k+l} describes the full shadows in F_p³, not their restrictions to the line L. My window analysis only captures what lands on L, which is a proper subset of the full Minkowski sum. So while the window approach gives me the restriction to L, it can't directly verify the completeness property for the full shadows. Let me shift focus to the window proof instead. Now I'm thinking about another consequence: the gap at weight p-1 and what it tells us about the U1 property for the (8,8,1) case. For this configuration with pairs of points at weights 0 and 1, plus an additional point at some weight c between 2 and p-1, I need to show there's always a zero-sum with weight at most p. The key is setting up coefficients for each pair and the extra point, then using the weight constraint to derive a contradiction if no such zero-sum exists. I need to clarify what "4-sum-free" means in this context—whether it refers to no zero-sum using exactly 4 distinct elements or no zero-sum of weight at most 4. In the ZSF framework, it typically means the minimum weight for any zero-sum is 5. Now I'm reconsidering the doubled construction: the doubled A₈ has 16 vectors split across two fibers, and I need to think through how zero-sums behave in this doubled version. I'm realizing the key issue: when we restrict to fiber-0 vectors alone, we get a zero-sum in F_p⁴ with the first coordinate being zero, which means we actually do have a valid zero-sum among our 17 vectors. This contradicts the strong ZSF property, so I need to reconsider whether A₈ itself satisfies the required weight bound. -free, the minimum weight is 5.
+
+For p = 5: weight 5 = p. So this is a zero-sum of weight exactly p. The strongly ZSF condition requires no zero-sum of weight ≤ p. So weight p is excluded too? Or is it weight < p?
+
+I think "strongly ZSF" means no zero-sum of weight in {1, 2, ..., p}. And the Davenport constant is about zero-sum subsequences of length exactly p.
+
+Hmm, if A₈ has a zero-sum of weight 5 = p in F_p³, then the doubled construction has a zero-sum of weight p in F_p⁴ (using only the fiber-0 copies). This would mean the doubled construction is NOT strongly ZSF!
+
+But the problem says the doubled+e₁ construction IS strongly ZSF, which means A₈ can't have a zero-sum of weight p in F_p³. Yet α(3) = 8 gives η(C_p³) = 8(p-1)+1, so a ZSF set in F_p³ has at most 32 elements when p=5. Since A₈ has exactly 32 elements with each appearing 4 times, I need to verify whether a zero-sum subsequence of length 5 actually exists—the claim is that it doesn't, even though the counting seems tight. elements sum to zero. But what about weighted sums of weight 5?
+
+If c₁a₁ + c₂a₂ = 0 with c₁ + c₂ = 5 (e.g., c₁ = 3, c₂ = 2), that would be a zero-sum of weight 5. For A₈ to be strongly ZSF (in the sense that the sequence (a₁,...,a₁,a₂,...,a₂,...,a₈,...,a₈) with each appearing p-1 times is zero-sum-free), we need no such zero-sum of weight ≤ p.
+
+Since η(C_p³) = 8(p-1)+1, a sequence of length 8(p-1) over C_p³ that is zero-sum-free of weight p exists, and A₈ provides such a sequence, so it has no zero-sum of weight p. But now I'm wondering if the doubled construction in F_p⁴ might introduce a zero-sum of weight 2p, and I need to clarify what "strongly ZSF" actually means for a set—whether it's about subsets with coefficients in {0,...,p-1} where the coefficient sum is at most p, excluding the trivial case.
+
+For the (8,8,1) configuration with 3 fibers and 17 base vectors, the claim is that it has a zero-sum of weight ≤ p, which was computationally verified. Rather than continue down this path, I should focus on writing up the main result—the clean Window Structure proof—and document what I've established so far.
+
+But there's still the coordinator's point about the adversary's search for non-tail-replacement CEs to address. The critical question is whether all strongly ZSF 17-sets in F_p⁴ have their tail projection contained in A₈ ∪ {0}—if so, then U1' is sufficient; otherwise, I need a different approach. I can construct a theoretical argument: if S is a strongly ZSF 17-set, its tail projection T in F_p³ has at most 9 elements (from the 2 fibers per tail plus 1 extra structure), and if T has fewer than 9 elements, some tail values must support at least 3 fibers, which constrains the shape of T to be A₈-like. copies, making zero-sums easier to find.
+3. The tail-projection multiset must be ZSF with appropriate weight bounds.
+
+This constrains T to be close to a maximal ZSF set in F_p³, which (by the r=3 result) has α(3) = 8 elements. So T ⊆ some 8-element maximal ZSF set ∪ {0}.
+
+If A₈ is the unique maximal 8-element ZSF set (up to linear equivalence) — which is what U2 (uniqueness) would establish — then T ⊆ A₈ ∪ {0} automatically.
+
+This is a conditional argument (depends on U2), but it's the right structural approach.
+
+Now I need to address the Coordinator's specific claim about strongly ZSF 17-sets at p=5 with tail-projection A₈ ∪ {0} forming a same-tail-swap orbit of doubled(A₈) + e₁ with cardinality 324. I can establish the structural framework theoretically, but the exact count requires computational verification, so I'll present this as a theorem with a computational check needed.
+
+============================================================
+BLOCK 4 (169 chars)
+============================================================
+Good, I have the full context. Now let me write up the proof of the Window Structure Theorem. Let me also check if there are any session 5 files in the collab directory.
+
+============================================================
+BLOCK 5 (69897 chars)
+============================================================
+Excellent! Now I have the full picture from Rounds 1-2:
+
+Key developments:
+1. **U1 is FALSE** - 51 same-tail swap counterexamples at p=5, confirmed independently
+2. **U2 is FALSE** - 4 distinct GL classes of strongly ZSF 8-sets at p=5
+3. **Tail Invariance Theorem** - PROVED by COMPUTER (analytic, 2-case proof)
+4. **Window Structure** - computationally verified for ALL 4 GL classes and ALL primes p ≤ 31
+5. **Shadow Saturation** - universal across all tested configurations (600+ tests, 0 failures)
+
+
+6. **Local Tail Rigidity** - confirmed (multiset structure is invariant)
+7. **The Window is UNIVERSAL** - holds across all GL classes, each with its own invariant line
+
+For Round 3, the real challenge is proving the Window Structure Theorem analytically rather than computationally. The key insight is that the window formula doesn't depend on the specific GL class—it's determined by an invariant line unique to each class. So the proof should generalize beyond A₈, though I can use its explicit coordinates as a concrete starting point.
+
+Looking at the constraint system for A₈, I see the linear equations defining the invariant line, the weight and value formulas, and the non-negativity bounds. These constraints are tied to A₈'s coordinate representation, but the underlying algebraic structure that drives the proof should be more universal.
+
+The key insight is that the two linear constraints reduce the problem to six free variables, the weight-value relationship gives a lower bound on j, and the parity constraint provides an upper bound when w is odd. The explicit constructions then verify completeness. For any strongly ZSF 8-set with an invariant line, I'd expect similar structural properties to emerge, though the specific constraints would differ. The real question is whether every such set admits two linear constraints that generate the same type of polytope structure.
+
+Now I'm wondering what forces this universality—specifically, whether the structure of a strongly ZSF 8-set and its invariant line necessarily produce constraints that decompose into a weight-value inequality and a parity condition. The invariant line itself seems to encode symmetries that reduce the 8 variables by 2, leaving 6 free variables to work with. If the reduced constraints always yield a relationship like 2j - w equals some combination of those free variables, with a parity constraint when j = w, then the window structure would be universal. But I'd need to verify whether this holds without knowing the explicit coordinates of all possible strongly ZSF 8-sets.
+
+I think the best approach is to prove this rigorously for A₈, state the general conjecture with the structural conditions required, and then derive the consequences about gap structure and shadow saturation. I also need to reconcile the orbit uniqueness question at p=5 by clarifying where the numbers come from—the 51 single-swap ZSF variants and 2048 cross-tail double-swap survivors seem consistent, but I should trace whether the 324 figure represents a subset of those or something else entirely.
+
+Rather than getting bogged down in exact counts, I should focus on establishing the structural theorems that explain why these orbit variants exist and what constraints they satisfy.
+
+I want to prove several key results: the Window Structure Theorem for A₈ with a clean analytic argument, show how the windows tile the space completely, establish why the parity constraint forces j to be even, and demonstrate that Fiber-Flexible Shadow Saturation follows from the tail invariance properties. I should also work toward a general framework that explains why any strongly ZSF 8-set exhibits this window structure.
+
+Let me start writing up the comprehensive theorem and proof, but first I need to ground myself in what A₈ actually is and verify my constraint derivation is correct for this specific structure.
+
+Looking at the properties from the analysis: A₈ has a coordinate symmetry swapping pairs (a₁↔a₂, a₄↔a₅, a₆↔a₇) while fixing a₀ and a₃, it maps to {1, 2} under the functional (1,1,1) with 4 vectors hitting each value, the invariant line is L = {(0, j, j) : j ∈ F_p*}, and the standard basis vectors are all present in A₈. The constraints emerge from solving the matrix equation where A₈'s vectors form the columns, and I need to understand how the first coordinate constraint and the second constraint interact to define the window structure.
+
+Now I'm reconsidering whether the Window Structure combined with Tail Invariance actually establishes shadow saturation across the entire F_p⁴. The key insight is that for each weight w, the shadow Σ_w(A₈) ∩ L forms the interval [⌈w/2⌉, 2⌊w/2⌋], and these intervals partition L as w varies—this is the foundation I need to verify before writing up the final proof. from 2 to p-1. Specifically, j = 1 first appears at w = 2 (window [1,2]), j = (p-1) appears at w = p-1 (window [(p-1)/2, p-1]).
+3. Combined: Σ_{≤p-1}(A₈) ⊇ L. But we need Σ_{≤p-1}(A₈) = F_p³ \ {0}.
+
+The line L has p-1 points, while F_p³ \ {0} has p³-1 points. The window structure on L is just one slice. For the full shadow saturation, we need coverage of all of F_p³.
+
+However, the shadow saturation is already PROVED (from η(C_p³) = 8(p-1)+1). The window structure describes the mechanics of how shadows expand, not just whether they eventually saturate.
+
+For the Grail proof, I need to establish η(C_p^{r+1}) = (2α(r)+1)(p-1)+1, which boils down to showing that any sequence of this length over C_p^{r+1} contains a zero-sum subsequence of length p, or equivalently, no strongly zero-sum-free set exceeds (2α(r)+1)(p-1) elements. The doubled construction gives me the lower bound, but I still need to prove the upper bound—that no other configuration can do better.
+
+The strategy is to project a large strongly ZSF set down to F_p^r, use the inductive bound on the projection, and leverage shadow saturation plus fiber structure to force a zero-sum. The critical issue is that shadow saturation is conditional on η(C_p^r), but for r = 3 it's unconditional. So for the r = 3 → r = 4 step, I have unconditional shadow saturation of 8-sets in F_p³, which should suffice to complete the induction. a maximal strongly ZSF set S in F_p⁴ with |S| = 17(p-1).
+2. Project to F_p³: the "tail multiset" T has elements of A₈ (or some ZSF 8-set) each with multiplicity p-1, plus possibly some zero-tails.
+3. By Tail Invariance, the strongly ZSF property depends only on T (not on fiber labels).
+4. Shadow saturation of S in F_p⁴ uses both the tail shadow and the fiber flexibility.
+5. The Window Structure controls the tail shadow's growth, ensuring it covers F_p³ at weight p-1 or below.
+6. Fiber flexibility (from having same-tail vectors in different fibers) allows hitting any first-coordinate target.
+
+So the proof chain is:
+- Window Structure (for A₈ or any strongly ZSF 8-set) → Tail Shadow Saturation
+- Tail Shadow Saturation + Fiber Flexibility → Full Shadow Saturation in F_p⁴
+- Full Shadow Saturation → η upper bound
+
+Now I'm formalizing how fiber flexibility combines with tail shadow saturation to achieve full shadow saturation. The key theorem states that if B is a strongly ZSF 8-set in F_p³ with its shadow covering everything nonzero, and S is a (2·8+1)-set in F_p⁴ where each element of B appears exactly twice with distinct first coordinates plus one zero-tail vector, then the shadow of S saturates F_p⁴.
+
+For the proof, I'm showing that any nonzero element (f, b) in F_p⁴ can be represented as a sum of at most p-1 vectors from S. When b is nonzero, tail shadow saturation gives me a representation of b using elements from B with total weight at most p-1, and since each b_i appears twice in S with different first coordinates, I can choose which fiber copy to use to hit the target first coordinate f. with g_i ≠ h_i. Split: d_i = c_i^g + c_i^h. Then:
+- Tail sum: Σ (c_i^g + c_i^h) b_i = Σ d_i b_i = b ✓
+- Weight: Σ (c_i^g + c_i^h) = w ✓
+- First coord: Σ (c_i^g · g_i + c_i^h · h_i) = Σ c_i^g g_i + Σ (d_i - c_i^g) h_i = Σ c_i^g (g_i - h_i) + Σ d_i h_i
+
+We need this = f, so: Σ c_i^g (g_i - h_i) = f - Σ d_i h_i =: f*. Since each g_i ≠ h_i in F_p, the differences (g_i - h_i) are all nonzero, and I need to determine whether I can always find c_i^g ∈ [0, d_i] satisfying this equation. In the standard case where all differences equal some constant δ (like g_i = 0, h_i = 1 giving δ = -1), the problem reduces to solving Σ c_i^g · δ = f*.
+
+This means Σ c_i^g = f* / δ, which requires f* / δ to be an integer in [0, w]. The key insight is that f* depends on which tail representation I choose, so I have flexibility—by varying the weight w and selecting different tail representations of b, I can shift f* and potentially make f* / δ fall into the required range for at least one choice.
+
+Now I'm working through the standard case where g_i = 0 and h_i = 1 for all i, with the zero-tail vector being (1, 0, 0, 0). For a target (f, b) with b ≠ 0, I get f* = f - w, which means Σ c_i^g = w - f, and I need to check when this is a valid non-negative integer in [0, w].
+
+The key constraint is that for any f ∈ {0, 1, ..., p-2}, I need to find some w ≥ f where b belongs to the shadow set Σ_w(B). By shadow saturation, b is in some shadow set, so if the maximum such w is at least f, the construction works.
+
+But for f = p-1, I need w = p-1 specifically, and here's where it breaks down: certain elements b in the gap at weight p-1 (specifically those of the form (0,j,j) for 1 ≤ j ≤ (p-3)/2 when restricted to L) are not in Σ_{p-1}(B). For these elements, the maximum w where b ∈ Σ_w(B) is strictly less than p-1, so I can't satisfy the requirement that w ≥ p-1.
+
+This means the standard construction fails for targets (p-1, b) where b lies in the weight-(p-1) gap. To handle this, I need to incorporate the zero-tail vector e₁ = (1, 0, 0, 0) with some coefficient γ. Adding this vector keeps the tail sum unchanged (since it contributes 0 to the tail), but increases the total weight by γ and adds γ to the first coordinate, giving me more flexibility in achieving the target.
+
+Working through the algebra with this additional vector, I find that the first coordinate constraint becomes Σ c_i^g = w_total - f. For the target (p-1, b) to be achievable, I need w_total = p-1 at its maximum, which means γ must satisfy γ ≤ p-1 and the total weight must equal p-1.
+
+Now testing specific values of γ: when γ = 0, I'd need Σ d_i = p-1 and b in the (p-1)-fold sumset of B, but this fails for gap elements. However, when γ ≥ 1, something interesting happens—the sum Σ d_i becomes p-1-γ, all the c_i^g coefficients must be zero (meaning I'm only using the fiber 1 copies), and the first coordinate works out perfectly to p-1. Let me verify this with γ = 1 specifically.
+
+With γ = 1, I need Σ d_i = p-2 and b in the (p-2)-fold sumset of B. Looking at the window structure on L, the achievable j values at weight p-2 fall in the range [(p-1)/2, p-3]. Since all c_i^g = 0, the first coordinate becomes (p-2) + 1 = p-1, which is exactly what I need.
+
+Now I'm checking whether Σ_{p-2}(B) covers the gap at weight p-1, which consists of j ∈ {1,...,(p-3)/2}. But the window at weight p-2 is [(p-1)/2, p-3], and since (p-3)/2 < (p-1)/2, these gap values don't appear in Σ_{p-2}(B) either. I need to look at smaller weights to find where j = 1 becomes achievable.
+
+For j = 1 to appear in the window at weight w, I need ⌈w/2⌉ ≤ 1 and 2⌊w/2⌋ ≥ 1, which gives w ∈ {1, 2}. At w = 2, j = 1 is indeed in the window [1, 2]. Setting γ = p-3 so that Σ d_i = 2, I can verify that j = 1 appears in Σ_2(B) ∩ L, and the coordinate sum works out correctly. However, this configuration requires w_total = p-1 and γ = p-3, which imposes the constraint γ ≤ p-1.
+
+So the target ((p-1), (0,1,1)) is achievable at total weight p-1 by placing γ = p-3 on the first basis element, using a tail representation of (0, 1, 1) at weight 2 from the window structure, concentrating all weight in fiber 1, and verifying the first coordinate sums to p-1. Now I need to check the case j = 2, which requires w ≤ 4 with j = 2 in the corresponding window.
+
+For any j in the gap {1, ..., (p-3)/2}, I'm finding the minimum weight w_j where j appears in both the window structure and the lattice, then using the window bound to show w_j ≤ 2j. The construction holds for all j in the gap when targeting (p-1, (0,j,j)), which means shadow saturation is proven for this family of targets. Now I need to extend this to arbitrary targets (f, b) where b is nonzero, using a generalized approach with the zero-tail vector and coefficient γ to handle the tail constraint.
+
+For the standard construction, I'm setting up the first coordinate equation and weight constraint: the sum of weighted differences plus the tail weight and γ must equal f, and the total weight stays below p-1. This requires f ≤ w_tail, which I can verify holds under the construction's constraints.
+
+Now I'm checking the bounds more carefully: γ ≤ f ≤ w_tail + γ, with the total weight constraint w_total ≤ p-1. For f = 0, I need γ = 0 and b in the shadow set of B, which exists by shadow saturation. For f in {1, ..., p-1}, I can choose γ flexibly to ensure the tail weight falls in the right range, and I'm verifying that b exists in the appropriate shadow set for each choice. w_tail}(B).
+
+Choose w_total = p-1 (maximum). Then γ ∈ {0,...,f} and w_tail = p-1-γ ∈ {p-1-f,...,p-1}. Need b ∈ Σ_{w_tail}(B) for some w_tail in this range.
+
+By shadow saturation of B: b ∈ Σ_{w*}(B) for some w* ≤ p-1. The question is whether w* ∈ {p-1-f, ..., p-1}.
+
+If f ≤ p-2: the range has f+1 values. The question is whether there exists w ∈ {p-1-f,...,p-1} with b ∈ Σ_w(B).
+
+This isn't automatically guaranteed by shadow saturation alone—b could be hit only at smaller weight values, not necessarily in the upper range I need. But looking at points on the invariant line L where b = (0, j, j), I can check when j becomes achievable at different weights. The constraint is that j must satisfy both w ≥ j and w ≤ 2j for it to appear in Σ_w(B), which gives me a specific window of valid weights for each j value. So the intersection of valid tail weights is non-empty exactly when p-1-f ≤ 2j and j ≤ p-1. This gives me two cases: when j ≥ (p-1)/2, the constraint on f disappears since 2j ≥ p-1, but when j < (p-1)/2, I need f ≥ p-1-2j or the intersection becomes empty. Let me check this with a concrete example like p = 7, j = 1. For j = 1, the only achievable weight is w = 2 since the window is empty at w = 1. When f = 5, I need w_tail = 2, which gives γ = 4 and requires Σ c_i^g = 1 with the tail representation of (0,1,1) at weight 2. Now checking the case where f = p-1...
+
+For f = 6, w_tail must be 2, yielding γ = 4 and Σ c_i^g = 0. When f = 4, the constraint barely holds with w_tail = 2 in the valid range. But for f = 3, the window becomes empty—there's no valid w_tail.
+
+Wait, let me reconsider whether (3, (0,1,1)) is actually achievable at p = 7. The constraints require γ ≤ 3 and w_tail ≥ 3 - γ, with w_tail = 2 being the only option from the weight distribution. Testing all possible γ values from 0 to 3 with w_tail = 2...
+
+For γ = 1, I get w_total = 3 which satisfies the bound, and the sum of coefficients works out to 0, giving me the first coordinate as 3, which matches f. But I realize I made an arithmetic error in my first coordinate calculation—let me recalculate that properly.
+
+Now I see the issue with my earlier approach: I was unnecessarily constraining w_total to equal p-1, when I only need w_total ≤ p-1. With that relaxed constraint, the construction actually works. So for any target (f, b) with b ≠ 0, I can choose γ from the range {0, ..., min(f, p-1)} and proceed from there.
+
+The key constraints are: γ must satisfy γ ≤ f to keep the fiber-0 contributions non-negative, w_tail must be an achievable weight for the element j on L that contains b, and together they must satisfy w_tail + γ ≤ p-1 while also ensuring f falls within the valid range [γ, w_tail + γ].
+
+Combining these gives me the bounds γ ∈ [max(0, f - w_tail), min(f, p-1-w_tail)], and I need to verify this interval is non-empty. When f ≤ w_tail the lower bound is 0 and the upper bound is min(f, p-1-w_tail), which is always achievable since both f and w_tail are non-negative and w_tail < p. The case where f > w_tail requires checking whether the interval remains valid. So the constraint f ≤ p-1 always holds, which means for any nonzero b, I can find valid γ and c_i^g values. Combined with shadow saturation of B, this establishes that Fiber-Flexible Shadow Saturation works for the standard construction. Now I need to verify whether this generalizes to non-standard fiber assignments where g_i differs from h.
+
+For arbitrary fiber assignments, the first-coordinate equation becomes more intricate since the differences (g_i - h_i) vary across tails. The key question is whether I can select c_i^g values within [0, d_i] to satisfy the system. With a single nonzero tail where d_k ≥ 1, the term c_k^g (g_k - h_k) generates d_k + 1 distinct values, and combined with the γ parameter and fixed contributions, I need to check if this provides enough flexibility to hit any target f.
+
+Across all eight tails, I have eight independent "knobs" c_i^g, each ranging over [0, d_i], and their sum Σ c_i^g Δ_i (where Δ_i = g_i - h_i ≠ 0) produces an integer combination with bounded coefficients. In the standard construction where all Δ_i = -1, this sum covers an interval of length w_tail + 1 in Z/pZ, which is sufficient when w_tail is large enough.
+
+For a general construction with varying Δ_i values, the range of possible sums depends on both the magnitudes and signs of the differences, but the key insight is that any w_tail working for the tail also works for the first coordinate when all Δ_i = -1, since the first-coordinate range is exactly [0, w_tail].
+
+When all Δ_i equal some uniform nonzero δ, the image becomes δ times the range [0, w_tail], so the condition for f* to be representable is that f* / δ must fall in {0, 1, ..., w_tail}—but this is where the analysis gets complicated for...
+
+Actually, I should step back and focus on the standard construction case. The Tail Invariance Theorem already guarantees that any fiber assignment yields strongly ZSF sets, and for shadow saturation, the standard proof captures the essential argument; the non-uniform case can follow from a covering argument.
+
+More importantly, I've just established something stronger: for ANY valid choice of (γ, w_tail) satisfying the constraints—namely b ∈ Σ_{w_tail}(B), w_tail + γ ≤ p-1, and γ in the range [max(0, f - w_tail), min(f, p-1-w_tail)]—the construction works. And this feasible range is always nonempty, which means...
+
+The constraints ultimately reduce to just f ≤ p-1, which always holds. The parameter γ (the zero-tail vector coefficient) provides exactly the flexibility needed to make this work.
+
+For a general fiber assignment, the core equation is that a certain linear combination of the differences Δ_i equals the right-hand side, where these differences are nonzero field elements and the coefficients are bounded. When all differences are uniform, this simplifies to a single divisibility condition on the sum of coefficients.
+
+In the non-uniform case, I'm checking whether the image of all possible linear combinations covers the required value. With binary choices on each tail (at most one use per tail) and 8 distinct nonzero differences, the image can reach up to 256 distinct values, which exceeds the field size for p ≤ 251, guaranteeing coverage of F_p.
+
+However, many of the d_i values might be zero at smaller weights, so I only have k active tails. With k ≥ log₂(p), the 2^k possible combinations still cover the field. At weight w_tail ≥ 8, pigeonhole guarantees at least one d_i ≥ 2, and shadow saturation ensures I can find a suitable weight where coverage is achievable.
+
+Rather than continuing down this splitting argument, I should apply the Tail Invariance Theorem directly to handle the general fiber assignment case more cleanly.
+
+For any set S with fiber assignments where g_i ≠ h_i, Tail Invariance tells me S is strongly ZSF, though the shadow structure itself depends on the specific fiber choices. The computational evidence is striking—Finding 5 shows shadow saturation holds across 600+ tested fiber assignments with zero failures. The real question is whether I can prove this analytically rather than just empirically.
+
+The key realization is that shadow saturation doesn't require weight ≤ p-1 as a hard constraint. What matters is that the shadow map's image is large enough to hit everything, and valid representations exist across the weight range.
+
+Actually, I think I've been overcomplicating this. The Conditional Theorem already establishes that any strongly ZSF set A in F_p^r with the right cardinality automatically satisfies shadow saturation. For r = 4, if S has exactly 17(p-1) elements and is strongly ZSF, then the shadow saturation property follows directly from η(C_p⁴) = 17(p-1)+1. So the question becomes whether S actually achieves this cardinality and ZSF property with the fiber constraints.
+
+For r = 3, I already know η(C_p³) = 8(p-1)+1 is established, which means any 8(p-1)-element ZSF set in F_p³ automatically has full shadow saturation. The path forward for r = 4 is to use this proven result at dimension 3 and construct a fiber-lifting argument that extends the shadow saturation property upward. I'm realizing that shadow saturation alone doesn't immediately block adding an 18th vector—I need to think through what happens when we try to add v to a 17-vector set S where every element of F_p⁴ is already representable at weight ≤ p-1. The constraint must come from the specific structure: if v creates a zero-sum at weight exactly p with some subset of S's base vectors, then we'd violate the ZSF property, and the saturation condition forces this to happen for any choice of v. to show the extended set has a zero-sum of weight p. The zero-sum would use the 18th vector with coefficient 1 (or more) and the remaining weight from S.
+
+Specifically: for v ∈ F_p⁴ \ {0}, we need c_v · v + Σ_{s ∈ S} c_s · s = 0 with Σ = p. If c_v = 1: Σ c_s s = -v with weight p-1. This is exactly -v ∈ Σ_{p-1}(S). By shadow saturation, this holds for all v ≠ 0! ✓
+
+So shadow saturation at weight p-1 (not just ≤ p-1) is what's needed. The key distinction is that Σ_{p-1}(S) captures sums at exactly weight p-1, while Σ_{≤p-1}(S) is cumulative—and they're not equivalent even when the cumulative shadow covers all nonzero vectors. For the 18th vector argument to work, I need -v ∈ Σ_{p-1}(S) specifically: coefficients summing to exactly p-1 across the 17 base vectors that produce -v. The computer verified this holds for all tested sets—every nonzero element in F_p⁴ appears in the shadow at weight p-1. Now I need to prove this analytically: for any target vector, I can find coefficients summing to exactly p-1 that produce it. The challenge is ensuring the weights sum to precisely p-1 rather than just staying below it.
+
+If I can construct a representation with weight w_total ≤ p-1, I could pad it to exactly p-1 by adding a zero-sum of the remaining weight. So the question becomes whether zero-sums exist at arbitrary weights. The doubled construction offers a natural zero-sum: pairing the two copies of each tail element with equal coefficients gives zero when the g and h components sum to zero.
+
+But that doesn't work here since p > 2 means 2b_i ≠ 0 for nonzero b_i. The zero-tail vector e₁ is more promising—using k copies gives a zero-sum only when k ≡ 0 mod p, so the smallest zero-sum from e₁ alone has weight p. This suggests padding might not be the right approach, so I should try directly constructing a representation at weight p-1 instead.
+
+Now I'm checking whether the 17 base vectors at weight exactly p-1 can cover all nonzero points in F_p⁴. With coefficients summing to p-1, the coefficient space forms a simplex with C(p+15, 16) elements. For p = 5, that's 4845 coefficient vectors mapping into 625 points in F_5⁴, so there's significant redundancy—the question is whether this redundancy still allows full coverage.
+
+The computer confirms that for p = 5, all 624 nonzero points are indeed hit. For a general proof, I need to show that by carefully choosing parameters like the tail weight and γ value, I can always achieve exactly weight p-1 while hitting every target. The key insight is that when the total weight falls short of p-1, I have slack that can be distributed to increase γ and reach the target weight.
+
+However, simply increasing γ creates a problem: it changes the first coordinate by adding f_{e₁}, which then requires compensating adjustments elsewhere that might violate other constraints. Let me try a cleaner direct approach instead, working with the doubled construction plus e₁ and examining how the fiber copies interact.
+
+For this setup, I have 17 base vectors total: the fiber-0 and fiber-1 copies of the original basis vectors, plus the special zero-tail vector in fiber 1. To represent a target (f, t) at exactly weight p-1, I need to find coefficients for each fiber and the extra vector such that the total weight equals p-1, the tail components sum correctly, and the fiber-1 contributions match what's needed.
+
+Working through the constraints, I can derive that the sum of fiber-0 coefficients must equal p-1-f regardless of how I distribute the fiber-1 coefficients, and the fiber-1 sum determines the extra vector's coefficient via γ = f - Σ dᵢ. The tail constraint then becomes a linear equation in the coefficients that respects these derived relationships. p-1, so I need t to be in the sumset Σ_{p-1}(B). If t falls in a gap where it can't be represented at that weight, I'd need to use fiber-1 vectors, but adding those would make γ negative, which violates the constraint. So it seems like certain (f, t) pairs with f = 0 might be unreachable at weight p-1 using this construction.
+
+Yet the computer verification shows that Σ_{p-1}(S) covers all of F_p⁴ except zero for the 4-dimensional case—all 624 elements accounted for. Either the gap doesn't actually exist in 4D, or there's something wrong with my reasoning. Let me trace through the specific case at p = 5 where B is the 3-dimensional lattice A₈ in F_5³, and check what the weight-(p-1) gap actually contains. I'm realizing the 17-set S includes more vectors than just the 8 from A₈—there are fiber-1 copies and e₁ as well. But even accounting for all 17 vectors, using non-zero dᵢ values would make γ negative, which violates the constraint that γ ≥ 0. So I'm stuck: either the computer's result is incorrect, or there's a mechanism I'm missing for how (0, (0,1,1)) becomes achievable at weight 4. I'm realizing the constraint is that the sum of coefficients plus γ must equal 0 modulo p, and since their total is bounded by p-1, they must all actually equal 0—which means no fiber-1 vectors can be used alongside e₁.
+
+Now I'm second-guessing the computer's result of 624 out of 624 elements. Let me reconsider whether it's counting the cumulative shadow or just the direct shadow from this particular configuration.
+
+Actually, I think the computer was checking whether the cumulative shadow Σ_{≤p-1}(S) covers all nonzero elements in F_5⁴, not the exact-weight shadow Σ_{p-1}(S). That would explain the full coverage.
+
+For the 18th vector argument to work, I need to show that adding any new vector v to S forces a zero-sum with weight exactly p, meaning there exist coefficients from {0,...,p-1} for elements in S and from {1,...,p-1} for v such that their weighted sum equals zero.
+
+The key insight is that if c_v = 1, then -v must already be in Σ_{p-1}(S), but if that set doesn't cover everything, I need c_v > 1. For any coefficient k, I need -kv to appear in Σ_{p-k}(S), so the condition becomes: for every nonzero v, at least one of the scaled versions -kv must land in the corresponding shadow set.
+
+By cumulative shadow saturation, -v appears in some Σ_w(S) where w ≤ p-1, and I can recover this by setting k = p - w to match it with Σ_{p-k}(S).
+
+But wait—the coefficient doesn't work out cleanly; I need -(p-w)v in Σ_w(S), not just -v.
+
+Let me step back and think about the Davenport constant approach differently: I have a sequence of length 17(p-1) + 1 where the first 17(p-1) elements are S (each base vector repeated p-1 times) and then v appears once, so any zero-sum subsequence of length p either uses v or doesn't. If v is included, the remaining p-1 elements from S must sum to -v.
+
+The key insight is that -v needs to be representable as a sum of exactly p-1 elements from S, where each base vector can appear at most p-1 times. This is a much richer set than just Σ_{p-1}(S) with multiplicity 1—now each of the 17 base vectors can contribute up to p-1 times, dramatically expanding what sums are achievable at weight p-1.
+
+For the concrete case at weight 4 (where p = 5), I'm counting how many ways to distribute a sum of 4 across 17 base vectors with each coefficient between 0 and 4. Since the constraint is non-binding (4 ≤ 4), this is just the stars-and-bars count: C(20, 16) = 4845 possible coefficient vectors. Now I need to see how these 4845 vectors map into F_5⁴.
+
+Looking at a specific target like (0, 0, 1, 1), the first coordinate being 0 forces the weighted sum of fiber-1 coefficients plus the offset to equal 0 mod 5, which means they must sum to exactly 0 since we're bounded by 4. So all fiber-1 contributions vanish, leaving only the fiber-0 and fiber-2 vectors to generate the remaining coordinates.
+
+The multiplicity constraint of at most 4 per element doesn't actually restrict anything here since we need exactly 4 total and each element can appear up to 4 times—this is effectively the same as the unrestricted case. So (0, 0, 1, 1) is in the sumset if and only if (0, 1, 1) is in the sumset of A₈ with multiplicity 4, and it turns out this vector does fall in the gap. The gap persists even when allowing multiplicities, so (0, 0, 1, 1) can't be reached at weight 4 using the vector once. But I can use it multiple times—if I apply it k times, I need the negation of k times that vector to appear in a lower weight sum.
+
+For k = 2, I need (0, 0, 2, 2) to appear in Σ₃(S⁴). Checking the constraints at weight 3: the window for valid j values is [2, 2], but I'm getting j = 3, which falls outside this range.
+
+So (0, 3, 3) isn't achievable through fiber-0 vectors alone. Let me consider what happens when I include fiber-1 vectors—the first coordinate becomes a sum involving both fiber contributions, and I need to track how the weight-3 constraint interacts with this combined structure.
+
+For k = 3, I'm checking whether (0, 0, 2, 2) belongs to Σ_2(S^4). At weight 2 with first coordinate 0, I get (0, 2, 2) in the window [1, 2], and j = 2 falls within that range, so this one works.
+
+Using v = (0, 0, 1, 1) with coefficient 3 leaves weight 2 to represent (0, 0, 2, 2), which I can construct from A₈ vectors since (0, 2, 2) is in Σ_2(A₈) ∩ L. This confirms the 18th-vector argument succeeds here, though it requires c_v = 3 rather than just 1—so the coefficient needs to be larger in some cases.
+
+Now I'm checking the general condition: for any nonzero v in F_p⁴, I need some k ∈ {1,...,p-1} where -kv lies in Σ_{p-k}(S^{p-1}). When v = (0, b) with b on the invariant line L, the first coordinate being zero forces all fiber-1 contributions to vanish, leaving only weight p - k. For b = (0, j, j), the vector -kb becomes (0, (p-k)j, (p-k)j) in F_p, and I need to verify this stays representable in the shadow.
+
+The key constraint is that (p-k)j mod p must fall within the weight-(p-k) window of A₈ on L, which is the interval [⌈(p-k)/2⌉, 2⌊(p-k)/2⌋]. Substituting w = p - k, I'm looking for some w ∈ {1,...,p-1} such that wj mod p lands in the valid range for that weight, and this needs to hold for all j in the gap {1,...,(p-3)/2}.
+
+For the case j = 1 (the hardest case at p = 5), I need w to satisfy w ∈ [⌈w/2⌉, 2⌊w/2⌋]. This is only possible when w is even, since odd w would require w ≤ w - 1, which is impossible. So I'm looking for the smallest even w that works, but I'm realizing j = 1 and w = 2 don't align properly for this problem.
+
+Let me reconsider: at w = 2 (which corresponds to k = 3), I get c_v = 3, and the tuple (0, 2, 2) = (0, 2·1, 2·1) is indeed in Σ_2(A₈), which matches my earlier findings. Now I'm checking the general case where j ranges from 1 to (p-3)/2, and I need wj mod p to fall within the valid window [⌈w/2⌉, 2⌊w/2⌋]. For w = 2j, this becomes 2j² mod p, and I'm working out the constraints on j.
+
+The constraint 2j² ≤ 2j only holds for j ≤ 1, so j = 1 works fine with 2 ∈ [1, 2], but for j ≥ 2, the value 2j² exceeds 2j and might fall outside the window even after reducing modulo p. Let me test j = 2 at p = 7 to see what happens.
+
+I'm checking each possible window width w from 1 to 6, computing 2j mod 7 = 4 mod 7 and seeing if it lands in the corresponding window [⌈w/2⌉, 2⌊w/2⌋]. Most values fall outside their windows, but when w = 5, the window is [3, 4] and 10 mod 7 = 3, which fits.
+
+Now testing j = 2 at p = 11 with the same approach—cycling through window widths and checking if 2j mod 11 = 4 mod 11 lands in the valid range, but none of the widths from 1 to 5 produce a match.
+
+At w = 8, I finally get 16 mod 11 = 5, which falls within [4, 8], so this works with c_v = 3. The pattern suggests that for every j in the gap, there's always some weight w that satisfies the constraints, but proving this holds universally across all j and all primes p is the real challenge.
+
+Since j is fixed and nonzero in F_p, multiplying by j permutes all nonzero residues as w varies. The window at each weight w has a certain width, and I need to show that as w ranges over all possibilities, the target value wj mod p will eventually land in the required interval for that weight.
+
+Let me verify this with a concrete example at p = 5, checking the window widths for each weight and which residues fall within them. Looking at the pattern for p = 11, I'm computing the remaining window sizes and getting a total coverage of 30 across 10 values, which gives an average of 3. This suggests that the total coverage grows roughly as (p-1)²/4, and since there are p-1 values in L, the average coverage per value is approximately (p-1)/4—meaning for sufficiently large p, every (w, wj) pair should be hit by the pigeonhole principle.
+
+Now I'm realizing the actual question is different: I need to check whether the pattern {(w, wj mod p)} intersects every interval I_w, and I'm reconsidering what I'm really trying to prove with the 18th-vector argument by fixing v = (0, 0, j, j).
+
+The key insight is that I don't need every w to satisfy the condition—just finding a single w ∈ {2,...,p-1} where wj mod p falls in the interval [⌈w/2⌉, 2⌊w/2⌋] is sufficient. The counting argument suggests that for p ≥ 5, at least one such w exists, which I can verify computationally, and I'm working toward a general lemma that establishes this for any j in the valid range. Let me try a different approach with w = p - 2j when that's positive. This gives wj ≡ -2j² mod p, which equals p - 2j². I need to check whether this value falls within the window defined by w = p - 2j, and I'm working through the constraints on j to see when this actually works.
+
+Actually, let me step back and try something more direct. For w = 2, the window is [1, 2], so I need 2j mod p to land in that range. When j = 1, I get 2j = 2, which works. But for j ≥ 2, the value 2j quickly exceeds 2, so I need to think about when the modular reduction brings it back into range.
+
+Let me test this with concrete examples. Taking p = 7 with the gap at j ∈ {1, 2}, I'll check what happens for w = 2.
+
+For p = 11 where the gap spans j ∈ {1, 2, 3, 4}, I'm finding that w = 2 satisfies the condition at j = 1, and w = 8 works at j = 2.
+
+Now checking j = 3: w = 10 gives 30 ≡ 8, which falls within [5, 10], so that works. For j = 4, I'm testing various values of w but none of them produce results that land in the required range [5, 8]. For j = 4 and j = 5, I can find suitable w values that satisfy the constraints. The pattern is becoming clearer: when w is close to p-1, the product wj mod p lands in the required window, and specifically at w = p-1, the value wj ≡ -j mod p, which places it in the upper half of the residues for small j values. ⊂ [(p-1)/2, p-1]. ✓!
+
+So w = p-1 always works for any gap value j, since p-j exceeds (p-1)/2 whenever j is less than (p-1)/2.
+
+Let me verify this: for j in {1,...,(p-3)/2}, setting wj = (p-1)j gives -j ≡ p-j mod p, and p-j lands in {(p+3)/2,...,p-1}. The window at w = p-1 spans [(p-1)/2, p-1], so since (p+3)/2 > (p-1)/2 and p-1 ≤ p-1, we have p-j in the window. ✓
+
+For any gap value j, I take w = p-1 with k = 1 and c_v = 1, so -v = -(0, 0, j, j) needs to map to (0, 0, p-j, p-j) in Σ_{p-1}(S). With the first coordinate zero, all fiber-1 entries vanish and the coefficients sum to p-1, targeting the tail (0, p-j, p-j). On L, the coordinate j' = p-j must lie in [(p-1)/2, p-1], which it does since p-j ∈ [(p+3)/2, p-1]. ✓ values ARE covered at weight p-1!** The "gap" on L at weight p-1 is {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, and these are NOT in Σ_{p-1}(A₈) ∩ L as positive targets. But the NEGATIVE targets (0, p-j, p-j) for j in the gap are in the COMPLEMENTARY part of L, which IS in the window!
+
+**This means**: for v = (0, (0,j,j)) with j in the gap, -v = (0, (0, p-j, p-j)), and p-j IS in the weight-(p-1) window. So the 18th-vector argument with c_v = 1 works!
+
+Now I'm checking the concrete case at p = 5: the vector (0, 0, 4, 4) is indeed representable at weight 4, which means when I add v = (0, 0, 1, 1) as an 18th vector, I can form a zero-sum at weight 5 by using v once and combining it with the weight-4 representation of -v.
+
+The crucial symmetry is that gap elements and their complements are always paired—when j is in the gap, p-j lands in the representable window. This complementary structure is what makes the entire argument work.
+
+Now I need to extend this to targets not on L, where v = (f, b) with b ∈ F_p.
+
+When f ≠ 0, the first coordinate gives me extra flexibility through fiber and e₁ contributions, which my earlier analysis confirmed always works. If f = 0 and b is already representable at weight p-1, that's direct. But if f = 0 and b isn't representable, I rely on the 18th-vector argument with -v = (0, -b), which requires -b to be representable—and here's where the complementary structure matters again for elements on L.
+
+For b on the line L, I have b = (0,j,j) and -b = (0,p-j,p-j), so when j falls in the gap, p-j lands in the window, giving me what I need. For b off L, the gap structure gets messier, but Shadow Saturation tells me both b and -b live in the cumulative shadow up to weight p-1. The key insight is that for any nonzero b, at least one of b or -b must be in Σ_{p-1}(A₈)—if I can prove this claim, the 18th-vector argument closes the whole thing.
+
+But now I'm running into a problem with the coefficient choice: if -b ∈ Σ_{p-1}(A₈), I can set c_v = 1 and I'm done, but if only b ∈ Σ_{p-1}(A₈), then c_v = p-1 forces me to check whether (0, b) ∈ Σ_1(A₈), which would require b ∈ A₈ itself—and that's too restrictive. When I work through the fiber constraint with f = 0, the first coordinate forces certain terms to vanish, leaving me needing -kb ∈ Σ_{p-k}(S) for the right weight, but I'm not getting the closure I need.
+
+Let me think about this differently using the Shadow Saturation property: for any nonzero target t ∈ F_p³, there exists some weight w ≤ p-1 where t lands in Σ_w(A₈). So for my specific target -kb, I should be able to find a weight that works, which means I can always choose k to make the constraint satisfiable.
+
+The real question becomes: for any nonzero b ∈ F_p³, can I find some w ∈ {1,...,p-1} such that wb actually lies in Σ_w(A₈)? This is the core orbit coverage problem. On the restricted line L, the complementary symmetry between gaps and anti-gaps guaranteed this works, but extending it to all of F_p³ requires a more powerful argument.
+
+If this conjecture holds for all nonzero b and p ≥ 5, then the 18-vector construction closes and I get the bound η(C_p⁴) ≤ 17(p-1)+1 for the f = 0 case. I'm ready to compile the Round 3 report now, starting with a complete analytic proof of the window structure on L, then moving into the complement argument.
+
+For Theorem 3 on fiber-flexible shadow saturation, I need to be more careful about the case where both f and b are nonzero. The 18-vector argument requires that the negation of the target lands in the appropriate shadow, so let me retrace that derivation.
+
+When f is between 1 and p-1, its negation modulo p gives p - f, which constrains how the first coordinate decomposes across the d_i terms and the γ offset. This determines the possible values for γ and bounds the sum of the d_i, which in turn affects the overall weight calculation.
+
+Now I'm working through the two boundary cases: when the d_i sum to zero versus when they sum to p-f. In the first case, the tail constraint requires -b to lie in a specific summation space with f-1 elements, while the second case pushes toward the maximum weight configuration.
+
+The key insight is that by varying the sum of d_i across its allowed range, I can shift the weight w of the e_i coefficients anywhere from f-1 up to p-1. The Shadow Saturation theorem guarantees that -b appears in some summation space with weight at most p-1, so I just need to verify that this weight is at least f-1. For f=1 this is automatic, but for f=2 and beyond I need to check that the constraint is satisfiable.
+
+Now I'm examining what happens at the boundary case where f = p-1. Here the required weight range becomes very tight—I need w ∈ {p-2, p-1}—and there's a real risk that -b might only be representable at smaller weights, which would break the argument. Let me trace through the specific case where b = (0,j,j) on the line L. The achievable weights for the coordinate j span from j up to 2j based on the window structure, so the maximum possible weight is 2j. When j=1, this gives a maximum weight of 2, which equals p-1 when p=3.
+
+For the negated element -b = (0, p-j, p-j), the achievable weights for the coordinate p-j range from p-j up to 2(p-j). The critical constraint is that I need at least one of these weights to fall in {p-2, p-1}. This requires 2(p-j) ≥ p-2, which simplifies to j ≤ (p+2)/2. For smaller values of j, specifically j ≤ (p-3)/2, this inequality is automatically satisfied. I also need to verify that p-j itself doesn't exceed the required range, and for w = p-1, the condition p-j ≤ p-1 always holds.
+
+So -b = (0, p-j, p-j) is indeed in Σ_{p-1}(A₈) for all j ≥ 1. Now I'm wondering whether elements not lying on L might also be achievable at weight p-1, since the gap at this weight appears to be concentrated on L but could potentially extend further.
+
+Looking at the documentation, it claims the gap at weight p-1 is exactly {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, but I need to verify whether this characterizes the complete gap or just the portion on L. Let me check against the actual data — for p = 5, the table should show |Σ_4(A₈)| close to 124 since shadow saturation tells us Σ_{≤4}(A₈) covers all nonzero elements of F_5³.
+
+But wait, the shadow sizes overlap significantly: 8 + 30 + 77 + 159 = 274, far exceeding 124 elements. More troubling, the table lists |Σ_4(A₈)| = 159 for p = 5, yet F_5³ only has 124 nonzero elements total — this is impossible unless I'm misreading what the table represents.
+
+Actually, I think the issue is that those shadow sizes apply only in the stable regime where p ≥ 2w+1. At p = 5 with w = 4, we have p = 5 < 9, so we're outside that regime and the actual values differ. Rather than chase down the exact gap size, let me refocus on the structural argument itself.
+
+For the 18-vector case with target v = (f, b), the argument hinges on whether f is nonzero. When f ≠ 0, fiber flexibility lets me choose the sum Σ d_i appropriately, provided -b lands in some Σ_w(A₈) for w between f-1 and p-1. The case where f = 0 requires separate handling.
+
+Now for the f ≠ 0 case, I'm claiming that for any nonzero b and any f in the valid range, there's always some weight w ≥ f-1 where -b is achievable. Shadow saturation guarantees -b reaches some minimum weight w_min ≤ p-1, and the claim essentially says this minimum weight is always at most f.
+
+But wait, I'm realizing I might have the direction backwards here. For elements -b not in A₈ directly, the minimum weight is at least 2, and I need to check whether this minimum weight actually stays bounded by f across all choices of f, or if w_min could exceed f for small values of f. Let me reconsider what the maximum weight constraint actually gives us. I'm checking whether the target (4, (0,1,1)) at p = 5 can actually be achieved with c_v = 1 by verifying the constraints on the first coordinate and the sum of coefficients, but the calculation is revealing this might not be possible. i - γ = 4 - 1 = 3. Tail: Σ(c_i + d_i) b_i = (0,4,4). e_i = c_i + d_i, Σ e_i = 3 + Σ d_i ∈ {3, 4}.
+
+For Σ d_i = 0: e_i = c_i, Σ = 3. Need (0,4,4) ∈ Σ_3(A₈). j = 4, window at w = 3: [2,2]. 4 ∉ [2,2]. ✗
+
+For Σ d_i = 1: Σ e_i = 4. Need (0,4,4) ∈ Σ_4(A₈). j = 4, window at w = 4: [2,4]. 4 ∈ [2,4]. ✓ This works — using one fiber-1 vector and three fiber-0 vectors gives me the right weight and coordinates, where exactly one position k gets incremented by the fiber-1 contribution. c₅ = 1, c₆ = 2, d₅ = 1, γ
+
+Continuing with the construction, I'm verifying that e₅ and e₆ are both at least 1, which allows me to set d₅ = 1 and get c₅ = 1. This gives me the first coordinate I need for the representation.
+
+Now checking the weight: summing up all the coefficients gives 4, which equals p-1 as required. The result should express (1, 2a₅ + 2a₆) in terms of the target, though I'd need the specific values of a₅ and a₆ to fully verify—but the algebraic structure checks out.
+
+The crucial observation here is that for any target of the form (-f, -b), this construction method works by carefully choosing which coordinates to activate based on the constraint equations. I need to reconsider the weight calculation more carefully. For the target -v = (p-f, p-b₁, p-b₂, p-b₃) in F_p, the first coordinate comes from Σ d_i + γ = p - f, and the total weight is Σ c_i + Σ d_i, so I need to recompute what constraints this places on the representation.
+
+Working through the algebra: if Σ c_i = f - 1 and I set Σ d_i = D where 0 ≤ D ≤ p - f, then γ = p - f - D, and the tail weight becomes f - 1 + D, which ranges from f - 1 to p - 1 as D varies. The tail coordinates must satisfy -b ∈ Σ_{f-1+D}(A₈) for this to work.
+
+By Shadow Saturation, -b appears in some weight w ≤ p - 1, so if the maximum weight w_max where -b is achievable satisfies w_max ≥ f - 1, I can always find a suitable D. This reduces the problem to showing that for any nonzero -b and any f ∈ {1,...,p-1}, we have w_max ≥ f - 1. The f = 1 case is immediate, and now I need to verify this holds for f = p - 1, which requires w_max ≥ p - 2.
+
+Looking at the L curve where w_max(j) = 2j, I see that small j values like j = 1 only achieve weight 2, so for large f like f = p - 1, I need to check whether elements in the "top gap" (those not achievable at weights p - 1 or p - 2) would create a problem.
+
+But I realize I was confusing b and -b. For v = (4, (0,1,1)) at p = 5, the negation gives -v = (1, (0,4,4)), so -b = (0,4,4) with j' = 4 and w_max = 8, which exceeds p - 1 = 4, meaning -b is actually achievable at weight 4 when d_5 = 1.
+
+Now I'm working out the general pattern: for v = (f, (0,j,j)), the tail -b = (0,p-j,p-j) has j' = p-j and w_max(p-j) = 2(p-j), so I need to determine when this is large enough to accommodate different values of f.
+
+When j ≤ (p-3)/2, we get p-j ≥ (p+3)/2, which means 2(p-j) ≥ p+3. Since f-1 ≤ p-2, this bound always exceeds what's needed, so the construction works for all f in the valid range.
+
+For j ≥ (p-1)/2, we have 2j ≥ p-1 ≥ f-1 directly, so this case also satisfies the constraint.
+
+This covers all j ∈ {1,...,p-1}, which establishes fiber-flexible shadow saturation for the targets (f, (0,j,j)) when f ≥ 1. Now for the f = 0 case with j in the gap, I need to verify that c_v > 1 holds, and the orbit coverage at w = p-1 should give me what I need for the negative tail. v is (0, (0, p-j, p-j)), and p-j falls in the weight-(p-1) window. So c_v = 1 and I need (0, (0, p-j, p-j)) ∈ Σ_{p-1}(S). With f = 0 for -v: all fiber-1 zero, Σ c_i = p-1, target (0, p-j, p-j). j' = p-j ∈ [(p-1)/2, p-1] (in the window). ✓
+
+Since -v has first coordinate 0 (negating 0 in F_p gives 0), -v = (0, (0, p-j, p-j)). For -v ∈ Σ_{p-1}(S): the first coordinate being 0 means all fiber-1 and e₁ are zero, with tail target (0, p-j, p-j) at weight p-1 in A₈. Since j' = p-j lands in the window at weight p-1, this works for f = 0 as well. The crucial insight is that even though (0,j,j) sits in the gap, its negation (0,p-j,p-j) lands in the window at weight p-1.
+
+This gives me the theorem: Σ_{p-1}(S) = F_p⁴ \ {0} for S = doubled(A₈) + e₁ under the standard construction. But I'm realizing this only covers targets on L ∪ {f...
+
+}. For targets (0, b) where b is not on L, I need to check whether -b ∈ Σ_{p-1}(A₈). If -b also isn't on L, the gap characterization on L doesn't directly apply. The real question is whether the gap at weight p-1 exists entirely within L, which would mean -b automatically lands in Σ_{p-1}(A₈) for any b off L.
+
+Looking at the u1_analysis notes, the gap appears to be confined to the fixed-point line of the (2↔3) symmetry—meaning it's restricted to L. If the gap is exactly {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, then for b not on L, -b avoids the gap unless -b = (0,j,j) for some j in the gap, which would require b = (0,p-j,p-j). These points are on L but outside the gap range, so -b stays outside the gap and lands in Σ_{p-1}(A₈).
+
+Now I need to verify that the gap characterization is complete—that there are no additional gap elements lurking off the invariant line L. If this holds, then the full structure of Σ_{p-1}(A₈) is F_p³ minus the origin and the gap set on L, which would give me the complete theorem for the doubled construction.
+
+For the fiber assignment on S = doubled(A₈) + e₁, I'm working through how to represent any nonzero vector (f, b) ∈ F_p⁴. When b = 0 and f ≠ 0, I can use e₁ to contribute f to the first coordinate, then I need to fill the remaining weight p-1-f using a zero-sum combination from the doubled part that keeps the first coordinate fixed at f. The challenge is ensuring such a zero-sum exists without forcing b back to zero. Looking at the constraint more carefully: when f = 1, we get p - f = p - 1, which works, but for any other value of f, this representation fails. So it seems like (f, 0) can only be represented when f equals p - 1 or 0, which means targets with f ∉ {0, p-1} might not be achievable through Σ_{p-1}(S) at all.
+
+But wait—the computer just verified that all 624 cases work, including elements like (2, 0, 0, 0) and (3, 0, 0, 0). Let me trace through what's actually happening for (2, 0, 0, 0) at weight 4 when p = 5. The tail needs to sum to zero in A₈, the first coordinate must come from the d_i and γ contributions equaling 2, and the total weight constraint ties everything together.
+
+So I have Σ c_i = 2 and Σ d_i = 2 - γ, which means I need a zero-sum combination of weight 4 in A₈. But A₈ is supposed to be strongly zero-sum-free—it shouldn't allow any zero-sum at weight 4 or less. This seems like a contradiction, unless I'm misunderstanding what "4-sum-free" actually means here.
+
+Looking at the definition more carefully: A₈ is maximal 4-sum-free, which I think means no 4-element zero-sum subset exists where each element is used exactly once. That's a zero-sum of weight 4 with coefficients in {0, 1}. But my constraint allows for multiplicities—the c_i and d_i can be larger than 1. So even if A₈ has no simple 4-element zero-sum, it might still have a zero-sum when elements are repeated, which would be a different kind of constraint.
+
+Let me check whether A₈ contains a vector and its negative. If a₁ = -a₂ for some pair in A₈, then 2a₁ + 2a₂ = 0 would give a zero-sum of weight 4 with multiplicities. So the question is whether A₈ is closed under negation or contains any opposite pairs.
+
+The problem states A₈ is "strongly ZSF," meaning no zero-sum of weight ≤ p exists. At p = 5, this forbids all zero-sums of weight ≤ 5, including weight 4. So if a zero-sum of weight 4 is needed to reach the target (2, 0, 0, 0), but A₈ has no such zero-sum, then I'm hitting a contradiction—how can the target even be achievable?
+
+Let me reconsider what the computer's "Shadow 624/624" actually means. It might be reporting cumulative shadow saturation Σ_{≤p-1}(S) = F_p⁴ \ {0}, not the exact weight-p-1 sums Σ_{p-1}(S). The 18-vector argument requires the stronger condition that exact weight p-1 sums cover everything, which is different.
+
+For the 18-vector argument to work, I need: for any nonzero v ∈ F_p⁴, there's some k ∈ {1,...,p-1} where -kv appears in Σ_{p-k}(S). Let me check this for v = (2, 0, 0, 0) by testing different values of k.
+
+When k = 1, I need (p-2, 0, 0, 0) to be a zero-sum of weight p-1 from S, but this runs into the same issue as before. Trying a different approach: if I decompose this as a sum of basis elements with some scalar γ, I get constraints on the total weight and the number of nonzero coefficients. For γ = 3, the weight requirement forces a zero-sum of weight 1, which would need to be a single basis element—but all elements in A₈ are nonzero, so this is impossible.
+
+For γ = 2, I'd need a zero-sum of weight 2, which means either two elements summing to zero or one element with coefficient 2. Since p > 2, doubling an element doesn't give zero, and A₈ has no antipodal pairs, so this fails too. When γ = 1, I'm looking for a zero-sum of weight 3 among the basis elements, which requires finding three elements from A₈ that sum to zero with positive integer coefficients.
+
+Since A₈ is strongly zero-sum-free up to weight p = 5, there's no such zero-sum of weight 3, ruling out γ = 1. For γ = 0, a zero-sum of weight 4 is also forbidden by the strong ZSF property, so k = 1 doesn't work.
+
+Moving to k = 2, I need -(2v) = (1, 0, 0, 0) to be in the sumset, which requires Σ d_i + γ = 1 and Σ c_i = 2. This means I need a zero-sum of weight 3 - γ. When γ = 1, that's a zero-sum of weight 2, which fails as before. For γ = 0, I'd need a zero-sum of weight 3.
+
+For k = 3, the requirement -(3v) = (4, 0, 0, 0) at p = 5 would need to come from a zero-sum of weight 2. But the constraints Σ c_i + Σ d_i + γ = 2 and Σ d_i + γ = 4 lead to Σ c_i = -2, which is impossible.
+
+At k = 4, I'm checking whether -(4v) = (-3, 0, 0, 0) can be constructed...
+
+Actually, wait—I'm realizing that (2, 0, 0, 0) isn't even in S to begin with. The standard construction only includes vectors of the form (0, b_i), (1, b_i), and (1, 0, 0, 0), so there's no (2, 0, 0, 0) present. This might be the key issue undermining the 18-vector argument for v = (2, 0, 0, 0) at p = 5.
+
+If I do add (2, 0, 0, 0) as an 18th vector, I need to find a zero-sum of weight 5 that includes it. I've checked k = 1 through 4 and none of them work algebraically. This suggests either the computer's shadow saturation check was cumulative rather than exact, I'm making a computational error, or there's a more subtle way to construct the zero-sum using the 18th vector. The sequence would have 69 total elements (17 base vectors each with multiplicity 4, plus the new vector), and I'm looking for a zero-sum using exactly 5 of them.
+
+Now I'm setting up the constraint more carefully: if I include c_v = 1 copy of the new vector, then I need 4 copies from the base vectors that sum to (3, 0, 0, 0), which means checking whether that target is in the 4-fold sumset of the base vectors.
+
+Looking at the first coordinate, I need the contributions to sum to 3, and this constrains how many base vectors I can use overall. The tail coordinates must then form a zero-sum with a specific weight constraint. When I try γ = 3, the tail would need weight 1, which can't be zero. When γ = 2, I'd need a zero-sum of weight 2 in the tail, but the structure of A₈ prevents this at small weights. Let me check what happens when γ = 1.
+
+For γ = 1, the tail weight becomes 3, which also fails. And γ = 0 gives tail weight 4, which doesn't work either. So using c_v = 1 doesn't produce a valid zero-sum of weight 5. But if c_v = 0, I'd need the zero-sum entirely from S, which contradicts S being strongly zero-sum-free. This suggests that adding v to S might not actually create a zero-sum of weight 5 after all.
+
+If S ∪ {v} is also zero-sum-free at weight 5, then I have 18 base vectors forming a sequence of length 69 with no zero-sum of length 5. But the conjecture says η(C_5⁴) should be exactly 69, meaning any sequence of that length must contain a zero-sum of length 5. This would be a contradiction. Let me reconsider the tail of v = (2, 0, 0, 0)—it's the zero vector in F_5³, which is already present in the tail structure.
+
+Adding this second zero-tail vector breaks the doubled-A₈ form that the Tail Invariance framework relies on, so the resulting set might not actually be strongly zero-sum-free. However, checking whether c_v = 1 creates a zero-sum requires finding one in the original S at weight 4 with target (3, 0, 0, 0), which would need a zero-sum of A₈ at weight ≤ 4—something that's impossible. So c_v = 1 doesn't produce a zero-sum after all.
+
+Now I'm exploring whether v = (2, 0, 0, 0) and e₁ = (1, 0, 0, 0) can combine to form one. Using 3 copies of v and 2 copies of e₁ gives (8, 0, 0, 0) ≡ (3, 0, 0, 0) at weight 5, but that's not zero. Let me check if some copies of v plus other vectors from the set could sum to zero instead.
+
+Testing different combinations of v and e₁ with weight 5: none of them produce a zero sum modulo 5, so this approach isn't working either.
+
+The issue is that both v and e₁ have zero tails, meaning their weighted sums will always have zero tails too. I need the first coordinate to sum to 0 mod 5 instead. With k copies of v = (2,0,0,0) and l copies of e₁ = (1,0,0,0) where k + l = 5, I get 2k + l ≡ k mod 5, which equals zero only when k = 0.
+
+But k = 0 means not using v at all, leaving just the zero-sum from S, and k = 5 would require c_v = 5, which violates the multiplicity constraint since v appears only once. So zero-tail vectors alone can't form a zero-sum this way.
+
+I need to incorporate fiber-containing vectors instead. If I use c_v = 1 and get a contribution of (-2, 0, 0, 0) from the weighted sum, that's equivalent to (3, 0, 0, 0) mod 5 at weight 4 from S. Now I need the remaining vectors to contribute a zero-sum from A₈ with first-coordinate contributions totaling 3.
+
+For any choice of γ (the coefficient of (1,0,0,0)), the tail constraint forces a zero-sum of weight 4-γ in A₈, but since A₈ has no zero-sums at weights 1 through 4, every possibility fails. So v = (2, 0, 0, 0) doesn't work either.
+
+But wait—I should check whether v is already in the standard construction S. Looking at the elements: S contains (0, a_i) and (1, a_i) for all i, plus (1, 0, 0, 0), but (2, 0, 0, 0) isn't there. And I've shown that adding it doesn't create a zero-sum, which would contradict the known bound unless I'm making an error or the bound itself is wrong.
+
+The problem statement claims 607 possible 18th vectors were tested and all created zero-sums, so (2, 0, 0, 0) should have been among them. If it was tested and failed, my argument about no zero-sums must be flawed—likely because I'm wrong about A₈ being zero-sum-free at weight ≤ 5.
+
+Now I'm reconsidering what "strongly ZSF" actually means for a sequence where each vector appears multiple times. A zero-sum of weight 5 could exist if the right combination of coefficients works out, even if the 8 distinct base vectors themselves don't form a zero-sum at that weight. The key distinction is between zero-sums among distinct vectors versus zero-sums when vectors can be reused. So "strongly zero-sum-free" means the sequence has no nonempty zero-sum subsequence up to length p, which is what ensures A₈ gives us the lower bound η(C_p³) ≥ 8(p-1)+1. Since the sequence itself has length 8(p-1), finding any zero-sum of weight 5 would break this, so there can't be one. Now I'm applying this to the 18-vector problem: adding v = (2, 0, 0, 0) to S = doubled(A₈) + e₁ in F_5⁴, where S contains 17 base vectors with a total sequence length of 68.
+
+With v included, the total length becomes 69, and I need to find whether a zero-sum of length 5 exists using elements from S ∪ {v}. If v appears once in the subsequence, the remaining 4 elements from S must sum to (3, 0, 0, 0). I'm checking whether the 17 base vectors of S can produce this sum at weight 4—using only fiber-0 vectors gives first coordinate 0, which doesn't work, so I need to consider combinations involving fiber-1 vectors and e₁.
+
+When mixing fiber-1 vectors with e₁, the first coordinate equals the weight contribution from e₁ and fiber-1 vectors combined, while the tail must sum to zero. But this creates a constraint: if the first coordinate is 3 and the total weight is 4, then the fiber-0 contribution must have weight 1, which means exactly one fiber-0 vector is used.
+
+Now I'm working through what this means for the tail. The fiber-0 vector contributes its tail directly, while fiber-1 vectors contribute a weighted sum of their tails, and these must cancel out. So I need to find when -a_k can be expressed as a sum of fiber-1 tails with coefficients summing to 3 - γ, where γ is the weight from fiber-1.
+
+For γ = 0, I'm checking if -a_k lies in the 3-fold sumset of A₈. The key constraint is that A₈ is strongly zero-sum-free up to weight 5, which means any zero-sum involving 4 or fewer elements is forbidden. If the only way to construct -a_k requires treating it as a zero-sum of weight 4 (one copy of a_k plus three other elements), then it's actually impossible to achieve within the sumset structure.
+
+Now I'm verifying this pattern for smaller values of γ. When γ = 1, getting -a_k from the 2-fold sumset would create a zero-sum of weight 3, which is also forbidden. For γ = 2, it would require -a_k to be in A₈ itself, creating a zero-sum of weight 2. The pattern continues as I check each case.
+
+So using c_v = 1 with a positive tail sum always forces a forbidden zero-sum somewhere in A₈. I should also consider what happens if I use both fiber-0 and fiber-1 contributions for the same index—say c_k = 1 and d_k = 1. This would give e_k = 2, and the remaining terms would need to sum to zero with total weight 4, which is a weight-4 zero-sum in A₈, also forbidden.
+
+Now trying c_v = 2: I need -2v to equal some element at weight 3 from S. Using just e₁ gives the right weight but the wrong first coordinate. If I mix in other d_i's and c_i's to hit the first coordinate constraint, the tail sum becomes a weight-2 zero-sum, which is forbidden. Moving on to c_v = 3...
+
+With c_v = 3, I get -3v = (4, 0, 0, 0) at weight 2. Setting γ = 2 and Σ d_i = 2 makes the first coordinate work, but then the total weight becomes 4 instead of 2—a contradiction. The weight constraint from the remaining sequence should be exactly 2, but I'm getting 4 from the coefficients.
+
+Now checking c_v = 4: -4v = (2, 0, 0, 0) mod 5, with weight 1 available from S. I need Σ c_i + Σ d_i + γ = 1 and Σ d_i + γ ≡ 2 mod 5, but with such a tight weight constraint, this seems impossible too.
+
+So none of the values c_v ∈ {1,...,4} produce a zero-sum configuration. This suggests S ∪ {(2,0,0,0)} is actually zero-sum-free at weight 5, which directly contradicts the claim that all 607 tested vectors succeeded. Either (2,0,0,0) wasn't among those 607 vectors, or the verification used different criteria than I'm analyzing.
+
+Actually, I think I'm misunderstanding what "607 possible 18th vectors tested" means. It's probably asking which vectors can extend S to an 18-element strongly zero-sum-free set—not whether adding a vector creates a zero-sum. The test would be checking if S ∪ {v} remains strongly ZSF with 18 base vectors. If none of the 607 vectors worked, that confirms α(4,5) ≤ 17. Since 607 is less than 624 (the total nonzero vectors in F_5⁴), some vectors were likely already in S or excluded for other reasons.
+
+When I say "breaks the strongly ZSF property," I mean the resulting 18-vector set—where each base vector appears with multiplicity 4—would contain a zero-sum of weight at most 5. For a candidate like v = (2,0,0,0), the full sequence has 72 elements total, and we'd need to find a zero-sum of weight ≤ 5 from it. The key issue is that if v becomes a base vector with multiplicity 4 instead of just appearing once, the coefficient c_v can be much larger, which changes the constraints significantly.
+
+Now I'm checking what happens for different values of c_v. When c_v = 1, the weight from the original set S is 4, which fails the same way as before. For c_v = 2, I need the tail vectors to sum to -2v = (1,0,0,0), which requires careful analysis of how the remaining coefficients distribute. If γ = 1 (meaning we use one copy of the zero vector), then the tail vectors must sum to zero at weight 2, but that would give us a forbidden zero-sum in A₈. If γ = 0 instead, we need exactly one tail vector, and I'm checking whether that leads to a contradiction.
+
+For c_v = 3 and c_v = 4, the constraints become impossible to satisfy—the first coordinate grows too large relative to the total weight available. This exhausts all possibilities, so even allowing multiplicity p-1 for v doesn't help. The set S ∪ {v} with v = (2,0,0,0) remains strongly zero-sum-free.
+
+But wait—this gives α(4,5) ≥ 18, yet the problem states α(4,5) = 17. I must be overlooking something. The issue might be that a zero-sum doesn't need to use v at all; it could come entirely from the original 17 base vectors. But S is strongly ZSF, so that's ruled out. Or perhaps v participates in a zero-sum alongside elements from S in a configuration I haven't fully explored. Let me think through this more carefully by considering all possible zero-sum weights up to 5 and how v could participate.
+
+For a zero-sum from S ∪ {v}, I need to track coefficients for both fiber layers and v itself, then impose the constraint that the weighted sum equals zero. When v has coefficient δ = 1, the first coordinate becomes ≡ 3 mod 5, which forces Σ d_i + γ = 3. Now I need to see what weight constraint this imposes.
+
+With total weight w = 5 and δ = 1, I get Σ c_i = 1, meaning exactly one element from the first fiber has nonzero coefficient. The tail condition then requires that single element's vector plus the weighted sum of second-fiber elements must cancel. When γ = 0, this gives Σ d_i = 3, creating a zero-sum of weight 4 in A₈, which violates the forbidden bound. I'm checking whether γ = 1 avoids this obstruction.
+
+For γ = 1, the weight drops to 2, still forbidden. At γ = 2, weight becomes 1, which is also forbidden. When γ = 3, the sum Σ d_i vanishes entirely, forcing a_k = 0, but that contradicts a_k being nonzero in A₈.
+
+Shifting to w = 4 with Σ c_i = 0 means the first fiber contributes nothing, leaving only the tail condition Σ d_i a_i = 0 at weight 3 - γ. Again γ = 0 gives a forbidden weight-3 zero-sum, γ = 1 gives weight-2 (forbidden), and γ = 2 yields weight-1.
+
+But at γ = 3, I get weight-0, which works only if Σ d_i = 0. The first coordinate becomes 0 + 3 + 2 = 5 ≡ 0 mod 5, and the total weight is 0 + 0 + 3 + 1 = 4 with tail = 0, so this actually forms a valid zero-sum: three copies of e₁ + δ plus one copy of v sum to (5, 0, 0, 0) ≡ (0, 0, 0, 0).
+
+The weight constraint 4 ≤ 5 checks out. I was overcomplicating this by fixating on the tail constraint when the real insight is that purely first-coordinate zero-sums work perfectly fine using vectors with zero tails—both v = (2, 0, 0, 0) and e₁ = (1, 0, 0, 0) have that property, so 3e₁ + v gives exactly (5, 0, 0, 0) ≡ 0 mod 5. 0 at weight 4 ≤ p. ✓
+
+Phew! So the zero-sum DOES exist, via a purely first-coordinate mechanism. My earlier analysis missed this because I was decomposing into tail and first-coordinate components separately, but the zero-tail vectors can create zero-sums on their own.
+
+More generally: if v = (f, 0) with f ≠ 0 (zero tail), then v and e₁ = (f_{e₁}, 0) (also zero tail) can create a zero-sum if af_{e₁} + bf ≡ 0 mod p with a + b ≤ p. I'm working through specific examples to verify this works. For f_{e₁} = 1 and f = 2 at p = 5, I can use a = 3 and b = 1 to get 3 + 2 = 5 ≡ 0 mod 5 with total weight 4 ≤ 5. For the general case, setting b = 1 gives a = p - f, which always satisfies the weight constraint since (p - f) + 1 ≤ p.
+
+Now I'm shifting focus to non-zero-tail vectors v = (f, b) with b ≠ 0, where the tail constraint becomes nontrivial and I need to revisit the earlier analysis.
+
+For v = (0, b), if b isn't in A₈, then it's a new tail value in fiber 0, and any zero-sum must combine elements of S whose tails cancel with b. But if b is already in A₈, then (0, b) is already a base vector in S. When f ∉ {0, 1} and b ∈ A₈, adding v creates a third fiber for that tail value, which triggers a different constraint mechanism.
+
+I'm hitting diminishing returns on this specific technical detail, so let me refocus on consolidating the main results. I've established the window structure analytically, shown that complementary gaps are covered by negation, proved all zero-tail 18th vectors are eliminated, and analyzed how fiber flexibility kills most nonzero-tail vectors. The remaining question is whether this argument extends to every nonzero-tail case.

@@ -1,0 +1,23 @@
+# Research Result
+
+**Goal:** Prove: for u, v in {1,...,p-2} with u+v not congruent to 0 mod p and u+v != p-1 mod p,
+min([u]+[v], [u^{-1}]+[vu^{-1}], [v^{-1}]+[uv^{-1}]) <= p-1.
+
+This is a pure arithmetic statement about F_p. It says: given two "non-antipodal" elements,
+at least one of three "inversions" produces a pair summing to at most p-1.
+
+Verified for all (u,v) pairs at p = 5, 7, 11, 13, 17, 19. Zero failures.
+
+This single lemma completes the proof of eta(C_p^3) = 8(p-1)+1.
+**Arch:** gpt
+**Turns:** 5
+**Cost:** $0.3562
+
+## Log
+
+
+[Turn 1] Worker produced an explicit counterexample at \(p=11\), \(u=7\), \(v=5\) with \(\min\{S_1,S_2,S_3\}=12>p-1\), showing Lemma 1 is false. They also diagnosed prior “no failures up to 19” as likely a testing bug and proposed switching to empirical determination of the true bound. Approaches tried: 3 (direct / u-invert / v-invert); all fail at the same structural point (min exceeds \(p-1\)) → Lakatos threshold reached, so we must compute true maxima for small primes before reformulating.
+[Turn 2] Worker reports values of \(M(p)\) for \(p=3,5,7,11,13\) and proposes a revised bound \(\min\{S_1,S_2,S_3\}\le p+1\), but the computation was described as hand enumeration with an unshown script, leaving uncertainty. Approaches tried remain 3; conjecture disproved; now in data-gathering mode without a structural lemma yet. Lakatos threshold already reached; we need reliable broad computation to infer the correct bound before proof attempts.
+[Turn 3] Worker did not produce new numerical results or a lemma; they only provided pseudocode and requested external verification. Approaches tried remain 3; no new obstruction or corrected bound confirmed beyond \(p\le 13\). Lakatos threshold remains in effect; progress stalled at “please compute,” so they must either execute computation (not just specify it) or advance a structural argument.
+[Turn 4] Worker proposed a new bound \( \min\{S_1,S_2,S_3\}\le p+2\) and sketched a contradiction argument via “if all sums \(>p+2\) then all six terms \(\ge L\),” but the key inverse-size contradiction is not pinned down (it waves at bounds on \(k\) and concludes inconsistently). Approaches tried are still variations on the same inversion-size heuristic; no verified computation has been produced to validate the \(p+2\) or \(p+1\) constants. Lakatos threshold still suggests computing broader data or isolating one clean inequality; the current writeup expands without delivering a solid new lemma.
+[Turn 5] Worker’s turn contained only a [VERIFY] request to compute \(M(p)\) up to 101; no new computations, lemmas, or obstructions were provided. Approaches tried remain 3; the project is stalled at unexecuted computation and an unconfirmed revised bound. Lakatos threshold remains, but without actual data or a decisive structural argument we cannot responsibly proceed.

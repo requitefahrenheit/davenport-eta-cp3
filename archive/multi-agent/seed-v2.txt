@@ -1,0 +1,150 @@
+# TARGET: Prove η(C_p³) = 8(p−1)+1 for all odd primes p.
+
+The LOWER BOUND is PROVED (Lean 4). Your job is the UPPER BOUND.
+
+---
+
+## THE PROOF STRUCTURE (mostly complete)
+
+The upper bound reduces to: for any 9 nonzero vectors in F_p³
+with multiplicities p−1, there exists a short zero-sum.
+
+Define φ(c) = Σcᵢ mod p on the kernel K.
+
+**Case A (φ nonzero on K):** All residues appear in K. There exist
+kernel vectors with Σcᵢ ≡ 1 (mod p), giving lift-sum 1 or 1+p.
+Need to show lift-sum 1 occurs (i.e., a vector already in the cube
+{0,...,p−1}⁹ with Σcᵢ = 1). THIS CASE MAY NEED SEPARATE WORK.
+
+**Case B (φ ≡ 0):** All 9 vectors lie on an affine hyperplane.
+All kernel vectors have Σcᵢ ≡ 0 mod p, so lift-sum ∈ {0, p, 2p,...}.
+We need a nonzero c with lift-sum = p.
+
+**Case B, p ≤ 7:** No MDS [9,6,4] code exists (need p ≥ 8).
+By Griesmer bound, there exists a weight ≤ 3 codeword.
+A weight-3 codeword with Σcᵢ = 0 has lift-sum 0 or p.
+Since entries are nonzero, lift-sum = p. DONE.
+
+**Case B, p ≥ 11:** MDS [9,6,4] codes exist. Minimum weight = 4.
+This is the HARD CASE. The proof below handles it.
+
+---
+
+## THE HARD CASE: MDS codes from conics (p ≥ 11)
+
+By Segre's theorem: every arc in PG(2,p) for p prime extends to
+a conic. So the 9-arc giving our MDS code sits on a conic.
+Parametrize: points (1, t, t²) for 9 values t₁,...,t₉ ∈ F_p.
+
+Every 4-element subset supports a weight-4 codeword.
+Coefficients (α,β,γ,δ) satisfy α+β+γ+δ = 0 in F_p.
+
+Define f(λ) = lift(λα)+lift(λβ)+lift(λγ)+lift(λδ).
+Since α+β+γ+δ=0: f(λ) ∈ {p, 2p, 3p}, average = 2p.
+
+**Key fact (PROVED):** f ≡ 2p for all λ iff {α,β,γ,δ} can be
+partitioned into two antipodal pairs {s,−s,t,−t}.
+Proof: each pair contributes lift(x)+lift(−x) = p. Conversely,
+if f is constant at 2p, the average argument forces this structure.
+
+**Key fact (PROVED):** If f is NOT constant at 2p, then some λ
+gives f(λ) = p. Proof: if f ∈ {2p, 3p} only, then avg ≥ 2p with
+equality iff f ≡ 2p, contradicting non-constant.
+
+So we need: at least one weight-4 codeword is NOT two-antipodal-pair.
+
+**Geometric translation:** Coefficients (α,β,γ,δ) form two
+antipodal pairs iff (after reordering) α+β=0 and γ+δ=0.
+From the kernel equation: α(v_i−v_j) = γ(v_l−v_k).
+On a conic: v_a−v_b = (0, a−b, a²−b²) = (a−b)(0,1,a+b).
+So (v_i−v_j) || (v_k−v_l) iff t_i+t_j = t_k+t_l (mod p).
+
+Therefore: a weight-4 codeword on support {i,j,k,l} is
+two-antipodal-pair iff t_i+t_j ≡ t_k+t_l for some pairing.
+Equivalently: the 4-element set {t_i,t_j,t_k,t_l} has a
+"balanced pair-sum" in F_p.
+
+---
+
+## THE LAST LEMMA
+
+**Lemma (No Universal Balance).** For any 9 distinct elements
+t₁,...,t₉ ∈ F_p (p ≥ 11), not every 4-element subset has a
+balanced pair-sum.
+
+COMPUTATIONALLY VERIFIED at p = 11, 13.
+
+At p=11 with tᵢ = 0,...,8: exactly 42 of 126 subsets are balanced,
+84 are unbalanced.
+
+**Proof sketch for specific 4-subset:**
+Consider {t₁, t₂, t₃, t₅} = {0, 1, 2, 4}.
+The three pair-sums from each pairing are:
+- 0+4=4 vs 1+2=3 → not equal
+- 0+2=2 vs 1+4=5 → not equal
+- 0+1=1 vs 2+4=6 → not equal
+These are INTEGER inequalities (4≠3, 2≠5, 1≠6) that hold in Z,
+hence in F_p for any p > 6. Since p ≥ 11 > 6: DONE.
+
+But wait — we need 0,1,2,4 to be among the 9 chosen parameters.
+The 9 parameters are given (arbitrary distinct elements of F_p).
+We can apply a Möbius/affine transformation t → at+b to assume
+t₁=0, t₂=1 (since affine maps preserve the conic and the
+balanced-pair-sum property). Then we need {0,1} plus two more of
+the remaining 7 parameters such that the 4-subset is unbalanced.
+
+Alternatively: among ANY 9 distinct elements of F_p, prove that
+some 4-subset has no balanced pair-sum. This is the claim.
+
+---
+
+## WHAT YOU NEED TO PROVE
+
+1. The "No Universal Balance" lemma for arbitrary 9-element sets.
+   (The {0,1,2,4} argument works when those values are available.
+   Need to handle the general case.)
+
+2. Case A (φ nonzero): show K₁ = {c ∈ K : φ(c)=1} contains
+   a vector in {0,...,p−1}⁹ (lift-sum = 1).
+   Or more generally: some coset K_r contains a vector with
+   lift-sum = r (no wrapping).
+
+3. Assemble the full proof from the pieces above.
+
+---
+
+## VERIFIED FACTS
+
+| Fact | Status |
+|------|--------|
+| η(C_p³) ≥ 8(p−1)+1 | PROVED (Lean 4) |
+| Case B, p≤7: Griesmer → weight≤3 → done | PROVED |
+| f ≡ 2p iff two-antipodal-pair coefficients | PROVED |
+| f not constant → some f(λ)=p | PROVED (averaging) |
+| Two-antipodal-pair iff balanced pair-sum on conic | PROVED |
+| {0,1,2,4} is unbalanced for p > 6 | PROVED (integer ineq) |
+| At p=11: 84/126 supports are unbalanced | Verified |
+| Abstract "every 6-dim subspace" version | FALSE |
+| Weight-3 individual scaling | FALSE for some triples |
+| Weight-4 individual scaling | FALSE for some quadruples |
+| Segre: arcs in PG(2,p) extend to conics (p prime) | Classical |
+
+---
+
+## DEAD ENDS
+
+1. Pure pigeonhole (margin = 1, fails)
+2. Chevalley–Warning (degree barrier for p ≥ 5)
+3. Individual-quadruple scaling lemma (FALSE)
+4. Abstract 6-dim subspace version (FALSE)
+5. Random search / enumeration (14000+ tests done, done)
+
+---
+
+## RULES
+
+1. Every turn: lemma + proof attempt, or precise obstruction.
+2. Computation only to verify stated conjectures.
+3. Universal results (all primes) valued over case-by-case.
+4. Focus on the two gaps: No Universal Balance, and Case A.
+5. One theorem. Stay focused.

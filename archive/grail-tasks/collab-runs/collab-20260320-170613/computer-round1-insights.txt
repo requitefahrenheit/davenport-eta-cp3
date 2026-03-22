@@ -1,0 +1,13 @@
+# Mathematician's Internal Thinking: Key Insights
+
+## Near-miss: Direct enumeration at large p
+
+Attempted brute-force enumeration of all coefficient tuples (c₀,...,c₇) at p=29 for window verification. Failed because 29⁸ ≈ 2×10¹¹ iterations is infeasible. The constraint system (two linear mod-p equations + weight sum) *should* reduce this to 5 free variables (≈2×10⁷), but the interplay between modular and integer constraints on coefficients in [0,p-1] made safe reduction to exact integer problem nontrivial and started leading to circular reasoning about which approach to optimize first.
+
+## Structural observation: Dimension collapse for restriction to L
+
+The key bottleneck is unnecessary—we only track j ∈ Fₚ along the invariant line L={(0,j,j)}, not the full 3D shadows. The eight generators constrain to 2D on L via the coordinate equations c₀ + (p-1)(c₃+c₆+c₇) + c₄ + c₅ ≡ 0 (mod p) and a linearity constraint on j. This reduces verification from exploring 8-tuples to finding which single j-values are achievable—a 1D filtration problem where composition-based enumeration of coefficient tuples becomes the true bottleneck, not the geometry.
+
+## Unexpected pattern: Weight-dependent exact vs. modular arithmetic
+
+For weights w ≤ (p-1)/2, all valid coefficients stay in [0,w] (never wrap), so mod-p constraints become *exact integer equations*, decoupling from p entirely. For larger w near p-1, wraparound forces genuine modular computation. This suggests window structure might have two regimes—one p-independent and one p-dependent—that could simplify verification if exploited carefully.

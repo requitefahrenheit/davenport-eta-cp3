@@ -1,0 +1,327 @@
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: TodoWrite]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+No Cortex tools available. Let me proceed by reading the key files to gather context.
+[TOOL: Agent]
+[READ: ~/claude/grail-tasks/u1_analysis.md]
+[TOOL: Agent]
+[TOOL: Glob]
+[TOOL: Glob]
+[TOOL: Glob]
+[TOOL: Glob]
+[TOOL: Glob]
+[TOOL: Glob]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: Agent]
+
+[BASH] find ~/claude/grail-tasks -type f \( -name "*u1*" -o -name "*window*" -o -name "*shadow*" \) 2>/dev/null
+
+
+[BASH] find ~/claude/multi-agent/seeds -type f \( -name "*u1*" -o -name "*window*" -o -name "*shadow*" \) 2>/dev/null
+
+
+[BASH] ls -la ~/claude/multi-agent/seeds 2>/dev/null || echo "Directory does not exist"
+
+
+[BASH] find /home/jfischer/claude/grail-tasks/collab-20260320-030311 -type f 2>/dev/null | head -50
+
+
+[BASH] find /home/jfischer/claude/grail-tasks -maxdepth 1 -name "*.md" -type f 2>/dev/null
+
+[READ: /home/jfischer/claude/grail-tasks/launch-u1.sh]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[READ: /home/jfischer/claude/multi-agent/seeds/inverse-theorem-seed.md]
+[READ: /home/jfischer/claude/grail-tasks/adversary_window_attack.py]
+[READ: /home/jfischer/claude/grail-tasks/window_verify_large_p.py]
+[READ: /home/jfischer/claude/grail-tasks/window_proof_verify.py]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/final-summary.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/synthesis-round3.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/synthesis-round2.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/synthesis-round1.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/theorist-round3.txt]
+[READ: /home/jfischer/claude/grail-tasks/adversary_u1_attack.py]
+[READ: /home/jfischer/claude/grail-tasks/adversary_u1_attack_v2.py]
+[READ: /home/jfischer/claude/grail-tasks/adversary_verify_u1_break.py]
+[READ: /home/jfischer/claude/grail-tasks/round1_results.md]
+[READ: /home/jfischer/claude/grail-tasks/goal.md]
+[READ: /home/jfischer/claude/grail-tasks/u1_analysis.md]
+[TOOL: TodoWrite]
+[READ: /home/jfischer/claude/grail-tasks/u1_analysis.md]
+[READ: /home/jfischer/claude/grail-tasks/round1_results.md]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/theorist-round3.txt]
+[READ: /home/jfischer/claude/grail-tasks/collab-20260320-030311/final-summary.txt]
+Now let me look up relevant literature on zero-sum theory and weighted Davenport constants.
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+[TOOL: TodoWrite]
+[TOOL: TodoWrite]
+Now let me write the formal Round 2 Theorist report.
+
+---
+
+# THEORIST ROUND 2 — REPORT
+
+## PART I: WINDOW THEOREM (STABLE REGIME) — PROVED
+
+**Theorem (Window Structure for A₈).** Let A₈ ⊂ F_p³ be the standard 8-vector construction with vectors:
+
+    a₀=(1,0,0), a₁=(0,1,0), a₂=(0,0,1), a₃=(-1,1,1),
+    a₄=(1,1,0), a₅=(1,0,1), a₆=(-1,2,1), a₇=(-1,1,2)
+
+On the invariant line L = {(0,j,j) : j ∈ F_p*}, for any weight w with 2 ≤ w ≤ (p-1)/2 (the "stable regime," where no modular wraparound occurs):
+
+> j ∈ Σ_w(A₈) ∩ L  if and only if  ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋
+
+**Proof.** A representation (0,j,j) = Σ cᵢ aᵢ at weight w = Σ cᵢ gives three coordinate equations. The first-coordinate equation and the equality condition (2nd = 3rd coordinate) yield two linear constraints:
+
+    (I)   c₀ = c₃ - c₄ - c₅ + c₆ + c₇
+    (II)  c₁ = c₂ - c₄ + c₅ - c₆ + c₇
+
+Eliminating c₀ and c₁, the free variables are c₂,...,c₇ ≥ 0, subject to (I) ≥ 0, (II) ≥ 0, and:
+
+    j = c₂ + c₃ + c₅ + c₆ + 2c₇
+    w = 2c₂ + 2c₃ - c₄ + c₅ + c₆ + 3c₇
+
+**Three key algebraic identities:**
+
+**Identity 1 (Lower bound):** 2j − w = c₄ + c₅ + c₆ + c₇ ≥ 0.
+
+Hence j ≥ w/2. Since j is an integer (sum of integers), j ≥ ⌈w/2⌉. ∎(lower bound)
+
+**Identity 2 (Upper bound via parity):** w − j = c₂ + c₃ − c₄ + c₇.
+
+Setting j = w (seeking the maximum) forces c₂ + c₃ = c₄ − c₇. Substituting into the non-negativity constraints for c₀ and c₁:
+
+    c₀ = c₆ − c₂ − c₅ ≥ 0
+    c₁ = c₅ − c₃ − c₆ ≥ 0
+
+Adding: c₂ + c₃ ≤ 0, so c₂ = c₃ = 0. Then c₅ = c₆ and c₄ = c₇. The weight becomes w = 2c₅ + 2c₇ — necessarily **even**. Therefore j = w is impossible for odd w.
+
+For even w: j_max = w = 2⌊w/2⌋. For odd w: j_max = w − 1 = 2⌊w/2⌋. ∎(upper bound)
+
+**Identity 3 (Feasibility at every intermediate j):** For each integer j with ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋, an explicit feasible solution exists. Let s = 2j − w.
+
+*Case s even (s = 2m):* Set c₅ = c₆ = m, c₄ = c₇ = 0, c₂ = 0, c₃ = j − 2m.
+Then c₀ = j − 2m ≥ 0 (since j ≤ w ⇒ j − 2m = j − s = w − j ≥ 0) and c₁ = 0. ✓
+
+*Case s odd (s = 2m+1):* Set c₅ = c₆ = m, c₄ = 1, c₇ = 0, c₂ = 1, c₃ = j − 2m − 1.
+Then c₀ = j − 2m − 2 and c₁ = 0. Need j ≥ 2m + 2. Since s = 2m + 1 is odd, w must be odd (as s = 2j − w), so j ≤ w − 1. Thus j − 2m − 2 = (w − j) − 1 ≥ 0 since j ≤ w − 1. ✓
+
+All coefficients are non-negative and ≤ w ≤ (p−1)/2 < p−1, so the bound cᵢ ≤ p−1 is automatic. The modular arithmetic is exact (all sums < p). ∎
+
+**Remark on the full range w ≤ p−1:** For w > (p−1)/2, the coefficients can exceed (p−1)/2, and modular wraparound occurs. The lower bound identity 2j − w ≡ c₄ + c₅ + c₆ + c₇ (mod p) still holds, but the integer constraint j ≥ w/2 is lost. The computational evidence (verified for all p ≤ 47) shows the window persists, but the proof for this regime requires additional analysis of the mod-p feasibility region.
+
+[VERIFY: Window Theorem construction: at p=29, w=7, confirm that (c₀,...,c₇) = (0,0,0,0,0,3,3,0) gives target (0,6,6) at weight 6... wait, let me recalculate. c₅ = c₆ = 3, w = 2(0)+2(0)-0+3+3+0 = 6, but we want w=7. Let me use the odd-w construction: w=7, j=6, s=5, m=2. c₅=c₆=2, c₄=1, c₇=0, c₂=1, c₃=6-4-1=1. Check: w = 2(1)+2(1)-1+2+2+0 = 7 ✓, j = 1+1+2+2+0 = 6 ✓, c₀ = 1-1-2+2+0 = 0 ✓, c₁ = 1-1+2-2+0 = 0 ✓.]
+
+[VERIFY: Confirm at p=11, w=5, j=3 (minimum ⌈5/2⌉): construction gives c₄=1, c₅=0, c₆=0, c₇=0, c₂=1, c₃=2. So vector = 2·a₀ + 0·a₁ + 1·a₂ + 2·a₃ + 1·a₄ + 0·a₅ + 0·a₆ + 0·a₇ = 2(1,0,0)+1(0,0,1)+2(-1,1,1)+1(1,1,0) = (2+0-2+1, 0+0+2+1, 0+1+2+0) = (1,3,3). But we need (0,3,3)! Let me recheck. c₀ = c₃-c₄-c₅+c₆+c₇ = 2-1-0+0+0 = 1. c₁ = c₂-c₄+c₅-c₆+c₇ = 1-1+0-0+0 = 0. So the vector is 1·a₀+0·a₁+1·a₂+2·a₃+1·a₄+0·a₅+0·a₆+0·a₇. Coord 1: 1-2+1 = 0 ✓. Coord 2: 0+0+2+1 = 3 ✓. Coord 3: 0+1+2+0 = 3 ✓. Weight: 1+0+1+2+1+0+0+0 = 5 ✓.]
+
+---
+
+## PART II: DEPENDENCY MAP — WHAT NEEDS WHAT
+
+Critical finding: **U1 and U2 are both FALSE.** The proof must be restructured.
+
+### The Current Proof Chain (with status):
+
+```
+η(C_p³) = 8(p−1)+1              [PROVED, Lean-verified]
+Doubled+e₁ is strongly ZSF       [PROVED, Theorem A — no computation]
+Shadow Sat of doubled+e₁         [PROVED, Theorems 1+2 — uses η(C_p³) only]
+U2: A₈ uniqueness                [FALSE — 200 maximal ZSF 8-sets at p=5]
+U1: Two-fiber forcing            [FALSE — 324 counterexamples at p=5]
+Conjecture U = U1 + U2           [FALSE]
+Grail: η(C_p^{r+1})             [OPEN — previous proof needed U]
+```
+
+### What does NOT depend on U1 or U2:
+- Theorem A (Strongly ZSF): Uses only η(C_p^r). Independent.
+- Theorem B (Fiber bounds): Uses only strongly ZSF definition. Independent.
+- Theorem 1 (Shadow Saturation from η): Uses only η(C_p^r). Independent.
+- Theorem 2 (Shadow Reduction for doubled+e₁): Uses specific doubled+e₁ structure. Independent of U.
+- Theorem 3 (Shadow Saturation of doubled+e₁): Chains Theorems 1+2. Independent.
+- **Window Theorem** (this round): Uses only A₈ coordinates. Independent.
+
+### What DOES depend on U (now broken):
+- **Theorem 4 (Grail)**: Needs "every strongly ZSF set has full shadow." Previously derived this from U (uniqueness → must be doubled+e₁ → apply Theorem 3). With U false, this step fails.
+
+### The precise gap:
+> We need Σ_{p-1}(T) = F_p^{r+1} \ {0} for ALL strongly ZSF T of size 2α+1, not just doubled+e₁.
+
+---
+
+## PART III: CONJECTURE SS — THE RIGHT REPLACEMENT
+
+**Conjecture SS (Shadow Saturation for All Strongly ZSF Sets).** For p ≥ 5, r ≥ 3: every strongly ZSF set T of size 2α(r)+1 in F_p^{r+1} satisfies Σ_{p-1}(T) = F_p^{r+1} \ {0}.
+
+**Theorem (SS implies Grail).** Assuming η(C_p^r) = α(r)(p−1)+1 and Conjecture SS at rank r+1:
+
+> η(C_p^{r+1}) = (2α(r)+1)(p−1)+1.
+
+*Proof.* Lower bound: doubled+e₁ (known). Upper bound: Given 2α+2 vectors V, take any (2α+1)-subset T.
+- T not ZSF → zero-sum at weight ≤ p−1 < p. Done.
+- T weakly ZSF → internal zero-sum at weight p. Done.
+- T strongly ZSF → by SS, −v ∈ Σ_{p-1}(T) for the omitted vector v. This gives zero-sum at weight ≤ p. Done. ∎
+
+**Why SS is strictly weaker than U:** Conjecture U (uniqueness) implies SS because: unique structure → known shadow. But SS requires only the shadow property, not the structure. Multiple distinct strongly ZSF sets can all have full shadow.
+
+**Why SS is the right target:** It is the MINIMAL hypothesis needed for the Grail. Any proof of the Grail must establish something at least as strong as SS.
+
+---
+
+## PART IV: STRUCTURAL ANALYSIS OF SS
+
+### The Obstruction to Proving SS
+
+For target t = (x₀, y) with y ≠ 0, reaching t from T requires solving:
+
+    Σ dᵥ · v = t,  Σ dᵥ ≤ p−1,  0 ≤ dᵥ ≤ p−1.
+
+Using a linear form w splitting T into fibers F_c, and using fiber-0 + fiber-c:
+- Fiber-0 contributes tail sum y₀ at weight w₀ (first coord: 0)
+- Fiber-c contributes tail sum y − y₀ at weight w_c (first coord: c·w_c ≡ x₀ mod p)
+
+This requires: **y − y₀ ∈ Σ_{w_c}(tails of F_c)** at the specific weight w_c = x₀ · c⁻¹ mod p, AND **y₀ ∈ Σ_{w₀}(tails of F₀)** with w₀ ≤ p − 1 − w_c.
+
+Shadow saturation at rank r (Theorem 1) guarantees each fiber's tails hit all of F_p^r at CUMULATIVE weight ≤ p−1. But we need coverage at a SPECIFIC weight, which individual-weight shadows may miss.
+
+### The Multi-Fiber Advantage
+
+With k ≥ 2 nonzero fibers at labels c₁,...,c_k, the target x₀ yields k distinct required weights W_i = x₀ · c_i⁻¹ mod p. Each fiber provides a "shot" at the target via its shadow at a specific weight. The more fibers, the more shots.
+
+**Conjecture SS reduces to:** The union of individual-weight shadows across available fibers covers F_p^r, possibly with fiber-0 assistance.
+
+### Fiber Pigeonhole Lemma (PROVED)
+
+**Lemma.** If ANY nonzero fiber F_c of a set V in F_p^{r+1} has ≥ α+1 nonzero tails, then V has a zero-sum of weight exactly p.
+
+*Proof.* The nonzero tails' copies pool has ≥ (α+1)(p−1) ≥ η(C_p^r) elements. By η, ∃ zero-sum at weight W ≤ p. First-coordinate: cW ≡ 0 (mod p) forces W = p. ∎
+
+**Corollary.** In any strongly ZSF set T of size 2α+1, every nonzero fiber has ≤ α nonzero tails. This is Theorem B(ii) from the prior session, reproved more cleanly.
+
+---
+
+## PART V: TAIL RIGIDITY — A NEW CONJECTURE
+
+The Computer's Round 1 finding is crucial: **all 324 counterexamples to U1 at p=5 project (under the tail map) to the SAME 9-point set.** Specifically, π(CE) = A₈ ∪ {0} for every counterexample, using the standard A₈.
+
+This suggests a conjecture intermediate between U1' and U:
+
+**Conjecture TR (Tail Rigidity).** Every strongly ZSF set T of size 2α+1 in F_p^{r+1} admits a projection π: F_p^{r+1} → F_p^r with:
+1. |π(T)| = α + 1
+2. π(T) \ {0} is an η-extremal set in F_p^r (i.e., copies pool is ZSF at length ≤ p)
+
+**Implication chain:** U ⟹ TR ⟹ U1' ⟹ (partial toward SS)
+
+TR is weaker than U (allows different fiber assignments) but stronger than U1' (requires the tail image to be η-extremal, not just bounded in size). If TR holds, each fiber's tail set is a SUBSET of an η-extremal set, guaranteeing shadow saturation of the tails by Theorem 1.
+
+### How TR + Shadow Reduction → SS
+
+If TR holds for T, pick the guaranteed projection π with η-extremal tails A = π(T) \ {0}.
+
+By Theorem 1: Σ_{p-1}(A) = F_p^r \ {0}. For target (x₀, y) with y ≠ 0:
+
+The vectors of T lie on α+1 parallel lines. Each line L_a = {(c, a) : c ∈ F_p} (for a ∈ A ∪ {0}) carries m_a vectors at various fiber levels. Key fact: Σ m_a = 2α+1 over α+1 lines, so on average ~2 vectors per line.
+
+Specifically: at least α lines carry ≥ 2 vectors (since α+1 lines with 1 vector each gives only α+1 < 2α+1).
+
+For a line carrying 2 vectors at levels c₁ < c₂: the difference c₂ − c₁ is nonzero in F_p. By choosing how much weight to put on each vector, we can vary the first-coordinate contribution from that line's tail.
+
+**Shadow Reduction (General Version):** Given y ∈ Σ_W(A) at some weight W, write y = Σ f_a · a. For each a with f_a > 0, distribute f_a among the m_a vectors on line L_a. If L_a has vectors at levels c_{a,1},...,c_{a,m_a}, the first-coordinate contribution from this line is Σ d_{a,i} · c_{a,i} with Σ d_{a,i} = f_a.
+
+The total first-coordinate contribution is Σ_a Σ_i d_{a,i} · c_{a,i}, and we need this ≡ x₀ (mod p).
+
+Each line with ≥ 2 vectors at different levels provides a "degree of freedom" for the first coordinate. With α such lines (each giving an independent adjustment), the first-coordinate contribution can be tuned to any value mod p.
+
+**Formal claim:** If ≥ 1 line carries vectors at two distinct levels c₁, c₂, then the first-coordinate adjustment range is {0, c₂ − c₁, 2(c₂ − c₁), ..., f_a(c₂ − c₁)} mod p. For f_a ≥ 1 and c₂ ≠ c₁, this generates a nontrivial coset progression in F_p.
+
+[VERIFY: For each of the 324 counterexamples at p=5, confirm that Σ_{p-1}(CE) = F_5⁴ \ {0}. If SS holds for all 324 CEs, this supports SS being the right replacement for U.]
+
+[VERIFY: Check whether ALL strongly ZSF 17-sets at p=5 satisfy Tail Rigidity (Conjecture TR). Specifically: for each maximal strongly ZSF 17-set, does there exist a projection to F_5³ whose image is an η-extremal 9-point set?]
+
+[VERIFY: For the 5 non-A₈ signature classes of maximal ZSF 8-sets at p=5: compute the window structure on their invariant lines (or analogous 1-parameter families). Do they satisfy the same ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ pattern?]
+
+---
+
+## PART VI: THE PATH TO SS WITHOUT UNIQUENESS
+
+### Strategy: Two-Layer Argument
+
+**Layer 1 (Tail Projection):** Prove TR — every strongly ZSF set has an η-extremal tail projection. This gives shadow saturation of the tails in F_p^r.
+
+**Layer 2 (First-Coordinate Lifting):** Given shadow-saturating tails and multiple vectors per line, prove the first-coordinate adjustment always succeeds. This is a combinatorial statement about the "level structure" of the vectors.
+
+**For Layer 1:** The fiber pigeonhole (Part IV) shows that each fiber's tails form an η-subthreshold set. The total tail image has ≤ 2α+1 points (trivially). U1' claims ≤ α+1 points, and TR claims the image is η-extremal.
+
+The proof of TR likely requires understanding WHY the tails are constrained — which comes from the strongly ZSF condition applied to cross-fiber zero-sums.
+
+**For Layer 2:** This is an exercise in additive combinatorics. The key inputs are:
+- Shadow saturation of tails at cumulative weight p−1
+- At least α lines with ≥ 2 vectors at distinct levels
+- Total weight budget of p−1
+
+The argument: pick W = p−1 (maximum weight). At this weight, the tail shadow includes all of F_p^r \ {0} minus a gap. The gap on the invariant line has size (p−3)/2 (by Window Theorem for A₈). But the first-coordinate freedom from the multi-level lines allows "dodging" between different tail representations, covering the gap for any specific (x₀, y) target.
+
+### Critical Question for Round 3
+
+> Is the first-coordinate freedom from multi-level lines ALWAYS sufficient to cover the gap, regardless of the specific level assignment?
+
+If the answer is yes, then SS follows from TR + the multi-level structure (which is guaranteed by the size 2α+1 on α+1 lines).
+
+If the answer is no, then specific pathological level assignments might block some targets, and additional constraints from the strongly ZSF property would be needed.
+
+[VERIFY: For the "worst-case" level assignment at p=5 (e.g., all non-standard fiber pairs like {0,4}, {1,3}, etc.), does shadow saturation still hold?]
+
+---
+
+## PART VII: SUMMARY OF PROVED RESULTS AND OPEN PROBLEMS
+
+### Proved This Round:
+1. **Window Theorem (Stable Regime):** For A₈, the shadow on L at weight w ∈ [2, (p-1)/2] is exactly {(0,j,j) : ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋}. Three-identity proof via integer LP.
+2. **Dependency Map:** U1 and U2 are NOT needed for Theorems A, B, 1, 2, 3 (all independent). They ARE needed for Theorem 4 (the Grail), which must be restructured.
+3. **SS ⟹ Grail:** Conjecture SS (shadow saturation for all strongly ZSF sets) is strictly weaker than Conjecture U but sufficient for the Grail.
+
+### New Conjectures (ordered by strength):
+- **U** (uniqueness) — FALSE
+- **TR** (tail rigidity) — OPEN, supported by p=5 data
+- **U1'** (line concentration) — OPEN, supported by p=5 data
+- **SS** (shadow saturation) — OPEN, the minimal sufficient hypothesis
+
+### Verification Priorities for Computer:
+1. SS at p=5: Does every strongly ZSF 17-set have full shadow?
+2. TR at p=5: Does every strongly ZSF 17-set have an η-extremal tail projection?
+3. Non-A₈ windows: What is the shadow structure of the 4 non-A₈ signature classes?
+4. Level-assignment robustness: Does shadow saturation hold for arbitrary fiber-level choices (not just {0,1})?
+
+### Attack Points for Adversary:
+1. Find a strongly ZSF 17-set at p=5 whose tail projection is NOT η-extremal (breaks TR).
+2. Find a strongly ZSF 17-set with Σ_{p-1} ≠ F_p⁴ \ {0} (breaks SS — would doom the current proof strategy entirely).
+3. Test non-A₈-based 17-sets: build doubled+e₁ from a non-A₈ maximal ZSF 8-set and check if it's still strongly ZSF.
+
+---
+
+*End of Theorist Round 2 Report.*
+[TOOL: TodoWrite]
+## Key Takeaways for Coordination
+
+**What's new this round:**
+
+1. **Window Theorem PROVED** (stable regime w ≤ (p-1)/2): Three algebraic identities from the A₈ constraint system give exact bounds. The lower bound 2j - w = c₄+c₅+c₆+c₇ ≥ 0 is tight; the upper bound comes from a parity obstruction forcing w even when j = w. Explicit constructions at every intermediate j.
+
+2. **The proof strategy must be completely restructured.** U1 is false, U2 is false, Conjecture U is false. The old chain (uniqueness → shadow sat → Grail) is broken at the uniqueness step.
+
+3. **Conjecture SS is the minimal replacement.** It asks only for shadow saturation of ALL strongly ZSF sets — no structural knowledge needed. SS ⟹ Grail by the same Case 1/2/3 argument as Theorem 4, with SS replacing U in Case 3.
+
+4. **Conjecture TR (Tail Rigidity)** is a new intermediate conjecture, supported by the Computer's data that all 324 counterexamples to U1 have the same η-extremal tail image. TR + multi-level first-coordinate freedom → SS.
+
+5. **The "weight-matching" problem** is the core obstruction: reaching a target (x₀, y) requires hitting a specific weight in a specific fiber's shadow, not just the cumulative shadow. Multi-fiber structures help by providing multiple weight options.
+
+**Critical verification requests** for Computer and Adversary are listed in Parts V-VII above. The single most important check: **does every strongly ZSF 17-set at p=5 have full shadow Σ₄ = F_5⁴ \ {0}?** If yes, SS holds at the base case and the proof strategy is viable. If no, we need a fundamentally different approach.
+
+Sources consulted:
+- [Grynkiewicz, "Generalization of Chevalley-Warning and Ax-Katz," Combinatorica 2023](https://link.springer.com/article/10.1007/s00493-023-00057-0)
+- [Gao & Geroldinger, "Zero-sum problems: a survey," Expo. Math. 2006](https://cfc.nankai.edu.cn/_upload/article/files/c6/e1/a2c52bf04b1896f59003b5993582/5c9e49ea-af5b-44ac-b153-5dbb6d8ae9a3.pdf)
+- [Inverse Davenport constants for rank 2, Combinatorica 2025](https://link.springer.com/article/10.1007/s00493-025-00153-3)

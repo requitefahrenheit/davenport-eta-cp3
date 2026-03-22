@@ -1,0 +1,180 @@
+[TOOL: ToolSearch]
+[TOOL: TodoWrite]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/gap_hypothesis_verified.md]
+Let me search for relevant prior work and read the memory file.
+[TOOL: TodoWrite]
+[TOOL: ToolSearch]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+Good. Now I have sufficient background. Let me think deeply and formulate new results.
+[TOOL: TodoWrite]
+---
+
+# THEORIST REPORT: Round 1
+
+## Overview
+
+After careful analysis, I identify five new results (three proved, two structural observations) and reduce the entire problem to one precise condition. The key new tool is the **Dimensional Fiber Threshold** — a hierarchy of increasingly sharp bounds depending on the geometric structure within fibers.
+
+---
+
+## Theorem 1 (Fiber Threshold Lemma)
+
+**Statement.** Let r ≥ 3, p ≥ 5 prime. Assume η(C_p^r) ≤ α(r)(p-1)+1. Let S be a set of nonzero non-proportional vectors in F_p^{r+1}. Choose a linear form w: F_p^{r+1} → F_p with fibers F_c = {v ∈ S : w(v) = c}. If some non-kernel fiber F_c (c ≠ 0) has |F_c| ≥ α(r)+2, then S contains a weighted zero-sum of weight exactly p.
+
+**Proof.** Within F_c, the projections π(v) = v mod ker(w) give |F_c| elements in F_p^r.
+
+*Claim:* these projections are pairwise distinct. If π(v) = π(v') for v, v' ∈ F_c, then v − v' ∈ ker(w) with w(v − v') = c − c = 0. But also v − v' has zero projection, so v = v'. ✓
+
+Each projection appears with multiplicity p−1 in the sequence. Total length: |F_c|(p−1) ≥ (α(r)+2)(p−1).
+
+By inductive hypothesis: s(C_p^r) = η(C_p^r) + p − 1 ≤ α(r)(p−1) + 1 + p − 1 = (α(r)+1)(p−1) + 1.
+
+Since (α(r)+2)(p−1) = (α(r)+1)(p−1) + (p−1) ≥ (α(r)+1)(p−1) + 1 = s(C_p^r) for p ≥ 3, the s-constant guarantees a zero-sum subsequence of length exactly p.
+
+This subsequence corresponds to coefficients s_i ∈ {0,...,p−1} for each v ∈ F_c with Σs_i = p and Σs_i π(v_i) = 0. The first coordinate: c · Σs_i = cp ≡ 0 mod p. So Σs_i v_i = 0 with weight p ≤ p. ∎
+
+---
+
+## Theorem 2 (Dimensional Fiber Threshold)
+
+**Statement.** Under the same setup, let F_c (c ≠ 0) be a non-kernel fiber whose projections span a subspace of dimension d (where 1 ≤ d ≤ r). If |F_c| ≥ α(d)+2, then S contains a weighted zero-sum of weight exactly p using only vectors from F_c.
+
+Here α(1) = 1, α(2) = 3 (from EGZ/Kemnitz), α(k) = 9·2^{k−3}−1 for k ≥ 3.
+
+**Proof.** Identical to Theorem 1, but applying s(C_p^d) instead of s(C_p^r). The projections lie in a d-dimensional subspace V_d ≅ F_p^d. The s-constant s(C_p^d) ≤ (α(d)+1)(p−1)+1. The argument goes through verbatim. ∎
+
+**Corollary (ZSF Fiber Size Bounds by Dimension).** In a ZSF set, every non-kernel fiber F_c with projection dimension d satisfies:
+- d = 1 (projections on a line): |F_c| ≤ 2
+- d = 2 (projections in a plane): |F_c| ≤ 4
+- d = 3: |F_c| ≤ 9
+- d = k (general): |F_c| ≤ α(k)+1
+
+This is a **strictly stronger constraint** than the uniform bound |F_c| ≤ α(r)+1 whenever d < r. Fibers with low-dimensional projections are forced to be very small.
+
+[VERIFY: At p=5, r=3 (rank 4), for each non-kernel fiber F_c in a ZSF set of 17 vectors, compute the projection dimension d_c and verify |F_c| ≤ α(d_c)+1. Specifically, check that no fiber with 2-dimensional projections has ≥ 5 vectors, and no fiber with 1-dimensional projections has ≥ 3 vectors.]
+
+---
+
+## Theorem 3 (Complete Inductive Reduction)
+
+**Statement.** For r ≥ 3 and p ≥ 5 prime, assume η(C_p^r) = α(r)(p−1)+1 (both bounds). Then η(C_p^{r+1}) = (2α(r)+1)(p−1)+1 if and only if the following condition holds:
+
+**(MF_r):** Every set S of 2α(r)+2 nonzero non-proportional vectors in F_p^{r+1} that spans F_p^{r+1} and satisfies, for *every* linear form w, that at least 3 fibers are nonempty — must contain a weighted zero-sum of weight ≤ p.
+
+**Proof.**
+
+(⟹) Trivially, any such S has 2α(r)+2 vectors, so the η bound gives a zero-sum.
+
+(⟸) Given S with |S| = 2α(r)+2.
+
+**Case A:** S lies in a subspace V of dimension d ≤ r. Then |S| = 2α(r)+2 > α(d)+1 (since α is strictly increasing for d ≥ 1). By η(C_p^d) at rank d, the sequence of length |S|(p−1) ≥ η(C_p^d), so a zero-sum exists. ✓
+
+**Case B:** S spans F_p^{r+1} and some linear form w gives ≤ 2 nonempty fibers. Apply the Two-Fiber Bound (proved). ✓
+
+**Case C:** S spans F_p^{r+1} and every w gives ≥ 3 fibers. Apply (MF_r). ✓
+
+*Tightening Case B:* With 2 fibers F_{c_1}, F_{c_2} and total 2α(r)+2: either both are non-kernel (change basis to make one the kernel, apply Two-Fiber Bound), or one is the kernel F_0 and one is F_c. Then |F_0| + |F_c| = 2α(r)+2. If |F_0| ≥ α(r)+1: η in kernel. If |F_c| ≥ α(r)+2: Theorem 1. Since |F_0| + |F_c| = 2α(r)+2, we can't have both |F_0| ≤ α(r) and |F_c| ≤ α(r)+1 (that gives ≤ 2α(r)+1 < 2α(r)+2). ✓ ∎
+
+**Key insight:** Condition (MF_r) is about **3-spread sets** — sets not contained in any union of 2 parallel hyperplanes. The extremal construction (2α(r)+1 vectors) IS contained in 2 parallel hyperplanes (fibers 0 and 1 under x_1). So 3-spread sets are **structurally distinct** from the extremal construction. This is what must be exploited.
+
+---
+
+## Proposition 4 (Cross-Fiber Weight Budget)
+
+**Statement.** For two non-kernel fibers F_{c_1}, F_{c_2} with d = c_1 c_2^{-1} ∈ F_p^* \ \{1\}, set s_1 = 1 and s_2 = ⟨−d⟩ = p − ⟨d⟩. Then:
+
+(i) s_1 c_1 + s_2 c_2 ≡ 0 mod p (first-coordinate cancellation). ✓
+
+(ii) The total weight is s_1 + s_2 = p + 1 − ⟨d⟩ ≤ p.
+
+(iii) The remaining weight budget for kernel vectors is B(d) = ⟨d⟩ − 1 ∈ {1, ..., p−2}.
+
+(iv) The projection residual is h(v_1, v_2) = π(v_1) + ⟨−d⟩ · π(v_2) ∈ F_p^r. A complete zero-sum requires −h to be representable by kernel vectors at weight ≤ B(d).
+
+(v) **Optimal choice:** over all s_1 ∈ {1,...,p−1}, the maximum budget is B^* = max_{s_1} (⟨s_1 d⟩ − s_1), which can be as large as p−2.
+
+**Proof.** Direct computation. For (v): set s_1 such that ⟨s_1 d⟩ = p−1, giving budget p−1−s_1. The maximum occurs at s_1 = d^{−1}(p−1), giving B^* = p−1−⟨(p−1)d^{-1}⟩. ∎
+
+**Critical observation:** To complete the zero-sum, we need:
+- A choice of v_1 ∈ F_{c_1}, v_2 ∈ F_{c_2}, and coefficient s_1 ∈ {1,...,p−1}
+- Kernel vectors u_1, ..., u_m ∈ F_0 with coefficients t_j ∈ {1,...,p−1}
+- Such that Σt_j u_j = −h(v_1, v_2, s_1) and Σt_j ≤ B(s_1, d)
+
+This is a **weighted representation problem** in the kernel.
+
+---
+
+## Proposition 5 (n=4 Weight Minimization Fails)
+
+**Statement.** The rank-3 theorem (existence of μ with ⟨μa⟩ + ⟨μb⟩ + ⟨μc⟩ < p when a+b+c ≢ 0) does NOT extend to 4 elements. Specifically, there exist a, b, c, d ∈ F_p^* with a+b+c+d ≡ 0 mod p such that ⟨μa⟩ + ⟨μb⟩ + ⟨μc⟩ + ⟨μd⟩ = 2p for ALL μ ∈ F_p^*.
+
+**Example.** p = 5, (a,b,c,d) = (1,2,3,4). Then a+b+c+d = 10 ≡ 0.
+
+| μ | ⟨μ⟩ | ⟨2μ⟩ | ⟨3μ⟩ | ⟨4μ⟩ | Sum |
+|---|------|-------|-------|-------|-----|
+| 1 | 1 | 2 | 3 | 4 | 10 |
+| 2 | 2 | 4 | 1 | 3 | 10 |
+| 3 | 3 | 1 | 4 | 2 | 10 |
+| 4 | 4 | 3 | 2 | 1 | 10 |
+
+Every μ gives weight 2p = 10. The minimum weight is 2p, not p.
+
+[VERIFY: Confirm that for p = 5 and (a,b,c,d) = (1,2,3,4), the sum ⟨μa⟩+⟨μb⟩+⟨μc⟩+⟨μd⟩ = 10 for all μ ∈ {1,2,3,4}. Also check: for p=7, find a 4-tuple with all-μ weight > p, or prove none exists.]
+
+**Why this matters.** This shows that support-4 zero-sums cannot be handled by "rescaling the dependency." Even when 4 vectors satisfy αv_1 + βv_2 + γv_3 + δv_4 = 0, rescaling the coefficients may not bring the weight below p. This is the fundamental reason that the multi-fiber case (requiring support ≥ 4) is harder than the support-3 case.
+
+**Structural explanation.** The sum Σ⟨μa_j⟩ is always a multiple of p (when Σa_j ≡ 0). For n = 3: the possible values are {p, 2p−2}, and at least one μ gives p. For n = 4: possible values are {p, 2p, 3p−3}, and the tuple (1,2,3,4) is "balanced" — {μ·1, μ·2, μ·3, μ·4} is a permutation of {1,2,3,4} for every μ, so the sum is always 10 = 2p.
+
+---
+
+## The Precise Obstruction: What Remains
+
+Combining Theorems 1–3 and Propositions 4–5, the problem reduces to:
+
+**Condition (MF_r):** For a 3-spread set S of 2α(r)+2 vectors in F_p^{r+1}, prove a weighted zero-sum of weight ≤ p exists.
+
+The available tools for attacking (MF_r):
+
+1. **Cross-fiber partial sums** (Prop 4): for any pair of non-kernel fibers, we get partial sums with budget for kernel cancellation.
+
+2. **Dimensional thresholds** (Thm 2): fibers with low-dimensional projections must be tiny, so most vectors are in "full-dimensional" fibers.
+
+3. **Rank-3 subroutine** (collinear triples): any non-degenerate collinear triple gives a zero-sum. The only obstacle is pairwise-degenerate triples.
+
+4. **The 3-spread constraint**: S is not in any thick hyperplane, meaning for every projection, vectors are genuinely spread across ≥ 3 fibers.
+
+**Conjecture (Multi-Fiber Representation).** For a 3-spread ZSF set S, the 3-spread condition forces enough cross-fiber interaction that SOME combination of Prop 4 (cross-fiber partial sums) + kernel representation yields a zero-sum. Specifically:
+
+*For any 3-spread set of 2α(r)+2 vectors, there exist two non-kernel fibers c_1, c_2 (under some linear form w), vectors v_1 ∈ F_{c_1}, v_2 ∈ F_{c_2}, a coefficient s_1 ∈ {1,...,p−1}, and kernel vectors u_1, ..., u_m ∈ F_0, such that the residual h = s_1 π(v_1) + ⟨−s_1 d⟩ π(v_2) is representable as −Σ t_j u_j with weight Σt_j ≤ ⟨s_1 d⟩ − s_1.*
+
+[VERIFY: At p=5, rank 4, for each of the 94 multi-fiber failure cases (adding an 18th vector to the 17-vector construction in fiber c ≥ 2): compute the cross-fiber partial sum h(v_1, v_2) for all pairs from different non-kernel fibers, and check whether the residual is representable by kernel vectors within the weight budget. Report which (c_1, c_2, s_1, v_1, v_2) combinations work.]
+
+---
+
+## Strategic Assessment
+
+The **most promising path** to proving (MF_r) is not direct cross-fiber analysis, but rather:
+
+**The CW-Polynomial Method (Grynkiewicz 2023 + Reiher technique):**
+
+Reiher proved s(C_p^2) = 4p−3 by:
+1. Counting zero-sum subsequences of length p via Chevalley-Warning congruences
+2. Showing the count N_p ≡ 0 mod p
+3. Using combinatorial structure to bound N_p away from 0
+
+For rank r+1, CW gives ~(r+1) congruences. The rank-3 theorem provides **additional structural constraints** (within each fiber). Nobody has combined these. The key paper is Grynkiewicz, "A Generalization of the Chevalley-Warning and Ax-Katz Theorems," *Combinatorica* 43(6), 2023.
+
+The approach would be: apply generalized CW to the system defining weight-p zero-sums in C_p^{r+1}, then use the rank-r η bound as a structural input to show the count must be positive.
+
+This is what I recommend the next round focus on: formalizing how the CW congruences interact with the inductive η bounds.
+
+---
+
+Sources:
+- [Grynkiewicz - A Generalization of the Chevalley-Warning and Ax-Katz Theorems (2023)](https://link.springer.com/article/10.1007/s00493-023-00057-0)
+- [Reiher - On Kemnitz' Conjecture Concerning Lattice-Points in the Plane](https://www.researchgate.net/publication/220441621_On_a_Conjecture_of_Kemnitz)
+- [Kemnitz's Conjecture - Wikipedia](https://en.wikipedia.org/wiki/Kemnitz's_conjecture)
+[TOOL: TodoWrite]

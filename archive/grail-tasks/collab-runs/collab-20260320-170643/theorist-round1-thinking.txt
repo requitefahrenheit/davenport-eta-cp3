@@ -1,0 +1,1191 @@
+
+============================================================
+BLOCK 1 (139 chars)
+============================================================
+Let me start by searching Cortex for existing results and reading the briefing document, then work on proving the Window Structure theorem.
+
+============================================================
+BLOCK 2 (160 chars)
+============================================================
+Cortex is having connection issues. Let me proceed with the theoretical work. Let me also check for the u1_analysis.md file and the prior collaboration results.
+
+============================================================
+BLOCK 3 (84469 chars)
+============================================================
+Now I have all the context. Let me also read the key computational findings and adversary reports to understand what's been established.
+
+Let me focus on the CORE task: proving the Window Structure theorem (sub-problem A).
+
+The claim is:
+
+**Window Structure Theorem.** For A₈ in F_p³ and the invariant line L = {(0,j,j) : j ∈ F_p*}, we have j ∈ Σ_w(A₈) if and only if ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋, provided p ≥ 2w+1 (no modular wraparound).
+ 
+Now I'm setting up the constraint system that governs which values j can appear on the invariant line. The key equations come from requiring the first coordinate to be zero and the second and third coordinates to match, along with the weight constraint and the formula for j itself.
+
+Let me trace through the structure of A₈ more carefully. The fiber over zero consists of eight specific vectors in F_p⁴, and when I project them by dropping the first coordinate (which is always zero), I get four basis vectors in F_p³: the standard basis vectors (1,0,0), (0,1,0), (0,0,1), and the vector (-1,1,1).
+
+Now I'm setting up the zero-sum constraint. If I take a linear combination of all eight vectors with coefficients c₀ through c₇, the result must equal (0,j,j) for some j. This gives me three equations—one for each coordinate—that the coefficients must satisfy.
+
+From the second and third coordinates being equal, I can derive a relationship between the coefficients. So I have two independent equations now: the first coordinate sums to zero, and the coefficients satisfy this derived constraint.
+
+For the weight constraint, all coefficients must sum to w. And the third coordinate j is determined by a specific combination of the coefficients.
+
+Now I'm considering the bounds on these variables. When p is large enough relative to w, the upper bound from the modulus becomes irrelevant since each coefficient is naturally limited by the weight constraint to be at most w, which is much smaller than p-1. Simplifying the constraint equation, I get 2c₂ + 2c₃ - c₄ + c₅ + c₆ + 3c₇ = w. Now substituting into the objective function V to express it in terms of the free variables.
+
+For the system to be valid, I need to ensure nonnegativity constraints on c₀ and c₁, which gives me c₃ + c₆ + c₇ ≥ c₄ + c₅ and c₂ - c₄ + c₅ - c₆ + c₇ ≥ 0.
+
+Now I'm setting up the optimization problem: I have six free variables constrained by the main equation 2c₂ + 2c₃ - c₄ + c₅ + c₆ + 3c₇ = w, plus the two inequality constraints, and I need to minimize and maximize the objective j = c₂ + c₃ + c₅ + c₆ + 2c₇ over all feasible integer points.
+
+Let me substitute the expression for c₄ from the main constraint into the inequalities to reduce the problem to just five variables, then work through what the constraints become. Working through another constraint where I'm establishing that c₂ + 2c₃ + 2c₆ + 2c₇ must be bounded by w, following the same algebraic manipulation pattern to isolate the inequality. Now I'm setting up the optimization problem for j by combining the upper bound constraints from (II) and (III) to establish a relationship between j and w. Now I'm setting c₇ = t and working with the constraints to express them in terms of s = w - 2t, then trying to maximize j by choosing optimal values for the remaining variables under these new bounds. I'm checking the formula for maximum j across even and odd values of w. For even w = 2k, the maximum should equal w itself, but I need to verify this against the constraint that j equals the sum of certain variables plus twice another term. Let me reconsider what j actually represents in terms of the original variables. I'm substituting the expressions for c₀ and c₁ back into the equation for w, which simplifies to 2c₂ + 2c₃ - c₄ + c₅ + c₆ + 3c₇.
+
+Now I'm computing j - w/2 to isolate a cleaner relationship, which gives me (c₄ + c₅ + c₆ + c₇)/2, so I can express j in terms of w and the remaining coefficients.
+
+This is elegant—since all the c values are non-negative integers, j ≥ w/2 with equality only when those four coefficients vanish. But j itself must be an integer, so I need to think carefully about what happens with the parity of c₄ + c₅ + c₆ + c₇ and how that constrains the possible values.
+
+Let me verify this relationship by expanding both sides and checking the algebra directly. I'm verifying that j must be an integer since it's defined as a combination of the c values, which are all integers themselves. So the sum c₄ + c₅ + c₆ + c₇ must have the same parity as w for the equation to work out. The minimum value of j depends on whether we can achieve m = 0 with the right parity—if w is even and m = 0 is feasible, then j_min = w/2, but if w is odd, we need m ≥ 1, giving j_min = ⌈w/2⌉. For the maximum, I'm looking at the largest possible sum M of those four coefficients.
+
+Now I'm checking whether j_max = 2⌊w/2⌋ holds by examining the two cases: when w is even, this would require the maximum sum to equal w itself, and when w is odd, it would need to equal w - 2. For the minimum, I'm verifying that the smallest feasible sum matches what the formula predicts. I'm realizing I need to reconsider my approach—I had treated c₄ as a free variable, but it's actually constrained by the other variables. Let me work with the full system of eight variables and their constraints instead, treating all of them as unknowns and deriving the relationships between them.
+
+Now I'm verifying a key identity: 2j should equal w plus the sum of c₄ through c₇. Let me check this by expanding both sides—the left side comes directly from the definition of j, while the right side uses the constraint that w equals the sum of all eight variables. I'm factoring this expression into two parts and then substituting the constraint from E1 to simplify c₀ - c₃ + c₅ - c₆, but I need to be careful with the algebra here since the substitution is getting messy. I've confirmed that 2j = w + c₄ + c₅ + c₆ + c₇, so now I need to figure out what values S = c₄ + c₅ + c₆ + c₇ can take given the constraints. Since all coefficients are non-negative and S is a subset of w's components, S is bounded between 0 and w, and must have the same parity as w since 2j is always even. S, so w + S is always even for any feasible solution. Let me verify this.
+
+Actually, this is an identity that holds for ALL feasible points, not just a constraint. Since j is defined to be c₁ + c₃ + c₄ + 2c₆ + c₇, and we showed 2j = w + S, this means w + S is always even for any solution to the constraints (E1), (E2), (W). Let me verify this differently.
+
+S = c₄ + c₅ + c₆ + c₇, and w - S = c₀ + c₁ + c₂ + c₃. From E1 and E2, I can express c₀ and c₁ in terms of the other variables, which gives me c₀ + c₁ + c₂ + c₃ = 2c₂ + 2c₃ - 2c₄ + 2c₇. This is always even, so w and S must have the same parity, meaning w + S is automatically even. Since 2j = w + S for any feasible solution, I have j = (w + S)/2.
+
+Now I need to find the range of j. The minimum and maximum values of S depend on w's parity. If w is even, S must be even, so S_min = 0 (and I need to verify this is achievable). If w is odd, S must be odd, so S_min = 1. Let me check if S = 0 is possible when w is even by setting c₄ = c₅ = c₆ = c₇ = 0 and solving for the remaining variables from E1.
+
+From the constraints, I get c₀ = c₃ and c₁ = c₂, with w = 2(c₁ + c₀). For any even w = 2k, I can choose nonnegative values a and b summing to k and set c₀ = c₃ = a and c₁ = c₂ = b, which works. For the odd case with S = 1, I'll try setting exactly one of c₄, c₅, c₆, c₇ to 1 and work through the constraints again. So w = 1 doesn't work with c₄ = 1 since I'd need c₂ + c₃ ≥ 2 but only have 1 available. Let me try setting c₅ = 1 instead and work through the constraint equations again from the beginning. So w = 1 doesn't work for either case—when c₅ = 1, I need c₃ ≥ 1 but the constraint forces c₃ = 0, and when c₆ = 1, I need c₂ ≥ 1 but again get c₂ = 0. Let me check what happens with c₇ = 1.
+
+Setting c₇ = 1 gives me c₀ = c₃ + 1 and c₁ = c₂ + 1, which means the weight equation becomes 2c₂ + 2c₃ + 3 = w. For w = 1 this is impossible since I'd need negative values. But for w = 3, I get c₂ = c₃ = 0, giving c₀ = 1 and c₁ = 1, which checks out: 1 + 1 + 0 + 0 + 0 + 0 + 0 + 1 = 3. ✓
+
+Now for w = 1, I need exactly one coefficient equal to 1 and the rest zero, so the vector must be one of the basis vectors a₀ through a₇. But for any vector to lie on line L, it needs the form (0, j, j). Checking each basis vector: a₀ = (1, 0, 0) doesn't work, a₁ = (0, 1, 0) fails because the last two coordinates don't match, a₂ = (0, 0, 1) doesn't fit, a₃ = (-1, 1, 1) has a nonzero first coordinate, and I'm checking the remaining vectors...
+
+None of them satisfy the constraint, so the intersection is empty, which matches what the formula predicts. For w = 2, the formula gives me the range 1 ≤ j ≤ 2, and I'm exploring whether I can achieve j = 1 when S_min = 0.
+
+I'm checking two cases where c₀ + c₁ = 1 with the other coefficients zero. Both cases produce the same vector (0,1,1) with j = 1, confirming this is achievable.
+
+Now for w = 2, I need S to also equal 2 to get j = 2. This requires the upper coefficients to sum to zero while the lower four sum to 2, which means c₄ + c₅ = c₆ + c₇ from the constraint equations.
+
+Solving the system, I find that c₄ = c₇ and c₅ = c₆, with c₄ + c₅ = 1. So one valid solution is c₄ = 1, c₅ = 0, giving c₇ = 1, c₆ = 0.
+
+Let me verify this works: the vector sum a₄ + a₇ gives (0,2,2), which corresponds to j = 2. The other case where c₄ = 0, c₅ = 1 also yields the same vector (0,2,2) through a₅ + a₆. So for w = 2, the intersection contains exactly two points with j values of 1 and 2.
+
+Now I need to think about how to maximize S in the general case.
+
+To maximize S = c₄ + c₅ + c₆ + c₇, I'm constrained by the fact that S ≤ w and S must have the same parity as w. The key is checking whether the constraints E1 and E2 can be satisfied with all variables nonnegative—specifically, I need c₀ ≥ 0 and c₁ ≥ 0, which imposes conditions like c₃ + c₆ + c₇ ≥ c₄ + c₅.
+
+Now I'm working through the sum c₀ + c₁ + c₂ + c₃ = w - S. Substituting the expressions from E1 and E2, I can simplify this to show that w - S must equal 2(c₂ + c₃ - c₄ + c₇), which means w - S is always even.
+
+From this constraint, I can express c₂ + c₃ in terms of the other variables: c₂ + c₃ = (w - S)/2 + c₄ - c₇. For these to be non-negative, I need (w - S)/2 + c₄ - c₇ ≥ 0, and I need to ensure c₂ and c₃ are individually non-negative given their sum.
+
+This is getting unwieldy, so let me try to find S_max by testing the boundary case where S = w, which would force all of c₀, c₁, c₂, c₃ to be zero.
+
+With those variables zeroed out, the equations simplify significantly. From E1 and E2, I can derive that c₄ = c₇, and subtracting the equations gives me another relationship involving c₅ and c₆.
+
+This means S = 2(c₄ + c₅), so S must be even. When w is even, I can set S = w and solve for c₄ + c₅ = w/2. But if w is odd, S can't equal w since S is always even—there's a parity mismatch that makes this impossible.
+
+For odd w, I need to try S = w - 2 instead to maintain the same parity. Let me test a concrete case: setting c₇ = (w-3)/2, c₄ = (w-3)/2, c₅ = 1, c₆ = 1, c₃ = 1, c₂ = 0, which gives c₀ + c₁ = 2, and then verifying this satisfies the constraint equations. I caught an error in my calculation—the sum should be w + 1, not w. Let me reconsider the constraints more carefully. For w = 3, I need S to be odd and at most 3, but checking whether S = 3 is achievable with the constraint that S = 2(c₄+c₅) is even creates a contradiction, so I'm exploring whether other configurations of c₀, c₁, c₂, c₃ might work. Now I'm checking whether S = w - 2 is actually achievable for odd w by setting c₀+c₁+c₂+c₃ = 2, and I need to work through the constraint equations to see if there's a valid assignment of the remaining coefficients. I'm working through the constraints from the equations—with c₇ = 0, I have c₂ + c₃ = 1 + c₄, and from the sum constraint, S = c₄ + c₅ + c₆ = w - 2. Now I'm checking the non-negativity conditions: c₀ requires c₃ + c₆ ≥ c₄ + c₅, and c₁ requires c₂ + c₅ ≥ c₄ + c₆. Since I want to maximize S, I should push c₄ as large as possible while respecting these bounds. So I'm working through the constraints on the coefficients—checking that c₀ and c₁ are non-negative given c₂ + c₃ = 1. This forces c₃ = 1 and c₂ = 0, which gives me c₀ = 0 and c₁ = 1. I can verify this produces w = 3 and S = 1 with j = 2, matching what I expected for this window size.
+
+Now I'm confirming that S = 1 is the only possible value here since S must be odd and bounded by w - 2, which leaves no other options.
+
+For a general odd w = 2k+1, I want to check if S = w - 2 = 2k-1 is achievable. Since S needs to be odd, this works. I'm trying to construct a solution with this maximum S by setting specific values for the coefficients c₄ through c₇, then working backward to determine c₀ through c₃ using the constraint equations.
+
+Now I'm exploring whether a symmetric approach might simplify the construction, rather than continuing with the asymmetric case where e = 0. Now I'm trying a slight variation where c₆ = s+1 to break the symmetry by one. This gives me c₀ = c₃ + 1 and c₁ = c₂ - 1, which means the sum S becomes odd as needed for odd w, and the weight equation still balances out to w.
+
+From the constraint that w = 2k+1, I can derive that c₂ + c₃ + t + s = k, which means t + s is maximized when c₂ and c₃ are minimized. Setting c₂ = 1 and c₃ = 0 gives me t + s = k - 1, so the maximum sum S = 2k - 1 = w - 2, and this is actually achievable with concrete values.
+
+Let me verify this works by setting t = k - 1 and s = 0, which gives me specific values for all the c variables. When I compute S and w from these values, I get S = 2k - 1 as expected, but my calculation for w is coming out to 2k instead of 2k + 1, so I need to recount the constraint equation more carefully.
+
+Breaking it down step by step: the first four terms sum to 2, the next four terms sum to 2k - 1, giving a total of 2k + 1. Now I can find j by averaging w and S, which gives me j = 2k.
+
+Let me verify this works for the minimum case where S = 1. I'm setting c₄ = 1 with the other constraint variables at 0, then working through the equations to confirm the weight constraint is satisfied.
+
+From the width equation, I get c₂ + c₃ = (w+1)/2, and since both need to be at least 1, this is feasible for w ≥ 3. For w = 1, the window is empty as expected. Now I need to check the even case w = 2 where S_min = 0.
+
+When w = 2k is even, at S_min = 0 the coefficients collapse to c₀ + c₁ = k, and at S_max = 2k they collapse to c₄ + c₅ = k. For odd w = 2k+1, the constraints work similarly with S_min = 1 giving the required relationship.
+
+Now I need to verify that all intermediate values of S with the correct parity are actually achievable. The key insight is that j ranges over all integers from ⌈w/2⌉ to 2⌊w/2⌋, which means S covers every value of the appropriate parity between its minimum and maximum.
+
+For even w = 2k, I can construct solutions for any even S = 2m where 0 ≤ m ≤ k by setting the corner pairs appropriately and distributing the remaining width among the edge pairs, which gives j = k + m as m varies from 0 to k.
+
+For odd w = 2k+1, I'm handling S = 2m+1 where 0 ≤ m ≤ k-1 by using a similar construction with c₄ = c₇ = t and c₅ = s, c₆ = s+1, ensuring c₂ + c₃ = k - m with c₂ ≥ 1 to keep all values nonnegative.
+
+Now I need to verify that c₀ and c₁ are also nonnegative in this case. Since c₀ = k - m and c₁ = 0, both constraints are satisfied. The resulting j = k + m + 1 ranges from k+1 to 2k as m varies from 0 to k-1.
+
+All the coefficients check out as nonnegative, so the Window Structure on L is established. Now I should formalize this as a theorem, though I want to make sure I'm being precise about the domain—the line L consists of points (0,j,j) where j is in F_p*, which corresponds to integers from 1 to p-1.
+
+The condition p ≥ 2w+1 guarantees that intermediate values stay within the integer range without needing modular reduction, since each coefficient is at most w and j is less than p. For cases where p < 2w+1, there's modular wraparound, but the claim holds exactly for p ≤ 23, which suggests the formula is robust across different parameter regimes. The crucial observation is that j is uniquely determined by S through the relation 2j = w + S, and S itself is determined by the sum of the four coefficients c₄ through c₇, which spans the correct range with the right parity.
+
+Now I need to see how this connects back to the U1 structure and the shadow pattern on the invariant line.
+
+At weight p-1, the shadow covers j in the range {(p-1)/2, ..., p-1}, leaving a gap at {1, ..., (p-3)/2}. The key insight is that across all weights, these windows tile completely—the cumulative shadow saturates the full range. For U1, I need to leverage this window structure to show that having A₈ distributed across multiple fibers forces a zero-sum of bounded weight, using the precise information about which cross-fiber zero-sums are possible from the window geometry.
+
+Now I'm checking sumset completeness by examining how Σ_k and Σ_l combine. When both k and l are even, the j-coordinates from each sumset add to give a range that matches exactly the expected window for k+l. The pattern holds as I work through the odd cases as well. a, l = 2b+1:
+j₁ ∈ [a, 2a], j₂ ∈ [b+1, 2b].
+j₁ + j₂ ∈ [a+b+1, 2a+2b] = [⌈(2a+2b+1)/2⌉, 2⌊(2a+2b+1)/2⌋]. ✓
+
+For k = 2a+1, l = 2b+1:
+j₁ ∈ [a+1, 2a], j₂ ∈ [b+1, 2b].
+j₁ + j₂ ∈ [a+b+2, 2(a+b)].
+But the sumset for k+l = 2(a+b+1) should be [a+b+1, 2(a+b+1)], which is strictly larger than what I'm getting. So the sumset Σ_k + Σ_l isn't staying confined to the line L — I need to account for the full sumset across the entire structure, not just the intersection with L. Actually, let me reconsider what U1 requires. We're working with 17 vectors in F_p⁴ distributed across 3+ fibers of a linear form w, and in the (8,8,1) case, we have 8 vectors in fiber 0 projecting to nonzero elements A in F_p³, 8 in fiber 1 projecting to elements B in the coset w⁻¹(1), and a single vector in fiber c.
+
+For U1 to hold, I need to find a zero-sum with weight at most p. If I take w₀ vectors from fiber 0, w₁ from fiber 1, and wc from fiber c, the constraint from the first coordinate gives w₁ + c·wc ≡ 0 (mod p), while the remaining coordinates require the weighted sums from each fiber to cancel out. The window structure constrains what sums are achievable from A.
+
+Now I'm trying to connect this back to the original goal—the claim is that the shadow gaps lie exactly on line L, and the window structure fully characterizes them. When I introduce a third fiber, the modular constraint w₁ + c·wc ≡ 0 (mod p) should force a cross-fiber zero-sum to exist, which would establish U1. enough flexibility to hit the targets that were in the gap.
+
+Let me think about this differently. The gap at weight p-1 is {(0,j,j) : 1 ≤ j ≤ (p-3)/2}. With two copies of A₈ (one in each fiber), using weights k from fiber 0 and l = p-1-k from fiber 1, we can reach any target except those in the gap intersection.
+
+But with 3 fibers, we can use smaller total weights that have their own window patterns, and the cross-fiber congruence provides different allocations.
+
+I think the complete proof of U1 requires more than just the window structure — it needs the cross-fiber coverage argument (sub-problems B and C). But the window structure is the foundational piece.
+
+Let me write up what I've proved and identify what still needs to be done.
+
+I've actually isolated something quite clean here: the window structure theorem shows that for the standard A₈ configuration on the invariant line L, the reachable points at weight w form a contiguous interval from ⌈w/2⌉ to 2⌊w/2⌋, and this holds uniformly across all weights and all sufficiently large primes. The proof hinges on a key identity relating the coordinate sum to the weight, which constrains exactly which points can be hit.
+
+Now I need to formulate how this extends to the full U1 claim using multiple fibers and cross-fiber coverage. (A₈) ∩ L = (F_p \ {0}) × (one-dim line L).
+
+Proof: For each j ∈ {1,...,p-1}, we need to find w ∈ {2,...,p-1} with ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋.
+
+Take w = 2j: even, and j ∈ [j, 2j]. Need 2j ≤ p-1, i.e., j ≤ (p-1)/2. This covers j = 1,...,(p-1)/2.
+
+For w = j, the left inequality holds automatically, but the right inequality j ≤ 2⌊j/2⌋ only works when j is even. When w = j+1, I can verify that ⌈(j+1)/2⌉ ≤ j ≤ 2⌊(j+1)/2⌋ holds for all j ≥ 2, giving me coverage for the remaining cases.
+
+For j > (p-1)/2, I can use w = p-1, which gives the window [(p-1)/2, p-1], covering all such j.
+
+But I'm realizing the window structure only accounts for points on the line L—it doesn't explain how shadow saturation covers the entire space F_p³ \ {0}. I need to think about what the full shadow structure looks like beyond just L.
+
+Let me step back and consolidate what I've actually established: the Window Structure is the core result I've proven, so I should write that up cleanly. Then I can move on to understanding how this connects to the broader U1 problem through a cross-fiber argument, where I'm tracking how zero-sums distribute across the three fibers defined by the (8,8,1) distribution.
+
+Now I'm working through the fiber constraint equation: when vectors from different fibers combine in a zero-sum, their fiber indices must satisfy 0·w₀ + 1·w₁ + c·wc ≡ 0 (mod p). If wc = 0, this forces w₁ = 0, meaning I'd need a zero-sum entirely within fiber 0 (the A₈ vectors). But A₈ is zero-sum-free by definition, so this path doesn't work unless I'm allowing weights up to p, which creates complications with the copies pool interpretation.
+
+Let me clarify what I mean by a zero-sum of weight ≤ p: I'm choosing coefficients from {1,...,p-1} for each vector, summing them to zero, with the total coefficient sum bounded by p. This is equivalent to finding a zero-sum subsequence of length ≤ p in a multiset where each of the 17 vectors appears with multiplicity p-1.
+
+For the three-fiber case with distribution (8,8,1), I need to determine whether these 17 vectors across the three fibers must contain such a zero-sum.
+
+When I try to construct a zero-sum using vectors from all three fibers, I get a constraint from the fiber-value coordinates: the weighted sum of fiber values must vanish modulo p. Specifically, if W₁ is the sum of coefficients from the second fiber, then W₁ ≡ -c·s_b (mod p) where c is the fiber value of the single vector in the third fiber and s_b is its coefficient.
+
+The core strategy for U1 is to leverage the window structure to characterize the shadows precisely, combine that with shadow saturation to ensure coverage across the nonzero elements of F_p³, and use the cross-fiber congruence to find enough flexibility for a zero-sum combination. The remaining pieces involve showing that the orbit coverage and lower bounds work out to complete the argument.
+
+Now I'm shifting focus to what I can establish theoretically about sumset completeness on L. When we take two independent copies of A₈ with weights k and l, their sum lands on L only if the x-coordinates cancel and the y-coordinates sum to the z-coordinate—I need to think through what this constraint means for which elements we can actually reach.
+
+The full shadow structure in 3D is what determines this, not just the window behavior on L, so proving completeness requires understanding the complete geometry rather than just local constraints. The main theoretical contribution I can make is establishing the identity 2j = w + (c₄+c₅+c₆+c₇) and deriving how the shadow grows on L.
+
+I've verified the shadow size formula against the documented cases—it correctly predicts the intersection sizes for w = 2, 3, and 4. Now I need to examine what happens at the critical weight p-1.
+
+When w = p-1 (which is even since p is odd), the reachable window spans from (p-1)/2 to p-1, giving a shadow of size (p+1)/2. The gap consists of the small values {1, 2, ..., (p-3)/2}, which aren't reachable at this weight. To cover j = 1 in the cumulative shadow by weight p-1, I'd need some w where ⌈w/2⌉ ≤ 1, which only happens for w ≤ 2, but then the upper bound constraint becomes problematic.
+
+Actually, looking at the next part: w = 2 gives window [1, 2] which does contain 1. For j = (p-3)/2, taking w = p-3 (even) produces window [(p-3)/2, p-3] that includes this value. So the cumulative shadow across all weights covers all of F_p*, with each j first appearing at weight w = 2j when j ≤ (p-1)/2, or at weight w = j when j is even and exceeds (p-1)/2.
+
+Wait, I need to reconsider the range j > (p-1)/2. Since j goes up to p-1 and we need p ≥ 2w+1 > 2j, this forces j < (p-1)/2, which contradicts j > (p-1)/2. But modular reduction changes things—for j in [(p+1)/2, p-1], at weight w = p-1 the window [(p-1)/2, p-1] covers all these values since (p+1)/2 > (p-1)/2. So there's no critical gap on L after all.
+
+Actually, the real gap I need to fill is {1, ..., (p-3)/2}, which I can cover using weights w = 2j for j = 1 through (p-3)/2, giving me weights 2, 4, ..., p-3. Now I want to understand how this window structure extends to the full 3D shadow beyond just the L coordinate. The A₈ root system has eight vectors, and I'm starting to map out how they interact with the weight windows.
+
+There's a (2↔3) coordinate symmetry that swaps y and z, which fixes the plane where y = z. This plane contains L, and the symmetry swaps certain root vectors while fixing others. For points on this symmetry plane but off L (where x ≠ 0 but y = z), I can apply a similar window analysis to understand the shadow structure.
+
+Now I'm working through the coordinate equations for a general point (x, j, j) in the shadow. The first coordinate gives one constraint, the second and third coordinates must be equal which provides another, and I'm deriving a relationship between j and the window parameter w by adding the second and third coordinate equations together. = -c₀ + c₃ + 2c₆ + 2c₇
+
+Now I need to work with the constraint x = c₀ - c₃ + c₄ + c₅ - c₆ - c₇ to express c₀ in terms of the other coefficients, keeping in mind that x isn't necessarily zero here.
+
+Rearranging, I get c₀ = c₃ - c₄ - c₅ + c₆ + c₇ + x, which means -c₀ + c₃ = -x + c₄ + c₅ - c₆ - c₇.
+
+Substituting this back into my expression for 2j - w gives me 2j = w - x + c₄ + c₅ + c₆ + c₇. This is the generalized form of the identity that reduces to 2j = w + S when x = 0.
+
+Now I need to think about what constraints this places on feasibility. Since c₀ must be non-negative, I have c₃ + x + c₆ + c₇ ≥ c₄ + c₅, which shows that x directly affects whether a solution exists. The real question is characterizing the 2D region of valid (x, j) pairs for a given w.
+
+From the identity 2j = w - x + S, I can express x in terms of j and S, but the bounds on S depend on the underlying constraints, which makes this tricky. Let me step back and focus on what I actually need to prove about the Window Structure, then tackle the cross-fiber coverage for the (8,8,1) case. For that, I'm looking at how the fiber-1 copy of A₈ relates to the fiber-0 copy—they should have the same shadow structure due to translation.
+
+Actually, examining the fiber-1 vectors more carefully, I'm stripping away the first coordinate to project onto F_p³ and see what structure emerges from the 8 vectors used in the (8,8,1) distribution.
+
+The key insight is that these 8 vectors project down to the same configuration as A₈, so both fiber 0 and fiber 1 contain isomorphic copies of this root system. Now I'm working through the constraints for a cross-fiber zero-sum, where I need to balance contributions from each fiber using their respective weights. W ≤ p.
+- Fiber constraint: w₁ + c · wc ≡ 0 (mod p).
+
+The projections to F_p³:
+- Fiber 0 contributes some vector v₀ ∈ Σ_{w₀}(A₈)
+- Fiber 1 contributes some vector v₁ ∈ Σ_{w₁}(A₈) (same A₈ since same projection)
+- Fiber c contributes wc · π(b) where π(b) is the projection of b
+
+Zero-sum: v₀ + v₁ + wc · π(b) = 0, i.e., v₀ + v₁ = -wc · π(b).
+
+Now I need to find w₀, w₁, wc satisfying the constraints. From the modular equation, w₁ is determined by wc: specifically w₁ ≡ -c·wc (mod p), which means w₁ = (p - c·wc) mod p when we want it in the range [1, p-1]. Testing wc = 1 gives w₁ = p - c, and then I need w₀ such that the three weights sum to at most p while the vectors satisfy the zero-sum condition.
+
+For small c like c = 2, this becomes quite restrictive—w₁ = p - 2 is large, leaving little room for w₀, and I'd need vectors from a small shadow (just 8 individual vectors) and a large shadow to sum to -π(b). But as c approaches p, w₁ becomes small, which opens up more flexibility for w₀. I need to verify that for each element in the weight-1 sum, there's a corresponding element in the weight-(p-2) sum that makes the pair work. The shadow saturation argument suggests this should hold for large p, but I need a rigorous proof that works for all p ≥ 5. Let me approach this through the window structure on L and see how the weight constraints interact. at weight w₁ it's [⌈w₁/2⌉, 2⌊w₁/2⌋].
+
+The sumset of these windows on L: sums of j₁ ∈ [⌈w₀/2⌉, 2⌊w₀/2⌋] and j₂ ∈ [⌈w₁/2⌉, 2⌊w₁/2⌋], taken mod p. This gives an interval of length roughly ⌊w₀/2⌋ · ⌊w₁/2⌋... no, the sumset of two integer intervals [a,b] + [c,d] = [a+c, b+d], which has length (b-a) + (d-c).
+
+The combined window size on L for the sumset at weight (w₀, w₁) is bounded by the sum of the individual window sizes, but the full sumset in F_p³ extends far beyond what's reachable on L alone. The key insight for proving U1 is that the Window Structure gives us the exact obstruction at each weight on L, while the 3D shadow off L contains substantially more points since the first coordinate constraint vanishes there. This decomposition—understanding what's forced on L versus what's possible in the full space—is where the cross-fiber congruence argument takes hold. wc ≡ 0 (mod p) with 3 fibers provides enough weight-allocation flexibility to ensure the combined shadow covers the target.
+
+The full U1 proof likely requires combining these with explicit calculations for small weights (computer's job).
+
+Let me formalize one more result that I can prove:
+
+**Lemma (Shadow Growth on L).** For A₈ and p ≥ 2w + 1:
+|Σ_w(A₈) ∩ L| = ⌊w/2⌋ + ε, where ε = 1 if w even, ε = 0 if w odd.
+
+The cumulative size on L: |Σ_{≤w}(A₈) ∩ L| = min(2⌊w/2⌋, p-1). The union of windows across all weights from 2 to w covers the interval [1, 2⌊w/2⌋], which saturates to the full multiplicative group F_p* when w = p-1. This confirms the shadow eventually covers all nonzero elements on L.
+
+Now I need to characterize which elements on L remain outside the shadow at each specific weight. I'm working through the cross-fiber argument by computing the combined window for two copies of A₈ with weights w₀ and w₁ that sum to p-1, establishing that the left endpoint equals ⌈w₀/2⌉ + ⌈w₁/2⌉ and the right endpoint is 2⌊w₀/2⌋ + 2⌊w₁/2⌋ modulo p. Working through the case where k is even and p-1-k is even, I get left = (p-1)/2 and right = p-1. Now for when k is odd and p-1-k is also odd, I need to compute the ceiling and floor values with the half-integer results.
+
+So when k is odd, the left side works out to (p+1)/2 and the right side to p-3. This gives me two different windows depending on k's parity: for even k the combined window is [(p-1)/2, p-1], but for odd k it shrinks to [(p+1)/2, p-3]. The sumset on L might actually span a larger range than these individual windows suggest.
+
+The key insight is that I'm only looking at L-restricted contributions here, but the actual shadow includes points off L whose sumsets can feed back onto L. More importantly, for the three-fiber cross-fiber argument, I don't need the sumset to cover the entire line—I just need the specific target -wc · π(b) to appear in the combined shadow for some weight allocation, and that target varies depending on which b and wc I'm considering.
+
+For the (8,8,1) distribution with the extra vector b in fiber c, the target T = -wc · π(b) needs to land in Σ_{w₀}(A₈) + Σ_{w₁}(A₈) subject to the constraints w₀ + w₁ + wc ≤ p and w₁ + c·wc ≡ 0 (mod p). The question is whether this combined sumset can reach the target for the right choice of weights.
+
+Since the sumset property gives us Σ_{w₀}(A₈) + Σ_{w₁}(A₈) ⊇ Σ_{w₀+w₁}(A₈), and Σ_{p-1}(A₈) covers everything except the gap on L, I can use a high-weight allocation (w₀ + w₁ ≥ p-1) to hit any target not in that gap. But if T lands in the gap—meaning T = (0,j,j) for some 1 ≤ j ≤ (p-3)/2—then I need a lower-weight allocation where the window includes j, which means setting w₀ = 2j and w₁ = 0.
+
+However, when I try to reach T using only fiber 0 with w₀ = 2j, the fiber constraint forces wc = p (since c ≢ 0 mod p), making the total weight W = 2j + p exceed the bound. So I can't rely on a single fiber—I need contributions from multiple fibers to hit targets in the gap.
+
+If I exclude the extra vector in fiber c entirely (wc = 0), the constraint becomes w₁ ≡ 0 (mod p), meaning w₁ is either 0 or p. With w₁ = 0, I'd need a weight-≤p zero-sum from fiber 0 alone, but A₈'s strong ZSF property rules out anything lighter than weight p. Setting w₁ = p pushes the total weight above p unless w₀ = 0, which would require a weight-p zero-sum using all 8 vectors from fiber 1—a very specific constraint. I'm realizing the 17 vectors across multiple fibers need to be balanced carefully to find a zero-sum within the weight bound.
+
+The key insight is that I'm not forced to use all vectors—just some subset with coefficients in {0, 1, ..., p-1} that sum to zero with total weight ≤ p. By mixing vectors across fibers, the total weight from each fiber contributes to both the overall weight constraint and a modular constraint based on fiber values. For the three-fiber setup with values {0, 1, c}, I need to find weights w₀, w₁, wc that satisfy the modular equation while keeping their sum within p.
+
+When I restrict to just fiber-0 vectors, the zero-sum property requires either zero weight or weight exactly p. Since the ZSF property prevents zero-sums of weight ≤ p-1, achieving weight p means I need coefficients on the 8 vectors that sum to p while producing a zero-sum in the underlying space.
+
+The key insight is that the copies pool contains 8(p-1) total elements—each of the 8 vectors repeated p-1 times. The Davenport constant η(F_p³) = 8(p-1)+1 tells me that any sequence of that length is guaranteed to have a zero-sum subsequence of length ≤ p. But my copies pool falls exactly one element short of this bound, so I can't guarantee such a zero-sum exists from fiber-0 alone. This is precisely why A₈ achieves the extremal property.
+
+With three fibers in play, I'm forced to draw vectors from multiple fibers to construct a zero-sum. For the (8,8,1) configuration with A₈ in fibers 0 and 1, plus a single vector b in fiber c, the cross-fiber weight constraints become rigid. If I use the extra vector with coefficient s_b ∈ {1,...,p-1}, then the weight from fiber 1 must satisfy W₁ ≡ -c (mod p), which forces W₁ = p - c when c ≤ p-1. This severely limits the total weight available.
+
+The combined weight from both A₈ copies can reach at most p-1, but I need to hit a specific target value through their sums. Alternatively, using s_b = 2 changes the modular constraint to W₁ ≡ -2c (mod p), opening different possibilities for how the weights distribute across the fibers.
+
+More broadly, for any choice of s_b = t, I get a corresponding weight allocation where W₀ ≤ t(c-1), and each value of t gives me a different degree of freedom in how to construct the solution. The real constraint is matching the target -t · π(b) in the 3D shadow, where π(b) is the projection of my extra vector into the F_p³ space.
+
+As t varies across different values, both the target I'm aiming for and the set of available shadows shift. The key question becomes whether I can always find some t that works for any given b and c. The window structure on L provides useful structure for analyzing this locally, but to complete the full proof I need to leverage the 3D shadow framework more carefully.
+
+I think I've explored the theoretical landscape enough here. Let me consolidate what I've actually proved and document the main result cleanly.
+
+Now I'm stating the core theorem about the window structure on the invariant line L, showing that for the specific 8-element set A₈ in F_p³, the intersection of weight-w shadows with L is characterized by a precise range of j-values. The proof hinges on a constraint that forces 2j to equal w plus a sum of specific coefficients, and I can construct explicit solutions that achieve every value in the target range.
+
+I'm now working through what else needs to be established for the full problem, and I realize the key insight is extending this to a generalized shadow identity that describes the entire weight-w shadow structure, not just the invariant line. For points on the diagonal (x, j, j), the identity becomes clean: 2j = w - x plus the coefficient sum. But off the diagonal where y ≠ z, the relationship gets messier because of additional cross-terms, so I'm narrowing focus to the (2↔3) symmetric subspace where the structure should be more tractable. I'm working through the system of equations by substituting the expressions for c₀ and c₁ back into the weight constraint, which will let me determine what values of the free variables are actually feasible given that c₀ must be non-negative. I've established the key identities on the invariant line and symmetry plane, along with the shadow saturation corollary and sumset analysis needed for the cross-fiber arguments. Now I'm working through whether I can prove sumset completeness analytically—specifically, whether the intersection of shifted sumsets with the line L equals the sumset of the intersection, at least for small enough shifts.
+
+For the forward direction, when I add elements from Σ_k(A₈) and Σ_l(A₈), I get a sum in Σ_{k+l}(A₈) by concatenating their coefficient vectors. But I'm running into a constraint: each individual coefficient in the sum could be as large as (k-1) + (l-1), which might exceed p-1 depending on the bounds. could exceed p-1. But for p ≥ k + l + 1, each coefficient is ≤ k + l ≤ p - 1. Hmm, but individual coefficients could be up to w.
+
+Actually, for the copies pool interpretation: v₁ = Σ c_i^{(1)} aᵢ with Σ c_i^{(1)} = k and 0 ≤ c_i^{(1)} ≤ p-1. Similarly for v₂. The combined coefficient for aᵢ is c_i^{(1)} + c_i^{(2)}, and we need this ≤ p-1. Since c_i^{(1)} ≤ k and c_i^{(2)} ≤ l, we have c_i^{(1)} + c_i^{(2)} ≤ k + l ≤ p - 1 (for k + l ≤ p - 1). ✓
+
+So the forward direction is settled: Σ_k + Σ_l ⊆ Σ_{k+l}.
+
+Now for the reverse inclusion—the harder part. Given v ∈ Σ_{k+l}(A₈), I need to show I can split its coefficient vector into two parts that sum to k and l respectively, with each part having non-negative entries bounded by p-1.
+
+The key insight is that this is just a standard integer partition problem: given a coefficient vector (c₀,...,c₇) with Σcᵢ = k + l, I can always distribute k units among the 8 bins where bin i has capacity cᵢ, as long as Σcᵢ ≥ k, which is trivially satisfied. So I can construct c' with Σc'ᵢ = k and 0 ≤ c'ᵢ ≤ cᵢ, then set c'' = c - c'.
+
+This means Σ_k + Σ_l = Σ_{k+l} for k + l ≤ p - 1, and this is actually a general property of weighted sums, not specific to A₈ or L. But wait—I need to be careful about what the sumset claim actually says: it's about sums of elements from Σ_k(A₈) plus sums of elements from Σ_l(A₈), not just the sets themselves.
+
+For the forward direction, if I take any v₁ from Σ_k(A₈) and v₂ from Σ_l(A₈), their sum v₁ + v₂ is achievable at total weight k+l since the coefficients add up properly. For the reverse direction, if v is in Σ_{k+l}(A₈), I can write it as a weighted sum with coefficients totaling k+l, then split those coefficients into two parts—one summing to k and one to l—so v decomposes as a sum of an element from Σ_k and an element from Σ_l.
+
+This property is really just about how integer combinations decompose, nothing specific to the A₈ lattice. Though I should be careful about what I mean by Σ_k(A₈)—it's the full set of all vectors expressible as Σcᵢaᵢ where the coefficients are non-negative integers summing to exactly k. But does the splitting always produce valid coefficient vectors? Yes, because 0 ≤ c'ᵢ ≤ cᵢ and 0 ≤ c''ᵢ = cᵢ - c'ᵢ ≤ cᵢ ≤ p-1.
+
+In the copies pool interpretation, Σ_k represents zero-sum subsequences of length k, which is the same as weighted combinations where coefficient cᵢ on aᵢ means using aᵢ exactly cᵢ times, so the total length is Σcᵢ = k. The sumset completeness Σ_k + Σ_l = Σ_{k+l} is just an elementary combinatorial identity that holds for any set as long as k + l ≤ p - 1 to prevent coefficient wraparound. So the "observation" about sumset completeness in the u1_analysis is actually trivial—it's not specific to A₈ at all, and the phrase "independent copies" simply means we're using two separate copies of A₈ so the coefficients don't interfere.
+
+This means the sumset completeness observation doesn't add new information beyond the shadow characterization at each individual weight. The "consequence" they draw—that "the cross-fiber argument using two full fibers gains NO additional coverage from independence"—is important but is just restating that the shadows are already maximal at each combined weight.
+
+So now I have a clear picture: the window structure is proved, sumset completeness is trivially true for any set, shadow saturation on L follows from the window structure, and the remaining challenge is the cross-fiber coverage for U1. The key question is whether the 3D shadow structure of A₈ combined with the cross-fiber weight allocation constraints can always produce the required coverage.
+
+The window structure gives exact information on L, and off L the shadow is even richer with more degrees of freedom, so the critical targets are those on L in the high-weight gap. Now I need to formulate the remaining theoretical problem precisely: given a prime p ≥ 5, a fiber label c, and a nonzero vector b, I need to show there exist integers W₀, W₁, t satisfying specific modular and inequality constraints that guarantee the existence of a zero-sum.
+
+The key insight is that we want -tb to lie in the combined shadow Σ_{W₀+W₁}(A₈), and since larger combined weight produces a larger shadow, the optimal case is using the full weight budget W₀ + W₁ = p - t. The constraint W₁ ≡ -tc (mod p) then becomes the critical condition to verify. W₁ = p - c, which satisfies c ≥ 1, giving W₀ = c - 1 and combined weight p - 1. Now I need -b to be in the sumset Σ_{p-1}(A₈), which by shadow saturation equals F_p³ minus a gap of size (p-3)/2 containing elements of the form (0, j, j). The only problematic case is when -b lands in this gap.
+
+For those specific b values, I'll try t = 2, which gives W₁ = (-2c) mod p. This requires W₁ ≤ p - 2 so that W₀ = p - 2 - W₁ ≥ 0, yielding a combined weight of p - 2. The target becomes -2b = (0, 2j, 2j), and I need to check whether this lies in Σ_{p-2}(A₈) using the window structure condition.
+
+Since p is odd, p - 2 is also odd, so the bounds become (p-1)/2 ≤ 2j ≤ p - 3, which translates to (p-1)/4 ≤ j ≤ (p-3)/2. Given that b is in the gap with 1 ≤ j ≤ (p-3)/2, the condition is satisfied when j ≥ (p-1)/4, but fails for smaller j values.
+
+When j < (p-1)/4, the -2b term doesn't fall within the weight-(p-2) shadow on L, so I need to explore other t values. Testing t = 3 gives a target of -3b with combined weight p - 3, and the window constraint becomes (p-3)/6 ≤ j ≤ (p-3)/3.
+
+This captures some j values in the range [(p-3)/6, (p-1)/4) that t = 2 missed. For a general parameter t, the target tj mod p traces a multiplicative orbit in F_p, and I need to determine when this orbit intersects the window at weight p-t, roughly between (p-t)/2 and p-t.
+
+The core question is whether for each j in {1,...,(p-3)/2}, there exists some t in {1,...,p-1} such that tj mod p falls within the window [(p-t)/2, p-t]. This is a beautiful number-theoretic problem about whether the target curve parametrized by (t, tj mod p) can hit these shifting windows.
+
+For small j values, tj mod p grows slowly until wrapping around near p, while the window shrinks as t increases. At t ≈ p/(2j) where tj is roughly p/2, I need to check if this target value actually lands in the corresponding window, which has endpoints around (p-t)/2 and p-t.
+
+Checking the bounds: the left endpoint p(1-1/(2j))/2 is less than p/2, and the right endpoint p(1-1/(2j)) exceeds p/2, so the target does fall within the window. Working through the algebra more carefully, when tj aligns with the window's midpoint at 3(p-t)/4, I get t ≈ 3p/(4j+3), which points toward a concrete construction for the solution.
+
+Now I need to formalize this intuition. The key claim is that for any j and prime p ≥ 5, I can always find a t where the orbit hits the required window—specifically where tj mod p lands in the range [⌈(p-t)/2⌉, 2⌊(p-t)/2⌋]. The proof strategy involves analyzing pairs (t, r) with r = tj mod p and examining when the window condition 2r ≥ p - t and 2r ≤ 2(p-t) is satisfied.
+
+This simplifies to requiring p ≤ 2r + t ≤ 2p. So I'm looking at the function f(t) = 2(tj mod p) + t and need to show it lands in [p, 2p] for at least one value of t in the valid range. Expanding this function algebraically, I get f(t) = t(2j+1) - 2p⌊tj/p⌋, which connects the orbit behavior directly to the floor function and the coefficient 2j+1.
+
+Now I'm analyzing how f behaves as t varies. Within intervals where ⌊tj/p⌋ stays constant at some value m, the function becomes linear with slope 2j+1. But at the boundaries where the floor function jumps, f experiences a sawtooth pattern—it climbs steadily, then drops by 2p when the floor increments, creating a net downward shift when p > j+1.
+
+The key insight is that between consecutive drops, f rises by roughly (2j+1)(p/j) = 2p + p/j, which exceeds 2p. Since each sawtooth cycle has amplitude greater than the interval [p, 2p], the function must pass through this interval at least once per cycle.
+
+Let me reconsider this more carefully by tracking what happens at integer values of t. The function f(t) = 2(tj mod p) + t oscillates in a sawtooth pattern, and I need to verify it actually hits [p, 2p] within the range t ∈ {1,...,p-1}. Since r must be nonzero for t in our range, f(t) = 2r + t falls between 3 and 3p-3, but we actually need it in [p, 2p]. Let me check what happens with (2j+1)t mod (2p) as t varies—since 2j+1 is odd, its gcd with 2p is either 1 or p depending on whether 2j+1 is divisible by p.
+
+When j = (p-1)/2, we have 2j+1 ≡ 0 (mod p), so r = t(p-1)/2 mod p and f(t) = 2r + t. For other values of j, the gcd is 1, meaning (2j+1)t mod 2p generates p-1 distinct residues as t ranges over {1,...,p-1}.
+
+Now I need to figure out whether at least one of these values lands in {p,...,2p}. The set {p,...,2p-1} has p elements out of 2p-1 total residues, so by pigeonhole principle, we'd expect roughly half of the p-1 values to fall there, but I need to verify this more carefully.
+
+Let me think about the structure differently. The values (2j+1)t for t = 1,...,2p-1 give all nonzero residues mod 2p. If I split this into two halves—t ∈ {1,...,p-1} and t ∈ {p,...,2p-1}—there's a relationship between them: (2j+1)(t+p) ≡ (2j+1)t + p(2j+1) (mod 2p), which simplifies to (2j+1)t + p (mod 2p) since p(2j+1) ≡ p (mod 2p). since (2j+1)p ≡ p (mod 2p) because (2j+1) is odd, so (2j+1)p = (2j)p + p ≡ p (mod 2p)).
+
+Hmm wait: (2j+1)p mod 2p = ((2j+1)p) mod 2p. Since 2jp is divisible by 2p (2jp = 2p·j), we get (2j+1)p mod 2p = p. So (2j+1)(t+p) ≡ (2j+1)t + p (mod 2p).
+
+This means: if (2j+1)t mod 2p = v, then (2j+1)(t+p) mod 2p = v + p mod 2p.
+
+So the values for t ∈ {p,...,2p-1} are just the values for t ∈ {0,...,p-1} shifted by p modulo 2p. This partitions {1,...,2p-1} into two sets of size p-1 each, with the boundary cases at t = 0 and t = p giving 0 and p respectively. For any v in {1,...,p-1}, it appears exactly once in each half.
+
+Now I'm checking whether V could equal {1,...,p-1}. If that were true, then (2j+1)t mod 2p would need to stay in {1,...,p-1} for all t ∈ {0,...,p-1}, but t = 0 gives 0, which isn't in that range, so this is impossible. Now I'm verifying that f(t) actually equals (2j+1)t mod 2p by checking whether the quotient m = ⌊tj/p⌋ matches n = ⌊(2j+1)t/(2p)⌋, since both expressions should reduce to the same remainder. So when there's a carry—when the fractional part of tj/p exceeds the threshold—f(t) and (2j+1)t mod 2p diverge. When n = m, they match perfectly, but when n = m + 1, there's an offset of 2p that pushes f(t) into a higher range, which constrains what values it can actually take given the bounds we've established.
+
+This means f(t) lands in [p, 2p] only when n = m and the modular value (2j+1)t mod 2p falls within [p, 2p]—the case with n = m + 1 can't contribute to this range because the offset would take us outside our constraints.
+
+Now I need to pin down exactly when n = m versus n = m + 1. The boundary depends on whether {tj/p} < 1 - t/(2p), which translates to checking if the remainder r = tj mod p is less than p - t/2. Since we're working with integers, this becomes r < p - ⌊t/2⌋. When this fails and r ≥ p - ⌊t/2⌋, we get n = m + 1 instead, and I need to recalculate what f(t) actually equals in that case.
+
+Let me be more systematic about this. I have f(t) = 2r + t where r = tj mod p, and I'm trying to characterize exactly when f(t) lands in [p, 2p].
+
+For f(t) to be in this range, I need 2r + t ≥ p and 2r + t ≤ 2p, which gives me r ≥ (p-t)/2 and r ≤ p - t/2. Converting to integer constraints with r, t ∈ {1,...,p-1}, the valid remainder values form a window [⌈(p-t)/2⌉, p - ⌈t/2⌉], and I'm calculating the width of this window.
+
+Let me work through the case where t is even, say t = 2s. Then ⌈(p-2s)/2⌉ = (p-2s+1)/2 since p-2s is odd, and the upper bound is p - s. The width simplifies to (p - s) - (p-2s+1)/2 + 1, which I need to expand and reduce.
+
+For t odd, t = 2s+1, I have ⌈(p-2s-1)/2⌉ = (p-2s-1)/2 since p-2s-1 is even, and the upper bound becomes p - (s+1). The width is then (p - s - 1) - (p-2s-1)/2 + 1, which I'm simplifying by combining the numerators.
+
+Actually, I'm realizing that regardless of whether t is even or odd, the valid window for r has width approximately (p+1)/2—essentially half of all possible r values. Since t ranges over {1,...,p-1} and r = tj mod p covers all nonzero residues as j is invertible, each t has about half the r values in its valid window. This makes it virtually certain (and provably impossible for p ≥ 5) that at least one (t, r) pair lands in the valid region. The key insight is that as t varies, the valid window is an interval of width (p+1)/2 within {1,...,p-1}, so the pigeonhole principle guarantees a solution exists. t ranges, r = tj mod p is a permutation of {1,...,p-1}. We need: the permutation maps some t to a value in the valid window for that t.
+
+But the valid window depends on t! So we need: ∃ t such that tj mod p ∈ [⌈(p-t)/2⌉, p - ⌈t/2⌉].
+
+Suppose for contradiction that for ALL t: tj mod p ∉ [⌈(p-t)/2⌉, p - ⌈t/2⌉].
+
+Then for each t, either tj mod p falls below the lower bound or above the upper bound. In the first case, 2r + t < p + 1, and in the second case, 2r + t ≥ 2p + 1. So every value of f(t) = 2r + t must be either at most p or at least 2p + 1, which means the range [3, p] can't be fully covered by the permutation. Now I'm establishing bounds on |S_high| by comparing the upper and lower bounds against the known sum. From the upper bound constraint, I can derive that |S_high| must be at least p(p-1)/(2(2p-3)), which gives me a lower limit on how many values must fall into the high range.
+
+The lower bound constraint then gives me an upper limit of approximately 3(p-2)/4 for |S_high|. So I'm finding that |S_high| is squeezed between roughly p/4 and 3p/4, but this range alone isn't tight enough to produce a contradiction. I should try a different approach—maybe something involving the three-distance theorem or examining the equidistribution properties more carefully.
+
+Now I'm thinking about this geometrically: the sequence tj mod p for t = 1,...,p-1 forms a permutation of {1,...,p-1}, and I need to find a t where the value tj mod p falls in a specific range relative to t. This translates to finding a point (t, tj mod p) in the discrete torus that lies within a band-shaped region R defined by the constraint 2r + t ∈ [p, 2p]. The line traced by t → tj mod p has slope j in this torus, and I'm checking whether it intersects this diagonal band.
+
+Counting the points in R across all t values gives roughly p²/2, so with p-1 points on the line, I'd expect about p/2 intersections. Rather than invoking heavy machinery like Weil bounds, I'm exploring a simpler angle: restricting to even values of t might give a cleaner argument, since the window constraints become more regular in that case. I need to verify that for each gap value j, I can find a suitable t where the residue tj mod p falls within the valid window I(p-t). Let me test t = 2 as a concrete case: this gives 2j mod p, which stays below p-3 for the relevant range of j, so I can check whether this residue lands in the required interval.
+
+For t = 2, the window is [(p-1)/2, p-3], so I need 2j in that range—this works when j ≥ (p-1)/4. When j is smaller, I'll try t = 4 instead, which gives a different window and target residue to check against. I'm working through the constraint that 2kj must fall within the interval for p-2k, which means j needs to be bounded by (p-2k)/(4k) and (p-2k)/(2k). As k increases, that lower bound shrinks roughly like p/(4k), so I'm looking for a k value around p/(2(2j+1)) that makes the lower bound approximately equal to j.
+
+With this choice of k, I can verify that the target value 2kj stays below p since p/(4j+2) is less than p/(2j) for any j ≥ 1, and similarly t = 2k is less than p. I also need the window to have room, meaning p - t ≥ 2, which holds since t ≈ p/(2j+1) stays well below p for j ≥ 1.
+
+For p = 5 specifically, I can check the case directly: when j = 1 and t = 2, the target is 2 and the window [2,2] works. This suggests a general pattern—for every gap value j and every prime p ≥ 5, I can find an even t in the valid range such that the target lands in the corresponding window, which is what I need to formalize as a lemma about orbit coverage.
+
+Now I'm working through the proof by cases. When j is large (at least (p+1)/2), taking t = 1 immediately places the target in the window for p-1. For smaller gap values j ≤ (p-1)/2, I need to construct an appropriate even t, likely by choosing something close to p/(2j+1) to ensure the modular arithmetic works out.
+
+Let me reconsider with t = 2m where m = ⌈(p+1)/(4j+2)⌉. Since p is odd and 2m is even, p - 2m is odd, which means the interval I(p-2m) has the form [(p-2m+1)/2, p-2m-1]. I need to verify that the target 2mj falls within this interval.
+
+For the left inequality, I'm checking that 2mj ≥ (p-2m+1)/2, which simplifies to m(4j+2) ≥ p+1. Since m is defined as the ceiling of (p+1)/(4j+2), this is automatically satisfied. For the right inequality, I need 2mj ≤ p-2m-1, which gives m ≤ (p-1)/(2(j+1)). Now I'm verifying whether the ceiling of (p+1)/(4j+2) actually satisfies this upper bound constraint.
+
+Looking at the ratio between the upper and lower bounds, I can rewrite them with a common denominator structure: (p+1)/(2(2j+1)) versus (p-1)/(2(j+1)). The ratio of these bounds is (p-1)(2j+1)/((p+1)(j+1)). For j ≥ 1, the factor (2j+1)/(j+1) equals 2 - 1/(j+1), which is at least 3/2 when j=1. This means the ratio is at least (3/2)(p-1)/(p+1), which exceeds 1 for p ≥ 5, confirming there's enough room between the bounds for m to exist.
+
+Now I need to verify that the ceiling function doesn't violate the upper bound. Since m = ⌈(p+1)/(4j+2)⌉ < (p+1)/(4j+2) + 1, I need to check whether (p+1)/(2(2j+1)) + 1 ≤ (p-1)/(2(j+1)).
+
+Cross-multiplying and simplifying the inequality, I get pj - 4j² - 9 on the right side minus the left side, which needs to be non-negative for the bound to hold.
+
+Now I'm checking whether this actually works for small values of p and j. For j = 1, I need p ≥ 17, which is too restrictive. Let me verify the small cases directly instead—checking p = 5 and p = 7 by computing the actual intervals and confirming the gaps fall within them. Continuing with p = 11, I'm checking the remaining gap values: j=2 fails with t=2 but works with t=3, and both j=3 and j=4 succeed with t=2. Now moving to p = 13 with a larger gap set, testing the first few cases where t=2, t=4, and t=6 are being evaluated. I'm realizing my approach of only checking even values of t isn't sufficient—I need to consider odd values too. For odd t like 3, I can derive that the interval I(p-2m-1) works when p is odd, and I'm checking whether the constraint (p-2m-1)/2 ≤ tj mod p holds for these cases.
+
+Now I'm working through the algebra to find the valid range for m, deriving bounds from both the left and right inequalities to pin down exactly which odd values of t will satisfy the modular condition. pj / (2(j+1)(2j+1)) needs to be at least 1, so p must be at least 2(j+1)(2j+1)/j. For j = 1 that's 12, meaning p ≥ 13 guarantees odd t works, while smaller primes need individual verification. When I combine the coverage from both even and odd values of t, the effective range roughly doubles. I realize my bound was too loose—for the maximum gap value j = (p-3)/2, the requirement p ≥ 2j + 4 actually fails. Let me check the specific case where t = 2: the target value p-3 needs to fall within the window [(p-1)/2, p-3], which it does exactly at the upper boundary, so this should work when p-3 ≥ (p-1)/2.
+
+Now I'm organizing this more systematically by splitting into cases based on the size of j. For larger j values near (p-3)/2, smaller t values like t = 2 suffice, while smaller j values require larger t. Let me write out a clean case-by-case proof: when j ≥ (p-1)/4, I can use t = 2 to get a target value 2j that lands in the required window [(p-1)/2, p-3].
+
+For the intermediate range (p-1)/8 ≤ j < (p-1)/4, I need t = 4, which gives 4j in the right ballpark. The key constraint is verifying that 4j stays below p and above the lower bound (p-3)/2, which works out when p ≥ 5.
+
+Now I'm checking the upper boundary more carefully—whether j ≤ (p-5)/4 actually holds given the constraint j < (p-1)/4, and this depends on how p breaks down modulo 4.
+
+Testing with p = 7 and j = 1 as a concrete case: the even-t approach with t = 4 gives a target value that falls outside the required interval, so this case actually needs an odd t instead. This suggests the even-t strategy alone has gaps and I need to incorporate odd values of t as well, though that complicates the case analysis significantly.
+
+Let me step back and try a different approach altogether.
+
+I'm defining a function f(t) = 2·(tj mod p) + t for integer t and trying to show it lands in [p, 2p] for some choice of t. Computing the sum of f(t) across all t from 1 to p-1 gives 3p(p-1)/2, which means the average value is 3p/2—exactly the midpoint of the target interval [p, 2p]. This averaging argument suggests the function should hit the target range for at least some value of t.
+
+Now I'm analyzing how f changes between consecutive values by looking at f(t+1) - f(t). The difference depends on whether the modular arithmetic wraps around: without wraparound, the step is 2j+1 (positive), but with wraparound, it becomes 2j+1-2p (negative). This means the function oscillates up and down as t increases, and I need to identify exactly when these wraparounds occur.
+
+Looking at the sawtooth pattern more carefully: f rises by 2j+1 each step until a wraparound happens roughly every p/j steps, then drops by 2p. The key insight is that over a full rising segment, f increases by approximately (2j+1)·(p/j) ≈ 2p + p/j, which exceeds the 2p drop. Since this rising segment spans more than the width of my target interval [p, 2p], the function must pass through that interval during its climb.
+
+But I need to be careful about the step size. If 2j+1 > p, a single step could skip over [p, 2p] entirely. However, in my range where j ≤ (p-1)/2, the step size 2j+1 is at most p, so f can't jump over an interval of width p—it must land within or cross [p, 2p] as it rises.
+
+Let me prove this more carefully: if f starts at some value ≤ p and reaches ≥ 2p with each step increasing by at most p, then by a discrete intermediate value argument, f must pass through [p, 2p] at some point. Specifically, if f(t₀) < p and f increases by 2j+1 ≤ p per step, then either the next value lands in [p, 2p], or it's still below p and we continue until we hit the interval. ∈ [p, 2p) (done) or f(t₀+1) < p. Continue inductively. Since f eventually exceeds 2p, it must first enter [p, 2p]. And since each step adds at most p, it can't jump from < p to > 2p in one step. ✓
+
+Actually wait: I need f(t) ≤ 2p at the first time it exceeds p. We have f(t₀) < p and f(t₀+1) = f(t₀) + 2j + 1. If f(t₀) + 2j + 1 ≤ 2p, then f(t₀+1) ∈ [p, 2p]. This requires f(t₀) ≤ 2p - 2j - 1, which simplifies to 2(p-j) - 1. Using the constraint j ≤ (p-1)/2, this lower bound is at least p - 1. Since f(t₀) < p, the condition f(t₀) ≤ 2p - 2j - 1 is automatically satisfied. ✓
+
+Now for the rising phase: f starts below p at some point, and each increment is 2j+1, which is at most p. When f first crosses p, it lands in [p, 2p]. f first reaches or exceeds p, it's at most p + (2j+1-1) = p + 2j ≤ 2p-1 < 2p. ✓
+
+But I also need to verify that f actually starts below p at some point in the rising segment. Let's check: at t = 1, f(1) = 2j + 1. For j ≤ (p-1)/2: f(1) = 2j + 1 ≤ p. So f starts at most p.
+
+If f(1) = p (when j = (p-1)/2): then f(1) = p ∈ [p, 2p]. Done.
+If f(1) < p: the first rising segment starts below p. ✓
+
+Now I need to handle the case where the first rising segment doesn't reach 2p before wrapping. When a wrap occurs, f drops by 2p, but the step itself changes f by 2j+1-2p instead of just 2j+1. After the wrap at t₀+1, f reaches a minimum value of at least 2, and I need to verify this stays bounded by checking the maximum f can achieve before wrapping, which occurs when the remainder is close to p and gives f values up to around 3p - 3. So after a wrap occurs, the new remainder when (t₀+1)j is divided by p becomes r₀ + j - p, where r₀ was the previous remainder. Since the wrap condition requires r₀ ≥ p - j, the new remainder falls in the range [0, j-1], which means f(t₀+1) = 2·(new r) + t₀ + 1 is bounded above by 2(j-1) + t₀ + 1.
+
+For j ≤ (p-1)/2, this gives f(t₀+1) ≤ 2p - 3, which is actually larger than p—so the function doesn't necessarily drop below p after a wrap. But since the new remainder is constrained to {0,...,j-1} and t₀+1 ≤ p-1, I need to examine whether f can actually stay bounded in a useful way.
+
+The condition for f to drop below p after a wrap is t₀ < p - 2j + 1. The first wrap happens around t₀ ≈ p/j, and at that point f ≈ 2·(t₀j - p) + t₀ ≈ 2·0 + p/j, which is less than p when j ≥ 2. For j = 1, the first wrap occurs at t₀ = p-1, where the transition happens at the boundary.
+
+For j = 1 specifically, since r = t, we have f(t) = 3t, and we need 3t to fall in [p, 2p], which means t ∈ [p/3, 2p/3]. This range contains integer solutions for p ≥ 5. For j ≥ 2, the first wrap occurs around t₀ ≈ p/j with the constraint t₀ < p - 2j + 1 (roughly when p ≥ 4j+1), causing f to dip below p before rising back into [p, 2p] in the next segment.
+
+For smaller values of j around (p-5)/4 or less, f might actually enter [p, 2p] during its initial rise without needing a wrap at all, since it starts at f(1) = 2j+1 < p and climbs toward approximately 3p.
+
+Let me formalize this with a clean lemma: for any prime p ≥ 5 and j ∈ {1,...,(p-1)/2}, I can always find some t ∈ {1,...,p-1} where f(t) = 2(tj mod p) + t lands in [p, 2p]. The proof begins by noting that f(1) = 2j + 1 ≤ p since j ≤ (p-1)/2.
+
+Now checking the endpoint: f(p-1) = 2((p-1)j mod p) + (p-1). Since (p-1)j ≡ -j (mod p), this becomes 2(p-j) + (p-1) = 3p - 2j - 1, which is at least 2p when j ≤ (p-1)/2. So f starts at or below p and ends at or above 2p, confirming the range is hit.
+
+Looking at consecutive differences in the sequence f(1) through f(p-1): each step is either 2j + 1 or 2j + 1 - 2p. Since j ≤ (p-1)/2, the positive step stays bounded by p while the negative step drops to around 1 - p. By contradiction, if f never enters the interval [p, 2p], it would have to jump over it, but the step sizes don't allow that. Now I'm trying to pin down exactly where the function crosses from below p to above 2p. Let me define t* as the first point where f reaches or exceeds p—since f starts below p and eventually exceeds 2p, this transition point must exist.
+
+At t*, the function value jumps by either 2j+1 (if there's no wraparound) or 2j+1-2p (if it wraps). In the no-wrap case, since f(t*-1) < p and the step is at most p, the result stays below 2p, landing in the range [p, 2p) as needed.
+
+But if there's a wrap, the step is negative and would push f(t*) below p, which contradicts the definition of t* as the first time f reaches p or higher. So the wrap case can't happen—t* must be a no-wrap step.
+
+Since f(t*-1) < p and the step size is at most p, we get f(t*) < 2p, placing it in [p, 2p). The edge case where j = (p-1)/2 gives f(1) = p exactly, which still satisfies the bound. So the orbit coverage lemma holds for all valid j and p ≥ 5.
+
+Now I'm formalizing this as a theorem: the Orbit Coverage Lemma guarantees that for any target on line L, we can find a weight allocation via parameter t such that the combined two-copy shadow hits that target—which is exactly what we need for the cross-fiber argument on L.
+
+Let me work through the constraint more carefully. For a target b = (0, j₀, j₀) with fiber label c, I need to find t ∈ {1,...,p-1} such that -t·j₀ mod p falls in the interval I(p-t). Since -t·j₀ ≡ t·(p-j₀) (mod p), I can rewrite this as checking whether t·j' mod p ∈ I(p-t) where j' = p-j₀, and the Orbit Coverage Lemma directly applies here.
+
+Now for the weight constraints: using coefficient t on the extra vector b, I get w₁ = (-ct) mod p from the fiber 1 copies, and the total weight w₀ + w₁ + t must stay at most p. This means w₀ + w₁ ≤ p - t, and since w₁ = (-ct) mod p, I need to verify this bound is actually achievable.
+
+The key inequality is (-ct) mod p + t ≤ p. Since (-ct) mod p is nonzero (t can't be 0 given the constraints), this reduces to checking whether t ≤ ct mod p, which holds when ct mod p ≥ t.
+
+Now I'm working through the cases based on the size of t relative to p/(c-1). When t is small enough that ct < p, the modular reduction is straightforward. But when ct spans multiple periods of p, I need to track whether the remainder after division is large enough to satisfy the inequality—and this depends on whether t(c-1) ≥ p, which actually gives a lower bound rather than the upper bound I was initially looking for. t ≥ t. ✓
+If ct ≥ p: ct mod p = ct - p. Need ct - p ≥ t, i.e., t(c-1) ≥ p. But this contradicts t < p/(c-1).
+
+So for t < p/c: ct < p, ct mod p = ct ≥ t. w₁ = p - ct. Need w₁ = p - ct ≤ p - t, i.e., ct ≥ t, i.e., c ≥ 1. ✓ (since c ≥ 2).
+
+For t < p/c: w₁ = p - ct, w₀ ≤ p - t - (p - ct) = ct - t = t(c-1).
+Combined weight from both A₈ copies gives w₀ + w₁ = p - t.
+
+Now I need to check whether the target point in F_p³, which is -t · π(b) = (0, -tj₀ mod p, -tj₀ mod p) for π(b) on the line L, actually lies in the shadow Σ_{p-t}(A₈). This requires -tj₀ mod p to fall within the interval I(p-t) determined by the window structure.
+
+By the Orbit Coverage Lemma, for any j = p - j₀ in the range {1,...,p-1}, there exists some t in {1,...,p-1} such that t·j mod p equals (-tj₀) mod p and this value lands in I(p-t). The constraint is that this t must also satisfy t < p/c for the weight allocation to work properly, but the lemma might produce a t that's too large.
+
+Looking at the orbit coverage proof more carefully: it identifies t* = min{t : f(t) ≥ p} where f(t) = 2(tj mod p) + t, and shows that f(t*) falls in [p, 2p). On the initial rising segment before any modular wraps occur, f(t) grows linearly as (2j+1)t, so t* ≈ ⌈p/(2j+1)⌉ — the first point where this linear growth reaches p.
+
+Testing specific cases: when j = 1, we get t* = ⌈p/3⌉, which satisfies t* < p/2 for p ≥ 5. For the extreme case c = p-1, we need t* < p/(p-1) ≈ 1, forcing t* = 1 and requiring f(1) = 2j+1 ≥ p, which holds when j ≥ (p-1)/2. When j is smaller, t* = ⌈p/(2j+1)⌉ becomes the binding constraint, and as c approaches p-1, the requirement forces t to be very small.
+
+For large c near p-1, the constraint t < p/c becomes nearly impossible to satisfy with t ≥ 2, but the fiber constraint offers a way out: when t ≥ p/c, we get w₁ = p - ct mod p, which can be small even if ct is large over the integers.
+
+Let me work through t = 2 with c = p-1 specifically: w₁ reduces to 2 mod p, giving a total weight of w₀ + 4 ≤ p, so w₀ ≤ p - 4. Now I need to check whether the target value -2b can be achieved on the fiber L, which requires (-2j₀) mod p to fall in the appropriate interval. Now I'm checking when p - 2j₀ falls within the interval I(p-2), which happens when j₀ is between 2 and roughly p/4, meaning t = 2 works for c = p-1 in that range. For j₀ = 1, I need to verify whether p - 2 actually lies in the interval.
+
+Since p - 2 > p - 3, the condition fails for j₀ = 1 with t = 2. Let me try t = 3 instead, which gives w₁ = 3 and constrains w₀ ≤ p - 6. For j₀ = 1, the target is p - 3, and I need to check if this value fits within the corresponding interval I(p-3). I'm checking whether w₀ = p-6 works for the weight allocation, but this becomes negative when p = 5, so I need to handle small primes separately. For p = 5 specifically, I'm computing what w₁ should be using modular arithmetic. 3. Total: w₀ + 3 + 3 ≤ 5, so w₀ ≤ -1. Impossible!
+
+So for p = 5, c = 4, j₀ = 1: the t = 3 allocation doesn't work.
+
+Let me try ALL allocations for p = 5, c = 4, j₀ = 1 (b = (0, 1, 1)):
+
+t = 1: w₁ = (-4) mod 5 = 1. Total: w₀ + 1 + 1 ≤ 5, w₀ ≤ 3. Combined = w₀ + 1.
+Target: -1 · (0,1,1) = (0,4,4) in F₅³.
+Need (0,4,4) ∈ Σ_{w₀+1}(A₈) for w₀+1 ≤ 4. The maximum combined weight is 4.
+On L: (0,4,4), j = 4. I(4) = [2, 4]. 4 ∈ [2,4]. ✓!
+So w₀+1 = 4, w₀ = 3, w₁ = 1. Total = 3 + 1 + 1 = 5 = p. ✓
+
+So t = 1 works! The target (0,4,4) is in the window at combined weight 4. Now I'm verifying this solution by checking j' = p - j₀ = 5 - 1 = 4 and computing f(1) = 2·4. + 1 = 9. Is 9 ∈ [5, 10]? Yes. And indeed, the orbit coverage lemma gives t = 1 for j' = 4 ≥ (p-1)/2 = 2. ✓
+
+But I had worry about the weight allocation. For t = 1, c = 4: w₁ = (-4·1) mod 5 = 1. Combined = w₀ + 1 ≤ p - 1 = 4. Target j = 4 ∈ I(4) = [2,4]. ✓
+
+So the weight allocation IS valid. The issue I was confused about was that the combined weight w₀ + w₁ = p - t, and the fiber split w₁ = (-ct) mod p doesn't need to equal p - ct over the integers. When ct < p, we get w₁ = p - ct directly, but for larger values the modular reduction gives a different result. Either way, w₁ stays in the valid range {1,...,p-1} and w₀ = p - t - w₁ stays non-negative as long as w₁ ≤ p - t. For t = 1 specifically, this condition becomes (-c) mod p ≤ p - 1, which is always satisfied.
+
+When t = 1 and c ≥ 1, the combined weight equals p - 1, and the target must lie in the appropriate fiber. For targets in the gap, I need t ≥ 2 and both conditions to hold.
+
+The orbit coverage analysis shows that the smallest t satisfying f(t) ≥ p falls in the range [p, 2p), with t* = ⌈p/(2j+1)⌉ where j = p - j₀. For the weight allocation to work, I need w₁ = (-ct*) mod p ≤ p - t*, which couples c and t* together. But here's the key: since this argument applies to any linear form, not just the first coordinate, I can choose the linear form strategically to optimize the fiber structure rather than being locked into a specific one.
+
+Now I'm realizing the actual constraint: the 17 vectors are given, and I need to determine whether they spread across 3+ fibers under some linear form, or stay in ≤ 2 fibers under all linear forms. If they're in 3+ fibers under at least one linear form, I can use that form; otherwise, the two-fiber bound applies and I need a different approach.
+
+For the weight allocation issue, I'm checking whether w₁ = (-ct) mod p can always be satisfied within the range [0, p - t]. Since w₁ can take any value in that range and the modular constraint just pins it to a specific residue class, this should be resolvable for the right choice of parameters. a specific value v ∈ {1,...,p-1}. We need v ≤ p - t. If v > p - t, then the exact fiber allocation at this t doesn't work.
+
+But we can use w₁ = v - p = (-ct) mod p - p... no, w₁ must be nonneg.
+
+Hmm, actually: w₁ must satisfy w₁ ≡ -ct (mod p) AND 0 ≤ w₁ ≤ p - t. The solutions to w₁ ≡ -ct (mod p) are w₁ = v, v+p, v+2p, ... where v = (-ct) mod p. Since w₁ ≤ p-t ≤ p-1: the only option is w₁ = v if v ≤ p - t, otherwise there's no valid solution.
+
+Now I'm checking when this constraint is actually satisfiable. Since v = (-ct) mod p, I can rewrite this as v = p - (ct mod p) when ct mod p ≠ 0, which holds because gcd(c,p) = gcd(t,p) = 1 for 1 ≤ t ≤ p-1. The feasibility condition v + t ≤ p becomes p - (ct mod p) + t ≤ p, which simplifies to checking whether t ≤ ct mod p.
+
+When ct < p, we have ct mod p = ct, so the condition is t ≤ ct, meaning c ≥ 1, which always holds. But when p ≤ ct < 2p, we get ct mod p = ct - p, and the condition becomes t ≤ ct - p, or equivalently p ≤ t(c-1). For c = 2 and t between p/2 and p-1, this fails since we'd need t ≥ p, which contradicts t < p.
+
+However, I can work with total weights less than p. If the total weight W = w₀ + w₁ + t is at most p, then w₁ ≡ -ct (mod p), and the minimum nonnegative w₁ is (-ct) mod p. The constraint becomes (-ct) mod p + t ≤ p, which fails when p - (ct mod p) + t exceeds p.
+
+For ct < p, this is always satisfied since t ≤ ct when c ≥ 2. But when ct ≥ p, I need to reconsider: ct mod p = ct - p, so the infeasibility condition t > ct - p simplifies to t < p/(c-1). This means for c = 2, the infeasible range is t ∈ [⌈p/2⌉, ⌊p/(c-1)⌋ - 1].
+
+Wait, this is a real problem—the orbit coverage lemma gives me a t value that satisfies the shadow condition, but it might fall in this infeasible range where the fiber constraint fails. I need to find a t that satisfies both the shadow coverage condition and the fiber feasibility constraint simultaneously.
+
+The safe range for t splits into two parts: either t is small enough that ct < p, or t is large enough that t ≥ ⌈p/(c-1)⌉. In the large t case, the modular arithmetic shifts things around—ct mod p becomes ct - p, and I need to verify the weight constraints work out consistently across both fibers. I'm verifying that w₁ = 2p - ct stays within bounds when ct is in the range (p, 2p), and checking that the constraint w₁ ≤ p - t holds given t ≥ p/(c-1), which it does. The combined weight works out to p - t.
+
+Now I need to compute w₀ from the remaining weight: w₀ = (c-1)t - p, which is non-negative exactly when (c-1)t ≥ p. So for sufficiently large t in this feasible range, I get w₁ = 2p - ct and w₀ = (c-1)t - p.
+
+The key question is whether the orbit coverage lemma produces a value t* = ⌈p/(2j+1)⌉ that actually falls below p/c, making it usable for this construction.
+
+This works out when c < 2j+1, or equivalently j > (c-1)/2. Since j represents p minus some target value j₀ from the gap, where j₀ ranges from 1 to (p-3)/2, I have j ranging from (p+3)/2 up to p-1. I need to check whether these values of j satisfy the condition j > (c-1)/2.
+
+Since j ≥ (p+3)/2 and the maximum value of (c-1)/2 is (p-2)/2 (when c = p-1), I can see that j is always strictly greater than (c-1)/2 for all valid values of c. This means all gap targets fall into the safe range.
+
+Now for the orbit coverage calculation: when j = p - j₀ with j₀ ∈ {1,...,(p-3)/2}, I get j ≥ (p+3)/2, which means 2j+1 ≥ p+4. This makes t* = ⌈p/(2j+1)⌉ ≤ ⌈p/(p+4)⌉ = 1 since p/(p+4) < 1 for p ≥ 5. And since f(1) = 2j+1 ≥ p+4, this value falls within the required range [p, 2p] for p ≥ 5.
+
+At t = 1, the target becomes j₀' = j = p - j₀, giving the point (0, p-j₀, p-j₀) on the line L. I need to check whether p - j₀ lands in the window I(p-1) = [(p-1)/2, p-1], and for j₀ ranging from 1 to (p-3)/2, the value p - j₀ ranges from (p+3)/2 down to p-1, which fits entirely within that window.
+
+So t = 1 handles all the gap targets—but wait, this contradicts what I found earlier about the gap at weight p-1 being {(0,j,j) : 1 ≤ j ≤ (p-3)/2}. The target (0, p-j₀, p-j₀) has a much larger second coordinate, so it's not actually in the gap itself. I think I'm confusing the target point with the original point—the target is -π(b), not π(b) itself.
+
+Let me reconsider: if b projects to (0, j₀, j₀) in the gap, then -π(b) = (0, p-j₀, p-j₀), and since p-j₀ falls in the range [(p+3)/2, p-1], this target is always in the weight-(p-1) shadow on L. This cross-fiber argument seems to work, but I need to verify it actually applies to the target being on L.
+
+Now I'm checking what happens when π(b) isn't on L—it's just some nonzero vector in F_p³. At t = 1, the target -π(b) needs to land in the weight-(p-1) shadow. By shadow saturation, this shadow covers everything except the gap {(0,j,j) : 1 ≤ j ≤ (p-3)/2}. If -π(b) avoids the gap, we're done; if it lands in the gap, I need t ≥ 2 to shift the target -tπ(b) = (0, -tj₀, -tj₀) outside the gap.
+
+When -π(b) is in the gap, it has the form (0, j₀', j₀'), so π(b) = (0, p-j₀', p-j₀'). For t ≥ 2, the target becomes (0, tj₀', tj₀') mod p, and I need to check whether this lands in the weight-(p-t) shadow.
+
+This reduces to the orbit coverage problem: finding some t ∈ {2,...,p-1} where tj₀' mod p falls in I(p-t) and the fiber allocation works out. The orbit coverage lemma guarantees such a t exists for j₀' ∈ {1,...,(p-3)/2}, with the first valid value being t* = ⌈p/(2j₀'+1)⌉.
+
+Now I'm checking whether t* stays below the threshold p/c for different values of c. Since j₀' ≥ 1 gives t* ≤ ⌈p/3⌉, this is less than p/2 for p ≥ 5, which works. For c = 3, the bound ⌈p/3⌉ doesn't strictly beat p/3 since equality holds when 3 divides p, which never happens for primes. So ct* exceeds p, which puts us in the infeasible range—but wait, I need to verify this actually holds. For c = 3, t* ≈ p/3 is less than p/2, confirming we're infeasible. Now I'm reconsidering the gap target analysis and checking whether the orbit coverage lemma applies to the cross-fiber argument with the target at multiplier t. When c ≥ 3 and j₀' = 1, I get t* = ⌈p/3⌉, which falls in the infeasible range since t* ≥ p/c. So I need to find an alternative t that satisfies either t < p/c or t ≥ p/(c-1), and I'm checking whether t < p/c is achievable by examining the constraint that t must lie in a specific interval derived from the modular condition.
+
+For the case t ≥ p/(c-1), I'm testing c = 3 where t ≥ p/2, and checking whether the target value t = p - 2 falls within the feasible interval for small values of p.
+
+When p = 5 and c = 3, I find that t = 2 works with the interval I(3) = [2,2], but the feasibility constraint fails because w₁ + t = 6 exceeds p = 5, making this configuration infeasible.
+
+Since w₁ must satisfy w₁ ≡ -6 ≡ 4 (mod 5), the smallest nonnegative value is w₁ = 4, which can't be reduced further while maintaining the congruence. So this allocation genuinely doesn't work, and I need to check whether a zero-sum involving the vector b = (3, 4, 4) and elements from the fibers can salvage this case.
+
+But the computational verification confirms U1 holds for p = 5, so a zero-sum must exist—it's just not following the weight allocation I've been tracking. The issue is that I've been restricting my analysis to the L subspace, but the full 3D shadow Σ_w(A₈) extends far beyond L. Off-L points provide additional paths to reach targets that might also lie on L, so my window structure approach only captures part of the picture. The complete proof likely requires understanding the full shadow geometry, though the window structure remains a crucial structural component.
+
+Let me step back and consolidate what I've actually established versus what I've discovered. I've rigorously proved the window structure theorem characterizing Σ_w(A₈) ∩ L, derived the key identity relating weights to the sum of certain coefficients, shown that orbit coverage works for every j, and confirmed sumset completeness. What I've learned is that the orbit coverage plus weight allocation argument succeeds when the scaling factor is small enough to cover all gap targets, but I need to correct my earlier reasoning about when this actually applies.
+
+For the t = 1 case specifically, I'm realizing the analysis hinges on whether the target -π(b) falls inside or outside the gap. When it's outside, the weight p-1 shadow handles it directly. When it lands in the gap as (0, j₀, j₀) with j₀ in the lower half-range, then π(b) takes the complementary form with components in the upper half, which creates the constraint I need to examine more carefully.
+
+Now for t ≥ 2, I'm checking what happens when π(b) = (0, a, a) with a in the problematic upper range. The target becomes -tπ(b) reduced modulo p, and I need to determine whether these scaled targets can still be covered by the available shadows.
+
+Setting j₀ = p - a, which falls in the lower gap range, I can reframe the orbit coverage condition: I need some t where t·j₀ mod p lands in the appropriate shadow interval for that t. The orbit coverage lemma tells me the critical threshold t* = ⌈p/(2j₀+1)⌉, and feasibility requires t* < p/c.
+
+For small c values (c ≤ 2), this always works since t* ≤ ⌈p/3⌉ while p/c stays above p/3. But when c ≥ 3, the bound p/c tightens to p/3 or less, so I need to identify which j₀ values actually violate the feasibility condition—specifically those where t* ≥ p/c, which happens when c ≥ 2j₀ + 1.
+
+This means only about c/2 problematic (c, j₀) pairs exist within the gap range, so I'm exploring alternative strategies: leveraging the 3D shadow structure beyond just L, adjusting the weight allocation scheme, or restricting to specific fiber vectors that might still yield a weight-p zero-sum.
+
+For the 3D shadow approach, the weight-(p-1) gap only exists on L itself—off L, coverage is complete. Since -tπ(b) lies off L whenever π(b) is off L, those cases are automatically covered. The real bottleneck is when π(b) sits on L and -π(b) falls in the gap, which is a narrow constraint.
+
+When this happens and c ≥ 3 with j₀ ≤ (c-1)/2, I can try using multiple copies of b's coefficient. If I assign coefficient s_b to b, the target becomes (0, s_b·j₀, s_b·j₀) mod p, and I need s_b·j₀ to land in the interval I(w₀+w₁). The fiber constraint w₁ + c·s_b ≡ 0 (mod p) determines w₁ = (-c·s_b) mod p, and the total weight stays within w₀ + w₁ + s_b ≤ p.
+
+But I'm hitting a wall: for c ≥ 3 and j₀ = 1, the L-restricted argument alone doesn't seem to close the gap, so I likely need either the 3D shadow technique or a different approach. Let me step back and clarify what I've actually established versus where the proof still has a hole—the core claim is that any strongly ZSF set of size 17 in F_p⁴ must live in at most 2 fibers, which is equivalent to showing that if 17 vectors span 3 or more fibers, a weight-≤-p zero-sum exists. (8,8,1) distribution is the "hardest" case (as noted in the goal). But maybe for c ≥ 3 and the problematic j₀ values, the vectors can't actually be arranged to create a ZSF configuration? I.e., the ZSF constraint itself prevents this case from arising.
+
+The ZSF constraint says: the 8 vectors in fiber 0 form a ZSF set in F_p³ (after projection). If they form a copy of A₈, then the shadow structure is as described. The extra vector b in fiber c with π(b) on L and -π(b) in the gap is a very specific configuration.
+
+But I'm not sure this constraint helps directly.
+
+Let me also consider: for c ≥ 3 and j₀ = 1, the orbit coverage lemma gives a valid t, but when I check the fiber allocation at weight p, it becomes infeasible. And I can't use weight p + s for negative s since the weight constraint requires staying at most p.
+
+============================================================
+BLOCK 4 (70799 chars)
+============================================================
+Let me focus on the core task: proving the Window Structure theorem (Sub-problem A). This is the key analytical result needed.
+
+Let me carefully set up the proof. We have A₈ in F_p³ consisting of 8 vectors. Let me recall what A₈ is from the construction:
+
+Fiber 0 (the last 3 coordinates of the 4D vectors):
+a₀ = (1,0,0), a₁ = (0,1,0), a₂ = (0,0,1), a₃ = (p-1,1,1), a₄ = (1,1,0), a₅ = (1,0,1), a₆ = (p-1,2,1), a₇ = (p-1,1,2)
+
+
+where p-1 represents -1 in F_p.
+
+Now I need to verify that vectors on the invariant line L = {(0, j, j) : j ∈ F_p*} can be expressed as non-negative combinations of the basis vectors exactly when ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋, assuming p is large enough (specifically p ≥ 2w+1) to avoid wraparound issues in the field.
+
+Let me set up the system of equations by writing out what each basis vector contributes to each coordinate, then solve for which values of j are achievable given the constraint that coefficients sum to w and stay non-negative. c₁ + c₃ + c₄ + 2c₆ + c₇ = c₂ + c₃ + c₅ + c₆ + 2c₇, which simplifies to c₁ + c₄ + c₆ = c₂ + c₅ + c₇. c₁ + c₃ + c₄ + 2c₆ + c₇ = c₂ + c₃ + c₅ + c₆ + 2c₇
+→ c₁ + c₄ + c₆ - c₂ - c₅ - c₇ = 0
+→ c₁ - c₂ + c₄ - c₅ + c₆ - c₇ = 0  ✓
+
+So the constraints are:
+(I)   c₀ - c₃ + c₄ + c₅ - c₆ - c₇ = 0
+(II)  c₁ - c₂ + c₄ - c₅ + c₆ - c₇ = 0
+(III) j = c₁ + c₃ + c₄ + 2c₆ + c₇
+(IV)  Σcᵢ = w
+(V)   cᵢ ≥ 0 integers (and cᵢ ≤ p-1 but for p ≥ 2w+1 this is automatic since cᵢ ≤ w < p)
+
+Now I'll express c₀ and c₁ in terms of the other variables using the first two constraints, then substitute everything into the sum constraint to see what relationships emerge. Now I'm collecting the coefficients for each variable—c₂ and c₃ each appear twice, c₄ has a net coefficient of -1, while c₅, c₆, and c₇ have coefficients of 1, 1, and 3 respectively. This gives me the simplified equation 2c₂ + 2c₃ - c₄ + c₅ + c₆ + 3c₇ = w, which I can now compare against the constraint from equation (III). + c₃ + c₅ + c₆ + 2c₇ ≥ 0
+
+So I'm reducing this to a system of two linear equations in six nonnegative integer variables, where I need to find which values of j admit a solution that also satisfies the constraints on c₀ and c₁.
+
+Let me subtract the second equation from the first to eliminate some variables and express c₄ in terms of the others.
+
+For c₄ to be non-negative, I need c₂ + c₃ + c₇ ≥ w - j. Now I'm substituting this back into the expressions for c₀ and c₁ to see what constraints emerge on the remaining variables.
+
+After working through the algebra, I can express everything in terms of five free variables: c₂, c₃, c₅, c₆, and c₇, all non-negative. The key relationships are that j equals c₂ + c₃ + c₅ + c₆ + 2c₇, while c₄ and c₀ are determined by these free variables and the constraint w - j. I need to figure out the feasible range for j by finding its upper and lower bounds. For the upper bound, j is maximized when δ = w - j is minimized, and since δ must be non-negative (given the constraints on c₀ and the non-negativity of the variables), I'm looking at what happens as δ approaches its lower limit. Setting c₂ = c₃ = c₅ = c₆ = 0 simplifies the constraints nicely: c₀ and c₁ are both satisfied when δ ≥ 0, but c₄ requires c₇ ≥ δ. Since j = 2c₇ and δ = w - j, I get δ = w - 2c₇, which means c₇ ≥ w - 2c₇, leading to c₇ ≥ ⌈w/3⌉. But I think there's a better approach here. find the max and min of j.
+
+**To maximize j:** Set c₇ as large as possible. With j = c₂ + c₃ + c₅ + c₆ + 2c₇.
+
+Try c₂ = c₃ = c₅ = c₆ = 0, j = 2c₇:
+- δ = w - 2c₇
+- c₄ = c₇ - δ = c₇ - w + 2c₇ = 3c₇ - w ≥ 0 → c₇ ≥ w/3
+- c₀ = δ = w - 2c₇ ≥ 0 → c₇ ≤ w/2
+- c₁ = δ = w - 2c₇ ≥ 0 → c₇ ≤ w/2
+
+So c₇ is bounded between ⌈w/3⌉ and ⌊w/2⌋, giving j = 2⌊w/2⌋ as the maximum from this configuration. Now let me check if setting c₂ = 1 with the others at zero yields anything better, which would give j = 1 + 2c₇ with adjusted constraints on c₇. I'm checking if using c₆ = 1 instead gives a better result, setting up the constraints with c₂ = c₃ = c₅ = 0 and solving for the maximum c₇ value, which requires c₇ ≥ (w-1)/3. I'm testing the case where c₅ = 1 and c₂ = c₃ = c₆ = 0, working through the constraints on c₇ from the coefficient equations—I need c₇ to satisfy both a lower bound from c₄ and upper bounds from c₀ and c₁. Setting j = 0 would give a trivial target, and besides, the weight constraint forces c₄ to be negative when all other coefficients are zero, so that's not feasible anyway. Let me reconsider the constraints more carefully.
+
+I need to ensure c₄ ≥ 0, which requires c₂ + c₃ + c₇ ≥ w - j, and I also have constraints from c₀ ≥ 0 and c₁ ≥ 0 that limit how the coefficients can be distributed. When I combine these constraints, I get that c₂ + c₃ + c₅ + c₆ can't exceed 2δ plus the contribution from c₅. So substituting the constraint on c₇ back into the expression for j gives me j ≥ 2δ - c₂ - c₃, which combined with c₂ + c₃ ≤ 2δ yields j ≥ 0, but that's not a tight bound. Let me try a different approach by setting the non-essential variables to zero and see what happens to the relationship between j, δ, and the remaining coefficients.
+
+Now I'm working through the constraints that emerge from requiring c₀, c₁, and c₄ to be non-negative, which gives me three inequalities involving c₂ and c₃. These constraints are starting to show that j = c₂ + c₃ must be at least ⌈w/2⌉. I'm working through the case where w = 2k+1, finding that c₄ = 1 and then determining the constraints on c₀ in terms of c₂.
+
+For the constraint on c₁, I need c₂ ≥ 1 to keep it non-negative, which means c₂ ranges from 1 to k, and correspondingly c₃ ranges from k down to 1. This works whenever k ≥ 1, so for w ≥ 3. Now checking the edge case where w = 1 (meaning k = 0), I have j = 1 with c₂ + c₃ = 1 and c₄ = 1, and I'm calculating what c₀ must be.
+
+For w = 1, the constraint forces c₂ = 0 to satisfy c₂ + c₃ = 1, which gives c₁ = -1, violating non-negativity. If I try c₂ ≥ 1 instead, then c₀ becomes negative. So this case isn't feasible. Let me verify this by checking the actual vectors in A₈—the invariant line L should contain vectors with first coordinate 0 and equal second and third coordinates, but examining the vectors in A₈, none of them satisfy this condition, so the intersection is empty.
+
+Now checking the window formula: for w = 1, the interval ⌈1/2⌉ ≤ j ≤ 2⌊1/2⌋ becomes 1 ≤ j ≤ 0, which is indeed empty. For w = 2 and w = 3, the windows work out correctly—[1, 2] and {2} respectively. So the minimum j value ⌈w/2⌉ is being achieved as expected.
+
+Now I need to establish that all j values within the interval [⌈w/2⌉, 2⌊w/2⌋] are achievable, and conversely, that nothing outside this range can be achieved. I've already shown the endpoints are reachable by setting specific coefficients to zero. For the intermediate values, I need to use some kind of continuity or convexity argument, though with integer constraints this requires careful handling.
+
+Let me work through the even case where w = 2k. The range should be j ∈ {k, k+1, ..., 2k}. At the minimum j = k, I set c₂ = 0, c₃ = k, and the rest to zero, which gives me the right configuration. At the maximum j = 2k, I use c₇ = k with the others zero. Now I'm checking whether I can construct intermediate values by adjusting these coefficients systematically. I'm verifying that this parameterization works by setting c₃ = k - t and c₇ = t while keeping the other coefficients at zero, which gives me j = k + t as needed. The constraint δ = k - t ensures all coefficients remain non-negative across the range t = 0 to k.
+
+Now for the odd case where w = 2k + 1, the objective j needs to span from k + 1 to 2k, and I'm starting by checking what happens at the lower bound j = k + 1, which requires c₂ = 1. I'm verifying the sum equals 2k + 1 for this configuration, then checking another case at j = 2k where c₇ = k and the remaining coefficients shift accordingly, confirming the constraints hold for k ≥ 1. Verifying the coefficients work out: c₀ and c₁ both satisfy their constraints, and the sum checks to 2k+1. For weight 2k+1, I've found a valid solution with c₂ = 1, c₃ = k-t, c₇ = t, and the remaining coefficients determined accordingly.
+
+Now I need to prove the second part—that no value of j falls outside the achievable window. I'm setting up bounds to show j must satisfy j ≥ ⌈w/2⌉ and j ≤ 2⌊w/2⌋, working through the constraint equations to establish these limits. Let me recalculate this more carefully. If w is the sum of all coefficients and j equals c₂ + c₃ + c₅ + c₆ + 2c₇, then subtracting j from w gives me c₀ + c₁ + c₄ - c₇.
+
+Now for the upper bound on j, I need to verify that j ≤ 2⌊w/2⌋. This simplifies to checking whether j ≤ w when w is even, or j ≤ w - 1 when w is odd—essentially j ≤ w - (w mod 2). Since j is constructed as w minus the positive terms c₀ + c₁ + c₄, this inequality should hold as long as c₇ doesn't exceed those terms.
+
+Let me work through the algebra more carefully by expressing both j and w in terms of the coefficients, then computing 2j - w to see what constraints emerge. Now I'm working through the algebra by computing 2j - w, which simplifies nicely to c₄ + c₅ + c₆ + c₇. Since all these coefficients are non-negative, this gives me the constraint that j ≥ w/2.
+
+For the upper bound, I'm expressing the sum of those four coefficients in terms of w and the earlier coefficients, which leads to 2j = 2w - (c₀ + c₁ + c₂ + c₃).
+
+Now I'm realizing that dividing by 2 doesn't work cleanly since the sum of those coefficients might be odd. Let me think about this differently—I know that c₄ + c₅ + c₆ + c₇ is at most w, so 2j ≤ 2w, giving j ≤ w. But I need to be more precise about the constraint j ≤ 2⌊w/2⌋.
+
+When w is odd, this means j ≤ w - 1, which translates to c₄ + c₅ + c₆ + c₇ ≤ w - 2. Since those four coefficients equal w minus the sum of the first four, I need to work out what constraint this places on c₀ + c₁ + c₂ + c₃. So when w is odd, c₄ + c₅ + c₆ + c₇ must also be odd and at most w, which means it's bounded between 0 and w with the same parity constraint. Since 2j equals w plus this sum, I can use these constraints to figure out the relationship. I need to verify the constraints on c₀ and c₁ when I set c₂ = c₃ = 0, since these are derived from the original equations rather than free variables. Let me work through what c₀ becomes in terms of the other parameters to check if it stays non-negative.
+
+When j = w and δ = 0, I get c₀ = c₆ - c₅ and c₁ = c₅ - c₆, which forces c₅ = c₆ for both to be non-negative. But then j = 2c₅ + 2c₇, which is always even—contradicting the assumption that w is odd. So j = w is impossible when w is odd, and I need to explore what values of j are actually achievable given the parity constraints. I'm working through the parity constraint more carefully: since w is odd and c₄+c₅+c₆+c₇ must also be odd, that means c₀+c₁+c₂+c₃ has to be even. Let me verify this relationship holds consistently across the system. c₁+c₂+c₃ is even. The minimum even value is 0. But can c₀+c₁+c₂+c₃ = 0?
+
+c₀ = c₁ = c₂ = c₃ = 0 → from c₂ = c₃ = 0:
+c₀ = (w-j) - 0 - c₅ + c₆ = 0
+c₁ = (w-j) - 0 + c₅ - c₆ = 0
+
+So w - j = c₅ - c₆ and w - j = c₆ - c₅. Adding: 2(w-j) = 0, so j = w.
+Then c₅ = c₆, and from the constraint equations, j = 2c₅ + 2c₇. Since j = w, I have w = 2c₅ + 2c₇, which is even. But w is odd by assumption, giving me a contradiction.
+
+So when w is odd, c₀+c₁+c₂+c₃ must be at least 2, meaning c₄+c₅+c₆+c₇ ≤ w-2. This bounds j ≤ w-1.
+
+For even w, the same analysis shows c₀+c₁+c₂+c₃ = 0 is possible, allowing j = w. So the maximum j equals w when w is even, but only w-1 when w is odd.
+
+Now checking the lower bound: since 2j - w = c₄+c₅+c₆+c₇ ≥ 0, we get j ≥ w/2. For odd w this sum must actually be odd, which constrains things further. So c₄+c₅+c₆+c₇ ≥ 1. Thus 2j ≥ w + 1, j ≥ (w+1)/2 = ⌈w/2⌉. ✓
+
+So we have:
+- j ≥ ⌈w/2⌉ because 2j - w = c₄+c₅+c₆+c₇ ≥ 0, and for odd w it must be ≥ 1 (parity).
+- j ≤ 2⌊w/2⌋ because for odd w, c₀+c₁+c₂+c₃ ≥ 2 (parity argument), so j ≤ w-1.
+
+For the upper bound with odd w, since c₀+c₁+c₂+c₃ equals w minus an odd number, it's even, and being at least 2 constrains j accordingly.
+
+For even w, the parity argument changes: 2j - w is now even, so c₄+c₅+c₆+c₇ can be 0, and c₀+c₁+c₂+c₃ can also be 0.  This gives j ≤ w. Let me verify that j = 2k is actually achievable when w = 2k by setting c₇ = k with all other coefficients zero. = 0, c₁ = 0, c₄ = k. Σ = 0+0+0+0+k+0+0+k = 2k ✓.
+
+But I claimed j ≤ w for even w. For w = 2k, j = 2k = w. ✓
+
+Actually, hmm, I realize I need to double-check that the upper bound is TIGHT. For w = 2k, is j = 2k actually achievable? 
+
+c₂=c₃=c₅=c₆=0, c₇=k:
+j = 0 + 0 + 0 + 0 + 2k = 2k ✓
+δ = 0
+c₄ = 0 + 0 + k - 0 = k ≥ 0 ✓
+c₀ = 0 - 0 - 0 + 0 = 0 ≥ 0 ✓
+c₁ = 0 - 0 + 0 - 0 = 0 ≥ 0 ✓
+Σ = 0 + 0 + 0 + 0 + k + 0 + 0 + k = 2k ✓
+
+Now I need to verify that j = 2k + 1 is impossible when w = 2k. If j were 2k + 1, then c₄+c₅+c₆+c₇ would need to equal 2k + 2, which exceeds the available sum of 2k, so this configuration is infeasible.
+
+For odd w = 2k + 1, I should check whether j = 2k + 1 is achievable. This would require c₄+c₅+c₆+c₇ = 2k + 1, forcing all other coefficients to zero. But I've already shown this is impossible for odd w.
+
+Finally, I need to confirm that j cannot be less than ⌈w/2⌉, since that would make c₄+c₅+c₆+c₇ negative, which violates the non-negativity constraint.
+
+So the complete window structure follows from three observations: the identity relating j to the sum of those four coefficients, the lower bound from non-negativity and parity constraints, and the upper bound from the same constraints plus the infeasibility at the boundary for odd w. I'm verifying the bounds more carefully now. For odd w, the sum c₄+c₅+c₆+c₇ must be odd and can't equal w (since that would require all of c₀ through c₃ to be zero, which forces w to be even—a contradiction), so it's at most w-2, giving j ≤ w-1. For even w, this sum can equal w, so j reaches w. The crucial identity 2j - w = c₄+c₅+c₆+c₇ emerges directly from A₈'s structure, and this completely characterizes the achievable window. Now I'm wondering what makes A₈ special that produces this particular identity. a₀ → 1, a₁ → 1, a₂ → 1, a₃ → 1, a₄ → 2, a₅ → 2, a₆ → 2, a₇ → 2.
+
+So A₈ splits into 4 vectors of total weight 1 (indices 0-3) and 4 of total weight 2 (indices 4-7).
+
+Now I'm using the total weight function to understand the constraint. When I sum the coefficients weighted by their total weights, I get w + S, where S is the sum of the coefficients for the heavier elements. On the invariant line where coordinates are (0,j,j), the total weight is 2j, which gives me the key relationship: S = 2j - w.
+
+The constraints follow naturally from this: S must be non-negative, the lower bound on the first coefficients is automatic, and the parity constraint emerges directly from the formula. Once I identify this grading, the proof becomes quite elegant. Now I need to work through the constructive part to show these constraints are actually achievable. So for odd w, S must be odd too, which means S is at least 1 and at most w-2 (since S = w would force the rest to be zero, making w even). For even w, S can equal w. This pins down j to the range [⌈w/2⌉, 2⌊w/2⌋] as necessary conditions from the weight grading alone. Now I need to verify these are also sufficient by constructing explicit examples, though I'm realizing the necessary conditions I derived don't actually depend on the first coordinate constraint yet.
+
+Let me verify my constructions work. For w = 4 (even), the window is [2, 4], and I can check that j = 2 gives a valid solution with the right coordinate values and all constraints satisfied. Now I'm continuing to verify the weight-4 codewords for j = 4, confirming that 2a₄ + 2a₇ gives the expected result. Moving into w = 5 with an odd window spanning positions 3 and 4, I'm checking the codeword where j = 3 with specific coefficient assignments and verifying it against the sum a₀ + a₃ + a₄. The verification checks out for all cases. Now I need to address a key constraint: the coefficients must satisfy cᵢ ≤ p-1, which holds automatically when p ≥ 2w+1 since the arithmetic stays within integer bounds without modular wraparound. For smaller p values, modular arithmetic could introduce additional solutions, but the problem's claim about the window being p-independent for p ≥ 2w+1 is still valid. is p-independent for p ≥ 2w+1, and the full range including wraparound is what was computationally verified.
+
+Actually wait, the claim says "j ∈ Σ_w(A₈^{p-1})" where A₈^{p-1} means we use coefficients in {0, 1, ..., p-1}. For p ≥ 2w+1, since Σcᵢ = w and each cᵢ ≥ 0, the max individual cᵢ ≤ w ≤ (p-1)/2 < p-1. So the upper bound is indeed automatic.
+
+Now I'm stating the main theorem about window structure: for the standard 8-vector construction with the invariant line L, a value j lies in the weighted sum set intersected with L precisely when it falls in the range ⌈w/2⌉ to 2⌊w/2⌋, provided p is large enough. The proof introduces a weight grading function that assigns weight 1 to the first four basis vectors and weight 2 to the remaining ones. Now I'm working through the constraints on S for odd weights. When w is odd, S must also be odd, and I can show that S can't equal w because that would force certain coefficients to zero, which then creates contradictions with the linear constraints from the coordinate conditions.
+
+This gives me the range j ∈ {⌈w/2⌉, ..., 2⌊w/2⌋}. For the sufficiency part, I'm constructing explicit examples: for even w = 2k and each value j = k+t in the valid range, I can set specific coefficients to achieve that j while maintaining all the constraints.
+
+For odd w = 2k+1, I'm doing the same thing with a slightly different construction. But now I'm second-guessing myself on the odd case—when S = w forces those coefficients to zero, I need to verify that the constraints actually do imply c₅ = c₆ and c₄ = c₇ like I claimed.
+
+Working through constraint (I) with c₂ = c₃ = 0 and c₀ = 0, I get c₄ + c₅ = c₆ + c₇. Then from constraint (II) with c₁ = 0, I'm deriving another relation between these coefficients to pin down the structure.
+
+Combining these two equations, I can subtract them to show that c₅ = c₆, which then forces c₄ = c₇. This means the sum w = c₄ + c₅ + c₆ + c₇ must be even since it equals 2c₄ + 2c₅.
+
+The key insight is that we're working over the integers here—the constraint p ≥ 2w+1 prevents any wraparound modulo p, so the algebra holds cleanly.
+
+Now I'm examining what this means for the weight p-1 case in U1. When w = p-1, the window of positions that can contribute spans from ⌈(p-1)/2⌉ to p-1, which creates a gap at the lower positions. As weights increase from 2 up to p-1, these windows progressively cover all positions from 1 to p-1.
+
+Looking at the pattern of coverage: at even weights 2k the window extends from k to 2k, adding the new positions {2k-1, 2k} compared to the previous weight. At odd weights 2k+1 the window is [k+1, 2k], so the lower bound shifts up but the upper bound stays fixed—no new positions are added at the top, just a contraction at the bottom.
+
+When I trace the cumulative union across all weights up to some value w, I see that by weight 2k we've covered all integers from 1 to 2k, and by weight p-1 we've covered 1 to p-1. This suggests the coverage grows monotonically and fills in all values up to the maximum window bound.
+
+Now for the U1 case, the real question is whether the window structure forces a zero-sum constraint across any 3-fiber configuration. With two complete copies of A₈ in fibers 0 and 1, plus an extra vector in some fiber c ≥ 2, I need coefficients with total weight ≤ p that produce zero. The cross-fiber analysis means the shadows from fiber 0 and fiber c must combine to cancel out, and the window structure tells me exactly what values each fiber can contribute at each weight level. For the (8,8,1) case specifically, I'm working with 8 vectors in fiber 0 forming A₈, 8 in fiber 1, and examining whether this configuration can avoid a zero-sum. So fiber 1 actually contains 9 vectors total—the 8 shifted copies of A₈ plus e₁ itself—giving us 17 vectors across both fibers. For the U1 case, I'm focusing on the (8,8,1) configuration where we have 8 vectors from fiber 0, 8 from fiber 1, and 1 from some other fiber c, and I need to figure out what weight-w zero-sum combinations are possible when drawing vectors from each fiber.
+
+The constraint is that the first coordinate must vanish modulo p: if W₁ is the total weight on fiber 1 vectors and W_c is the weight on the fiber c vector, then W₁ + c·W_c ≡ 0 (mod p), where the total weight w₀ + w₁ + w_c stays at most p.
+
+Now I need to verify whether this window structure actually captures the full A₈ shadow or just the invariant line L = {(0,j,j)}. The gap at weight p-1 appears entirely on this line, which is the critical piece, but I should check if the argument extends to smaller primes where p < 2w+1 and the constraint cᵢ ≤ p-1 becomes tighter.
+
+For the cross-fiber zero-sum problem at weight w = p, the window on L would be [(p+1)/2, p-1] for odd p, but working over F_p means values wrap around modularly. The key insight is that the window structure for a single A₈ copy determines what weight targets are reachable, and combining multiple fibers requires understanding how these shadows interact across the modular arithmetic.
+
+I think the core theorem is solid now. Let me formalize it properly and then tackle what comes next for U1. I'll also state a useful corollary about the gap structure: for p ≥ 2w+1, the gap Σ_w(A₈) ∩ L consists precisely of elements (0,j,j) where j falls outside the range [⌈w/2⌉, 2⌊w/2⌋]. At weight p-1 specifically, this gap is {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, giving a gap size of (p-3)/2. I should also work out the shadow size on L.
+
+Now I'm computing how many points of L actually lie in Σ_w(A₈)—it's ⌊w/2⌋ + 1 when w is even and ⌊w/2⌋ when w is odd. This brings me to the question of sumset completeness: does Σ_k + Σ_l = Σ_{k+l} hold on L? I'm starting to check whether adding elements from Σ_k ∩ L and Σ_l ∩ L gives me exactly what's in Σ_{k+l} ∩ L.
+
+When I add the two sets, the j-coordinates range from ⌈k/2⌉ + ⌈l/2⌉ up to 2⌊k/2⌋ + 2⌊l/2⌋, and I need to compare this against what Σ_{k+l} ∩ L actually contains.
+
+Let me check whether the ceiling and floor sums decompose nicely: ⌊k/2⌋ + ⌊l/2⌋ equals ⌊(k+l)/2⌋ only when at least one of k or l is even, but when both are odd, I lose 1 from the sum. The ceiling sums work the opposite way—⌈k/2⌉ + ⌈l/2⌉ exceeds ⌈(k+l)/2⌉ by 1 exactly when both k and l are odd.
+
+Now when both k and l are odd, the intersection of the sumset with L has j values in a much tighter range than what Σ_{k+l} itself covers on L—the sumset is actually more constrained than the individual set would be.
+
+But wait, the claim is about the full shadows, not just their restrictions to L. When I add two shadows together, the resulting vectors can escape L entirely, even if both input shadows were restricted to L. So while the sumset restricted to L is genuinely smaller than Σ_{k+l} ∩ L, the full sumset Σ_k + Σ_l could still equal Σ_{k+l} because vectors from Σ_k that live off L might combine with vectors from Σ_l to fill in those missing endpoints.
+
+Anyway, the sumset completeness is secondary—the Window Structure Theorem is what really matters. Now I want to understand what this structure tells us about U1 more broadly. For a 3-fiber setup with A₈ in fibers 0 and 1, and some vector b in fiber c, a zero-sum of weight at most p requires coefficients on each fiber that satisfy certain weight and congruence constraints.
+
+The key insight is that when I look at just the last three coordinates, the weighted contributions from each fiber must sum to zero modulo p—so if σ₀ and σ₁ are the sums of weighted vectors from fibers 0 and 1, and b' is the last three coordinates of b, then σ₀ + σ₁ + W_c · b' ≡ 0 in F_p³.
+
+This splits into two cases: either b isn't used at all (W_c = 0), which forces W₁ ≡ 0 and reduces to a zero-sum within the two fibers alone, or b is used (W_c ≥ 1), which constrains W₁ ≡ -c·W_c and requires finding σ₀ and σ₁ from the respective fiber sums such that they cancel out the term -W_c·b'.
+
+Now the key question is whether -W_c·b' can be expressed as a sum from the two fiber sumsets for each valid weight triple. If sumset completeness holds, then Σ_{W₀} + Σ_{W₁} collapses to Σ_{W₀+W₁}, which means I need to check if -W_c·b' lands in Σ_{p-W_c}(A₈) — the sumset of weight p - W_c.
+
+This is really asking whether the number-theoretic orbit of b' under the action covers all necessary residues, which is the crux of sub-problem (B). Let me clarify the sumset completeness itself: for full shadows (not restricted to L), the forward inclusion Σ_k + Σ_l ⊆ Σ_{k+l} is immediate since independent copies at weights k and l combine to weight k+l. The reverse direction Σ_{k+l} ⊆ Σ_k + Σ_l is what actually requires proof, and that's where the window structure should come in.
+
+For any element σ in Σ_{k+l}, I can write it as a sum Σc_i a_i where the coefficients sum to k+l. The key move is partitioning each coefficient as c_i = c'_i + c''_i with the parts summing to k and l respectively, which gives me σ as a sum of two elements from Σ_k and Σ_l. This works as long as all the original coefficients are non-negative, which they are by definition.
+
+Now I'm realizing the constraint issue: both c'_i and c''_i need to stay bounded by p-1 since they're coefficients in the shadow sets. But since c'_i and c''_i are non-negative parts of c_i ≤ p-1, they automatically satisfy this bound.
+
+The subtlety I'm catching now is that Σ_k and Σ_l are both shadows of the same set A_8, so when I form their sum, I'm picking elements independently from each shadow—one achievable at weight k and another at weight l using the same basis vectors.
+
+The sum σ₁ + σ₂ lands in Σ_{k+l} only if the combined coefficients stay within bounds, but this breaks down when c'_i + c''_i ≥ p for some coordinate, which means the Minkowski sum isn't cleanly contained in the weight-k+l shadow.
+
+Wait, I'm realizing the key distinction here—these aren't coefficients on the same copy of A₈, but rather independent copies living in separate fibers. Each fiber has its own physical vectors in F_p⁴ that project down to the same A₈ in F_p³, so I can apply coefficients c'_i to one fiber and c''_i to the other without any interaction between them. no constraint linking c'ᵢ and c''ᵢ (other than the weight constraint and nonnegativity).
+
+So Σ_k(A₈) + Σ_l(A₈) using independent copies IS {Σ(c'ᵢ+c''ᵢ)aᵢ : Σc'ᵢ = k, Σc''ᵢ = l, 0 ≤ c'ᵢ, c''ᵢ ≤ p-1}. And Σ_{k+l}(A₈) = {Σdᵢaᵢ : Σdᵢ = k+l, 0 ≤ dᵢ ≤ p-1}.
+
+For the inclusion Σ_{k+l} ⊆ Σ_k + Σ_l, I can decompose any dᵢ with Σdᵢ = k+l into c'ᵢ + c''ᵢ by greedily assigning to c'ᵢ up to the remaining budget k, ensuring both coefficients stay within [0, p-1]. Σc'ᵢ = k (if we have enough total), and c''ᵢ = dᵢ - c'ᵢ ≥ 0, c'ᵢ ≤ dᵢ ≤ p-1, c''ᵢ ≤ dᵢ ≤ p-1. ✓
+
+So the splitting always works! The sumset completeness Σ_k + Σ_l = Σ_{k+l} for independent copies is a trivial consequence of the coefficient splitting.
+
+Actually wait, this is almost too simple. Let me make sure. For any σ ∈ Σ_{k+l}(A₈), I can decompose it as σ = σ₁ + σ₂ where σ₁ ∈ Σ_k(A₈) and σ₂ ∈ Σ_l(A₈) by splitting each coefficient dᵢ into c'ᵢ and c''ᵢ such that they sum to dᵢ, stay within the valid range, and their totals give me exactly k and l.
+
+This means sumset completeness is essentially free from the model—it's not a deep structural property of A₈ itself, just how the coefficient constraints work with independent copies. This dramatically simplifies the U1 argument since I can now combine shadows across fibers without worrying about sumset obstructions.
+
+Now for the (8,8,1) case specifically: I have A₈ in fiber 0, A₈ in fiber 1 (shifted by e₁), and a single vector b in fiber c ≥ 2. When I look at zero-sums of weight W ≤ p using contributions from each fiber, I need to be careful about how coefficients interact—the first coordinate constraint involves the fiber index c multiplied by the coefficient on b, not just the coefficient itself.
+
+For the remaining coordinates, I'm setting up the equation where the sum of scaled vectors from fibers 0 and 1 plus the scaled b vector equals zero, with σ₀ and σ₁ coming from the respective A₈ sum sets.
+
+Using sumset completeness, their sum must lie in Σ_{W₀+W₁}, which means -W_c · b' needs to be in that same set. This connects back to the first coordinate constraint where W₁ ≡ -c·W_c (mod p).
+
+Now I'm working through the parameter ranges: for each choice of W_c from 1 to p-1 and total weight W from W_c + 1 to p, I need to check whether -W_c · b' is actually reachable at weight W - W_c. When W_c = 1, the weight W can vary from 2 up to p, though I need to verify the lower bound constraints more carefully. W₁ = p - c, W₀ = c - 1, and I need -b' to be in Σ_{p-1}(A₈). Shadow saturation tells me the cumulative weight set up to p-1 covers F_p³ \ {0}, but I specifically need -b' at exactly weight p-1, not just cumulatively. The gap at weight p-1 on L consists of points (0,j,j) where 1 ≤ j ≤ (p-3)/2, so if -b' lands there, this weight won't work—but I can explore other weight configurations.
+
+For any total weight W with W_c = 1, the constraint W₁ + c ≡ 0 (mod p) forces W₁ ≡ -c (mod p). Since c ranges from 2 to p-1 and W₁ must be between 1 and p-1, this uniquely determines W₁ = p - c.
+
+Given W₁ = p - c, the remaining weight W₀ = W - 1 - (p - c) = W - p + c - 1. For this to be non-negative, I need W ≥ p - c + 1. So the minimum total weight is W = p - c + 1 (where W₀ = 0), and the maximum is W = p (where W₀ = c - 1).
+
+Now I'm checking the constraints on -b' at these boundary cases: when W₀ = 0, the condition comes entirely from fiber 1, and when W₀ = c - 1, I need to examine what additional constraints arise.
+
+For the case where b appears with coefficient 2, the weight constraint becomes W₁ ≡ -2c (mod p), and -2b' must lie in the appropriate shadow set. The real question is whether there exists some valid pair (W_c, W) that works for every choice of (c, b'). This is fundamentally a coverage problem—I need to check if the window structure of A₈ provides enough flexibility to hit all possible points. When -b' lands on the invariant line L, the window structure gives a direct answer, but off-line points have even larger shadows, so the constraint is actually easier to satisfy there.
+
+I've now established the window structure theorem cleanly, verified sumset completeness, and shown how the gap characterization follows from the tiling. The remaining piece is confirming computationally that the full shadow Σ_w(A₈) concentrates its gap on L, not scattered elsewhere.
+
+But I need to circle back and verify the parity argument more carefully for odd w at the boundary case S = w, where all the lower coefficients vanish. Let me trace through the constraints again to make sure the logic holds when c₀ through c₃ are all zero.
+
+From the first constraint with c₀ and c₃ both zero, I get c₄ + c₅ = c₆ + c₇. The second constraint with c₁ and c₂ zero gives c₄ + c₆ = c₅ + c₇. Combining these two equations forces c₄ = c₇ and c₅ = c₆, which means w must be even—a contradiction for odd w. This confirms the parity argument is sound.
+
+Now I'm verifying that the condition p ≥ 2w+1 prevents any wraparound in the field arithmetic. Since all coefficients stay within the range where their linear combinations don't exceed p-1 in absolute value, everything works over the integers without modular reduction interfering. The proof holds.
+
+Let me write this up cleanly and then state what the Window Structure Theorem actually gives us for the specific case. The full characterization shows exactly which points in the line L appear in the weight-w sumset, and the corollary identifies the gap structure at maximum weight—specifically, which points on the diagonal are missing from the full sumset.
+
+But I need to be careful here: I've only characterized what's in the gap ON the line L, not whether the gap extends beyond L. The corollary as stated claims the entire gap sits on L, but that's a computational observation from the u1_analysis document, not something I've proved analytically. The shadow saturation result (that the cumulative shadow reaches all of F_p³ \ {0}) does follow from the η bound, but the specific claim that the weight p-1 gap is exactly {(0,j,j) : 1 ≤ j ≤ (p-3)/2} needs verification—I should check whether there could be gap points off L that I'm missing. This is claiming the FULL gap at weight p-1 (not just on L) equals this set on L. So the gap is entirely on L. This is a stronger claim than what I can derive from the window structure alone.
+
+To prove this, I would need to show that every point NOT on L is reachable at weight p-1. This is a statement about the full shadow Σ_{p-1}(A₈), not just its restriction to L.
+
+This is an important gap in the argument. Let me flag it.
+
+The computational verification from Session 4 already confirms this for p ≤ 23, so the claim is verified empirically. But I still need a theoretical proof. Looking at the shadow size, |Σ_{p-1}(A₈)| = p³ - (p-1)/2, which means the shadow is approaching almost all of F_p³ \ {0} at weight p-1. I'm trying to figure out how to prove this rigorously.
+
+For now, I'll treat the Window Structure Theorem as my main result—it handles the L-restricted case cleanly. The full off-L characterization is a separate, harder problem that I should tackle next.
+
+Now let me think about the U1 argument with the (8,8,1) distribution. With fiber 0 and fiber 1 each containing A₈, plus one extra vector b = (c, b') in fiber c, I need to check whether using coefficient W_c on b (where 1 ≤ W_c ≤ p-1) allows me to reach -W_c·b' in Σ_{W-W_c}(A₈) for some appropriate weight W.
+
+As W_c ranges over all nonzero values in F_p, the targets -W_c·b' sweep out the entire projective line through b', so I'm looking at whether every nonzero scalar multiple of b' can be hit by the sumset. The constraint that W₀ + W₁ = W - W_c with W₁ = p - c·W_c mod p makes this intricate, so let me just state the theorem and move forward.
+
+I've established the key result and can now extract the verification. There's a structural consequence from the Window Structure Theorem for the (8,8,1) distribution: if the extra vector b = (c, 0, j, j) lies on the invariant line L, then a weight-≤-p zero-sum must exist. The proof hinges on showing that targets of the form (0, -W_c·j, -W_c·j) on L can be realized by the sumset Σ_{p-W_c}(A₈) through the window structure.
+
+Now I'm checking whether the multiplicative orbit generated by -W_c·j as W_c varies actually intersects the feasible range determined by the window bounds. W_c·j mod p) : W_c = 1,...,p-1} intersect the window [(p-W_c+1)/2, p-W_c] (roughly) for at least one W_c?
+
+This is sub-problem (B): number-theoretic orbit coverage. The windows have width ~(p-W_c)/2, and their union covers all of {1,...,p-1} (shadow saturation). Since the multiplicative orbit {W_c·j : W_c ∈ F_p*} = F_p* (all nonzero values, as j ≠ 0), and each value appears exactly once, we're asking: does the permutation W_c ↦ -W_c·j hit each window at least once?
+
+Now I'm thinking about the probabilistic structure here. Each window at weight w = p - W_c has width roughly w/2, so a random permutation would avoid it with probability around 1 - w/(2p). The total capacity across all windows is approximately p²/4, which is much larger than the p-1 hits we actually need. On average, each W_c should have about p/4 valid values available, but the real question is whether multiplication by j as a specific permutation can simultaneously avoid all the windows.
+
+This seems unlikely and should follow from a counting argument, though I'll set that aside for now and write up what I've established so far.
+
+I've proven the Window Structure Theorem—showing exactly which elements j belong to Σ_w(A₈) ∩ L through a key identity relating the weight difference to a sum of coefficients, with both lower and upper bounds derived from parity and feasibility constraints. I've also verified that sumsets combine as expected for independent copies, identified the precise gap at weight p-1 consisting only of elements on L, and confirmed that the union of all weight-w sumsets on L covers the entire space L. Now I need to verify that this gap characterization is complete and check a few remaining edge cases around the boundary behavior. I'm translating this into a constraint on the coefficients: if every nonzero point is reachable at weight p-1, then the sum of coordinates must satisfy a specific modular relation. I'm setting up the system of linear constraints on the coefficients to verify this works for all cases where x ≠ 0. The window structure gave us tight control with just one free parameter, but the off-L case has three free parameters after accounting for the linear constraints, making it a 3D polytope problem at each weight level. I'm considering whether the support-2 shadow—all pairwise sums from the eight basis elements—might provide a cleaner path to showing feasibility across all non-zero x targets, since this shadow grows quickly and might cover the necessary range.
+
+Since a₀, a₁, a₂ form a basis for F_p³, any vector decomposes uniquely as x·a₀ + y·a₁ + z·a₂, but the weight x+y+z might not equal p-1, so I need to pad with zero-sum combinations from A₈ to hit the exact weight constraint.
+
+Let me check if A₈ contains any zero-sum sub-combinations—testing a₀ + a₃ + a₄ + a₅ gives (2,2,2), not zero, and it looks like A₈ is actually zero-sum-free up to weight p. So instead, I'll use the full coefficient range: I want c₀·a₀ + ... + c₇·a₇ = (x,y,z) with Σcᵢ = p-1, leveraging a₀, a₁, a₂ as the basis part and adjusting the remaining coefficients to match the weight constraint.
+
+This becomes a system of 4 linear equations in 8 integer unknowns with bounds, and for most targets like (1,y,z), the feasible region should have solutions. Let me construct one explicitly: I'll set c₄ = 1 to contribute (1,1,0), then c₁ = y-1 and c₂ = z to handle the y and z coordinates, leaving c₀ to balance the total weight.
+
+This works when y ≥ 1, z ≥ 0, and y+z ≤ p-1, but I need to handle the edge cases where y = 0 or y < 0.
+
+For y = 0 with z ≥ 1, I can use a different basis vector to get the first coordinate to 1, then set the remaining coefficients to match z, which keeps everything within the valid range since z ≤ p-1.
+
+When y+z exceeds p-1, I'll need a different approach using modular arithmetic. a₃ = (-1,1,1) to "rotate" weight.
+Try: c₀ = 1, c₃ = t (for suitable t), c₁, c₂ adjusted.
+c₀·a₀ + c₃·a₃ = (1,0,0) + t(-1,1,1) = (1-t, t, t).
+Need to add (0, y-t, z-t) from the remaining vectors.
+c₁·a₁ + c₂·a₂ = (0, c₁, c₂) with c₁ = y-t, c₂ = z-t.
+Weight: 1 + t + (y-t) + (z-t) + pad = 1 + y + z - t + pad = p-1.
+
+Now I'm setting up a system with all four coefficients as variables. The constraint is that they sum to p-1, and I need to match the three coordinates: the first gives me c₀ - c₃ = x, the second gives c₁ + c₃ = y, and the third gives c₂ + c₃ = z. c₃ needs to satisfy a weight constraint where the total equals p-1, which means x+y+z must be congruent to p-1 modulo p. If that's not the case, I need to use additional vectors to adjust the excess weight, and the constraint becomes S ≡ x+y+z+1 (mod p). Since S can take any value in the valid range, I can achieve this with the right allocation of coefficients. But this approach is getting unwieldy—let me step back and ask the fundamental question: does the sumset of these eight vectors actually cover all of F_p³ except for the intersection of the line and the gap?
+
+A cleaner angle is to look at the dimension of the shadow. Since A₈ is a lattice polytope and its image under the linear map should be full-dimensional in F_p³ for sufficiently large weights, it should cover most of the space. More directly, the set {a₀, a₁, a₂, a₃} already spans F_p³ because it includes the standard basis vectors plus a vector with total weight 1, so any target in F_p³ can be reached by combining these generators with the remaining vectors that have weight 2.
+
+Now I'm working through a specific case where S = 0, meaning I only use the first four vectors {a₀,...,a₃} to achieve the full weight p-1. This gives me a system of linear constraints: the coefficients must sum to p-1, and their weighted combinations must produce the target coordinates (x,y,z).
+
+Solving this system, I find that c₃ acts as a free parameter, and the other coefficients express in terms of it and the targets. The key constraint emerges: this approach works precisely when x + y + z equals p - 1, which is the condition I need to satisfy.
+
+When that condition holds and x ≥ 1, I can set c₃ = 0 to get a valid solution where c₀ = x, c₁ = y, c₂ = z—all nonnegative and within bounds. This confirms that every point satisfying x + y + z = p - 1 lies in the solution set.
+
+Now for the case where x + y + z = p - 2, I need to use one of the higher-weight vectors. If I pick c₄ = 1 to contribute (1,1,0), the remaining target becomes (x-1, y-1, z) with a remaining weight of p - 2. But the sum (x-1) + (y-1) + z = p - 4, which doesn't match the remaining weight, so I need to account for this discrepancy with additional coefficients.
+
+Actually, I'm getting tangled up in the arithmetic here. Let me step back and try a cleaner approach using the grading structure to show this off-L gap is genuinely empty. So targets in layer φ⁻¹(s) need S ≡ s + 1 (mod p). When s ranges from 0 to p-2, we get S values from 1 to p-1, and when s = p-1, we need S = 0. This means for any non-zero S, I have flexibility in choosing c₄ through c₇ to sum to S, while the remaining coefficients c₀ through c₃ must sum to p-1-S to satisfy the linear constraint.
+
+Now I'm checking the invariant line L = {(0,j,j)}: here φ gives 2j, so S = 2j + 1 (mod p). But at weight p-1, the no-wraparound condition p ≥ 2w+1 becomes p ≥ 2p-1, which is impossible—so this condition actually fails for maximum weight, and that's a crucial observation.
+
+The window structure theorem I proved only applies when p ≥ 2w+1, which means for w = p-1 the modular arithmetic creates additional solutions beyond what the integer window formula would predict. So the gap at weight p-1 on L can't be directly read off from the standard window bounds.
+
+Let me verify this with the concrete example: for p = 5, the gap at weight 4 should be {(0,1,1)} with size 1, and checking against the modular window in F₅ confirms this matches.
+
+Now I need to reconsider the general case where cᵢ ≤ p-1. At weight p-1, the equation 2j ≡ (p-1) + S (mod p) still governs which j values appear, where S is the sum of the four c values and can range up to 4(p-1).
+
+Working through the modular arithmetic, I'm finding that j ≡ (S-1)(p+1)/2 (mod p), and checking specific values of S reveals constraints: when S = 0 I get j ≡ (p-1)/2, but when S = 1 the result j = 0 is problematic since j must be nonzero in F_p*. For larger S values like S = p-1, the calculation becomes more involved.
+
+Let me step back and think about this more directly: as S ranges over all achievable values, I need to track which values of j are actually possible given the constraint 2j ≡ S - 1 (mod p). So S can range from 0 to p-1, and for each value of S, I need to check whether the remaining sum c₀+c₁+c₂+c₃ = p-1-S is achievable given the linear constraints. When S = p-1, all of c₀ through c₃ must be zero, which forces the same parity relationships between c₄ through c₇ as before.
+
+Working modulo p now, the constraint 2(c₅-c₆) ≡ 0 means c₅ = c₆, and similarly c₄ = c₇. This makes S = 2c₄+2c₅ necessarily even. For odd primes (where p-1 is even), I can achieve S = p-1 by setting c₄+c₅ = (p-1)/2, which gives j = (S-1)/2 = (p-2)/2.
+
+Actually, let me recalculate: 2j ≡ S-1 ≡ p-2 ≡ -2 (mod p), so j ≡ -1 ≡ p-1 (mod p). Let me verify this with p=5: if S = 4, then c₄+c₅ = 2, and with the constraints c₄=c₇ and c₅=c₆, I need to check whether this configuration actually works.
+
+Setting c₄=c₅=1 and c₆=c₇=1, the target sum becomes (0,4,4) in F₅, which gives j = 4 = p-1 as expected. For smaller values of S like p-3 and p-5, the pattern continues with j decreasing accordingly.
+
+Now I'm trying to map out how S relates to j more systematically. As S decreases by 2 each time, j should decrease by 1, giving achievable values from p-1 down to some minimum. When all the c coefficients are zero, S = 0 and j = (p-1)/2, but I'm running into some inconsistency when I try to verify this with the modular arithmetic—the formula 2j = S - 1 doesn't seem to be giving me consistent results across different cases.
+
+Let me recalculate this properly in Z_p. Using 2j ≡ S - 1 (mod p), I can solve for j by multiplying both sides by the modular inverse of 2, which is (p+1)/2. Working through specific values: when S = 0, I get j ≡ (p-1)/2; when S = 2, I get j ≡ (p+1)/2; and as S increases by 2, j increases by 1 modulo p.
+
+Let me verify this pattern with concrete examples for p = 5, where 2^{-1} ≡ 3. Computing the mapping from S to j: S = 0 gives j ≡ 2, S = 2 gives j ≡ 3, S = 3 gives j ≡ 1, and S = 4 gives j ≡ 4.
+
+Now I need to figure out which S values are actually achievable given the linear constraints on the target vector (0, j, j). The parity considerations from my earlier analysis translate into modular constraints here, so I'm working through what values of S at weight p-1 satisfy both the explicit linear equations and the implicit compatibility conditions. I need to test this with a concrete example. Let me work through p=5, w=4 to see which values of S are actually achievable. When S=0, all of c₄ through c₇ are zero, so the remaining coefficients must sum to 4 with the constraints c₀=c₃ and c₁=c₂, giving c₀+c₁=2. This yields j=2, and I can verify this works with specific values like c₀=2, c₁=0.
+
+For S=2, I need c₄+c₅+c₆+c₇=2 and c₀+c₁+c₂+c₃=2, targeting j=3. Setting c₄=1 and c₇=1 forces c₀=c₃ from the first constraint, and now I'm checking what the second constraint tells me about c₁ and c₂. So for S=3, I need the last four coefficients to sum to 3 and the first four to sum to 1. The modular constraints from the original equations are more intricate than I initially thought—let me work out the exact conditions on both groups of coefficients.
+
+Testing c₄=1, c₅=1, c₆=0, c₇=1, I can substitute into the constraints and solve for what c₀ through c₃ must satisfy modulo 5. I'm running into a fundamental contradiction—the modular arithmetic constraints require c₀ = 4, but that immediately violates the integer constraint that all coefficients sum to 1. Since each coefficient must be between 0 and 4, and they sum to exactly 1, each can be at most 1, which makes c₀ = 4 impossible.
+
+Let me reconsider: if c₀ - c₃ must satisfy the modular condition, then c₀ - c₃ ∈ {-1, 0, 1} from the integer bounds, and I need c₀ - c₃ ≡ 4 (mod 5). The value -1 works since -1 ≡ 4 (mod 5), so c₀ = 0 and c₃ = 1. This forces c₁ + c₂ = 0, meaning both are zero, and then I need to check if c₁ - c₂ ≡ 1 (mod 5) is satisfied.
+
+That doesn't work, so I'm trying a different assignment: c₄ = 0, c₅ = 1, c₆ = 1, c₇ = 1. This gives me two new congruence conditions: c₀ - c₃ ≡ 1 (mod 5) and c₁ - c₂ ≡ 1 (mod 5), both achievable with c₀ - c₃ = 1 and c₁ - c₂ = 1.
+
+But when I substitute into the sum constraint c₀ + c₁ + c₂ + c₃ = 1, I get 2c₃ + 2c₂ + 2 = 1, which means 2(c₃ + c₂) = -1. This has no integer solution, so this assignment fails too.
+
+Let me try c₄ = 1, c₅ = 0, c₆ = 1 instead. , c₇=1 (S=3):
+(I): c₀ - c₃ + 1 + 0 - 1 - 1 ≡ c₀ - c₃ - 1 ≡ 0 → c₀ - c₃ ≡ 1.
+(II): c₁ - c₂ + 1 - 0 + 1 - 1 ≡ c₁ - c₂ + 1 ≡ 0 → c₁ - c₂ ≡ -1 ≡ 4.
+c₀ = c₃+1, c₁ = c₂+4 (mod 5). 
+
+Now checking the two cases for c₁ - c₂: if it equals -1, then c₂ = c₁+1, which leads to 2c₃+2c₁+2 = 1, impossible. If it equals 4, then c₁ ≥ 4, making the sum c₀+c₁+c₂+c₃ exceed 1, also impossible. Let me try c₄=2, c₅=0 instead.
+
+With c₄=2, c₅=0, c₆=0, c₇=1, I get c₀ - c₃ ≡ 4 and c₁ - c₂ ≡ 4 (mod 5). Setting c₀ = c₃-1 and c₁ = c₂-1 gives 2c₃+2c₂-2 = 1, which means 2(c₃+c₂) = 3—not an integer, so this fails too. Let me try c₄=0, c₅=0, c₆=1, c₇=2 instead.
+
+Now I'm getting c₀ - c₃ ≡ 3 and c₁ - c₂ ≡ 1 (mod 5), so c₀ = c₃+3 and c₁ = c₂+1. Substituting into the sum constraint gives 2c₃+2c₂+4 = 1, which requires 2(c₃+c₂) = -3—again not an integer. This means S=3 isn't achievable at p=5, w=4 on L, so the point (0,1,1) isn't in Σ.
+
+This aligns with the computational result showing the gap is exactly {(0,1,1)} at p=5. The constraint comes down to parity: with w = p-1 = 4, the sum c₀+c₁+c₂+c₃ must equal 4-S, but the linear system forces it to have a form like 2c₃+2c₂+2·(stuff), which creates a parity obstruction over the integers. The fundamental relation 2j - w = c is what drives this restriction.
+
+Now I'm checking whether the integer bounds on j actually match what modular arithmetic allows. With w=4 and p=5, the range 2j-w gives values between -2 and 4, so j must be in {2,3,4} to keep S non-negative. But I need to verify whether modular solutions could introduce additional valid configurations beyond what the integer analysis predicts.
+
+The constraints split into two types: the weight sum and coordinate bounds are strict integer conditions, while the coordinate relationships come from modular equations. So I'm working with a system where the weight Σcᵢ = 4 is fixed over integers, each cᵢ stays in [0,4], and the linear congruences mod 5 must all be satisfied simultaneously.
+
+For p=5 with w=4, I need to reconsider whether the modular equations actually constrain the solution space differently than integer equations would. The first constraint's left side can range quite widely depending on which coordinates are nonzero, so the modular arithmetic might allow solutions that wouldn't exist if we required exact integer equality. With Σcᵢ = 4 and each ≤ 4, the range of c₀-c₃+c₄+c₅-c₆-c₇ is from -4-4-4 = -12 to 4+4+4 = 12. But Σ = 4 constraints this further. Max of c₀+c₄+c₅ is 4 (if all weight in these three), giving c₃=c₆=c₇=c₁=c₂=0, LHS = 4. Min: c₃+c₆+c₇ = 4, LHS = -4.
+
+So LHS ∈ {-4,...,4}. For this to be ≡ 0 mod 5: LHS ∈ {-5, 0, 5}. Since |LHS| ≤ 4, LHS must equal 0. This means the modular equation is actually an integer equation with no wraparound. The same reasoning applies to constraint (II), so for p=5, w=4, both modular equations reduce to integer equations and my parity argument holds.
+
+More generally, when w = p-1, the range of each linear constraint is roughly [-(p-1), p-1]. The values satisfying LHS ≡ 0 mod p within this range are just {0}, so modular equations always become integer equations at this weight threshold. I should verify whether the range is exactly [-(p-1), p-1] or if there's more nuance here. I'm verifying that the range of the left side stays within [-(p-1), p-1], which means any value congruent to 0 mod p must equal exactly 0 as an integer. This confirms my parity argument holds at w = p-1 even though the modular wraparound condition isn't strictly met, since the linear constraints naturally prevent overflow. Now I need to check whether the value equation behaves the same way. c₆ + c₇ (mod p). The RHS ranges from 0 to ... c₁+c₃+c₄+c₇ ≤ p-1, and 2c₆ ≤ 2(p-1). So RHS ∈ [0, 3(p-1)]. For p ≥ 3, this can exceed p, so there IS modular wraparound in the value equation.
+
+But this doesn't affect the PARITY argument, which only uses the total weight grading identity 2j ≡ S + (p-1) (mod p), where S = c₄+c₅+c₆+c₇ is an integer in [0, p-1].
+
+2j ≡ S - 1 (mod p). Over integers: 2j and S-1 differ by a multiple of p. Since j ∈ {1,...,p-1}, we have 2j ∈ {2,...,2(p-1)}, while S-1 ∈ {-1,...,p-2}. This means 2j = S - 1 + kp for some integer k, and checking the ranges: if k=0, then 2j = S-1, which requires S ≥ 3 to satisfy 2j ≥ 2, and S ≤ p-1 follows naturally.
+
+For k=1, we get 2j = S - 1 + p, so j ∈ {(p-1)/2,...,p-1} and S = 2j - p + 1. Testing with p=5 gives specific values: j=2 yields S=0, j=3 yields S=2, and j=4 yields S=4.
+
+When k=2, the constraint 2j = S - 1 + 2p pushes j beyond p-1, putting it out of range for p ≥ 3. So I'm focusing on k=0 and k=1 as the only viable cases. For k=0, odd values of S from 3 to p-1 give j values from 1 to (p-2)/2, though I need to be more careful about the exact upper bound depending on whether p is odd or even.
+
+For k=1, when S is even and p is odd, j = (S+p-1)/2 ranges from (p-1)/2 when S=0 up through larger values as S increases toward p-1.
+
+So combining both branches, j covers the full range {1, ..., p-1}, but the relationship between j and S flips at the midpoint: for smaller j values S is odd (S = 2j+1), while for larger j values S is even (S = 2j-p+1). Now I need to check what the parity constraint from the linear equations tells us about c₀+c₁+c...
+
+For the k=0 branch where j ≤ (p-3)/2, S is odd, so c₀+c₁+c₂+c₃ = p-2-2j. The integer linear equations impose constraints on how these coefficients can be distributed, and I need to verify whether the parity of S is actually compatible with the solutions to those equations.
+
+Let me step back and work through the w = p-1 case more carefully. I'll set up the problem cleanly: w = p-1, the target on L is (0,j,j), and the coefficients c₀ through c₇ are nonnegative integers summing to p-1, subject to the two linear constraints that must hold as integer equations.
+
+Now I'm computing the weight function φ applied to the target. The sum Σcᵢaᵢ decomposes based on which coefficients contribute, and when I apply φ I get (p-1-S) + 2S where S is the sum of the last four coefficients. This simplifies to p-1+S, which reduces modulo p to S-1. So I have 2j ≡ S-1 (mod p).
+
+Since j ranges from 1 to p-1 and S ranges from 0 to p-1, I need to resolve this congruence as an actual integer equation to understand which values are achievable.
+
+The difference 2j - (S-1) must be a multiple of p, and given the ranges involved, this multiple can only be 0 or 1. When the multiple is 0, I get j = (S-1)/2, which requires S to be odd and at least 3, giving j values up to (p-3)/2. When the multiple is 1, I get j = (S+p-1)/2, which requires S to be even and gives j values from (p-1)/2 onward.
+
+Now I'm looking at the parity constraints that emerge for j values in the first branch, where j ≤ (p-3)/2 and S must be odd.
+
+From the integer constraint equations, I can derive that c₀+c₁+c₂+c₃ equals p-2-2j. By combining the two main constraints and analyzing their parity implications, I'm finding relationships between the coefficient sums that will determine which j values are actually achievable.
+
+Now I'm checking the parity constraint more carefully. Adding the two equations gives me that c₀+c₁-c₂-c₃ must be even, and combined with the sum c₀+c₁+c₂+c₃ = p-1-S, this forces p-1-S to be even. Since p is odd, S itself must be even.
+
+But for the k=0 case, S = 2j+1 is odd—this contradicts the requirement that S be even. So the k=0 branch yields no valid solutions.
+
+For k=1, S = 2j-p+1 is even (since p is odd, this is even minus even), which works. This means for w = p-1, the achievable j values must satisfy j ≥ (p-1)/2, giving j ∈ {(p-1)/2, (p+1)/2, ..., p-1}. Now I need to verify that all these j values are actually achievable, not just necessary, by checking the case j = (p-1)/2 + t for t ∈ {0, ..., (p-1)/2}.
+
+When t = 0 (so S = 0 and j = (p-1)/2), the higher coefficients vanish and the integer constraints force c₀ = c₃ and c₁ = c₂ with c₀ + c₁ = (p-1)/2. This is achievable—for instance, setting c₀ = c₃ = (p-1)/2 and c₁ = c₂ = 0 gives weight p-1 and produces the target vector ((p-1)/2)(0,1,1). Now I'm checking the case where t = (p-
+
+1)/2, which means S = p-1 and j = p-1. Here the constraint c₀ + c₁ + c₂ + c₃ = 0 applies, and the parity argument with S = p-1 (which is even) yields c₅ = c₆ and c₄ = c₇, with c₄ + c₅ = (p-1)/2. I can achieve this with c₄ = 0, c₅ = c₆ = (p-1)/2, c₇ = 0, again giving weight p-1.
+
+Now for the general case with arbitrary t, I'm using an interpolation construction where S = 2t. Setting c₃ = (p-1)/2 - t, c₇ = t, c₄ = t, c₀ = (p-1)/2 - t, and the rest zero gives S = 2t as required, with total weight 2((p-1)/2 - t).
+
+Verifying the constraints: the weight sum equals p-1, both linear constraints (I) and (II) are satisfied, and the j-value works out to (p-1)/2 + t. All coefficients stay nonnegative for t in the valid range {0,...,(p-1)/2}.
+
+So I've shown that every j from (p-1)/2 to p-1 is achievable, which means at weight p-1, the intersection Σ_{p-1}(A₈) ∩ L consists exactly of the points (0,j,j) where (p-1)/2 ≤ j ≤ p-1, and the gap is the set of points (0,j,j) with 1 ≤ j ≤ (p-3)/2. This completes the gap characterization at w = p-1 using the same total weight and parity grading argument, where the parity constraint eliminates the k=0 branch.
+
+The beautiful part is that both the window structure at arbitrary weight w and the gap at w = p-1 follow from the same underlying principle: the total weight grading combined with parity constraints. Now I'm formulating the general theorem that unifies this: for A₈ on the invariant line L, a point (0,j,j) lies in Σ_w(A₈) if and only if there exists some S in the appropriate range satisfying the congruence condition 2j ≡ S - 1 (mod p) along with additional constraints on S.
+
+The key insight is that S must be even whenever p is odd, which gives us a clean parity characterization that applies uniformly across all weights. , that's not right either. In the p ≥ 2w+1 regime, I showed that for odd w, S is odd. But in the w = p-1 regime, S must be even. These seem contradictory!
+
+Let me re-examine. The parity constraint comes from:
+c₀+c₁ - c₂-c₃ = 2(c₇ - c₄) [from (I)+(II)]
+
+So c₀+c₁+c₂+c₃ - 2(c₂+c₃) = 2(c₇-c₄), i.e., (p-1-S) - 2(c₂+c₃) = 2(c₇-c₄). So p-1-S ≡ 0 (mod 2), meaning S ≡ p-1 (mod 2). Since p is odd, p-1 is even, so S must be even.
+
+But earlier in the integer analysis where p ≥ 2w+1, I concluded that for odd w, S should be odd. Now I'm checking whether this actually holds: if w is even, then 2j = w + S with S even gives an even result, which works. But when w is odd and S is even, then 2j would be odd, which is impossible since 2j must always be even.
+
+This suggests there's an error in my parity derivation for the integer case, or I misidentified which solutions actually exist for odd w. So when p ≥ 2w+1, the linear constraints give integer equations, which means S is always even. But then 2j = w + S, and if w is odd while S is even, I'd get 2j equal to an odd number—which is impossible for integer j. This suggests there shouldn't be any solutions for odd w in this range, yet I constructed explicit examples earlier. Let me trace through the w=3 case to see where the contradiction arises.
+
+With w=3 and j=2, I get specific coefficient values, and checking the two linear constraints confirms they're satisfied. But then S comes out to 1, which is odd—directly contradicting what I just proved about S needing to be even. Something's wrong with my reasoning about p. c₀+c₁-c₂-c₃ comes out to -2, which checks the evenness constraint, and the sum c₀+c₁+c₂+c₃ equals 4, also even. The value S is 1 (odd), and w-S gives 2 (even), which matches c₀+c₁+c₂+c₃.
+
+Wait, that's not right—w is 3, so w-S should be 2, but I calculated c₀+c₁+c₂+c₃ as 4. And looking back at the full sum across all coefficients, I'm getting 5 instead of the required 3. I made an error in my construction.
+
+Let me reconsider the odd w case more carefully. For w = 2k+1 with j = k+1+t where t ranges from 0 to k-1, I'm setting up the coefficients differently: c₂ = 1, c₃ = k-t, c₇ = t, c₄ = 1+t, c₀ = k-t-1, and c₁ = c₅ = c₆ = 0. Adding these up: (k-t-1) + 0 + 1 + (k-t) + (1+t) + 0 + 0 + t = 2k+1, which checks out.
+
+Now testing the specific case w = 3 (so k = 1, t = 0): I get c₂ = 1, c₃ = 1, c₇ = 0, c₄ = 1, c₀ = 0, c₁ = 0, which sums to 3. The j value is 1+1 = 2, and S = 1, which is odd—so I've found an odd S value at w = 3. The sum c₀+c₁+c₂+c₃ = 2, and I'm checking what this means for the overall structure.
+
+Wait, I've been making an error with the parity argument. The constraint c₀+c₁+c₂+c₃ is even means w - S is even, which means S has the same parity as w, not that S must be even. For odd w, S should be odd, not even—I had the parity backwards.
+
+Now checking: when w is even, S is even; when w is odd, S is odd. This matches my earlier analysis where w = p-1 (even) gives S even. And for the integer case without wraparound, 2j = w + S works because w and S have matching parity, making their sum even. So the parity constraint is simply S ≡ w (mod 2), and for even w = 2k, S must be in the set of even values. For odd w, when S equals w, all coefficients would be zero, which forces S to be even—contradicting the odd requirement. So the maximum S is actually w-2, giving j_max = 2k, which matches the formula for even and odd cases.
+
+Now I'm verifying the parity constraint S ≡ w (mod 2) across different branches. For w = p-1 (even), the k=0 case shows S must be even, but the equation 2j = S-1 would require S-1 to be even, which is impossible. The k=1 branch needs checking next.
+
+For the k=1 case with w = p-1, I have 2j = S-1+p, and since S is even and p is odd, this sum is even, giving integer j = (S+p-1)/2. As S ranges over {0,2,...,p-1}, j spans from (p-1)/2 to p-1, leaving a gap at {1,...,(p-3)/2}. This confirms all even values of S in that range are achievable through the interpolation construction.
+
+The complete argument hinges on the linear constraint that c₀+c₁+c₂+c₃ must be even.
+
+In the integer regime where p ≥ 2w+1, the formula 2j = w+S restricts S to either {0,2,...,w} or {1,3,...,w-2} depending on parity, excluding boundary cases. The w = p-1 case uses modular resolution where the k=0 branch is killed by parity constraints, leaving only k=1 to define the achievable window. Explicit constructions verify all these values are actually attainable.
+
+Now I need to tackle the claim that every point off the L directions lies in Σ_{p-1}(A₈).
+
+For any point (x,y,z) in F_p³ with x ≠ 0, I'm trying to show it belongs to the (p-1)-fold sumset of A₈. The direct approach is to use the basis vectors a₀, a₁, a₂ and the vector a₃ = (-1,1,1) to construct the target explicitly. Let me focus on the case where we only use the first three basis vectors and set the other coefficients to zero.
+
+When I use just a₀, a₁, a₂, the sum c₀·a₀ + c₁·a₁ + c₂·a₂ gives me (c₀, c₁, c₂) directly, so the weight equals x+y+z. This works perfectly when x+y+z = p-1 and all coordinates are in the valid range. For other weight values, I need a different strategy.
+
+I'm introducing additional basis vectors with a weight grading φ that tracks x+y+z. The remaining vectors contribute a sum S = c₄+c₅+c₆+c₇, and the total weight must satisfy φ(x,y,z) ≡ S-1 (mod p). This means S ≡ x+y+z+1 (mod p), and since the target weight p-1 is even, S must also be even. Depending on whether x+y+z+1 falls within the valid range, I either use it directly as S or adjust it by subtracting p.
+
+Now I'm analyzing the specific cases: since x,y,z are each at most p-1 and at least 1, the sum x+y+z ranges from 1 to 3(p-1), making x+y+z+1 range from 2 to 3p-2. But S must stay in {0,...,p-1}, so I take the representative modulo p. For smaller sums where x+y+z ≤ p-2, S equals x+y+z+1 directly and needs to be even, which happens when x+y+z is odd. When x+y+z = p-1, S wraps to 0, which is even. I'm checking the remaining cases where x+y+z exceeds p-1.
+
+For the higher ranges, when x+y+z ∈ {p,...,2p-2}, S becomes x+y+z+1-p and still needs to be even. Similarly, when x+y+z ∈ {2p-1,...,3(p-1)}, S becomes x+y+z+1-2p and must be even. If the grading forces S to be odd, there's no valid solution with that weight, meaning the point isn't in the Schubert variety. But on the line L, the gap consists only of points with x = 0, which contradicts the constraint that x ≥ 1.
+
+So for any point with x ≠ 0, the parity of S isn't actually an obstruction—when S needs to be even, I can construct a solution using the available degrees of freedom, and when S would need to be odd, that case doesn't arise.
+
+Wait, let me check this more carefully. Computing S = (x+y+z+1) mod p for specific points: (1,0,0) gives S = 2 (even), which works, but (1,1,0) gives S = 3 (odd). But (1,1,0) is actually a generator in A₈, so if the parity constraint says it shouldn't exist, something's wrong with my reasoning.
+
+Let me verify at p = 5 whether (1,1,0) can be expressed as a weight-4 combination of the generators with the parity constraint satisfied.
+
+I'm testing specific coefficient assignments against the three modular equations. When I put all weight on a₄, the first equation gives 4 instead of 1, so that doesn't work. Now trying c₄ = 1 and c₀ = 3 to see if this combination satisfies the constraints. I'm checking whether 4a₄ actually gives (1,1,0) in F₅, but it doesn't—it gives (4,4,0) instead. I'm also testing various linear combinations of the basis vectors, but none of them seem to produce (1,1,0) at weight 4, so maybe I should reconsider whether a parity argument applies here.
+
+Looking at the constraint that S = c₄+c₅+c₆+c₇ must satisfy S-1 ≡ 2 (mod 5), which forces S = 3, but S also needs to be even from the linear constraint—so there's no valid solution. This suggests (1,1,0) isn't in Σ₄(A₈) at all, which would mean the gap extends beyond L even though (1,1,0) has x ≠ 0, contradicting my earlier claim that the gap should be empty for x ≠ 0. I need to recheck that reasoning.
+
+Actually, I think I was wrong about the gap being restricted to L. The key insight is that what matters for U1 isn't whether a point appears at weight exactly p-1, but whether it's reachable at *some* weight ≤ p-1 in the cumulative shadow. The cumulative shadow Σ_{≤p-1}(A₈) saturates to F_p³ \ {0}, meaning every nonzero point is covered by some weight, even if specific points have gaps at specific weights. So the gap at weight p-1 might be broader than just L, but that's fine as long as the cumulative coverage is complete. be specifically about the gap on L at weight p-1, not the full gap in F_p³. Or it might be wrong.
+
+Actually, re-reading: "Gap at weight p-1: exactly {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, size (p-3)/2." — this seems to claim the gap in ALL of F_p³ \ {0} at weight p-1 is exactly this set. But my analysis shows it's larger (includes off-L points).
+
+I think the u1_analysis document may be incorrect about the full gap being on L. The gap includes all points (x,y,z) where φ(x,y,z)+1 is odd mod p and the resolution... hmm, it's more nuanced than that because higher S values (from k=2, k=3, ...) might fill in.
+
+Wait, I only considered two branches (k=0 and k=1) for 2j ≡ S-1 (mod p), but I'm looking at a general 3D target now, not just L. The weight grading gives one constraint on S, but the other coordinates add more constraints. For a generic target, there's more freedom in how solutions can arise. The parity constraint I derived applies specifically to the invariant line structure, so off-L targets follow different rules entirely. Now I'm adding up all three equations to find what parity constraint emerges from their sum. I'm verifying that the weight identity φ(target) = w + S holds regardless of the specific constraints, which means the parity obstruction I found earlier only applies when those additional constraints are imposed. For general targets without those restrictions, every value of S becomes potentially achievable, so the parity constraint doesn't actually limit the solution space.
+
+The key insight is that what really matters for U1 isn't just the gap at a single weight, but the cumulative shadow across all weights—and I've already shown that every nonzero point in F_p³ is reachable at some weight. To handle the cross-fiber case, I need to use sumsets of shadows from different weights and fibers to cover everything that's reachable by distributing the budget across them.
+
+So my strategy should be: first, use the window structure on L to understand the gap at each individual weight, then for any extra vector, show that some weight allocation across fibers will work—which ultimately reduces to a number-theoretic coverage problem. I should stop chasing whether the full gap is concentrated on L (that might not even be true for single-weight shadows) and instead focus on what the window structure and cross-fiber argument actually give me.
+
+Let me document what I've proved so far and map out the remaining steps clearly. When S = w, we'd need all of c₀, c₁, c₂, c₃ to vanish, which forces c₅=c₆ and c₄=c₇, making S even—a contradiction for odd w. For the achievable cases, I can construct explicit families: when w is even, I set specific coefficients to get j=k+t, and when w is odd, a different assignment yields j=k+1+t. The boundary case w=p-1 becomes problematic due to parity constraints.
+
+For the k=0 branch, requiring 2j = S-1 over integers demands S be odd, but we know S is even, so that's impossible. The k=1 branch gives j = (S+p-1)/2, which ranges from (p-1)/2 to p-1, and the same interpolation argument confirms these are all achievable. This completes the proof.
+
+The corollaries follow naturally: there's a gap on L at weight p-1 consisting of points (0,j,j) where j ranges from 1 to (p-3)/2, the shadow saturates L except at the origin by taking the union across all weights, and sumsets decompose cleanly for independent copies since the coefficients split independently.
+
+Now I need to verify these constructions work concretely. For small primes like p=5,7,11, I should check that the explicit formula (c₀,c₃,c₄,c₇) = (k-t,k-t,t,t) at weight 2k actually produces the claimed output (0, k+t, k+t)—for instance, when w=4, t=1 at p=5, the sum a₀+a₃+a₄+a₇ should equal (0,3,3). I also need to verify for larger primes like p=29,31 that the gap on L at weight p-1 matches exactly {(0,j,j) : 1 ≤ j ≤ (p-3)/2}, and then determine whether the full gap across all of F_p³ at weight p-1 has a different structure.
+
+For off-diagonal points where x ≠ 0, there's no parity constraint like there is on L, so the gap could be larger—I need to run a computational check to see if points outside L contribute additional missing sums. The window structure itself is solid: the shadow of A₈ on the invariant line has a precise, analytically tractable form, and the gap at weight p-1 is concentrated on L. The remaining piece is showing that cross-fiber zero-sums can cover this gap through the number-theoretic orbit argument—specifically, for each fiber label c and vector b, I need to find a weight allocation that works.
+
+Beyond that, I still need to handle distributions beyond (8,8,1), extend the argument beyond A₈ or establish why A₈ is unique, and verify the orbit coverage claim computationally.
+
+============================================================
+BLOCK 5 (226 chars)
+============================================================
+Good. Now I have all the context I need. Let me write up my proof of the Window Structure Theorem clearly and completely. This is the core theoretical result.
+
+Let me organize the proof and present it, then store it to Cortex.
+
+============================================================
+BLOCK 6 (107 chars)
+============================================================
+Good, stored to Cortex. Now let me also store a second entry about the key insight and what remains for U1.
+
+============================================================
+BLOCK 7 (24867 chars)
+============================================================
+Now let me work on sub-problem (B): the number-theoretic orbit coverage. This is about proving that for the (8,8,1) 3-fiber case, any extra vector b in fiber c can be "killed" by a cross-fiber zero-sum.
+
+Let me formalize what needs to be proved.
+
+**Setup:** Two copies of A₈ in fibers 0 and 1, one extra vector b = (c, b') in fiber c ≥ 2.
+
+A zero-sum at weight W ≤ p uses:
+- W₀ coefficients on fiber 0 vectors (contributing σ₀ ∈ Σ_{W₀}(A₈) to last 3 coords)
+
+
+- W₁ coefficients on fiber 1 vectors (contributing σ₁ ∈ Σ_{W₁}(A₈))
+- W_c = coefficient on b (contributing W_c · b')
+
+The constraints are: total weight stays within p, the first coordinate vanishes modulo p when we account for the fiber indices, and the remaining three coordinates sum to zero in F_p³.
+
+Now I'm using sumset completeness to rewrite the third condition—the remaining coordinates must come from the sumset of the two fiber contributions. This means W_c · b' has to be the negative of what we get from combining the two fiber sums. From the first coordinate constraint, I can express W₁ in terms of W_c and c modulo p. But W₁ could actually be zero if we're not using the first fiber at all, so I need to split this into cases and work through what happens when W₁ = 0 first. W₁ + c · W_c ≡ 0 mod p, so I need W₁ ≡ -c · W_c mod p. Since W_c ∈ {1,...,p-1} and c ∈ {1,...,p-1}, the product c · W_c is nonzero mod p, which means W₁ must equal p - (c · W_c mod p), giving a valid solution in the range {1,...,p-1}.
+
+Now I'm checking the constraint on total weight: W₁ + W_c ≤ p, which simplifies to p - (c · W_c mod p) + W_c ≤ p, or equivalently W_c ≤ c · W_c mod p.
+
+When c · W_c doesn't wrap around modulo p, this reduces to the condition 1 ≤ c, which holds for c ≥ 2, giving W₁ + W_c = p - (c-1) · W_c. For the wraparound case where c · W_c ≥ p, I get W₁ = 2p - c · W_c, and I need to verify the constraint on W₁ + W_c in this scenario.
+
+Let me simplify by assuming total weight equals p. In the no-wraparound case, W₀ = (c-1) · W_c, and when wraparound occurs, I need to work through what W₀ becomes with W₁ = 2p - c · W_c.
+
+For the no-wraparound case where c · W_c < p, the combined weight of fibers 0 and 1 is p - W_c, and I need to check whether -W_c · b' lies in the valid weight set for that combined weight.
+
+As W_c ranges over valid values, the target -W_c · b' sweeps through all nonzero scalar multiples of b', while the shadow set Σ_{p-W_c}(A₈) changes with W_c. The condition U1 holds if these ever intersect. When b' is off the invariant line L, the shadow has no parity constraint and is much larger, making intersection likely. The critical case is when b' lies on L itself.
+
+For b' = (0,j,j) on L, I need -W_c · j to fall within the achievable window at weight p-W_c. The window structure depends on the weight: for smaller weights (larger W_c), the window is [⌈w/2⌉, 2⌊w/2⌋], but at w = p-1 there's a gap. is {1,...,(p-3)/2}.
+For general w: need the modular window characterization.
+
+This is where the orbit coverage comes in. Let me think about it.
+
+For each W_c ∈ {1,...,p-1}, define:
+- w = p - W_c (the shadow weight)
+- m = -W_c · j mod p (the target value on L)
+
+We need: m is in the window at weight w.
+
+For w ≤ (p-1)/2 (integer regime): window = [⌈w/2⌉, 2⌊w/2⌋].
+For w > (p-1)/2: need the modular analysis.
+
+Actually, from the w = p-1 analysis, I showed the window at w = p-1 is {(p-1)/2,...,p-1}. Can I generalize this to all w?
+
+For general w, the achievable m values come from solving 2m ≡ w + S (mod p) where S has the same parity as w and ranges from w up to p-1, with the constraint that S = w forces all coefficients to zero, which is only feasible when w is even. So I need to work out how this modular arithmetic behaves for w > (p-1)/2 and determine the full window structure. The parity constraint holds, and S ranges from w mod 2 up to w (or w-2 for odd w). When w is small relative to p, the values of m are straightforward, but once w exceeds (p-1)/2, the modular reduction kicks in at the threshold S = p - w, splitting the achievable m values into two regions depending on whether w + S stays below p or wraps around.
+
+Rather than enumerate all cases, I should focus on the window size—how many distinct m values are reachable at each weight w. For small w, the window grows roughly linearly with w/2, but at w = p-1 the behavior changes.
+
+Summing across all weights gives roughly p²/4 achievable pairs out of p² total, so the density is about 1/4. With an expected p/4 hits across the weight values, it's unlikely to miss all of them entirely, though a rigorous proof needs to handle the worst-case configuration carefully.
+
+The trickiest scenario is when b' = (0, j) sits in the gap at weight p-1, making m = p-j land in the upper range. But checking the window bounds at weight p-1, this value actually falls inside the window, which suggests the orbit coverage might be automatically satisfied for the (8,8,1) case. For larger values of j in the range {(p+3)/2,...,p-1}, the target from W_c = 1 falls into a gap, so I need to try W_c = 2 instead. With W_c = 2, the target becomes (0, p-2j mod p, p-2j mod p), and I need to check if this lands in the window at weight w = p-2. Let me work out the general window formula for weights w > (p-1)/2 to determine when this works.
+
+For weights in the range (p-1)/2 < w ≤ p-1, the achievable S values form a set {w mod 2, w mod 2 + 2, ..., S_max} where S_max depends on whether w is even or odd. The constraint S ≤ w comes from requiring c₀+c₁+c₂+c₃ = w - S ≥ 0, which is the binding restriction here.
+
+Now I'm looking at how 2m ≡ w + S (mod p) behaves across this range. When w = p-1-k for small k, the sum w + S spans different intervals depending on the parity of w—for even w it goes from w to 2w, while for odd w the range shifts slightly.
+
+When I apply the modular reduction, values below p give m = (w+S)/2 directly, but values at or above p need to subtract p first, giving m = (w+S-p)/2. For the specific case w = p-1, the values of w+S that exceed p map to m values in {0, 1, ..., (p-3)/2}, but since S must be even, I'm getting a constraint on which values (S-1)/2 can actually take.
+
+I'm going in circles with the general formula. Let me use what I've already established: the window at w = p-1 is {(p-1)/2, ..., p-1}. Now I need to find the windows at every weight w to answer the orbit coverage question. Rather than deriving the general window formula, I'll directly check which j values have p-j falling in the window at w = p-1.
+
+Since p-j ∈ {(p-1)/2, ..., p-1} exactly when j ∈ {1, ..., (p+1)/2}, I know W_c = 1 works for these j values. For larger j in the range {(p+3)/2, ..., p-1}, I need W_c ≥ 2, so I'm now computing the window at w = p-2 to see if the target m = -2j mod p lands there.
+
+With w = p-2 and odd S values in {1, 3, ..., p-4}, the sum w+S ranges from p-1 up to 2p-6. When w+S < p (only S = 1), I get m = (p-1)/2, but for w+S ≥ p (S ≥ 3), the values of m come from (S-2)/2.
+
+Wait, that's problematic since S is odd, making S-2 odd as well, so (S-2)/2 isn't an integer. Let me reconsider using modular arithmetic directly: m = (w+S) · 2^{-1} mod p, where 2^{-1} = (p+1)/2 mod p. So m = (w+S)(p+1)/2 mod p. Testing this with w = p-2 and S = 1 gives m = (p-1)(p+1)/2 = (p²-1)/2 ≡ (p-1)/2 mod p, which checks out.
+
+Now I'm working through specific cases: for w = p-2 with S = 3 and S = 5, computing the corresponding m values modulo p, then verifying with concrete examples like p = 5 and p = 7. For p = 5 with w = 3, the constraint S ≤ w-2 = 1 combined with S being odd and positive means S = 1 is the only option, giving m = (3+1) · (p+1)/2. ⌉=3, 2⌊5/2⌋=4} = {3,4}. ✓
+
+So the formula actually holds even when p < 2w+1, which is outside the proven range. Let me check p=5, w=3 again: the window is {2}, and the formula gives {2,...,2} = {2}, which matches. And for p=5, w=4, I need to compute what the window should be.
+
+The formula gives {2,...,4} = {2,3,4}, which matches the actual window. I verified earlier that j=1 isn't achievable at p=5, w=4, so the formula correctly excludes it. Now checking if S=4 is feasible: with c₀=c₁=c₂=c₃=0, I need c₄+c₅=2, which works, giving m≡4 (mod 5).
+
+This suggests the window formula j∈{⌈w/2⌉,...,2⌊w/2⌋} might hold universally across all w and p≥5. Testing at p=7: for w=6 the formula gives {3,...,6}, matching the proven window {(p-1)/2,...,p-1}={3,...,6}. At w=5, the formula gives {3,4}.
+
+For w=4 at p=7, I'm checking whether the formula {2,3,4} holds by computing m values for even S∈{0,2,4}, finding that S=0 gives m≡2 mod 7, S=2 gives m≡3 mod 7, and S=4 gives m≡4 mod 7, confirming the window matches the formula.
+
+Now I'm testing smaller windows at p=7 and p=5 to verify the pattern holds across different cases, and I'm about to examine the boundary case p=5, w=4 where w equals p-1 to see if the formula breaks down. Checking the vectors in the window at w=1: they all come from {a₄,...,a₇}, which either have nonzero first coordinate or have first coordinate -1, so none satisfy the required conditions—the window is indeed empty. Now I'm wondering if this pattern generalizes: does the window formula j ∈ {⌈w/2⌉,...,2⌊w/2⌋} actually work for all w ∈ {1,...,p-1} across all primes p ≥ 5, and if so, whether the integer formula remains valid even when p < 2w+1.
+
+I've established that the parity constraint S ≡ w (mod 2) emerges whenever the linear constraints are integer equations, and at w = p-1 these constraints are indeed integer equations. For arbitrary w, the constraints have left-hand sides bounded by the sum of absolute values of coefficients times their maximum values, which gives a range of [-w, w]. For constraint (I) specifically, this bound is w, so the left side must lie in [-w, w] and satisfy divisibility by some modulus—but the thought cuts off before completing this argument.
+
+The next part clarifies: since the left side is in [-w, w] and must be divisible by p, for w < p the only possibility is 0, making these integer equations for all w ≤ p-1. This means the parity argument holds universally. Now I'm examining the total weight identity 2m = w + S (mod p), where 2m ranges in [2, 2(p-1)] and w + S ranges differently depending on whether w is even or odd, and I'm about to analyze the case where w ≤ (p-1)/2.
+
+For larger w values where (p-1)/2 < w ≤ p-1, the sum w + S can reach up to 2w, which might exceed p-1, so I need to account for the modular arithmetic. Since 2m ∈ {2,...,2(p-1)} and w + S falls in a specific range, the equation 2m = w + S (mod p) means either 2m = w + S directly or 2m = w + S - p, and I'm working through which sub-case applies. So when w+S falls in the range [p, 2p), I have two possible values for m depending on whether I use k=0 or k=1 in the modular resolution. Both turn out to be valid solutions—I can either take m = (w+S)/2 directly, or subtract p first to get m = (w+S-p)/2. When w+S = p+2t, these give me m values that differ by exactly (p-1)/2 + t, which means I'm getting multiple valid midpoints. So when w+S is even and p is odd, the two candidate values for m have different parities—one's an integer and one isn't. This means only k=0 gives a valid solution: m = (w+S)/2, which works as long as w+S ≤ 2p-2.
+
+The key insight is that m is determined entirely by w and S, with no modular arithmetic needed. The constraints are that S must have the same parity as w, and m ranges from ⌈w/2⌉ to ⌊w/2⌋ + w depending on whether w is even or odd. This window formula actually holds universally across all w and all p ≥ 5.
+
+Now I'm verifying that m stays within the valid range {1,...,p-1} and that S doesn't exceed p-1, which both check out. I also need to confirm the explicit constructions still work when p is smaller than 2w+1, particularly for even w where I'm using the pattern (k-t, k-t, t, t) with values bounded by w/2.
+
+For odd w, the construction (k-t-1, 1, k-t, 1+t) has its maximum at k = (w-1)/2, which stays safely below p-1 even when p is constrained. So these constructions hold across all p ≥ 5.
+
+This gives me the unconditional theorem: for A₈ in F_p³ with p ≥ 5, points on the line L = {(0,j,j)} belong to Σ_w(A₈) precisely when w satisfies a specific divisibility condition.
+
+The breakthrough here is that the mod p resolution always produces integer solutions because w+S is even while p is odd—this eliminates the p ≥ 2w+1 restriction entirely. So the window structure {⌈w/2⌉,...,2⌊w/2⌋} applies unconditionally at every weight.
+
+Now I'm shifting to the orbit coverage problem: for a point (0,j₀,j₀) on L and a weight W_c, I need to determine when the target value m = -W_c·j₀ mod p falls within the achievable window. I'm substituting u for W_c to simplify the analysis, then examining how the window bounds change depending on whether u is odd or even, which determines the size of valid slots for each case. I'm seeing a pattern in the window sizes—even indices give k+1 and odd indices give k. So I can split the sum into two parts and work through the algebra to get a closed form, which comes out to roughly p²/4. Now I need to figure out how this relates to the function f(u) involving the Bessel function.
+
+Since f is a permutation of {1,...,p-1}, I can count how many values u land in their corresponding windows. The average number of hits per window is about p/4, which suggests multiple collisions for larger p. But averages don't guarantee anything—I need to show the permutation can't actually avoid all the windows. Let me examine what happens when I look at the difference between the window position and the function value. I'm working through the modular arithmetic more carefully now. Setting v = f(u) as the representative in {1,...,p-1}, I can express the condition u + v ≤ p in terms of j₀, and for j₀ ≥ 2, this simplifies to u + v = p - u(j₀-1), which stays within the bound. The upper bound is automatically satisfied when u·j₀ < p. For the lower bound, I need v ≥ ⌈(p-u)/2⌉, which means u ≤ p/(2j₀-1). For j₀ ≥ 1, this gives me a constraint on the maximum value of u.
+
+Let me check specific cases: when j₀ = 1, all values of u work up to p-2 since the window condition requires p-u ≥ 2. For j₀ = 2, the constraint tightens significantly—for p=5 I get only one valid u value, and I'm working through what happens for p=7.
+
+The key insight is that even in the extreme case where j₀ = (p-1)/2, there's always at least one valid u, which I can verify by checking that u=1 with v=(p+1)/2 falls within the required window.
+
+Now I'm checking what happens when j₀ takes other values like (p+1)/2 or p-1, working through the modular arithmetic to see if the window constraints are still satisfied in each case. So when p-u is odd, I need u ≥ (p+1)/3. For j₀ = p-1, this gives me a valid range of ⌈(p+1)/3⌉ ≤ u ≤ (p-1)/2, which yields roughly p/6 values. I'm verifying this works for small cases like p = 5 and p = 7, and it checks out. This suggests that for any p ≥ 5, there are always valid hits when j₀ = p-1.
+
+Now I'm establishing the broader claim: for every j₀ between 1 and p-1 and every p ≥ 5, I can find at least one u where f(u) lands in the required window. The key insight is that in the no-wraparound regime where u·j₀ < p, the window bounds are automatically satisfied for u up to ⌊p/(2j₀-1)⌋, and this quantity is always at least 1 when j₀ ≤ (p+1)/2.
+
+For larger j₀, I'm using a symmetry argument: substituting j₀' = p - j₀ transforms the problem into an equivalent one with a smaller parameter, so the same reasoning applies. j₀ > (p-1)/2: j₀' = p - j₀ ∈ {1,...,(p-1)/2}, and f(u) = u·j₀' mod p.
+
+For u·j₀' < p (i.e., u < p/j₀'): f(u) = u·j₀'. Upper bound: u·j₀' ≤ p - u iff u(j₀'+1) ≤ p iff u ≤ p/(j₀'+1). Lower bound: u·j₀' ≥ (p-u)/2 iff u(2j₀'+1) ≥ p iff u ≥ p/(2j₀'+1).
+
+The number of hits falls in the range [⌈p/(2j₀'+1)⌉, ⌊p/(j₀'+1)⌋]. Testing specific cases: when j₀' = 1, I get roughly p/6 hits; when j₀' = 2, about 2p/15 hits. For the extreme case where j₀' = (p-1)/2, the bounds collapse to just 1 or 2 hits, confirming at least one solution exists.
+
+Now I need to verify the discrete version of the inequality holds—that ⌊p/(j₀'+1)⌋ ≥ ⌈p/(2j₀'+1)⌉ for all valid j₀' values. Now I'm checking whether the discrete inequality holds by examining the gap between the continuous and discrete versions. For the inequality to fail, I'd need p to be smaller than 2(j₀'+1)², but when j₀' is bounded by (p-1)/2, this threshold becomes (p+1)²/2, which constrains the problem space significantly.
+
+At the boundary case where j₀' = (p-1)/2, the gap works out to (p-1)/(p+1), which is less than 1—meaning the interval between p/(2j₀'+1) and p/(j₀'+1) might not contain any integers at all. Let me verify this with a concrete example like p=5.
+
+For p=5 with j₀'=2, the interval is [1, 5/3], and the floor and ceiling both give u=1. Testing p=7 with different values of j₀' confirms the same pattern—whether j₀'=3 or j₀'=2, I'm getting u=1 in both cases.
+
+Moving to p=11 with j₀'=5, the calculations show u=1 again, and checking the window at w=10 confirms that 5 falls within [5, 10].
+
+For p=11 with j₀'=4, I'm getting u=2, and verifying that f(2)=8 sits properly in the window [5, 8].
+
+I'm noticing a pattern here—it looks like u=1 always works whenever j₀' ≤ (p-1)/2, since f(1) equals j₀' and the window at w=p-1 spans from (p-1)/2 to p-1, which would contain j₀'.
+
+But wait, I need to be more careful about the boundary. When j₀' is strictly less than (p-1)/2, it actually falls below the lower bound of that window, so u=1 doesn't work in those cases. For smaller values of j₀' in the range {1,...,(p-3)/2}, the no-wraparound approach gives me a different range for u.
+
+Let me verify this with concrete examples: when j₀'=1 and p=5, I get u=2 which produces f(2)=2 in a window that works. For p=7, u=3 gives f(3)=3 and that also checks out. When j₀'=2 with p=5, I get u=1 and f(1)=2, which falls in the valid window. The key insight is that even when u=1 fails, higher values of u can satisfy the condition. Let me approach this more systematically by considering cases where u·j₀' doesn't wrap around modulo p, so I'm working directly with the product u·j₀'. I need to find a u where this product falls within the window [⌈(p-u)/2⌉, p-u].
+
+This gives me three constraints: u must be at least p/(2j₀'+1) to satisfy the lower bound, at most p/(j₀'+1) to satisfy the upper bound, and less than p/j₀' to avoid wraparound. The question is whether these intervals overlap for all valid j₀' values. + 3j₀' + 1, which simplifies to pj₀' ≥ 2j₀'² + 3j₀' + 1. For p ≥ 5 and j₀' ≥ 1, I can verify this holds by checking that p ≥ 2j₀' + 3 + 1/j₀', which is satisfied in our range.
+
+Case 2: When b - a < 1, I need to show a and b fall within the same integer interval, meaning ⌊b⌋ = ⌊a⌋ or they straddle an integer in a way that still gives ⌊b⌋ ≥ ⌈a⌉. I'm analyzing when the ceiling and floor functions create a valid integer in the interval. If both endpoints round to the same integer n, then I need a to be exactly that integer for the ceiling to work—otherwise the ceiling jumps above b. This means I either need a to be an integer itself, or there must be a distinct integer strictly between a and b. Now I'm checking whether these conditions hold for the specific intervals arising from the problem parameters.
+
+But I realize I've been too restrictive by only considering the no-wraparound case. When the modular arithmetic wraps around (u·j₀' ≥ p), the result lands in a different region of the window, and I should explore those possibilities too. I'm also reconsidering whether treating negative j₀ values separately is necessary, or if I can handle all j₀ uniformly. Let me step back and think about the structure of this problem more systematically.
+
+I'm reformulating the problem: for each u ∈ {1,...,p-1}, I define m(u) as the modular product -u·j₀ mod p, w(u) as p minus u, and the window W(u) as a specific range within {1,...,p-1}. The key insight is that m is a bijection under multiplication by -j₀ in the field, so the existence of a u where m(u) lands in W(u) is equivalent to finding a v in some related set that satisfies a certain condition.
+
+The total size of all windows combined is roughly p²/4, and since m permutes the elements bijectively, I'm counting how many u satisfy m(u) ∈ W(u). If m were a random permutation, the expected count would be proportional to the sum of the window sizes.
+
+But m is multiplication by a fixed element, which acts like a pseudo-random permutation in this context. I'm trying to show that at least one u must satisfy m(u) ∈ W(u) for any choice of j₀ and any prime p ≥ 5. Let me try a direct approach by considering u around p/2, where the window W(u) has specific structure.
+
+Actually, I'm exploring whether choosing u = ⌈p/(j₀+1)⌉ might work better, since this would make f(u) approximately p/(j₀+1) and give me more control over the relationship between u and w.
+
+Let me shift to a cleaner strategy: I'll count the total coverage by summing over all u to see how many satisfy m(u) + u ≤ p. For values where u·j₀ < p, I have m(u) = p - u·j₀, so m(u) + u = p - u(j₀-1), which is always ≤ p when j₀ ≥ 1.
+
+This set U₁ has size ⌊(p-1)/j₀⌋, and all these u satisfy the upper bound. But I also need the lower bound m(u) ≥ ⌈(p-u)/2⌉, which gives me the constraint u ≤ p/(2j₀-1) for valid u.
+
+Since 2j₀-1 ≥ j₀, this is the tighter constraint. When j₀ ≤ (p+1)/2, I get p/(2j₀-1) ≥ 1, so u = 1 is feasible—it gives f(1) = p - j₀, which fits in the window at w = p-1 since p - j₀ ≥ (p-1)/2 exactly when j₀ ≤ (p+1)/2.
+
+For larger j₀ values, u = 1 drops below the window, but I can use the symmetry j₀' = p - j₀ to handle those cases, reframing the problem in terms of this complementary index. Now checking u = 2 with j₀' = (p-3)/2: the function value p-3 falls within the window [(p-1)/2, p-3] at w = p-2, which works for p ≥ 5.
+
+Generalizing this approach, I'm trying u = ⌈(p-1)/(2j₀')⌉ to make f(u) land around (p-1)/2, then checking whether this value stays within the required window bounds as w varies. Now I'm checking whether the upper bound holds: does u(j₀'+1) stay below p? With u = ⌈p/(2j₀'+1)⌉, this product works out to roughly p(j₀'+1)/(2j₀'+1), which is always less than p since the numerator ratio is strictly less than 1. So this choice of u satisfies all the constraints, though I should be careful about how floor and ceiling operations affect the exact values. For any j₀' ∈ {1,...,(p-1)/2} and p ≥ 5, let u = ⌈p/(2j₀'+1)⌉. Then:
+(a) u·j₀' < p (no wraparound)
+(b) u·j₀' ≤ p - u (upper window bound, loosened)
+(c) u·j₀' ≥ ⌈(p-u)/2⌉ (lower window bound)
+
+I'm working through the proof of (a). Since u ≤ p/(2j₀'+1) + 1, I have u·j₀' ≤ p·j₀'/(2j₀'+1) + j₀'. Rewriting the first term as p - p/(2j₀'+1), I need p/(2j₀'+1) > j₀', which requires p > j₀'(2j₀'+1). But for j₀' up to (p-1)/2, this inequality fails for large j₀', so my approach isn't working. Let me check the boundary case where j₀' = (p-1)/2, which gives 2j₀'+1 = p.
+
+Checking specific values of j₀' to verify the bound holds: when j₀' = (p-1)/2, u = 1 and u·j₀' = (p-1)/2 < p; when j₀' = (p-3)/2, u = 2 and u·j₀' = p-3 < p; when j₀' = 1, u = ⌈p/3⌉ < p; and for j₀' = 2, I need to check whether u·2 stays below p.
+
+Now I'm working through the general bound more carefully. I have u ≤ (p + 2j₀')/(2j₀'+1), so u·j₀' ≤ j₀'(p+2j₀')/(2j₀'+1), and I need this to be strictly less than p. This reduces to checking whether 2j₀'² < pj₀', which simplifies the inequality.
+
+For the constraint j₀' ≤ (p-1)/2, the maximum value of 2j₀'² is (p-1)²/2, while p(j₀'+1) is at least 2p. The inequality (p-1)² < 4p only holds when p < 3+2√2 ≈ 5.83, so for p = 5 I can verify directly that 8 < 10.
+
+But when p = 7, the bound breaks down since 18 > 14. Testing specific values for p = 7 shows that j₀' = 3 gives u = 1 with u·j₀' = 3 < 7, and j₀' = 2 gives u = 2 with u·j₀' = 4 < 7, so the constraint is satisfied in these cases. My bound appears to be too loose, and I need to reconsider the analysis more carefully. Now I'm realizing the algebraic bound was too conservative—the ceiling function only adds at most 1, and for the relevant values of j₀', the product u·j₀' stays strictly below p. Let me work through the direct proof: since u = ⌈p/(2j₀'+1)⌉, I can bound u·j₀' by noting that pj₀'/(2j₀'+1) is less than p/2, and adding the j₀' term from the ceiling still keeps everything under p.
+
+For part (b), I need to verify that u(j₀'+1) ≤ p by expanding the product and checking whether the resulting expression stays within bounds.
+
+After working through the algebra, I'm getting p + p/(2(2j₀'+1)) + 1/2, which exceeds p—so the bound might actually be violated. Let me test this against the concrete example where j₀' = 1, p = 7, u = 3 to see if my reasoning is off.
+
+The examples check out: when j₀' = 1 and p = 5 with u = 2, both u·j₀' ≤ p-u and u(j₀'+1) ≤ p hold. Now I'm testing the case where j₀' = 2.

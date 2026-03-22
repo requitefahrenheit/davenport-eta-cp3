@@ -1,0 +1,42 @@
+# Research Briefing (THEORIST thread)
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+
+---
+
+### Round 1  (03:40)
+
+I implemented a fast, exact “bitset” dynamic-program that, for any proposed support A in the 343-point group C7^3 and a chosen multiplicity m, decides whether the multiset A^[m] contains any nonempty zero-sum subsequence of length ≤7; the routine is validated by reproducing the known p=5 extremal 8-point example and runs in ≈0.8 ms per 8-support test for p=7. Using it, I exhaustively tested hundreds of random 8-element supports with multiplicity 6 and found none that avoid a short zero-sum (so the previously-proven lower bound of 49 looks suspicious), but a brute-force check over all ~9·10^12 8-sets is infeasible (would cost ≈230 CPU-years), so I’m moving to a pruned exhaustive search: fix a GL(3,7) frame to cut symmetry, and apply cheap filters (no antipodal pairs x,−x; no three collinear; plane-count profiles inherited from p=5) inside a backtracking enumerator that stops branches early and only runs the DP on promising leaves; next turn I’ll report precise filter survival counts to judge whether a full search is practical and then proceed to search mixed multiplicities, 7/8/9-point supports, and greedy DFS extensions from known length-42 examples. Vibe check: (yellow) = solid progress and good tools, but we haven’t yet achieved a systematic proof that no 8-point multiplicity-6 extremal exists, so the outcome is still uncertain.
+
+**Cost so far: $0.15** | Tokens: 53,498 in / 5,183 out
+
+### Round 2  (03:45)
+
+We kept working on the computational search for an 8-point support in (Z/7Z)^3 that would allow a multiplicity-6 short-zero-sum-free sequence and implemented two cheap geometric filters: a fast antipode map and a memoized routine that gives the 7-point line through any two points, plus is_cap(A) to reject sets with any collinear triple; on 1 000 random 5-point choices (together with the three fixed basis vectors) 924 passed the antipodal test and 395 passed both tests (≈39% survival), which implies that, even after fixing a basis, about 3.8×10^8 candidate 8-sets remain — far too many to finish a brute-force DP without stronger sieves. Based on p=5 experience we plan to add a kernel meet-in-the-middle filter (expected to eliminate ≈99.9% of candidates cheaply) and a plane-intersection profile filter, then rerun Monte‑Carlo to estimate the post-filter workload and only attempt full backtracking if the reduction is large; the main current blocker is that several attempted enumeration/backtracking implementations have timed out, so progress is now bottlenecked by implementation/performance rather than by a mathematical obstruction. Next turn I will implement and benchmark the kernel filter and report new survival rates; overall: Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.34** | Tokens: 137,554 in / 10,388 out
+

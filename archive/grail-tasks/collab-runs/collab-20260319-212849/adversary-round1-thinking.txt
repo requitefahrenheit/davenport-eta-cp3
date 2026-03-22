@@ -1,0 +1,542 @@
+
+============================================================
+BLOCK 1 (416 chars)
+============================================================
+The user wants me to act as the ADVERSARY in a mathematical research collaboration. My job is to break things - find counterexamples, disprove lemmas, and find boundaries where things fail. Let me start by:
+
+1. Searching Cortex for prior findings
+2. Reading the full briefing document
+3. Then systematically trying to break the Shadow Saturation conjecture
+
+Let me begin by searching Cortex and reading the briefing.
+
+============================================================
+BLOCK 2 (7256 chars)
+============================================================
+Excellent. I've got a wealth of prior findings from Cortex. Let me digest the key information:
+
+1. **Shadow Saturation for doubled+e1**: VERIFIED at p=5,7,11,13,17,19,23. The shadow at weight p-1 covers all nonzero vectors.
+
+2. **Shadow Saturation for GENERAL ZSF sets**: FALSE. A counterexample exists at p=7 - a cap ZSF set where shadow covers only 2244/2400. BUT the Grail still holds because the cap set has an internal weight-p zero-sum.
+
+3. **Strong vs Weak ZSF distinction**: 
+   - Strongly ZSF sets have no zero-sum at weight ≤ p
+   - Weakly ZSF sets have no zero-sum at weight ≤ p-1 but contain one at weight p
+   - All tested ZSF sets except doubled+e1 are weakly ZSF, making doubled+e1 appear to be the unique strongly ZSF set
+
+4. **Proof strategy proposed**: If S has an internal weight-p zero-sum, the Grail follows trivially. If S is strongly ZSF, it must be doubled+e1, which exhibits shadow saturation and therefore satisfies the Grail. This covers the main cases.
+
+5. **p=5 is the critical threshold**: The random model predicts E[misses] = 0.27 at p=5, dropping to negligible levels for p≥7.
+
+6. **No 18-vector strongly ZSF set exists** across exhaustive searches at p=5, 7, and 11.
+
+Now I'm thinking like an adversary trying to find weaknesses. The uniqueness of doubled+e1 as strongly ZSF is the linchpin, but it's only been verified through random sampling and swaps at p=7 and p=11—not exhaustively. This leaves room to question whether there might be other strongly ZSF sets lurking in the space that weren't caught by the testing strategy.
+
+The inductive construction also assumes doubled+e1 is the only strongly ZSF set of size 35 in F_p^6 at rank 4, but I haven't ruled out alternatives that could still satisfy the shadow saturation property. And the weakly ZSF to trivial reduction—claiming that internal weight-p zero-sums make the Grail hold automatically—needs to be formalized more carefully. a zero-sum of weight ≤ p among 18 vectors. If S (17 vectors) already has a weight-p zero-sum, that's weight = p ≤ p. So yes, we have 18 vectors with a weight-p zero-sum among 17 of them. That's correct, Grail holds trivially.
+
+But wait - actually the Grail is stated differently. We have 2α(r)+2 = 18 vectors. We need a zero-sum of weight ≤ p among SOME subset. If any 17-element subset has an internal weight-p zero-sum, we're done. But what if the 18-element set doesn't contain a 17-element ZSF subset? Let me think...
+
+Actually, η(C_p^4) = 17(p-1)+1. This means any sequence of length 17(p-1)+1 has a zero-sum subsequence. With 18 non-proportional vectors giving 18(p-1) copies in the pool, and since 18(p-1) ≥ 17(p-1)+1 for p ≥ 2, I can extract a zero-sum subsequence. But that bounds the weight at 18(p-1), not p—so I'm conflating η with the Davenport constant. Let me clarify: η is the weighted Davenport constant, where η(G) is the smallest N such that every sequence of length N over G\{0} has a zero-sum subsequence of length at most exp(G), and for C_p^4 that exponent is p. I need to reconsider the proof strategy more carefully. The approach assumes we can always find a 17-element zero-sum-free subset S among our 18 vectors, but that's not guaranteed—I need to verify whether such a subset actually exists before applying the rest of the argument. (a) is done, or (b) they're strongly ZSF with no zero-sum at weight ≤ p. But this approach breaks down—different 17-element subsets could all fall into case (b), and I'd need all 18 of them to contradict each other, which doesn't happen. Let me reconsider the shadow saturation method instead: if I take a fixed 17-vector set S and add any 18th vector v, I should check whether -v lies in S's shadow at weight p-1, which would give me coefficients summing to -v with bounded weight.
+
+The issue is that this requires S to be a specific ZSF set like the doubled+e1 construction, but the problem gives me arbitrary 18 vectors. So I first need to show that some 17-element subset among them is ZSF and has the right structure, or I need a different strategy altogether—maybe the approach is to pick any 17 vectors S and then case on whether S itself has a zero-sum at weight ≤ p. not, S is a 17-element set with no weight-≤p zero-sum (strongly ZSF in the sense of no ZS at weight ≤ p, not just ≤ p-1).
+4. But wait: η at the previous rank gives η(C_p^3) = 8(p-1)+1. This tells us about F_p^3. For S in F_p^4 with 17 non-proportional vectors, S cannot have a zero-sum at weight ≤ p-1 if it's ZSF. But it might have one at weight p.
+5. If S has a zero-sum at weight p, Grail holds.
+6. If S has NO zero-sum at weight ≤ p (strongly ZSF), then we need shadow saturation to handle the 18th vector.
+
+So the strategy is to pick any vector v from the 18 and let S be the remaining 17. Either S fails to be strongly ZSF—giving us a weight-≤p zero-sum among those 17—or S is strongly ZSF, in which case shadow saturation guarantees that -v appears in the shadow at weight p-1, yielding a weight-≤p zero-sum involving v. This approach works as long as for every possible choice of v and S, at least one of these conditions holds.
+
+Let me clarify the definitions: ZSF means no zero-sum at weight ≤ p-1, strongly ZSF means no zero-sum at weight ≤ p, and weakly ZSF means ZSF but not strongly ZSF (so a zero-sum exists at weight exactly p). For any 17-vector set S, if it's not ZSF, there's already a weight-≤p-1 zero-sum among them, which is done.
+
+If S is weakly ZSF, there's a zero-sum at weight exactly p, which also satisfies the bound. The hard case is strongly ZSF sets, which require shadow saturation to work. So the proof strategy hinges on two claims: any 17-element strongly ZSF set of non-proportional vectors in F_p^4 must be the doubled+e1 construction up to equivalence, and shadow saturation holds for that construction at all p ≥ 5. Both have been verified computationally but lack formal proofs, so I should look for counterexamples to either claim—starting with whether there's a strongly ZSF set that doesn't match the doubled+e1 structure.
+
+At p=7, random sampling only produced weakly ZSF sets, but I should test algebraic constructions like caps or curves instead. I'm also wondering if I can construct a set where shadow saturation fails AND the Grail fails simultaneously, or whether shadow saturation breaks down for the doubled+e1 construction when lifted to higher ranks like r=4 with 35 vectors in F_p^6. Finally, I need to verify whether doubled+e1 is truly the unique strongly ZSF structure or if there are other configurations that also work.
+
+The key insight is that "unique up to equivalence" likely means up to GL(4, F_p) action, so I should search for strongly ZSF sets of size 17 that fall outside the GL-orbit of doubled+e1. I can run several computational experiments: construct alternative strongly ZSF candidates using caps or random walks, test shadow saturation for doubled+e1 at r=4 over small primes, and stress-test the construction's robustness.
+
+Now I need to verify whether the "weakly ZSF → internal weight-p ZS" claim actually holds universally, since it seems almost definitional but I should confirm the definitions are being applied consistently. Let me check what computational tools are available to start testing these hypotheses.
+
+============================================================
+BLOCK 3 (9118 chars)
+============================================================
+Excellent. I have a comprehensive picture now. Let me identify the key attack vectors for Round 2:
+
+**State of play from Cortex:**
+1. Shadow saturation for doubled+e1: VERIFIED at p=5,7,11,13,17,19,23
+2. Shadow saturation for general ZSF: FALSE (cap counterexample at p=7)
+3. Strong vs Weak ZSF dichotomy discovered
+4. All non-doubled+e1 ZSF sets appear weakly ZSF (internal weight-p ZS exists)
+5. Doubled+e1 appears uniquely strongly ZSF
+
+
+6. The proof strategy hinges on showing weakly ZSF cases are trivial while strongly ZSF cases reduce to doubled+e1, which then guarantees shadow saturation
+
+**What needs to be attacked (vulnerabilities in the proof strategy):**
+
+1. **Uniqueness of doubled+e1 as strongly ZSF**: Only tested at p=5 (unique ZSF period), p=7 (200 random + 200 swaps), p=11 (similar). For larger p, could there be strongly ZSF sets not equivalent to doubled+e1? The testing was NOT exhaustive for p≥7.
+
+2. **Shadow saturation at higher rank**: The entire discussion is about r=3.
+
+3. For r=4 and beyond, I need to verify the inductive step works—does shadow saturation still hold with 35 vectors in F_p^6?
+
+4. **The "every 17-subset is ZSF or has weight-≤p ZS" step**: Given 18 vectors, I pick 17 and leave one out. If no 17-element subset is ZSF, then every 17-subset has a weight-≤(p-1) ZS and we're done. But if some 17-subsets are ZSF and others aren't, I need to pick the right 17 to leave the right vector out. Let me re-examine this more carefully—given 18 vectors, if I pick any one vector v and look at the remaining 17...
+
+If those 17 aren't ZSF, they have a weight-≤(p-1) ZS and we're done. If they're ZSF but weakly so (with a weight-p ZS), we're done. If they're strongly ZSF, shadow saturation gives us -v in the shadow, which also works. The key insight is that only ONE choice of v needs to succeed—so I can try all 18 possibilities. For the Grail to fail, every choice would need to leave behind a strongly ZSF set where shadow saturation fails, but since strongly ZSF sets are doubled+e1 (assuming the uniqueness claim) and those have shadow saturation, we're done. The problem is the uniqueness claim itself remains unproved, and I'm not sure how to proceed from here.
+
+Let me try a different angle: what if two overlapping 17-element subsets are both strongly ZSF? If S₁ and S₂ each have 17 vectors and overlap in 16, then they differ by swapping one vector for another. If both are GL-equivalent to doubled+e1, the swapped vectors must both be compatible with that structure. But shadow saturation for S₁ means the removed vector is reachable at weight p-1, which creates a weight-p ZS involving both sets.
+
+However, the result that no 18-vector set is strongly ZSF contradicts this—adding any 18th vector to doubled+e1 produces a weight-≤p ZS. So I need to flip the logic: if I remove any vector v from the 18-set and the remaining 17-element subset S is strongly ZSF, then S must be doubled+e1, and shadow saturation immediately gives me a ZS at weight p involving v.
+
+The real bottleneck is whether a strongly ZSF set of size 17 can exist outside the GL-equivalence class of doubled+e1. My testing at p=7 with 400 random samples is nowhere near exhaustive—there are roughly 10^30 possible 17-element subsets from the 400 projective points—but the structure of strongly ZSF sets is so constrained that doubled+e1 appears to be the unique extremal configuration in the η sense.
+
+I should try a few computational approaches: constructing strongly ZSF sets using algebraic methods rather than random greedy search, testing fiber distributions other than the 8+9 split, and exploring whether sets with three or more fibers can achieve the same zero-sum-free property. I could also push the higher rank test at p=5 with r=4, where doubled+e1 expands to 35 vectors in F_5^6, and verify whether the shadow at weight 4 covers the entire space minus the origin.
+
+For the 18-vector logic, I want to check empirically whether random non-proportional vectors in F_7^4 typically have zero or many ZSF 17-subsets—if none are ZSF, that validates the proof strategy, but if some are, I need to determine whether they're all weakly ZSF. Finally, I could test whether applying a random GL transformation to doubled+e1 preserves shadow saturation, which it theoretically should since the shadow is GL-invariant.
+
+But now I'm wondering about the uniqueness of the maximal 4-sum-free set in F_7^3—at p=5 it's unique, but at p=7 there might be multiple choices for A8, which would generate different doubled+e1 constructions and potentially affect the whole argument.
+
+Actually, even if A8 isn't unique at p=7, the prior work suggests all these variants should be GL-equivalent anyway, so they'd all produce the same strongly ZSF set of size 17. I should focus on the most impactful next steps rather than getting stuck on uniqueness questions.
+
+I want to test whether the shadow saturation pattern holds at r=4 for p=5, then try constructing non-doubled+e1 strongly ZSF sets at p=7 using more systematic methods. I should also verify that the proof strategy is sound when applied to 18 arbitrary vectors—specifically, whether the claim that every 17-subset has a weight-≤(p-1) zero-sum actually guarantees Grail holds for all 18 vectors.
+
+The real weak point is the unproved step that strongly ZSF sets must be GL-equivalent to doubled+e1. At p=7, I should search for a 17-element set with no zero-sum at weight ≤7 that isn't GL-equivalent to doubled+e1. Let me write code to systematically explore both attacks, and think through the r=4 case more carefully—where the doubled+e1 structure would have 17 vectors in the fiber over 0 and 18 in the fiber over 1.
+
+Now I'm working through the shadow computation at p=5. The key insight is that I can iterate over all coefficient vectors with bounded sum and check coverage of F_5^6. The number of such vectors is manageable—around 82,250—so this computational approach is actually feasible. But first I need to construct the extremal 17-element set in F_p^5.
+
+The proof strategy is to show η(C_p^5) = 35(p-1)+1, which would establish α(4,p) = 17 universally, though I've only verified this computationally at p=5. The doubled+e1 construction at r=4 builds on the 17-vector base from r=3 by taking two copies in F_p^5 with the fiber structure, then adding the extra element to complete the extremal set.
+
+Now I'm clarifying the recursive formula: η(C_p^{r+1}) = (2α(r)+1)(p-1)+1, so the extremal set has 2α(r)+1 vectors in F_p^{r+1}, meaning α(r+1) = 2α(r)+1. For r=3, this gives α(3) = 8 and an extremal set of 17 vectors in F_p^4, which is exactly what I'm using as the foundation for the next rank.
+
+For r=4, I'm scaling up: α(4) = 17, so the extremal set has 35 vectors in F_p^5. The construction embeds the 17-vector set from F_p^4 into F_p^5 by adding a leading 0 coordinate, then takes a second copy with a leading 1, and adds the basis vector e_1 to complete the set. At the shadow test level, these 35 vectors in F_p^5 cover all nonzero points when tested at weight p-1, which accounts for p^5-1 vectors at p=5. The coefficient space is then all vectors c ∈ {0,...,4}^35 with at least one nonzero entry.
+
+Now I'm counting the coefficient vectors: that's C(39,35) - 1 = 82250 total. With 3124 nonzero vectors in F_5^5, I'm averaging about 26 coefficient vectors per target vector, so the coverage question becomes whether every nonzero vector actually gets hit. This is computationally tractable, so I should implement it. But first I need to verify that the 35-vector set itself is zero-sum-free at weight ≤ 4 in F_5^5, since if it has a zero-sum at that weight, the shadow saturation conjecture wouldn't apply.
+
+To check this, I need to examine all coefficient vectors c ∈ {0,...,4}^35 with 1 ≤ Σc_i ≤ 4 where Σc_i*v_i = 0—that's the same 82250 vectors, which is feasible to test. Based on the pattern I've seen before, the first zero-sum should appear at weight 6 for this doubled+e1 construction at p=5. Let me verify that and then focus on two main computational approaches: testing shadow saturation at r=4 with the 35 vectors in F_5^5, and searching for alternative strongly zero-sum-free sets that don't follow the doubled+e1 pattern.
+
+Actually, I'm realizing something crucial about the problem structure. The shadow saturation conjecture applies specifically to the base case at r=3, but the inductive step requires it to hold at all r values. At r=4, I'd need 35 vectors in F_p^5 to satisfy the conjecture, and the proof strategy from the earlier analysis depends on this working out. Let me trace through what that actually means for whether this approach can succeed.
+
+The core issue is that the "strong vs weak ZSF dichotomy" and the "doubled+e1 uniqueness" are only proven for r=3. To make the induction work, I need to verify that every strongly ZSF set of the right size at higher ranks follows the doubled+e1 construction, and that shadow saturation holds for those constructions too. This gets exponentially harder to test as r increases.
+
+Let me start implementing the verification code for r=4 to see if the pattern holds.
+
+============================================================
+BLOCK 4 (5244 chars)
+============================================================
+Good, I've read the existing code. Now let me plan my attacks for this round:
+
+**ATTACK A: Shadow saturation at rank 4 (r=4), p=5**
+This is the most impactful test. The 35-vector doubled+e1 construction in F_5^5. If shadow saturation fails here, the whole inductive approach is dead.
+
+The construction:
+- Start with the 17-vector S17 in F_p^4
+- Create S35 in F_p^5 as: (0,v) for v in S17, (1,v) for v in S17, plus (1,0,0,0,0)
+
+
+- This gives us 35 vectors total
+
+Now I need to verify that S35 is zero-sum-free up to weight 4, then check whether the shadow at weight 4 actually covers all 3124 nonzero vectors in F_5^5. I'll use dynamic programming where each state tracks a weight level and a vector in F_5^5, giving me roughly 15,625 total states to explore across the five weight levels.
+
+For the coefficient search, I'm working with 35 vectors where each can have a coefficient from 0 to 4, but the total weight constraint keeps this tractable. Now I'm shifting focus to attack B: I need to find a 17-vector set in F_7^4 that's zero-sum-free up to weight 7 and isn't GL-equivalent to the doubled+e1 construction.
+
+The doubled+e1 set is strongly ZSF at p=7 since its first zero-sum appears at weight 8. For alternative candidates, I'm exploring different construction methods from projective geometry and algebraic techniques to see if any also achieve this property.
+
+There's a potential gap in the proof logic I want to examine—the claim that strongly ZSF sets must be doubled+e1 has only been verified through random search at p=5 and p=7. If multiple non-isomorphic strongly ZSF sets exist, the shadow saturation argument would need to hold for all of them, which raises questions about the completeness of the proof chain.
+
+Let me verify the Grail condition more carefully. The proof claims that an internal weight-p zero-sum in the 17-element set S guarantees the Grail for the full 18-element set. Since any weight-p zero-sum using elements from S is also a weight-p zero-sum using a subset of the 18 vectors, this step checks out.
+
+Now I'm going to implement the rank 4 shadow saturation test, which seems like the most critical and novel verification to run.
+
+For the dynamic programming approach, I'm tracking states as (weight, vector) pairs where weight ranges from 0 to 4 and vectors live in F_5^5. The state space is manageable at around 15,625 states, and processing all 35 vectors through the DP takes roughly 2 million operations—very efficient. Memory-wise, storing the vector encodings at each weight level is negligible.
+
+Now I'm considering Attack D to check whether shadow saturation is actually tight at rank 4.  At rank 3, the shadow covers all nonzero vectors while excluding zero (which is the zero-sum-free property). I need to verify this holds at rank 4 and investigate whether the shadow at weight p-2 has significant gaps or if certain targets are barely reachable with unique representations.
+
+Writing code to verify the construction...
+
+Now I'm realizing the proof strategy hinges on the base case at rank 3, where shadow saturation is crucial. If that fails at rank 4, the inductive step for higher ranks breaks down—but the induction formula η(C_p^{r+1}) = (2α(r)+1)(p-1)+1 only applies for r ≥ 4 anyway, so the base case and inductive cases might follow different logic.
+
+Before I implement anything, I need to verify that the doubled+e1 construction is actually the right extremal configuration for rank 4, since that's what the induction would depend on. For r=4, the construction gives 35 vectors in F_p^5 by taking two copies of the 17-vector set from r=3 in different hyperplanes and adding a single vector. Now I'm wondering whether all 35 vectors are actually necessary for the shadow saturation property, and more critically, whether this doubled construction preserves the zero-sum-free property that's essential to the argument. vector set is ZSF in F_p^4 (no zero-sum at weight ≤ p-1). At r=4, the 35-vector set should be ZSF in F_p^5. Let me verify this.
+
+If S35 is NOT ZSF, that means the construction itself is broken at rank 4, which would be a huge problem for the inductive approach. But the construction was designed to be ZSF, so it should be.
+
+Actually, the lower bound proof says: the copies pool of S35 has length 35(p-1), and it's zero-sum-free (no zero-sum subsequence of length ≤ 1). Wait, that's not right. Let me re-read.
+
+The lower bound η(C_p^{r+1}) ≥ (2α(r)+1)(p-1)+1 means there's a sequence of length (2α(r)+1)(p-1) where no subsequence of length ≤ p sums to zero—this is the copies pool with each of the 2α(r)+1 vectors repeated p-1 times. For this to be zero-sum-free in the η sense, I need no coefficients c_i ∈ {0,...,p-1} (not all zero) with Σc_i ≤ p and Σc_i*v_i = 0, which splits into checking weight ≤ p-1 (standard ZSF) and weight exactly p separately. For the doubled+e1 construction at r=3, I showed it's strongly ZSF with no zero-sum at weight ≤ p and the first zero-sum at p+1, which is what makes the copies pool work. Now I need to verify the same property holds for r=4.
+
+Let me write a script to check three things: whether S35 is ZSF at weight ≤ 4, whether it's ZSF at weight ≤ 5, and whether the shadow at weight 4 covers all 3124 nonzero vectors in F_5^5.
+
+============================================================
+BLOCK 5 (1699 chars)
+============================================================
+Let me run this. But first, I'm concerned about the DP performance for 35 vectors in F_5^5. Let me think about the state space:- Each weight level has at most 5^5 = 3125 possible vector states
+- Weight ranges from 0 to 4, so 5 levels
+- For each of 35 vectors, we process all states at each weight level
+- Worst case: 35 × 5 × 3125 × 4 (4 coefficient choices) = ~2.2M operations per sweep
+
+But the sets grow quickly. After adding several vectors, the sets at each weight could have thousands of entries. 
+
+The inner loop processes each state in the DP table for every coefficient choice, so with up to 15,625 total states across all weights and 4 possible coefficients, that's roughly 62,500 operations per vector—totaling around 2 million dictionary operations across all 35 vectors, which Python should handle in a few seconds. The real constraint is how the state space expands as we add more vectors.
+
+Let me think through the actual complexity: with 35 vectors at p=5, the DP states can reach up to 3,125 at various weight levels, making the total work O(35 × 5 × 3,125 × 4) ≈ 2.2 million operations—manageable but the decode/encode overhead in the fast_add function might be the bottleneck. I should optimize by precomputing the vector additions instead.
+
+Actually, the simplest fix is to work directly with tuples in a set rather than encoding and decoding repeatedly. Let me just run the current implementation and see if it's fast enough; if not, I can optimize the addition operation.
+
+For the strongly ZSF check, I'm looking at a DP with 6 weight levels and up to 3125 states per level across 35 vectors, which should still be manageable. Let me execute the attack and see how it performs.
+
+============================================================
+BLOCK 6 (677 chars)
+============================================================
+OK, excellent! Attack A results so far:
+
+1. **ZSF at weight ≤ 4**: TRUE. S35 is ZSF.
+2. **Shadow at weight 4**: SATURATED! All 3124 nonzero vectors covered.
+3. **Strongly ZSF at weight ≤ 5**: TRUE. S35 is strongly ZSF.
+4. **First zero-sum at weight 6 = p+1**: Pattern continues from r=3!
+
+This is significant: shadow saturation SURVIVES at rank 4. The proof strategy isn't obviously broken.
+
+The layer structure is interesting:
+
+
+- w=1: 35 vectors (one per construction vector)
+- w=2: +279 (new at weight 2)
+- w=3: +1077
+- w=4: +1733 = 3124 total
+
+I'm waiting for the full output since it got cut off at 100 lines. Attack B on strongly ZSF uniqueness at p=7 is still computing.
+
+============================================================
+BLOCK 7 (3697 chars)
+============================================================
+The output is too verbose with the intermediate state counts. Let me extract the key results:
+
+1. **Attack A (r=4 shadow saturation)**: 
+   - S35 is ZSF at weight ≤ 4: TRUE
+   - Shadow at weight 4 covers all 3124 nonzero vectors: TRUE (SATURATED)
+   - S35 is strongly ZSF at weight ≤ 5: TRUE
+   - First zero-sum at weight 6 = p+1: CONFIRMED
+
+2. **Attack B (non-doubled+e1 strongly ZSF at p=7)**: The output got buried in state counts. 
+
+3. **Attack C (17-subset logic)**: "Most random 18-sets have NO ZSF 17-subset" - this confirms that the proof strategy works because if every 17-subset has a zero-sum, the Grail is trivial.
+
+The Attack A result is significant but actually SUPPORTS the conjecture. I need to try HARDER to break things. Let me clean up Attack B's output to see what it actually found, then pivot to a more targeted approach—modifying the doubled+e1 configuration at r=4 in ways that might preserve the structure while breaking the conjecture.
+
+I should also check shadow saturation at p=5, r=5 with those 71 vectors in F_5^7, though that's probably computationally expensive. The real vulnerability I haven't fully explored is whether some 17-subsets could be weakly ZSF or strongly ZSF in ways that don't fit the three cases the proof assumes—maybe there's a gap where multiple 17-subsets behave differently than expected.
+
+Actually, rethinking this: the proof only needs one choice of v to work. If all 17-subsets are not ZSF, we're done via Case 1. If at least one is ZSF, we handle it through Case 2 or 3. But the real problem is when a 17-subset is strongly ZSF but doesn't satisfy the doubled+e1 structure—that's where the uniqueness claim falls apart and I haven't actually proved it.
+
+Let me rerun Attack B with cleaner output to see what's happening, and try a more targeted approach using algebraic constructions for A8 instead of random choices. I'm also wondering whether at p=7, a maximal 4-sum-free set in F_7^3 could exceed size 8, since the space is larger than at p=5. But wait—the construction fixes α(3)=8 across all p≥5 specifically so the copies pool of size 8(p-1) avoids zero-sums of length ≤p.
+
+At p=7, the A8 vectors remain the same canonical representatives mod 7, and I'm trying to determine whether this is the unique maximal set avoiding weight-6 zero-sums, or if p=7 allows a larger maximal 4-sum-free set than p=5 did.
+
+Let me refocus on what I can actually compute efficiently—I'll redesign my attack to cut down the verbose output and zero in on the key results. I'm also curious about testing a different angle: can I find a specific non-standard weakly zero-sum-free set where the shadow saturation breaks more dramatically, or where the Grail conjecture actually fails? The Cortex data shows that for the cap-based counterexample at p=7, even though shadow saturation only covers 2244 out of 2400 vectors, all 156 missing vectors still generate weight-≤p zero-sums internally, so the Grail holds despite the shadow gap.
+
+To actually break the Grail, I'd need an 18-vector set where every 17-subset is strongly zero-sum-free but at least one of those subsets fails shadow saturation—meaning the 18th vector can't be eliminated. The catch is that the "no 18-vector strongly zero-sum-free" result relies specifically on the doubled+e1 construction, so if I can construct 18 vectors where some 17-subset is strongly zero-sum-free but isn't doubled+e1, then shadow saturation might genuinely fail there, and that's exactly what Attack B is designed to hunt for.
+
+Let me implement a more systematic search, trying both a careful Attack B execution and a greedy construction algorithm to build a strongly zero-sum-free set from the ground up at p=7.
+
+============================================================
+BLOCK 8 (12761 chars)
+============================================================
+The command is running in the background. Let me now think about another angle of attack while waiting.
+
+The most critical unproved claim is:
+1. **Uniqueness of doubled+e1 as strongly ZSF**: This is the keystone. If I can find a different strongly ZSF set, and its shadow doesn't saturate, the proof strategy collapses.
+
+2. **Shadow saturation at all primes**: The random model analysis shows that for p ≥ 7, the expected number of misses is negligible (10^{-11}). For p = 5, E[misses] = 0.27. This means p = 5 is the tight case.
+
+
+I'm exploring whether I can construct a counterexample directly by building a strongly ZSF set with a different fiber structure than doubled+e1—maybe something like a 3-fiber configuration with unequal distribution across fibers, or some other arrangement that still maintains the strong ZSF property but breaks the uniqueness claim.
+
+But I'm realizing the real question might be about GL-equivalence: if I apply a general linear transformation to doubled+e1, I get a projectively different set that's still essentially the same object. So uniqueness only makes sense up to GL-equivalence, and I should be asking whether any other fundamentally different strongly ZSF set exists, not just whether doubled+e1 can be transformed into itself.
+
+The core structure hinges on A8 being a maximal 4-sum-free set in F_p^3. At p=5 it's unique, but at p=7 there could be other maximal 4-sum-free sets of size 8 that would lead to alternative strongly ZSF configurations. Instead of random greedy search, I should enumerate all possible A8 sets at p=7 and test which ones yield strongly ZSF doubled+e1 constructions. But that's infeasible—there are roughly 1.6 billion 8-element subsets of the 57 projective points in PG(2, F_7). A more practical approach is to start with the standard A8, systematically swap one vector at a time, and check if each variant produces a strongly ZSF result. I should also think through whether there's a mathematical reason the doubled+e1 construction might not be unique, rather than just searching computationally.
+
+The A8 set at p=7 consists of eight specific vectors: the three standard basis vectors, plus five others like (6,1,1), (1,1,0), (1,0,1), (6,2,1), and (6,1,2). Now I'm wondering whether other 8-element sets at p=7 also satisfy the 4-sum-free property. Applying coordinate permutations to A8 just gives GL-equivalent sets, which isn't revealing. But non-linear transformations or sets with fundamentally different internal structure might work differently. Let me try constructing some concrete alternatives.
+
+Rather than manually searching, I should let the greedy algorithm at p=7 finish its work—it should discover any other 4-sum-free 8-element sets if they exist. Meanwhile, I'm reconsidering the proof strategy: instead of proving uniqueness of the strongly ZSF 17-set, I could try proving that *all* strongly ZSF 17-sets achieve shadow saturation, which would sidestep the uniqueness requirement entirely. The random model suggests that for p ≥ 7, the expected number of misses is essentially zero, whereas at p=5 it's around 0.27, so the threshold behavior is sharp.
+
+At p=5 specifically, any 17-vector strongly ZSF set produces roughly 5984 coefficient vectors that must cover 624 nonzero targets—averaging 9.6 vectors per target, but some targets might have zero coverage. The ZSF condition might force a minimum of at least 1 vector per target, though for doubled+e1 I've verified this minimum is exactly 1 with 44 barely-reachable targets. Since uniqueness of A8 is already established at p=5, there's no competing strongly ZSF structure to worry about.
+
+The real concern shifts to p≥7, where counting suggests E[misses]<<1, so saturation should happen even for non-standard strongly ZSF sets—unless one exists with a concentrated shadow where coefficient vectors cluster on certain targets while leaving gaps elsewhere. The ZSF condition blocks reaching 0, but doesn't prevent other vectors from being disproportionately popular, which could create uncovered targets despite the favorable average count.
+
+I'm now thinking about constructing a concrete counterexample at p=7 using a near-cap structure—a set of 17 vectors where most triples are non-collinear but a few have degenerate dependencies. The cap-based ZSF sets I found were all weakly ZSF with internal weight-7 zero-sums, so I want to explore whether a carefully chosen slightly-structured set can avoid those weight-7 zero-sums while still maintaining the ZSF property.
+
+Let me work through the weight-7 zero-sum constraints more carefully. A weight-7 zero-sum requires coefficients c_i ∈ {1,...,6} with Σc_i ≤ 7 and Σc_i*v_i = 0. For support 1, we'd need c = 7, but since 7 ≡ 0 (mod 7), no nonzero vector works. For support 2, I need c₁ + c₂ = 7 with c₁*v₁ + c₂*v₂ = 0, which means v₂ = -(c₁/c₂)*v₁.
+
+Since v₁ and v₂ must be non-proportional, this equation c₁*v₁ = -c₂*v₂ can't hold unless the proportionality condition is violated. But wait—if they're non-proportional, then no scalar multiple of v₁ equals v₂, so this constraint is impossible to satisfy.
+
+Therefore, weight-7 zero-sums require support of at least 3 vectors. Let me check what happens with support 3.
+
+For three vectors with coefficients summing to at most 7, I need to determine if collinear triples exist in the doubled+e1 configuration. Since it's not a cap set, such dependencies do exist. The key question is whether any of them have coefficient sums ≤ 7. When I apply the rank-3 subroutine to non-degenerate triples, I'm looking for whether there's a functional μ where the sum of evaluations equals p or falls below it, which ties into the strongly ZSF condition. this sum is never ≤ p-1 (since that would give a weight-(p-1) zero-sum, contradicting ZSF). But α + β + γ ≡ 0 case gives sum = p for some μ.
+
+Actually, the strongly ZSF condition means no zero-sum at weight ≤ p. So for ANY collinear triple with dependency (α,β,γ), we need: for ALL μ ∈ F_p*, ⟨μα⟩ + ⟨μβ⟩ + ⟨μγ⟩ > p.
+
+But the rank-3 theorem says: if α ≠ 1, β ≠ 1, α+β ≠ 0 (non-degenerate), then ∃μ with ⟨μα⟩ + ⟨μβ⟩ + ⟨μγ⟩ < p. This contradicts strongly ZSF!
+
+Wait, but doubled+e1 IS strongly ZSF and it DOES have collinear triples. I need to reconsider what I'm actually measuring here. The dependency (α,β,γ) with αv1 + βv2 + γv3 = 0 and α+β+γ ≡ 0 (mod p) gives a zero-sum with weight equal to α+β+γ as integers. If all coefficients are in {1,...,p-1}, the weight ranges from 3 up to 3(p-1), so I'm conflating something about how the weight constraint actually applies. 3(p-1).
+
+For the rank-3 theorem: given a non-degenerate dependency (α,β,1) with α ≠ 1, β ≠ 1, α+β ≠ 0, there exists μ such that ⟨μα⟩ + ⟨μβ⟩ + ⟨μ⟩ < p. Here ⟨x⟩ is the representative in {1,...,p-1}.
+
+But I'm realizing the issue—when I scale the dependency αv1 + βv2 + v3 = 0 by μ, I get (μα)v1 + (μβ)v2 + μv3 = 0, and the coefficients ⟨μα⟩, ⟨μβ⟩, ⟨μ⟩ do give that weight. However, for a ZSF set, the vectors themselves must be distinct projective points from S, and I can't just arbitrarily scale a dependency—the original vectors v1, v2, v3 need to actually belong to S. are FIXED.
+
+Let me re-read the framework more carefully. The ZSF condition is: no coefficients c_i ∈ {0,...,p-1} (not all zero) with Σc_i ≤ max_weight and Σc_i*v_i = 0.
+
+If v1, v2, v3 are collinear with dependency αv1 + βv2 + γv3 = 0 (α,β,γ ∈ F_p*), then for any scalar μ ∈ F_p*, I can scale this to get a zero-sum with coefficients in the standard range, and the rank-3 theorem guarantees that for non-degenerate dependencies, there exists some μ where the weight of these coefficients stays below p.
+
+So if doubled+e1 is strongly ZSF with no zero-sums at weight ≤ p, then every collinear triple in S17 must satisfy this weight bound for all possible scalings μ. So if doubled+e1 is strongly ZSF, it can't have any non-degenerate collinear triples—they all must be degenerate. But the briefing shows 513 out of 607 possible 18th vectors form non-degenerate collinear triples with S17, which means S17 itself has collinear structure, yet all triples within S17 must be degenerate to avoid contradicting the strong ZSF property.
+
+Let me check if my background computation has finished, or try a different angle while waiting. The evidence so far is actually supporting the conjecture: shadow saturation holds at r=4 with p=5, S35 is strongly ZSF with the first zero-sum at weight p+1, and this pattern carries from r=3 to r=4. As an adversary, I need to find where this breaks—likely at higher rank like r=5 with 71 vectors.
+
+Now I'm examining the computational feasibility: at r=5 in F_5^7, the DP state space becomes 78,125 per weight level which is still manageable, though I've already tested larger p values with r=3 up to p=23. The most promising approach might be finding a logical gap in the proof rather than continuing computationally. The argument hinges on whether any set of 18 nonzero non-proportional vectors in F_p^4 must satisfy the Grail property, and I'm tracing through the case analysis to see where it might fail. So "weakly ZSF" means having a weight-(p-1) zero-sum family but not at weight p, which guarantees a weight-p ZS exists in S, satisfying the Grail condition. For the strongly ZSF case, I'm relying on S being uniquely doubled+e1 up to GL-equivalence and shadow saturation holding, but neither has been fully proved—only verified computationally for doubled+e1. The shadow argument would show that -v lies in the shadow at weight p-1, so adding coefficient 1 to v gives a weight-p zero-sum.
+
+The real issue is that I need to either prove uniqueness and shadow saturation for doubled+e1 specifically, or show that shadow saturation holds for all strongly ZSF sets. Since it fails for general ZSF sets, I'd need to exploit the stronger constraint of strongly ZSF—no zero-sum at any weight ≤ p—to force the necessary structure.
+
+Now I'm reconsidering this through the Cauchy-Davenport-Weil lens: the number of solutions to Σc_i*v_i = 0 with Σc_i ≡ 0 (mod p) should have a specific residue modulo p, and since the vector (1,...,1) isn't in the row span, the linear form Σs_i is non-constant on each solution affine subspace, which constrains the distribution of solutions.
+
+For 17 vectors in F_p^4, the solution space to Σc_i*v_i = 0 has dimension 13, and each weight class where Σc_i ≡ w (mod p) contains exactly p^12 solutions. The zero solution sits in the w=0 weight class, but the ZSF condition requires that none of these p^12 solutions are actually zero-sum subsequences of length ≤ p.
+
+Now I'm clarifying what "integer weight" means here—when we lift a solution from F_p back to integers using representatives in {0,...,p-1}, a solution with Σc_i ≡ w (mod p) has integer weight equal to w, w+p, w+2p, and so on. For w ∈ {1,...,p-1}, the minimum possible integer weight is just w itself. and each c_i ∈ {0,...,p-1}).
+
+Wait, the integer weight is Σ_{c_i ≠ 0} c_i where c_i ∈ {1,...,p-1}. The maximum weight with at most 17 vectors and coefficients in {1,...,p-1} is 17(p-1). The mod-p value of the weight is Σc_i mod p.
+
+For the ZSF condition: no solution at target 0 has integer weight ≤ p-1. This means: for each weight class w ∈ {1,...,p-1}, the p^12 solutions at target 0 all have integer weight ≥ w + p (since the next possibility after w is w + p). But wait, that's not right either - the integer weight can be w, w+p, w+2p, etc., bounded above by 17(p-1).
+
+Let me reconsider this more carefully. Each solution is a vector in F_p^17 where the integer weight is the sum of the coefficients as integers, ranging from 0 to 17(p-1). The weight modulo p determines which residue class the solution belongs to, and within each class the actual integer weight can take values w, w+p, w+2p, and so on. The ZSF condition at weights up to p-1 means no nonzero solution at target 0 can have integer weight in that range.
+
+For the strongly ZSF condition, I need to extend this to weights up to p as well. Now I'm thinking about the shadow...
+
+the set of nonzero targets t that can be reached with coefficient vectors having weight at most p-1. The Cauchy-Weil equidistribution result tells me that over the full field F_p, each target gets exactly p^12 solutions across all weight classes, but that's counting solutions in F_p, not the restricted integer weights I actually care about.
+
+Now I'm trying to figure out how many of those p^12 solutions at a given target and weight class actually correspond to integer weights. For nonzero weight w, this means having at most w nonzero coefficients, each bounded by w, that sum to exactly w—and the count depends heavily on the specific vector configuration. This combinatorial approach is getting unwieldy, so I should shift back to just computing this directly.
+
+============================================================
+BLOCK 9 (9078 chars)
+============================================================
+Interesting results! Let me analyze:
+
+**Attack G: Collinear triple classification**
+- At both p=5 and p=7: 20 collinear triples, 8 degenerate, 12 non-degenerate
+- ALL triples have weight > p (no weight-≤p zero-sum)
+- BUT I flagged something important: the rank-3 theorem says non-degenerate triples should have weight < p. If all 12 non-degenerate triples have weight > p, there's an apparent contradiction!
+
+Wait, let me re-examine. 
+
+The rank-3 theorem actually states that for a non-degenerate collinear triple with dependency (α, β, 1), there exists some μ ∈ F_p* where the weighted sum ⟨μα⟩ + ⟨μβ⟩ + ⟨μ⟩ is less than p. But I think I'm computing the weight differently—I'm using the actual coefficient values rather than searching over all possible μ to find the minimum. μα⟩ + ⟨μβ⟩ + ⟨μ⟩ < p for some μ, but my calculations show all scalings have weight greater than p, which suggests either the rank-3 theorem or my computation has an error. Let me trace through my weight calculation logic more carefully by examining a specific non-degenerate triple.
+
+Checking weight computation...
+
+Since μ and a are both nonzero mod p, their product μ*a mod p is never zero, so ma always falls in {1,...,p-1}, and the same holds for mb and mg. This means the weight simplifies to just the sum of these three residues: (μ*a mod p) + (μ*b mod p) + (μ mod p). At p=5, I'm finding that all 12 non-degenerate triples have minimum weight exceeding p.
+
+But the rank-3 theorem predicts there should exist some μ with weight less than p for non-degenerate dependencies—that's a direct contradiction. So either my dependencies are incorrect, my normalization is off, or I'm misclassifying which triples are degenerate. Let me reconsider the degeneracy condition: a triple (a, b, 1) is degenerate when a=1 or b=1 or a+b≡0 (mod p). But the rank-3 theorem uses the form (−α, −β, 1) with its own degeneracy criteria, and I'm noticing a sign discrepancy that might be throwing everything off.
+
+Ah, I see the issue now—the briefing's dependency (−α, −β, 1) corresponds to αv₁ + βv₂ = v₃, while my (a, b, 1) satisfies av₁ + bv₂ + v₃ = 0, which means v₃ = −av₁ − bv₂. Matching the briefing's format requires α = −a and β = −b, so the non-degeneracy condition becomes −a ≠ 1, −b ≠ 1, and −a−b ≠ 0.
+
+I just realized my code is checking the wrong values—it's testing a = 1 and b = 1, but it should be testing a = p−1 and b = p−1 instead. This is a bug that could cause me to misclassify triples, so I need to correct the degeneracy check to use the right conditions.
+
+Now I'm working through the relationship between my code's notation and the briefing's notation more carefully. In the briefing, the dependency (−α, −β, 1) means v_c = αv_a + βv_b, with non-degeneracy requiring α ≠ 1, β ≠ 1, and α+β ≠ 0. Since my code finds (a, b, 1) where av_i + bv_j + v_k = 0, I have α = −a and β = −b, so the non-degeneracy condition translates to checking that −a ≠ 1, −b ≠ 1, and −a−b ≠ 0.
+
+In modular arithmetic, this becomes a ≠ p−1, b ≠ p−1, and a+b ≢ 0 (mod p). My current degeneracy check is wrong—it's testing for a == 1 and b == 1 when it should be testing for a == p−1 and b == p−1. I also need to verify the weight function formula for rank-3 dependencies, which involves the sum ⟨μα⟩ + ⟨μβ⟩.
+
+Now I'm working through the weight function where α = −a and β = −b, so I need to substitute these and use the property that ⟨−x⟩ = p − ⟨x⟩ to simplify the expression.
+
+I'm noticing a discrepancy between what my code is computing and what the actual mathematical weight should be. The code calculates w = ⟨μa⟩ + ⟨μb⟩ + ⟨μ⟩, but when I work through the algebra with the zero-sum constraint and the coefficient scaling, the weight formula should be 2p − ⟨μa⟩ − ⟨μb⟩ + ⟨μ⟩ instead.
+
+Actually, wait—I think I see the issue now. My weight computation is correct for the dependency (a, b, 1), but the rank-3 theorem is stated in terms of a different dependency (−α, −β, 1) where α and β are negations of a and b. When I translate the theorem's bound ⟨μα⟩ + ⟨μβ⟩ + ⟨μ⟩ < p back to my original variables using the property that ⟨−μa⟩ = p − ⟨μa⟩, I'm getting a different expression that I need to work through completely. I need to reconsider this from the beginning. A dependency with coefficients (a, b, 1) represents a zero-sum relation, and when I scale it by some μ ∈ F_p*, I get new coefficients (μa, μb, μ) with a corresponding weight. For the zero-sum-free condition to hold, I need every possible scaling to produce a weight exceeding the threshold, which means checking all μ across the field.
+
+The rank-3 theorem actually works against this—it guarantees that for non-degenerate dependencies like (−α, −β, 1), there exists some scaling μ where the weight drops below p, which directly violates the ZSF property I'm trying to establish. Translating to my notation where α = −a and β = −b, this means I can always find a μ making the scaled weight small, so the dependency cannot be zero-sum-free. ⟨μ⟩ > 0, which means the weight is positive. So I need to verify that the rank-3 theorem's non-degeneracy conditions translate correctly to my setup: α ≠ 1 and β ≠ 1 mean a ≠ p-1 and b ≠ p-1, while α+β ≠ 0 means a+b ≠ 0 mod p. So when the rank-3 theorem applies and ⟨μα⟩ + ⟨μβ⟩ + ⟨μ⟩ < p, the actual weight becomes 2p - (⟨μα⟩ + ⟨μβ⟩ + ⟨μ⟩) + 2⟨μ⟩, which is always greater than p. This means the rank-3 theorem produces a deceptively low weight in the (α, β, 1) convention, but the true weight is actually much higher.
+
+The key insight is that the convention matters—when the rank-3 subroutine fires on the 18th vector, it's analyzing a different dependency structure than what exists within S17 itself. The 18th vector might use a different sign convention, which explains why the rank-3 theorem doesn't directly give a low-weight zero-sum for the actual dependency inside S17.
+
+I need to reread the briefing to understand exactly how the rank-3 subroutine applies when adding the 18th vector to the 17-vector construction. There's no contradiction here—I was confused about sign conventions. The internal triples within S17 have dependencies that consistently produce high weights, while their complementary versions (with negated coefficients) would yield low weights under the rank-3 theorem. This structural relationship is actually consistent with S17 being strongly ZSF.
+
+Now I need to verify my degeneracy check against the rank-3 theorem's actual convention, since the theorem uses (-α, -β, 1) for its dependencies while my code uses (a, b, 1), meaning I should be checking whether α = -a and β = -b satisfy the non-degeneracy conditions.
+
+The theorem requires α ≠ 1, β ≠ 1, and α+β ≠ 0, which translates to a ≠ p-1, b ≠ p-1, and a+b ≢ 0 in my convention. So my current check for a = 1 or b = 1 is incorrect—I should be checking a = p-1 or b = p-1 instead.
+
+This is a significant bug that could misclassify triples as degenerate or non-degenerate. Let me correct this and rerun the analysis.
+
+Actually, I need to reconsider the direction of the dependency more carefully. When applying the rank-3 subroutine to an external vector v₁₈ paired with v_a and v_b from S17, the linear dependence is αv_a + βv_b + γv₁₈ = 0, which normalizes to expressing v₁₈ in terms of the other two vectors. The rank-3 theorem then applies based on whether this normalized form satisfies the non-degeneracy conditions.
+
+The theorem guarantees that if the normalized coefficients α' and β' are both not equal to 1 and their sum is nonzero, I can find a multiplier μ that produces a zero-sum with weight strictly less than p. The actual weight of this zero-sum comes from applying the multiplier to the original coefficients and computing the resulting sum.
+
+Now I'm working through the weight calculation: if the sum of fractional parts ⟨μα'⟩ + ⟨μβ'⟩ + ⟨μ⟩ equals w' and w' < p, then the actual weight simplifies to 2p - w' + 2⟨μ⟩. Since w' is strictly less than p and the fractional part is at least 1, this guarantees the actual weight is always at least p + 3, which means the rank-3 theorem prevents internal triples in S17 from satisfying the dependency.
+
+But the 18th vector's rank-3 subroutine operates under a different normalization—it sets the 18th vector's coefficient to 1, which directly yields a weight less than p when the fractional parts sum to w' < p. The key insight is that the normalization convention determines whether the weight bound applies directly or requires the complementary calculation.
+
+For internal triples from S17, the normalization is arbitrary, so the rank-3 theorem might fire in a convention where the actual weight ends up high. But for external triples involving the 18th vector, normalizing it to coefficient 1 gives the weight bound directly. This explains why S17 can maintain strong zero-sum-free properties despite having non-degenerate internal collinear triples—the internal ones always produce high actual weights.
+
+This structural distinction is interesting, but it doesn't actually break the proof strategy. Let me shift focus and check what the background job results show.
+
+============================================================
+BLOCK 10 (1518 chars)
+============================================================
+The background task produced an empty output file. It probably failed or is still running. Let me check the process status.
+
+Actually, I think the task might have been killed due to timeout or the process might be running somewhere else. Let me just run the script directly.
+
+But actually, looking at the task output, the file is empty (0 bytes and 0 lines). Let me try running it again directly, but this time I'll limit the scope to make it finish in time.
+
+Actually, the targeted attacks script might be too slow for p=7 with the full greedy search. Let me focus on what I can get quickly and design faster attacks.
+
+Let me think about what the most impactful thing to do is with my remaining round time.
+ 
+I'm seeing some really compelling evidence here—shadow saturation holds at r=4 with 35 vectors in F_5^5, the zero-sum weight pattern continues to match p+1, and the collinear triple analysis across S17 and S35 is all pointing toward the conjecture being solid. There's a sign convention issue in Attack G that I need to verify with a quick test.
+
+The background job for non-standard strongly ZSF sets didn't produce anything, so I'll run a faster version. But the real priority is fixing the degeneracy classification bug—if I've misclassified triples as degenerate or non-degenerate, it could undermine my understanding of why S17 is strongly ZSF. I'm going to write a verification script that enumerates all collinear triples in S17 and checks the sign convention carefully.
+
+Writing verification script...
+
+============================================================
+BLOCK 11 (7751 chars)
+============================================================
+The job is running in the background. Let me also think about the most important result I should produce for this round while waiting.
+
+The key findings from this round so far:
+
+1. **Shadow saturation at r=4**: HOLDS. 35 vectors in F_5^5, shadow at weight 4 covers all 3124 nonzero vectors. Strongly ZSF confirmed. First zero-sum at weight 6 = p+1.
+
+2. **Internal collinear triples**: 20 in S17 (12 non-degenerate, 8 degenerate), but all have actual weight > p. This is CONSISTENT with strongly ZSF because of the sign convention: the rank-3 theorem guarantees weight < p in the α,β,1 convention, which translates to weight > p+2 in the actual convention for internal triples.
+
+
+3. **Barely reachable targets**: 44 at p=5, with 20 being single-vector scalings. **S35 collinear triples**: 77 out of 6545 possible, all consistent with strongly ZSF.
+
+The critical insight here is about the **sign convention and how the rank-3 subroutine applies differently to external versus internal triples**. The subroutine works for external triples involving the 18th vector by design, but internal triples follow a different pattern due to the sign convention translation.
+
+When the 18th vector is involved in a collinear relation, I can normalize and apply the rank-3 theorem to get a bound on the weighted sum, but the actual weight calculation requires accounting for the complementary weights—the difference between p and the theoretical bound gives the true weight contribution.
+
+Working through the algebra, if the rank-3 constraint holds with weight less than p, the actual weight ends up being greater than p + 2, which contradicts what the support-3 kills should produce. This suggests my analysis of how the normalization interacts with the weight calculation needs revision.
+
+Let me reconsider the normalization approach. When the 18th vector is being eliminated, I have a linear dependence where the coefficients sum to at most p, and I want them all in the range {1,...,p-1}. If I normalize by setting one coefficient to 1, the dependency becomes c_a*v_a + c_b*v_b + v_18 = 0, where the rank-3 theorem applies to these normalized coefficients.
+
+But actually, the underlying dependency is projective: v_18 = αv_a + βv_b for some nonzero α, β in F_p. This means αv_a + βv_b - v_18 = 0, which in the zero-sum framework has coefficients (α, β, p-1) with total weight α + β + (p-1). I can scale this entire relation by any nonzero μ to get different coefficient representations, and the scaling affects all three coefficients multiplicatively.
+
+For the rank-3 theorem, the dependency is expressed as (-α, -β, 1), meaning (-α)v_a + (-β)v_b + v_18 = 0, which is equivalent to v_18 = αv_a + βv_b. So the theorem's coefficients are just the negatives of α and β paired with 1 for the third coordinate.
+
+When the non-degeneracy conditions hold (α ≠ 1, β ≠ 1, α+β ≠ 0), there exists some μ where the scaled coefficients give a weight ⟨μα⟩ + ⟨μβ⟩ + ⟨μ⟩ < p. The actual zero-sum coefficients after scaling by μ become p - ⟨μα⟩ on v_a, p - ⟨μβ⟩ on v_b, and ⟨μ⟩ on v_18, which determines the total weight.
+
+Now I'm working through the algebra: if that sum equals w' < p, the total weight becomes 2p - w' + 2⟨μ⟩. Since w' is at least 3 (the minimum sum of three positive integers) and ⟨μ⟩ ≥ 1, I can bound the weight as 2p - 3 + 2(p-1), which simplifies to 4p - 5.
+
+On the lower end, the weight is at least p + 3, so it's always strictly greater than p. But that contradicts the empirical data showing support-3 kills with weight ≤ p at p=5. I think I've made an error in my setup—specifically in how I'm lifting the zero-sum relation to the coefficient representation. Let me reconsider the actual coefficients when α and β are in {1,...,p-1}.
+
+The dependency (-α)v_a + (-β)v_b + v_{18} = 0 has coefficients p-α, p-β, 1 when represented in {0,...,p-1}, giving weight 2p - α - β + 1. For p=5, this means weight = 11 - α - β, which ranges from 3 (when α = β = 4) to 9 (when α = β = 1). So larger values of α and β actually produce smaller weights, which suggests the rank-3 theorem's scaling doesn't follow the pattern I initially expected.
+
+When I scale by μ, the coefficients become p - ⟨μα⟩, p - ⟨μβ⟩, and ⟨μ⟩, giving weight 2p - ⟨μα⟩ - ⟨μβ⟩ + ⟨μ⟩. The rank-3 theorem guarantees I can find some μ that optimizes this weight by making ⟨μα⟩ + ⟨μβ⟩ small relative to ⟨μ⟩. I'm working through the weight calculation and finding that when the rank-3 theorem applies, the weight should always exceed p+2, which contradicts the requirement that weight ≤ p. Yet empirically, the support-3 subroutine is eliminating over 500 cases at p=5, so there's a fundamental gap in my reasoning that I need to uncover.
+
+Let me reconsider what "support-3" actually means—it might refer to zero-sums involving exactly 3 vectors with arbitrary coefficients from {1,...,p-1}, rather than the weighted rank-3 theorem I've been analyzing. The rank-3 formulation I'm using might not be the right lens for understanding how these cases are actually being resolved. the mechanism is: given a collinear triple with the dependency v_{18} = αv_a + βv_b (where α ≠ 1, β ≠ 1, α+β ≠ 0), the rank-3 theorem guarantees the existence of coefficients c_a, c_b, c_{18} ∈ {1,...,p-1} satisfying the zero-sum relation with total weight less than p. The proof relies on the rank-3 upper bound theorem, and I need to work through how the general zero-sum coefficients scale from the original dependency.
+
+For any μ ∈ F_p*, the zero-sum relation becomes (μα)v_a + (μβ)v_b + (-μ)v_{18} = 0, and I'm computing the weight by converting these to representatives in {1,...,p-1}. The weight formula involves ⟨μα⟩ + ⟨μβ⟩ + (p - μ) for μ ∈ {1,...,p-1}, and I need to find the μ that minimizes this expression.
+
+For the weight to stay below p, I need ⟨μα⟩ + ⟨μβ⟩ < μ, which is a pretty restrictive condition. Let me test this at p=5 with α=2, β=3 to see if this inequality ever holds—checking μ=1,2,3 and computing the bracket sums shows they're all exceeding μ, so this constraint seems difficult to satisfy. I'm verifying this with a concrete example: at p=5 with α=3, β=4, μ=4, the sum ⟨12⟩ + ⟨16⟩ = 2 + 1 = 3, which is less than μ=4, giving weight 4 < 5. So achieving weight less than p is possible—my mistake was in how I set up the dependency direction. Now I'm reformulating it correctly: the dependency v₁₈ = αvₐ + βvᵦ creates the zero-sum constraint, and scaling by μ gives the proper coefficient structure. The rank-3 theorem guarantees that for non-degenerate pairs (α,β) where α ≠ 1, β ≠ 1, and α+β ≠ 0, there's always some μ with weight strictly less than p. Now I'm shifting to internal triples within S₁₇, where three vectors satisfy a linear dependency av_i + bv_j + cv_k = 0. The key question is whether every possible normalization of this dependency produces a weight exceeding p, or if at least one normalization keeps the weight below the threshold. I'm checking the constraints on μa' and μb' modulo p—both need to equal p-1 for the weight to drop below p, which happens when μa' and μb' are each congruent to p-1 mod p.
+
+But wait, I'm realizing I've been conflating two separate concepts: the dependency relation itself (the unique vector satisfying the collinear constraint) versus the actual zero-sum coefficients we're trying to find. Let me step back and see what the computational verification actually reveals about this. I'm realizing I need to step back and verify this with concrete examples rather than getting caught in the abstract argument. Let me check the specific case at p=5 with v18 to see what support-3 zero-sums actually exist. The briefing mentions support-4 cases from fiber 2 where three vectors from fiber 1 combine with v18 to give weight 4, which is already below p=5.
+
+============================================================
+BLOCK 12 (5566 chars)
+============================================================
+Now I understand the sign convention. Let me analyze:
+
+1. **The dependency**: v18 = α*vi + β*vj means the zero-sum is α*vi + β*vj - v18 = 0, with natural coefficients (α, β, p-1).
+
+2. **Scaling by μ**: gives coefficients (⟨μα⟩, ⟨μβ⟩, ⟨μ(p-1)⟩). The third coefficient is ⟨-μ⟩ = p - μ.
+
+3. **Weight** = ⟨μα⟩ + ⟨μβ⟩ + (p - μ). For this to be ≤ p: ⟨μα⟩ + ⟨μβ⟩ ≤ μ.
+   
+4. Let me check with a concrete example: α=3, β=3, p=5, μ=2 gives ⟨6⟩=1, ⟨6⟩=1, so weight = 1+1+3 = 5 = p. But the briefing claims support-3 kills have weight strictly less than p, so something's off here—let me verify against the first example to see if I'm computing this correctly.
+
+Looking back at v18 = (0,0,1,1), which is killed by two different relations: one with weight 5 (equal to p) and another with weight 4 (less than p). So the Grail condition is actually weight ≤ p, not strictly less than.
+
+Now I'm noticing a discrepancy in the counts: I found 139 candidates with 111 killed by support-3, but the briefing reports 513 out of 607 killed. The issue is that the briefing counts all nonzero non-proportional vectors including their scalar multiples, whereas I'm counting projective points. Since each projective point has p-1 = 4 scalar representatives, multiplying 139 by 4 gives 556, which still doesn't match 607.
+
+Looking at the Cortex data more carefully, it mentions "556/556 at p=5" and "All 607 possible 18th vectors tested," suggesting the 607 might come from a different enumeration or counting method than what I'm using.
+
+The key insight is that 111 out of 139 candidates get eliminated by support-3 constraints with weight ≤ 5, leaving just 28 that need support-4 analysis. And I've now pinned down the sign convention: when a dependency (α, β, p-1) is scaled by μ, it produces weight ⟨μα⟩ + ⟨μβ⟩ + (p - μ).
+
+For S17 to be strongly ZSF, every internal triple must have minimum weight exceeding p across all possible scalings μ. The condition ⟨μα⟩ + ⟨μβ⟩ ≤ μ determines when weight stays at or below p, so I need to verify this fails for all internal triples in S17. I see that when the rank-3 theorem applies, these internal non-degenerate triples exhibit a striking duality: they satisfy a weight constraint under one coefficient system but violate it under another. The actual zero-sum using the original coefficients always produces weight greater than p+2, which is fundamentally different from the rank-3 convention weight that stays below p.
+
+Now I'm checking how this changes for the external case where v18 kills—there the dependency naturally carries different coefficients on v18, which shifts how the weight calculation works. being p-1 = -1. Scaling by μ makes the coefficient on v18 be ⟨-μ⟩ = p - μ. The weight is ⟨μα⟩ + ⟨μβ⟩ + (p - μ).
+
+So the trick is that for external triples, the v18 coefficient is NEGATIVE in the natural dependency, so it gets "complemented" and the weight becomes ⟨μα⟩ + ⟨μβ⟩ + (p - μ), which can be small. For internal triples, all coefficients are "same sign" in the natural dependency, giving higher weight. For internal triples, the dependency (a, b, c) has all three coefficients positive or mixed, and the weight ⟨μa⟩ + ⟨μb⟩ + ⟨μc⟩ depends on the specific values.
+
+I think I've got the sign convention sorted now. The key insight is that support-3 kills for external triples work via the rank-3 theorem with the right sign convention, internal triples of S17 all stay above weight p under any scaling which fits with strongly ZSF, and I had the wrong sign convention in my earlier Attack G (checked degeneracy with a=1 instead of a=p-1), though the weight computation itself was correct.
+
+Now I'm noticing a discrepancy in my counts—I'm getting 111/139 killed by support-3, which is 80%, but the briefing mentions 513/607. Let me check the background job and wrap up this round.
+
+Actually, there's another issue here. The 513/607 is 84.5%, and the difference might come down to how we're counting candidates—projective versus vector representatives. At the projective level I get 79.9%, but at the vector level each projective kill could correspond to 4 vector kills depending on proportionality with S17 triples.
+
+I'm working through the numbers: 139 projective candidates times 4 gives 556 vectors, but 607 doesn't match that. Maybe the 607 includes vectors proportional to S17? The problem says 18 non-proportional vectors though. Let me recalculate—at p=5 there are 156 projective points total, 17 in S17, leaving 139 outside.
+
+So 139 is definitely the right count for projective candidates. The 607 from the briefing might be counting something different—possibly from a different prime or including multiplicities. Looking back at the Cortex entry, it confirms 139 candidates with 122 killed at weight p-1, which is 87.8%. The briefing's mention of "all 607 possible 18th vectors tested" suggests that 607 is the vector-level count for a different scenario entirely. Zero failures. So 607 counts all nonzero vectors except those in S17 itself, though it includes their scalar multiples—if the 18th vector is proportional to an S17 vector, that creates a proportional pair which invalidates the set, but the briefing still counts it as a candidate and checks for weight-≤p zero-sums anyway. That resolves the discrepancy: 607 represents all nonzero vectors outside S17 including proportional ones, while 139 is the count of projective points not in S17, and among the 607 some are trivially eliminated because they're proportional to S17 vectors. Now let me check if the background jobs have finished and close out this round.
+
+============================================================
+BLOCK 13 (194 chars)
+============================================================
+The background tasks don't seem to be producing output. They might have been killed or are still running. Let me try running the quick script directly (not in background) with a shorter timeout.
+
+============================================================
+BLOCK 14 (1766 chars)
+============================================================
+The search at p=7 is extremely slow. The greedy strongly ZSF search found a max of 15 vectors in 300 seconds. The DP is too slow for p=7 with weight ≤ 7 (7+1 = 8 weight levels, each with up to 7^4 = 2401 states, 400 points to test).
+
+Let me optimize the DP. The bottleneck is the decode/add/encode cycle. I can precompute lookup tables.
+
+Actually, let me reconsider. The DP at p=7 with weight ≤ 7 has:
+
+
+- Weight levels: 0-7 (8 levels)
+- States per level: up to 2401 (7^4)
+- For each candidate vector: (p-1) = 6 coefficient choices
+- For each existing state at each weight: do 6 additions
+
+After 15 vectors, the number of states at weight w is bounded by the binomial coefficient C(k*(p-1), w) but capped at p^4 = 2401. The real bottleneck is the inner loop where I decode each state code, add the new vector, and encode back—this happens repeatedly for every state and every candidate vector.
+
+With thousands of potential states, this decode-add-encode cycle becomes a performance killer in Python. I could precompute an addition table for all 2401 × 2401 pairs, but that's nearly 6 million entries, which is too memory-intensive. Instead, I'll optimize by computing the offset directly using modular arithmetic on the vector components—encoding as v[0]*343 + v[1]*49 + v[2]*7 + v[3] and adding by taking each component modulo 7 before re-encoding.
+
+For each fixed cv, I can precompute a lookup table mapping encoded values to their sums with that cv, avoiding repeated decode operations. Better yet, I can compute the addition directly with pure integer arithmetic by extracting each component from the encoded value, adding it to the corresponding cv component modulo 7, and reconstructing the result—no decoding step needed.
+
+Writing optimized arithmetic code...
+
+============================================================
+BLOCK 15 (3134 chars)
+============================================================
+Very interesting! After 30 random greedy trials at p=7:
+- Best size achieved: 16 (one short of 17)
+- No strongly ZSF set of size 17 found by greedy
+- The standard doubled+e1 is confirmed strongly ZSF and shadow-saturated
+
+The greedy algorithm hits a wall at size 16. This means strongly ZSF size-17 sets are very rare at p=7 — the doubled+e1 is extremely special. Greedy can't find it because the construction requires a very specific algebraic structure (the same A8 in both fibers).
+
+This is consistent with the uniqueness claim: the doubled+e1 might indeed be the ONLY strongly ZSF set of size 17 at p=7. But I haven't PROVED it's impossible. 
+
+I've only shown that random greedy can't find alternatives. The prior work already tested 200 single-swap variants from doubled+e1 and found them all weakly ZSF, so that avenue is exhausted. Instead, I should try applying a non-trivial GL(4,F_7) transformation to the doubled+e1 construction to see if I can generate a genuinely different strongly ZSF set by altering the fiber structure.
+
+But any GL transformation preserves the ZSF and shadow properties, so the result would just be GL-equivalent to doubled+e1—still fundamentally the same set. The real question is whether there exists a strongly ZSF set outside the GL-orbit of doubled+e1 entirely. The greedy search suggests there probably isn't one, but I can't prove it yet.
+
+Let me now compile my findings from this investigation.
+
+The shadow saturation pattern holds at r=4, p=5: all 3124 nonzero vectors in F_5^5 are covered by the weight-4 shadow of S35, which itself is strongly ZSF with no zero-sums until weight 6. The layer growth shows a clear progression from 35 vectors at weight 1 through increasingly larger increments. For the sign convention question, the internal collinear triples of S17 all have actual weight exceeding p under any scaling, which aligns with the strongly ZSF property through the rank-3 theorem.
+
+The external triples involving v18 behave differently because the coefficient on v18 flips sign, allowing the rank-3 theorem to directly produce weight ≤ p. At p=5, support-3 zero-sums eliminate 111 of 139 projective candidates (80%), leaving only 28 that require support-4 or higher. The greedy algorithm for strongly ZSF at p=7 maxes out around size 16 across 30 trials, unable to reach 17 except in the special case of Doubled+e1. There are 44 targets at p=5 that sit right at the boundary of reachability.
+
+Of those 44 barely-reachable targets, 20 are simple scalar multiples of single vectors (using c=4), while 24 arise from pair combinations at weight p-1. Looking at S35 with r=4, I found 77 collinear triples out of 6545 possible, all consistent with the strongly ZSF structure. What I haven't managed to break is the shadow saturation phenomenon in Doubled+e1, which now holds at both r=3 and r=4, nor have I found any counterexample to the Grail conjecture itself. Doubled+e1 also appears to be uniquely strongly ZSF as a 17-set—greedy search can't locate any alternatives. The remaining gap is proving whether Doubled+e1 is truly the only strongly ZSF 17-set, which remains unresolved.
+
+============================================================
+BLOCK 16 (175 chars)
+============================================================
+Good, the finding is stored. Now let me write a concise adversary report for the team.
+
+Let me summarize the key results and focus on what matters most for the proof strategy.
+
+============================================================
+BLOCK 17 (1539 chars)
+============================================================
+The file is essentially empty (1 line, probably just empty). The targeted attacks script timed out at 600 seconds without producing any output. This is because the DP at p=7 with weight ≤ 7 is very slow without the precomputed addition tables optimization.
+
+No new information from this. My report is already complete. Let me check if there's anything else I should do for this round.
+
+Actually, let me think about what the most valuable thing I could do with remaining time is. The key open question is: can I find a non-doubled+e1 strongly ZSF set? The greedy search maxed at 16. But maybe a more targeted search could work.
+ 
+I could try proving that doubled+e1 is the unique 17-element strongly ZSF set by showing any such set must have the (8,9) fiber structure. The strongly ZSF condition imposes tight structural constraints—for instance, collinear triples can't have certain dependency patterns where the rank-3 weight stays below p.
+
+The doubled+e1 configuration works because it's maximally 4-sum-free within each fiber and the two-fiber structure prevents cross-fiber zero-sums at low weight. A three-fiber split like 6+6+5 would create far richer cross-fiber interactions, making it much harder to avoid low-weight zero-sums, which is why the greedy approach fails there.
+
+I've covered the main findings: shadow saturation at r=4, the sign convention clarification, greedy search results confirming how rare strongly zero-sum-free sets are at p=7, and the remaining structural vulnerabilities. I should finalize the report now.

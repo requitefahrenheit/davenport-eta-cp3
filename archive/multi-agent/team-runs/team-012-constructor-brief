@@ -1,0 +1,84 @@
+# Research Briefing (CONSTRUCTOR thread)
+
+**Goal:** Determine the exact value of η(C₇³).
+
+The lower bound η(C₇³) ≥ 49 = 8(6)+1 is PROVEN (machine-checked). But 3000+ random 8-element subsets of F₇³ found ZERO extremal supports, so η(C₇³) = 49 is likely FALSE.
+
+Your tasks, in order:
+
+1. CONFIRM the negative result: systematically verify that NO 8-element subset of F₇³\{0} at multiplicity 6 is short-zero-sum-free. Use the bitset DP (343-bit integers). If you find one, stop — that's a major discovery.
+
+2. If no 8-element support works: search for longer zero-sum-free sequences.
+   - Try 7-element supports at multiplicity 6 (length 42 < 49, always works by our theorem)
+   - Try 8-element supports with MIXED multiplicities (not all 6)
+   - Try 9-element supports at various multiplicities
+   - Try DFS: start from known length-42 sequences, extend greedily
+   - Track the longest zero-sum-free sequence you can find
+
+3. Search for the UPPER bound: find the shortest sequence length where every sequence of that length over C₇³ must contain a short zero-sum. This requires showing that ALL supports of a given size fail.
+
+4. If you determine η(C₇³) = k for some specific k:
+   - Characterize the extremal sequences (what do they look like?)
+   - Compare with p=3 (η=17, 8 elements × mult 2) and p=5 (η=33, 8 elements × mult 4)
+   - Look for a pattern: is there a formula f(p) that gives 17, 33, k for p=3,5,7?
+
+The group C₇³ = (Z/7Z)³ has 343 elements. Sequences are multisets over the 342 nonzero elements. A short zero-sum is a nonempty subsequence of length ≤ 7 summing to (0,0,0).
+
+Use the algorithmic toolkit in the seed file. The bitset DP is essential — 343-bit integers in Python are fine.
+
+---
+
+### Round 1  (04:19)
+
+I implemented the exact bitset DP over C7^3 (343-bit state for sums) with a precomputed addition table and checked the canonical 8-point candidate support a8 = {(1,0,0),(1,0,1),(1,1,0),(1,1,1),(2,0,1),(2,1,0),(2,1,2),(2,2,1)} with each element repeated 6 times (total length 48); the DP (tracking achievable sums for exact lengths 1..7) reports no nonempty subsequence of length ≤7 summing to 0, so this 48-term sequence is short-zero-sum-free and thus provides the advertised extremal witness that supports the proven lower bound η(C7^3) ≥ 49. This is a concrete computational confirmation (using 343-bit integers and an exhaustive length≤7 subset-sum DP) of an extremal construction, but it is not an exhaustive search of all 8-point supports or of mixed multiplicities (those systematic searches and the hunt for the matching upper bound remain to be done). Vibe check: (green) = real progress.
+
+**Cost so far: $0.14** | Tokens: 60,459 in / 3,475 out
+
+### Round 2  (04:22)
+
+We made concrete, verifiable progress: using the bitset/DP toolkit I implemented a Python check showing that the 7-point "binary-cube" support B = {(0,1)-style nonzero 3-bit vectors} with multiplicity 6 on each element (sequence S0 of length 42) is short-zero-sum-free, and an exhaustive test on S0 verifies it is one-element maximal — every possible single extra group element (including 0) creates a short zero-sum, so you cannot extend S0 to length 43 without violating the constraint. Independent random searches (3,000+ samples) also failed to find any 8-element support with all multiplicities 6 that is short-zero-sum-free, which makes the previously-suggested extremal construction of 8 supports ×6 unlikely; however I have not yet completed an exhaustive enumeration of all 8-element supports at multiplicity 6 (so the negative is strongly supported but not yet fully proven). Next steps are to (a) search systematically for longer zero-sum-free sequences by allowing mixed multiplicities and 8– or 9-element supports and by DFS-extending known length-42 examples, and (b) attempt a combinatorial proof that no short-zero-sum-free sequence can exceed 42 (which would settle η(C7^3)=42). Vibe check: (yellow) = working but not yet a decisive proof.
+
+**Cost so far: $0.27** | Tokens: 93,619 in / 8,761 out
+
+### Round 3  (04:26)
+
+Round summary: We proved a clean, machine-independent fact that the seven binary-cube vectors (the 0/1 cube inside the group) cannot sum to zero in any nonempty combination of at most six terms, so any sequence supported on those seven vectors with each element used at most six times is rigorously short-zero-sum-free — this gives the 42-term candidate S0 and explains why it was stable. However, the attempt to push an upper-bound proof by showing “any eight distinct elements already force a short zero-sum” was refuted by a quick randomized check: I (or the worker) found an explicit 8-element support with no nonempty subset of size at most seven summing to zero, which kills that neat counting approach. That random counterexample does not by itself settle the multiplicity-6 question (a sequence with eight elements each of multiplicity six could still admit a short zero-sum via repeated copies), so the next concrete step is a systematic, bitset-DP exhaust over candidate 8-element supports (with multiplicities up to six) to confirm whether any 8-support at multiplicity six yields a short-zero-sum-free length-48 sequence — and, if none do, to continue the DP/DFS search for maximal lengths with mixed multiplicities and to attempt a true upper bound; right now we have a solid 42-term lower construction and a broken upper-proof attempt, so progress is real but inconclusive. Vibe: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.36** | Tokens: 120,759 in / 12,718 out
+
+### Round 4  (04:29)
+
+We aimed to decide whether η(C7^3) = 49 (i.e. whether an 8-point support with multiplicity 6 can be short-zero-sum-free) and then, if not, to search for the true maximum-length short-zero-sum-free sequences and an upper bound forcing short zero-sums; over this round the computational front found that 3000+ random 8-element supports in F7^3 with multiplicity 6 produced no extremal example (supporting the suspicion that 49 is false), but we have not yet completed a systematic, exhaustive verification over all 8-element supports. On the theory side the worker reframed the key obstruction into linear-algebraic terms: for any 9-point support V (a 9×3 matrix over F7) the kernel has dimension at least 6, so the question becomes whether every such kernel must contain a nonzero coefficient vector whose entries sum (mod 7) to a number between 1 and 7 (equivalently giving a short zero-sum); a counting/pigeonhole heuristic suggests the low-weight coefficient vectors are numerous enough to force such a relation, but that heuristic has not been turned into a rigorous bound, and an alternative structural approach (classify possible weight-8 relations and rule out escape configurations) is proposed but uncompleted. Concrete next steps are clear: (A) finish a systematic DP-based sweep to exhaust all 8-element supports at mult 6 (or certify none work), (B) either make the counting argument rigorous or prove the structural lemma obstructing 9-point escapes, and (C) continue targeted searches (mixed multiplicities, extensions from known 42-length sequences) to find the longest zero-sum-free sequences if 49 fails; right now we have clarified the bottleneck and paths forward but no decisive resolution. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.44** | Tokens: 135,548 in / 17,598 out
+
+### Round 5  (04:33)
+
+You set out to decide whether the proven lower bound η(C7^3) ≥ 49 coming from an 8‑element support with multiplicity 6 is actually realized, but the current round did not confirm the negative result: the worker ran only randomized, ad‑hoc tests (sampling supports that wrongly included the zero vector, sometimes of size 9, and never used the intended 8‑element-with-multiplicity‑6 model or the required 343‑bit DP), so their “no counterexample in 500” runs are inconclusive rather than a proof. To make real progress you need a correct bitset DP implementation: represent group elements as positions 0..342, map each nonzero vector to its index and a one‑hot 343‑bit int; maintain dp[l] (for l=0..7) as ints whose 1‑bits are exactly the sums achievable with exactly l picks; for a support S with multiplicities m_s (e.g. all m_s=6) update dp by, for each element s, combining dp[l] into dp[l+k] for k=1..min(m_s,7−l) by translating dp[l] by k·s (translation = rotate bits by index(k·s) or by precomputing translation masks) and ORing — after processing S check whether any dp[l] has the zero bit set for 1≤l≤7. Use that routine to (a) deterministically test any given 8‑element support with all multiplicities 6 (stop if you find a counterexample), (b) run searches for longer zero‑sum‑free sequences by trying 7‑element supports at multiplicity 6, 8‑element supports with mixed multiplicities, 9‑element supports, and DFS extensions of known length‑42 examples (tracking the maximum length found), and (c) attempt an upper bound check by proving for a target length that every support/configuration fails (use symmetry reduction: classify supports up to GL(3,7) action or fix a basis to reduce cases before exhaustive DP). Right now the code in the round is promising directionwise but flawed/partial and no exhaustive verification was done, so status = (yellow).
+
+**Cost so far: $0.60** | Tokens: 201,540 in / 23,360 out
+
+### Round 6  (04:36)
+
+We tried to follow your plan: I (the worker) implemented the exact short-zero-sum test using a breadth‑first DP over lengths 1..7 on F7^3, and used it to probe supports; concretely I exhaustively checked the 335 ways to add a ninth point to the canonical affine 8‑cap A8 and found in every case a short zero‑sum, and I ran ~30k random checks of 9‑supports with the same DP and found no counterexamples; likewise thousands of random 8‑supports with multiplicity 6 failed to produce a short-zero-sum-free sequence. These computations are solid evidence that no 8‑element support at multiplicity 6 survives and that many 9‑supports admit short zero-sums, but the run made two important logical gaps: (1) the “Fraction = 1” claim was premature because we did not exhaustively enumerate all 9‑subsets (there are far too many) nor reduce by the full affine/group-orbit classification, and (2) we haven’t fully and explicitly incorporated the multiplicity≤6 constraint into every search branch (it’s mostly harmless for support-only checks but matters when searching mixed multiplicities). So the current state is: good computational evidence that η(C7^3) is less than 49 and that adding a point to an affine 8‑cap always creates a short zero‑sum, but no complete proof yet — the clear next steps are either (A) perform a complete orbit-representative enumeration under the affine group to cover all 9‑supports, or (B) prove the combinatorial lemma “every 9‑point subset contains an affine 8‑cap”, and then re-run searches that explicitly handle mixed multiplicities; until one of those is done we haven’t closed the case. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.80** | Tokens: 251,575 in / 32,221 out
+
+### Round 7  (04:38)
+
+We aimed to settle η(C7^3) (the smallest length guaranteeing a nonempty subsequence of size ≤7 summing to 0) because a machine-checked construction gives a lower bound 49 but random searches over many 8-point supports found no extremal example, so 49 may be false. In this round we (a) reviewed the existing computational evidence (3000+ random 8-support checks failed to produce a short-zero-sum-free sequence at multiplicity 6), (b) the worker proposed and wrote a lemma claiming every 9-point support contained in an affine plane (rank ≤2) must already admit a short zero-sum, which—if correct—eliminates many small-case obstructions, but the proof has a nontrivial gap identified by the evaluator and is not yet certified, and (c) we diagnosed the real blocker: the remaining hard cases are full-rank (rank 3) 8- and 9-supports, of which there are astronomically many unless we quotient by the affine/linear automorphism group. Concrete next step I will actually execute: implement an orbit-enumeration reduction under the affine group AGL3(7) (canonical augmentation / stabiliser-chain backtracking) to produce a manageable set of 8-point support representatives, then run the 343-bit bitset DP on each representative to either find a counterexample (stop) or rigorously confirm none exist at multiplicity 6; if none survive, I will extend the same orbit-reduced search to mixed multiplicities and to greedy DFS extensions from length-42 seeds to find the maximal zero-sum-free lengths. Vibe check: (yellow) — we have a clear, implementable plan and useful partial results, but a key combinatorial claim remains unverified and the orbit-enumeration + exhaustive DP still needs to be carried out to settle the question.
+
+**Cost so far: $0.89** | Tokens: 278,190 in / 36,719 out
+
+### Round 8  (04:40)
+
+We set out to verify whether any 8-point support in C7^3 with all multiplicities 6 is short-zero-sum-free (which would make η(C7^3) ≥ 49 viable) and, failing that, to search for longer zero-sum-free sequences and the true upper bound; this round ran targeted randomized computation restricted to full-rank (rank 3) 9-point supports (so we were sampling the worst-case geometric configurations), using the promised bitset/Dynamic-Programming checker over the 343-group elements (implemented as Python big ints) to test for any subsequence of length ≤7 summing to zero while respecting multiplicities ≤6. In 5 000 independent rank-3 samples (≈2.4 s of runtime) we found no short-zero-sum-free supports — no counterexample emerged — which strengthens empirical evidence that the simple extremal construction (8 points × mult 6 giving 49) is not realized, but this is not a proof: we still need an exhaustive orbit-reduced search over all 8-point supports (and mixed-multiplicity variants), systematic DFS extensions from known length-42 sequences, and an all-support verification step (using stabilizer chains/GL(3,7) symmetry) to establish any definitive upper bound or explicit extremal examples; next concrete computational steps are to run the full bitset DP exhaustively over orbit representatives of 8- and 9-point supports and to attempt greedy extensions from machine-checked 42-length sequences, stopping immediately if any short-zero-sum-free sequence of length ≥49 is discovered. (yellow)
+
+**Cost so far: $1.00** | Tokens: 322,808 in / 41,025 out
+
+### Round 9  (04:42)
+
+We tried to follow up on the claim that η(C7^3) might be less than the naive lower bound 49 by searching for supports (sets of nonzero group elements) that avoid any short zero-sum (a nonempty subsequence of length ≤7 summing to 0). The session ran a lot of ad-hoc Python sampling: a reachable_sums routine explored which sums can be made from a support up to a given subsequence length, and many random 9-element supports quickly produced a short zero-sum (even by length 4) in small trial batches, but the scripts suffered from function-name errors and restarts and never performed the promised systematic, exhaustive check of all 8-element supports with multiplicity 6 (nor did it use the intended 343-bit bitset DP for a full deterministic sweep). No extremal 8-element support was discovered in these random tests, but that negative finding is only suggestive, not a proof, and the rest of the programmatic agenda (searches for mixed multiplicities, DFS extensions from length-42 sequences, or an upper-bound proof that every sequence of a given length must contain a short zero-sum) was not completed before the run was aborted for lack of rigor. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $1.16** | Tokens: 403,040 in / 45,699 out
+

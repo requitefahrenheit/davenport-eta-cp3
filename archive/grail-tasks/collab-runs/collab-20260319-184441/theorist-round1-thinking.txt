@@ -1,0 +1,1189 @@
+
+============================================================
+BLOCK 1 (157 chars)
+============================================================
+Let me start by searching Cortex for prior findings and reading the briefing document to understand the full context before attempting to prove anything new.
+
+============================================================
+BLOCK 2 (45499 chars)
+============================================================
+Let me now carefully analyze all the Cortex findings and the briefing document to understand the state of the art and identify what new theorem I can prove.
+
+Key findings from Cortex:
+
+1. **Shadow Saturation** (computational): For the doubled+e1 construction S17 in F_p^4, shadow at weight p-1 covers ALL of F_p^{r+1}\{0}. Verified at p=5 and p=7.
+
+2. **Adversary Proof Chain**: 
+   - Step 1 (One-Fiber Impossibility): (1,...,1) ∉ row_span of the matrix. PROVED.
+   - Step 2 (CW Equidistribution): Each weight class has p^{12} solutions. PROVED.
+   - Step 3 (Shadow Saturation): OPEN. Need to show that among p^{12} solutions with ∑s_i ≡ w mod p for w ∈ {1,...,p-1}, at least one has INTEGER ∑s_i ≤ p-1.
+
+3. **CW Degree Obstruction**: Direct CW fails (degree 5(p-1) ≥ 18 for p ≥ 5). Grynkiewicz weighted approach might bypass this by using a different polynomial structure.
+
+4. **Parity Theorem Status**: There's a contradiction in my notes. One source claims the k=4 parity theorem is wrong because W(χ) = 0 for all nontrivial even characters, which breaks the Fourier extraction. But another source from later claims a k=4 parity theorem exists using even characters and Legendre parity. I need to figure out which is correct or if they're addressing different values of k. The k=4 parity theorem is clearly marked as wrong in the briefing with a concrete counterexample at p=5, so I should discard that approach entirely. The GRAIL STATUS entry claiming it's proven appears to be outdated or incorrect. What I should focus on instead is the Shadow Saturation Conjecture—let me state it precisely and see what I can actually prove about ZSF sets.
+
+I'm working through the proof chain from Cortex: the first step shows that (1,...,1) cannot be in the row span, since that would create a fiber contradiction with the size bounds. Now I need to establish the second step about linear combinations.
+
+For Step 3, I'm examining whether at least one solution has integer weight at most p-1. The setup involves n = 17 vectors in F_p^4 (when r=3), and I'm looking at the system where linear combinations equal a target vector and the sum of coefficients satisfies a congruence condition modulo p. By the equidistribution result, this system has exactly p^12 solutions in F_p^n, and I'm analyzing what constraints this places on the weights of individual solutions. So the integer weight is just the sum of the standard representatives in {0,1,...,p-1}, ranging from 0 to n(p-1). The ZSF property creates a constraint: if we have a solution to ∑s_i v_i = 0, then the only way this works is if all coefficients are zero, which means there's no non-trivial solution with integer weight between 1 and p-1.
+
+For any non-zero target t, I need to show that solutions actually exist at these lower weights. The key asymmetry is that target 0 is blocked by ZSF at weights up to p-1, but targets t ≠ 0 should have at least one solution in that range. Let me try to make this rigorous by counting solutions across different integer weights for a fixed target. I need to reconsider the weight distribution more carefully. For the zero-sum-free set S of size 17 in F_p^4, I'm examining how the solution space decomposes by weight, particularly checking that the weight constraints from the ZSF condition are consistent with the equidistribution properties of the affine subspace. For non-zero targets, I need to check whether there's a solution in the weight class with actual integer weight at most p-1. Since ∑s_i ≡ w (mod p) for w ∈ {1,...,p-1}, the integer weight must be w, w+p, w+2p, etc., and the minimum is w itself when all coordinates are small enough to avoid wraparound. So the constraint boils down to finding a solution where the integer weight equals exactly w—meaning I need at most w nonzero coefficients, each bounded by p-1, that sum to w. This is really asking whether there exists a sparse solution with support size at most w.
+
+But I need to reconsider what I'm actually looking for: I want vectors in the shadow at weight p-1, which means for each target t, I need coefficients from {0,...,p-1} such that their weighted sum produces t and their total weight is p-1.
+
+Let me think about this more carefully using the ZSF exclusion principle. The key insight is that if the shadow doesn't contain 0 at weight p-1, then the only way to get 0 as a target is either trivially (all coefficients zero) or by using weights that sum to at least p. This means the distribution of integer weights achieving 0 is heavily concentrated at weights ≥ p, leaving the lower weights completely empty for the zero target.
+
+Now for a non-zero target t, I need to reconsider what the shadow condition actually constrains. The shadow at weight ≤ p-1 asks whether we can hit t using only weights in that range, but I'm conflating different residue classes modulo p. Let me separate this properly: for each residue class w mod p, the total count across all weights congruent to w is fixed by the character sum, but the shadow condition specifically restricts the weights in the range [1, p-1]. So for any t ≠ 0, the sum of all N_w(t) across weights equals p^{13}. I need to show that not all solutions have weight at least p, which means at least one solution must have weight in the range 1 to p-1. I'm using a counting argument based on the average integer weight—since V_t is a 13-dimensional affine subspace of F_p^{17}, the expected weight of a random solution should be small enough that some solutions fall below the threshold p. Since each coordinate is a free variable and takes all values in F_p uniformly, the expected value of each ⟨s_i⟩ is (p-1)/2, giving me E[∑⟨s_i⟩ | s ∈ V_t] = 17(p-1)/2. For p = 5 this is 34, and for p = 7 it's 51.
+
+The average weight is much larger than p-1, so I need to find at least one solution with small weight. The ZSF constraint on target 0 forces all nontrivial solutions to have weight at least p, which heavily constrains the geometry of V_0. Since V_t is just a translate of V_0 for t ≠ 0, and the weight function isn't linear, shifting the affine subspace changes how the weights distribute. Let me reconsider this with a more direct approach.
+
+I'm thinking about using the copies pool and Davenport constant. If I create a multiset where each vector appears p-1 times, I get a pool of size 17(p-1). The weight-(p-1) shadow consists of elements representable as subsums using at most p-1 copies. The small Davenport constant D*(F_p^{r+1}) = (r+1)(p-1) + 1 guarantees that any sequence of that length contains a nonempty zero-sum subsequence. With r = 3, this gives D*(F_p^4) = 4(p-1) + 1, and since my copies pool has 17(p-1) elements, I should be able to extract a zero-sum subsequence with controlled weight.
+
+But here's the key issue: the ZSF condition blocks zero-sum subsequences at weight ≤ p-1, so I need the minimum weight of any zero-sum subsequence to be at least p. Since D*(F_p^4) = 4p-3, any sequence of 4p-3 elements in F_p^4 must contain a zero-sum subsequence, and I'm trying to show this subsequence has weight at least p.
+
+Now I'm shifting focus to the shadow structure itself rather than just finding zero-sums. The shadow at weight k captures all possible sums we can form using coefficients in {0,...,p-1} with total coefficient sum at most k, so I need to understand how these shadows grow and when they force a zero-sum of sufficient weight. I'm trying to formalize this more carefully—instead of thinking about weighted sums, I should work with the restricted sumset where each basis element can be used at most once. Let me define the k-bounded sumset properly as all possible sums of up to k distinct elements from the basis.
+
+To handle the multiplicity constraint, I can think of this as a copies pool where each basis element appears p-1 times, then take all sums using at most k distinct copies from that pool. For n = 17, this gives me a total pool size of 17(p-1).
+
+Now I'm applying an Olson-type theorem to bound the size of these sumsets in the group F_p^{r+1}, which should give me a handle on how many distinct sums are possible with a sequence of length D.
+
+But I'm hitting a wall—the bounds I'm getting don't align with what the zero-sum-free condition requires. Let me step back and try thinking about this as a lattice point problem instead, where I'm looking at integer points in a polytope with both modular and integer constraints on the coordinates.
+
+The key insight is that P_0 has no nonzero integer solutions by the zero-sum-free property, but I need to understand how the integer points in these constrained polytopes behave more systematically. Maybe I can use generating functions or inclusion-exclusion to count solutions directly.
+
+I'm trying to count integer points (c₁,...,c_n) in {0,...,p-1}^n satisfying the congruence ∑c_i v_i ≡ t (mod p) with the additional constraint ∑c_i ≤ p-1. The character sum approach gets messy with this weight constraint, so I'm pivoting to a generating function method where each vector v_i contributes a factor based on its contribution to the sum.
+
+The generating function tracks both the vector value modulo p and the total weight, so the coefficient of x^t z^w gives the count of representations at exactly weight w. For the shadow count, I'd sum over all weights up to p-1, but evaluating this directly seems intractable. I'm wondering if there's a connection between the Codeword Weight equidistribution and the Zero-Sum-Free exclusion that could force the shadow count to saturate at the maximum possible value.
+
+From the adversary's perspective, I have two key facts: for any nonzero target t, the solutions are uniformly distributed across weight classes modulo p (exactly p^{12} solutions per class), while for target 0, there are no solutions at weights 1 through p-1 due to the ZSF property. When I look at low-weight solutions specifically, a solution with modular weight w can have integer weight w + kp for some k ≥ 0, and it achieves integer weight exactly w only when k = 0.
+
+For integer weight w, I need the support size to be at most w, with coefficients from {1,...,p-1} summing to w and satisfying the target equation. The question becomes whether N_w(t) > 0 for some w in {1,...,p-1} when t ≠ 0, which I can approach by summing over all weight classes and analyzing the total count.
+
+Now I'm comparing the weight distributions between target 0 and target t ≠ 0. Since there are p^{13} solutions in {0,...,p-1}^n for any target in F_p^{r+1}, I can use this symmetry to argue that if all solutions for target 0 have weight divisible by p, then target t ≠ 0 must have solutions with non-zero weight modulo p. Now I'm applying the same equidistribution argument to non-zero targets, showing that for any t ≠ 0, the solutions with weights in each residue class modulo p also sum to p^{12}, which gives me the constraint that solutions at weights ≡ w (mod p) for w ∈ {1,...,p-1} must all occur at weights ≥ p. ∑_{k≥0} N_{w+kp}(t) = p^{12} for w ∈ {1,...,p-1}
+N_w(t) + ∑_{k≥1} N_{w+kp}(t) = p^{12}
+
+We want N_w(t) > 0 for some w ∈ {1,...,p-1}.
+
+Suppose for contradiction that N_w(t) = 0 for all w = 1,...,p-1 (i.e., t is not in the shadow at weight p-1). Then:
+
+∑_{k≥1} N_{w+kp}(t) = p^{12} for each w ∈ {1,...,p-1}
+
+Summing across all residue classes, the total count at weights ≥ p is p · p^{12} = p^{13}. Since N_0(t) = 0, all p^{13} solutions must lie at weights w ≥ p. But this is the same distribution as at target 0, where ∑_{w≥p} N_w(0) = p^{13}.
+
+The key difference is just the single zero solution at target 0. So a simple counting argument doesn't immediately give a contradiction—the weight distributions could be nearly identical. I need to think more carefully about what actually distinguishes target 0 from nonzero targets.
+
+Let me examine how the action of F_p^* on solutions behaves. Scaling a solution by a nonzero scalar λ ∈ F_p^* maps solutions from V_t to V_{λt}, but the weight function doesn't scale linearly with the solution—the Hamming weight of λs isn't simply λ times the weight of s.
+
+However, scalar multiplication does preserve which coordinates are nonzero and the sum of coordinates modulo p, giving a bijection between V_t and V_{λt}. The crucial observation is that at target 0, the ZSF condition forces all solutions to have weight at least p—there are no solutions with weight in {1,...,p-1}. This creates an unusual concentration of weight at higher values. The question is whether a nonzero target could also have this property, or whether the weight distribution must spread differently.
+
+Now I'm trying to count the total number of low-weight solutions across all targets. This is the sum over all targets t and all weights w from 1 to p-1 of the number of solutions N_w(t). Equivalently, I'm counting tuples (c₁,...,c_n) with coordinates in {0,...,p-1} where the sum of coordinates falls strictly between 1 and p-1. The combinatorial count involves summing binomial coefficients, but I need to be careful about the upper bound constraint on each coordinate. For w between 1 and p-1, the upper bound constraint on each c_i becomes redundant since w itself is already at most p-1, so the count simplifies to the standard stars-and-bars formula C(n+w-1, n-1).
+
+Computing the total for n=17 and p=5, I sum the binomial coefficients from w=1 to 4, which gives 17 + 153 + 969 + 4845 = 5984 low-weight solutions. Each of these maps to some target in F_p^{r+1}.
+
+With 625 possible targets total, the pigeonhole principle suggests an average of about 9.6 solutions per target. But the zero solution (ZSF) contributes 0 low-weight solutions, so the remaining 624 nonzero targets must account for all 5984 solutions—still averaging around 9.6 each. This means not every nonzero target can have zero low-weight solutions.
+
+Now I'm wondering if I can strengthen this to show full coverage. The total count of low-weight solutions is definitely positive, so at least one nonzero target must be in the shadow. But proving that *all* nonzero targets have low-weight solutions requires a different approach. Let me reconsider whether the solutions are actually equidistributed across targets, or if there's some structure I'm missing about how weight relates to the target distribution. I'm trying to count solutions using character sums—setting up a formula that tracks both the linear constraint and the weight bound, though the expression is getting complicated. Let me pivot to a different strategy instead.
+
+The Olson-Gao approach uses the Davenport constant D(F_p^r) = r(p-1)+1, which guarantees any sequence of that length contains a nonempty zero-sum subsequence. I'm also considering the Erdős-Ginzburg-Ziv constant and how it relates to the Davenport constant in higher dimensions, though I need to be careful about distinguishing between different notions of zero-sum-free sequences.
+
+Looking at the shadow at weight p-1, I'm examining which elements t can be represented as linear combinations of the vectors with bounded coefficients. For structured sets like the doubled+e₁ construction in F_p^4, this geometric structure might be exploitable. I'm working toward proving that any zero-sum-free set of nonzero pairwise non-proportional vectors spanning F_p^{r+1} must satisfy a specific weight gap property.
+
+Now I'm trying to establish that for any nonzero t, there exists at least one weight w where N_w(t) is nonzero—this would directly prove the Shadow Saturation conjecture. I'm exploring a Fourier analysis approach by mapping the coefficient space to F_p^{r+1} × F_p, where the fiber structure gives me p^{n-r-2} preimages for each (t, w) pair, assuming the map has full rank. So N_w(t) counts the preimages in F^{-1}(t,w) where the integer weights sum to exactly w—the smallest possible value. This constraint means all the s_i stay within their minimal representatives, giving us a lattice point counting problem in a bounded fundamental domain.
+
+Now I'm clarifying the relationship between integer weight and field weight: for elements in F_p^n, the integer weight ∑⟨s_i⟩ and the field weight ∑s_i (mod p) are congruent, and the difference between them captures how much the integer representatives exceed the field constraint. a multiple of p. Specifically, ∑⟨s_i⟩ = w + p · #{i : ⟨s_i⟩ ≥ ???}
+
+No, that's not right. Let me think again.
+
+∑⟨s_i⟩ = ∑s_i + p · (number of "wraps"). But ∑s_i is in F_p, so ∑⟨s_i⟩ mod p = ∑s_i. And ∑⟨s_i⟩ = w + kp where w = ∑s_i ∈ {0,...,p-1} (viewing F_p as {0,...,p-1}) and k ≥ 0.
+
+So the minimum value of ∑⟨s_i⟩ for s ∈ F^{-1}(t,w) is either w itself (if we can achieve that weight) or w+p (if not). For weights between 1 and p-1, representing t with coefficient sum w means distributing at most w among the n vectors using coefficients from {1,...,p-1} that add up to w. I'm working through a lemma about counting these small support representations—specifically, how many coefficient tuples (c₁,...,c_n) from {0,...,p-1}^n satisfy both ∑c_i = w and ∑c_i v_i = t. Now I'm defining the generating function g_a(z) for each element a in the field, which simplifies to a geometric series that I can evaluate in closed form—collapsing to (1-z^p)/(1-z) when a is zero, and (1-z^p)/(1-ω^a z) otherwise. This lets me rewrite the counting formula in terms of these generating functions.
+
+For the product over all indices, when a equals zero I get the n-fold power of the basic geometric series, but when a is nonzero the denominator becomes a product over the v_i terms weighted by ω^{a·v_i}. Splitting the sum into the a=0 case and the nonzero cases, I can extract the (1-z^p)^n factor and focus on extracting the coefficient of z^w, which simplifies nicely when w is small relative to p. Now I'm separating out the main contribution from the error terms. The leading term gives me (1/p^{r+1}) times the binomial coefficient C(n+w-1, n-1), which represents the dominant asymptotic behavior. For the remaining terms where a ≠ 0, I need to analyze the power series expansion of the product over all coordinates to bound how much they contribute. So the coefficient extracts all compositions of w, and for each one I'm evaluating a character sum based on the target vector. When I sum over all nonzero values of a, I get a double sum where the inner sum over a becomes a character orthogonality relation—it's nonzero only when the composition's weighted sum equals t.
+
+After simplifying, I end up with p^{r+1} times the count I'm looking for, minus the total number of compositions. But when I rearrange this, I just get back the original identity—the Fourier approach is circular and doesn't actually solve the problem.
+
+Let me step back and try something completely different using sumset growth ideas, similar to Cauchy-Davenport but adapted for this setting. I'm reconceptualizing the shadow as a Minkowski sum of dilate lines—each A_i represents the multiples of v_i in F_p^{r+1}—and the weight constraint restricts which elements from each line can be combined. The key insight is that without the weight bound, Σ(S) becomes a straightforward sumset of these cosets, which I can analyze using additive combinatorics tools.
+
+Now I'm focusing on what the ZSF condition actually enforces: it creates a gap in the zero-kernel, preventing any nonzero representation of 0 at weights below p, which fundamentally constrains how the shadow can cover F_p^{r+1}.
+
+To show coverage for nonzero targets, I'm using a pigeonhole argument by counting total representations across all weights 1 through p-1. The total count sums over all possible targets and weights, which equals the number of ways to distribute n items with total weight w. For the zero target specifically, the ZSF condition forces all such representations to vanish, meaning every representation at these weights must map to some nonzero target.
+
+However, basic pigeonhole only guarantees that some target gets multiple representations—it doesn't ensure every target gets at least one. To prove universal coverage, I'd need to show the representations are equidistributed across all nonzero targets, which is a stronger requirement. Let me check whether the variance of the distribution can help establish this.
+
+For each fixed composition weight w, I'm computing the second moment by counting pairs of compositions with the same weight that map to the same target value. Using character sums to evaluate this...
+
+For a = 0, the contribution is just the square of the first moment. For nonzero a, I need to bound the character sum, and applying Cauchy-Schwarz gives me an upper bound on the second moment in terms of the first moment squared plus an error term. If this error is small enough, I can use Cauchy-Schwarz again to bound the number of nonzero N_w(t) values.
+
+The key insight is that the number of nonzero terms should be approximately p^{r+1}, but I need to verify the error terms don't spoil this. Let me work out what happens when a ≠ 0 by computing the character sum S_w(a) explicitly.
+
+I can rewrite this sum as a coefficient extraction problem: S_w(a) is the coefficient of z^w in the product ∏_i 1/(1-ω^{a·v_i}z), which lets me use generating functions to analyze its behavior.
+
+Now I'm trying to bound |S_w(a)| using Cauchy's integral formula, extracting the coefficient by integrating around a contour. Let me set α_i = ω^{a·v_i} and work with the partial fraction decomposition of the product, though this is getting messy with the distinct roots assumption.
+
+Actually, let me pivot to a more direct approach using Davenport-type bounds and the structure of the shadow saturation. The key insight is that S contains 17 vectors in F_p^4, which means the copies pool has 17(p-1) elements total, and I need to relate this to the Davenport constant for F_p^4.
+
+The Davenport constant D*(F_p^4) = 4p-3, so any sequence of that length must contain a nonempty zero-sum subsequence. Combined with the zero-sum-free structure saying the shortest zero-sum in the copies pool has length at least p, I can use the saturation number s(F_p^4) = 5p-4 to conclude that any sequence of this length contains a zero-sum of exactly length p.
+
+Since 17(p-1) ≥ 5p-4 for p ≥ 2, the copies pool definitely has enough elements to guarantee a zero-sum of length p, which corresponds to coefficients c_i summing to p with ∑c_i v_i = 0. This weight-p zero-sum is minimal by the zero-sum-free property.
+
+Now I need to handle shadow saturation at weight p-1. For any nonzero target t ∈ F_p^{r+1}, I'll augment the copies pool by adding a single copy of -t, giving a total sequence of length 17(p-1) + 1. A zero-sum using this -t element would satisfy ∑c_i v_i = c·t for some c ∈ {1,...,p-1}, which provides the representation I need.
+
+If such a zero-sum has length at most p, then the weight constraint ∑c_i ≤ p-1 ensures that c·t lands in the shadow at weight p-1. Since I can recover any scalar multiple of t this way, I can then scale back to get t itself in the shadow by dividing through by c.
+
+But wait—dividing the coefficients d_i by c in the field F_p doesn't preserve the weight constraint in the integers, so this approach doesn't quite work.
+
+Let me reconsider what I actually need: I want t itself in Shadow(S, p-1), meaning there exist coefficients c_i ∈ {0,...,p-1} with total weight at most p-1 such that they sum to t.
+
+I should try a different angle—maybe counting zero-sums up to translation. Let me go back to the proof structure and check what's been established so far: the vector (1,...,1) is not in the row span, and the Chinese Weights equidistribution property has been verified.
+
+The remaining piece is shadow saturation, which is the tricky part. The claim is that for any nonzero target t, there's some weight w ∈ {1,...,p-1} where the equation ∑c_i v_i = t actually has a solution with integer coefficients summing to exactly w.
+
+Now I'm thinking about what happens if this fails — if t somehow avoids having any low-weight representation, then every solution must have coefficient sum at least p. This would mean t behaves similarly to the zero target under the zero-sum-free constraint, where we can't find representations at weights 1 through p-1. The question becomes whether two different targets can simultaneously avoid low-weight representations, which seems unlikely given the counting constraints.
+
+Let me set up the counting argument more carefully. For each target t, I'm defining L(t) as the total count of low-weight representations across all weights from 1 to p-1. The sum over all targets gives us T total representations, and we know L(0) = 0 from the zero-sum-free property. I want to prove that L(t) must be positive for every nonzero t.
+
+Computing T for n = 17 using the hockey-stick identity...
+
+The binomial coefficient C(16+p, 17) expands to a product formula, and for large p this grows like p^17/17!. Since there are roughly p^4 nonzero targets, the average number of representations per target is enormous—on the order of p^13/17!. This suggests that having L(t) = 0 for some nonzero t would be extremely unlikely, but I need to prove it's actually impossible.
+
+Trying to bound the variance of L(t) relative to its mean would require controlling character sums, which gets complicated. Instead, let me shift to a bootstrapping strategy: I'll track how the shadow set grows as I increase the weight from 1 up to p-1, showing that each new weight adds enough elements to cover all nonzero targets.
+
+At weight k, the shadow includes all sums of elements from lower weights plus new vectors, which by Cauchy-Davenport should force rapid growth in the set size.
+
+The key insight is that Σ₁ contains exactly 17 nonzero vectors that are pairwise non-proportional and span the 4-dimensional space, so Σ₂ must include all their pairwise sums plus the original vectors.
+
+Now I'm trying to formalize this growth pattern using additive combinatorics—specifically, I want to show that |Σ_k| grows at least linearly with k, which would guarantee we reach the full space F_p^4 by step p-1.
+
+But the linear bound I derived isn't strong enough. The real insight is that the shadow grows exponentially, not linearly, because at each step every existing element can combine with every vector in S. So I need to reconsider how Σ_{k+1} relates to Σ_k—it's not just adding one vector, but rather the set of all sums of elements from Σ_k with vectors from S. I'm realizing the constraint is trickier—when adding v_j to an element, I need to ensure the coefficient of v_j doesn't exceed p-1, so I can only add v_j if its current coefficient is at most p-2. This means Σ_{k+1} contains Σ_k plus elements formed by adding single vectors, but only when the coefficient constraint allows it. I'm realizing the issue—just because the sum of coefficients equals k doesn't mean each individual coefficient is bounded by k. A single vector could have coefficient p-1 while others are zero, blocking further additions. But I can still add vectors that aren't saturated, and maybe I can always find a representation where the weight is distributed enough to allow growth. Let me reconsider this by thinking of the shadow as an iterated sumset built from multiples of the basis vectors. I'm clarifying the shadow definition using a multiset perspective—Pool(S) contains p-1 copies of each vector v_i, and Σ_k(S) is all possible sums of at most k elements from this pool. Now I'm applying additive combinatorics results, specifically the Davenport constant and Grynkiewicz's theorem on subsums, to bound how large the shadow can grow in F_p^4. ) = 17p-17. Since 17p-17 ≥ 8p-7 for all p ≥ 2, the DeVos-Goddyn-Mohar theorem applies here. The theorem tells us that either Σ(S) = F_p^4 or Σ(S) is contained in a proper coset, which would mean it's contained in some subgroup H. But since Pool(S) generates the entire space F_p^4, Σ(S) can't be confined to a proper subgroup, so we must have Σ(S) = F_p^4.
+
+This means every element of F_p^4 is representable as some subsum from the pool, but that's using the unrestricted subsum set with arbitrary lengths up to 17(p-1). The real constraint is the restricted subsum set with length at most p-1, and the Davenport constant result doesn't tell us anything about controlling the length of these representations. For zero-sums specifically, the Zeilberger-Shallit-Füredi bound gives a minimum length of at least p, but I need to figure out whether this length constraint is achievable for all nonzero targets too.
+
+I'm trying to prove that any nonzero element can be represented with length at most p-1 by assuming the opposite—that some nonzero target t requires minimum length at least p—and then deriving a contradiction by combining this with the zero-sum structure.
+
+The approach of subtracting zero representations doesn't immediately work because the resulting weight becomes unpredictable. So I'm pivoting to consider additive subsets of the pool, looking at how elements combine when restricted to initial segments of some ordering.
+
+As I add elements one by one, the set of possible sums either stays the same or grows, and by the Davenport constant I'll eventually hit zero and fill out the entire space. But this still doesn't give me control over the lengths of the subsums I'm finding.
+
+Let me reconsider the problem from scratch with a different strategy for proving shadow saturation.
+
+I want to establish that for any nonzero element t, I can represent it as a sum of at most 2(p-1) basis vectors. The idea is to use a weight-p zero-sum as a pivot: if I have some representation of t and a zero-sum relation, I can combine them to reduce the weight. But the naive approach of just subtracting coefficients doesn't control the resulting weight well enough.
+
+Let me reconsider what shadow saturation actually captures. The key insight is that s(G) - 1 counts the longest sequence with no zero-sum subsequence of length exp(G). For F_p^{r+1}, this connects to the Davenport constant η through the formula s = η + p - 1. If η equals (2α(r)+1)(p-1)+1, then s should work out to (2α(r)+2)(p-1), which would give me the bound I need.
+
+Now I'm checking whether the copies pool, which has (2α(r)+1)(p-1) elements, can avoid having a zero-sum of length exactly p. The Olson-EGZ theorem tells me that any sequence of length s = (2α(r)+2)(p-1)+1 must contain a zero-sum of length p, but my pool falls short of this threshold. The question is whether it still has such a zero-sum anyway, or if the structure of the copies pool prevents it. The s-constant tells me that any sequence of length s(F_p^4) must contain a zero-sum of length exp(F_p^4). Since s(F_p^4) = 18p - 17 and my pool only has 17p - 17 elements, I'm one short — the ZSF pool is precisely at the extremal boundary where a length-p zero-sum becomes unavoidable.
+
+Let me pivot to a different approach. Instead of chasing shadow saturation directly, I'll focus on proving a structural theorem about how the ZSF saturation principle works through the interplay between η and s bounds at rank r. The key insight is that the 17-vector ZSF set partitions into two fibers under the doubled+e₁ construction, with sizes bounded by α(r) and α(r)+1, and these bounds relate directly to the η and s constants for C_p^r.
+
+Now for any nonzero element in F_p^{r+1}, I need to show it has a representation at weight at most p-1. I'll use a linear form to decompose the element by its fiber value, then handle the case where the element lies in the kernel separately—using only vectors from the smaller fiber F₀, which gives me a pool of 8(p-1) elements to work with in the kernel hyperplane.
+
+For the kernel case, I need to be careful about the zero-sum-free condition: it applies to the full set S, not necessarily to subsets like F₀. So while S itself has no zero-sums at weight ≤ p-1, a subset might have them at smaller weights, which actually helps me find representations for nonzero elements in the kernel.
+
+Looking at F₀ specifically, it has 8 vectors projecting into ker(w), and with 8(p-1) copies available, the Davenport constant tells me that any sequence of length 8(p-1)+1 must contain a zero-sum subsequence of weight at most p. But I need to think about whether this actually gives me what I'm looking for.
+
+The pool has exactly one fewer element than the Davenport constant requires, so I can't directly guarantee a bounded-weight zero-sum from F₀ alone. Adding vectors from higher fibers complicates the weight accounting significantly. I'm realizing I've been exploring many partial approaches without making real progress, so let me step back and try to prove something concrete instead—specifically, a clean lemma about why a single fiber can't contain a ZSF set of the required size.
+
+For the zero fiber case, the projected vectors form a ZSF set in the lower-dimensional space, but I need to be more precise about how the projection preserves the zero-sum-free property and what size bound that actually gives. of |F_0| pairwise non-proportional vectors in F_p^r. Their copies pool has |F_0|(p-1) elements. For this to be zero-sum-free at weight < p, we need the zero-sum-free condition.
+
+But F_0 being zero-sum-free (as part of S) means: no s with s_i ∈ {0,...,p-1}, ∑s_i ≤ p-1, ∑s_i v_i = 0 (over all v_i ∈ S, not just F_0). But using only F_0 vectors: any zero-sum in F_0 is also a zero-sum in S. So the projected F_0 is zero-sum-free at weight < p.
+
+The η-constant: η(F_p^r) = α(r)(p-1)+1 means any sequence of α(r)(p-1)+1 elements in F_p^r (which is a copies pool of ≥ α(r)+1 non-proportional vectors) has a zero-sum at weight ≤ p. I need to be careful here—I'm talking about sequences as multisets, not just distinct elements. So if |F_0| ≥ α(r)+1, then the copies pool has at least (α(r)+1)(p-1) elements, which exceeds the η-constant threshold. η(C_p^r) elements (for p ≥ 3: (α(r)+1)(p-1) = α(r)(p-1)+p-1 ≥ α(r)(p-1)+2 ≥ η). But wait:
+
+η(C_p^r) = α(r)(p-1)+1. And |pool(F_0)| = |F_0|·(p-1). If |F_0| ≥ α(r)+1:
+|pool| = (α(r)+1)(p-1) = α(r)(p-1)+p-1 ≥ α(r)(p-1)+1 = η for p ≥ 2.
+
+So the pool has ≥ η elements, which means it contains a zero-sum of length ≤ p. This zero-sum in F_0 is also a zero-sum in S at weight ≤ p. A weight-p zero-sum doesn't contradict the zero-sum-free property since all elements in F_0 have weight 0, making the weighted sum consistent. So having |F_0| ≥ α(r)+1 doesn't directly violate ZSF—it just produces a weight-p zero-sum in F_0.
+
+But the real question is whether |F_0| ≥ α(r)+1 combined with the 18th vector creates a contradiction with ZSF at weight < p. That's not obvious from F_0 alone. I should refocus on what I can actually prove here: formalizing the one-fiber impossibility and equidistribution arguments as lemmas, then establishing a fiber bound for zero-sum-free sets. 3. I can attempt to prove a growth-rate bound on the shadow.
+
+4. I can formulate and prove partial results toward shadow saturation.
+
+Let me try to prove something specific and NEW. Here's my best attempt:
+
+**THEOREM (Shadow Representation Bound):**
+
+Let S = {v₁,...,v_n} be a set of n nonzero pairwise non-proportional vectors spanning F_p^{r+1} with n ≥ r+2. Assume S is ZSF (zero-sum-free at weight < p).
+
+Then for any nonzero t ∈ F_p^{r+1}:
+∑_{w=1}^{p-1} N_w(t) ≥ (1/p^{r+1}) · ∑_{w=1}^{p-1} C
+
+The formula's getting messy with the correction terms, so let me shift to something more tractable. I'll work with an exact counting formula using character sums that relates the number of solutions at each weight to a generating function over the vector set. For weights up to p-1, the upper bound on coefficients becomes redundant, so I'm really just looking at compositions of w into n parts that satisfy the modular constraint. I can express the count using character sums over the discrete Fourier transform, where I'm summing over all compositions and tracking which ones land on the target residue t modulo p. over non-negative integer compositions of w.
+
+As computed before:
+∑_{c: ∑c_i=w} ω^{a·∑c_iv_i} = [z^w] ∏_i 1/(1-ω^{a·v_i}z)
+
+For a = 0: [z^w] (1-z)^{-n} = C(n+w-1, n-1) = C(n+w-1, w)
+For a ≠ 0: [z^w] ∏_i 1/(1-ω^{a·v_i}z) = S_w(a) (some character sum)
+
+So: N_w(t) = C(n+w-1,n-1)/p^{r+1} + (1/p^{r+1}) ∑_{a≠0} ω^{-a·t} S_w(a)
+
+Now I'm summing across all weights from 1 to p-1, which gives me the main term from the binomial coefficients plus a character sum contribution. Using the hockey stick identity, the main term simplifies to C(n+p-1,n) - 1. For the specific case where n = 17 and p = 5, I'm computing this binomial coefficient.
+
+Now I'm evaluating the main term numerically: it comes out to about 9.57 representations per target value. The error term involving the character sums needs to stay below this threshold for the result to be meaningful. I'm now working on computing the character sum ∑_{w=1}^{p-1} S_w(a) to understand how large the error term can get. I can extract the partial sum using a contour integral with the truncation factor, but let me reconsider—maybe the root of unity filter is the cleaner approach here. {p-1} [z^w] G(z) where G(z) = ∏_i 1/(1-α_i z)
+
+For a power series G(z) = ∑_{w≥0} g_w z^w:
+∑_{w=0}^{K} g_w = (1/2πi) ∮ G(z) · (1-z^{K+1})/(1-z) · dz/z
+
+For K = p-1:
+∑_{w=0}^{p-1} S_w(a) = (1/2πi) ∮ ∏_i 1/(1-α_i z) · (1-z^p)/(1-z) · dz/z
+
+Since |α_i| = 1, I need to integrate over a circle with radius less than 1 to avoid the singularities. The integral evaluates to a sum over all compositions where the parts sum to at most p-1, weighted by roots of unity based on the dot product with the vector v. This gives me a count of elements in the preimage of each possible sum, which I can express as the cardinality of the level sets of the map.
+
+The key insight is that the total count across all nonzero targets should equal T_main, and if I can show via Fourier analysis that the distribution is roughly uniform across nonzero targets, then each target gets approximately T_main/(p^{r+1}-1) representations, which is positive as long as the error term is small enough.
+
+To make this rigorous, I'm using a Fourier decomposition to express L(t) in terms of a main term plus an error involving the sums E(a) over all nonzero characters a, and bounding the error using the triangle inequality—though this bound is quite loose since it ignores cancellation from the oscillating character terms.
+
+Now I need to show that the individual character sums E(a) are small enough that their total contribution stays below T_main. For each nonzero a, I'm decomposing E(a) as a sum over the coefficients of a generating function involving the α_i = ω^{a·v_i}, and the key observation is that since a is nonzero and the v_i span the full space, not all of these α_i can equal 1—in fact, at most n-1 of them do.
+
+The challenge is that bounding how many v_i lie in the hyperplane ker(a) depends heavily on the specific structure of S, and a generic bound here seems too loose. Let me shift to directly bounding the magnitude of E(a) itself by looking at the sum of coefficients.
+
+I can express |E(a)| as a sum over weights w, where each term counts monomials with total degree w in the α_i = ω^{a·v_i} variables. These are essentially evaluations of elementary symmetric functions at unit-modulus points, which is a well-studied problem in harmonic analysis. The triangle inequality gives an upper bound on these symmetric function evaluations, though it's fairly crude.
+
+But this approach is hitting a wall—the error bound I'm getting is useless because it's negative. The real key is that when a ≠ 0, the exponentials aren't all equal to 1, which means there's genuine cancellation happening in the sum. I need to exploit this cancellation rather than just bounding the magnitude of E(a). The structure comes from grouping the v_i values by how they interact with a.
+
+Now I'm organizing this by partitioning the indices based on the value of a·v_i in F_p, then rewriting the character sum in terms of these fibers. The sum over compositions can be rewritten as a character sum where the exponent becomes a·∑c_iv_i, and for a uniform distribution over compositions, I'd expect significant cancellation in this character sum.
+
+But I'm realizing the precise bounds depend heavily on the specific geometric structure of S, which is getting complicated. Let me shift to proving something more concrete instead—a weaker result that still advances the argument. I'll establish that for a ZSF set of the right size (specifically 2α(r)+1 pairwise non-proportional vectors in F_p^{r+1}), the matrix formed by these vectors has full rank, which is a necessary structural property. the values of η are known for small dimensions—specifically η(C_p^k) = α(k)(p-1)+1 for k ≤ 3, with α taking values 1, 3, and 8. Using the relationship s(C_p^k) = η(C_p^k) + p-1, I can bound the size of the projected copies pool: if |F_0|(p-1) < η(C_p^k), then |F_0| ≤ α(k), which would contradict the zero-sum-free property unless the rank constraint holds.
+
+Now I'm checking whether rank ≤ r gives a contradiction by comparing the copies pool size n(p-1) against η(C_p^r). The pool size (2α(r)+1)(p-1) exceeds η(C_p^r) = α(r)(p-1)+1, forcing a zero-sum, but it could have weight p, which doesn't violate the zero-sum-free condition. So I need to use s(C_p^r) instead and verify whether (2α(r)+1)(p-1) ≥ (α(r)+1)(p-1)+1 to get a tighter contradiction. I'm verifying that both expressions for s(C_p^r) are equivalent—they both simplify to (α(r)+1)p - α(r). Now I need to check whether our pool of copies has enough elements to guarantee a zero-sum subsequence of length exactly p, which requires comparing (2α(r)+1)(p-1) against the threshold (α(r)+1)(p-1)+1.
+
+A length-p zero-sum in the quotient space lifts back to F_p^{r+1}, but if the vectors only span a subspace of dimension ≤ r, this just gives a weight-p zero-sum without creating a contradiction. The real constraint comes when the vectors actually span the full space F_p^{r+1}—that's where I need to focus.
+
+Now looking at part (b): if (1,...,1) is in the row span of M, then there's a vector w where w·v_i = 1 for all i, meaning all vectors lie in the affine hyperplane defined by w·x = 1. I can use coordinates where w = (1,0,...,0), so each v_i = (1, u_i) with u_i ∈ F_p^r. The question is whether the u_i remain pairwise non-proportional even though the original v_i are—and that's not immediately clear.
+
+But actually, since w·v_i = 1 forces the first coordinate to be 1 for all v_i, if u_i = u_j then v_i = v_j, which contradicts the fact that the v_i are pairwise non-proportional. So the u_i must also be pairwise non-proportional in F_p^r.
+
+Now I'm looking at the multiset of all u_i values — there are n(p-1) = (2α(r)+1)(p-1) total elements, with each u_i appearing p-1 times. Some of these u_i might be proportional to each other, which would affect the structure of the multiset.
+
+For the s-constant argument, since this multiset has at least s(C_p^r) elements, I can find a zero-sum subsequence of length p. When I lift this back to the v_i vectors by prepending 1 to each u_i, I get a corresponding sum in the original space.
+
+Now I'm checking whether we can achieve a zero-sum with weight strictly less than p. Looking at the affine constraint: any zero-sum of the v_i vectors must have coefficients summing to 0 modulo p from the first coordinate, so the minimum positive weight is at least p.
+
+This means the affine configuration automatically satisfies the zero-sum-free property, which seems to undermine the idea that ZSF should be a strong constraint for proving shadow saturation. But we're given that our n = 2α(r)+1 vectors are ZSF, and even if they lie in an affine hyperplane, we still need to establish shadow saturation somehow—maybe the one-fiber impossibility argument provides the key.
+
+Looking at the 18-vector case: if any 17 of them span an affine hyperplane (meaning (1,...,1) is in their row span), then there exists a weight vector w with w·v_i = 1 for those 17 vectors. When we project to F_p^r, we get 17 distinct vectors with a copies pool of size 17(p-1), but this needs to be compared against the shadow size s(C_p^r) = (α(r)+1)(p-1)+1 to derive a contradiction.
+
+The key insight I'm realizing is that a weight-p zero-sum among just the 17 vectors doesn't actually contradict the ZSF property—it only becomes a problem when we involve the 18th vector. So the argument requires all 18 vectors to work, not just any subset of 17.
+
+Now looking at the one-fiber impossibility step: if the all-ones vector is in the row span of any 17-element ZSF subset, then there's a weight vector w making all 17 vectors lie in a single affine hyperplane. When I project these 17 affine vectors down to F_p^3, I get at least 16 non-proportional vectors—the count drops by at most one because the original vectors are pairwise non-proportional and share the same first coordinate, so their projections are pairwise distinct, though some might coincide in projective space if they're scalar multiples. Can this happen?
+
+v_i = (1, u_i), v_j = (1, u_j). Non-proportional means (1, u_i) ≠ λ(1, u_j) for any λ. If λ = 1, u_i ≠ u_j. If λ ≠ 1, then (1, u_i) = (λ, λu_j), so λ = 1, contradiction. So v_i ≠ v_j means u_i ≠ u_j. But u_i could be proportional to u_j (u_i = μu_j for μ ≠ 1).
+
+Actually, let me recount. The Cortex entry says "≥ 16 non-proportional vectors." The claim is: among 17 pairwise distinct u_i ∈ F_p^r, at most one can be zero, and the remaining 16 nonzero vectors partition into proportionality classes of size at most p-1 since any two proportional vectors u_i = λu_j must have λ ∈ F_p^*.
+
+============================================================
+BLOCK 3 (51123 chars)
+============================================================
+Let me analyze what I've gathered from Cortex and the briefing, and formulate a new theoretical contribution. The key open problem is proving Shadow Saturation: for any ZSF set S of size 2α(r)+1 in F_p^{r+1}, the weight-(p-1) shadow covers all of F_p^{r+1}\{0}.
+
+The most promising thread from Cortex is the "Adversary Proof Chain" which identified three steps:
+1. ONE-FIBER IMPOSSIBILITY: (1,...,1) ∉ row_span of the matrix of any 17-element ZSF subset. PROVED.
+
+
+2. CW EQUIDISTRIBUTION: Since (1,...,1) ∉ row_span, the weight function L(s) = Σs_i is non-constant on solution spaces, giving equidistribution mod p. Each weight class has p^{n-r-2} solutions.
+3. SHADOW SATURATION: Among solutions with Σs_i ≡ w (mod p) for w ∈ {1,...,p-1}, at least one has INTEGER Σs_i ≤ p-1. OPEN.
+
+The key insight I'm developing is that Step 3 might be tackled by leveraging the Z-structure alongside the equidistribution properties we've established.
+
+Now I'm setting up the formal framework more carefully. Let me denote S as a zero-sum-free set in F_p^{r+1} with n = 2α(r)+1 elements. When I consider the copies pool where each element appears p-1 times, I get n(p-1) total elements to work with. The shadow Sh_w(S) captures all vectors that can be expressed as weighted combinations of S elements, where the weights come from {0,...,p-1} and aren't all zero, and the sum of weights equals w modulo p.
+
+For the solution space approach, I'm looking at the affine subspace V_t of all coefficient vectors in F_p^n that sum to a given target t. Since the vectors span the full space (which they must with n ≥ 2α(r)+1), this subspace has dimension n - (r+1). For the specific case r=3 with n=17, that gives me a 13-dimensional solution space for each target.
+
+Now I need to find points within V_t that satisfy the weight constraint—specifically, points where all coordinates are in {0, 1, ..., p-1}, the sum of coordinates is at most p-1, and the point is nonzero. The zero-sum-free property of the set S is supposed to guarantee that V_0 contains no such point, but I'm realizing I need to be more careful about what ZSF actually means here—it's about the absence of subsequences with certain sum properties, not just any nonzero vector with bounded weight. I'm working through the definition of zero-sum-free more carefully: V_0 should contain no nonzero vector with coordinates in {0,...,p-1}, which means V_0 ∩ {0,...,p-1}^n = {0}. For the shadow at weight w, I need every nonzero element t to have some corresponding vector s in V_t where the coordinates stay in {0,...,p-1} and their sum is at most w. The crucial step is showing that (1,...,1) doesn't lie in the row span of the v_i vectors, which would mean the weight function Σs_i isn't... I need to clarify what the shadow actually represents—it's the set of all linear combinations of the basis vectors with coefficients in {0,...,p-1}, where the sum of coefficients is at most p-1 and not all zero. The key insight is that these coefficients are genuine non-negative integers bounded by p-1, not field elements, so I'm working with actual integer constraints rather than modular arithmetic on the coefficients themselves.
+
+For a given target t, the solution space V_t over F_p forms an affine subspace of dimension n-r-1. When I lift any solution from F_p back to integers by choosing representatives in {0,...,p-1}, the integer weight becomes the sum of these representatives, which ranges from 0 to n(p-1). The real question is whether there exists a solution in V_t where this integer weight is at most p-1, and since V_t is a large affine subspace, I need to understand how the integer weights distribute across its elements. Now I'm clarifying the setup: each element of V_t has a unique representation in {0,...,p-1}^n, so V_t contains exactly p^d points. The integer weight W(s) of a point s is the sum of its coordinates, ranging from 0 to n(p-1). I need to show that some nonzero point in V_t has weight at most p-1, but the ZSF constraint seems to say V_0 avoids all nonzero points with small weight—though I'm getting confused about what exactly that constraint rules out.
+
+Let me reconsider: V_0 consists of all points s where the weighted sum Σs_i v_i equals zero in F_p^{r+1}, and when I view the coefficients s_i as integers in {0,...,p-1}, the ZSF condition is saying something about which nonzero integer combinations can give a zero-sum. I need to be precise about whether we're working over F_p or over the integers. So if s ∈ V_0 and s ≠ 0, I can pick the nonzero coordinates and use them as coefficients to get a zero-sum combination, which violates the zero-sum-free property. This means V_0 must be trivial, forcing the dimension to be zero, so n = r+1. But I have n = 2α(r)+1, which gives me a constraint relating these quantities.
+
+Wait, I think I'm confusing myself about the rank. The n vectors v_1,...,v_n live in F_p^(r+1), so they span at most an (r+1)-dimensional space. That means the null space of the system has dimension at least n - (r+1), which for n = 17 and r+1 = 4 gives dimension at least 13. So V_0 contains p^13 elements, but the zero-sum-free condition should force V_0 = {0}. There's a contradiction here that I need to resolve.
+
+Actually, I think I see my mistake now—the Cauchy-Davenport-type result applies when we're looking for coefficients in {1,...,p-1}, not {0,...,p-1}. The key insight is that any nonzero element of V_0 would give us a zero-sum with coefficients from {0,...,p-1}, but ZSF requires coefficients from {1,...,p-1}. So I need to be more careful about what the constraint actually implies. So the actual goal is finding a zero-sum with coefficients summing to at most p, not just any zero-sum. A ZSF set of size 2α(r)+1 avoids zero-sums entirely, but once we have 2α(r)+2 vectors, we're forced to have one with bounded weight. Let me reconsider what η(C_p^{r+1}) actually measures—it's about sequences where no element repeats more than p times, and we need a zero-sum subsequence of length at most p.
+
+The copies pool interpretation makes this clearer: each vector v_i appears p-1 times, and a zero-sum subsequence of length ≤ p corresponds to a weighted zero-sum where coefficients are in {1,...,p-1} and sum to at most p. Using v_i with coefficient c_i means selecting c_i copies from the pool, so the total weight equals the subsequence length.
+
+Now I'm realizing there's a fundamental issue: if the set is ZSF (zero-sum-free), the copies pool has no zero-sum subsequence. But that means no coefficients c_i ∈ {0,...,p-1}, not all zero, satisfy Σc_i v_i = 0. This is exactly saying the kernel of the matrix M formed by these vectors is trivial. Yet since we have n > r+1 vectors in r+1 dimensions, the kernel must be nontrivial—any nonzero element gives a zero-sum, contradicting ZSF. I need to check whether I'm interpreting the definition correctly by looking at the actual Cortex entries. Hmm. Let me reconsider. Maybe ZSF means no zero-sum of weight exactly in the copies pool, i.e., using the unweighted sum?
+
+Actually, I think the issue is that ZSF might be about SUBSEQUENCES, not WEIGHTED sums. In the copies pool, each v_i appears p-1 times. A zero-sum subsequence picks a subsequence (multiset, where each v_i is used at most p-1 times) that sums to 0. The sum is UNWEIGHTED: just sum the selected elements.
+
+So the zero-sum condition is: Σ_{i∈I, copies} v_i = 0, where each v_i contributes c_i copies (0 ≤ c_i ≤ p-1). This gives: Σ c_i v_i = 0 in F_p^{r+1}. Same thing.
+
+So we're back to: ZSF ⟹ V_0 = {0}, but V_0 has dimension ≥ n - (r+1) > 0. I must be missing something fundamental. Let me look at the specific construction and examine the actual fibers to see what's going on.
+
+Looking at the vectors in fiber 0 and fiber 1, I can construct a linear dependence: taking v1 = (0,1,0,0) and v2 = (0,0,1,0), their sum is (0,1,1,0), which appears as v5 in the same fiber. So v1 + v2 - v5 = 0 gives a zero-sum with coefficients (1,1,p-1) on these three vectors, yielding weight p+1. So this IS a zero-sum, but not of the weight I was initially expecting.
+
+I think I've been misunderstanding the definition. The Davenport constant η(G) for G = C_p^{r+1} is the smallest t such that every sequence of t nonzero elements contains a zero-sum subsequence of length between 1 and p. The key insight is that we're looking at subsequences of a sequence (where elements can repeat), not subsets, and the length counts multiplicity.
+
+So the formula η(C_p^{r+1}) = (2α(r)+1)(p-1)+1 tells us that (2α(r)+1)(p-1) elements can be arranged to avoid any zero-sum subsequence of length 1 through p, but adding one more element forces such a subsequence to exist. The copies pool construction—taking 2α(r)+1 vectors each repeated p-1 times—achieves this maximum avoidance, though it might contain zero-sum subsequences of length greater than p.
+
+Looking at the specific example, v1 + v2 equals v5, so we can write 1·v1 + 1·v2 + (p-1)·v5 = 0 mod p, giving a zero-sum with weight p+1. This clarifies the key insight: the copies pool is free of zero-sums with weight ≤ p, which is exactly the condition we need. Now I can see how the solution space V_0 = {s ∈ F_p^n : Σs_i v_i = 0} has dimension at least n-(r+1).
+
+The crucial observation is that while V_0 contains many nonzero elements, none of them have integer weight Σs_i ≤ p when we lift to {0,...,p-1}^n. The ZSF property enforces that every nonzero s in V_0 must have weight at least p+1, which is an extremely restrictive constraint on the kernel structure. But for shadow saturation, I need the opposite: for every nonzero target t, I need to find some s ∈ V_t with weight at most p-1, creating an asymmetry between the zero target and all other targets.
+
+This asymmetry is the key insight—the ZSF condition pushes all weight away from 0, and by some conservation principle, this forces weight to concentrate at low values elsewhere. Now I'm analyzing how weight distributes within each coset V_t. Since V_t is a coset of V_0, any element s ∈ V_t can be written as s = s^(t) + u where u ∈ V_0 and s^(t) is a fixed particular solution. The integer weight of such an element depends on how the components of s^(t) and u interact.
+
+The complication is that the integer weight isn't linear—when we add two field elements and take their representative in {0,...,p-1}, carries can occur, so ⟨a+b⟩ ≠ ⟨a⟩ + ⟨b⟩ in general. To find the average weight over V_t, I need to compute the expected value of the integer weight as u ranges over V_0. For each coordinate, as u varies over V_0, the coordinate u_i should hit each value in F_p equally often, assuming the projection onto that coordinate is surjective.
+
+With 17 vectors in F_p^4, any single coordinate's projection is indeed surjective—the remaining 16 vectors span the whole space. So while the coordinates are correlated by the linear constraints defining V_0, each individual coordinate u_i is uniformly distributed over F_p when u ranges over V_0.
+
+This means the expected value of W(s) is n(p-1)/2 regardless of whether the target is t = 0 or t ≠ 0. For the specific parameters (r=3, n=17, p=5), that's an expected weight of 34. But here's the key constraint: when t = 0, the ZSF property requires all nonzero vectors in V_0 to have weight at least p+1 = 6, while only the zero vector has weight 0.
+
+For other targets t ≠ 0, there's no such constraint forcing weights up. The average stays at 34 either way, but the constraint at t = 0 redistributes the weight distribution upward for nonzero elements. This suggests I should look at the weight modulo p instead to find a tighter bound.
+
+Since (1,...,1) isn't in the row span over F_p, the linear functional L(s) = Σs_i isn't constant on any target set V_t—each residue class modulo p contains exactly |V_t|/p elements. For target 0, the ZSF constraint blocks integer weights in {1,...,p}, which translates to blocking F_p weights in {1,...,p-1}. This means elements at target 0 must have integer weight either 0 or ≥ p, and I can use this to constrain what happens at other targets.
+
+Now I'm reconsidering the structure more carefully: for s ∈ {0,...,p-1}^n, the integer weight ranges from 0 to n(p-1), and its residue modulo p determines the F_p weight. The key insight is that integer weights in {1,...,p-1} map to nonzero F_p weights, while weight p maps to 0 modulo p. ≤ p-1, then W(s) mod p = w ≠ 0, and W(s) ≤ p-1.
+
+If W(s) = p, then W(s) mod p = 0.
+
+If W(s) = p+1, then W(s) mod p = 1.
+
+So elements with F_p weight w ∈ {1,...,p-1} have integer weight in {w, w+p, w+2p, ...}. The minimum possible integer weight for F_p weight w is w itself.
+
+**Key insight:** To find an element of V_t with integer weight ≤ p-1, it suffices to find s ∈ V_t with F_p weight w ∈ {1,...,p-1} and integer weight exactly w (i.e., no "carry").
+
+The integer weight is just the sum of the coordinate representatives from {0,...,p-1}, so I'm really asking whether elements in V_t can achieve their minimal possible integer weight for a given F_p weight. For any F_p weight w, the smallest integer weight is w itself—achieved by configurations like w coordinates equal to 1 or a single coordinate equal to w. Σs_i) mod p. If the integer weight is w with 1 ≤ w ≤ p-1, then F_p weight = w. So finding integer weight ≤ p-1 is equivalent to finding F_p weight = integer weight, i.e., integer weight < p.
+
+The elements of V_t with integer weight < p are precisely those with Σs_i ∈ {0,1,...,p-1} as integers, i.e., they use "few" copies.
+
+Now, the F_p weight = integer weight mod p. So if the integer weight is in {0,...,p-1}, the F_p weight equals the integer weight. The elements with integer weight in {p,...,2p-1} have F_p weight in {0,...,p-1} too, but shifted.
+
+Here's the key argument: V_0 has p^d elements (where d = 13 for our parameters), and when partitioned by F_p weight, each weight class contains p^{d-1} elements. The zero-sum-free property tells us that 0 is the only element in V_0 with integer weight ≤ p. For any V_t with t ≠ 0, I need to show at least one element has integer weight ≤ p-1, which would mean its F_p weight equals its integer weight.
+
+Let me try a cleaner approach using a double-counting or exchange argument on the low-weight elements across all cosets.
+
+I'll define L(W+a) as the count of elements in the coset W+a with integer weight at most p-1. The zero subspace V_0 trivially has L(V_0) = 1 by ZSF. Now I'm summing L across all cosets in F_p^{r+1} and comparing it to the total number of vectors in {0,...,p-1}^n with bounded weight, which relates to counting weak compositions.
+
+For each weight k from 0 to p-1, I'm counting compositions of k into n parts where each part stays below p-1—but since k itself is already bounded by p-1, this constraint is automatically satisfied. So I'm computing the binomial sum C(k+n-1, n-1) for k = 0 through p-1. With n = 17 and p = 5, this gives me 1 + 17 + 153 + 969 + 4845 = 5985, and I'm comparing this against p^{r+1} = 5^4 = 625 cosets.
+
+The average L(V_t) across all targets is about 9.6, which means the total "budget" is substantial—though this averaging argument alone doesn't guarantee every nonzero target has L(V_t) ≥ 1. I need a sharper approach, so I'm turning to weight equidistribution modulo p, using the fact that (1,...,1) isn't in the row span of M to constrain how the linear form L behaves on V_0.
+
+For each target t and residue w ∈ F_p, I'm partitioning V_t into sets V_{t,w} where the coordinate sum is congruent to w mod p—each has size p^{n-r-2}. For nonzero targets, elements in V_{t,w} with w ∈ {1,...,p-1} have integer weights at least w, and I want to show at least one achieves the minimum weight w rather than jumping to w+p or higher.
+
+Now I'm using the structure that V_t is a translate of V_0, so V_{t,w} is a translate of the coset V_{0, w-w_0} where w_0 is the coordinate sum of the translation vector.
+
+Let me try a different angle: thinking about this in terms of carries. For any element s with coordinates in {0,...,p-1}, the integer sum W(s) can be written as qp + r where r is the F_p weight and q counts the number of carries. The no-carry condition W(s) ≤ p-1 is equivalent to q = 0, and I can characterize other weight ranges similarly.
+
+Now for the zero-sum-free set at target 0: elements in V_{0,0} satisfy W(s) ≡ 0 mod p, so W(s) ∈ {0, p, 2p, ...}. The ZSF condition rules out W(s) = 0 for nonzero s, which is automatic since all coordinates are nonnegative.
+
+Let me clarify what ZSF actually means here: for the n vectors, no nonzero s in V_0 can have weight at most p. The goal is to show that adding one more vector forces a zero-sum with weight ≤ p to exist.
+
+Now I'm working through the η function more carefully. For C_p^{r+1}, the exponent is p, so we're looking for zero-sum subsequences of length between 1 and p. In the copies pool where each of the n vectors appears p-1 times, a subsequence of length ℓ uses some number of copies of each vector, and I need to track when the weighted sum equals zero.
+
+The zero-sum-free condition means no nonzero coefficient vector c ∈ {0,...,p-1}^n exists with both Σc_i v_i = 0 and Σc_i ≤ p. This translates to V_0 having no nonzero elements with weight at most p—they must all have weight at least p+1. For elements in V_{0,0} \ {0}, since the weight is divisible by p and exceeds p, the minimum weight is 2p. So for any w in {1,...,p-1}, if W ≡ w mod p and W ≥ p+1, then W must be at least p+w since that's the smallest value in that residue class above p. This gives me the weight bounds: elements in V_{0,0} excluding zero need W(s) ≥ 2p, while elements in V_{0,w} need W(s) ≥ p+w. Now I'm trying to establish that for any nonzero target t, the sets V_{t,w} contain elements with specific weights, which should lead to a key structural result about how weight distributions behave under this shadow saturation framework.
+
+Let me step back and focus on the concrete case where r=3, so V_0 is the kernel of a 4×17 matrix with dimension 13.
+
+The key insight from ZSF is that every nonzero element in V_0 has coordinate sum at least p+1. But I need to distinguish between Hamming weight (number of nonzero coordinates) and the actual sum of coordinates—these are different properties, and I should clarify which one matters for the argument. sum, with s_i ∈ {0,...,p-1})
+
+ZSF says Sum(s) ≥ p+1 for all nonzero s ∈ V_0.
+
+Since s_i ∈ {1,...,p-1} for nonzero coordinates, Sum(s) ≥ Ham(s). So Sum(s) ≥ p+1 implies Ham(s) ≥ p+1... wait, no. Sum(s) ≥ Ham(s) (each nonzero coordinate contributes at least 1), so Sum(s) ≥ p+1 implies Ham(s) could be as small as 2 (e.g., one coordinate = p-1, another = 2, sum = p+1).
+
+OK this is interesting but not immediately helpful. Let me think about what we can derive from the dual code.
+
+V_0 = ker(M) is a [17, 13, d] code, and its dual V_0^⊥ is [17, 4, d^⊥]. The rows of M span this 4-dimensional dual code. By the Singleton bound, d^⊥ ≤ 14 and d ≤ 5. The ZSF property constrains the weight enumerator of V_0 through the Sum condition on nonzero codewords.
+
+Now I'm reconsidering the structure of the dual code. Since V_0^⊥ is generated by the rows of M (the coordinate vectors v_i), and these vectors are pairwise non-proportional and span F_p^4, the dual code has a specific geometric structure. The codewords of V_0^⊥ take the form (w·v_1, w·v_2, ..., w·v_17) for w ∈ F_p^4, so the minimum distance d^⊥ is determined by how many positions can simultaneously have w·v_i = 0 across all nonzero w.
+
+Using the two-fiber bound from ZSF, the largest hyperplane can contain at most 8 of the v_i vectors, which means d^⊥ ≥ 17 - 8 = 9. So V_0^⊥ is a [17, 4, ≥9] code, making V_0 itself a [17, 13] code with dual distance at least 9. This connects to the Singleton bound and other code properties.
+
+Let me shift tactics entirely and look at this through Olson's method and the Davenport constant framework. I need to reconsider how the shadow saturates by examining the structure more carefully—specifically, the shadow consists of all elements that are images of low-weight vectors under the linear map, where the weight constraint limits which coefficient combinations we can use.
+
+Now I'm counting the preimages in the low-weight region. For a given weight bound, I need to enumerate how many vectors have coordinate sum between 1 and w, which breaks down by the number of vectors with each specific coordinate sum k. When w = p-1 and n = 17, I'm starting to count the cases: vectors with exactly one nonzero coordinate, then two, and so on. So these map to nonzero targets in F_p^4, giving us 624 possible outputs. With about 9.6 preimages per target on average, the map could theoretically hit everything, but I need to verify whether it actually does. I'm wondering if a Cauchy-Davenport argument might help establish that the shadow covers all nonzero targets, or if there's a structural reason why the map must be surjective onto the nonzero elements.
+
+For one-dimensional sumsets, Cauchy-Davenport bounds the size of A+B, and iterating this gives us control over kA. Since my ZSF set has restricted sumset structure, I should look at how this extends to multiple dimensions using Kneser's theorem, which relates the size of A+B to a stabilizer subgroup H. When H is trivial, the bound becomes |A+B| ≥ |A| + |B| - 1, which is the classical result.
+
+Now I'm moving to the weighted sumset perspective for the shadow problem. I need to define what happens when we take linear combinations of elements from A with coefficients summing to a fixed weight k, which gives us the shadow at each weight level. A). Hmm, but the coefficients can go up to p-1 on a single vector, so this isn't quite the same as an iterated sumset.
+
+Actually, in the copies pool formulation: each a ∈ A appears p-1 times. So the k-fold sumset of the copies pool is the set of all sums of k elements from the pool. This is:
+
+Σ_k(pool) = {Σ c_i a_i : c_i ∈ {0,...,p-1}, Σc_i = k}
+
+The shadow at weight w = Sh_w = ∪_{k=1}^{w} Σ_k(pool).
+
+Now, the key fact: the copies pool has n(p-1) elements. The Davenport constant D(C_p^{r+1}) = (r+1)(p-1)+1. This means any sequence of (r+1)(p-1)+1 elements has a zero-sum subsequence.
+
+For our pool with n(p-1) = (2α(r)+1)(p-1) elements, which is much larger than the Davenport constant D = (r+1)(p-1)+1, the pool must contain zero-sum subsequences despite being zero-sum-free up to length p. not of length ≤ p.
+
+**The sumset growth approach:**
+
+Let A_k = Σ_k(pool) for k = 1, 2, ....
+
+- A_1 = the vectors in S (since coefficient 1 on each, or 2,3,...,p-1 on a single vector — wait).
+
+Hmm, A_1 = {c·v : v ∈ S, c ∈ {1,...,p-1}} ∪ {0 is not included since c ≥ 1}. Wait, A_1 is sums of exactly 1 element from the pool. Each element is one of the n(p-1) copies, where copy (v_i, j) for j = 1,...,p-1 represents v_i. Summing 1 element = v_i. So A_1 = S.
+
+A_2 consists of sums of two elements from the pool, giving us either 2v_i when we pick two copies of the same vector, or v_i + v_j for distinct vectors. So A_2 includes all scalar multiples of vectors by 2, plus all pairwise sums of distinct vectors. I'm realizing the full sumset S + S allows repetition since we're working in F_p^{r+1}, and more generally the k-fold sumset kS consists of all possible sums of k vectors from S. The shadow Sh_w is the union of all these k-fold sumsets up to width w, but I need to be careful about the constraint that each vector from the pool can appear at most p-1 times, which is automatically satisfied when k ≤ p-1.
+
+So for weight p-1, the shadow is just the union S ∪ 2S ∪ 3S ∪ ... ∪ (p-1)S, and the key insight is that this becomes a pure sumset coverage problem—I need to show this union covers all nonzero elements of F_p^{r+1} when S is a ZSF set of the right size.
+
+The ZSF property guarantees 0 isn't in any of these sumsets since no k ≤ p-1 elements of S can sum to zero, which is exactly what I need.
+
+Now I'm formulating the key theorem: if S has n = 2α(r)+1 nonzero, pairwise non-proportional vectors satisfying ZSF, then the union of all sumsets kS for k from 1 to p-1 should cover all nonzero vectors in F_p^{r+1}. To prove this, I'll apply Kneser's theorem on the abelian group structure.
+
+For the sumset S + S specifically, since S contains no zero vector and no proportional pairs, I need to account for both the doubled elements 2a and the distinct pairwise sums. Let me explore whether an Olson-type argument about k-fold sumsets in F_p^d might give me the growth bounds I need, though the standard formulations don't quite fit this setup. I'm trying to understand what (p-1)S looks like and whether it can be characterized more directly.
+
+Now I'm realizing that (p-1)S is the (p-1)-fold sumset of S with repetition allowed. Since scalar multiplication by (p-1) in F_p gives -1, every element -a for a ∈ S appears in (p-1)S, which might be a useful structural constraint.
+
+More broadly, any element that's a sum of p-1 vectors from S with integer coefficients summing to p-1 lies in (p-1)S, and this generalizes to wS for any w ∈ {1,...,p-1} where we're looking at sums with coefficients that add up to w. ≤ Σc_i ≤ p-1}.
+
+I'm verifying that the coefficients stay within bounds—since each c_i can be at most w and w is capped at p-1, no coefficient exceeds p-1, which confirms the characterization of the Shapley sumset.
+
+Now I want to establish a key lemma: if S is a zero-sum-free set with no proportional elements, then S must generate the entire space F_p^{r+1}. The argument is that S generates some subgroup H, which as a subspace has dimension at most r if it's proper, leading to a contradiction with the zero-sum-free property.
+
+But I'm running into an issue—the Davenport constant D(H) isn't quite the right tool here. I need to use the η function instead, which gives a tighter bound on the longest sequence without a zero-sum of bounded weight.
+
+For H = F_p^3, the η function is 8p-7, and since my pool has n(p-1) ≥ 17p-17 elements, this exceeds η(H) for p ≥ 2, which means the pool must contain a zero-sum subsequence of weight at most p—contradicting the zero-sum-free property.
+
+Now for the general case with H = F_p^r of dimension r: I'm using induction to show that η(F_p^r) = (2α(r-1)+1)(p-1)+1, and my pool size n(p-1) = (2α(r)+1)(p-1) exceeds this bound since α(r) = 2α(r-1)+1.
+
+Wait—I'm realizing I'm actually using the inductive hypothesis I'm trying to prove. But the base case r = 3 does check out with η(C_p^3) = 8(p-1)+1, so I can build from there.
+
+For r = 4, if a set S of size 17 is zero-sum-free in F_p^4, it must span the whole space. If it only spanned a 3-dimensional subspace, the copies pool would have 17(p-1) elements, which exceeds η(C_p^3) = 8(p-1)+1 for any p ≥ 2, forcing a zero-sum contradiction.
+
+So S spans F_p^{r+1}, which means the sumset S generates the entire space. Now I need to think about what this tells me regarding shadow saturation.
+
+The key question is whether (p-1)S already covers everything. Let me define B = S ∪ {0}, so |B| = 2α(r) + 2. Then (p-1)B equals the union of all k-fold sumsets from 0 to p-1, which is {0} ∪ Sh_{p-1}(S). For shadow saturation, I need (p-1)B to equal the entire space F_p^{r+1}.
+
+Applying Kneser's theorem iteratively, if the stabilizer is trivial at each step, I get |(p-1)B| ≥ (p-1)(2α(r)+1) + 1. For r = 3, this gives 17p - 16, which for p = 5 yields only 69—far short of the 625 elements in F_5^4, so this bound is too weak to guarantee coverage.
+
+The linear growth from Kneser can't possibly reach the exponential p^{r+1} I need from a set of size O(α(r)). I should shift to exploiting the multiplicative structure of the group more directly. The Plünnecke-Ruzsa inequality might help here—if the sumset A+A is controlled relative to A's size, it constrains how the iterated sumsets grow.
+
+Actually, that gives an upper bound on growth, which is the opposite of what I need. For a lower bound, I'd need to know when kA eventually covers the whole space. The Freiman-Ruzsa theorem tells me that small doubling forces A into a low-dimensional subspace, which means A can't generate the full group quickly unless it has large doubling.
+
+For the specific case with |S| = 17 in F_p^4: if S had small doubling, it would be confined to a subspace of dimension around log_p(17), but I've shown S actually spans all four dimensions. This forces S to have large doubling—|2S| must grow significantly beyond |S|—otherwise Freiman-Ruzsa would contradict the spanning property.
+
+Applying the theorem quantitatively: if |2S| ≤ K·17, then S fits in a coset of a subspace with size at most C·K^4·17. For S to span F_p^4, this subspace must be the whole space, so C·K^4·17 ≥ p^4, which gives K ≥ (p^4/(17C))^{1/4}. For p=5, this yields K ≥ 2.5 or so, meaning |2S| ≥ 43. The bound is suggestive but not tight enough on its own, so I should explore a different angle.
+
+Let me combine the ZSF minimum weight constraint with sumset growth. The kernel code V_0 has minimum sum-weight at least p+1, which is remarkably strong—a random code would have sum-weight around 3 or 4. This ZSF property severely restricts the additive structure of S, and I want to leverage that to build a stronger argument about how the set must grow under addition.
+
+I'm attempting a weighted version of shadow saturation: if S contains 2α(r)+1 pairwise non-proportional vectors with no zero-sum of weight ≤ p, then every nonzero target t can be represented as a weighted sum with coefficients in {0,...,p-1} where the total weight falls strictly between 1 and p-1.
+
+Now I'm using double counting on N(t, w)—the count of coefficient vectors achieving target t with exact integer weight w. The key observation is that when we sum N(t, w) over all weights congruent to the same residue modulo p, we get equidistribution by a dimension argument, giving p^{n-r-2} for each residue class. 2 of Adversary chain, assuming (1,...,1) ∉ row_span).
+
+(B) ZSF: N(0, w) = 0 for w = 1,...,p. (And N(0, 0) = 1 for the zero vector.)
+
+(C) For all t: Σ_w N(t, w) = p^{n-r-1} (total solutions in V_t).
+
+We want: for all t ≠ 0, Σ_{w=1}^{p-1} N(t, w) ≥ 1.
+
+From (A): for t ≠ 0 and w̄ ∈ {1,...,p-1}, the solutions with residue w̄ modulo p sum to p^{n-r-2}, so N(t, w̄) equals this total minus any solutions with larger weights. If N(t, w̄) = 0 for all residues in {1,...,p-1}, then every solution with residue w̄ must have integer weight at least w̄+p, which means all solutions in V_t have weight at least p.
+
+For w̄ = 0, the only weight-0 solution is the zero vector, which maps to target 0, not t. So all w̄ = 0 solutions in V_t also have weight at least p.
+
+This gives a lower bound: the total integer weight in V_t is at least p · p^{n-r-1} = p^{n-r}. But I can also compute this total weight globally across all targets and solutions.
+
+The sum of all integer weights over every vector in {0,...,p-1}^n equals p^n · n(p-1)/2, since each coordinate averages to (p-1)/2. Distributing this evenly across the p^{r+1} targets means each target gets average weight n(p-1)/2 · p^{n-r-1}. Now if a target is a shadow gap where N(t,w) = 0 for all w ≤ p-1, then all its solutions must have weight strictly greater than p-1, which creates a contradiction with the average. The constraint that all weights exceed p is actually consistent with the average weight being much larger—this alone won't produce a contradiction. I need to look at the variance or higher moments instead. Let me examine the second moment by computing E[W(s)²] across all elements, using the fact that for a single coordinate uniformly distributed over {0,...,p-1}, the expected value of its square follows a specific formula, and then extending this to the sum of all coordinates.
+
+But the distribution within a coset V_t isn't simply uniform—the coordinates are correlated, which complicates the calculation. Let me shift to a dimension-counting approach instead. Since V_t is an affine subspace of dimension d = n-r-1 in F_p^n, I can think about how the "low weight" region (elements with coordinate sum at most w) intersects with this subspace, using combinatorial formulas for the size of such regions. The density is extremely small at about 7.8 × 10^{-9}. An affine subspace of dimension 13 would have around 1.2 × 10^9 points, so on average each coset should intersect L_{p-1} in roughly 9.6 points. But the real constraint is that every nonzero coset needs to intersect L_{p-1}, not just on average—and for the target 0, the zero-sum-free property guarantees V_0 ∩ L_{p-1} has a specific structure.
+
+The total intersection budget across all cosets equals |L_{p-1}| = 5985, which gives us |Sh_{p-1}| ≤ 5984. Since |F_5^4 \ {0}| = 624, the budget technically allows full coverage, though that alone doesn't guarantee it. Now I'm wondering whether the weight-to-target map exhibits enough spread to ensure every nonzero coset actually hits L_{p-1}.
+
+The linear map M sends the zero coset to 0 and each coset V_t to its label t, mapping the low-weight region L_{p-1} onto the shadow set Sh_{p-1}(S). For this to work, I need M to be surjective from L_{p-1} \ {0} onto F_p^{r+1} \ {0}—essentially asking whether a "ball" in {0,...,p-1}^n covers all nonzero targets under this linear transformation. Let me flip this around and assume some nonzero t escapes the shadow, then see what that implies about V_t ∩ L_{p-1}.
+
+If t isn't in the shadow, then V_t must lie entirely outside the low-weight region, meaning every element of V_t has integer weight at least p. Since V_t is a coset a + V_0 for some a with Ma = t, I'm looking at how weights behave when I add a to elements of V_0. The weight of a + u depends on whether carries occur in the coordinate-wise sum—when a_i + u_i stays below p, the representative ⟨a_i + u_i⟩ equals a_i + u_i directly, but once we hit p or beyond, the modular reduction kicks in. = a_i + u_i - p if a_i + u_i ≥ p (carry).
+
+So W(a+u) = Σ(a_i + u_i) - p · #{i : a_i + u_i ≥ p} = W(a) + W(u) - p · C(a,u)
+
+where C(a,u) = #{i : a_i + u_i ≥ p} is the number of "carries".
+
+So: W(a+u) = W(a) + W(u) - p·C(a,u).
+
+For u = 0: W(a) = W(a) ≥ p (since a ∈ V_t and V_t ∩ L_{p-1} = ∅).
+
+For any u ∈ V_0, the constraint W(a+u) ≥ p gives me W(u) ≥ p(1 + C(a,u)) - W(a). Combined with the requirement that nonzero elements have W(u) ≥ p+1, I need W(u) ≥ max(p+1, p(1+C(a,u)) - W(a)). Now I'm looking at the total weight across all elements in V_0, using the fact that the average weight is n(p-1)/2 · |V_0|, and summing the constraints over all u. W(a) equals p times the expected number of carries when adding a random element from V_0 to a. Since each coordinate of V_0 projects surjectively onto F_p, each u_i is uniformly distributed, so the probability that u_i ≥ p - a_i is simply a_i/p. I realize that approach is circular—the equation just confirms itself without revealing anything useful. Let me explore the variance instead, looking at how W(a+u) behaves across different u values, though the calculation is getting complicated. Maybe I should step back and think about what I'm actually trying to prove here.
+
+The core question is whether a ZSF set S of size n = 2α(r)+1 in F_p^{r+1} has a shadow at weight p-1 that covers everything. The computational evidence at p=5 and p=7 strongly suggests this is true, so I need to find the right proof strategy. What's special about ZSF sets is their sumset structure—specifically, S is ZSF exactly when the kernel V_0 has minimum sum-weight at least p+1, meaning any nontrivial linear combination of the vectors that sums to zero must use coefficients adding to at least p+1.
+
+Looking at this from the dual perspective: the dual code V_0^⊥ is generated by the rows of M, and its codewords are the inner products of some weight vector w with all the v_i. The all-ones vector can't be in V_0^⊥ because that would force all vectors into a single affine hyperplane, which contradicts the ZSF property via the s(C_p^r) bound.
+
+Now I'm trying a more direct approach: if some nonzero vector t is missing from the shadow, then any representation of t must have weight at least p. The same constraint applies to -t, so if both t and -t are outside the shadow, they both require representations of weight ≥ p.
+
+But when -t is actually in the shadow with weight ≤ p-1, combining it with a representation of t (weight ≥ p) gives a zero-sum with total weight ≥ 2p, which doesn't immediately contradict ZSF. The issue is that these representations might cancel out in ways I haven't fully accounted for.
+
+Let me step back and look at the specific structure of the p=5 construction with the doubled elements.
+
+Looking at the fiber structure: fiber 0 projects to a specific 8-element set in F_5^3, while fiber 1 contains those same 8 vectors plus the zero vector as a tail. The key observation is how these fibers relate to each other under the projection.
+
+Now I'm working through the shadow computation—how to represent any vector in F_5^4 using these 17 basis vectors with coefficients bounded by weight 4. The constraint is that coefficients on fiber-1 vectors must sum to the target fiber index modulo 5, while fiber-0 coefficients contribute zero to that first coordinate, and all the tail components need to combine correctly to produce the desired output.
+
+I think the most promising direction is proving a generalized one-fiber impossibility theorem: if we have a ZSF set of n = 2α(r)+1 vectors in F_p^{r+1}, then for any linear form w and any target value c, at most α(r) vectors can map to c under w. The proof strategy is to show that if we had α(r)+1 or more vectors mapping to c, they'd either lie in the kernel of w (when c = 0) or in an affine subspace, and in either case the copies pool would exceed the capacity bound for that lower-dimensional space.
+
+For the c = 0 case, vectors in ker(w) form an F_p^r subspace, and the copies pool would have (α(r)+1)(p-1) elements, which by induction must exceed the bound η(C_p^r) = (2α(r-1)+1)(p-1)+1. Since α(r) = 2α(r-1)+1, the inequality works out and we get a contradiction with the ZSF property. For c ≠ 0, I can rescale w to normalize c to 1, which shifts the problem to a similar affine configuration.
+
+Now with w(v_i) = 1 for α(r)+1 vectors lying in the affine hyperplane {v : w(v) = 1}, any zero-sum combination must have coefficients summing to 0 mod p. Given the weight constraint ≤ p, the coefficient sum must equal exactly p. The copies pool contains (α(r)+1)(p-1) elements in this hyperplane, and I'm projecting down to F_p^r by subtracting the w-value times a reference vector. I'm checking whether the length constraint is satisfied: we need (α(r)+1)(p-1) ≥ s(C_p^r), but substituting the recursive formula for α(r) gives (p-1) ≥ p, which is false. So this approach fails when c ≠ 0. Let me reconsider the problem from a different angle, looking at what happens when (1,...,1) appears in the row span.
+
+The key insight is that the adversary argument applies to all 17 vectors in a single fiber, not just α(r)+1 of them. If all 17 vectors lie in the hyperplane {w(v) = 1}, then projecting them to F_p^3 gives 17 distinct vectors—they can't be equal since that would mean the original vectors are equal. But I need to check whether these projections could be proportional to each other.
+
+If two projections π(v_i) and π(v_j) are proportional, say π(v_i) = λπ(v_j), then v_i = λv_j + (1-λ)e. The w-coordinate constraint w(v_i) = 1 is satisfied regardless of λ, so this is possible even though v_i and v_j aren't proportional in F_p^4. The adversary chain then claims that projecting yields at least 16 non-proportional vectors, and since the copies pool has 16(p-1) elements while s(C_p^3) = 9p-8, there's a counting argument that creates a contradiction. ≥ 9p-8 for p ≥ 2."
+
+So with 17 vectors projecting to at least 16 non-proportional projections (possibly with some proportional pairs), the copies pool with multiplicities would have at least 16(p-1) elements (even if one proportional pair is merged). And s(C_p^3) = 9p-8. Since 16(p-1) ≥ 9p-8 ↔ 16p-16 ≥ 9p-8 ↔ 7p ≥ 8 ↔ p ≥ 2. ✓.
+
+s(C_p^3) elements suffice to find a zero-sum of length exactly p. This lifts to a zero-sum of weight p in F_p^4 (since all coefficients sum to p ≡ 0 mod p, satisfying the affine constraint). But this contradicts ZSF—a zero-sum of weight p violates the requirement that the copies pool has no zero-sum subsequence of length ≤ p. Therefore, the 17 vectors cannot all lie in one affine hyperplane, which means (1,...,1) ∉ row_span(M). This establishes Step 1.
+
+For Theorem A: when c = 0, at most α(r) vectors can have w(v) = 0, and when c ≠ 0...
+
+For non-zero weight c, the bound follows similarly: if we had α(r)+1 vectors with w(v) = c, the copies pool in that fiber would contain (α(r)+1)(p-1) elements, which must be less than s(C_p^r) to avoid a zero-sum of length p.
+
+Let me verify this constraint. By induction, η(C_p^r) = (2α(r-1)+1)(p-1)+1, so s(C_p^r) = (2α(r-1)+1)(p-1) + p. Checking whether (α(r)+1)(p-1) ≥ s(C_p^r): this simplifies to (2α(r-1)+2)(p-1) ≥ (2α(r-1)+1)(p-1) + p, which reduces to p-1 ≥ p—false. So α(r)+1 vectors in one fiber actually fall short by 1 element, meaning we'd need α(r)+2 vectors to trigger the bound, or I need to refine the argument.
+
+Now I'm reconsidering the structure of this copies pool. With α(r)+1 distinct vectors each appearing p-1 times, I'm not dealing with an arbitrary sequence—the repetition pattern is uniform. The key insight is that when projecting these vectors onto F_p^r (after removing the fiber direction), at most one pair can be proportional, which constrains the effective pool size. The s-bound for C_p^r depends on η(C_p^r) + p - 1, and I need to check whether this uniform repetition structure actually helps us reach the threshold.
+
+If the pool size m(p-1) exceeds η(C_p^r) = (2α(r-1)+1)(p-1)+1, then by the Davenport constant property, the pool must contain a zero-sum of length at most p. This is the critical threshold I'm trying to establish.
+
+Now I'm verifying that m = α(r)+1 = 2α(r-1)+2 satisfies this inequality. When I substitute this value, I get m(p-1) = (2α(r-1)+2)(p-1), which expands to (2α(r-1)+1)(p-1) + (p-1). Since p-1 ≥ 1, this indeed exceeds the required bound, confirming the threshold works.
+
+So any α(r)+1 vectors from a single fiber—whether the zero fiber or a nonzero one—must contain a zero-sum with length at most p. For the nonzero fibers where all vectors have the same weight w(v) = c ≠ 0, a zero-sum Σc_i v_i = 0 forces c · Σc_i = 0, which means Σc_i ≡ 0 (mod p). Since the coefficients sum to something between 1 and p, this forces Σc_i = p exactly. The function η counts zero-sums by their length in the range {1,...,p}, so I need to account for this constraint.
+
+Now I'm decomposing vectors in the affine hyperplane w(v) = c as v_i = c·e + u_i where e is a weight-1 vector and u_i lies in the kernel of w. The zero-sum condition then splits into two requirements: the coefficients must sum to p, and the kernel components must also sum to zero.
+
+Looking at whether these kernel projections u_i can be proportional—they're distinct since the original vectors are, but proportionality is possible when vectors aren't themselves proportional, which means the projections can exhibit dependencies. occur.
+
+Hmm, but in the copies pool of the u_i in ker(w) ≅ F_p^r: if u_i = λu_j, then λ must equal 1 for them to be genuinely distinct elements of F_p^r. Wait no, u_i and λu_j are proportional vectors. In the copies pool, proportional vectors are merged: using u_i with coefficient c_i is the same as using λu_j with coefficient c_i/λ... hmm, actually no. In the copies pool, u_i and λu_j are DIFFERENT elements (both nonzero, not proportional unless λ = 1 since they come from different v's). Wait, u_i = λu_j means they ARE proportional. But the copies pool counts them as separate elements (since they came from different v_i, v_j).
+
+Actually, I think the key point is that the copies pool in F_p^r might contain proportional vectors, but the η function counts sequences with repetitions allowed, not sets. So proportional elements can still appear multiple times and contribute to zero-sum subsequences. The η function for C_p^r applies to any sequence of nonzero elements from F_p^r, and our pool has each vector appearing up to p-1 times, giving us α(r)+1 total vectors to work with.
+
+Now, if the total pool size (α(r)+1)(p-1) is at least η(C_p^r), then we're guaranteed a zero-sum subsequence of length ≤ p. But when we lift this back to F_p^{r+1}, the zero-sum in ker(w) becomes Σ d_j v_j = (Σ d_j) ce, which isn't actually a zero-sum in the full space—it's a multiple of ce.
+
+For this to be a genuine zero-sum, we need Σ d_j ≡ 0 mod p, which forces Σ d_j = p exactly (since the sum is between 1 and p). That gives us a zero-sum of weight p, contradicting the zero-sum-free property. But here's the issue: the guarantee from η(C_p^r) only promises length ≤ p, not length = p, so the actual sum could be some ℓ < p, which means Σ d_j v_j would equal ℓ·ce, and that's not zero unless ℓ ≡ 0 mod p—which is impossible since ℓ < p.
+
+So only zero-sums of length exactly p in ker(w) will lift to actual zero-sums in F_p^{r+1}, while shorter ones lift to nonzero elements. This means I need s(C_p^r) instead of η(C_p^r), since s guarantees a zero-sum of length exactly p.
+
+Now comparing the pool size against what's needed: the pool has (2α(r-1)+2)(p-1) vectors, but s(C_p^r) requires (2α(r-1)+1)(p-1) + p vectors. The pool falls short by exactly 1, so α(r)+1 vectors in a nonzero fiber don't actually guarantee what we need.
+
+But the two-fiber bound works differently—when vectors are split across exactly two fibers with n+1 total vectors, one fiber can have at least α(r)+1 vectors while the other also has α(r)+1, and this distribution is tight enough to force a zero-sum despite the shortfall.
+
+Let me zoom out. I should focus on what I can actually prove cleanly rather than getting lost in these edge cases. The key insight is establishing a direct connection between zero-sum-free sets and their shadows under scalar multiplication, then pinning down exactly what gaps remain in the argument.
+
+I can formalize this as a lemma: for a zero-sum-free set S of size n in F_p^{r+1}, the shadow under scalar multiplication by k should grow at least like k(n-1)+1, capped by the ambient space size. Testing this on the concrete example—with r=3, n=17, p=5, I get a lower bound of 65 for the (p-1)-shadow, but I actually need 624. The Cauchy-Davenport approach is fundamentally too weak here.
+
+I need to return to the three-step structure of the adversary argument: I've established that (1,...,1) isn't in the row span and verified the equidistribution property, but shadow saturation—the third piece—remains unresolved. The question is whether among the p^{n-r-2} possible shadows, enough of them actually saturate the space.
+
+A new angle: I can treat the zero-sum-free constraint as an excluded region and use it to force coverage elsewhere. If I count the total weight-w points across all possible targets, I'm looking at how many solutions exist in {0,...,p-1}^n where the coordinates sum to w, and whether the lift from the modular constraint actually hits the integer weight-w shell. For w = p-1: Σ_{t ≠ 0} N(t, p-1) = C(n+p-2, n-1) = 4845.
+
+Distributing these across 624 non-zero targets gives an average of about 7.8 per target. The key constraint is that each non-zero target t needs at least one weight w ∈ {1,...,p-1} with N(t, w) > 0. Summing across all weights and targets, I'm computing Σ_{t≠0} Σ_{w=1}^{p-1} N(t, w) to see if there's enough total mass to satisfy this requirement.
+
+Completing the sum over w = 1 to 4 gives 17 + 153 + 969 + 4845 = 5984, which averages to about 9.6 per target. Now I'm wondering if I can use a variance argument to show that N(t, w) stays bounded away from zero. This would require computing the second moment Σ_{t≠0} N(t, w)^2 to understand how much the values deviate from their mean.
+
+I'm rewriting this as a sum over pairs (s, s') with the same weight w and same syndrome, which transforms into counting pairs (s, u) where u is a nonzero syndrome element, both s and s+u have weight w, and s is nonzero modulo M.
+
+Let me pivot to a cleaner strategy: the key insight is that V_0 has minimum sum-weight at least p+1, which should let me bound how many codewords can share the same weight w.
+
+I'm realizing that sum-weight isn't symmetric—W(u) and W(-u) aren't equal in general. Let me work through the relationship: for each coordinate, if u_i ≠ 0, then ⟨u_i⟩ + ⟨p-u_i⟩ = p, and when u_i = 0, both contribute 0. So W(u) + W(-u) relates to the number of nonzero coordinates...
+
+Now I'm using the constraint that W(u) ≥ p+1 for nonzero elements in V_0. This means W(-u) = p·Ham(u) - W(u) is bounded above, but since -u is also nonzero in V_0, W(-u) must also be at least p+1. Working through the inequality, this forces the Hamming weight to be at least 3 for any nonzero u in V_0.
+
+I'm recognizing this as a coding theory problem where V_0 is a linear code with minimum sum-weight at least p+1, and the real question is about the covering radius—finding the maximum sum-weight needed to reach any coset. I'm realizing the sum-weight isn't quite the Lee weight—it's just the L1 norm on F_p, where we sum the representatives directly from {0,...,p-1}. This is more like a homogeneous weight used in repetition codes, measuring how many "copies" are being used across the coordinates.
+
+Now I'm thinking about the covering radius for V_0 as a subgroup under this sum-weight metric: I need to show that the maximum distance from any element in F_p^n to the nearest coset of V_0 is bounded by p-1, using the minimum sum-weight of nonzero elements in V_0 itself. ≥ p+1.
+
+**The covering radius of a subgroup of F_p^n w.r.t. sum-weight.**
+
+V_0 is a subspace of codimension r+1. The quotient F_p^n / V_0 ≅ F_p^{r+1}. Each coset V_t has |V_0| = p^{n-r-1} elements.
+
+The covering radius: ρ_S = max_{a ∈ F_p^n} d_S(a, V_0) = max_a min_{u ∈ V_0} W(a + u).
+
+Since W(a + u) = Σ ⟨a_i + u_i⟩, and as u ranges over V_0, for each coordinate i, u_i takes each value in F_p with equal frequency when the projection is surjective. While I could zero out any single coordinate by choosing u_i = -a_i, I can't do this for all coordinates simultaneously due to the constraint that u must lie in V_0. Finding the optimal u that minimizes the sum-weight is essentially solving the nearest codeword problem.
+
+For Hamming weight, the Singleton bound gives a covering radius of at most r+1, but I need to figure out what the analogous bound looks like for sum-weight. Now I'm checking whether the covering condition actually holds by computing the ball size for radius p-1, and it does satisfy the inequality, but this approach doesn't seem to be giving me the tighter bound I'm looking for.
+
+The real question is whether there's a general theorem connecting the codimension of a subspace to its sum-weight covering radius, similar to how the Hamming weight covering radius is bounded by the codimension. For sum-weight, I need to determine if every syndrome can be represented by a vector with sum-weight at most (p-1) times something.
+
+============================================================
+BLOCK 4 (43309 chars)
+============================================================
+Let me analyze the Cortex findings and formulate a new theorem. The key insight from the prior work is:
+
+1. The "Adversary Proof Chain" identifies three steps, with Step 3 (Shadow Saturation) being the open conjecture
+2. Steps 1 and 2 are proved: (1) the all-ones vector is not in the row span of any 17-element ZSF subset, and (2) CW equidistribution holds
+
+The critical open question is Step 3: proving that among the p^{12} solutions with Σs_i ≡ w (mod p) for each w ∈ {1,...,p-1}, at least one has INTEGER Σs_i ≤ p-1.
+ 
+Now I'm reconsidering the approach—instead of attacking shadow saturation head-on, I should focus on what's actually provable and new. The reformulation shows that for any nonzero target t, among the p^{n-r-2} solutions satisfying both the linear constraint and the congruence condition, at least one must have integer weight bounded by p-1. The ZSF constraint creates an asymmetry: for target 0, no solution can achieve weight ≤ p-1 since weight 0 is excluded and higher weights are blocked by the structure. weight ≤ p-1).
+
+The shadow saturation conjecture suggests that for any zero-sum-free set of size 2α(r)+1, the shadow at weight p-1 should cover everything except zero. Let me try approaching this differently through lattice points—I'll look at the solution space of linear equations where the vectors form an (r+1)×n matrix, and examine how the weight function distributes across these affine subspaces. By the one-fiber impossibility result, there's a constraint on how weights can be distributed.
+
+Since the all-ones vector isn't in the row span of M, the weight function must be surjective across the solution space, meaning each residue class modulo p appears equally often. When I shift to integer weights using the natural representatives from F_p, I get a range from 0 to 68 for p=5, and these integer weights are congruent to the field weights modulo p. For the trivial solution at the origin, I'm looking at how the zero residue class distributes across different integer weight values.
+
+Now I'm reconsidering what the ZSF condition actually means—it's not just about the residue classes, but about excluding nontrivial solutions with small integer weights. Specifically, ZSF requires that no nontrivial solution exists where all coordinates stay in {0,...,p-1} and the integer weight sum falls between 1 and p-1. This is a much tighter constraint than I initially stated.
+
+Let me step back and think about what I can actually prove here. The most concrete approach seems to be analyzing the exclusion volume created by the ZSF condition—how many potential solutions get ruled out by requiring that nontrivial solutions must have weight at least p.
+
+The key insight is that if S is a ZSF set, then the image of the coefficient polytope (all vectors with coordinates in {0,...,p-1} and sum at most p-1) under the linear map to F_p^{r+1} avoids the origin entirely. This geometric constraint should give me a handle on the structure of ZSF sets.
+
+Now I'm trying to formalize this more precisely by counting solutions at specific weight levels. For a ZSF set S of size n, I want to track how many coefficient vectors sum to zero in F_p^{r+1} while having a fixed integer weight w, and separately count solutions that map to any nonzero element t with the same weight constraint. The idea is that the zero-sum solutions should be sparse relative to the total solutions, which would explain why ZSF sets have this exclusion property.
+
+The key insight is that the total number of solutions hitting any target t across all weights is p^{n-r-1}, and when I partition these by weight modulo p, each residue class should contain roughly p^{n-r-2} solutions. This gives me a way to measure whether the solutions are distributed evenly or concentrated in certain weight ranges. F_p (equidistribution from Step 2)
+
+For target 0:
+Σ_{w≡0 (mod p)} N_0(w) = p^{n-r-2}
+Since N_0(0) = 1 and N_0(w) = 0 for w = 1,...,p-1, we get:
+1 + N_0(p) + N_0(2p) + ... = p^{n-r-2}
+
+So N_0(p) + N_0(2p) + ... = p^{n-r-2} - 1.
+
+For nonzero target t:
+Σ_{w≡0 (mod p)} N_t(w) = p^{n-r-2}
+This gives: N_t(0) + N_t(p) + N_t(2p) + ... = p^{n-r-2}
+
+Since N_t(0) = 0 for t ≠ 0 (the zero-weight solution only hits target 0), the sum over positive multiples of p equals p^{n-r-2}. For any residue class j ∈ {1,...,p-1}, the solutions with weight congruent to j modulo p also sum to p^{n-r-2}. The shadow saturation question becomes whether there exists some j in that range with N_t(j) > 0.
+
+This is equivalent to asking if the total count across all nonzero residue classes is positive. The key insight is that the total solution count across all weights is p^{n-r-1} regardless of target, and since N_t(0) = 0 for t ≠ 0, we need at least one solution at weights 1 through p-1.
+
+The ZSF exclusion principle concentrates all solutions for target 0 at weights ≥ p, but for nonzero targets there's no such structural constraint. However, this alone doesn't guarantee solutions exist at low weights—they could still cluster at higher weights. Let me approach this using generating functions to track the weight distribution more carefully.
+
+I'm defining F_t(x) as a generating function where the coefficient of x^w counts solutions N_t(w) at each weight w. For target 0, the ZSF mechanism forces F_0(x) to have no contributions from weights 1 through p-1, but for nonzero targets, those low weights are structurally possible. The key question becomes whether F_t(x) actually has nonzero coefficients in the range {1,...,p-1}, and I can investigate this by evaluating the generating function at specific points—particularly at x=1 to get the total count p^{n-r-1}, and at roots of unity to extract information about the weight distribution through equidistribution arguments. F_p^{r+2} is surjective with fibers of size p^{n-r-2}. So:
+
+Σ_{s: Ms=t} ζ^{j·(1,...,1)·s} = p^{n-r-2} · Σ_{w∈F_p} ζ^{jw} = 0 for j ≠ 0.
+
+And = p^{n-r-1} for j = 0.
+
+So F_t(ζ^j) = 0 for j = 1,...,p-1, and F_t(1) = p^{n-r-1}.
+
+Wait, that's not right. F_t(x) = Σ_w N_t(w) x^w where w ranges over integers 0,...,n
+
+-1. Since ζ^j is a p-th root of unity, ζ^{jw} only depends on w modulo p. I can reorganize the sum by grouping terms with the same residue class: for each residue w̄ in F_p, I collect all the N_t(w) values where w ≡ w̄ (mod p), and by equidistribution these sums are all equal to p^{n-r-2}. This gives me p^{n-r-2} times the Gauss sum Σ_{w̄∈F_p} ζ^{jw̄}, which vanishes for j ≠ 0.
+
+At x = 1, I get F_t(1) = p^{n-r-1}, so F_t vanishes at all nontrivial p-th roots of unity but is nonzero at 1. This means F_t must be divisible by the cyclotomic polynomial Φ_p(x) = 1 + x + ... + x^{p-1}, so I can factor it as F_t(x) = p^{n-r-2} · Φ_p(x) · G_t(x) for some polynomial G_t(x) with integer coefficients.
+
+Let me approach this differently by looking at the distribution modulo p. If I define A_j as the sum of N_t(w) over all w ≡ j (mod p), then equidistribution tells me A_j = p^{n-r-2} for each residue class j. The shadow saturation question reduces to whether Σ_{w=1}^{p-1} N_t(w) is positive for nonzero t.
+
+Now I can decompose each A_j by layers: the first layer contributes N_t(j) directly, while higher layers contribute N_t(j+p), N_t(j+2p), and so on. So for j ∈ {1,...,p-1}, I have N_t(j) = p^{n-r-2} minus the contributions from all higher layers.
+
+For shadow saturation to fail, I need N_t(j) = 0 for every j in this range, which means all solutions with residue j must have weight at least j+p. This forces the minimum weight of any solution hitting target t to be at least p+1, since the smallest weight with residue j ≥ 1 and weight ≥ p would be p+j.
+
+Now I'm seeing the connection to the zero-sum-free condition: ZSF guarantees that any nontrivial solution hitting 0 has minimum weight ≥ p, while shadow saturation failing means the minimum weight for solutions hitting t is also ≥ p. So these conditions are closely related—shadow saturation fails precisely when the minimum weight threshold matches what ZSF requires.
+
+Let me try a different approach using a double-counting argument. I'll sum up the total weight across all solutions for every target in F_p^{r+1}.
+
+For any target t, the expected weight of a solution hitting it should relate to the overall distribution. The key insight is that the total weight across all solutions is n · (p-1)/2 · p^n, and this distributes evenly across targets because the average coordinate sum E[Σs_i | Ms = t] = n(p-1)/2 holds uniformly for all t—this follows from the symmetry of the coordinate distribution independent of which target constraint we're conditioning on.
+
+But target 0 is special under the ZSF constraint: it forces N_0(w) = 0 for all weights w = 1,...,p-1, meaning the weight distribution gets pushed toward higher weights. This creates a deficit of "low-weight mass" compared to what we'd expect from the uniform distribution.
+
+For generic targets t ≠ 0, this low-weight mass should be present. I'm trying to formalize this by defining an indicator function that captures whether a codeword has low weight, then comparing how often this occurs for the zero target versus other targets. The key insight is that averaging this indicator across all targets should reveal whether the zero target genuinely has fewer low-weight codewords than expected.
+
+Now I'm computing this average more explicitly—the fraction of codewords with weight in the range {1,...,p-1} turns out to be quite small when n is large, since the typical weight concentrates around n(p-1)/2, which dominates the low-weight region. I need to count more carefully how many codewords actually fall into this low-weight regime. I'm computing the number of non-negative integer solutions to s_1+...+s_17 = w for each w from 0 to 4 using the stars and bars formula C(n-1+w, w), then summing these counts to get 5985.
+
+Now I'm comparing this to the total number of solutions across all possible weights, which is p^17 ≈ 7.6 × 10^11, making the fraction with weight ≤ 4 negligibly small. The average value of this count turns out to be about 9.6 when normalized by p^4, though for the target weight of 0 the count drops to zero.
+
+When I exclude the trivial zero solution and look only at nonzero targets, the average becomes 5984/624 ≈ 9.6 low-weight representations per target. This shows there's enough "budget" in principle, but the average alone doesn't guarantee every nonzero target has at least one such representation—I need to show the distribution is actually uniform across targets. The Codeword Weight equidistribution theorem might help here by showing how representations distribute across residue classes.
+
+Now I'm trying to pin down exactly how many of those equidistributed solutions actually achieve the smallest possible integer weight sum. For a given residue class j modulo p, I need to calculate what fraction of the p^{n-r-2} solutions have the minimal integer weight sum equal to j, which involves comparing binomial coefficients against the total solution space. I'm realizing the counting needs to be more careful—when j ≤ p-1, the constraint that each s_i ≤ p-1 is automatically satisfied since their sum equals j, so I'm just counting nonnegative integer solutions to s_1+...+s_n = j, which gives C(n-1+j, j). onneg integer solutions to s_1+...+s_n = j is C(n+j-1, j)... no:
+
+The number of nonneg integer solutions to x_1 + ... + x_n = j is C(j+n-1, n-1) = C(j+n-1, j).
+
+For j=1, n=17: C(17, 1) = 17.
+For j=2, n=17: C(18, 2) = 153.
+
+Now, the number of s ∈ {0,...,p-1}^n with Σval(s_i) = j is C(j+n-1, j) (for j ≤ p-1).
+
+The total number of s ∈ F_p^n is p^n.
+
+The number of s with Ms = t for a specific target t is p^{n-r-1}. If the value constraint were independent of the linear constraint Ms = t, I'd expect roughly C(j+n-1,j) / p^{r+1} solutions, but that's way too small for small j. The real issue is that solutions within the affine subspace V_t aren't uniformly distributed—the matrix M introduces correlations that break the independence assumption.
+
+The equidistribution result tells me that within V_t, the sum Σs_i is uniform modulo p, so exactly p^{n-r-2} solutions have Σs_i ≡ j (mod p) for each residue class j. Among those, the integer weight can be j, j+p, j+2p, and so on. The actual count of solutions with weight exactly j is a combinatorial lattice point problem within the algebraic variety defined by both the linear constraint Ms = t and the modular constraint Σs_i ≡ j (mod p).
+
+Now I'm working out the ratio of solutions with exact weight j to those with weight congruent to j modulo p. Using the combinatorial formula, this ratio is approximately p · C(j+n-1,j) / p^n. For j=1 and n=17 with p=5, this gives roughly 10^{-11}, which is tiny. But since there are p^{n-r-2} = 5^{12} ≈ 2.4 × 10^8 solutions with weight congruent to j modulo p, the expected count of solutions with weight exactly j in V_t works out to about 85/3125, which is less than 0.03.
+
+That's far too small to expect finding weight-j solutions for any specific j. But when I sum across all possible j values from 1 to p-1, the total expected count jumps to around 9.6, which is actually reasonable.
+
+Let me clarify what this means: there are 5984 total solutions with low weight distributed across 625 possible targets, giving an average of 9.6 solutions per nonzero target. The target 0 gets none (by the zero-sum constraint), so the average across only the nonzero targets is slightly higher at around 9.6.
+
+Now I'm wondering whether this distribution is actually uniform—could some nonzero targets receive zero solutions while others get more? Looking at the simplest case, the weight-1 vectors alone already hit 17 distinct nonzero targets (the columns of the matrix), so at minimum those 17 targets are guaranteed to have solutions.
+
+For weight-2, I need to count more carefully: there are 17 vectors with a single coordinate equal to 2, and C(17,2) = 136 vectors with two coordinates equal to 1, giving targets of the form 2v_i and v_i + v_j respectively.
+
+So the shadow up to weight 2 contains at most 17 + 17 + 136 = 170 distinct targets, but I need to cover 624 total. Even at weight 4 with nearly 6000 coefficient vectors available, the map from coefficient vectors to targets isn't uniformly distributed—it's only p^{n-r-1}-to-1 on average across the full space, not necessarily on the low-weight piece. I'm trying to understand whether the low-weight vectors alone can achieve full coverage.
+
+Actually, let me step back and try a completely different angle using additive energy and covering arguments. I'll look at the set of vectors B = {v_1,...,v_n} in F_p^{r+1} \ {0} where n = 2α(r)+1, and examine what the shadow at each weight w actually captures.
+
+The shadow is essentially the set of all weighted combinations where the coefficients sum to at most w, which I can decompose as a union of restricted sumsets. But this is getting unwieldy. Let me pivot to the Olson-Davenport approach instead, using the critical number D*(G) — the smallest length that guarantees a zero-sum subsequence in any sequence over the nonzero elements of G.
+
+For the cyclic group C_p^{r+1}, this critical number is (r+1)(p-1)+1, which equals 4p-3 when r=3. My copies pool contains 17(p-1) elements total, and since this exceeds the critical threshold for p ≥ 2, a zero-sum definitely exists somewhere in the pool. The challenge is ensuring it has length at most p.
+
+The η function captures exactly what I need: it's the minimum sequence length over C_p^{r+1}\{0} that guarantees a zero-sum of length between 1 and p. So I'm aiming to show that η(C_p^4) ≤ 17(p-1)+1, meaning any sequence of that length drawn from the copies pool must contain a short zero-sum.
+
+Let me reconsider the setup more carefully. I have 18 pairwise non-proportional vectors in F_p^4, and I'm looking for coefficients s_i ∈ {0,...,p-1} (not all zero) where the sum of coefficients is at most p and they combine to zero. This is equivalent to finding a zero-sum subsequence of length ≤ p in the multiset where each vector appears p-1 times, giving a total pool of 18(p-1) elements.
+
+I know that η(C_p^3) = 8(p-1)+1, meaning any 8(p-1)+1 elements from C_p^3\{0} contain a zero-sum of length ≤ p. If I project my 18 vectors down to F_p^3 by dropping one coordinate, the copies pool projects to 18(p-1) elements. Since 18(p-1) ≥ 8(p-1)+1 for p ≥ 2, there exists a zero-sum of length ≤ p in the projection. However, lifting this back to F_p^4 is problematic—the kernel of the projection introduces additional constraints that might prevent the zero-sum from lifting.
+
+Actually, I should think of this through the fiber approach: I project via a linear form w: F_p^4 → F_p to get fibers F_c = {v_i : w(v_i) = c}. The projection of each v_i onto ker(w) ≅ F_p^3 gives me the "tail." A zero-sum in the projection Σs_i · π(v_i) = 0 with Σs_i ≤ p means Σs_i · v_i equals (Σs_i · c_i, 0, 0, 0) where c_i = w(v_i). For this to actually be zero in F_p^4, I also need Σs_i · c_i ≡ 0 (mod p).
+
+When all vectors lie in a single fiber with c_i = 1, the condition Σs_i · c_i = Σs_i combined with Σs_i ≤ p and Σs_i ≡ 0 (mod p) forces Σs_i = p exactly—which is the s-constant condition I keep running into.
+
+I'm repeating myself here. Let me refocus and try to establish something new: a shadow lower bound theorem stating that for any ZSF set S = {v_1,...,v_n} in F_p^{r+1} with n ≥ r+2, the shadow |Shadow_{p-1}(S)| satisfies some meaningful constraint.
+
+At weight 1, the shadow trivially contains all n vectors since they're nonzero and pairwise non-proportional by the ZSF property. But I need to show something stronger about the full shadow structure. The key insight is that the ZSF condition should impose constraints on which vectors can appear at different weights—specifically, if v appears in the shadow at weight w, then -v cannot simultaneously appear at weight p-1-w.
+
+The argument hinges on the coefficient structure: if v and -v both appeared with their respective weight bounds, we'd get a zero combination with coefficients in {0,...,p-1}, which would contradict the ZSF property. But the constraint needs to hold on individual coefficients, not just the total weight, which is where the argument gets tight. The condition that a_i + b_i ≤ p-1 for all i turns out to be quite restrictive—it's entirely possible for representations of v and -v to be incompatible in this way, using too many copies of the same vector. This approach isn't working out as cleanly as I'd hoped, so let me try a different angle.
+
+I'm considering a polynomial identity approach instead. I could construct a polynomial in variables x_1,...,x_n involving products over the rank and the constraint vectors, but I run into the problem that I can't take inverses in this setting. Let me look more carefully at how Reiher handled the Kemnitz problem for C_p^2—he used congruence conditions on the count of zero-sums to establish that s(C_p^2) = 4p-3, which translates to the Davenport constant. Maybe I can adapt that technique for higher rank.
+
+For the rank-2 case, I'd set up n = 4p-4 vectors and construct a polynomial as a product over the coordinate sums and the total sum, each raised to the (p-1)-th power. The degree works out to 3(p-1), which is less than the number of variables 4(p-1), so the Cauchy-Davenport-type congruence argument applies—the polynomial sum over all evaluations vanishes modulo p.
+
+Now for rank 4, I need to be more careful about what the polynomial should capture. I'm thinking of a product over all r+1 coordinate sums, each with the (p-1) exponent, plus the total sum, plus individual variable factors to enforce nonzero constraints.
+
+But when I work out the degree, I get (r+1)(p-1) + n(p-1), and for this to satisfy the Cauchy-Davenport weight condition, I'd need it to be less than n. That gives (r+1)(p-1) < n(2-p), which is impossible for p ≥ 3 since the right side goes negative.
+
+So the standard Cauchy-Weil approach with those x_i^{p-1} factors breaks down here. Reiher must have used a different technique in his proof.
+
+Actually, looking at how Reiher proved Kemnitz's conjecture, the approach is more clever. He works over binary vectors instead of the full field, and uses a copies pool where each vector appears p-1 times. The polynomial becomes a product of (1 - S_d^{p-1}) terms where S_d sums the coordinates, and now the degree is just (r+1)(p-1) with N = n(p-1) variables. The Cauchy-Davenport condition simplifies to r+1 < n, which is actually achievable—for r=3 I'd need n ≥ 5.
+
+With n = 18 this constraint is easily satisfied. But here's the subtlety: when degree is less than the number of variables, the sum of P over all binary assignments vanishes mod p, which means the number of nonempty zero-sum subsequences is ≡ p-1 (mod p). This guarantees zero-sum subsequences exist, though we already knew that from the Davenport constant. To pin down the weight bound, Reiher introduced a weight constraint that modifies the polynomial structure.
+
+The degree condition becomes (r+2)(p-1) < n(p-1), which simplifies to r+2 < n. For our parameters this holds, so the Cauchy-Davenport argument applies and forces the sum to vanish mod p. The key insight is that P(x) = 1 precisely when both the subsequence sum equals zero and the cardinality is divisible by p in F_p, and the polynomial construction ensures these conditions are linked through the vanishing factors. and the product over all four constraints equals 1 only when all S_d and W vanish modulo p, giving me a count of solutions to the system Mx ≡ 0, Σx_i ≡ 0 (mod p). Since x = 0 always satisfies this, I can subtract 1 to isolate the nontrivial solutions.
+
+The count of nontrivial solutions is congruent to p - 1 modulo p, which is nonzero, so a nontrivial zero-sum subsequence definitely exists. However, the Cauchy-Davenport approach only guarantees the weight is divisible by p, meaning it could be p, 2p, 3p, and so on—not necessarily exactly p. To pin down weight = p specifically, I'd need to add further constraints to the polynomial.
+
+Reiher's method was more refined, using the Combinatorial Nullstellensatz or a weighted version of Cauchy-Davenport to extract tighter bounds. Looking at this differently, the key congruence groups solutions by their integer weight: the count of trivial solutions plus those of weight p, 2p, 3p, etc., all sum to 0 modulo p. The polynomial evaluation counts solutions where the weight is divisible by p, but I need to separate out which weight class actually occurs. p), which means Σx_i ∈ {0, p, 2p, ...}. Since x ∈ {0,1}^N and N = n(p-1) = 18·4 = 72 at p=5:
+
+Σx_i ∈ {0, 5, 10, 15, 20, ..., 72}.
+
+The contributions at weight 0 is just x=0 (the trivial solution), contributing 1 to the count.
+
+So N_5 + N_{10} + N_{15} + ... ≡ -1 (mod p=5), giving N_5 + N_{10} + ... ≡ 4 (mod 5).
+
+This means at least one N_{kp} is nonzero, i.e., zero-sum subsequences of weight divisible by p exist.
+
+For a ZSF sequence, the Cauchy-Davenport congruence tells me that N_p ≡ -1 - N_{2p} - N_{3p} - ... (mod p). If I can bound the higher weight terms or determine their residue modulo p, I might be able to show N_p is nonzero. To get more constraints, I should look at higher-degree polynomial identities that could give me additional congruences. I'm realizing that when W ≡ 0 (mod p), the term W^{k(p-1)} becomes 0 for any k ≥ 1, which makes all the polynomials P_k vanish trivially—this approach isn't giving me useful information. I need to abandon the W^{k(p-1)} weighting and try a different modifier instead.
+
+Let me shift to using W^j for j ranging from 0 to p-2 as the weight factor. This gives me polynomials where the degree constraint is satisfied for all valid j values, and summing these polynomials over all solutions to the zero-sum condition yields a constraint on the weighted sum of W^j values.
+
+For each j, I'm getting a congruence modulo p: the sum of W^j over all zero-sum subsequences is divisible by p. When j = 0, this recovers the basic Cauchy-Davenport result about counting zero-sum subsequences. For higher j values, I'm tracking weighted sums based on the cardinality of each subsequence.
+
+Now I'm regrouping these sums by the value of W modulo p, so I can express the total as a sum over each possible weight w from 0 to p-1, multiplied by the count of zero-sum subsequences with that particular weight.
+
+This gives me a system of p-1 linear equations in the unknowns A_w (the counts for each weight class). The coefficient matrix is Vandermonde-like, with entries w^j for j = 0 to p-2 and w = 0 to p-1. Since I have p-1 equations and p unknowns, the system is underdetermined, but the Vandermonde structure means the rank is p-1, which constrains the solution space significantly.
+
+Now I'm realizing that by Fermat's Little Theorem, w^{p-1} ≡ 1 for nonzero w, so polynomial functions on F_p of degree at most p-1 span the entire space of functions. The orthogonality conditions I derived mean A_w must be orthogonal to all polynomials of degree ≤ p-2, which forces A_w to be proportional to w^{p-1} (or equivalently, the Kronecker delta at w = 0). ≠0}... wait, that's not right.
+
+Let me use the discrete Fourier transform on F_p. The monomials w^0, w^1, ..., w^{p-1} span all functions F_p → F_p. But w^{p-1} = δ_{w≠0} (the function that's 1 for w≠0, 0 for w=0) by Fermat's little theorem.
+
+The equations Σ w^j A_w = 0 for j=0,...,p-2 mean A is orthogonal to all of w^0,...,w^{p-2}. Since w^0,...,w^{p-1} form a basis, A must be proportional to the dual basis element corresponding to w^{p-1}.
+
+So A is orthogonal to the span of 1, w, ..., w^{p-2} under the inner product ⟨f, g⟩ = Σ_w f(w)g(w). The only remaining direction is w^{p-1} = δ_{w≠0}, which means A must be a scalar multiple of this indicator function.
+
+But wait, I need to check this modulo p. The constraint A_0 = 0 contradicts the fact that x=0 is always a solution to Mx ≡ 0 (mod p) with Σx_i ≡ 0 (mod p). Let me reconsider whether these are congruences modulo p or exact equalities.
+
+Actually, looking at the total count: A_0 + A_1 + ... + A_{p-1} equals 2^N, and applying the character sum argument gives (p-1)c ≡ 0 (mod p). Since p-1 ≡ -1 (mod p), this forces c ≡ 0 (mod p), meaning all A_w are divisible by p.
+
+So every weight class has a count divisible by p—a standard consequence of the character sum method. But this doesn't directly help with the weight constraint. The real issue is that character sums work over F_p, so I need a different approach to separate by actual integer weights rather than residues modulo p.
+
+Grynkiewicz's weighted version of the character sum method might be the key here. His 2023 result gives congruences specifically on N_{jq+α}, which counts zero-sum subsequences by their actual integer weight, not just weight mod p. The proposition involves a sum over j with binomial coefficients and a modulus of p^{m+1}, which could give me the finer control I need.
+
+For my setup with G = C_p^4, the sequence pool of size 17(p-1), and the Davenport constant D*(G) = 4p-3, I can check when the required length condition is satisfied. For m = 0, this gives me t ≤ 17 - 13/p, which means for large p I can handle up to 16 different weight classes simultaneously.
+
+Now I'm working through the congruence conditions that arise when m = 0. This gives me t independent congruences modulo p, where each one involves a sum over binomial coefficients weighted by the counts of zero-sum subsequences at different lengths. The key insight is that these congruences separate by residue class modulo p—so the counts of zero-sum subsequences of length jp+α for different values of j are related through these modular equations, with each residue class α = 0, 1, ..., p-1 giving its own system of constraints. i=0: Σ_j (p-1)^{jp} N_{jp} ≡ 0 (mod p)
+i=1: Σ_j (p-1)^{jp} · j · N_{jp} ≡ 0 (mod p)
+...
+i=t-1: Σ_j (p-1)^{jp} · C(j, t-1) · N_{jp} ≡ 0 (mod p)
+
+Since p-1 ≡ -1 (mod p), I have (p-1)^{jp} ≡ (-1)^{jp}. For odd p, this simplifies to (-1)^j depending on whether j is even or odd. So the congruences reduce to alternating sums like N_0 - N_p + N_{2p} - ...
+
+Using N_0 = 1 and the fact that N_w vanishes for w > 17(p-1), I get N_p - N_{2p} + N_{3p} - ... ≡ 1 (mod p). For p=5 with weights up to 68, this becomes N_5 - N_{10} + N_{15} - ... ≡ 1 (mod 5), which constrains N_p modulo p.
+
+Now I'm exploring whether the alternating sum N_{2p} - N_{3p} + ... vanishes modulo p, which would immediately give N_p ≡ 1 (mod p). I'm setting up weighted alternating sums: the first one gives -N_p + 2N_{2p} - 3N_{3p} + ... ≡ 0 (mod p), and I'm computing higher-order versions to extract more constraints on the individual terms.
+
+Let me introduce M_j = N_{jp} to simplify notation, with M_0 = 1, and organize these congruences into a system to solve for the unknowns.
+
+Now I'm setting up the constraint equations—for each index i, I get a linear congruence modulo p involving binomial coefficients and the M_j values. The maximum value of j is bounded by the total weight N = 17(p-1), so for p=5 I'm working with j up to 13.
+
+This gives me 13 unknowns (M_1 through M_13, since M_0 = 1 is fixed) but potentially 14 or more congruence equations depending on how many valid indices i I can use. The system appears to be overdetermined, which means I need to check whether these equations are actually independent or if some are redundant.
+
+Let me examine the coefficient matrix more carefully—specifically whether the 13×13 submatrix formed by the first 13 rows is invertible over F_5, which would tell me if the system has a solution at all. matrix [(-1)^j C(j,i)]_{i=0,...,12, j=1,...,13}. Let's check the determinant.
+
+Hmm, C(j,i) for j ≥ i is a polynomial in j of degree i. The matrix is triangular-ish: C(j,i) = 0 for j < i. So the submatrix for i=0,...,12, j=1,...,13:
+- Column j=1: C(1,0)(-1)^1, C(1,1)(-1)^1, 0, 0, ..., 0 = -1, -1, 0, ...
+- Column j=2: C(2,0)(-1)^2, C(2,1)(-1)^2, C(2,2)(-1)^2, 0, ... = 1, 2, 1, 0, ...
+- Column j=k: (-1)^k C(k,0), (-1)^k C(k,1), ..., (-1)^k C(k,k), 0, ..., 0
+
+The matrix has an upper triangular structure where entries are nonzero only when j ≥ i. For the 13×13 submatrix with i=0,...,12 and j=1,...,13, I need to figure out when the determinant is nonzero. I'm realizing the indexing is tricky here—the columns start at j=1, not j=0, so for row i, the first nonzero entry appears at column j=i with value (-1)^i, except row 0 needs special handling since j=0 isn't actually a column in the matrix. The diagonal entries are (-1)^i, so the determinant of the 13×13 submatrix is the product of these diagonals, which equals (-1)^78 = 1, confirming it's nonsingular. But wait—I need to reconsider the structure. Looking at the actual entries, this matrix is upper-triangular, not lower-triangular as I initially thought.
+
+Row i has entries (-1)^j C(j,i) for j from 1 to 13, and since C(j,i) = 0 whenever j < i, each row starts with zeros up to the diagonal position. This means row 0 is all nonzero, row 1 has its first nonzero entry at column 1, row 2 starts at column 2, and so on—giving us an upper-triangular structure where the diagonal entries are all nonzero.
+
+Let me reindex the columns as c = j-1 (ranging from 0 to 12) so that entry (i,c) = (-1)^{c+1} C(c+1, i), which is nonzero exactly when c+1 ≥ i. This clarifies that the matrix is upper-triangular with the diagonal shifted one position to the right. The matrix has a lower-Hessenberg structure with the first two rows fully dense, so I should verify it's nonsingular over F_5. But for the actual proof, the key point is that we have 14 congruences constraining 13 unknowns—an overdetermined system. The critical question is whether the 14th congruence is independent of the first 13, which would make the system inconsistent when M_1 = 0.
+
+Let me work through a direct computation at p=5, n=17 to test this. The system consists of 14 equations where for each i from 0 to 13, a linear combination of the M_j values (weighted by binomial coefficients and alternating signs) must satisfy a specific congruence modulo 5. The first equation simplifies nicely since the binomial coefficient C(0,i) equals 1 only when i=0, giving me a direct constraint on the alternating sum of all M_j values.
+
+Now I'm expanding out what these equations look like explicitly—the i=0 case gives an alternating sum, the i=1 case involves coefficients 1,2,3,...,13, and higher cases involve binomial coefficients that grow and then reduce modulo 5. Let me explore what happens if M_1 = 0, meaning there are no weight-p zeros...
+
+The system becomes underdetermined, and since the N_{kp} values are exponentially large, there should be plenty of nonnegative integer solutions even if the modular constraints don't uniquely determine the M_i. The congruences alone don't seem tight enough to force N_p > 0 unless something else constrains the system more severely.
+
+Let me approach this from a different angle—I'll try to isolate N_p directly using the alternating sum structure. Comparing the i=0 and i=1 congruences and subtracting them gives me a new relation that should help pin down what M_2 actually equals modulo p. M_3 - 4M_4 ≡ 1 (mod p).
+
+I'm seeing a clear pattern emerge from these eliminations. Let me track what's happening systematically by looking at the original equations and how they combine—it seems like each step is isolating individual M_k terms with coefficient 1, giving me M_k ≡ 1 (mod p) for each k. I'm introducing cleaner notation with F_k to represent these constraint equations, where F_k equals zero for all k ≥ 2, and the first two also vanish modulo p. This F_k is actually the k-th finite difference of the sequence M_j evaluated at zero, which connects to the backward difference operator.
+
+Now I'm working with generating functions to express this more elegantly—if M(x) is the generating function for the M_j sequence, then F_k can be extracted as the coefficient of y^k in M(-(1+y)), which gives me a cleaner way to handle these constraints. I'm going in circles here. Let me step back and try extracting N_p directly from the congruence conditions. Setting α = 0 gives me a system of equations over F_p: the alternating sum of M coefficients equals zero, then the weighted alternating sum, and so on for each k up to t-1. From the first equation I can express M_1 in terms of the higher coefficients.
+
+Now I need to see if the remaining equations can pin down that tail sum T = M_2 - M_3 + M_4 - ... so that M_1 becomes fully determined. Let me look at what E(0) and E(1) actually give me separately: one is the plain alternating sum of all M_j, the other weights each term by j before alternating. So that gives me zero mod p, which means the sum Σ_{j≥2} (-1)^j (j-1) M_j ≡ 1 (mod p). Now looking at E(2), I can express it in terms of binomial coefficients and get another constraint. I have two equations now—one from the difference and one from E(2)—so I'm going to try combining them by multiplying the first by j/2 and subtracting to eliminate variables.
+
+Actually, this algebraic approach is getting unwieldy. Let me just compute a concrete example at p=5 where n=17, N=68, and j_max=13. I'll set up the system of equations for M_1 through M_13 modulo 5, using Lucas' theorem to handle the binomial coefficients. But even that's quite computational. What I really need to understand is what the generating function M(z) = Σ_j M_j z^j represents—it's tracking zero-sum counts weighted by multiples of p. The key insight from the copies pool model is that when we evaluate M(z) at z = -(1+y), we should get something that reveals the structure of the problem.
+
+Setting z = -1 gives us M(-1) = Σ (-1)^j M_j, which must be divisible by p. This alternating sum condition, combined with the total count M(1), constrains the M_j values. But maybe I should explore what happens when I consider α ≠ 0 and look at the shifted generating functions M^{(α)}_j for the counts N_{jp+α}.
+
+Since there are no nontrivial zero-sums of weight less than p in a ZSF, we have N_α = 0 for α = 1,...,p-1. This means the congruences simplify to an alternating sum starting from N_{p+α}, giving us -N_{p+α} + N_{2p+α} - N_{3p+α} + ... ≡ 0 (mod p).
+
+These equations tell us about zero-sums at higher weights, but they don't directly constrain N_p itself. So let me step back and formulate a precise theorem I can actually prove, then identify what gaps remain.
+
+I'm stating the main result: for a ZSF set of the right size with the (1,...,1) condition, N_p satisfies a congruence modulo p that relates it to the alternating sum of higher-weight counts. The key insight is that N_p ≡ 1 (mod p) precisely when this alternating tail vanishes. The proof applies the CW method to a specific polynomial constructed from the vector set, using its degree to extract the coefficient we need.
+
+Wait, I'm realizing the polynomial I described doesn't include the weight constraint, so it's counting all zero-sum subsequences rather than just those of weight p. I need to reconsider the construction—the polynomial should incorporate both the zero-sum and weight constraints simultaneously. Now I'm incorporating the weight constraint into the polynomial, which adds another factor that's 1 only when both the linear system and weight sum to zero mod p. This gives me a congruence for subsequences with weight divisible by p, showing that the count of such subsequences is p-1 mod p. To extract the alternating sum, I need to modify the approach with sign changes. I need Grynkiewicz's weighted version.
+
+Actually wait, the Grynkiewicz congruence at i=0, α=0 gives the alternating sum:
+Σ (-1)^j (p-1)^{jp} M_j ≡ 0 (mod p).
+
+Since (p-1)^{jp} ≡ (-1)^j (mod p), the signs cancel and I get Σ M_j ≡ 0, which is just the Cauchy-Davenport count.
+
+Let me look at the Grynkiewicz result more carefully. The formula involves (p-1)^{jq+α} where q = p, so I'm looking at (p-1)^{jp+α} = (p-1)^α · ((p-1)^p)^j. Since (p-1)^p ≡ -1 (mod p) for odd p, the factor becomes (p-1)^α · (-1)^j.
+
+At α=0, i=0, the congruence becomes the alternating sum M_0 - M_1 + M_2 - ... ≡ 0 (mod p), which with M_0 = 1 gives me N_p ≡ 1 + N_{2p} - N_{3p} + ... (mod p).
+
+Now looking at α=0, i=1, I get another congruence from the weighted sum -M_1 + 2M_2 - 3M_3 + ... ≡ 0 (mod p), which expresses M_1 in terms of higher moments. Combining these two constraints, I can eliminate M_1 and derive a relation involving the alternating sum of higher moments starting from j=2.
+
+Moving to i=2, I have a similar constraint from binomial coefficients C(j,2), giving me another equation involving the moments. By strategically adding or combining these equations, I can eliminate M_2 and continue building a system of relations among the moments. I'm working through the pattern by computing successive steps—subtracting each equation from the previous one to isolate higher-order terms. At Step 2, I need to carefully combine the equations to see what constraint emerges on M_3, M_4, and beyond. Subtracting Step 2 from E(3) gives me a cleaner relation: -M_4 + 4M_5 - 10M_6 + ... ≡ 1 (mod p). I'm noticing a recursive pattern emerging—at each step k, I get a similar binomial coefficient structure with the sum always equaling 1 modulo p. Let me verify this pattern holds more generally. I'm noticing a sign discrepancy—the alternating sum at step 1 should give -1 (mod p), not 1, which means I need to recalculate from the base case to make sure I'm tracking the signs correctly. Now I'm combining Step 1 with E(2) to derive Step 2, which gives me -M_3 + 3M_4 - 6M_5 + ... ≡ -1 (mod p), and I'm starting to add E(3) to continue the pattern, though I need to recalculate the coefficients for E(3) first. C(3,3)M_3 + C(4,3)M_4 - C(5,3)M_5 + ...
+= -M_3 + 4M_4 - 10M_5 + 20M_6 - ...
+
+Step 2 - E(3): (-M_3 + 3M_4 - 6M_5 + ...) - (-M_3 + 4M_4 - 10M_5 + ...)
+= (3-4)M_4 + (-6+10)M_5 + ... = -M_4 + 4M_5 - ...
+= -1 - 0 = -1.
+
+Step 3: -M_4 + 4M_5 - 10M_6 + ... ≡ -1 (mod p).
+
+I'm noticing a pattern emerging here: for each step k ≥ 1, the alternating sum with binomial coefficients gives -1 modulo p. Let me refine this pattern more carefully by checking whether it should actually be (-1)^k instead, looking at the k=0 case where the alternating sum M_1 - M_2 + M_3 - ... should equal 1. At k=1, multiplying the earlier result by -1 gives M_2 - 2M_3 + 3M_4 - ... = 1, which matches the binomial coefficient pattern. Now checking k=2: the previous step showed -M_3 + 3M_4 - 6M_5 + ... = -1, so multiplying by -1 gives M_3 - 3M_4 + 6M_5 - ... = 1, confirming the pattern holds. Σ_{j≥3} (-1)^{j-3} C(j-1,2) M_j = C(2,2)M_3 - C(3,2)M_4 + C(4,2)M_5 - ...
+= M_3 - 3M_4 + 6M_5 - ... = 1. ✓
+
+At k=3: Step 3 gave -M_4 + 4M_5 - 10M_6 + ... = -1.
+M_4 - 4M_5 + 10M_6 - ... = 1.
+Σ_{j≥4} (-1)^{j-4} C(j-1,3) M_j = C(3,3)M_4 - C(4,3)M_5 + C(5,3)M_6 - ...
+= M_4 - 4M_5 + 10M_6 - ... = 1. ✓
+
+I'm seeing a consistent pattern emerge: for each k from 0 to t-2, the alternating sum with binomial coefficients equals 1 modulo p. This is a remarkably elegant identity. Now I need to use this to isolate M_1 = N_p, starting with the k=0 case where M_1 - M_2 + M_3 - ... ≡ 1, which means I need to determine what M_2 - M_3 + ... equals to extract M_1. I'm realizing that each identity in this tower constrains the M_j values, but I need to push further to isolate M_1. When k reaches 12, the sum should collapse down to just a single term, which would give me the direct constraint I need to solve for M_1 modulo p. 1 + 12 = 13 ≡ 3 (mod 5).
+
+At k = 10:
+M_{11} - 11M_{12} + 66M_{13} ≡ 1 (mod 5).
+M_{11} ≡ 1 + 11·3 - 66·1 = -32 ≡ 3 (mod 5).
+
+I can recursively compute all M_j mod 5 working backwards from M_{13} ≡ 1.
+
+Continuing down: M_{12} ≡ 3, M_{11} ≡ 3, and then M_{10} ≡ 1 + 10·3 - 55·3 + 220·1 ≡ 1 (mod 5). Now I'm working through M_9 with the same recurrence pattern.
+
+Computing M_9 gives me 1 + 9 - 135 + 495 - 495 = -125, which is 0 mod 5. Moving on to M_8 using the same approach with the binomial coefficients. Continuing the calculation for k = 6, I get 1 + 14 + 0 + 84 - 630 + 1386 - 924 = 1 (mod 5). Now moving to k = 5 to find M_6 using the same recurrence pattern with binomial coefficients. + 756 - 1386 + 792 = 1 ≡ 1 (mod 5).
+
+Wait, 1 + 6 = 7, 7 - 42 = -35, -35 + 0 = -35, -35 - 126 = -161, -161 + 756 = 595, 595 - 1386 = -791, -791 + 792 = 1. So M_6 ≡ 1 (mod 5).
+
+For k = 4, I'm computing M_5 using the recurrence with binomial coefficients and the previously calculated values, which gives me 52 ≡ 2 (mod 5). Now moving to k = 3 to find M_4 using a similar approach with the appropriate binomial coefficients. Now I'm working through the k=2 case, substituting the known Motzkin numbers into the recurrence relation and computing the sum modulo 5, which gives me 26 ≡ 1 (mod 5). Moving on to k=1 to find M_2. Now I'm working through the alternating sum with the actual Motzkin numbers, carefully adding and subtracting each term to verify the result comes out to 3 modulo 5.
+
+Once I confirm that value, I need to check whether the system of 14 equations in 13 unknowns actually determines all the M_j values uniquely modulo 5 through back-substitution. M_{13} = N_{65}, and I need to verify whether this can be nonzero. Since we're working with a pool of 68 copies total, achieving a zero-sum of weight 65 just means leaving 3 copies unused, which is definitely feasible.
+
+============================================================
+BLOCK 5 (49342 chars)
+============================================================
+Let me analyze what I've gathered from Cortex and the briefing, and formulate a new theoretical contribution. Let me focus on the most promising angle: the Shadow Saturation approach via the CW equidistribution + ZSF asymmetry.
+
+The key insight from the Adversary proof chain is:
+
+1. **One-Fiber Impossibility**: (1,...,1) ∉ row_span of any 17-element ZSF subset. This means the weight form L(s) = Σs_i is non-constant on solution spaces.
+
+2. **CW Equidistribution**: Each weight class mod p has exactly p^{n-r-2} solutions in F_p^n.
+
+
+3. **Shadow Saturation (OPEN)**: The critical gap is whether solutions with Σs_i ≡ w (mod p) for non-zero w must contain at least one with integer sum bounded by p-1. I'm reconsidering the shadow construction—looking at what linear combinations of basis vectors with bounded coefficients can actually achieve, and whether the modular constraint forces an integer solution into a lower weight class. Shadow_{p-1}(S) = F_p^{r+1} \ {0} for ZSF S with |S| = 2α(r)+1.
+
+Let me think about a new angle that hasn't been tried.
+
+**The Copies Pool Perspective.** 
+
+Consider the multiset where each vector v_i appears with multiplicity p-1, giving n(p-1) total elements where n = 2α(r)+1 = 17. The shadow at weight w consists of all elements representable as sums of at most w elements from this pool, where each v_i can be used at most p-1 times.
+
+This is equivalent to looking at all subsequence sums of length at most w from the copies pool. Now I'm connecting this to the Davenport constant D(C_p^{r+1}) = (r+1)(p-1)+1, which guarantees that any sequence of length at least this value contains a nonempty zero-sum subsequence. For r=3, this gives 4(p-1)+1, and since our pool has size 17(p-1), I need to examine whether this relationship constrains what elements can appear in the shadow.
+
+Actually, let me reconsider the problem from a representation-theoretic angle using character sums. I'm looking at how many ways each element v ∈ F_p^{r+1} can be represented as a linear combination of the basis vectors with coefficients in the allowed range, using Fourier analysis over the group to count representations.
+
+When t = 0, I get the trivial contribution. For nonzero t, the product over all basis vectors only survives when the inner product <t, v_i> vanishes for each i—otherwise those terms contribute zero to the sum. But I'm realizing my logic here is flipped.
+
+Actually, since the vectors span the full space, no nonzero t can be orthogonal to all of them, so the product always collapses to zero for t ≠ 0.
+
+By Cauchy-Weil equidistribution, every vector v gets exactly p^{n-r-1} representations when coefficients range over {0,...,p-1}. But I need to filter these down to only the representations where the weight—the sum of all coefficients—stays at most p-1, which is a much tighter constraint than the full range of 0 to 68.
+
+The weight distribution modulo p turns out to be uniform: each residue class w mod p contains exactly p^{n-r-2} solutions. For the shadow at weight p-1, I need at least one solution where the actual integer weight (not just mod p) falls in {1,2,...,p-1}, and I'm now analyzing which residue classes w can contribute solutions in that range. 0, and weight 0 means all c_i = 0). So for target 0, all p^{n-r-2} solutions with weight ≡ 0 have integer weight ≥ p.
+
+Now here's the key asymmetry. For target 0, all low-weight solutions are absent. For target v ≠ 0, we want to show that low-weight solutions must exist.
+
+Let me think about this more carefully. For a fixed target v, the solutions form an affine subspace of dimension n - r - 1. I need to recount the dimensions here—we have 17 variables and 4 constraints from matching the target coordinates, so the dimension should be 13.
+
+Adding the weight constraint Σ s_i ≡ w (mod p) gives an additional independent constraint, dropping the dimension to 12 and yielding p^{12} solutions. For target 0 with weight ≡ 0, all these solutions have integer weight at least p. For any nonzero target v with weight w ∈ {1,...,p-1}, we also get p^{12} solutions.
+
+The integer weights follow the pattern w, w+p, w+2p, ..., up to w+kp where w+kp ≤ 17(p-1). The key question is whether all p^{12} solutions could have integer weight at least w+p, which would mean total weight is at least p^{12}(p+1). To resolve this, I need to compute the average weight across all solutions in the affine variety.
+
+For a random solution in V_v, I can use the fact that V_v is an affine subspace s_0 + W, where s_0 is a particular solution and W is the kernel of the constraint matrix. The average of any linear functional over V_v equals its value on s_0 plus the average over the kernel. For the sum Σ s_i, I need to find the average of this sum restricted to the kernel W.
+
+Since W is a 13-dimensional subspace of F_p^{17} and the all-ones vector isn't in the row span of the constraint matrix (which follows from the one-fiber impossibility), the sum function is a nonzero linear functional on W. This means it maps W onto all of F_p with equal frequency, so its average over W is 0 in F_p. Therefore, the average of Σ s_i over V_v in F_p is just the value at s_0.
+
+But for the integer average—treating the solutions as elements of {0,...,p-1}^{17}—the expected sum is n(p-1)/2, which aligns with the equidistribution principle.
+
+Now I need to reconsider what happens for the affine subspace V_v specifically. The constraint breaks the symmetry, so the average weight isn't simply 17(p-1)/2. Instead, I should compare the weight distributions between the zero target and a nonzero target v by looking at the moments of the weight function across these solution sets.
+
+Let me approach this more systematically using generating functions. For each target v, I can define a generating function that tracks the weight distribution of solutions, then evaluate it at roots of unity to extract information about which weights actually appear.
+
+When I evaluate at primitive pth roots of unity, the equidistribution property tells me that all weight residue classes modulo p appear equally often among the p^{12} solutions. This means the generating function at ω^j collapses to p^{13} when j = 0 and vanishes otherwise—a strong constraint that should force the existence of low-weight solutions.
+
+Now I'm setting up the polynomial F_v(x) = Σ a_k(v) x^k where the coefficient a_k(v) counts solutions with a specific weight k. For the zero-sum-free target, the trivial solution gives a_0(0) = 1, and the ZSF property guarantees no nontrivial solutions exist at any weight up to p-1, so all those coefficients vanish.
+
+For any nonzero target v, the zero vector can't contribute, so a_0(v) = 0. The key insight is to factor out the known roots from F_v—since ω^1,...,ω^{p-1} are all roots, I can write F_v as a product of these linear factors times a remaining polynomial G_v, which will help me analyze the structure of the coefficients at small weights. Now I'm working through the coefficients of G_v by using the constraint that a_k(0) follows a specific pattern. From a_0(0) = 1, I get g_0(0) = 1, and then each subsequent coefficient g_m(0) can be determined recursively from the relation a_k = g_k + g_{k-1} + ... + g_{k-p+1}. So all the remaining coefficients vanish: g_3 through g_{p-1} are zero. When k = p, I get a_p = g_p - 1, which means g_p is determined by a_p plus one. The zero-sum-free condition essentially locks in the first p coefficients of G_0. Now switching to the case where the target v is nonzero—there's no way to map all c_i = 0 to a nonzero value, so a_0(v) = 0 and consequently g_0(v) = 0, and I'm working through what happens with a_1(v).
+
+This recursive structure is getting unwieldy, so I'm pivoting to a different strategy using inclusion-exclusion to establish a lower bound on the shadow size.
+
+I'm defining S_k as the shadow at weight k—all possible weighted sums with coefficients in {0,...,p-1} and total weight between 1 and k. At maximum weight n(p-1), the shadow covers everything except 0 by the zero-sum-free property, so S_{n(p-1)} = F_p^{r+1} \ {0}. The key insight is that I want to show the shadow already reaches the full space at weight p-1, not just at the maximum. To track this, I'm counting T_k as the number of nonzero elements in S_k, knowing that T_{n(p-1)} = p^{r+1} - 1.
+
+The computational evidence for p=5 shows T_1 through T_4 growing until hitting p^{r+1} - 1 at weight p-1, confirming the pattern. Now I'm trying to establish a general lower bound on T_{p-1} using double counting: I'll count the total number of representations R_k—how many ways elements of F_p^{r+1} can be expressed as weighted sums with weight exactly k—which equals the number of compositions of k into n parts from {0,...,p-1}.
+
+For k ≤ p-1, since no part can exceed p-1 anyway, the constraint is automatically satisfied, so R_k = C(n-1+k, k).
+
+Now I need to account for the fact that these counts include the zero target. For k ≥ 1, the zero vector contributes nothing to the ZSF, so the sum of a_k(v) over all nonzero v equals R_k. When k = 1, I get R_1 = n = 17, which are just the basis vectors themselves. For k = 2, R_2 = C(18, 2) = 153.
+
+Continuing this pattern through k = 4, I have R_4 = C(20, 4) = 4845. Adding up all representations with weight at most p-1 gives me 17 + 153 + 969 + 4845 = 5984 total representations across at most 624 nonzero targets, averaging about 9.6 representations per target. But this average doesn't guarantee every target gets hit—I need to establish that the minimum is at least 1, which requires a different approach...
+
+Now I'm applying the Croot-Winterhof equidistribution result. For any nonzero v and weight class w modulo p, there are exactly p^{12} solutions where the sum equals v and the weight is congruent to w mod p. Within that p^{12}, the solutions distribute across different integer weights w, w+p, w+2p, and so on. The count of solutions with weight exactly w is a_w(v), which is bounded above by p^{12}, but this upper bound alone doesn't help me prove coverage.
+
+I need to find a lower bound on a_w(v) instead. The zero-sum-free constraint on target 0 is interesting—it forces all solutions with weight congruent to w modulo p to have weight at least p, which means the p^{12} solutions must spread across weights p, 2p, 3p, etc. But this constraint is specific to target 0 and doesn't directly propagate to other targets v, since each target has its own independent solution set.
+
+However, I can use a global counting argument: summing a_k(v) across all targets and all weights k = 1,...,p-1 gives me the total number of shadow representations, which equals the sum of all R_k values. Since a_k(0) = 0 for these weights, all of this total must come from targets v ≠ 0. This means the average number of shadow representations per nonzero target is positive, and I should be able to show that every target v has at least one shadow representation at low weight.
+
+The challenge is that proving this directly requires either a strong upper bound on the maximum number of representations (which seems difficult), or showing the variance is small enough to guarantee no target falls below the average. Let me instead look at the Dias da Silva-Hamidoune theorem, which gives bounds on sumset sizes in Z_p based on the cardinality of the original set.
+
+The theorem states that for a set A in Z_p with |A| = k, the number of distinct sums of t elements grows at least as min(p, t(k-t)+1). However, this applies to rank-1 structures, and our vectors live in F_p^4, so the multidimensional version would give weaker bounds.
+
+I should try a more direct approach that leverages the zero-sum-free condition itself. Let me consider partitioning the set S based on the ZSF property and see if I can build a contradiction or establish the required lower bound more constructively.
+
+The key observation is that ZSF forces the shadow to expand faster than it would for arbitrary sets, since any "capacity" that would normally be consumed reaching the zero element gets redirected toward nonzero targets instead. To formalize this, I'm setting up a polynomial framework where I track weighted sums systematically.
+
+But this is getting unwieldy—let me step back and focus on what's actually provable right now. The Adversary proof chain has three components, and the bottleneck is Step 3 on shadow saturation, which depends on establishing that the shadow reaches all nonzero points when the set has the ZSF property.
+
+The key claim is that among all the solutions satisfying the modular constraint, at least one must have integer weight exactly w rather than w plus some multiple of p. I need to figure out when this could actually fail and what that would tell us about the structure of the solution set.
+
+Now I'm checking whether the condition n ≥ p is sufficient to guarantee a solution with small integer weight. For n = 17, this works when p ≤ 17, but breaks down for larger primes like p = 101 where we have far fewer variables than the prime. In those cases, I'm looking at a different regime where the pool of available elements is much larger relative to the constraints. Looking at the number of four-subsets and their sums, I'm getting around 2380 distinct values, which falls short of covering all p^4 - 1 elements. For larger p, the weight constraint p-1 lets me use all 17 vectors with varying coefficients, and the number of ways to distribute this weight follows a combinatorial pattern—roughly C(16+k, k) representations at each weight k, which grows significantly as p increases.
+
+This means the average number of representations per target is enormous for p ≥ 5, suggesting that even though the average is huge, I need to ensure every target gets at least one representation. A probabilistic or second moment argument seems like the right approach here. Let me try to set up a formal lemma using the second moment method to establish a lower bound on the shadow set. I'm working through the Cauchy-Schwarz inequality to bound the shadow set size, computing the numerator as the square of total representations and the denominator by counting pairs of representations that collide under the same linear functional. Now I'm working out the exact collision count by introducing difference vectors d_i = s_i - s'_i, which must satisfy both the orthogonality constraint and sum to zero modulo p. The key insight is that once I fix d with these properties, counting the valid pairs (s,s') reduces to counting sequences s with a specific sum constraint.
+
+Let me step back though—I should focus on what would actually move this proof forward. The adversary reduction chain hinges on shadow saturation, which I've verified for small primes but the real challenge is handling large p, especially when p ≥ 2r or beyond the range where the parity and Ball theorems apply.
+
+Looking at what's actually been established: the Cortex notes claim comprehensive coverage up to p=13 across all ranks, and r=4 is apparently fully resolved. So the actual frontier is r=3 with larger primes, starting around p=18. But I need to double-check the exact boundary—whether the base cases are settled and where the inductive gaps actually are. I'm noticing a direct contradiction in the entries—one claims the k=4 parity theorem is definitively wrong, while another asserts it's been proved. Let me trace through what's actually being claimed here to figure out which assessment is correct. So r=2 is settled for all primes at least 5, but r=3 remains open in the general case—though I've verified it works at p=5. The real bottleneck is understanding shadow saturation in step 3 of the adversary chain. Let me try a different angle: I can model the solution set as an affine subspace of dimension 12 over F_p, then lift it to integer points in a polytope to get better control over the structure.
+
+The key insight is that when I view these solutions as discrete points in {0,...,p-1}^n, I need to find one whose integer weight—the sum of p-adic valuations—lands exactly in the range {1,...,p-1} rather than higher multiples. If I can show the minimum integer weight achievable on this affine subspace is bounded by p-1, the proof goes through. viewed as integers in {0,...,p-1}) over the affine subspace.
+
+But since we're working over F_p, the "integer weight" is not a linear function over F_p. It's val(s_1) + ... + val(s_n) where val: F_p → {0,...,p-1}. This is not F_p-linear.
+
+However, val(s) = s mod p (taking the representative in {0,...,p-1}). So Σ val(s_i) = Σ (s_i mod p). Over F_p, Σ s_i = w, but the integer sum could be w, w+p, w+2p, ..., up to w + (n-1)p.
+
+So I need to think about this in terms of a wrap count. For each element s_i ∈ F_p, I take its natural representative val(s_i) ∈ {0,...,p-1}, and the integer weight W(s) is just the sum of these representatives. Since W(s) ≡ w (mod p), I can write W(s) = w + kp for some k ≥ 0, where k is the wrap count measuring how many times the sum "wraps around" p. When W ≤ p-1, there's no wrapping and k = 0, but for larger weights the wrap count increases.
+
+The key insight is that I want to find a solution with k = 0, meaning the integer weight equals w exactly. The maximum possible wrap count is roughly n - 1 - w/p. Now I can formulate this as an integer programming problem: find s ∈ {0,...,p-1}^n satisfying the four matrix equations modulo p, the weight equation modulo p, and the crucial inequality that the integer sum stays below p, which forces k = 0. This becomes a feasibility problem with n-5 degrees of freedom.
+
+With 12 free parameters available, the solution lattice is quite dense, so it seems implausible that every lattice point would violate the integer inequality. My strategy is to assume the opposite—that some target v and weight w admit no low-weight solution—and derive a contradiction using the ZSF condition. If every solution to the modular equations with weight w has integer weight at least w + p, then all that extra weight must come from specific components, which should lead to a contradiction. With 17 components and each value capped at p-1, the average needs to be just (p+1)/17, which is barely restrictive—for p=5 that's only about 0.35. Most random solutions would naturally have much higher weight around 34, so the constraint W ≥ p+1 isn't really the limiting factor. The real question is whether I can construct a minimum-weight solution that stays below p-1, and with 12 degrees of freedom available, it seems plausible but I need to verify this more rigorously rather than just assuming it's possible.
+
+Let me pivot to exploring the zero-sum-free asymmetry between targeting 0 versus targeting some other vector v. I'm formalizing a theorem attempt around this asymmetry: if S is zero-sum-free with enough elements and the all-ones vector isn't in the row space of the matrix formed by S, then for any target vector v and any weight w in the valid range, I should be able to find a subset with that specific weight summing to v.
+
+The proof strategy hinges on analyzing the affine subspace of solutions to Ms = v, and using the fact that the linear form tracking the sum of coefficients is surjective on this subspace. This gives me an affine subspace of dimension n-r-2 for each weight constraint, which should be non-empty and allow me to extract integer solutions with the desired properties.
+
+Now I'm parameterizing this solution space as a translate of a linear subspace, and examining how the p-adic valuations of the coordinates vary as I move through the subspace. The key observation is that the sum of valuations can be expressed modulo p in terms of the weight parameter and the linear form applied to the subspace direction.
+
+For the zero vector case, the valuation sum is zero, but for non-zero weights, I need to verify whether the zero-sum-free property actually forces the minimum excess to be positive, or if there's a subtlety in how the constraint applies to this particular setup. The ZSF constraint on target 0 forces k ≥ 1 for all nonzero elements in those spaces, but I'm struggling to leverage this for target v ≠ 0 because combining solutions from different targets doesn't preserve the weight structure—the integer valuation function isn't linear under addition in F_p. Let me shift to a direct counting approach instead, looking at how many elements in V_{v,w} actually achieve weight exactly w. I'm realizing this is really about counting the ways to select w vectors (with repetition allowed) from the set {v_1,...,v_n} such that they sum to v in F_p—essentially distributing w items across n bins where each bin i contributes v_i to the total, and I need the generating function coefficient of x^v in the w-fold convolution of (x^{v_1} + x^{v_2} + ... + x^{v_n}).
+
+So a_w(v) counts tuples (c_1,...,c_n) of nonnegative integers where the c_i sum to w and their weighted sum Σ c_i v_i equals v modulo p. This is a linear constraint problem, and I can use character sums over F_p^{r+1} to count solutions—the formula involves summing over all characters and using orthogonality to isolate the solutions satisfying the congruence condition. ω^{<t,v>} Σ_{c ∈ Z_≥0^n, Σc_i=w} Π_i ω^{-c_i<t,v_i>}
+
+= p^{-(r+1)} Σ_t ω^{<t,v>} · [coefficient of z^w in Π_i (1/(1-ω^{-<t,v_i>}z))] for |z| < 1
+
+Wait, this is the generating function for the number of compositions with prescribed sum mod p.
+
+The inner sum: Σ_{c ∈ Z_≥0^n, Σc_i=w} Π_i ω^{-c_i<t,v_i>} = [z^w] Π_i 1/(1 - ω^{-<t,v_i>} z).
+
+Now I'm extracting the coefficient of z^w from this product. When t = 0, all the ω terms vanish and I get 1/(1-z)^n, which gives the binomial coefficient C(n+w-1, w). For nonzero t, I can use partial fractions if the values ω^{-<t,v_i>} are distinct, which generically happens when no two inner products <t,v_i> coincide.
+
+The partial fraction decomposition gives me a sum of residues, and the coefficient of z^w becomes a sum of exponential terms. For large enough w, this formula applies cleanly, but for small w there are boundary effects to consider depending on the relationship between w and n.
+
+Let me step back and look for a more direct approach. I'm trying to show that for 17 vectors in F_p^4 forming a ZSF set, the shadow at level p-1 covers all nonzero elements. The key insight is that at w=1 I have exactly 17 distinct vectors, and as w increases, the shadow grows by including scalar multiples and sums of pairs, which should quickly fill out the space. I'm recalling the Cauchy-Davenport theorem for F_p, which gives a lower bound on sumset size, but in vector spaces like F_p^r the situation is more complex. The Plünnecke-Ruzsa inequality provides a way to bound sumset growth when |A+A| is controlled relative to |A|, which might help constrain how quickly the shadows expand.
+
+For my specific set of 17 non-proportional vectors in F_p^4, the doubling constant is at most 153/17 ≈ 9, so by Plünnecke-Ruzsa the k-fold sumset grows like 9^k · 17. At k = 4, this gives an upper bound on |4A|, which I can compare against the ambient space size of p^4 = 625 to see if the shadows actually stay bounded.
+
+But I'm realizing the shadow at weight k isn't just the k-fold sumset—it's the set of all linear combinations c_1 v_1 + ... + c_n v_n where each coefficient c_i ranges from 0 to p-1 and the sum of coefficients is at most k. This includes dilated copies of individual vectors and mixed sums with varying coefficients, which is more like a Minkowski sum of scaled versions of each vector, restricted to a weight constraint.
+
+In F_p, each non-zero vector v generates a full line through the origin since {0, v, 2v, ..., (p-1)v} covers all scalar multiples. So if the 17 vectors are non-proportional, they span 17 distinct lines, and the shadow becomes the set of points reachable by moving along these lines with a total budget of k steps—which is exactly a Cayley graph distance problem where the generators are all the scaled versions of the vectors.
+
+But I need to account for the weights: each step of size c along vector v_i costs c units, so this is a weighted Cayley graph where the shadow at weight k is the ball of radius k from the origin. Since 4 independent vectors suffice to generate all of F_p^4, and I have 17 generators, the diameter should be bounded by something like 4(p-1) in the worst case.
+
+With the weight constraint, the key insight is that reaching any vector v requires total weight at most equal to the distance in this weighted graph. For a zero-sum-free set of size 2α(r)+1, I can claim the diameter is at most p-1: any target v can be expressed as a combination of 4 linearly independent generators with coefficients in {0,...,p-1} summing to at most p-1.
+
+Without the ZSF structure, using just 4 vectors gives diameter 4(p-1), but with all 17 vectors available, the additional directions and structural constraints from the zero-sum-free property should compress this down to p-1. Rather than pursuing this direct approach further, I'm shifting to the Davenport constant framework from additive combinatorics, which might provide a cleaner path to bounding the diameter.
+
+For the cyclic group C_p^r, the Davenport constant D(C_p^r) = r(p-1)+1, so for r=4 we get D = 4(p-1)+1. The key insight is that a zero-sum-free set S of size n has a copies pool of size n(p-1), and while this pool avoids zero-sum subsequences of length ≤ p, it must eventually contain one of length ≤ D by the pigeonhole principle. This relationship between the copies pool structure and the Davenport constant might be the leverage needed to establish the diameter bound. (p=5). Since D(C_5^4) = 4·4+1 = 17, any sequence of length ≥ 17 in C_5^4 has a zero-sum subsequence. So the copies pool of length 68 has MANY zero-sum subsequences. The ZSF condition just says none has length ≤ p-1 = 4. But all have length ≥ p = 5.
+
+The minimum zero-sum subsequence length in the copies pool is exactly p (since ZSF prevents length ≤ p-1, but length p is achievable since n > D*(C_p^4)/(p-1) + 1, from the shadow containing all targets at weight p-1).
+
+Wait, I need to be more careful here. The ZSF condition doesn't directly guarantee a zero-sum of length exactly p.
+
+Let me try to formalize a new lemma about how the shadow grows under the ZSF constraint. I'm setting up a scenario where S = {v_1,...,v_n} ⊂ F_p^{r+1} \ {0} is ZSF with n = 2α(r)+1 and pairwise non-proportional vectors. I want to define B_k as the set of all unweighted k-element sums and establish a claim about how these sets cover the restricted sumset.
+
+Actually, wait—this is stronger than shadow saturation because I'm restricting coefficients to {0,1} instead of {0,1,...,p-1}. Let me check if this even holds. At p=5, I'm looking at the cardinality counts: B_1 has 17 elements, B_2 has 136 sums, B_3 has 680 sums, B_4 has 2380 sums. The union gives at most 3213 sums, which vastly exceeds |F_5^4\{0}| = 624, so the total count is way larger than the space itself. But I need to figure out whether there are actually any gaps in the coverage.
+
+Now I'm realizing the key distinction: with coefficients restricted to {0,1}, the shadow at weight k is just B_1 ∪ ... ∪ B_k (unweighted sums), whereas the actual shadow saturation conjecture allows arbitrary coefficients in {0,...,p-1}, which gives a much larger shadow. The p=5 verification I did earlier used the larger shadow, so I shouldn't conflate these two different conditions.
+
+Let me explore whether I can prove shadow saturation by reducing it to the rank-3 theorem. The idea would be to show that for any nonzero target v, I can express it as a weighted sum of at most 3 elements from S with coefficients in F_p*, and then apply the rank-3 theorem to bound the sum of valuations. But this approach only works when k=3—for larger k, there's no analogous rank-k theorem to fall back on.
+
+Actually, I think there's a cleaner angle here. Let me reconsider the equidistribution argument more carefully. The key insight is that for any target vector and weight constraint, the affine subspace of solutions has exactly p^{12} points, and among those, at least one must have integer weight in the range {1,...,p-1}.
+
+The crucial observation is that a solution with integer weight w ≤ p-1 can have at most w nonzero coordinates, since each contributes at least 1 to the total weight. With 12 degrees of freedom available, we have enough flexibility to construct a solution where most coordinates are zero and only a few are nonzero, keeping the total weight small.
+
+For p=5, this means finding a solution supported on at most 4 coordinates—essentially checking whether v lies in the weighted shadow of every possible 4-element subset of our 17 variables, where the coefficients sum to at most 4.
+
+With C(17,4) = 2380 possible subsets to consider and each generating a shadow of bounded size, this combinatorial approach is getting unwieldy. Let me step back and focus on proving a clean, general result instead.
+
+I'm going to establish a lemma about zero-sum-free sets: for any n-element ZSF set S in F_p^{r+1} where n exceeds a certain threshold depending on the combinatorial structure, the all-ones vector must have a specific property that leads to a contradiction.
+
+Then I'll use this to show that under these conditions, the weight form distributes uniformly across solution varieties, and finally derive a lower bound on the shadow size using polynomial kernel arguments. For t ≠ 0, I can write F_t(x) = Φ_p(x) · G_t(x) where the leading coefficients of G_t encode information about the shadow. The key insight is that if G_t has a positive constant term for all nonzero t, then the shadow would saturate to cover everything except the origin. Let me verify this by evaluating at x = 1: since F_t(1) gives the total number of representations and Φ_p(1) = p, I can extract G_t(1) to understand the structure better. The coefficients of G_t determine the distribution of integer weights among the representations. From a_0(t) = [G_t]_0 (constant term of G_t): for t = 0, a_0(0) = 1 so [G_0]_0 = 1, but for t ≠ 0, a_0(t) = 0. Let me reconsider this more carefully. I have F_t(x) = Σ_{k=0}^{n(p-1)} a_k(t) x^k and Φ_p(x) = 1 + x + ... + x^{p-1} = (x^p - 1)/(x - 1).
+
+Since F_t(ω^j) = 0 for j = 1,...,p-1 from equidistribution and F_t(1) = p^{n-r-1}, the cyclotomic polynomial Φ_p(x) divides F_t(x). Given that F_t has nonnegative integer coefficients and Φ_p is a cyclotomic polynomial with integer coefficients, the quotient G_t(x) = F_t(x)/Φ_p(x) must also have integer coefficients. F_t(x) has degree n(p-1), so G_t has degree (n-1)(p-1). Evaluating at x=1 gives G_t(1) = p^{n-r-2}. Now I need to connect this to the shadow by looking at how the coefficients a_k(t) of F_t relate to the coefficients of G_t through the cyclotomic polynomial multiplication.
+
+The coefficients follow a pattern: each a_k is a cumulative sum of consecutive g coefficients, with a sliding window of size p for indices beyond p-1. So I'm summing all these a_k values to find the total shadow.
+
+For the shadow condition at weight p-1, I need the sum of a_k(t) for k from 1 to p-1 to be positive when t ≠ 0, since a_0(t) vanishes. This sum equals the total of all a_k values minus the zero term.
+
+Now I'm simplifying this expression by canceling out g_0(t) and reindexing, which gives me the condition that Σ_{j=1}^{p-1} (p-j) g_j(t) > 0 for all nonzero t.
+
+For the zero-sum filter case, a_0(0) equals 1 while all other a_k(0) terms vanish at t = 0.
+
+Working through the constraints from the zero-sum conditions, I find that g_0(0) = 1, g_1(0) = -1, and g_k(0) = 0 for k ≥ 2, which determines the initial values of the generating function G_0(x).
+
+Now I need to handle the case where the target t is nonzero, which requires g_0(t) = 0 and the weighted sum condition Σ_{j=1}^{p-1} (p-j) g_j(t) > 0 to hold.
+
+Looking at how the coefficients a_k(t) decompose as cumulative sums of the g_j(t) values, the total shadow count at weights up to p-1 becomes exactly that weighted sum. Since G_t(1) gives me the total count p^{n-r-2} and g_0(t) vanishes, I can account for how the remaining g_j values distribute across all weights.
+
+The key insight is that even though the a_k values stay nonnegative, the g_j values themselves can swing negative—they're like discrete derivatives of the a sequence. So the question becomes whether I can lower-bound the weighted sum of the first p-1 terms by showing that the tail contribution beyond weight p is small enough.
+
+But here's the catch: proving Σ_{j=1}^{p-1} g_j(t) > 0 doesn't automatically give me Σ_{j=1}^{p-1} (p-j) g_j(t) > 0, since individual g_j terms can be negative and the weights (p-j) are decreasing.
+
+Let me compare the structure at target 0 versus target t to see if there's a pattern I can exploit. ≠ 0: g_0(t) = 0, need info about g_1(t),...,g_{p-1}(t).
+
+Can I relate G_t to G_0? 
+
+Define N_k(t) = #{s ∈ F_p^n : Σ s_i v_i = t, Σ val(s_i) = k}. This is a_k(t).
+
+The TOTAL number of representations summing to t is N(t) = Σ_k N_k(t) = p^{n-r-1} for all t (equidistribution).
+
+Now consider the generating function over ALL targets:
+Σ_t F_t(x) = Σ_t Σ_k a_k(t) x^k = Σ_k x^k Σ_t a_k(t) = Σ_k R_k x^k
+
+where R_k counts the total number of n-tuples with valuation sum k. The generating function for this is (1 + x + ... + x^{p-1})^n, which I can express in terms of cyclotomic polynomials and factors involving (x^p - 1)/(x - 1).
+
+Let me simplify: (1 + x + ... + x^{p-1}) = (1 - x^p)/(1 - x), so the generating function becomes ((1 - x^p)/(1 - x))^n.
+
+Since the cyclotomic polynomial Φ_p(x) divides each F_t(x), I can write the sum of the reduced generating functions as R(x)/Φ_p(x), which simplifies nicely to ((1 - x^p)/(1 - x))^{n-1}.
+
+Now I'm extracting the coefficient of x^j from this generating function to find the average value, and for j < p, this gives me a binomial coefficient C(n - 2 + j, j).
+
+Checking the specific cases: when j = 0, the average is 1/p^{r+1}, and when j = 1, it's (n-1)/p^{r+1}. With n = 17 and p = 5, this matches the actual distribution where g_0(t) is 1 only at t = 0 and g_1(0) equals -1.
+
+For g_1, the average of 16/625 means the sum across all non-zero t values is 17, which checks out since g_1(t) = a_1(t) for t ≠ 0, and these count the weight-1 representations where each non-proportional vector contributes at most 1.
+
+Now I'm wondering whether g can...
+
+Actually, let me think about the constraints more carefully. Since a_k(t) = g_1(t) + ... + g_k(t) must be non-negative for all k and all t ≠ 0, the partial sums of the g sequence form a non-decreasing path—each g_j can't be so negative that it violates the cumulative non-negativity constraint.
+
+Now I'm computing the weighted sum Σ_{j=1}^{p-1} (p-j) g_j(t), which I showed earlier equals the sum of all prefix sums Σ_{k=1}^{p-1} a_k(t). Since each a_k(t) ≥ 0, this weighted sum is also non-negative.
+
+The key insight is that this sum equals zero if and only if every a_k(t) = 0 for k = 1,...,p-1, which happens precisely when g_1(t) = g_2(t) = ... = g_{p-1}(t) = 0. So shadow saturation fails at time t exactly when the first p-1 coefficients of G_t vanish, meaning G_t starts at degree p or higher.
+
+When G_t(x) = Σ_{j≥p} g_j x^j, multiplying by Φ_p(x) gives F_t(x) starting at degree p, so a_k(t) = 0 for all k < p and a_p(t) = g_p.
+
+If shadow saturation fails at some target t ≠ 0, then t has no representation of weight less than p—every one of the p^{n-r-1} representations must have weight at least p. This means the sum of all representation weights is bounded below by p times the number of representations, which should give me a contradiction against the expected average weight. p^{n-r-1}.
+
+The average weight over all representations of all targets:
+Σ_t Σ_{s: Ms=t} W(s) = Σ_{s ∈ {0,...,p-1}^n} W(s) = p^n · n(p-1)/2.
+
+This gives: average over targets of (average weight) = p^n · n(p-1)/(2 · p^{r+1} · p^{n-r-1}) = n(p-1)/2.
+
+So the average weight per representation is n(p-1)/2 for every target (by symmetry... actually this needs the equidistribution result).
+
+If for some target t: ALL representations have weight ≥ p, then:
+Σ_{s: Ms=t} W(s) ≥ p · p^{n-r-1}.
+
+Now I'm using the equidistribution property to count representations with a fixed linear functional value—there are p^{n-r-2} of them for each value in F_p, giving p^{n-r-1} total representations per target. To find the conditional expectation of weight given a target, I need to sum the weights across all representations mapping to that target and divide by the number of representations. Let me see if I can compute this expectation directly for a uniformly random representation. Now I'm breaking down the expectation by decomposing it into weight classes modulo p, separating out the contribution from the first term (which gives 1/p by the equidistribution) and the higher-order terms involving multiples of p.
+
+For the zero target, all nontrivial representations have weight at least p since there are no representations with weight between 1 and p-1, making the excess contribution substantial. For generic targets, most representations cluster around the average weight n(p-1)/2, so the excess term becomes relatively small compared to the base contribution.
+
+Now I'm checking whether the average weight should be constant across all targets by exploiting the cube's symmetry under affine shifts. When I shift the input by a standard basis vector, the target shifts accordingly, but the weight function doesn't scale linearly because of wraparound effects—incrementing a coordinate from p-1 to 0 causes the weight to drop rather than increase smoothly.
+
+Since this symmetry argument breaks down, the conditional expectation E[W | Ms = t] can actually vary with t. I'm trying to compute the average weight directly using character sums and conditioning on individual coordinates, but this is getting tangled because s_i is fully determined by the other coordinates and the target t when M has full rank.
+
+I'm stepping back from the average-weight approach entirely and reconsidering what I can actually prove here.
+
+The research goal requires showing that for any nonzero v in F_p^{r+1}, I can express it as a weighted sum of vectors from S with bounded coefficients. Let me focus on what clean, provable statements would actually move this forward. I've already established that shadow saturation is equivalent to G_t having nonnegative partial sums of coefficients from index 1 onward with at least one positive sum, for all nonzero t. Now I'm working toward formalizing a second statement about zero-sum-free sets with sufficient size.
+
+For a ZSF S with n ≥ 2(r+1)+1 vectors spanning F_p^{r+1}, I'm trying to show the shadow at weight n-1 covers all nonzero points. The shadow would contain all differences (Σ v_i) - v_j, but I'm running into the issue that these might not all be distinct or might not cover everything. Let me reconsider the approach—maybe I need an Olson-type result instead, where for ZSF S with n exceeding the Davenport constant of C_p^{r+1}, the shadow at weight ⌊n/2⌋ achieves full coverage of the nonzero elements.
+
+Actually, I'm not confident this is provable as stated. Let me shift focus to something more concrete: a lemma about the polynomial structure of ZSF. If S = {v_1,...,v_n} is a ZSF with n ≥ r+2 pairwise non-proportional vectors, and the all-ones vector isn't in the row space of the coefficient matrix, then for any target t in F_p^{r+1}, I can define a polynomial F_t(x) that counts representations of t as weighted sums of the vectors, where the exponent tracks the total weight.
+
+The key properties are: this polynomial vanishes at all primitive p-th roots of unity, so the cyclotomic polynomial divides it; after factoring out the cyclotomic part, the quotient polynomial has integer coefficients and a specific degree; for non-zero targets, the coefficients have a non-negative partial sum property; and for the zero target (the ZSF case itself), the quotient has a very special form with just a constant term and a linear term. I'm working through the structure of the affine subspace V_t defined by the linear system Mc = t, which has dimension n - r - 1 since M has rank r+1. The key insight is that the linear functional L(c) = Σ c_i is non-constant on V_t because (1,...,1) isn't in the row space of M, making L surjective onto F_p with each value attained exactly p^{n-r-2} times.
+
+When I compute F_t(ω^j) by summing over all values w that L takes, I get p^{n-r-2} times the geometric sum Σ ω^{jw}, which vanishes for j ≢ 0 mod p, confirming F_t(ω^j) = 0.
+
+For part (ii), I'm using the fact that Φ_p(x) divides F_t(x) in Z[ω][x], and since both polynomials lie in Z[x], the divisibility must hold over Z[x] as well—this follows from Φ_p being the irreducible cyclotomic polynomial, so any divisibility over the extension field descends to the base field.
+
+Now I'm computing G_t = F_t/Φ_p, which has degree (n-1)(p-1) and satisfies G_t(1) = p^{n-r-2}.
+
+For part (iii), I'm checking that g_0(t) = 0 when t ≠ 0, and examining the partial sums of the g_j coefficients to verify they're non-negative.
+
+I need to verify the relationship between a_k and the g_j coefficients by expanding the product F_t = Φ_p · G_t. The coefficient of x^k comes from summing g_j where the indices satisfy 0 ≤ k-j ≤ p-1, which for k ≤ p-1 gives Σ_{j=0}^{k} g_j.
+
+For k ≥ p, I get a sliding window of p consecutive terms: Σ_{j=k-p+1}^{k} g_j. Both cases require a_k ≥ 0.
+
+Now checking the zero-sum-free case at t = 0: g_0(0) = a_0(0) = 1 as the trivial solution, and a_1(0) = 0 since there are no weight-1 zero-sum configurations when all v_i are nonzero, which means g_0 + g_1 = 0.
+
+Continuing this pattern, a_2(0) = 0 gives g_2 = 0, and by induction all g_k = 0 for k = 2 through p-1.
+
+For the generating function, I'm computing the sum over all coefficient vectors and their weights, which factors as (1+x+...+x^{p-1})^n, so the generating function G_t(x) relates to this expression.
+
+Now I'm verifying that 1+x+...+x^{p-1} equals the cyclotomic polynomial Φ_p(x) when p is prime, since (x^p-1)/(x-1) gives exactly this form.
+
+So the sums work out: Σ_t F_t(x) = Φ_p(x)^n and Σ_t G_t(x) = Φ_p(x)^{n-1}. For condition (vi), the shadow contains F_p^{r+1}\{0} precisely when all the partial sums a_k(t) are positive for t ≠ 0, which happens if and only if not all of g_1,...,g_{p-1} vanish.
+
+When those coefficients do vanish for some t ≠ 0, then G_t(x) becomes divisible by x^p, making F_t(x) = Φ_p(x) · x^p · H_t(x) for some polynomial H_t. But if at least one of g_1,...,g_{p-1} is nonzero, the partial sums stay positive, which is what we need.
+
+Now I'm checking whether all those coefficients could be negative simultaneously. Since g_1 = a_1 ≥ 0, they can't all be negative—at minimum, the first nonzero coefficient among them must be positive, which means the shadow at that weight covers t.
+
+So the shadow misses t exactly when all those coefficients vanish, which happens precisely when x^p divides G_t(x). The key insight is that x^p can't divide G_t for any t ≠ 0, and I need to prove this claim.
+
+If x^p does divide G_t, then the first p coefficients of G_t are all zero, which forces the first p coefficients of the original sequence to be zero. This creates a specific structure: a_p becomes the first nonzero term, and then the subsequent coefficients build up from there as the window of the partial sums shifts. The crucial observation is what happens at position 2p—that's where the window finally slides past a_p, which determines whether any representation can have weight less than 2p-1.
+
+Wait, I need to reconsider the indexing here. If a_k represents the sum of p consecutive g values ending at position k, then a_p = g_1 + ... + g_p, and if the first p-1 terms are zero, then a_p = g_p ≥ 0. But actually, the minimum weight constraint I derived only guarantees weight ≥ p, not 2p-1—I need to revise my claim.
+
+The corrected statement is: if x^p divides G_t(x) for some nonzero t, then every representation of t must have weight at least p. This is because the coefficients a_0 through a_{p-1} are all zero. So shadow saturation fails precisely when t cannot be expressed with weight less than p—meaning we can't write it as a sum of basis vectors with coefficients in {0,...,p-1} and total weight at most p-1.
+
+Now applying the ZSF condition to the target 0: every nontrivial representation has weight ≥ p, while the trivial representation has weight 0.
+
+For t = 0, the G polynomial already has the right structure: g_0(0) = 1, g_1(0) = -1, and g_j(0) = 0 for j between 2 and p-1, which correctly captures why the shadow misses weight p-1. For any nonzero t where the shadow fails, we'd have g_0(t) = 0 and all of g_1(t) through g_{p-1}(t) equal to zero. Comparing the G polynomials directly: G_0 starts with 1 - x plus terms at degree p and higher, while any missed target's G polynomial is purely x^p times some other polynomial H(x). Using the sum condition on all G_t polynomials should resolve this.
+
+Now I'm looking at the escaped targets—those nonzero values where the shadow misses—and setting up the equation Σ_{t ∈ E} G_t(x) = Φ_p(x)^{n-1} - G_0(x) - Σ_{t ∉ E, t≠0} G_t(x). For the escaped targets, all coefficients g_0 through g_{p-1} vanish, so the first p coefficients of their sum are zero. For the non-escaped nonzero targets, g_0 = 0 but at least one of the remaining coefficients is nonzero.
+
+Looking at the first p coefficients of the full sum, I need to extract [x^j] Φ_p(x)^{n-1} for j = 0,...,p-1. Since Φ_p(x) = 1 + x + ... + x^{p-1}, these coefficients are binomial coefficients C(n-2+j, j) with no wrap-around from higher degree terms. This gives me the constraint C(n-2+j, j) = g_j(0) + Σ_{t≠0, t∉E} g_j(t).
+
+For j = 0, the constraint C(n-2, 0) = 1 checks out since g_0(0) = 1 and all other g_0(t) = 0. For j = 1, I have C(n-1, 1) = n-1, which means g_1(0) = -1 plus the sum over non-exceptional t gives n total. Since g_1(t) counts how many vertices map to each element t, this is counting the distribution of vertices across the domain.
+
+Now for j = 1, I'm realizing that the sum over all non-zero t equals n, and the sum over escaped targets E also equals n, so the escaped targets must contribute zero to g_1. Since g_1(t) ≥ 0 always, this forces g_1(t) = 0 for every t in E—meaning no vertices map to escaped targets at weight 1, which makes sense since all n vectors are already in the shadow at that weight. Moving to j = 2, I need to work out the constraint C(n, 2). I need to be more careful about what I'm counting here. For a_2(t), I'm looking at coefficient vectors with exactly two nonzero entries summing to 2. The cases are: either one coordinate is 2 (giving solutions where 2v_i = t), or two different coordinates are each 1 (giving solutions where v_i + v_j = t). But I need to remember these are ordered tuples, so I should count each pair (i,j) with i < j separately.
+
+So a_2(t) counts the number of indices i where 2v_i = t, plus the number of unordered pairs {i,j} where v_i + v_j = t. For t in the exceptional set E, both of these counts must be zero, which means t can't be written as 2v_i for any i, and no two elements of S sum to t.
+
+This means E is disjoint from both 2·S and S+S. Now I need to think about the sizes: |2·S| = n since doubling is a bijection on the nonzero elements of F_p, and |S+S| has a lower bound from Cauchy-Davenport, which applies to sumsets in F_p^{r+1}.
+
+For the specific case of r+1 = 4 and |S| = 17, I'm estimating |S+S| by counting pairs and accounting for collisions where different pairs sum to the same vector. The key constraint is that for a ZSF set, the additive structure is restricted—specifically, we can have v_j = -v_i for some pairs, which affects how many distinct sums we get.
+
+Since no two vectors in S are proportional, v_j ≠ -v_i for any i ≠ j, which means 0 never appears as a sum of distinct vectors. Combined with the fact that 2v_i ≠ 0 for all i, this tells me that 0 is completely absent from S+S.
+
+Now I'm wondering if I can use these constraints across all values of j to actually bound the size of E. For each j from 0 to p-1, I have a sum over elements outside E, and for any t not in E, the values g_j(t) across all j can't simultaneously be zero.
+
+Looking at the polynomial identity: the sum of all G_t(x) equals Φ_p(x)^{n-1}, so if I isolate the contribution from elements in E, I can express it as Φ_p(x)^{n-1} minus the contributions from 0 and from elements outside E. The key is understanding what structure the sum over non-E elements has.
+
+Let me evaluate everything at x = 1 to get concrete values. For any t, G_t(1) = F_t(1)/Φ_p(1) = p^{n-r-1}/p = p^{n-r-2}, regardless of whether t is in E or not. So the sum over E at x = 1 gives |E| · p^{n-r-2}.
+
+As a sanity check, the total sum Σ_t G_t(1) should equal Φ_p(1)^{n-1} = p^{n-1}, which checks out since there are p^{r+1} values of t total. But this doesn't directly bound |E|.
+
+Let me try evaluating at x = 0 instead. U(0) = Σ_{t∈E} G_t(0), and since G_t(0) = g_0(t), I'm looking at the sum of constant terms. But G_t(0) = 0 for all t, so U(0) = 0. Now I need to think about what U(x) equals overall—it's Φ_p(x)^{n-1} minus some other terms.
+
+At x = 0, this gives 1 - 1 - (sum of g_0 terms outside E) = 0, which is consistent since g_0(t) = 0 for t ≠ 0. Now let me look at what happens with derivatives instead.

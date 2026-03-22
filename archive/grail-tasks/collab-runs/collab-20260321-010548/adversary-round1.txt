@@ -1,0 +1,190 @@
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: mcp__claude_ai_openmind__recent_nodes]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+Cortex is down. Let me read the briefing and start breaking things.
+[TOOL: Agent]
+Literature search running in background. Let me now do my core adversary work — stress-testing the proposed approaches and finding obstructions.
+
+---
+
+## ADVERSARY REPORT: Round 1
+
+### Attack 1: Pair-Degenerate Weight Bound (NEW, PRECISE)
+
+**Claim:** For any collinear triple with a pair-degenerate dependency (α, β, γ) — meaning some pair sums to 0 — the minimum weight over all rescalings μ ∈ F_p* is **exactly p+1**.
+
+**Proof:** WLOG γ = 1. Pair-degenerate means α = -1, β = -1, or α + β = 0. Take the case α = -1 (others symmetric). Weight under rescaling by μ:
+
+> W(μ) = ⟨-μ⟩ + ⟨μβ⟩ + ⟨μ⟩ = (p - ⟨μ⟩) + ⟨μβ⟩ + ⟨μ⟩ = **p + ⟨μβ⟩ ≥ p + 1**
+
+Similarly for β = -1: W(μ) = ⟨μα⟩ + (p - ⟨μ⟩) + ⟨μ⟩ = p + ⟨μα⟩ ≥ p + 1.
+
+For α = -β: W(μ) = ⟨-μβ⟩ + ⟨μβ⟩ + ⟨μ⟩ = p + ⟨μ⟩ ≥ p + 1.
+
+**Conclusion:** Pair-degenerate triples are DEAD for weight ≤ p. The rank-3 theorem is the ONLY support-3 tool, and it requires non-degeneracy.
+
+### Attack 2: Lemma 2 from Post-Mortem is Trivially True (not useful)
+
+The post-mortem's Lemma 2 ("triple-sum-zero gives weight exactly p") follows from one line:
+
+> **S(μ) + S(p-μ) = 3p** for any triple with α+β+γ = 0.
+
+Because ⟨x⟩ + ⟨p-x⟩ = p for all x ∈ F_p*. So if S(μ) = 2p, then S(p-μ) = p. Weight = p ≤ p. ✓
+
+This is correct but uninteresting — it gives weight EXACTLY p, never < p. The sum-zero case is a boundary case, not a tool for progress.
+
+### Attack 3: Fiber Induction Is Provably Incomplete (CRITICAL)
+
+The Pigeonhole ratio for fiber induction is:
+
+> (α(r) + 2) / (α(r-1) + 1) = (2α(r-1) + 3) / (α(r-1) + 1) → **2 as r → ∞**
+
+For ANY r ≥ 4 and ANY p ≥ 5: this ratio is strictly less than 3. So with **≥ 3 nonempty fibers**, no fiber is guaranteed to have α(r-1)+1 vectors. Within-fiber induction via the η or s constants NEVER fires.
+
+Explicitly: at rank 5 with 36 vectors across 3 fibers (12+12+12), each fiber has 12 projections in F_p^4. Need 18 for η(C_p^4). Gap of 6. No amount of cleverness with η/s fixes this.
+
+**The two-fiber bound works** (I verified: Pigeonhole gives max(a,b) ≥ α(r)+1 when there are exactly 2 fibers, which suffices for η in fiber 0 or s in fiber c). But it's a CLIFF — going from 2 to 3 fibers destroys the argument entirely.
+
+### Attack 4: Cap Obstruction Kills Support-3 for Large p (CRITICAL)
+
+The maximum cap size in PG(n, F_p) (set of points with no three collinear) satisfies:
+
+- PG(3, F_p): cap size ≤ p² + 1 (ovoid bound, achieved for all odd p)
+- PG(4, F_p): cap size ~ p² (Bose, Segre)
+
+At rank 4 (PG(3, F_p)): we need α(4)+2 = 19 non-proportional points. For p ≥ 5: p² + 1 ≥ 26 > 19. So **18 points CAN be placed with no three collinear** in PG(3, F_p) for all p ≥ 5.
+
+At rank 5 (PG(4, F_p)): need 37 points. Cap bound ~p². For p ≥ 7: 49 > 37. Again, all points in general position is possible.
+
+**When no three are collinear, there are NO support-3 zero-sums at all.** The rank-3 theorem is completely useless. Any proof must find zero-sums of support ≥ 4.
+
+Combined with Attack 1: even if some triples ARE collinear, if they're all pair-degenerate, support-3 is still dead.
+
+### Attack 5: The Support-4 Problem Is Fundamentally Harder
+
+At p = 5, the 94 residual cases (out of 607) were killed by support-4 zero-sums of weight 4 < p = 5. These are:
+- 4 vectors summing to zero with all coefficients = 1
+
+This is the "4-sum-free set" problem: can a set of 18 points in F_p^4 avoid v₁+v₂+v₃+v₄ = 0?
+
+For weight ≤ p at support 4: coefficients (s₁,s₂,s₃,s₄) with each s_i ∈ {1,...,p-1} and Σs_i ≤ p. Since each s_i ≥ 1, we need Σs_i ∈ {4, 5, ..., p}. The number of such coefficient tuples grows polynomially in p. But the algebraic conditions (Σs_i·v_i = 0) are HARD to analyze without the character-theoretic machinery that's been declared dead (Dead End #1).
+
+**No existing tool handles support ≥ 4.** The rank-3 theorem handles support 3. Character theory for support 4 is dead (two energy levels, not one). The polynomial method (CW) is underdetermined. This is the core gap.
+
+### Attack 6: Stress-Testing the Inductive Approach (Approach 1)
+
+The proposed inductive upper bound mirrors the lower bound: assume η(C_p^r) ≤ α(r)(p-1)+1, prove η(C_p^{r+1}) ≤ (2α(r)+1)(p-1)+1.
+
+**This approach CANNOT work by fiber induction alone** (Attack 3). It requires a cross-fiber argument. What would that look like?
+
+A cross-fiber zero-sum involves vectors from ≥ 2 fibers. The fiber constraint: Σ_i s_i·c_i ≡ 0 (mod p), where c_i is the fiber of vector i. This is ONE linear equation in the coefficients. Combined with the r equations from the projection (Σ s_i · proj(v_i) = 0), we have r+1 equations — the original zero-sum condition.
+
+So there's no "decomposition gain" from fibers in the multi-fiber case. The fiber structure doesn't simplify the problem; it just reparametrizes it.
+
+### Summary of Obstructions
+
+| Attack | Status | Impact |
+|--------|--------|--------|
+| Pair-degenerate weight ≥ p+1 | **PROVED** | Kills support-3 for degenerate triples |
+| Fiber Pigeonhole ratio < 3 | **PROVED** | Kills within-fiber induction for ≥ 3 fibers |
+| Cap obstruction (large p) | **PROVED** | Kills ALL support-3 for general position configs |
+| Support-4 has no tool | **OBSERVED** | The actual gap — no approach handles this |
+| Fiber decomposition = no gain | **ARGUED** | Multi-fiber ≠ simpler; just reparametrization |
+
+### Verdict
+
+The multi-fiber gap is NOT an artifact of insufficient cleverness with fibers. It reflects a **fundamental limitation**: the only working tool (rank-3 theorem) handles support 3, but the hard configurations have no support-3 zero-sums. Any proof of the upper bound MUST either:
+
+1. **Develop a support-4+ theory** (replacing the dead character approach with something new), or
+2. **Show that cap-like configurations are impossible under the ZSF constraint** (the ZSF condition may force collinear triples to exist), or  
+3. **Abandon fiber induction entirely** in favor of a global argument (polynomial method, combinatorial Nullstellensatz, or something else).
+
+Option (2) is the most promising adversary-suggested direction: **Does the ZSF property (no zero-sum of weight ≤ p) force the point set to contain non-degenerate collinear triples?** If ZSF ⇒ ∃ non-degenerate triple, then the rank-3 theorem applies and gives a contradiction. This would close the gap. But I suspect this is FALSE for support-3 and the real action is at support 4+.
+
+Let me attempt to store this to Cortex now.
+[TOOL: mcp__claude_ai_openmind__search]
+Cortex remains down. Let me try the add_node endpoint directly.
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_openmind__add_node]
+Cortex is fully down this session. Let me save findings locally and present the full adversary report.
+[WRITE: /home/jfischer/claude/grail-tasks/adversary-round1.md]
+Now let me check on the literature search.
+
+[BASH] cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/83fc487d-0993-4af2-bb58-c49872ab3697/tasks/a306abcd7bdb07d32.output 2>/dev/null | tail -80
+
+
+[BASH] cat /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/83fc487d-0993-4af2-bb58-c49872ab3697/tool-results/bpr4wloju.txt | grep -A 200 '"type":"result"' | tail -200
+
+
+[BASH] cat /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/83fc487d-0993-4af2-bb58-c49872ab3697/tool-results/bpr4wloju.txt | python3 -c "
+import sys, json
+data = sys.stdin.read()
+# Find the last assistant message
+parts = data.split('\"type\":\"assistant\"')
+if len(parts) > 1:
+    last = parts[-1]
+    # Extract text content
+    import re
+    texts = re.findall(r'\"text\":\"((?:[^\"\\\\]|\\\\.)*)\"', last)
+    for t in texts[-3:]:
+        print(t.encode().decode('unicode_escape'
+
+
+[BASH] python3 -c "
+import json, sys
+with open('/home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/83fc487d-0993-4af2-bb58-c49872ab3697/tool-results/bpr4wloju.txt') as f:
+    data = f.read()
+lines = data.strip().split('\n')
+# Get last few JSON objects
+for line in lines[-5:]:
+    try:
+        obj = json.loads(line)
+        if obj.get('type') == 'result':
+            print(obj.get('result','')[:3000])
+    except:
+        pass
+" 2>/dev/null
+
+
+[BASH] wc -l /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/83fc487d-0993-4af2-bb58-c49872ab3697/tool-results/bpr4wloju.txt && tail -c 2000 /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/83fc487d-0993-4af2-bb58-c49872ab3697/tool-results/bpr4wloju.txt
+
+[TOOL: Agent]
+Good — literature confirms no published counterexample exists, and cap sizes are exactly what I predicted. Let me update the report with the literature context and present the final synthesis.
+[TOOL: Edit]
+[TOOL: Edit]
+---
+
+## ADVERSARY ROUND 1 — EXECUTIVE SUMMARY
+
+**Five obstructions identified. None are counterexamples to the conjecture itself, but all are walls that any proof must climb over.**
+
+### The Three Hardest Walls
+
+**Wall 1 — No support-3 tool for degenerate triples.** I proved that pair-degenerate collinear triples have minimum weight **exactly p+1** under any rescaling. The rank-3 theorem only handles non-degenerate triples. This is sharp and unfixable within the current framework.
+
+**Wall 2 — Cap obstruction kills support-3 entirely.** PG(3, F_7) has caps of size 50. We only need 18 points. So there exist 18-point configurations with **zero** collinear triples — making the rank-3 theorem completely irrelevant. Any proof MUST handle support ≥ 4.
+
+**Wall 3 — Fiber induction dies at 3 fibers.** The Pigeonhole ratio (α(r)+2)/(α(r-1)+1) < 3 for all r ≥ 4. With ≥ 3 fibers, no fiber has enough vectors for within-fiber induction. The two-fiber bound works (ratio > 2), but this is a cliff — adding one more fiber destroys the argument.
+
+### What the Literature Says
+
+No counterexample to η(C_p^r) is published. But the analogous Davenport constant formula **fails** at rank ≥ 4 (Biswas-Mazumdar 2024), which is a cautionary signal. The conjecture is plausible but fragile.
+
+### The Core Gap Restated
+
+Any proof needs a **support ≥ 4 theory** that doesn't exist yet. The rank-3 theorem handles support 3. Character theory for support 4 is dead (two energy levels). CW is underdetermined. No tool in the current arsenal touches the hard configurations.
+
+### The One Opening I See (for the theorist)
+
+**Can ZSF force non-degenerate collinear triples?** If having 18 ZSF vectors in F_p^4 forces at least one non-degenerate collinear triple, the rank-3 theorem applies and kills it. The question: is every 18-element ZSF set necessarily NOT a cap? I suspect false, but this is the cheapest thing to check next — a single counterexample (a ZSF cap of size 18) would kill this direction; a proof would solve the problem.
+
+Full report saved to `adversary-round1.md`.
+
+
+Literature search confirmed everything already incorporated. The key additional data point: **PG(3, F_7) has a largest *complete* cap of size 32** (no point can be added), distinct from the maximum cap of 50. This means even "saturated" caps are much larger than our 18-point threshold.
+
+The adversary report is complete. The five obstructions and the literature context are saved in `adversary-round1.md`. The bottom line hasn't changed:
+
+**The conjecture is unrefuted but the current toolkit cannot prove it.** The rank-3 theorem (support 3) is the only working weapon, and I've proved it's useless against cap configurations and pair-degenerate triples. Any proof must either develop support-4 theory or show that ZSF forces exploitable structure (non-degenerate collinear triples).

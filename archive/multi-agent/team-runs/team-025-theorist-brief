@@ -1,0 +1,72 @@
+# Research Briefing (THEORIST thread)
+
+**Goal:** Prove: for any 9 nonzero vectors in F_p^3 NOT lying on a common affine hyperplane, with multiplicities p-1, there exists a short zero-sum.
+
+This is Case A of the eta(C_p^3) upper bound. Case B is fully solved (see seed).
+
+The most promising approach: project to C_p^2 using eta(C_p^2) = 3p-2, extract partial zero-sums, combine them. This is standard in additive combinatorics.
+
+Alternatively: reduce to Case B by studying K_0 (the sum-0 part of the kernel).
+
+---
+
+### Round 1  (21:42)
+
+We wanted to prove that any 9 nonzero vectors in F_p^3 (with multiplicities p−1) not lying in a single affine plane always contain a short zero-sum; the worker projected the multiset to the first two coordinates and used the known η(C_p^2)=3p−2 fact repeatedly to pull out, unless we are already done, four disjoint “partial” zero-sums T1,…,T4 whose x,y–projections sum to zero and whose z–coordinate sums r1,…,r4 are all nonzero residues in F_p; concretely, from 8p−7 vectors one either finds a short zero-sum of length ≤p immediately or reduces to the problem of combining these four nonzero residues into 0 while keeping the total concatenated length ≤p, so the hard part has been distilled to a finite combinatorial classification of 4-element multisets in C_p* with no zero subsum and an accounting of lengths when concatenating the corresponding Ti’s. Vibe check: (green) = real progress.
+
+**Cost so far: $0.04** | Tokens: 6,929 in / 2,539 out
+
+### Round 2  (21:51)
+
+You set out to prove Case A of the eta(C_p^3) bound by projecting the 9 nonzero vectors to C_p^2, extracting partial zero-sums, and assembling them; the worker tried to make progress by classifying 4-term multisets in Z_p* that admit no nontrivial zero-subsum, claiming (after scaling) they must be of the form {1,a,b,a+b} and even a Sidon 4-set, and proposed to use that rigid shape to pick small integer coefficients n_i so that n_1r_1+…+n_4r_4=0. But the derivation of the normal form contains a concrete logical gap (Step 4 is incoherent: “set b=c” then “solve for c=1+a+b” is not justified), so the lemma as stated is not established and the subsequent coefficient-box argument is not yet started; some of the Sidon-type conclusions may still be salvageable but must be re-proved by a careful case-split (or by invoking known small-sumset/crystal-structure facts), or else one should switch to a different route (e.g. a direct combinatorial counting or Cauchy–Davenport style argument on the projected partial-sum sets, or a precise reduction to Case B via the kernel K_0). Honest assessment: red = stuck/spinning until the lemma is rigorously fixed or a concrete alternate combinatorial step is executed.
+
+**Cost so far: $0.17** | Tokens: 15,949 in / 10,753 out
+
+### Round 3  (21:59)
+
+Round summary: We tried the standard projection-to-F_p^2 approach and were able to extract several disjoint partial zero-sums T_i, but the endgame needs to pick whole T_i’s (0/1 choices), so the problem reduces to a binary subset-sum/knapsack under a total-size ≤ p constraint — that binary constraint is the precise roadblock and cannot be overcome just by extracting more blocks. The worker therefore proposed two pivots (A: split one T_i to get fractional-like coefficients; B: abandon projection and study the zero-sum kernel K0 via coding/geometry) and decided to pursue B; concretely the next step is to prove a specific geometric lemma: nine non-coplanar affine points in F_p^3 cannot form the parity-check configuration of an MDS-like [9,5,4] code, and I will try an explicit incidence/counting contradiction (count point–plane and point–line incidences to force a collinearity or coplanarity and hence a weight-3 kernel vector, which immediately gives the short zero-sum). This is a concrete, immediately actionable move (I will write the incidence counts and chase the contradiction next). Vibe: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.33** | Tokens: 27,116 in / 20,644 out
+
+### Round 4  (22:06)
+
+You’re trying to show that from 9 distinct directions in F_p^3 (each repeated p−1 times) you can always pick a short nontrivial subsequence summing to zero, and the working plan is standard: project the 3D multiset to the 2D plane, use the known threshold η(C_p^2)=3p−2 to extract many 2D zero-sum blocks, then combine their z–components as a 1D subset-sum to finish. The recent worker lemma attempted to guarantee many disjoint 2D-zero blocks of very small size (≤⌊p/2⌋) by taking a 2D-zero subsequence U of size ≤p and then arbitrarily partitioning or truncating U, but that truncation step is invalid—there is no reason a random sub-subsequence of U (or its complement) still has vanishing projection, so the claimed construction of 10 disjoint small projected-zero pieces does not follow. As a result the reduction to a 1D subset-sum on 10 terms is not justified and the proof is blocked at the extraction step; to proceed you must either (a) replace the flawed lemma with a correct extraction tool (for example a proven statement that yields many disjoint projected-zero subsequences of bounded length, or an averaging/packing argument that produces enough usable blocks), or (b) pivot to the alternative reduction to Case B by analyzing the sum-zero part inside the projection-kernel and using structural information about that kernel, or (c) apply a sharper 1D additive theorem (Olson/Cauchy–Davenport variants) earlier in the process to avoid needing so many tiny blocks. Overall this is a promising line but currently stuck on a real combinatorial gap in the extraction lemma — working but not yet productive (yellow).
+
+**Cost so far: $0.50** | Tokens: 48,298 in / 30,948 out
+
+### Round 5  (22:12)
+
+Summary: You set out to prove a short zero‑sum exists among 9 nonzero vectors in F_p^3 (each repeated p−1 times) when those 9 directions don’t lie in one affine plane; the promising plan is the usual projection-to-F_p^2 trick (use eta(C_p^2)=3p−2 to peel off partial zero‑sums) and then combine those partial sums into a full short zero‑sum. The worker claimed progress for the small primes p∈{3,5,7,11} by extracting four partial zero‑sum blocks whose z‑residues r1,…,r4 were then supposed to be exhaustively checked (by computer) to force a cancelling pair r_i+r_j=0, but the claimed verification was not actually run and there is a real combinatorial gap: the writeup asserts |T_i|≤p so any two blocks fit inside length p, which is false (that only gives ≤2p), so the concatenation argument is not justified as stated. The evaluator correctly asked for an explicit Python enumeration of all 4‑tuples in (F_p^*)^4 with no nonempty zero subsum for those primes; that is the immediate next task (run the code, report results) and simultaneously fix the size/counting issue in the extraction step (either ensure smaller blocks or use a different gluing argument). For larger primes p≥13 the plan to adapt Olson’s subset‑sum methods to the residue multiset remains sensible but untouched. Vibe check: (yellow) = working but some key steps (the computer check and the block‑size justification) are missing or flawed, so progress is real but not yet solid.
+
+**Cost so far: $0.63** | Tokens: 64,584 in / 39,179 out
+
+### Round 6  (22:15)
+
+We ran a small exhaustive computation to test a key auxiliary claim used in Case A: whether one can always avoid nontrivial zero-sums among any ordered 4-tuple of nonzero residues mod p. For p = 3, 5, 7 no such “zero-subsum-free” 4-tuples exist, but for p = 11 many do (for example (1,2,3,4)), so the earlier lemma is correct only up to p = 7 and fails starting at p = 11; this means Case A is settled so far only for p ≤ 7 and the attempted projection-to-C_p^2 approach must be refined for larger primes. Concretely, the plan now is to extract more (six) short partial zero-sums from the projected multiset (each of length ≤⌊p/2⌋) so one can apply Olson-type subset-sum results; the computation gave a precise obstruction and a clear next lemma to prove. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.68** | Tokens: 83,259 in / 41,013 out
+
+### Round 7  (22:20)
+
+You tried the standard projection-to-C_p^2 plan and produced a useful dichotomy: either you already find a full zero–sum of length ≤p, or you can extract six disjoint subsequences whose projections sum to  origin and whose z–coordinate sums are six nonzero residues r1,…,r6. That looked promising because a short zero–sum would follow if some small subcollection of those residues sums to 0. However the writeup contains a fatal gap: the “complement/halving’’ trick used to force each projected zero–sum down to length ≤⌊p/3⌋ is not valid — taking complements inside a zero–sum does not preserve the zero–sum property, so there is no justification that every extracted projected zero–sum can be trimmed to that short length. Because that length-control is essential for turning a vanishing sum of 1–3 residues into a full zero–sum of total length ≤p, the current argument is spinning. To proceed concretely you must either (A) replace the bogus halving lemma by a correct tool that actually yields many projected zero–sums of suitably small length (which looks unlikely without a new structural input, since EGZ-type results give length p or larger but not ≤p/3), or (B) abandon the strict length ≤⌊p/3⌋ requirement and instead rework the combination step (for example by exploiting the z-kernel K_0 and reducing to your already solved Case B, or by using pigeonholing on z-values to force useful collisions), or (C) directly prove the combinatorial residue statement TC(p) from the outputs you can legitimately obtain. Pick one of these concrete routes and commit to proving the required lemma (state precisely which standard theorem you will use or what structural property of the projection reservoir you will exploit); until that is done the project is spinning and stuck. (red)
+
+**Cost so far: $0.79** | Tokens: 108,962 in / 47,277 out
+
+### Round 8  (22:25)
+
+We made a concrete piece of progress: using a Cauchy–Davenport counting argument the worker proved that for primes up to 17 any six nonzero residues mod p must contain a 1-, 2- or 3-term zero-sum, and then observed that this would complete Case A for p≤17 provided an earlier “extraction” lemma (that one can project the 9 vectors to C_p^2 and extract six partial zero-sums each of length ≤⌊p/3⌋ whose residue-sums form those six residues) holds. The evaluator rightly flagged that the counting lemma is genuine but known and that the crux—justifying the extraction/length-control step used to reduce the 3D problem to the residue-counting in 2D—has not been proved, so the main theorem is not yet advanced beyond small primes. The immediate, single concrete thing I will try next is to prove that extraction lemma by averaging over many projections to 2D: apply eta(C_p^2)=3p−2 on enough distinct affine projections (or fibers) and use pigeonhole/average-size arguments to produce the required number of disjoint short partial zero-sums with the length bound ⌊p/3⌋; if that fails I will instead pursue the alternative of adding a seventh residue/sumset layer to the counting argument to cover larger p. Overall: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.88** | Tokens: 137,423 in / 52,269 out
+
+### Round 9  (22:29)
+
+We tried the standard projection-to-2D plan: project the nine p−1–multiplicity vectors to F_p^2, extract disjoint short zero-sum blocks there (using η(C_p^2)=3p−2) and then combine their projection-coefficients to force a short zero-sum upstairs. To test the necessary combinatorial ingredient, I enumerated 6-element residue sets for p=19 and found the explicit counterexample {1,2,3,4,5,7} in Z_19*, which has no nonempty 1-,2-, or 3-term zero-sum—so the “six residues always force a short zero-sum” claim fails and the earlier six-block extraction plan is invalid for larger primes. The worker proposed replacing six by eight short blocks (each ≤⌊p/4⌋) to recover a counting contradiction for small primes and reduce the problem to a finite check, but that tightened extraction lemma is unproven and the evaluator rightly flagged that we’ve shifted toward computation rather than proving the structural property we need. Bottom line: we found a genuine obstruction that rules out the original six-block route (real progress), but the replacement claim remains an unproved technical bottleneck and we must either prove a stronger extraction lemma or find a different structural reduction before we’re on a clear path. (yellow) = working but unclear if productive.
+
+**Cost so far: $0.94** | Tokens: 167,729 in / 55,120 out
+
+### Round 10  (22:32)
+
+We were trying to finish Case A of the η(C_p^3) bound: starting with nine nonzero vectors in F_p^3 (each repeated p−1 times) not on a common affine hyperplane, show there is a short zero-sum. Progress this round: I proved computationally the auxiliary residue claim C(8,≤3) for all primes p ≤ 43 (using a Cauchy–Davenport reduction to a handful of primes and a brute-force check), and from that and an earlier—but unproved—extraction statement I concluded Case A for p ≤ 43. However the evaluator rightly flagged the real bottleneck: the needed “extraction lemma” that produces many disjoint, short zero-sum subsequences after projecting to C_p^2 has not been proved and prior intuitions (a complement/halving trick) were invalid, so the argument is currently incomplete. What I will do next, and am committing to now, is to focus narrowly on that single lemma: either (A) prove a concrete Greedy Extraction Lemma—show that the projection of our multiset yields nine disjoint projected zero-sums of controlled length (e.g. ≤⌊p/5⌋ for large p) by combining η(C_p^2)=3p−2 with pigeonhole/Cauchy–Davenport/Olson-type counting, or (B) if that fails, pivot to a structural reduction that studies the sum-0 part of the kernel K_0 and reduces Case A to the already-solved Case B; I will attempt (A) first and report a fully written lemma or a precise obstruction next turn. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $1.01** | Tokens: 200,372 in / 57,365 out
+

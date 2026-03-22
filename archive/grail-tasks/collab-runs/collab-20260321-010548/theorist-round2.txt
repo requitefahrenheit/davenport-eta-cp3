@@ -1,0 +1,81 @@
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: Glob]
+[TOOL: Glob]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/gap_hypothesis_verified.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/alpha4_maximality_verified.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/alpha4_verification.md]
+[READ: /home/jfischer/claude/grail-tasks/THEORIST_R3_REPORT.md]
+[READ: /home/jfischer/claude/grail-tasks/task6-proof-attempt.md]
+[READ: /home/jfischer/claude/grail-tasks/gap_hypothesis_proof.md]
+[READ: /home/jfischer/claude/grail-tasks/round1_results.md]
+[READ: /home/jfischer/claude/grail-tasks/goal.md]
+[READ: /home/jfischer/claude/grail-tasks/adversary_session6_round1.md]
+[READ: /home/jfischer/claude/grail-tasks/ADVERSARY_SESSION6_R1_REPORT.md]
+[TOOL: TodoWrite]
+Now let me search for relevant recent results on weighted zero-sum theory that could help with the inductive step.
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+[TOOL: TodoWrite]
+[TOOL: TodoWrite]
+[TOOL: TodoWrite]
+[WRITE: /home/jfischer/claude/grail-tasks/THEORIST_R2_REPORT.md]
+[TOOL: TodoWrite]
+# THEORIST ROUND 2 — RESULTS
+
+## Major New Results
+
+### 1. Universal Shadow Saturation (PROVED — 5-line proof)
+
+**The key theorem of this round.** For ANY strongly ZSF α(r)-set B in F_p^r (not just A₈):
+
+> Σ_{≤p-1}(B) = F_p^r \ {0}
+
+**Proof sketch:** To show v ∈ shadow, add ONE copy of −v to B^{p−1}, reaching exactly η(C_p^r) elements. The η bound forces a zero-sum. If it doesn't use −v, it contradicts ZSF. If it does (with coefficient t=1), we get v = Σc_i b_i at weight ≤ p−1 directly.
+
+**Key innovation:** Prior "three-line argument" (flagged by Adversary) used −v with multiplicity p−1, yielding s₉v (not v) in the shadow. My proof uses multiplicity **1**, so t ∈ {0,1} — no rescaling bug.
+
+This **resolves Adversary Attacks 2 and 3**: shadow saturation is universal across ALL GL classes, proved from η alone, requiring zero structural information about B.
+
+### 2. Weight Flexibility Theorem is FALSE
+
+The approach from `goal.md` (Cauchy-Davenport on weight sets from different fibers) **cannot work**. Counterexample: A₈ ∪ {(0,1,1)} at p=5 has only **one** achievable zero-sum weight (w=p=5), far below the needed (p+1)/2 = 3.
+
+### 3. Weight Mod-p Invariance (PROVED)
+
+Zero-sum-preserving perturbations (same tail, same weight mod p) change the integer weight by **multiples of p only**. This explains why weights cluster at exactly p.
+
+### 4. Precise Inductive Bottleneck Identified
+
+The inductive step works when:
+- Fiber 0 has ≥ α(r)+1 vectors (η bound, weight ≤ p, lifts trivially)
+- Any nonzero fiber has ≥ α(r)+2 vectors (s bound gives weight exactly p)
+
+It **fails** when:
+- Each nonzero fiber has ≤ α(r)+1 vectors (= exactly s−1 copies, one short of the s threshold)
+- The η bound gives weight ≤ p but NOT weight = p specifically
+- Lifting requires weight ≡ 0 (mod p), i.e., weight = p exactly
+
+### 5. The ONE Remaining Gap
+
+**Cross-Fiber Solvability:** Can partial sums from multiple fibers be combined to satisfy both the tail equation AND the first-coordinate constraint? This requires matching **exact-weight** representations, not just cumulative shadows.
+
+## Verification Requests
+
+Four [VERIFY] blocks in the report request:
+1. Confirm weight-5-only for A₈ ∪ {(0,1,1)} at p=5
+2. Test Universal Shadow Saturation on all 4 GL classes at p=5
+3. Compute full exact-weight shadow matrices for A₈ at p=5,7,11
+4. Test Cross-Fiber Solvability directly at p=5
+
+## Full report at:
+`~/claude/grail-tasks/THEORIST_R2_REPORT.md`
+
+Sources:
+- [Grynkiewicz, "Iterated Sumsets and Setpartitions"](https://arxiv.org/abs/1709.09288)
+- [Geroldinger, Grynkiewicz, Schmid, "Zero-sum problems with congruence conditions"](https://digitalcommons.memphis.edu/facpubs/6146/)
+- [Grynkiewicz, "A Weighted Erdős–Ginzburg–Ziv Theorem"](https://link.springer.com/article/10.1007/s00493-006-0025-y)
+- [Zero-sum problem (Wikipedia)](https://en.wikipedia.org/wiki/Zero-sum_problem)

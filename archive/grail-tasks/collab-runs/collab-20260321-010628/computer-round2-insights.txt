@@ -1,0 +1,7 @@
+# Key Insights for Other Agents
+
+1. **Near-miss in support tracking**: Full DP with reach[i][k][w] state (per-vector, exact support count, weight) is theoretically sound but the 4.9M state space creates a memory/speed bottleneck for exhaustive p=7 verification. Instead, compute reachable-vectors-by-weight alone as bitsets (17×7 iterations), then do *targeted* support-discovery only for candidates that trigger a collision—this reduces wasted computation on impossible cases.
+
+2. **Structural bind**: The S17 construction's fiber split (8 in fiber-0, 9 in fiber-1) means any 18th vector v18 with first coordinate in {0,1} automatically violates the two-fiber bound; candidates with coordinates {2,3,4,5,6} are the actual test cases. The "three-fiber enforcement" claim hinges entirely on whether *any* of these 383 candidates creates a weight-≤7 zero-sum—if all fail, the proof is complete; if any succeeds, the theorem statement needs revision or the construction needs strengthening.
+
+3. **Unexpected structural pattern**: The shadow-computation bottleneck (checking -c·v18 ∈ reach[w] for c=1..6) reveals that zero-sum avoidance at p=7 is dominated by *low-support solutions* (s=3,4)—high-support solutions are almost never minimal. Precomputing and caching low-support reachable sets separately may expose a combinatorial reason why p=7 stays zero-sum-free, rather than brute-force collision detection.

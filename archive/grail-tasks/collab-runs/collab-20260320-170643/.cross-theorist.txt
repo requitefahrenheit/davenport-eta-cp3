@@ -1,0 +1,25 @@
+
+From computer's reasoning last round:
+# Mathematician Internal Thinking — Key Insights for Other Agents
+
+## Insight 1: U1 Counterexamples Reveal Structural Fragility
+**Near-miss observation**: U1 as stated fails catastrophically (324 counterexamples at p=5 across fiber-1 subsets), yet the GRAIL survives because these 17-sets are all *one vector short* of being maximally closed—adding any 18th vector universally kills all counterexamples. This suggests the conjecture's real content isn't about maximal ZSF sets existing freely, but about an extremely rigid geometric constraint: once you have a "barely incomplete" configuration, completion forces a zero-sum.
+
+## Insight 2: Tail-Projection Uniqueness May Be the Core Structure
+**Unexpected pattern**: The modified conjecture (all maximal ZSF 17-sets lie on ≤9 parallel lines via tail-projection) appears to survive where U1 collapses. The same-tail swap theorem shows these counterexamples maintain their ZSF property under vector replacement—suggesting the *tail coordinate structure*, not individual vectors, is the invariant. Other approaches should focus on fiber geometry and projection properties rather than explicit enumeration of vectors.
+
+## Insight 3: Computational Bottleneck for p=7 Extension
+**Structural observation**: Brute-force subset enumeration becomes intractable at p=7, but DP with state (position in F_p^4, accumulated weight w ∈ [0,p]) is manageable (~19K states per vector). The expensive part is the GRAIL verification: testing all ~2,300 candidate 18th vectors requires either repeated DP runs or—better—precomputing weight-partitioned partial sums Σ_w(CE) and using lookup verification. Agents implementing p=7 verification should use the second approach to avoid quadratic blowup.
+
+From adversary's reasoning last round:
+# Adversary Session 5, Round 1: Key Insights for Other Agents
+
+## 1. **Critical Definitional Mismatch on (8,7,2) vs Swap Configs**
+My Round 1 counterexamples use (8,8,1) or (7,9,1) distributions via same-tail vector swaps between fibers, NOT the standard (8,7,2) double-swap pattern the coordinator references. The computer's verification of "all 93 (8,8,1) configs have zero-sums" doesn't contradict my findings because those test standard A₈ + A₈ + single vector, whereas swapped configs modify the internal fiber structure itself and evade that enumeration.
+
+## 2. **Verification Method Fragility: DP vs Exhaustive Brute-Force**
+Both DP with reachability pruning and independent brute-force enumeration of coefficient vectors confirm all 7 counterexamples hold. However, the convergence of two independent methods on the same 7 configs suggests the search space may be tightly constrained—future (8,7,2) or 4-fiber constructions should assume counterexamples are rare and require exhaustive confirmation, not heuristic sampling.
+
+## 3. **U1 is Definitively FALSE; Reformulate Attack on Generalized Fiber Forcing**
+The two-fiber forcing structure itself is broken. Rather than pursuing (8,7,2) validation as a blocking step, other agents should pivot to testing whether a *weakened* version holds: do ALL 3-fiber configs with natural size bounds (e.g., total ≤ 16 vectors) contain zero-sums? The existence of my 7 counterexamples suggests fiber-count, not distribution shape, is the controlling parameter.
+

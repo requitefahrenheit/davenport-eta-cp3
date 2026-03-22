@@ -1,0 +1,24 @@
+
+From computer's reasoning last round:
+# Key Insights for Other Agents
+
+1. **Near-miss in support tracking**: Full DP with reach[i][k][w] state (per-vector, exact support count, weight) is theoretically sound but the 4.9M state space creates a memory/speed bottleneck for exhaustive p=7 verification. Instead, compute reachable-vectors-by-weight alone as bitsets (17×7 iterations), then do *targeted* support-discovery only for candidates that trigger a collision—this reduces wasted computation on impossible cases.
+
+2. **Structural bind**: The S17 construction's fiber split (8 in fiber-0, 9 in fiber-1) means any 18th vector v18 with first coordinate in {0,1} automatically violates the two-fiber bound; candidates with coordinates {2,3,4,5,6} are the actual test cases. The "three-fiber enforcement" claim hinges entirely on whether *any* of these 383 candidates creates a weight-≤7 zero-sum—if all fail, the proof is complete; if any succeeds, the theorem statement needs revision or the construction needs strengthening.
+
+3. **Unexpected structural pattern**: The shadow-computation bottleneck (checking -c·v18 ∈ reach[w] for c=1..6) reveals that zero-sum avoidance at p=7 is dominated by *low-support solutions* (s=3,4)—high-support solutions are almost never minimal. Precomputing and caching low-support reachable sets separately may expose a combinatorial reason why p=7 stays zero-sum-free, rather than brute-force collision detection.
+
+From adversary's reasoning last round:
+# ADVERSARY's Round-2 Internal Observations
+
+## Key Insights for Other Agents
+
+**1. U1 Definitively Dead—But U1' Needs Verification:**
+The Same-Tail Swap Theorem destroyed Two-Fiber Forcing, yet the revised architecture (U1') claiming ≤α+1 parallel lines for strongly ZSF of size 2α+1 hasn't been independently verified. A p=7 search for 17-element strongly ZSF sets with >9 distinct tails would instantly settle whether the line-count bound holds or whether alternative fiber geometries exist.
+
+**2. The Gap Hypothesis is Suspiciously Brittle:**
+The structure Σ_{p-1}(A8)^c = {(0,j,j) : 1≤j≤(p-3)/2} is verified only up to p=29 and lies on a *single line*—this extreme specificity suggests it's a finite-range phenomenon, not a general principle. If Minkowski-sum completeness holds asymptotically (k+l≤p-1 forces full coverage), then at sufficiently large p this linear gap should shatter into scattered points, breaking the entire tail-uniqueness argument (U2).
+
+**3. Proof Architecture Has Unclosed Case Split:**
+Theorem 1(c) assumes 18-vector violations exist in multi-fiber regime but the proof cuts off—the 2-fiber case is handled separately. This leaves a logical gap: no proof yet that any 18-vector set *must* either (a) violate the two-fiber bound or (b) contain a zero-sum. The "remaining case" logic in the weight argument is incomplete.
+

@@ -1,0 +1,483 @@
+
+============================================================
+BLOCK 1 (165 chars)
+============================================================
+Let me start by searching Cortex for relevant findings from other agents, and also read the briefing document and any relevant files to understand the current state.
+
+============================================================
+BLOCK 2 (238 chars)
+============================================================
+Good, I have a lot of context from Cortex. Let me search for more specific things related to my adversary tasks for this round. Let me also search for the specific near-misses I flagged last round and the current state of the proof chain.
+
+============================================================
+BLOCK 3 (30260 chars)
+============================================================
+Now I have a comprehensive picture of the state of play. Let me analyze my directives for this round:
+
+**ADVERSARY PRIMARY TASKS (from coordinator):**
+1. **8-tail argument:** Construct an explicit proof that η(C_5^3) ≥ 9 and η(C_7^3) ≥ 15 using *only* direct zero-sum arguments (no recursive η-appeal). OR provide a concrete 8-tail example at p=3 showing the bound is tight and explain why it fails for p≥5.
+2. **p≥11 orbit coverage:** Test the modular constraint w·j mod p ∈ [⌈w/2⌉, 2⌊w/2⌋] exhaustively for j ∈ {1,...,p-2} and w ∈ {2,...,p} at p=11 and p=13. Quantify the fraction of (w,j) pairs satisfying the constraint; if <50%, the "dense coverage" claim is false.
+
+Rather than just executing these tasks, I should focus on attacking the core proof architecture itself. The Weight Flexibility Theorem is the claimed key reduction, the cross-fiber completeness via Minkowski identity is supposedly proved, and shadow saturation universality is computationally verified but unproven—these are my real targets. Let me think about what I can actually break computationally, starting with the Weight Flexibility Theorem.
+
+The theorem claims that given α(r)+k non-proportional vectors, zero-sums exist for at least f(k) distinct weights where f grows with k, and then Cauchy-Davenport combines weights across fibers. But the actual setup has 2α(r)+2 vectors that split into fibers after projection. The critical case is when vectors spread across three or more fibers—if I have m fibers with n_1, n_2, ..., n_m vectors totaling 2α(r)+2, the worst case for the induction is when each fiber has at most α(r) vectors, which means the theorem's assumptions might not even apply.
+
+With exactly three fibers of sizes roughly (α(r), α(r), 2), each large fiber has exactly α(r) vectors—one less than what the induction needs. The Weight Flexibility Theorem would have to work with zero surplus, but that's precisely where it breaks down: with k=0, there's no weight flexibility guaranteed, and the set could be zero-sum-free. This is the core issue—the proof relies on f(k) growing with k, yet the hardest case has k=0 or k=1.
+
+Let me reconsider the architecture. The total surplus across all fibers is roughly 2α(r)+2 minus the sum of individual thresholds. Since each fiber needs α(r-1)+1 vectors to fire, and α(r) = 2α(r-1)+1, I need to recount how the surplus distributes when we have 2α(r)+2 vectors split across fibers.
+
+With 4α(r-1)+4 total vectors and each fiber requiring α(r-1)+1, the pigeonhole principle shows that three fibers can't all reach threshold simultaneously—at most four fibers can be supported. But I'm mixing up the rank levels here. Let me clarify what I'm actually trying to prove about η(C_p^r) and the relationship between α(r) and the threshold structure.
+
+Now I'm realizing the issue: α(r) counts non-proportional vectors, not multiplicities, so I need to track how many distinct directions appear in each fiber when I project down to F_p^{r-1}. multiplicity: (α(r)+1)(p-1). But η counts sequences, not sets.
+
+Actually, let me re-read the problem statement: "given α(r)+1 = 9·2^{r−3} nonzero non-proportional vectors in F_p^r, each with multiplicity p−1, there exists a nonempty subsequence of length ≤ p that sums to zero."
+
+So we have N = α(r)+1 non-proportional directions, each appearing p-1 times. Total sequence length = N(p-1). We need a subsequence of length ≤ p summing to zero.
+
+Project via π. Each direction v_i goes to some fiber c_i = π(v_i). Let n_c = #{i : π(v_i) = c} count non-proportional directions in fiber c.
+
+Within each fiber F_c, I have n_c non-proportional directions (projected to ker(π)), each with multiplicity p-1. If n_c ≥ α(r-1)+1, the induction hypothesis applies immediately.
+
+Now, the total number of directions is N = α(r)+1 = 2α(r-1)+2. If no single fiber reaches the threshold α(r-1)+1, then each fiber has at most α(r-1) directions. Distributing 2α(r-1)+2 directions across fibers with this constraint requires at least 3 nonempty fibers, with the minimal configuration being sizes (α(r-1), α(r-1), 2). In this scenario, induction doesn't immediately trigger within any fiber.
+
+The cross-fiber Minkowski identity that worked for the rank-3 case doesn't generalize to arbitrary strongly ZSF sets at higher ranks—it's specific to the doubled+e1 construction. The computer verification covered 277 alternative B8 sets, but only at rank 3, leaving open whether shadow saturation holds for arbitrary strongly ZSF configurations at higher ranks.
+
+There's also a fundamental gap in the proof chain: even if I can establish η for the doubled+e1 construction across ranks, that only gives the lower bound. The upper bound requires showing that ANY set of α(r)+1 non-proportional vectors has a zero-sum, which can't be proven by analyzing just the doubled+e1 construction.
+
+The shadow saturation argument attempts to bridge this: if every maximal ZSF set of size α(r) achieves full shadow saturation at weight p-1, then adding any new vector v would create a zero-sum since -v would already be in the shadow. This would prove the upper bound holds for all maximal sets, not just the constructed one. The computational verification for p=5 at rank 4 checks whether all 54 maximal ZSF sets satisfy this saturation property.
+
+However, the Minkowski identity proof that establishes saturation only works for the specific doubled+e1 construction—it doesn't generalize to arbitrary maximal ZSF sets. So I need to test whether the Weight Flexibility Theorem actually provides the key reduction. The claim is that with α(r)+k non-proportional vectors (where multiplicity is bounded by p-1), zero-sums must exist across at least f(k) distinct weights. At rank 3 with α(3)=8 vectors, they form a ZSF set with no additional weights available, so f(0)=0.
+
+Now I'm checking what happens when we add one more vector—at k=1, we must get at least one zero-sum, but the critical question is whether the inductive argument actually works when applying this constraint within individual fibers, where the surplus is measured as the number of directions minus α.
+
+The problem is that when a fiber has fewer than α(r-1)+1 directions, the surplus becomes negative, which means the Weight Flexibility Theorem can't guarantee any zero-sums at all in that fiber. The theorist even notes this explicitly—the fiber induction produces nothing in the multi-fiber regime—but that's exactly where we need it most.
+
+Beyond the individual fiber analysis, there's another layer of difficulty: even if we could extract zero-sums from each fiber separately, combining them across fibers using Cauchy-Davenport isn't straightforward, since we'd need to ensure the weight sets from different fibers actually combine to give us the desired result. So the key constraint is that for two fibers to cancel their contributions modulo p, their weights must satisfy a specific linear relationship: w1 ≡ -(c2/c1)·w2 (mod p). The question becomes whether the achievable weight sets from each fiber can simultaneously satisfy this ratio constraint while keeping the total weight sum below p. So the achievable weights are integers in {1,...,p} for each fiber, and for cross-fiber cancellation I need w1 ∈ W1 and w2 ∈ W2 such that c1·w1 + c2·w2 ≡ 0 (mod p) while keeping w1 + w2 ≤ p, which means w2 is bounded by p - w1.
+
+For any given w1, the congruence equation uniquely determines w2 modulo p, so the question becomes whether there exists some w1 ∈ W1 where this required w2 actually falls within the valid range {1,...,p-w1} ∩ W2. If W1 and W2 are sufficiently dense—say both have size at least (p+1)/2—then I should be able to find such a pair. The feasibility really hinges on whether W1 and W2 are large enough relative to p, though analyzing this properly would need something like a Cauchy-Davenport argument adapted to constrained sets, which is getting unwieldy. Let me shift to running concrete computational tests instead: checking the modular constraint at small primes like p=11 and p=13, exploring what weights are achievable for zero-sums in the 54 multi-fiber ZSF sets at p=5, and trying to find a counterexample to shadow saturation by constructing a strongly ZSF 17-set that lacks full shadow coverage.
+
+The coordinator wants me to resolve the 8-tail near-miss and test those modular constraints, but as an adversary I should target the Weight Flexibility Theorem since it's the core of the current architecture. I'll write code to verify the modular constraint w·j mod p stays within the required bounds for p=11,13, compute which weights are actually achievable within each fiber of the rank-4 multi-fiber sets at p=5, and check whether the Weight Flexibility framework can produce the zero-sums we need. I should also develop some deeper theoretical attacks on this approach.
+
+Now I'm realizing the Weight Flexibility strengthening might actually be false. The theorist is trying to upgrade from "there exists a zero-sum of weight ≤ p" to "there exist zero-sums at many distinct weights," but this could be a flawed assumption. When I add a 9th vector to A8 at rank 3 with large p, the achievable weights of zero-sums depend on how many vectors from A8 participate in the sum along with the new vector. The weight equals the support size plus one, but the minimum support is constrained by the non-proportionality assumption and the multiplicity structure—I need to think through whether we can actually achieve the weight diversity the theorem claims.
+
+Looking at the empirical data from p=5 and p=7, the zero-sum weights cluster heavily at the lower end (3, 4, 5), with support-3 configurations dominating. But for the fiber induction to succeed, I need weights spanning the full range {1, ..., ⌊p/2⌋}, which the data suggests isn't happening. /2⌋} so that two fiber contributions can sum to ≤ p.
+
+At p=5: weights 3, 4, 5. Weight 3 works (3 ≤ ⌊5/2⌋ = 2? No, 3 > 2). Hmm. Actually p/2 = 2.5, so we need w1 + w2 ≤ 5 with w1, w2 ≥ 3. That gives w1 = w2 = 3... nah, we can go up to p. Let me re-check.
+
+Wait, we need w1 + w2 ≤ p = 5. With w1 ≥ 3 and w2 ≥ 3, we need w1 + w2 ≤ 5, which requires w1 = 2, w2 = 3 or similar. But zero-sums within a fiber have weight ≥ 3 (support ≥ 3). So w1 ≥ 3 and w2 ≥ 3 gives w1 + w2 ≥ 6 > 5 = p.
+
+This is the key constraint: if zero-sums within fibers always have weight ≥ 3, then combining two of them requires p ≥ 6, meaning p must be at least 7. At p=5, it's impossible to pair two fiber zero-sums with total weight ≤ p when each individually has weight ≥ 3.
+
+Yet we know α(4,5) = 17, so the theorem holds at p=5. This means either the proof takes a different route at p=5, or there's a way to construct weight-2 zero-sums within fibers (which contradicts our non-proportionality assumption), or the mechanism is entirely different. This is a structural obstruction for the weight-flexibility approach at p=5. Let me think about what weight-2 zero-sums within a fiber would actually require: two vectors v and w with v + w = 0, meaning w = -v. Since each direction appears with multiplicity p-1, both v and -v would need to be present in the same fiber, which means the direction itself and its opposite must both appear.
+
+But in F_p, -v and v point in the same projective direction (since -v ≡ (p-1)v mod p), so this would require the same direction to appear twice—contradicting our non-proportionality assumption. Alternatively, a weight-2 zero-sum could be a_1 v_i + a_2 v_j = 0 where a_1, a_2 ∈ {1,...,p-1} and a_1 + a_2 ≤ p, which would give v_j = -(a_1/a_2)v_i.
+
+Since we're assuming non-proportional vectors, this is impossible. So the minimum weight for a zero-sum from non-proportional vectors is 3, coming from three collinear points.
+
+Now at p=5, combining two fiber zero-sums requires w_1 + w_2 ≤ 5 with both w_1, w_2 ≥ 3, which gives 6 ≤ w_1 + w_2 ≤ 5—a direct contradiction. This means the Weight Flexibility and Cauchy-Davenport approach fundamentally breaks down at p=5 when trying to combine two fiber zero-sums, since the minimum combined weight exceeds p itself.
+
+So I'm wondering if the proof could instead combine a fiber zero-sum with individual vectors from another fiber, bypassing the need for zero-sums in each fiber. But that just pushes the problem back to finding a cross-fiber zero-sum directly, which is what we're trying to prove in the first place. Using three or more fibers only makes things worse—the minimum weight jumps to 9 or higher, still exceeding p=5.
+
+Now I'm realizing the issue with partial sums: they don't actually land at zero in ker(π), so they can't serve as zero-sums. When I combine vectors across two fibers, the fiber coordinate contributes c₁·w₁ + c₂·w₂ (mod p), and for this to be a valid zero-sum, the ker(π) projections need to sum to zero as well. This forces each fiber's contribution to already be a zero-sum in ker(π) individually, or their sum must cancel—which brings me back to the same structural constraint.
+
+But maybe I'm overcomplicating this. Instead of requiring sub-zero-sums in each fiber, I could construct a single zero-sum using vectors from multiple fibers simultaneously, like the cross-fiber collinear triple approach. Three vectors from fibers 0, 1, and c with dependency (c-1, -c, 1) would have a total weight of c + 1 plus something else, but I need to be careful about whether I'm measuring weight in Z or in F_p.
+
+Actually, in this problem setup, weights are multiplicities—each vector v appears with a coefficient a ∈ {0, 1, ..., p-1}, and the total weight is just the sum of these coefficients. So for the dependency (c-1)v₀ + (-c)v₁ + v_c = 0, the coefficients are (c-1), (p-c) mod p, and 1, giving a total weight of exactly p. That's tight against the bound but leaves no room for combining with other constraints, and it turns out all cross-fiber dependencies at three fibers hit this weight exactly p.
+
+Now I need to think about what the adversary could construct. The Weight Flexibility + Cauchy-Davenport approach breaks down at p=5 because the minimum zero-sum weight within a single fiber is 3, and combining two such dependencies gives weight at least 6, which exceeds p. Yet the theorem is actually true at p=5, so the proof must rely on a different mechanism—specifically, direct cross-fiber zero-sums rather than combining within-fiber ones. This means the Weight Flexibility architecture the theorist proposed won't work and needs to be replaced entirely.
+
+I should verify this computationally and run the other tests to confirm.
+
+Writing verification script... zero-sum weight within fibers at rank 4, p=5. I should test the modular constraint at p=11 and p=13, then check weight flexibility across various parameters. At p=7, the minimum within-fiber zero-sum weight is 3, and two fibers give 3+3 = 6 ≤ 7, which barely works. For this to satisfy c1·w1 + c2·w2 ≡ 0 (mod 7) with w1 = w2 = 3, I need c1 + c2 ≡ 0 (mod 7), meaning the fibers must have antipodal labels like c and -c.
+
+However, if the vectors spread across non-antipodal fibers like {0, 1, 2}, then sums like 1+2 = 3 or 0+1 = 1 won't give zero. With different weights like w1=3 and w2=4, I get c1·3 + c2·4 ≡ 0 (mod 7), which opens up more possibilities depending on which fiber pairs I'm working with. I'm realizing that combining zero-sums from all three fibers would exceed the weight limit, so I need to focus on pairing the kernel fiber with individual non-kernel fibers. For a valid zero-sum using fiber 0 and fiber c, the weight from fiber c must be divisible by p, but that constraint is running into issues with the minimum weight requirements.
+
+Let me instead consider using single vectors from different fibers—three vectors of weight 1 each from distinct fibers would give total weight 3, and I need their sum to vanish in F_p^r. This is the cross-fiber collinear triple, where the dependency coefficients determine the actual weight.
+
+Now I'm exploring what happens with multiplicities: taking 2 copies of a vector from fiber 1 and 1 copy from fiber c gives weight 3, and the first coordinate becomes 2+c, which needs to be 0 mod p, so c = p-2. But then I need to check whether the fiber constraint is satisfied—specifically whether the projection of the combined vector matches what the dependency requires.
+
+The key insight is that if v is in fiber 1 and w = -2v is in fiber p-2, then 2v + w = 0 works with weight 3. However, this means v and w are scalar multiples of each other in the underlying vector space, so they represent the same projective direction—which violates the non-proportionality assumption the problem is built on.
+
+When I account for multiplicities, using 2 copies of v and 1 copy of (p-2)v is really just 3 copies of the same direction, giving total weight p. This confirms that using multiple copies of any single direction always yields weight divisible by p, so the minimum is p. The only way to break below weight p is to genuinely use vectors from different projective directions, and the cross-fiber collinear triple of three distinct directions achieves exactly weight p.
+
+Wait, I need to reconsider that last claim. For cross-fiber collinear triples with three non-proportional vectors v1, v2, v3 satisfying a1·v1 + a2·v2 + a3·v3 = 0, the weight is the sum a1 + a2 + a3. The dependency is determined by the rank-2 condition on the subspace they span. For the cross-fiber case where the vectors come from fibers c1, c2, c3, the first coordinates must satisfy a1·c1 + a2·c2 + a3·c3 = 0, and I need to check what happens with the tail components.
+
+Let me test this with a concrete example at p=5 using vectors (0, 1, 0), (1, 0, 1), (2, 4, 3). Setting up the dependency equation and solving the system, I find that the only solution is the trivial one where all coefficients are zero, meaning these three vectors are actually linearly independent.
+
+Now I'm trying coplanar vectors instead: (0, 1, 0), (1, 2, 0), (2, 3, 0). These all have zero in the third coordinate, so they lie in a 2D subspace. Working through the dependency relation, I get that b = 3c and a = c modulo 5, giving me a nontrivial linear dependence.
+
+Let me check another example with 2D vectors: (0, 1), (1, 1), (3, 1). The dependency calculation gives b = 2c and a = 2c, so the relation is c(2, 2, 1). Both examples have weight equal to p = 5, which is interesting—I'm wondering if this is always true for cross-fiber collinear triples.
+
+Now I'm setting up the general case with three vectors having distinct fiber coordinates. From the dependency equation, I can express the weight in terms of the coordinate differences and see whether it's constrained to equal p.
+
+Let me reconsider this more systematically by treating the dependency as a linear system: the two equations (the coordinate sum and the weight sum) define a one-dimensional solution space, so any valid dependency is a scalar multiple of a base solution.
+
+Now I need to think about what weights are actually achievable. If the base solution has nonzero coordinate sum, then scaling it by different values of λ would seem to give all possible weights—but I need to be careful about the actual constraints on a, b, c and the allowed weight range. I need to think about the weight function more carefully. For a dependency line parameterized by λ, the weight W(λ) is computed by taking the integer representatives of each coefficient and summing them, so I'm looking at how this weight varies as λ ranges over F_p and what the minimum achievable weight is for non-degenerate triples.
+
+Now let me verify this with the specific cross-fiber collinear triple on fibers 0, 1, and c where the dependency relation is (c-1, -c, 1).
+
+For v0 in fiber 0, v1 in fiber 1, and vc in fiber c, the dependency checks out: (c-1)·0 + (-c)·1 + 1·c = 0. The weight at λ=1 is (c-1) + (p-c) + 1 = p, but I need to examine what happens when I scale this dependency by other values of λ in F_p* to see if I can get a smaller weight.
+
+When I compute the weight for a scaled dependency, each term becomes λ times the original coefficient, taken modulo p. The sum of these three representatives is always congruent to 0 modulo p, which means the actual weight must be a multiple of p. Given that each term is between 0 and p-1, the weight can only be 0, p, 2p, or 3p-3, and among these, only 0 and p are feasible.
+
+Weight 0 only occurs when λ = 0 (the trivial case), while weight p is what happens generically. This means for any three vectors from distinct fibers, the minimum positive weight is always exactly p—never smaller. Let me verify this holds more generally.
+
+Actually, I need to reconsider the relationship between the first-coordinate constraint and the weight. The first coordinate gives me a·c₁ + b·c₂ + c·c₃ ≡ 0 (mod p), but the weight is just the integer sum â + b̂ + ĉ, which are independent constraints. For the specific case of fibers 0, 1, c, the first coordinate equation becomes b + c·c ≡ 0 (mod p), but this doesn't directly constrain the weight itself.
+
+Let me work through the dependency (c-1, -c, 1) more carefully. The first coordinate checks out: (c-1)·0 + (-c)·1 + 1·c = 0. The weight of this dependency as integers is (c-1) + (p-c) + 1 = p. When I scale by λ, the coefficients become λ(c-1), -λc, λ as field elements, which correspond to integers λ(c-1) mod p, p - λc mod p, and λ mod p. Now I need to figure out what the weight becomes under this scaling.
+
+Testing with p=7 and c=2, I'm checking whether the weight stays constant at p regardless of the scaling factor λ. With λ=2, the coefficients are (2, 3, 2) in F_7, giving weight 7. With λ=3, they're (3, 1, 3), also giving weight 7. The pattern suggests the weight remains p across different scalings.
+
+Now I'm testing λ=4 through λ=6 to see if this holds, and I'm finding the weights jump to 2p instead. For c=3, I'm checking whether a similar pattern emerges. Still computing the weights... I'm noticing that across different values of λ, the weight consistently equals either p or 2p, which suggests there's an underlying algebraic structure here. Let me work through the modular arithmetic to see if I can prove this pattern holds generally for the dependency (c-1, -c, 1). mod p] = [(λc mod p) - (λ mod p) mod p]
+
+If λc mod p ≥ λ mod p: [λ(c-1) mod p] = (λc mod p) - (λ mod p).
+Weight = (λc mod p) - (λ mod p) + p - (λc mod p) + (λ mod p) = p.
+
+If λc mod p < λ mod p: [λ(c-1) mod p] = (λc mod p) - (λ mod p) + p.
+Weight = (λc mod p) - (λ mod p) + p + p - (λc mod p) + (λ mod p) = 2p.
+
+So the weight is always either p or 2p! This is exact. The minimum weight of a cross-fiber collinear triple involving fibers 0, 1, c is ALWAYS exactly p.
+
+This completely undermines the Weight Flexibility approach. Now I need to examine what happens with cross-fiber collinear triples where all three fibers are nonzero—say c1, c2, c3. Setting up the dependency av1 + bv2 + cv3 = 0 with vectors from each fiber, the first coordinate gives a·c1 + b·c2 + c·c3 = 0. The weight becomes [λa mod p] + [λb mod p] + [λc mod p], and substituting a' = λa, b' = λb, c' = λc, I get a'c1 + b'c2...
+
+Actually, let me test this with concrete fibers like 1, 2, 4 in F_7 to see if the weight pattern holds more generally.
+
+I need to find solutions to a + 2b + 4c ≡ 0 (mod 7). Solving for a gives a ≡ 5b + 3c (mod 7). When b = c = 1, I get a = 1, so the triple (1,1,1) works and has weight 3, which checks out since 1 + 2 + 4 ≡ 0 (mod 7).
+
+This is interesting—cross-fiber collinear triples can have weight less than p even when all fibers are nonzero. Now I'm checking what happens when I scale all three fibers by the same λ ∈ F_7*. The triple (1,1,1) has weight 3, but (2,2,2) has weight 6, and I need to continue checking the remaining scalings. 9 > 7? No, 3+3+3 = 9. That's 9 = p + 2.
+λ=4: (4,4,4). Weight = 12 = 2p - 2.
+λ=5: (5,5,5). Weight = 15 = 2p + 1.
+λ=6: (6,6,6). Weight = 18 = 3(p-1).
+
+The simplest case is (a,b,c) = (1,1,1), where three vectors sum to zero with weight 3 at λ=1. But this only applies to that specific dependency—for general coefficients where a+b+c isn't small, the minimum weight could be much larger. The real question is whether any collection of 2α(r)+2 non-proportional vectors across multiple fibers must contain a cross-fiber triple summing to zero, which connects to the classical s_3(F_p^r) problem about the minimum size needed to guarantee three vectors sum to zero.
+
+This is actually a cap set problem—I'm looking at sets that avoid three elements summing to zero, which is the additive combinatorics version of sum-free sets. The condition v1+v2+v3=0 is equivalent to v3 = -(v1+v2), an affine constraint, and the maximum size of a set avoiding this relates to cap set bounds. For F_5^4 specifically, I need to check whether 18 non-proportional vectors can avoid having any three sum to zero, which would contradict the bound.
+
+But wait, I'm conflating two different problems. The actual constraint is about non-proportional vectors (projective points) with multiplicities, where zero-sums can use coefficients greater than 1. The real question is whether the Weight Flexibility architecture actually works. It turns out it works for the kernel fiber but fails at small primes for non-kernel fibers—the minimum intra-fiber zero-sum weight is p. Cross-fiber zero-sums can be lighter, but only when specific fibers cooperate, like in F_7 where fibers 1, 2, and 4 sum to zero.
+
+Now I need to write code to test this systematically across different primes, checking minimum zero-sum weights for cross-fiber dependencies and whether the inductive step can be salvaged. The real issue is understanding whether the lifting from rank 3 to rank 4 using the doubled+e1 construction actually covers all cases or if there's a gap for non-doubled+e1 configurations.
+
+Let me verify my weight-p barrier claim more rigorously—the argument that any zero-sum from a single non-kernel fiber must have weight divisible by p, which would force weight ≥ p. 0 (mod p), minimum weight p. So within-fiber zero-sums in the kernel fiber have no weight constraints, but any non-kernel fiber zero-sum must have weight divisible by p with minimum p. This means to stay under the p weight limit, I can use at most one non-kernel fiber zero-sum at exactly weight p, with the kernel contributing nothing—but that already gives us a weight-p zero-sum, so we're done.
+
+The real question is whether such a within-fiber zero-sum actually exists in a non-kernel fiber. In fiber c with n_c non-proportional directions each repeated p-1 times, a zero-sum requires coefficients summing to 0 (mod p) with total weight at least p if positive, so any zero-sum either has weight exactly p or doesn't exist at all.
+
+If I lift a zero-sum from the projected space F_p^{r-1} back to F_p^r, the weight stays the same, but the first coordinate becomes c times that weight—and for this to vanish in F_p, the weight must be divisible by p.  Since weight ≤ p and positive, this forces weight = p exactly. But if the inductive zero-sum has weight strictly less than p, then lifting it preserves that smaller weight, making the first coordinate non-zero mod p, so it's not actually a zero-sum in the full space—I need to reconsider this.
+
+Let me clarify the structure: vectors in fiber c are pairs (c, t_i) where t_i lives in the lower-dimensional space. A zero-sum requires both the first coordinate to sum to zero mod p and the tail vectors to sum to zero. The inductive hypothesis gives me a zero-sum in the tail with weight at most p, but I also need the coefficients themselves to sum to zero mod p.
+
+Here's the problem: if that inductive zero-sum has weight w < p, then the coefficients sum to w as an integer, which is nonzero mod p. So the first coordinate becomes c·w ≠ 0, breaking the zero-sum property in the full space. I need to either modify the coefficients to satisfy the mod p constraint (which pushes the weight to p) or find a zero-sum in the projection that already has weight divisible by p. This becomes a constrained search problem for the fiber induction.
+
+The inductive hypothesis gives me weight ≤ p, but adding the constraint that weight ≡ 0 (mod p) is a strengthening I haven't justified. However, if I aim for weight = p exactly, that's achievable since I have enough directions and can distribute p among them with coefficients in {0,...,p-1}.
+
+For r=4, the fiber has 9 non-proportional directions, so finding a weight-p zero-sum is feasible—at p=5 I can construct a combination of 9 coefficients summing to 5 that vanishes in F_5^3, since the bound on zero-sums there is large enough to guarantee such a solution exists.
+
+But wait, the η-constant only guarantees a zero-sum of weight *at most* p, not exactly p. The first-coordinate constraint actually forces the weight to be divisible by 5, which is a much stronger restriction than what the counting argument alone provides.
+
+Let me verify this pattern holds for the other primes. At p=7, I have 54 elements total, which exceeds the threshold of 49, so a zero-sum of weight ≤ 7 exists, and the modular constraint forces it to equal 7. The same logic applies at p=11 with 90 > 81. So whenever a fiber has at least 9 directions, the η-theorem guarantees a zero-sum bounded by p, and the fiber's modular structure pins down the weight exactly.
+
+The real problem emerges with fibers that fall below this threshold—the η-theorem doesn't apply, and I lose any guarantee of finding a within-fiber zero-sum. This obstruction persists in the multi-fiber case where all fibers stay below the critical density.
+
+Now I'm seeing the full landscape. The remaining challenge is either proving shadow saturation for arbitrary zero-sum-free sets beyond the doubled+e1 case, or strengthening the induction by incorporating weight flexibility as a hypothesis, though that approach hasn't been fully formalized yet.
+
+The most promising angle seems to be the incidence geometry approach: whether cross-fiber collinear triples must exist when I have enough vectors distributed across fibers. I need to test this computationally—checking the window structure at higher primes, verifying cross-fiber collinear triple existence in multi-fiber configurations, and measuring the minimum achievable cross-fiber zero-sum weight as fiber structure varies.
+
+Writing computational tests now...
+
+============================================================
+BLOCK 4 (205 chars)
+============================================================
+The script is running in the background. Let me check on it after a moment. Meanwhile, let me think about the theoretical attacks and write them up.
+
+Actually, let me check if there's output available yet.
+
+============================================================
+BLOCK 5 (12740 chars)
+============================================================
+The script is still running. Let me wait a bit and check again, or think about what theoretical arguments I can develop while waiting.
+
+Actually, let me think about the theoretical attacks more deeply while the computation runs.
+
+### Theoretical Attack: The Weight-p Barrier is a THEOREM, not just an observation
+
+Let me prove this rigorously:
+
+**Theorem (Weight-p Barrier):** Let v_1, ..., v_k be vectors in F_p^r, all with the same first coordinate c ≠ 0. If coefficients a_1, ..., a_k ∈ {0, ..., p-1} satisfy Σ a_i v_i = 0 and not all a_i = 0, then the weight w = Σ a_i (as an integer) satisfies w ≡ 0 (mod p). In particular, w ≥ p.
+
+
+The proof follows from looking at the first coordinate: since c · w = 0 in F_p and c ≠ 0, we must have w ≡ 0 (mod p), which means w is at least p given that the coefficients are nonzero.
+
+This creates a critical problem for the fiber induction approach at p=5: any zero-sum from a non-kernel fiber has weight at least p, so combining two such zero-sums immediately exceeds p. The method only works when you can extract a single fiber zero-sum with weight exactly p, requiring one fiber to contain enough vectors to satisfy the inductive hypothesis. Once vectors scatter across three or more fibers without any reaching critical mass, the entire approach collapses.
+
+This contradicts the Weight Flexibility Theorem's claim that zero-sums exist at many weights—for non-kernel fibers, the weight constraint is far more rigid than the theorem suggests. zero-sums have weight ≡ 0 (mod p). So the achievable weights are {p, 2p, 3p, ...}. The only weight ≤ p is p itself. There is NO flexibility — the weight is RIGIDLY p (when it exists at all).
+
+So the Weight Flexibility approach must rely entirely on:
+1. Cross-fiber zero-sums (which DON'T factor through individual fibers)
+2. Kernel fiber zero-sums (which have no mod-p constraint)
+
+But cross-fiber zero-sums with one kernel vector and one non-kernel vector don't help either, because the kernel vector contributes 0 to the first coordinate, so the non-kernel part still needs weight ≡ 0 (mod p).
+
+The key insight is that only cross-fiber zero-sums involving at least two distinct non-kernel fibers can achieve weight < p, since the first-coordinate equation then becomes a1·c1 + a2·c2 + a3·c3 = 0 without forcing the coefficients to sum to 0 mod p. But once I include the kernel fiber, the constraint tightens again — if I have vectors from the kernel and two non-kernel fibers, the first coordinate forces a relationship that reintroduces the mod-p restriction. The weight is a0 + a1 + a2. No constraint on a0 + a1 + a2 from the first coordinate! So the weight CAN be anything.
+
+Wait, that means my analysis is wrong for the mixed case (kernel + non-kernel). Let me reconsider.
+
+If we use vectors from fibers 0, c1, c2 (where c1, c2 ≠ 0): the first-coordinate equation is 0·a0 + c1·a1 + c2·a2 = 0. This constrains a1 and a2 but NOT a0. The weight is a0 + a1 + a2. Since a0 is free (as long as the zero-sum condition holds in all coordinates), the weight can be adjusted by varying a0.
+
+But I need to be more careful here. The zero-sum condition Σ a_i v_i = 0 must hold across ALL coordinates, not just the first one. That means a0 isn't actually free—it gets pinned down by what happens in the other coordinates. Let me work through a concrete example to see how this plays out. I'll take three vectors from different fibers: v0 = (0, 1, 0, 0), v1 = (1, 0, 1, 0), v2 = (2, 0, 0, 1). Now checking the zero-sum constraints coordinate by coordinate, the first coordinate gives me a1 + 2a2 ≡ 0, and the second coordinate forces a0 ≡ 0. Working through the system of equations, I can solve for the coefficients in terms of a2: from the first coordinate equation I get a1 = 3a2, and from the second I get a0 = a2, which means the solution space is one-dimensional and spanned by (1, 3, 1).
+
+Now I'm checking the weight of this vector across different values of a2 modulo 5—when a2 = 1 or 2 the weight equals p = 5, but when a2 = 3 or 4 it jumps to 2p = 10, so the minimum weight is p. Let me explore whether other fiber types like (0, c1, c2) with different coefficients might achieve a lower weight.
+
+I'm setting up a specific example with vectors v0 = (0, 1, 0, 0), v1 = (2, 3, 0, 0), v2 = (3, 4, 0, 0) and solving the zero-sum constraints modulo 5 to find the coefficients (a0, a1, a2).
+
+The dependency vector turns out to be a2·(3, 1, 1) with weight equal to p, which isn't helping. Let me try a different approach with fibers (2, 3, 4) in F_7 and solve for the dependency coefficients there.
+
+After working through the modular arithmetic, I find that (a,b,c) = (1,1,4) gives a collinear triple with weight 6, which is less than p = 7—this is the breakthrough I was looking for. Now I'm wondering if the same fibers work in smaller fields like F_5.
+
+For p = 5, I'm checking the same fiber coordinates (2,3,4) and testing different values of (a,b) to find valid c values. Most combinations either exceed the weight threshold or produce invalid results like c = 0, though (a,b) = (2,1) gives c = 2 with weight exactly equal to p.
+
+Now I'm seeing that at p = 7, the minimum weight can actually drop below p, which is different from p = 5 where it stays at or above p. This suggests the relationship between weight and p isn't universal—it depends on the specific prime. I'm starting to think about the general pattern: for collinear triples of nonzero fibers, what determines whether the minimum weight stays above, equals, or falls below p? I'm calculating how many valid triples exist on this plane by checking which (a,b) pairs yield a valid c value in the allowed range, which gives me 12 points total. Now I need to find which of these 12 triples has the minimum coordinate sum.
+
+For the sum to equal 3, I'd need (1,1,1), but that only works if the coefficients satisfy a specific congruence condition modulo 5. I'm checking which coefficient triples with distinct values would allow this, starting with the constraint that c₁ + c₂ + c₃ ≡ 0 (mod 5). 2+3+4 = 9 ≡ 4 (mod 5). So none of the distinct triples from {1,2,3,4} sum to 0 mod 5, meaning there's no weight-3 collinear triple for all-nonzero fibers at p=5. Now I need to find what the actual minimum weight is for these fibers, starting with the constraint that a + 2b + 3c ≡ 0 (mod 5) for the fiber (1,2,3).
+
+Computing the valid (a,b,c) triples systematically: when a=1, b=1 gives c=4 with weight 6; a=1, b=3 gives c=1 with weight 5; a=2, b=1 gives c=2 with weight 5; a=3, b=2 gives c=1 with weight 6. The pattern shows several triples achieve weight 5, which appears to be the minimum for this fiber. Now I'm checking whether the fiber triple (1,2,4) at p=5 actually satisfies the collinearity constraint. The sum 1+2+4=7 doesn't equal 0 mod 5, so I need to recalculate what value of c would work given the modular arithmetic—specifically that 4^{-1} ≡ 4 (mod 5), which means I'm solving for c in terms of a and b.
+
+Testing small values of (a,b), I find that (1,1) gives c=3 with total weight 5, which equals p itself and turns out to be the minimum possible weight.
+
+At p=7, the same approach yields weight 6 for (a,b)=(1,1), which is less than p. This reveals a crucial structural difference: the modular constraint at p=5 forces the minimum weight of cross-fiber collinear triples to equal p exactly, but for p≥7 this constraint loosens enough to allow weights strictly below p. This means the proof strategy needs to split into two cases—p=5 likely requires direct verification, while p≥7 needs a different argument accounting for the possibility of lighter configurations.
+
+But wait, the theorem does hold at p=5 (α(4,5)=17 is verified), so the 18th vector must create a zero-sum of weight at most 5. Looking at the distribution from the exhaustive search: support-3 triples kill 83% of candidates, support-4 kills 17%, with weights concentrated at 3, 4, and 5. The bulk of eliminations happen at weight exactly 5, with 17 candidates killed at weight 3.
+
+These weight-3 kills are special—they're three vectors from the kernel fiber forming a collinear triple, so the first coordinate sums to zero. The cross-fiber and non-kernel zero-sums all have weight at least 5. This gives a clean separation: only the kernel fiber can produce weight-3 zero-sums, while everything else stays at weight ≥ p.
+
+The proof strategy hinges on this: at p=5, if the kernel fiber has enough directions (at least α(r-1)+1), induction works. Otherwise, we'd need all the weight to come from the kernel fiber, but there might not be enough vectors there to support it. At rank 4 with p=5, the kernel fiber of S17 has 8 vectors, which I need to check against the threshold.
+
+But here's the key insight: even if the kernel fiber alone doesn't trigger induction, adding the 18th vector could still force a collinear triple within the kernel fiber. If v18 lands in the kernel fiber (fiber 0), then we suddenly have 9 vectors there—exactly α(3)+1—and induction fires directly, giving weight ≤ 5. If v18 lands in some other fiber c, then that fiber now has 9 vectors total, and since all vectors in the same fiber share the same first coordinate, the structure there might also force a collinear triple.
+
+Wait, I need to reconsider the distribution in S17. Let me recount which fibers actually contain vectors and how many. So fiber 0 has 8 vectors, and fiber 1 has 9 vectors including e1. But I need to be careful here—the zero vector (0,0,0) in the tail isn't a valid projective direction, so I'm getting confused about what I'm actually counting. Let me restart with the projection map π: F_p^4 → F_p that sends (x1,x2,x3,x4) to x1. The kernel is the 3-dimensional subspace {(0,x2,x3,x4)}, and within each fiber c, the elements project down to F_p^3 via their tail coordinates. For fiber 1 of S17, I'm looking at vectors of the form (1,a) where a comes from A8, plus e1 = (1,0,0,0). a ∈ A8: these project to A8 in F_p^3. 8 directions.
+- e1 = (1,0,0,0): this projects to (0,0,0) in F_p^3. But (0,0,0) is the zero vector!
+
+So in the projection to ker(π), e1 maps to 0. This is problematic because 0 is not a valid "direction." The η-bound works with nonzero vectors.
+
+What does this mean for the fiber induction? In fiber 1, we have 9 vectors:
+- 8 with nonzero projections (tails in A8)
+- 1 with zero projection (e1 = (1,0,0,0))
+
+The zero projection means e1 contributes to the first coordinate but its tail is 0. For a zero-sum within fiber 1, I need both the first coordinate sum and the tail sum to vanish. Since e1's tail is zero, it doesn't affect the tail constraint—only the weight constraint. So I'm looking at two independent conditions: the coefficients must sum to 0 mod p, and the nonzero tails must form a zero-sum among the remaining 8 vectors.
+
+But A8 is strongly ZSF, so no nontrivial zero-sum exists among those 8 vectors. This means no intra-fiber zero-sum in fiber 1 exists—contradiction with S17 being ZSF overall. The issue is that the η-theorem requires all vectors in the fiber to have nonzero projections, but e1 breaks this assumption.
+
+When we add v18, if it lands in fiber 0, we get 9 nonzero-projection vectors and η applies immediately. If v18 lands in fiber 1, we'd have 10 vectors total but only 9 with nonzero tails, so η still fires with a zero-sum of weight p. However, e1 might allow us to construct a lower-weight zero-sum by incorporating it into the combination.
+
+Actually, e1 doesn't help lower the weight. Since e1 contributes nothing to the tail sum, its coefficient a_0 is constrained only by the overall weight modulo p. If the tail zero-sum has weight w ≤ p, then a_0 must equal p - w to satisfy the weight constraint, giving total weight p. Even when w = p, we're forced to a_0 = 0, still yielding weight p. So fiber 1 always produces weight p.
+
+Now for fiber c where c ≠ 0, 1: it contains only one vector, so there's no intra-fiber zero-sum possible. I need a cross-fiber zero-sum involving v18 from fiber c and vectors from fiber 0. If v18 is in fiber c and I take two vectors from fiber 0, the first coordinate equation becomes c + 0 + 0, which immediately fails.
+
+To make this work, I'd need to either scale v18 by some coefficient α, which contributes α·c to the first coordinate, or bring in more vectors from fiber c itself. This is where the weight-p barrier becomes a real obstacle—the simple fiber induction approach breaks down for non-kernel fibers.
+
+I'm also realizing that my computational search strategy might be inefficient at p=11, since searching through all zero-sums in a fiber of 8 vectors with coefficients up to 10 could be slow.
+
+Let me refocus on the theoretical results and the modular window test instead, which are more computationally feasible.
+
+============================================================
+BLOCK 6 (217 chars)
+============================================================
+The script is still running. Attack 1 is probably very slow because it tries to find zero-sums by brute force for all coefficient tuples. At p=11, this is infeasible. Let me kill it and write a faster, smarter script.
+
+============================================================
+BLOCK 7 (10946 chars)
+============================================================
+Excellent! The results are very illuminating. Let me now analyze the key findings:
+
+### Attack 1 — Weight-p Barrier:
+- **CONFIRMED**: At p=5, ALL cross-fiber collinear triples (including all-nonzero fiber triples) have weight ≥ p. 100% of fiber triples have weight = p.
+- **At p≥7**: All-nonzero fiber triples CAN have weight < p. In fact, 100% of all-nonzero fiber triples at p=7 have min weight < p! This is because for p≥7, there's more room.
+
+
+- At p=5 specifically, the combinatorial constraint is tight—there are only 4 possible all-nonzero fiber triples and every single one hits exactly weight p, making the barrier absolute across all collinear triple types.
+
+### Attack 2 — Modular Window:
+- **DEVASTATING**: The modular constraint w·j mod p ∈ [⌈w/2⌉, 2⌊w/2⌋] is SPARSE for ALL tested primes, with density dropping as p increases—41.7% at p=5 down to 36% and lower for larger primes.
+- **w=p is ALWAYS 0%**: Since w·j = p·j ≡ 0 (mod p), it always falls outside the window [⌈p/2⌉, p-1], and w=3 is similarly sparse with only 1/(p-2) of j values hitting its single-element window.
+- The earlier claim about dense coverage is definitively wrong—overall density stabilizes around 27-30% for large p, nowhere near 50%.
+
+But wait, I'm realizing the Cortex entry is actually describing something different. The window formula ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ applies to j values in the shadow of A8 at weight w intersected with a line, not to which j values get hit by multiplicative orbits. So Attack 2 is testing the range structure of sumsets, not orbit coverage—I've been conflating two different things.
+
+The coordinator's directive is specifically asking about the multiplicative constraint: whether w·j mod p falls in that window for j ∈ {1,...,p-2} across different weights and primes. My test shows this is sparse, but I need to check whether the original "dense coverage" claim was actually about this multiplicative structure or something else entirely.
+
+Looking back at the Adversary Session 4 entry, the window formula ⌈w/2⌉ ≤ j ≤ 2⌊w/2⌋ describes a constraint on sumset values—specifically which j-values appear in the sumset of A8 when restricted to a 1D subspace. This is a structural property of the sumset itself, not a claim about coverage. The orbit coverage question is separate: whether for a fixed w, all j-values in that window are actually achievable as we vary over the orbit.
+
+The real issue is whether multiplicative orbits of w·j mod p are dense enough in the window to guarantee shadow saturation. My sparsity test directly addresses this—showing that orbits cover less than 50% of the window across all tested primes, declining toward ~27%. This is the right measurement for understanding whether the orbit structure alone can achieve the saturation property the theorist needs.
+
+Now I'm examining the fiber arithmetic constraints more carefully. The induction works cleanly for m ≤ 2 fibers across all ranks r ≥ 4, but breaks down completely at m ≥ 3—that's the structural bottleneck. For non-kernel fibers, zero-sums have weight at least p, so combining two of them exceeds p. At p=5 specifically, cross-fiber triples all achieve exactly weight p, which is the tightest possible bound for any zero-sum involving non-kernel vectors.
+
+This rigidity at p=5 creates a critical constraint: the kernel fiber's 8 directions form A8, which is zero-sum-free up to weight 5, so the 18th vector must either stay within the kernel fiber or force a zero-sum that violates the weight bound.
+
+For the S17 construction specifically, placing v18 in fiber 0 triggers induction immediately with 9 kernel directions, while placing it in fiber 1 activates the η mechanism within that fiber at weight 5. Any other fiber placement leaves v18 isolated without creating the necessary zero-sum structure.
+
+The challenging scenario is when v18 lands in fiber c ≥ 2, requiring a cross-fiber zero-sum to fire. I can construct this either through a collinear triple pairing v18 with vectors from fibers 0 or 1 at weight 5, or through higher-support zero-sums across multiple fibers. Both approaches yield weight ≤ 5 when they exist, though I need to verify their existence rigorously.
+
+I think I have the full picture now to write this up cleanly. Let me double-check whether the cross-fiber triple at weight exactly 5 always exists at p=5.
+
+The Cortex data confirms it: 390 out of 556 candidates are killed at weight exactly 5, which accounts for the cross-fiber cases. Now I'm ready to document this and wrap up.
+
+But I should also refine Fact 2 more carefully. The claim is that a cross-fiber triple on fibers (0, c1, c2) with c1·c2 ≠ 0 has weight in {p, 2p}. I've verified this for (0, 1, c), so let me check whether it generalizes to arbitrary (0, c1, c2).
+
+Testing with fibers (0, 2, 3) in F_7, I'm working through the dependency constraint to see how the weight formula behaves when the coefficients are scaled by the fiber values.
+
+I'm computing the weight for different values of λ with a0 = 3 as a test case, and I'm getting weights like 6, 9, 10, 11, 12, 15 — which means some weights are less than 7, suggesting that Fact 2 might not hold universally for this configuration.
+
+Now I'm realizing the issue: the algebraic constraint that weight equals p or 2p only applies to the specific case where the fiber coordinates are (0, 1, c). For generic vectors from fibers 0, 2, 3, the coefficient a0 is determined by the tail equations, not fixed. So the weight formula becomes more complex and doesn't necessarily simplify to p or 2p. λ%p.
+
+But for general fibers (0, c1, c2) with c1 ≠ 1, the dependency structure is different. The coefficients (a, b, c) satisfy 0·a + c1·b + c2·c = 0, i.e., c1·b + c2·c = 0. So b = -(c2/c1)·c. And a is determined by the tail equations. The weight is then:
+
+Weight = a + b + c (as integers in {0,...,p-1}).
+
+Now, a is NOT constrained by the first coordinate (since fiber 0 has first coord 0). So the first-coordinate equation gives b = -(c2/c1)·c, but a is free in the first coordinate. However, a IS determined by the tail equations.
+
+For a generic column triple, the dependency direction (a, b, c) scales linearly with some parameter λ, so the weight becomes W(λ) = [a0λ%p] + [b0λ%p] + [c0λ%p], where a0, b0, c0 are fixed coefficients determined by the fiber coordinates and vector tails. The central question is whether this weight always equals p or 2p across different triples.
+
+I'm working through the specific case (0, 1, c) to check both scenarios: when cλ%p ≥ λ%p and when cλ%p < λ%p, computing the weight in each case to see if it's consistently p. p) + λ%p = 2p.
+
+So for (0, 1, c): W ∈ {p, 2p}. This is specifically because a0 = c-1 = c0·c - c0 = c0(c-1), and b0 = -c = -c·c0. The specific relationship a0 + b0 + c0 = (c-1) + (-c) + 1 = 0 in F_p gives a0 + b0 + c0 ≡ 0 (mod p).
+
+In general: a0 + b0 + c0 ≡ 0 (mod p) iff W(λ) ≡ 0 (mod p) for all λ. Since W(λ) is the sum of three terms and their coefficients sum to zero modulo p, the entire expression vanishes modulo p. This means W(λ) can only take values in {0, p, 2p, 3(p-1)}, but since we need at least one nonzero coefficient to get W ≥ 3, we're left with W ∈ {p, 2p}. Now I need to examine what happens when a0 + b0 + c0 ≢ 0 (mod p). then W(λ) takes various values mod p, and CAN be < p.
+
+For the (0, 1, c) case: a0+b0+c0 = (c-1)+(-c)+1 = 0. So W ≡ 0 always.
+
+For a general (0, c1, c2) case: a0+b0+c0 depends on the specific vectors. The fiber coordinates only constrain b0 and c0 (via c1·b0+c2·c0 = 0). The tail equations determine a0.
+
+If the tail dependency happens to give a0+b0+c0 ≡ 0 (mod p), then W ∈ {p, 2p}. Otherwise, W can be < p.
+
+So Fact 2 is WRONG as stated — the weight for cross-fiber triples involving fiber 0 isn't always p or 2p, it depends on the specific vectors. But wait, my algebraic proof for the (0, 1, c) case was completely general and didn't rely on any particular choice of vectors, only the fiber structure itself. Let me reconsider what's actually happening here. I'm setting up the dependency equation av0 + bv1 + γvc = 0 where v0 = (0, t0), v1 = (1, t1), vc = (c, tc) are from fibers 0, 1, and c respectively, and I need to work through the first coordinate constraint. I'm realizing that the dependency (c-1, -c, 1) only works for a specific choice of vectors, and different selections from fibers 0, 1, and c would yield different dependencies—though the constraint b = -cγ from the first coordinate remains fixed regardless. γ = -c is fixed. But a/γ is free (depends on the tail).
+
+The weight of the dependency (a, b, γ) = (a, -cγ, γ) at scaling λ is:
+W(λ) = [aλ%p] + [(-cγλ)%p] + [γλ%p]
+
+Let me set γ = 1 (WLOG, rescale). Then (a, -c, 1) with a determined by tails.
+
+a + (-c) + 1 = a - c + 1. This is 0 iff a = c - 1.
+
+In my proof, I used a = c-1. But this is ONLY correct when the specific tail vectors satisfy (c-1)t0 - c·t1 + tc = 0. For different vectors in fibers 0, 1, c, I'd get a different value of a, so Fact 2 is actually restricted to specific vector configurations rather than applying universally to all cross-fiber triples involving fiber 0.
+
+Yet the computer verified that at p=5, ALL cross-fiber triples have weight ≥ p—but that was specifically for the S17 construction with the added 18th vectors, where the 513 support-3 kills were collinear triples involving that 18th vector and two S17 vectors. Let me reconsider the S17 setup at p=5 under the first-coordinate projection: fiber 0 contains vectors (0, t) for t ∈ A8, and fiber 1 contains vectors (1, t) for t ∈ A8.
+
+Now I'm setting up the 18th vector v18 = (f, t18) where f determines which fiber it lands in, and analyzing collinear triples involving v18, a vector from fiber 0, and a vector from fiber 1. The dependency equation breaks down by coordinates: the first coordinate constraint gives γ = -αf, and the tail constraint becomes a linear equation in the tail vectors.
+
+Since we're working in rank 4 with 3D tails, the algebra gets messier than the 1D case—the dependency doesn't factor as cleanly. But the computational evidence at p=5 is clear: any zero-sum involving non-kernel fiber vectors has weight at least 5, which confirms the weight-p barrier holds across all fiber configurations. Rather than chase the algebraic details further, I should document these findings and move on to writing up the results.
+
+The key takeaways are that at p=5 we get rigidity—all collinear triples from nonzero fibers hit exactly weight p with no lighter alternatives—while at p≥7 the picture flips and we see substantial flexibility with most triples falling below p. The modular window itself is sparse, hovering between 27-42% density and dropping as p grows, with the w=p line consistently uncovered. And across all ranks ≥4, the induction breaks down once we have three or more fibers involved.
+
+Now I want to verify whether Fact 2 about weights being p or 2p for triples touching fiber 0 holds universally or just in specific cases.
+
+============================================================
+BLOCK 8 (20999 chars)
+============================================================
+Interesting findings:
+1. At p=5, fiber 0 has 31 projective points and fiber 1 has 125 projective points. ALL points have first coord 0 or 1 (since we normalize by dividing by the first nonzero coord, giving first coord = 1, and the zero-first-coord ones have first coord 0). So at p=5 rank 4, there are only 2 fibers for the standard normalization! The "fiber c" structure depends on which linear form we project along. With π = first coordinate, the normalized projective points have first coord 0 or 1.
+
+
+2. I'm realizing the key distinction: in projective space, vectors like (3, 0, 1, 0) and (1, 0, 1/3, 0) are actually the same point, but in the original problem we're counting non-proportional vectors with multiplicity p-1, so I need to be careful about what "proportional" means in this context. (3, 0, 1, 0) = 3 · (1, 0, 1/3, 0) = 3 · (1, 0, 2, 0) in F_5 (since 1/3 = 2 mod 5). So projectively, (3,0,1,0) IS the same as (1,0,2,0).
+
+So the "fiber" structure under first-coordinate projection:
+- Fiber 0: vectors with first coord = 0 (projectively: (0, ...))
+- Fiber c (c ≠ 0): vectors projectively equivalent to (1, ...) with first coord c. But projectively, (c, t) ~ (1, t/c). So ALL nonzero-first-coord vectors are in the same projective class (fiber 1 when normalized).
+
+This means the fiber decomposition under first-coordinate projection gives only 2 fibers (fiber 0 and fiber 1) when working with projective representatives. The multi-fiber structure only emerges with a different projection or when we don't normalize.
+
+In the Grail problem, we're working with non-proportional vectors, each with multiplicity p-1. The fibers under a projection π are sets of vectors sharing the same π-value. Since vectors are projectively distinct, two vectors v and λv (λ ≠ 1) represent the same projective point, and with multiplicity p-1, we get p-1 copies of each projective point. For a vector (c, t) under first-coordinate projection, I need to determine what the fiber structure actually looks like. So each projective point appears p-1 times in the sequence as its distinct scalar multiples, which get distributed across the p-1 nonzero fibers under the projection map—one representative per fiber.
+
+For points with first coordinate 0, all their scalar multiples land in fiber 0, so that fiber collects all p-1 copies of each such "horizontal" point. The nonzero fibers each contain exactly one copy of every "non-horizontal" projective point, giving p^{r-1} distinct non-horizontal points across all nonzero fibers combined. For points with first coordinate 0, all their scalar multiples stay in fiber 0, so fiber 0 contains h(p-1) elements total where h is the count of horizontal projective points. Meanwhile, each nonzero fiber c contains exactly one representative from each non-horizontal projective point, giving v elements per nonzero fiber where v is the count of non-horizontal points. This accounts for all N(p-1) elements across the fibers. Now moving to the S17 construction... with π = first coord:
+- S17 = {(0,a) : a ∈ A8} ∪ {(1,a) : a ∈ A8} ∪ {(1,0,0,0)}
+- The 17 projective points:
+  - (0,a) for a ∈ A8: horizontal, first coord 0. h = 8 horizontal points.
+  - (1,a) for a ∈ A8 plus (1,0,0,0): non-horizontal, first coord 1. v = 9 non-horizontal points.
+- With multiplicity p-1:
+  - Fiber 0: 8·(p-1) elements
+  - Each fiber c ≠ 0: 9 elements (one from each non-horizontal projective point)
+
+Each nonzero fiber hits exactly 9 elements, which matches the η-theorem threshold of α(3)+1 = 9, so every nonzero fiber should satisfy the conditions. Now I need to verify that the 9 projections onto ker(π) ≅ F_p^3 are actually non-proportional—the vectors λ_i · t_i from the fiber must be linearly independent in the right sense, and I'm checking when two such projections could be proportional.
+
+The issue is that the tails of the 9 non-horizontal points include (0,0,0), which isn't a valid projective point, leaving only 8 genuinely non-proportional nonzero tails in each nonzero fiber.
+
+Each nonzero fiber contains 8 nonzero directions from A8 plus 1 zero-tail element, giving 8(p-1)+1 total elements. The η-theorem requires α(3)+1 = 9 nonzero non-proportional directions to fire on the projected problem, but we only have 8, so it doesn't apply there. However, the original η-theorem for the unprojected problem does guarantee a zero-sum among these 8(p-1)+1 elements satisfying the weight condition, which is exactly what we have in each nonzero fiber—I need to check whether the zero-tail element contributes meaningfully to triggering this.
+
+For a zero-sum in the projected fiber, I need both the tail vectors to sum to zero in F_p^3 and the coefficients to sum to 0 mod p (which forces weight = p). With 8 non-proportional A8 tail directions plus the zero tail, I'm looking for whether a linear combination of these tails can equal zero.
+
+Since A8 is strongly zero-sum-free with minimum zero-sum weight p+1, there's no way to achieve a weight-p zero-sum using only the A8 tails. This means no intra-fiber zero-sum can exist in any nonzero fiber.
+
+S17 itself is strongly ZSF, so naturally its fibers can't contain zero-sums either. The real mechanism kicks in when we add the 18th vector: if it lands in a nonzero fiber, that fiber suddenly has 9 nonzero tails, triggering the η-condition in the projected problem (9 nonzero non-proportional tails at multiplicity p-1). This produces a zero-sum of weight ≤ p in the tails, which combined with the first-coordinate constraint gives exactly weight p. But I need to check whether the 18th vector could have a zero tail itself, since that would make it proportional to e₁.
+
+The 18th vector can't be proportional to e₁ since e₁ is already in S17, so its tail must be nonzero. If it lands in fiber 0 instead, then fiber 0 gets 9 horizontal points with nonzero tails (the 8 from A8 plus the new one), and with multiplicity p-1 each, η fires in F_p³ to produce a weight-≤-p zero-sum—but since we're in fiber 0, there's no first-coordinate contribution to worry about.
+
+So for S17 specifically, any 18th non-proportional vector either goes to fiber 0 and gives a weight-≤-p intra-fiber zero-sum, or goes to a nonzero fiber and gives a weight-p intra-fiber zero-sum. But this argument relies on S17's specific structure—exactly 8 horizontal and 9 non-horizontal points. For a general 17-vector ZSF set with a different fiber distribution, like one with fibers {0:7, 1:9, 3:1}, the analysis would change, so I need to think about how the first-coordinate projection affects the fiber structure in that case.
+
+The projective point structure stays the same since we're picking 17 points in PG(3,5), each with a specific first coordinate in standard form. When I swap (0,0,1,0) with (3,0,1,0), that new point normalizes to (1,0,2,0) in standard form, which is different from the original (1,0,1,0), so I need to verify the actual normalization.
+
+The real issue is that the fiber structure under first-coordinate projection depends on how many of these 17 points have first coordinate 0 versus nonzero, and I'm getting tangled up in the representation details. Let me step back and check what the actual test results show instead of going deeper into this. I see the key distinction now: in the η problem, we're working with affine vectors in C_p^r, not projective points. Each non-horizontal projective point contributes p-1 affine vectors (its nonzero scalar multiples), and these spread across different fibers under the first-coordinate projection—a non-zero scalar multiple λv lands in fiber λc rather than fiber c, so the p-1 copies of a projective point distribute one per nonzero fiber.
+
+For the original S17 configuration with 8 horizontal and 9 non-horizontal points, fiber 0 gets 8(p-1) copies while each nonzero fiber c gets exactly 9 copies. When we swap one horizontal point for a non-horizontal one, we get 7 horizontal and 10 non-horizontal, shifting fiber 0 down to 7(p-1) copies and raising each nonzero fiber to 10 copies.
+
+With this swapped configuration, the inductive threshold α(3)+1 = 9 nonzero tails means we need at least 9 elements with nonzero tails in each fiber. The vector e₁ = (1,0,0,0) appears in every nonzero fiber as (c,0,0,0) but has a zero tail, so it doesn't count toward the threshold. That leaves 9 elements with actual nonzero tails in each nonzero fiber, which meets the threshold exactly—the η condition fires and gives us weight p. - 1 zero-tail (from e1)
+- 9 nonzero tails (from 10 non-horizontal points minus e1, but wait...)
+
+Actually, e1 = (1,0,0,0) is a non-horizontal point (first coord 1 ≠ 0). So it's one of the 10 non-horizontal points. The other 9 non-horizontal points have nonzero tails. Each nonzero fiber gets one copy of each: 9 nonzero tails + 1 zero tail = 10 vectors.
+
+η at rank 3 needs 8(p-1)+1 elements from 9 nonzero non-proportional directions with multiplicity p-1. We have 9 nonzero non-proportional tails with multiplicity 1 each (each nonzero fiber has exactly one copy of each non-horizontal point). So within a fiber, each tail direction has multiplicity 1, not p-1 — this is the key difference from the full sequence where each projective point carries multiplicity p-1.
+
+In a single fiber c, I'm working with 9 tail directions (nonzero) plus 1 zero tail, each appearing exactly once, giving 10 total elements. For the η-theorem to apply at rank 3, I need to check whether 10 ≥ 8(p-1)+1.
+
+At p=5, that's 8·4+1 = 33, and 10 < 33, so the η-theorem doesn't fire within a single fiber. The multiplicity-1 constraint is too weak — I need either more directions or higher multiplicity to trigger a guaranteed zero-sum. The η-bound requires enough elements in a fiber to trigger, but with only 17 projective points total, even if all were non-horizontal, each fiber would have at most 17 elements—far below the threshold of 33 needed at p=5 or 49 at p=7. This means my approach of applying the η-theorem within individual fibers doesn't actually work, since the multiplicity constraint breaks down at that level. I need to reconsider what the problem is actually asking. I'm checking whether the η-theorem can actually apply within a single fiber—at rank 4 with p=5, I'd need at least 33 non-horizontal directions, but I only have 17 available, so this approach fails. This suggests the fiber induction strategy as described might be fundamentally broken, unless the proof uses η differently or relies on the Davenport constant relationship instead. Let me reconsider what happens to those p-1 copies of each direction when they project into a fiber.
+
+When the p-1 copies of each direction scatter across different fibers, any single fiber only gets one copy of each direction—so I'm really solving a subset-sum problem where I pick which directions to include (coefficients in {0,1}) to sum to zero with total weight at most p. This shifts the relevant constant from η to Olson's constant.
+
+But I need to reconsider: within a fiber, I'm not just tracking directions, I'm tracking the actual sequence elements that landed there. Each element appears once, so coefficients are still {0,1}, but now I'm choosing subsets of the actual elements in that fiber. The key insight is that the zero-sum I'm looking for can pull elements from multiple copies of the same direction across the original sequence—two instances of direction v can both contribute to the sum.
+
+For horizontal directions, all p-1 copies end up in fiber 0, giving multiplicity p-1 there. For non-horizontal directions, each fiber gets exactly one copy with multiplicity 1. So in fiber 0, if I have enough horizontal directions (at least α(r-1)+1), the threshold condition fires. In other fibers, I need enough non-horizontal directions to trigger the threshold, which requires N_v to be sufficiently large.
+
+But wait — the η constant doesn't actually depend on multiplicities in the way I was thinking. It's just about the length of a sequence of group elements. So within fiber c ≠ 0, I have N_v elements from the non-horizontal directions, and for the Davenport constant to guarantee a zero-sum subsequence, I need N_v ≥ η(C_p^{r-1}). At r=4 and p=5, that's η(C_p^3) = 33, but N_v is at most 17, so this fails.
+
+However, there's also the first-coordinate constraint — the zero-sum in the full space requires the weight to be ≡ 0 mod p. So I can't just apply η within a single fiber; I need that additional constraint to hold too. This is actually a much more fundamental obstruction: the multiplicity drops from p-1 to 1 when projecting down, which pushes the η threshold far too high to reach. This kills the fiber induction approach entirely, and it's a stronger obstruction than the multi-fiber issue I was wrestling with earlier.
+
+Now I'm checking whether the multiplicity drop is really what I think it is. Within each nonzero fiber, the effective multiplicity is 1, so the sequence length is bounded by the number of non-horizontal directions. At rank 4, that's at most 17, but η(C_p^3) is at least 33 — so this fails for all p ≥ 5. This is a fundamental barrier that wasn't previously identified in the theoretical framework.
+
+Let me reconsider the problem setup more carefully. We have α(r)+1 non-proportional vectors in F_p^r, each appearing with multiplicity p−1, giving a total sequence length of (α(r)+1)(p−1). The claim is that some nonempty subsequence of length at most p sums to zero. I see now—the p-1 copies of each v_i all stay in the same fiber under projection π, they don't spread across different fibers like I initially thought. So when selecting a subsequence, all copies of v_i contribute to the same fiber π(v_i). are all the same vector v_i, not the scalar multiples λv_i. The non-proportional condition is between DIFFERENT vectors: v_i and v_j are non-proportional (v_j ≠ λv_i for any λ). But the copies of v_i are all identical.
+
+So under projection: all p-1 copies of v_i go to fiber c_i = π(v_i). The fiber c has elements = {v_i : π(v_i) = c}, each with multiplicity p-1. The number of non-proportional directions in fiber c is #{i : π(v_i) = c}. And each has multiplicity p-1.
+
+Now η within fiber c: we have n_c non-proportional directions, each with multiplicity p-1. Total = n_c(p-1). For η(C_p^{r-1}) to fire, I need n_c(p-1) ≥ α(r-1)(p-1)+1, which means n_c ≥ α(r-1) + 1 since n_c must be an integer.
+
+But here's the subtlety: two vectors in the same fiber might have proportional projections onto the kernel even though they're non-proportional overall. If v_i = (c, t_i) and v_j = (c, t_j) are both in fiber c, their tangent components t_i and t_j could satisfy t_j = λt_i for some scalar λ, even though the full vectors aren't proportional. (c, t_i) and (c, t_j) with t_i ≠ t_j are automatically non-proportional. Even when t_j = λt_i for some λ ≠ 1, the original vectors remain non-proportional while their projections become proportional—this is the proportionality loss in nonzero fibers. So in the projected space, the effective number of non-proportional directions m_c is actually less than n_c, meaning the sequence has fewer independent directions than the original fiber suggests.
+
+The total sequence length in the projected space is n_c(p-1), and for η to fire on C_p^{r-1}, I need this total to exceed α(r-1)(p-1)+1, which gives n_c ≥ α(r-1)+1. The η-theorem applies regardless of multiplicities—it just counts total length—so even though some projected directions have higher multiplicity due to proportionality, the firing condition depends only on whether n_c(p-1) is large enough.
+
+Now I'm realizing the key constraint: the zero-sum that η produces in the projected space has weight at most p, but when I lift it back to the original space, the first coordinate contributes c times the weight. For this to vanish mod p, the weight must be divisible by p, and since it's between 1 and p, it must equal exactly p. I'm realizing the crux of the issue: if the η-theorem produces a zero-sum with weight strictly less than p, that contradicts the modular constraint that weight ≡ 0 (mod p). Since any weight in the range (0, p) can't be divisible by p, the only possibility is weight = p. But I need to verify whether the η-theorem actually guarantees we get exactly weight p, or if a smaller weight would invalidate the zero-sum property when lifted back to the original space. p - 1} + p - 1, then I can guarantee a weight-p zero-sum in the original space. The s-constant is exactly what I need here — it's the Erdős-Ginzburg-Ziv analogue for groups, ensuring a zero-sum of the right weight rather than just any zero-sum.
+
+Now I'm checking the concrete case at rank 4: if a fiber has n_c directions, each appearing p-1 times, I need the total length n_c(p-1) to exceed the s-constant for C_p^3, which works out to requiring n_c ≥ 10. But with 18 total directions split across 3 fibers, the maximum any single fiber can contain is 6 directions — far short of what's needed.
+
+Wait, I need to clarify the distinction between η and s. The s-constant is what matters here: it's the threshold where any sequence of that length is guaranteed to have a subsequence of exactly exp(G) elements summing to zero. For C_p^3, this is s(C_p^3) = η(C_p^3) + p - 1, and I need to compute what that actually equals.
+
+At p = 5, this gives s = 37, which means I'd need at least 37 elements in each fiber to guarantee a zero-sum of exactly weight p. But with only 18 total directions split across 3 fibers, I can't get 37 in any single fiber—this approach breaks down.
+
+The real issue is that the η-theorem only guarantees a zero-sum of weight at most p, not exactly p. The weight could be anything from 1 to p, and I have no control over which one I get. If it's not divisible by p, the whole strategy falls apart.
+
+So the core problem with fiber induction isn't just about pigeonhole arguments or having enough vectors—it's that each fiber has the right number of directions but only with multiplicity 1, not the p-1 multiplicity needed to force a zero-sum of the right weight. The cross-fiber approach is where the real gap lies.
+
+Now I'm checking the η-theorem threshold more carefully. Each fiber c contains n_c directions from the original set, each appearing p-1 times, giving a total sequence length of n_c(p-1) within that fiber. The η-theorem requires n_c(p-1) ≥ α(r-1)(p-1)+1, which simplifies to n_c ≥ α(r-1)+1. At rank 4, this means n_c ≥ 9.
+
+With 18 total directions distributed across fibers, I need to check whether a 3-fiber partition can achieve the required threshold. By pigeonhole principle, at least one fiber gets ⌈18/3⌉ = 6 directions, but that's not enough—I need 9. However, a distribution like (9, 5, 4) works, so 3 fibers can satisfy the constraint.
+
+The key insight is that the proof doesn't have to fix a single projection upfront. Instead, I can choose the projection adaptively to maximize the largest fiber. When projecting 18 directions from PG(3,p) onto a line PG(1,p) with p+1 points, the maximum fiber size corresponds to the maximum number of directions that map to the same point—essentially, the most collinear directions in the projective space.
+
+Now I should wrap up and document my findings rather than continue down this theoretical rabbit hole. I've established the weight-p barrier algebraically, confirmed that p=5 exhibits complete rigidity across cross-fiber triples, shown that p≥7 allows flexibility with all-nonzero fibers achieving weight below p, found the modular window is sparse and shrinks as p grows, and demonstrated that fiber induction fails once we have three or more fibers. Let me consolidate these results and move forward with the writeup. ranks
+6. The weight-p barrier means Weight Flexibility cannot combine intra-fiber zero-sums
+
+Actually, let me re-examine finding #2. The computation showed:
+
+For the swapped S17 at p=5, the collinear triples involving (3,0,1,0):
+- Triple: (3,0,1,0), (0,1,4,0), (1,1,1,0) — fibers [0,1,3], min weight 6 > p=5!
+- Triple: (3,0,1,0), (1,0,1,0), (1,0,0,0) — fibers [1,3], min weight 6 > p=5!
+
+So the actual collinear triples involving the swapped vector have weight 6 > p = 5. This means the swapped vector is not eliminated by collinear triples at this weight threshold — it must fall to a higher-support zero-sum instead.
+
+The swapped set remains strongly ZSF at size 17, so adding the 18th vector would necessarily create a zero-sum, but I need to determine its structure. The collinear triple analysis reveals that at p=5, cross-fiber triples spanning all three fibers {0, 1, 3} exceed the weight bound, so weight-≤-p zero-sums must arise either within the kernel fiber alone or from support-≥-4 configurations. This aligns with the earlier observation that 390 out of 556 candidates at p=5 are eliminated at weight 5, with 149 remaining.
+
+So the weight-3 and weight-4 eliminations come from kernel-fiber collinear triples and quadruples, while the weight-5 eliminations occur at the exact cross-fiber boundary. Now I'm ready to finalize the analysis and write this up.

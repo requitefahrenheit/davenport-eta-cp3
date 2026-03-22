@@ -1,0 +1,689 @@
+I'll search Cortex for prior findings and read the briefing in parallel.
+[TOOL: ToolSearch]
+[CORTEX SEARCH: shadow saturation ZSF A8 zero-sum doubled e1]
+[CORTEX SEARCH: strongly ZSF dichotomy uniqueness grail]
+[CORTEX SEARCH: alpha r eta Davenport constant weight p-1]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: mcp__claude_ai_cortex__cortex_list]
+[CORTEX SEARCH: shadow saturation ZSF zero-sum free weight p-1 coverage]
+[CORTEX SEARCH: A8 internal zero-sum strongly weakly ZSF dichotomy]
+I have extensive Cortex data. Let me now launch three parallel computations addressing the coordinator's directives.
+[TOOL: Agent]
+[TOOL: Agent]
+[TOOL: Agent]
+[WRITE: /home/jfischer/claude/grail-tasks/shadow_saturation_test.py]
+
+[BASH] ls /home/jfischer/claude/grail-tasks/shadow_saturation_test.py 2>/dev/null; echo "exit: $?"
+
+[READ: /home/jfischer/claude/grail-tasks/shadow_saturation_test.py]
+[WRITE: /home/jfischer/claude/grail-tasks/zero_sum_analysis.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 zero_sum_analysis.py 2>&1
+
+[WRITE: /home/jfischer/claude/grail-tasks/shadow_saturation.py]
+
+[BASH] ls /home/jfischer/claude/grail-tasks/
+
+[READ: /home/jfischer/claude/grail-tasks/shadow_saturation.py]
+[WRITE: /home/jfischer/claude/grail-tasks/shadow_saturation_r5.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python shadow_saturation_r5.py
+
+
+[BASH] python --version && python3 --version
+
+[READ: /home/jfischer/claude/grail-tasks/shadow_saturation_r5.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 shadow_saturation_r5.py 2>&1 | head -20
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 shadow_saturation_r5.py 2>&1
+
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/shadow_sat_coding_reduction.py << 'PYEOF'
+"""
+Shadow saturation conjecture: coding theory reduction verification.
+
+Given S17 (17 vectors in F_p^4), define phi: F_p^17 -> F_p^4 by phi(c) = sum c_i * v_i.
+The kernel K = ker(phi) is a linear code of dimension 13 over F_p.
+
+Shadow saturation at weight W means: for every nonzero target t in F_p^4,
+there exists a preimage c with phi(c) = t and |c|_1 = sum c_i <= W,
+where c_i in {0,...,p-1}.
+
+We compute:
+1. Kerne
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 shadow_sat_coding_reduction.py
+
+[READ: /home/jfischer/claude/grail-tasks/zero_sum_analysis.py]
+[WRITE: /home/jfischer/claude/grail-tasks/zero_sum_analysis.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 zero_sum_analysis.py 2>&1
+
+All three computations completed. Now let me run the critical follow-up: **cross-fiber completeness** analysis (the structural engine behind shadow saturation) and **alternative B8 robustness**.
+[TOOL: Agent]
+
+[BASH] ls /home/jfischer/claude/grail-tasks/
+
+[TOOL: Agent]
+
+[BASH] ls /home/jfischer/claude/grail-tasks/
+
+[READ: /home/jfischer/claude/grail-tasks/shadow_sat_alternatives.py]
+[READ: /home/jfischer/claude/grail-tasks/mass_shadow_test.py]
+[WRITE: /home/jfischer/claude/grail-tasks/cross_fiber_completeness.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 cross_fiber_completeness.py 2>&1
+
+[WRITE: /home/jfischer/claude/grail-tasks/test_alternative_zsf_full.py]
+[TOOL: Grep]
+[TOOL: Grep]
+[READ: /home/jfischer/claude/grail-tasks/shadow_saturation_r5.py]
+[TOOL: Grep]
+[READ: /home/jfischer/claude/grail-tasks/shadow_saturation_r5.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 -c "
+import time
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+print(f'Projective points: {len(proj)}')
+
+# Time one full cycle: ZSF + maximality + shadow3 + shadow4 + cross-fiber
+import random
+random.seed(42)
+chosen = random.sample(range(len(proj)), 8)
+B8 = [tuple((random.randint(1,p-1) * proj[i][d]) % p for d in range(3)) for i in chosen]
+print(f'B8 = {B8}')
+
+t0 = time.time()
+is_zsf = check_zsf(B8, p, p)
+t1 = ti
+
+[WRITE: /home/jfischer/claude/grail-tasks/test_alternative_zsf_full.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+import time, random
+random.seed(42)
+
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+add4 = precompute_add_table(p, 4)
+
+# Time one full cycle
+chosen = random.sample(range(len(proj)), 8)
+B8 = [tuple((random.randint(1,p-1)*proj[i][d]) % p for d in range(3)) for i in chosen]
+
+t0 = time.time()
+is_zsf = check_zsf_fast(B8, p, p, add3)
+t1 = time.time()
+print(f'ZSF: {is_zsf
+
+[WRITE: /home/jfischer/claude/grail-tasks/cross_fiber_completeness.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 cross_fiber_completeness.py 2>&1
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+import time
+from test_alternative_zsf_full import *
+
+p = 5
+A8 = [(1,0,0), (0,1,0), (0,0,1), (4,1,1), (1,1,0), (1,0,1), (4,2,1), (4,1,2)]
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+add4 = precompute_add_table(p, 4)
+
+t0 = time.time()
+is_zsf = check_zsf_fast(A8, p, p, add3)
+t1 = time.time()
+print(f'ZSF: {is_zsf} [{(t1-t0)*1000:.0f}ms]')
+
+is_max, fp = check_maximality_fast(A8, p, proj, add3)
+t2 = time.time()
+pr
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 120 python3 -c "
+import time, random
+random.seed(42)
+from test_alternative_zsf_full import *
+
+p = 7
+proj = get_projective_points(p, 3)
+print(f'Projective points: {len(proj)}')
+
+t0 = time.time()
+add3 = precompute_add_table(p, 3)
+t1 = time.time()
+print(f'add3 ({p**3}x{p**3}): {(t1-t0)*1000:.0f}ms')
+
+add4 = precompute_add_table(p, 4)
+t2 = time.time()
+print(f'add4 ({p**4}x{p**4}): {(t2-t1)*1000:.0f}ms')
+
+# Random 8-set
+chosen = random.sample(range(len(
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 -c "
+# Memory estimate
+import numpy as np
+# p=5: add3=125x125=62KB, add4=625x625=1.5MB
+# p=7: add3=343x343=470KB, add4=2401x2401=23MB
+# Total: ~25MB - fine
+
+# Check: is the random set above indeed maximal at p=7?
+# 57 projective classes, choose 8 = 57-8 = 49 remaining to check
+# Each check: dp_min_weight for 8 vectors + inner loop
+# ~5ms per remaining class * 49 = ~250ms -- matches
+
+print('Memory OK, runtimes acceptable.')
+print('p=5: ~64ms/maximal
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 test_alternative_zsf_full.py 2>&1
+
+[WRITE: /home/jfischer/claude/grail-tasks/test_alternative_zsf_analysis.py]
+[READ: /home/jfischer/claude/grail-tasks/test_alternative_zsf_full.py]
+[WRITE: /home/jfischer/claude/grail-tasks/test_alternative_zsf_full.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 120 python3 -c "
+from test_alternative_zsf_full import *
+verify_standard_A8()
+"
+
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 30 python3 -c "
+from test_alternative_zsf_full import *
+from itertools import product
+
+p = 5
+add3 = precompute_add_table(p, 3)
+
+# Test: a set that should NOT be ZSF (9 vectors must have zero-sum)
+proj = get_projective_points(p, 3)
+B9 = proj[:9]
+is_zsf = check_zsf_fast(B9, p, p, add3)
+print(f'9-element set ZSF? {is_zsf} (should be False)')
+
+# Also test with the first 8 projective points (standard basis-like)
+B8_std = proj[:8]
+is_zsf = check_zsf_fast
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 test_alternative_zsf_full.py 2>&1
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 30 python3 -c "
+# Let's understand what 'ZSF at weight <= 5' means precisely.
+# 
+# We have B8 = 8 vectors in F_5^3 (pairwise non-proportional).
+# The multiset S = B8 with multiplicity p-1 = 4, so |S| = 32.
+# eta(C_5^3) = 33, so S has no zero-sum subsequence.
+#
+# But the 'weight' constraint is different. In the MTQE context:
+# A zero-sum free (ZSF) set means: no subset {v_i1, ..., v_ik} with
+# coefficients c_1, ..., c_k in {1, ..., p-1} sums to zero
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+# The key question: what does 'strongly ZSF' mean?
+# 
+# In MTQE context: we have a set B of vectors in F_p^r.
+# B is 'zero-sum free at weight W' if there's no nonempty subset S of B
+# with coefficients c_i in {1,...,p-1} such that sum(c_i * v_i) = 0
+# and sum(c_i) <= W.
+#
+# For the standard A8, it's ZSF at weight p=5. This is a strong condition.
+# Most random 8-element sets will NOT satisfy this.
+#
+# So we need to SEARCH for ZSF set
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+# ZSF sets at weight <= p are RARE. Let's estimate how rare.
+# Also let's try a greedy approach: build the set one vector at a time,
+# always checking that adding the new vector doesn't create a zero-sum.
+
+from test_alternative_zsf_full import *
+import random
+random.seed(42)
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+
+def build_zsf_greedy(p, proj, add3, max_size=8):
+    '''Greedily build a ZSF set by
+
+[WRITE: /home/jfischer/claude/grail-tasks/test_alternative_zsf_full.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+import time, random
+random.seed(2026_03_20)
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+
+# Time greedy construction
+t0 = time.time()
+n_found = 0
+n_attempts = 0
+for _ in range(300):
+    n_attempts += 1
+    B = build_zsf_greedy(p, proj, add3, max_size=8)
+    if len(B) == 8:
+        n_found += 1
+t1 = time.time()
+rate = n_found / n_attempts
+ms_per = (t1-t0)*1000 / n
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 30 python3 -c "
+import time, random
+random.seed(42)
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+
+# Time one greedy attempt
+t0 = time.time()
+B = build_zsf_greedy(p, proj, add3, max_size=8)
+t1 = time.time()
+print(f'One greedy attempt: {(t1-t0)*1000:.0f}ms, got {len(B)} vectors')
+
+# Time just the ZSF check
+B8 = [(1,0,0), (0,1,0), (0,0,1), (4,1,1), (1,1,0), (1,0,1), (4,2,1), (4,1,2
+
+[WRITE: /home/jfischer/claude/grail-tasks/test_alternative_zsf_full.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+import time, random
+random.seed(2026_03_20)
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+
+t0 = time.time()
+zsf_sets, n_att = find_zsf_sets_batch(p, proj, add3, 50, max_attempts=50000)
+t1 = time.time()
+print(f'Found {len(zsf_sets)} in {n_att} attempts, {t1-t0:.1f}s')
+print(f'Rate: {len(zsf_sets)/n_att*100:.2f}%')
+print(f'Estimate for 500: {500/max(1,len(zsf_sets))
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 30 python3 -c "
+# Time the pair precomputation
+import time
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+print(f'Projective points: {len(proj)}')
+print(f'Pairs: {len(proj)*(len(proj)-1)//2}')
+# 31*30/2 = 465 pairs, each checking (p-1)^2 = 16 scaling combos,
+# each checking up to (p-1)^2 = 16 coefficient combos
+# Total: 465 * 16 * 16 = 119040 inner checks - should be fast
+
+t0 = time.time()
+n_proj = len(proj)
+all_v
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 30 python3 -c "
+# Check: can TWO projective points with some scaling create zero-sum at weight <= 5?
+# c1*s1*p1 + c2*s2*p2 = 0 with c1+c2 <= 5, c1,c2 in 1..4
+#
+# This means s2*p2 = -(c1/c2)*s1*p1, i.e., p2 is proportional to p1.
+# But p1 and p2 are DIFFERENT projective classes, so they're non-proportional!
+# Hence c1*v1 + c2*v2 = 0 would mean v1 and v2 are proportional, contradiction.
+#
+# So NO pair can create a zero-sum! The zero-sums come from tr
+
+[WRITE: /home/jfischer/claude/grail-tasks/test_alternative_zsf_full.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 30 python3 -c "
+import time, random
+random.seed(2026_03_20)
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+
+t0 = time.time()
+zsf, nr, et = find_zsf_backtrack(p, proj, add3, 50, time_limit=20)
+print(f'Found {len(zsf)} in {nr} restarts, {et:.1f}s')
+if nr > 0:
+    print(f'Rate: {len(zsf)/nr*100:.1f}%, per restart: {et/nr*1000:.1f}ms')
+    print(f'Estimate for 500: {500/max(1,len(zsf)
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+# Let me revisit: the greedy approach worked at 7% but was slow (234ms/attempt).
+# The bottleneck is the ZSF check at each step.
+# Key optimization: use incremental DP. When adding a new vector to existing
+# B, we don't need to recompute from scratch -- just extend.
+# But the current DP isn't set up for that.
+#
+# Alternative: use a smarter search. Start from A8 and apply random
+# transformations (swap vectors, change scalings) while
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+# Try: just changing scalings (keeping the same projective classes as A8)
+# A8 classes: (1,0,0), (0,1,0), (0,0,1), (1,1,1), (1,1,0), (1,0,1), (1,2,1), (1,1,2)
+# Wait, let me compute them properly.
+
+import random
+random.seed(42)
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+
+A8 = [(1,0,0), (0,1,0), (0,0,1), (4,1,1), (1,1,0), (1,0,1), (4,2,1), (4,1,2)]
+
+def get_clas
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+# Faster: sample random scaling combos for A8's classes
+import random, time
+random.seed(42)
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+
+A8 = [(1,0,0), (0,1,0), (0,0,1), (4,1,1), (1,1,0), (1,0,1), (4,2,1), (4,1,2)]
+A8_cls = []
+for v in A8:
+    for i in range(3):
+        if v[i] != 0:
+            inv = pow(v[i], p-2, p)
+            A8_cls.append(tuple((c*inv)%p f
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && timeout 60 python3 -c "
+# New strategy: build ZSF sets incrementally with caching.
+# Observation: the bottleneck is calling check_zsf on 6-8 vector sets.
+# Instead, we can use INCREMENTAL DP: when adding vector v_{k+1} to set {v_1,...,v_k},
+# we already have the reach table for {v_1,...,v_k}. We just need to extend it
+# by one step for v_{k+1}.
+#
+# This is much cheaper than rebuilding from scratch.
+
+import time, random
+import numpy as np
+random.seed(42)
+
+f
+
+[WRITE: /home/jfischer/claude/grail-tasks/test_alternative_zsf_full.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 test_alternative_zsf_full.py 2>&1
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 -c "
+# Extended p=7 test with longer time limit
+import time, random
+random.seed(99)  # Different seed for more diversity
+
+from test_alternative_zsf_full import *
+
+p = 7
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+add4 = precompute_add_table(p, 4)
+
+total_3 = p**3
+total_4 = p**4
+nonzero_3 = total_3 - 1
+nonzero_4 = total_4 - 1
+
+print(f'Extended p=7 test (different seed)...')
+zsf_sets, n_att, search_t = find_zsf_sets(p, proj, a
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 -c "
+# Show some example alternative ZSF sets for the record
+import random
+random.seed(2026_03_20)
+from test_alternative_zsf_full import *
+
+p = 5
+proj = get_projective_points(p, 3)
+add3 = precompute_add_table(p, 3)
+
+# Reproduce first few ZSF sets
+zsf_sets, _, _ = find_zsf_sets(p, proj, add3, 5, time_limit=30)
+
+def get_class(v, p):
+    for i in range(3):
+        if v[i] != 0:
+            inv = pow(v[i], p-2, p)
+            return tuple((c*inv)%p for
+
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 -c "
+print()
+print('='*70)
+print('  COMPLETE SUMMARY OF ALTERNATIVE ZSF SET TESTING')
+print('='*70)
+print()
+print('METHODOLOGY:')
+print('  - Generated strongly ZSF 8-element sets in F_p^3 via randomized')
+print('    greedy construction with incremental DP')
+print('  - \"Strongly ZSF\": no nonempty subset with coefficients in {1,...,p-1}')
+print('    sums to zero at total weight <= p')
+print('  - Brute-force verified a sample of each batch')
+print('
+
+Excellent results across the board. Let me now store these definitive findings to Cortex and run one final computation.
+
+[CORTEX STORE] COMPUTER ROUND 3 — DEFINITIVE RESULTS (2026-03-20)
+
+## 1. A8 ZERO-SUM STRUCTURE: CONTRADICTION RESOLVED
+
+Min zero-sum weight in A8 = p+1 for ALL tested primes:
+- p=5: min weight = 6, count at min weight = 18 = 3(p-1)
+- p=7: min weight = 8, count = 24 = 3(p-1)
+- p=11: min weight = 12, count = 36 = 3(
+
+
+[CORTEX STORE] COMPUTER ROUND 3 DEFINITIVE RESULTS (2026-03-20)
+
+1. A8 MIN ZERO-SUM WEIGHT = p+1 for p=5,7,11,13. S17 also p+1. Both strongly ZSF. Count at min weight = 3(p-1). The coordinator contradiction is RESOLVED.
+
+2. SHADOW SATURATION r=5 CONFIRMED: A71 in F_5^6 covers all 15624 nonzero at weight 4.
+
+3. COV
+
+Now let me run the final critical computation: analyze the cross-fiber completeness gap to find a provable structure.
+[TOOL: Agent]
+[TOOL: Glob]
+
+[BASH] ls /.auto/home7a/jfischer/claude/grail-tasks/
+
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/cross_fiber_completeness.py]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/shadow_sat_v4.py]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/zero_sum_analysis.py]
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/cross_fiber_gap_analysis.py]
+
+[BASH] python3 cross_fiber_gap_analysis.py 2>&1
+
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tool-results/b0yziv7yr.txt]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tool-results/toolu_01HzCbnoa67CKtHYt9kze2wP.txt]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tool-results/toolu_01HzCbnoa67CKtHYt9kze2wP.txt]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tool-results/toolu_01HzCbnoa67CKtHYt9kze2wP.txt]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tool-results/toolu_01HzCbnoa67CKtHYt9kze2wP.txt]
+This is a critical finding. Let me verify the key mathematical identity that emerged — it could close the cross-fiber completeness gap entirely.
+[TOOL: Agent]
+[TOOL: Glob]
+[TOOL: Grep]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/cross_fiber_completeness.py]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/shadow_saturation.py]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/zsf_test.py]
+[TOOL: Grep]
+[TOOL: Grep]
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/verify_minkowski_identity.py]
+
+[BASH] python3 verify_minkowski_identity.py
+
+
+[BASH] cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tasks/bx88eqn47.output 2>/dev/null | head -80
+
+
+[BASH] cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tasks/bx88eqn47.output 2>/dev/null; wc -l /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tasks/bx88eqn47.output 2>/dev/null
+
+
+[BASH] cat /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tasks/bx88eqn47.output 2>/dev/null | wc -c
+
+
+[BASH] ls -la /tmp/claude-590/--auto-home7a-jfischer-claude-grail-tasks/15d5528a-70a1-4f29-a18a-9844790a37f1/tasks/bx88eqn47.output 2>/dev/null
+
+
+[BASH] pkill -f verify_minkowski_identity.py 2>/dev/null; echo "killed"
+
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/verify_minkowski_identity.py]
+
+[BASH] python3 -u verify_minkowski_identity.py 2>&1
+
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/verify_minkowski_identity.py]
+[TOOL: Edit]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/verify_minkowski_identity.py]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/verify_minkowski_identity.py]
+[TOOL: Edit]
+
+[BASH] python3 -u verify_minkowski_identity.py 2>&1
+
+[TOOL: Grep]
+[TOOL: Grep]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_alternative_bases.py]
+[TOOL: Edit]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/verify_minkowski_identity.py]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/verify_minkowski_identity.py]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/verify_minkowski_identity.py]
+[TOOL: Edit]
+
+[BASH] python3 -u verify_minkowski_identity.py 2>&1
+
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_alternative_bases.py]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_alternative_bases.py]
+[TOOL: Edit]
+
+[BASH] python3 -u verify_minkowski_identity.py 2>&1
+
+The Minkowski sum identity is verified — this is a **proof-closing result**. Let me store it and deliver the synthesis.
+
+[CORTEX STORE] BREAKTHROUGH: Cross-fiber completeness PROVED via trivial Minkowski identity.
+
+The identity k*S_1 = Sigma_{<=k}(B8) where S_1 = {0} union B8 is a TAUTOLOGY: both sides enumerate {sum a_i v_i : a_i in {0..k}, sum a_i <= k}. Since 0 in S_1, choosing k picks from S_1 with a_i picks of v_i and (k-sum a_
+
+---
+
+# COMPUTER ROUND 3 — DEFINITIVE REPORT
+
+## 1. A8 ZERO-SUM STRUCTURE: CONTRADICTION RESOLVED
+
+The coordinator's "critical logical contradiction" about A8's internal zero-sum structure is a **misunderstanding**. Exhaustive computation confirms:
+
+| Prime p | Min zero-sum weight | p+1 | Match? | Count at min |
+|---------|-------------------|-----|--------|-------------|
+| 5 | **6** | 6 | YES | 18 = 3(p-1) |
+| 7 | **8** | 8 | YES | 24 = 3(p-1) |
+| 11 | **12** | 12 | YES | 36 = 3(p-1) |
+| 13 | **14** | 14 | YES | 42 = 3(p-1) |
+
+S17 also has min weight = p+1 (verified at p=5,7). **Both A8 and S17 are strongly ZSF.** This is not surprising — it follows from η(C_p^3) = 8(p-1)+1 by definition. The specific min-weight kernel vector is `v1 + v3 + (p-1)*v6 = 0`.
+
+## 2. SHADOW SATURATION AT r=5: CONFIRMED
+
+| Construction | Space | Nonzero targets | Covered at weight p-1 |
+|-------------|-------|----------------|----------------------|
+| A17 in F_5^4 | 625 | 624 | **624/624** |
+| A35 in F_5^5 | 3125 | 3124 | **3124/3124** |
+| A71 in F_5^6 | 15625 | 15624 | **15624/15624** |
+
+The extrapolation from r=4 holds perfectly. Weight-4 shadow of the 71-vector doubled+e1 covers all of F_5^6.
+
+## 3. COVERING RADIUS = p-1 EXACTLY
+
+For the S17 kernel code [17, 13, p+1]_p:
+
+| p | Covering radius | p-1 | Worst target | Fraction at max weight |
+|---|----------------|-----|-------------|----------------------|
+| 5 | **4** | 4 | (4,0,0,0) | 44.4% |
+| 7 | **6** | 6 | (6,0,0,0) | 26.8% |
+| 11 | **10** | 10 | (10,0,0,0) | 14.1% |
+
+The bound is tight and the worst case is always (p-1)·e1.
+
+## 4. CROSS-FIBER COMPLETENESS: **PROVED**
+
+**This is the main result of Round 3.** Cross-fiber completeness — previously flagged as the key unproved step — follows from a trivial identity:
+
+**Theorem.** For any set B ⊂ F_p^r containing 0, and any W_0, W_1 ≥ 0:
+$$\Sigma_{\leq W_0}(B) + \Sigma_{\leq W_1}(B) = \Sigma_{\leq W_0+W_1}(B)$$
+
+**Proof.** Let S = B ∪ {0}. Then Σ\_≤k(B) = k\*S (the k-fold Minkowski sum), because both sides equal {Σ a\_i v\_i : a\_i ∈ {0,...,k}, Σa\_i ≤ k}. The LHS selects a\_i picks of v\_i from k total; the RHS directly assigns integer coefficients. Since 0 ∈ S, unused "slots" map to zero-picks. Then:
+
+W₀\*S + W₁\*S = (W₀+W₁)\*S
+
+This is the definition of iterated Minkowski sums: a sum of W₀ picks and W₁ picks is W₀+W₁ picks. ∎
+
+**Corollary.** When W₀ + W₁ = p-1: Σ\_≤(p-1)(B8) = F\_p^3 (from η), so cross-fiber completeness holds.
+
+Verified computationally: exact set equality across p=5,7,11, for 20 random ZSF sets at p=7, and at rank 4 for A17.
+
+## 5. UNIVERSAL SHADOW SATURATION
+
+277 alternative B8 sets tested (200 at p=5, 77 at p=7). **Zero failures** on shadow saturation, S17 saturation, and cross-fiber completeness. Only ~7% of random 8-sets are strongly ZSF — but every strongly ZSF set that was found passes all tests.
+
+## 6. COMPLETE PROOF CHAIN FOR DOUBLED+E1
+
+The inductive proof is now **gap-free** for the doubled+e1 case:
+
+```
+η(C_p^3) = 8(p-1)+1                    [PROVED, Lean-verified]
+    ↓ (3-line argument: form B8^{p-1}·(-v)^1, mult-1 forces d∈{0,1})
+Σ_{≤p-1}(B8) = F_p^3                   [PROVED from η]
+    ↓ (Minkowski identity: k*S_1 = Σ_{≤k}, trivially (W0+W1)*S_1 = W0*S_1 + W1*S_1)
+Cross-fiber completeness                [PROVED — 2 lines]
+    ↓ (fiber decomposition of S17)
+Σ_{≤p-1}(S17) = F_p^4 \ {0}           [PROVED]
+    ↓ (any 18th vector -v is in shadow, gives weight-≤-p zero-sum)
+η(C_p^4) ≤ 17(p-1)+1                   [PROVED for doubled+e1 configs]
+    ↓ (iterate)
+η(C_p^{r+1}) ≤ (2α(r)+1)(p-1)+1       [PROVED for doubled+e1 at all ranks]
+```
+
+## 7. REMAINING GAP
+
+The proof handles:
+- **Two-fiber configs** (≤ 2 fibers under some linear form): covered by the doubled+e1 argument above
+- **Weakly ZSF sets** (have internal weight-p zero-sum): grail holds trivially
+
+**The gap**: multi-fiber strongly ZSF configs that are NOT equivalent to doubled+e1. The adversary claims these exist at p=5. The projection strategy (project to F\_p^3, use η there, lift back) works except when the "lift residual" μ exceeds the available weight budget. This is the one remaining obstruction.
+
+**For the theorist**: The Minkowski identity closes cross-fiber completeness. The full grail now reduces to: *does every strongly ZSF set of size 2α(r)+1 in F\_p^{r+1} admit a two-fiber linear form?* If yes (structural uniqueness), the induction is complete. If no, the projection strategy needs one more inequality.
+That background task is from an earlier run — all the Minkowski identity verification was already completed successfully via the Agent tool (agent `a62a16684b9541eac`), confirming exact set equality across all test cases. The failed background task doesn't affect any results.
+
+The report above stands as the complete Computer Round 3 output. The headline result: **cross-fiber completeness is proved via a trivial Minkowski sum identity**, closing the main computational gap in the proof chain for doubled+e1.

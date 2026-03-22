@@ -1,0 +1,39 @@
+# Research Result
+
+**Goal:** Deep-dive research report on three AI-pharma stocks: SDGR (Schrodinger), RLAY (Relay Therapeutics), RXRX (Recursion Pharmaceuticals).
+
+Horizon: September 2026. Retail investor. Medium risk tolerance.
+
+"Done" = markdown file written to ~/claude/multi-agent/sdgr-rlay-rxrx-report.md containing:
+
+  For EACH of the three stocks:
+    1. Current price + market cap (timestamped, sourced)
+    2. Cash, debt, EV — from latest SEC filing with URL
+    3. All confirmed catalysts before Sept 2026 with exact dates and source URLs
+    4. Pipeline summary — what's in clinic, what's AI-driven vs conventional
+    5. Valuation: is it early, fair, or expensive vs the bull case? Show the math.
+    6. Bear case: single most lethal kill condition, probability, source
+    7. Position sizing recommendation with rationale
+
+  Cross-stock section:
+    8. Which one is the best risk-adjusted entry right now and why
+    9. Correlation risk: do these three move together or independently?
+
+  Special focus:
+    - RLAY: What happened at ESMO TAT on March 16, 2026? Zovegalisib data — what was the readout? How did the stock react?
+    - RXRX: $312M convertible note maturity — what is the current refinancing status? Has it been addressed?
+    - SDGR: SGR-3515 Phase 1 — any updates beyond the Q2-2026 guidance?
+
+Every factual claim must have a source URL. No invented numbers. Flag anything unverified.
+**Arch:** gpt
+**Turns:** 5
+**Cost:** $0.3301
+
+## Log
+
+
+[Turn 1] The worker identified only the scheduled ESMO TAT session details from a company press release, but did not obtain the actual presentation data or any primary artifact from Mar 16, 2026. This is not progress on the question “what happened” (results/content), just restating lack of sources and listing places to look. Approaches tried: 1 (company-source preview). No failures-by-margin pattern yet; Lakatos threshold not reached.
+[Turn 2] Turn 2 formalized an “absence lemma” that no primary artifact with the Mar 16, 2026 numerical readout exists in the currently retrieved corpus, and caught one concrete mismatch (an investor deck for the wrong company). But it still doesn’t advance toward obtaining the actual ESMO TAT results or stock reaction; it mainly re-packages the same blockage. Approaches tried: still effectively 1 (press releases/filings); no quantitative failure margin pattern; Lakatos threshold not reached.
+[Turn 3] Turn 3 made a concrete retrieval attempt (Relay IR events-presentations) and identified a specific mechanical blocker: a 403 Forbidden in this environment. They also committed to a precise pivot: retrieve March 2026 Relay materials via SEC EDGAR (8-K/EX-99 exhibits) as an alternate primary-artifact channel. Approaches tried: 2 (company PRs; direct IR retrieval blocked/alt EDGAR path). No Lakatos-style repeated near-misses; threshold not reached.
+[Turn 4] Turn 4 focused on tooling/endpoint issues around EDGAR listing pages and proposed switching to classic browse-edgar/direct accession URLs. However, it did not actually retrieve any March 2026 Relay filing or exhibit that could contain the ESMO TAT readout; it’s meta-progress about navigation, not new data. Approaches tried: 2 (press releases; IR blocked; EDGAR access path troubleshooting). No repeated near-miss quantitative failures; Lakatos threshold not reached.
+[Turn 5] Turn 5 introduced another tooling constraint (can’t open fresh SEC URLs unless they appear in search results), further shifting effort to workflow debugging rather than data extraction. Across 5 turns, no primary artifact of the Mar 16, 2026 ESMO TAT results was obtained, and the process is now dominated by access limitations rather than research. Approaches tried: 2+ but blocked by environment; no Lakatos threshold (not a conjecture/proof problem), but clear unproductive loop.

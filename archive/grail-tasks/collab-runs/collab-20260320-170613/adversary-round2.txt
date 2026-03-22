@@ -1,0 +1,122 @@
+I'm the ADVERSARY. Let me search Cortex and read prior work before launching attacks.
+[TOOL: ToolSearch]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: Glob]
+[TOOL: Glob]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/u1_analysis.md]
+[TOOL: mcp__claude_ai_openmind__search]
+[TOOL: Glob]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/u1_analysis.md]
+[TOOL: Glob]
+[TOOL: Glob]
+Let me read the latest adversary outputs and cross-pollination from this collab round.
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/collab-20260320-170643/.cross-adversary.txt]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_report_round1.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/collab-20260320-170643/adversary-round1.txt]
+Now let me read the latest round results and the prior adversary round 3 (the most advanced) to know exactly where we stand.
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/adversary_round3_final.md]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/collab-20260320-030311/adversary-round2-insights.txt]
+[READ: /.auto/home7a/jfischer/claude/grail-tasks/collab-20260320-030311/adversary-round3-insights.txt]
+Good. I have full context. The situation is critical:
+
+- **A8 is NOT unique** for p ≥ 5 (Round 3 finding)
+- **Window formula is unbroken** but only tested on A8
+- The coordinator wants me to test the window formula on **non-A8 sets**
+
+This is the right attack vector. If the window formula fails for non-A8 strongly ZSF 8-sets, then U1 cannot be proved without U2 (which is false). Let me launch targeted attacks.
+[TOOL: ToolSearch]
+[TOOL: TodoWrite]
+Let me write the core attack script. The key insight: **A8 is NOT unique at p≥5**, so if the window formula fails for non-A8 strongly ZSF 8-sets, the entire proof chain collapses.
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/adversary_r2_nonA8_window.py]
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/adversary_r2_3fiber_swap.py]
+Now let me run both attacks in parallel.
+
+[BASH] timeout 600 python3 adversary_r2_nonA8_window.py 2>&1
+
+
+[BASH] timeout 600 python3 adversary_r2_3fiber_swap.py 2>&1
+
+This is a **MASSIVE** finding. Let me read the full output carefully.
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/bf1a9f71-c8f1-40c3-8087-a1e0ca5337da/tool-results/bwysg5kbv.txt]
+**17/17 single swaps to fiber 2 survive at p=5**. Massive numbers of double-swap survivors too. But I need to verify the CRITICAL question: does there exist ANY linear form under which these 3-fiber sets collapse to 2 fibers? If not, U1 is genuinely dead.
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/adversary_r2_verify_u1_false.py]
+[TOOL: TodoWrite]
+
+[BASH] timeout 600 python3 adversary_r2_verify_u1_false.py 2>&1
+
+**DEVASTATING RESULT.** At p=5:
+
+- **17/17 single swaps** to fiber 2: ALL strongly ZSF, ALL with min_fibers=3 under EVERY linear form
+- **20/20 double swaps** sampled: ALL min_fibers=3
+- **4-fiber configurations** (swaps to fibers 2 AND 3): ALL min_fibers=3
+- **U1 IS FALSE**
+
+The minimum fiber count is 3 for EVERY counterexample — no linear form can collapse these to 2 fibers.
+
+Now I need to verify this at p=7 and understand WHY the swap theorem produces these counterexamples.
+[TOOL: TodoWrite]
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/adversary_r2_p7_and_extreme.py]
+
+[BASH] timeout 600 python3 adversary_r2_p7_and_extreme.py 2>&1
+
+Absolute confirmation. Let me write one final independent verification with a brute-force approach on a small example, then the full report.
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/adversary_r2_independent_verify.py]
+
+[BASH] timeout 600 python3 adversary_r2_independent_verify.py 2>&1
+
+**TRIPLE CONFIRMED.** Three independent DP implementations agree:
+- Counterexample is strongly ZSF (no zero-sum at weight ≤ 5)
+- Minimum fibers = 3 under ALL 624 linear forms
+- The counterexample is MAXIMAL (0/556 extensions survive)
+
+This is the best possible outcome for the adversary:
+- **U1 is FALSE** (definitively, with explicit counterexample)
+- **The main conjecture is UNHARMED** (counterexample is maximal at 17, can't reach 18)
+
+Let me now store to Cortex and write the comprehensive report.
+[TOOL: TodoWrite]
+[TOOL: mcp__claude_ai_openmind__natural_language]
+[TOOL: mcp__claude_ai_openmind__natural_language]
+Now the full report:
+[WRITE: /.auto/home7a/jfischer/claude/grail-tasks/adversary_r2_report.md]
+[TOOL: TodoWrite]
+---
+
+# ADVERSARY ROUND 2 — COMPLETE
+
+## U1 (Two-Fiber Forcing) IS FALSE
+
+### The Kill Shot
+
+Swap e₁ = (1,0,0,0) to (2,0,0,0) in doubled+e₁ at p=5. The resulting 17-vector set:
+- Is **strongly ZSF** (no zero-sum at weight ≤ p) — confirmed by 3 independent DP implementations
+- Has **minimum 3 fibers** under ALL 624 nonzero linear forms F₅⁴ → F₅
+- Is **MAXIMAL** (0/556 possible 18th vectors survive)
+
+### Scale: Not a Fluke
+
+| Attack | Count | Result |
+|---|---|---|
+| Single swaps at p=5 | 17/17 | ALL survive with 3+ fibers |
+| Double swaps at p=5 | 20/20 sampled | ALL survive |
+| 4-fiber configs at p=5 | 15/15 | ALL survive |
+| 5-fiber configs at p=5 | 2/2 tested | **SURVIVE** |
+| Single swaps at p=7 | 5/5 tested | ALL survive with min_fibers=3 |
+
+### Mechanism
+
+The Same-Tail Swap Theorem makes this inevitable: swapping a vector's fiber preserves tails (so tail equations unchanged) while ADDING a constraint to the first-coordinate equation. This makes zero-sums **harder**, not easier. The 2-fiber property was an accident of the construction.
+
+### Damage Assessment
+
+- **U1: DEAD** — proof chain cannot use it
+- **Main conjecture η(C_p⁴) = 17(p−1)+1: UNHARMED** — counterexample is maximal at 17
+- **Window formula: UNRELATED** — decoupled from fiber structure, still unbroken
+
+### For the Theorist
+
+The proof of Conjecture U needs a **direct argument** (polynomial method, character sums, or combinatorial proof at 18 vectors) that doesn't assume fiber structure. The 2-fiber approach is a dead end.
+
+Full report: `adversary_r2_report.md`
+Counterexample scripts: `adversary_r2_*.py`

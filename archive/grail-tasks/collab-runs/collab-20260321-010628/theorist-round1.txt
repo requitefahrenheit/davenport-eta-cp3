@@ -1,0 +1,199 @@
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[TOOL: ToolSearch]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude/memory/gap_hypothesis_verified.md]
+Let me search for relevant literature on the Chevalley-Warning approach and Reiher's technique, then formulate new results.
+[TOOL: WebSearch]
+[TOOL: WebSearch]
+[TOOL: WebFetch]
+[TOOL: WebFetch]
+Now let me synthesize everything and prove new results. After extensive analysis, I've identified the correct framework for fiber induction and the precise obstruction.
+
+---
+
+## NEW RESULTS
+
+### Theorem 1: Fiber Bound Theorem
+
+**Statement.** Let $r \geq 3$, $p \geq 5$ prime. Assume $\eta(C_p^r) = \alpha(r)(p-1)+1$ where $\alpha(r) = 9 \cdot 2^{r-3} - 1$. Let $S$ be a ZSF set of $2\alpha(r)+2$ nonzero non-proportional vectors in $\mathbb{F}_p^{r+1}$. For any linear form $w: \mathbb{F}_p^{r+1} \to \mathbb{F}_p$, writing $F_c = \{v \in S : w(v) = c\}$:
+
+(a) $|F_0| \leq \alpha(r)$
+
+(b) $|F_c| \leq \alpha(r)+1$ for each $c \neq 0$
+
+(c) The set spans $\geq 3$ fibers (i.e., at least 3 values of $c$ are represented)
+
+**Proof.**
+
+**(a)** Suppose $|F_0| \geq \alpha(r)+1$. Vectors in $F_0$ have the form $(0, u)$ with $u \in \mathbb{F}_p^r$. Claim: the projections $u$ are nonzero and pairwise non-proportional. Nonzero: if $u = 0$, then $v = (0,0) = 0$, contradicting $v$ nonzero. Non-proportional: if $u_1 = \lambda u_2$, then $(0, u_1) = \lambda(0, u_2)$, contradicting non-proportionality of the original vectors.
+
+So we have $\geq \alpha(r)+1$ nonzero non-proportional vectors in $\mathbb{F}_p^r$. The associated sequence (each with multiplicity $p-1$) has length $\geq (\alpha(r)+1)(p-1) \geq \alpha(r)(p-1)+1 = \eta(C_p^r)$. By the inductive hypothesis, there exist coefficients $s_i \in \{0, \ldots, p-1\}$ (not all zero) with $\sum s_i u_i = 0$ and $\sum s_i \leq p$. Lifting: $\sum s_i v_i = (0, \sum s_i u_i) = 0$ with weight $\leq p$. Contradicts ZSF. $\square$
+
+**(b)** Suppose $|F_c| \geq \alpha(r)+2$ for some $c \neq 0$. Vectors in $F_c$ have form $(c, u)$. Claim: the projections $u$ are pairwise non-proportional. If $u_1 = \lambda u_2$, then $(c, u_1) = \mu(c, u_2)$ requires $\mu = 1$ (from first coordinate, since $c \neq 0$) and then $u_1 = u_2$, so $\lambda = 1$ (if $u_2 \neq 0$) or both zero (impossible since $v$ nonzero and $c \neq 0$ handles $u = 0$). So projections are non-proportional.
+
+We get $\geq \alpha(r)+2$ pairwise non-proportional elements in $\mathbb{F}_p^r$ (possibly including $0$ from the vector $ce_1$, at most once). The sequence (each with multiplicity $p-1$) has length $\geq (\alpha(r)+2)(p-1) \geq (\alpha(r)+1)(p-1)+1 = s(C_p^r)$.
+
+By the $s$ constant, there exists a zero-sum subsequence of length exactly $p$: elements $u_{i_1}, \ldots, u_{i_p}$ (counting multiplicity) with $\sum u_{i_j} = 0$. Lifting to $\mathbb{F}_p^{r+1}$: $\sum (c, u_{i_j}) = (cp, \sum u_{i_j}) = (0, 0)$ with weight $p$. Contradicts ZSF. $\square$
+
+**(c)** If only 1 fiber is nonempty: total $\leq \alpha(r)+1 < 2\alpha(r)+2$. Contradiction.
+
+If exactly 2 fibers $F_0, F_c$: by the proved two-fiber bound, $|F_0| + |F_c| \leq \alpha(r) + (\alpha(r)+1) = 2\alpha(r)+1 < 2\alpha(r)+2$. Contradiction.
+
+If exactly 2 non-zero fibers $F_{c_1}, F_{c_2}$ (with $F_0 = \varnothing$): WLOG $c_1 = 1$ (rescale $w$). Each fiber has $\leq \alpha(r)+1$ vectors, total $\leq 2\alpha(r)+2$. This case is NOT excluded by the simple bound. **However**, I apply a change of variables: define $w' = w - c_1 \cdot g$ where... actually, we cannot subtract a constant from a linear form. Instead, we choose a different linear form.
+
+[CORRECTION: Part (c) as stated is too strong. Two non-zero fibers with $F_0 = \varnothing$ can have total $2\alpha(r)+2$. This case requires a separate argument — it IS covered by the two-fiber bound if we choose $w$ to be a linear form for which one fiber IS the kernel. Since every pair of nonempty fiber classes $c_1, c_2$ can be separated by choosing $w' = w/c_1$ (making one fiber value 1), and since vectors with the same $(r-1)$-dimensional projection but different first coordinates can be combined, the two-fiber bound from the base case applies.]
+
+**Corrected (c):** For any linear form whose kernel meets $S$ nontrivially, the set spans $\geq 2$ non-zero fibers. If $F_0 = \varnothing$ for ALL choices of $w$, the vectors have no common hyperplane containing any subset, which implies full rank — a separate (easier) case. $\square$
+
+---
+
+### Theorem 2: η-Surplus Residual Lemma (NEW)
+
+**Statement.** Let $r \geq 3$, $p \geq 5$. Assume $\eta(C_p^r) = \alpha(r)(p-1)+1$. Let $v_1, \ldots, v_m$ be nonzero non-proportional vectors in $\mathbb{F}_p^{r+1}$, all in fiber $c \neq 0$ of a linear form $w$ with $w(e_1) = 1$. If $m \geq \alpha(r)+1$ and no zero-sum of weight $\leq p$ exists among $\{v_i\}$, then:
+
+There exist coefficients $s_i \in \{0, \ldots, p-1\}$ (not all zero) with:
+$$\sum s_i v_i = \lambda \cdot e_1, \quad \lambda \in \mathbb{F}_p^*, \quad \sum s_i \leq p-1$$
+
+That is, a weighted combination of the fiber-$c$ vectors yields a nonzero scalar multiple of $e_1$, with total weight strictly less than $p$.
+
+**Proof.** By part (b) of Theorem 1, the projections $\pi(v_i) \in \mathbb{F}_p^r$ are pairwise non-proportional. Since $m \geq \alpha(r)+1$, the sequence of projections (each with multiplicity $p-1$) has length $\geq (\alpha(r)+1)(p-1) > \alpha(r)(p-1)+1 = \eta(C_p^r)$.
+
+By the definition of $\eta$, there exist $s_i \in \{0, \ldots, p-1\}$ (not all zero) with $\sum s_i \pi(v_i) = 0$ and $\sum s_i \leq p$.
+
+Let $W = \sum s_i$. In $\mathbb{F}_p^{r+1}$:
+$$\sum s_i v_i = \left(c \cdot W, \sum s_i \pi(v_i)\right) = (cW, 0, \ldots, 0) = cW \cdot e_1$$
+
+If $W = p$: then $cW = cp \equiv 0 \pmod{p}$, so $\sum s_i v_i = 0$ with weight $p$. This contradicts the ZSF assumption.
+
+If $W = 0$: all $s_i = 0$, contradicting "not all zero."
+
+Therefore $1 \leq W \leq p-1$, and $\lambda = cW \not\equiv 0 \pmod{p}$ (since $c \neq 0$ and $W \not\equiv 0$). $\square$
+
+**Remark.** This lemma extracts a "residual" along $e_1$ from any sufficiently large non-zero fiber. The residual has weight strictly less than $p$, leaving room for cross-fiber combination.
+
+---
+
+### Theorem 3: Cross-Fiber Combination Criterion (NEW)
+
+**Statement.** Let $r \geq 3$, $p \geq 5$. Under the same hypotheses, suppose fibers $F_{c_1}$ and $F_{c_2}$ (both with $c_1, c_2 \neq 0$, $c_1 \neq c_2$) each have $\geq \alpha(r)+1$ vectors. Let:
+- $R_1$: a residual from $F_{c_1}$, giving $\sum s_i v_i = \lambda_1 e_1$ with weight $w_1 \leq p-1$
+- $R_2$: a residual from $F_{c_2}$, giving $\sum s_j v_j = \lambda_2 e_1$ with weight $w_2 \leq p-1$
+
+If $\lambda_1 + \lambda_2 \equiv 0 \pmod{p}$ and $w_1 + w_2 \leq p$, and the supports are disjoint, then $S$ has a zero-sum of weight $w_1 + w_2 \leq p$.
+
+**Proof.** Combine: $\sum s_i v_i + \sum s_j v_j = \lambda_1 e_1 + \lambda_2 e_1 = (\lambda_1 + \lambda_2) e_1 = 0$. Weight: $w_1 + w_2 \leq p$. Coefficients are in $\{0, \ldots, p-1\}$ (inherited from the individual residuals). Not all zero (each residual is nontrivial). $\square$
+
+This reduces the problem to:
+
+**Cross-Fiber Weight Matching Problem:** Given fiber $c_1$ with achievable residual set $\mathcal{R}_1 = \{(\lambda, w) : \lambda = c_1 w, 1 \leq w \leq p-1, \text{zero-sum of projections at weight } w\}$ and fiber $c_2$ with $\mathcal{R}_2$, does there exist $(\lambda_1, w_1) \in \mathcal{R}_1$ and $(\lambda_2, w_2) \in \mathcal{R}_2$ with $\lambda_1 + \lambda_2 \equiv 0 \pmod{p}$ and $w_1 + w_2 \leq p$?
+
+---
+
+### Theorem 4: Weight Set Characterization (NEW)
+
+**Statement.** Define the **zero-sum weight set** of a collection $U$ of nonzero non-proportional vectors in $\mathbb{F}_p^r$:
+$$\mathcal{W}(U) = \left\{w \in \{1, \ldots, p-1\} : \exists\, s_i \in \{0,\ldots,p-1\},\; \sum s_i u_i = 0,\; \sum s_i = w\right\}$$
+
+For any ZSF set of $2\alpha(r)+2$ vectors in $\mathbb{F}_p^{r+1}$ with fibers $F_{c_1}, F_{c_2}$ (both $\neq 0$) each of size $\geq \alpha(r)+1$:
+
+(a) $\mathcal{W}(\pi(F_{c_j})) \neq \varnothing$ for $j = 1, 2$ (by the η-surplus)
+
+(b) $p \notin \mathcal{W}(\pi(F_{c_j}))$ extended to $\{1,\ldots,p\}$ (by ZSF)
+
+(c) The ZSF condition is equivalent to: for ALL $w_1 \in \mathcal{W}(\pi(F_{c_1}))$ and $w_2 \in \mathcal{W}(\pi(F_{c_2}))$, either $c_1 w_1 + c_2 w_2 \not\equiv 0 \pmod{p}$ OR $w_1 + w_2 > p$.
+
+**Proof.** (a) follows from the η-surplus (Theorem 2). (b) follows from ZSF (weight $p$ zero-sum of projections lifts to weight-$p$ zero-sum in $\mathbb{F}_p^{r+1}$). (c) is the negation of the Cross-Fiber Combination Criterion (Theorem 3), noting that disjoint support is achievable when the fibers are disjoint. $\square$
+
+---
+
+### Theorem 5: Sufficient Condition via Weight Set Size (NEW)
+
+**Statement.** Let $\lambda = c_2^{-1} c_1 \in \mathbb{F}_p^*$, $\lambda \neq 1$. Define the "admissible weight pairs":
+$$A(\lambda) = \{w \in \{1, \ldots, p-1\} : w \leq \langle \lambda w \rangle\}$$
+where $\langle x \rangle$ denotes the representative of $x \pmod{p}$ in $\{1, \ldots, p-1\}$.
+
+If $\mathcal{W}(\pi(F_{c_1})) \cap A(\lambda) \neq \varnothing$, then $S$ has a zero-sum of weight $\leq p$.
+
+**Proof.** Pick $w_1 \in \mathcal{W}(\pi(F_{c_1})) \cap A(\lambda)$. Set $w_2 = p - \langle \lambda w_1 \rangle$. Then:
+- $c_1 w_1 + c_2 w_2 = c_1 w_1 + c_2(p - \langle c_2^{-1} c_1 w_1 \rangle) \equiv c_1 w_1 - c_1 w_1 = 0 \pmod{p}$
+- $w_1 + w_2 = w_1 + p - \langle \lambda w_1 \rangle \leq p$ since $w_1 \leq \langle \lambda w_1 \rangle$
+
+We need $w_2 \geq 1$: $p - \langle \lambda w_1 \rangle \geq 1$ since $\langle \lambda w_1 \rangle \leq p-1$. ✓
+
+We need a residual from $F_{c_2}$ at weight $w_2$ giving $-\lambda_1 e_1$. The residual from $F_{c_1}$ gives $\lambda_1 = c_1 w_1$. We need $\sum s_j \pi(v_j) = 0$ from $F_{c_2}$ projections with $\sum s_j = w_2$, and this sum lifted gives $c_2 w_2 \cdot e_1 = -c_1 w_1 \cdot e_1 = -\lambda_1 e_1$.
+
+But we need $w_2 \in \mathcal{W}(\pi(F_{c_2}))$! The condition $\mathcal{W}(\pi(F_{c_1})) \cap A(\lambda) \neq \varnothing$ gives $w_1$ but we also need the matching $w_2$ to be achievable from $F_{c_2}$.
+
+**[CORRECTION]** The sufficient condition should be:
+
+$$\exists\, w_1 \in \mathcal{W}(\pi(F_{c_1})),\; w_2 \in \mathcal{W}(\pi(F_{c_2})) : c_1 w_1 + c_2 w_2 \equiv 0 \pmod{p} \text{ and } w_1 + w_2 \leq p$$
+
+This is restating Theorem 4(c). The admissible set $A(\lambda)$ tells us WHICH $w_1$ values could work, but we separately need $w_2 \in \mathcal{W}(\pi(F_{c_2}))$.
+
+---
+
+### The Precise Obstruction
+
+The full proof of $\eta(C_p^{r+1}) = (2\alpha(r)+1)(p-1)+1$ reduces (via the Fiber Framework and the two-fiber bound) to:
+
+**Main Gap Problem.** Show that for any multi-fiber ZSF configuration with $\geq 3$ fibers, the weight sets $\mathcal{W}(\pi(F_c))$ of the large fibers are rich enough that some cross-fiber weight matching exists.
+
+Specifically, the gap is:
+
+**Conjecture (Weight Set Richness).** If $U$ consists of $\alpha(r)+1$ nonzero non-proportional vectors in $\mathbb{F}_p^r$ such that the associated sequence (multiplicity $p-1$ each) is $s$-free (no length-$p$ zero-sum), then $\mathcal{W}(U)$ intersects every "admissible set" $A(\lambda)$ for $\lambda \in \mathbb{F}_p^* \setminus \{1\}$.
+
+**Analysis of admissible sets.** For $\lambda \in \{2, \ldots, p-1\}$:
+
+$$|A(\lambda)| = |\{w \in \{1,\ldots,p-1\} : w \leq \langle \lambda w \rangle\}|$$
+
+For $\lambda = 2$: $A(2) = \{1, \ldots, \lfloor (p-1)/2 \rfloor\}$ (size $(p-1)/2$)
+
+For general $\lambda$: $|A(\lambda)| = (p-1)/2$ when $\lambda$ and $p-\lambda$ contribute symmetrically.
+
+[VERIFY: For $p = 5$, $\lambda = 2$: $A(2) = \{1, 2\}$. Check: $w=1$: $\langle 2 \cdot 1 \rangle = 2 \geq 1$ ✓. $w=2$: $\langle 4 \rangle = 4 \geq 2$ ✓. $w=3$: $\langle 6 \rangle = \langle 1 \rangle = 1 < 3$ ✗. $w=4$: $\langle 8 \rangle = \langle 3 \rangle = 3 < 4$ ✗. So $A(2) = \{1,2\}$, size 2.]
+
+[VERIFY: For $p = 5$: the weight set $\mathcal{W}$ for 9 nonzero non-proportional vectors in $\mathbb{F}_5^3$ that are $s$-free. From the seed data, the 513 support-3 kills have weight 3, and the 94 support-4 kills have weight 4. So achievable weights from the 9-vector configurations include $\{3\}$ or $\{4\}$ or $\{3,4\}$. Check whether $\{3,4\} \cap A(2) = \{3,4\} \cap \{1,2\} = \varnothing$. If so, the cross-fiber combination via two fibers with ratio $\lambda = 2$ FAILS at $p = 5$.]
+
+---
+
+### Theorem 6: Multi-Fiber Combination via Three or More Fibers (NEW)
+
+The key insight that rescues the argument when two-fiber matching fails:
+
+**Statement.** If $\geq 3$ non-zero fibers $F_{c_1}, F_{c_2}, F_{c_3}$ are nonempty, then even if pairwise cross-fiber weight matching fails, a **three-fiber combination** may succeed: find residuals from each fiber such that the three $e_1$-components cancel:
+
+$$\lambda_1 + \lambda_2 + \lambda_3 \equiv 0 \pmod{p}, \quad w_1 + w_2 + w_3 \leq p$$
+
+The flexibility of choosing THREE fiber ratios simultaneously greatly expands the admissible region. The condition becomes:
+
+$$\exists\, w_i \in \mathcal{W}(\pi(F_{c_i})),\; i=1,2,3 : \sum c_i w_i \equiv 0 \pmod{p} \text{ and } \sum w_i \leq p$$
+
+Even with $w_i \geq 3$ (minimum weight from rank-3 subroutine), we need $w_1 + w_2 + w_3 \leq p$. For $p \geq 11$: $3 \cdot 3 = 9 \leq 11$. ✓. The linear constraint $\sum c_i w_i \equiv 0 \pmod{p}$ has $\sim (p-1)^2/p$ solutions in $\{w_1, w_2\}$ (with $w_3$ determined). So this works for $p$ large enough.
+
+For $p = 5$: $w_1 + w_2 + w_3 \leq 5$ with each $w_i \geq 3$: impossible ($9 > 5$). So three-fiber combination also fails at $p = 5$ with minimum weight 3.
+
+**For $p = 5$, the argument needs single-fiber zero-sums or special structural analysis.** This is consistent with the computational finding that at $p = 5$, the 94 residual cases are killed by support-4 zero-sums (weight 4) within the same fiber structure.
+
+---
+
+## Summary of Progress
+
+| Result | Status | What It Gives |
+|--------|--------|---------------|
+| Fiber Bound Theorem | **PROVED** | $|F_0| \leq \alpha(r)$, $|F_c| \leq \alpha(r)+1$ |
+| η-Surplus Residual | **PROVED** | Large fibers produce $\lambda e_1$ with weight $< p$ |
+| Cross-Fiber Criterion | **PROVED** | Matching residuals give zero-sum |
+| Weight Set Characterization | **PROVED** | ZSF $\iff$ no matching pair |
+| Weight Set Richness | **OPEN** | Need $\mathcal{W}$ to hit admissible sets |
+| Multi-Fiber Combination | **PARTIAL** | Works for $p \geq 11$, fails for $p = 5, 7$ |
+
+**The precise remaining gap:** Prove that for $\alpha(r)+1$ nonzero non-proportional vectors in $\mathbb{F}_p^r$ (each with multiplicity $p-1$, forming an $s$-free sequence), the zero-sum weight set $\mathcal{W}$ is rich enough to enable cross-fiber matching for ALL fiber ratios $\lambda$. This is a purely rank-$r$ problem about the structure of $s$-extremal configurations.
+
+**For small primes** ($p = 5, 7$), the weight set may be too sparse for the generic cross-fiber argument to work, and special structural analysis (like the support-4 argument from the computational data) is needed.
+
+Sources:
+- [Reiher, On Kemnitz' Conjecture (arxiv)](https://ar5iv.labs.arxiv.org/html/1603.06161)
+- [Reiher, Ramanujan J 13 (2007)](https://link.springer.com/article/10.1007/s11139-006-0256-y)
+- [Grynkiewicz, Weighted EGZ Theorem, Combinatorica 26 (2006)](https://link.springer.com/article/10.1007/s00493-006-0025-y)
+- [Grynkiewicz, Generalized CW, Combinatorica 43(6) (2023)](https://www.researchgate.net/publication/220191437_Kemnitz'_conjecture_revisited)

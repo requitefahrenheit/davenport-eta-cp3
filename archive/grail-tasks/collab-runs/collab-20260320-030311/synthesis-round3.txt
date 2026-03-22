@@ -1,0 +1,109 @@
+# SYNTHESIS: ROUND 3 COORDINATOR REPORT
+
+## STATUS
+Doubled+e1 construction is proven strongly ZSF via η-subthreshold characterization; uniqueness claim remains **conditionally sound but logically incomplete**—the proof establishes sufficiency (Theorem A) but leaves a critical gap in necessity (Case 3 vacuity and fiber-structure uniqueness).
+
+---
+
+## CONVERGENCE/ESCALATION
+
+### **[HIGH CONFIDENCE]** Doubled+e1 is Strongly ZSF
+- **THEORIST**: Formal algebraic proof (Theorem A) via two-case analysis on first coordinate, reducing to η-subthreshold contradiction. No computational dependency.
+- **COMPUTER**: Parallel verification scripts launched; shadow saturation robustness across 640K alternative bases observed (decoupled from uniqueness).
+- **ADVERSARY**: Exhaustive searches at p=3 found no counterexample; instead confirmed doubled+e1's local rigidity.
+
+**Verdict**: This claim is **sound and verified** across three independent verification axes.
+
+---
+
+### **[POSSIBLE FALSE CONJECTURE]** Uniqueness of Doubled+e1 Among Strongly ZSF Sets
+- **THEORIST**: Proof of Theorem A does NOT establish uniqueness. Claims about "resolving the coordinator's directive on A8's internal zero-sum structure" imply uniqueness via framing, not proof.
+- **ADVERSARY** (Insight 1): "Theorem 1 apply only to a proper subset of ZSF sets, not all of them. The uniqueness claim fundamentally rests on this unstated extremality assumption." Identifies hidden premise: A must be **extremal** (length η(C_p^r) − 1), not merely strongly ZSF.
+- **COMPUTER**: 640K alternative 8-element strongly ZSF sets exist in F_5^3; all achieve shadow saturation when doubled+augmented, suggesting saturation is **topological** (construction architecture), not unique-set-dependent.
+
+**Verdict**: Uniqueness claim is **unproven** and may be false. The proof chain confuses sufficiency with necessity.
+
+---
+
+### **[ESCALATION]** Case 3 Fiber Structure Gap
+**THEORIST & ADVERSARY both identify but neither resolves**: 
+
+ADVERSARY (Insight 2) observes: "With 3+ fibers, cross-fiber zero-sums at weight p ARE possible, creating additional constraints." This suggests multi-fiber constructions with equal/different sizes could be strongly ZSF if cross-fiber zero-sum patterns are carefully balanced.
+
+**Current state**: Undecidable from provided outputs. Case 3 ("all fibers ≤ 8 under every linear form") is neither proven vacuous nor shown to admit non-doubled+e1 solutions.
+
+---
+
+## CROSS-POLLINATION: Insights Bridging Agents
+
+### **From THEORIST → COMPUTER**
+THEORIST's Insight 2 ("η-bound encodes the weight bound; other proof strategies miss this") directly enabled COMPUTER's pivot: **weight-iteration search** (loop over weight w=1…p, find coefficients) is structurally more efficient than brute-force coefficient enumeration because η-subthreshold proof already partitions the search space by weight. Recommend COMPUTER adopt this for p ≥ 11.
+
+### **From COMPUTER → THEORIST**
+COMPUTER's Insight 2 ("shadow saturation is topological, not base-set-specific") reveals that THEORIST's proof of Theorem A is **sufficient but not tight**: the uniqueness question conflates two properties:
+1. A specific set A (e.g., A8) being strongly ZSF ✓ (proven)
+2. The doubled+e1 *construction* being the unique strongly ZSF shape ✗ (unproven)
+
+THEORIST should reformulate Theorem A as: "For any extremal A with |A^{p−1}| = η(C_p^r) − 1, the doubled+e1 construction is strongly ZSF."
+
+### **From ADVERSARY → THEORIST**
+ADVERSARY's Insight 3 ("biconditional is only proven in one direction") exposes the fatal gap: Theorem 1 proves (strongly ZSF construction) ⟹ (doubled+e1), but the converse (non-doubled+e1) ⟹ (not strongly ZSF) is asserted without proof. The exhaustive search at p=3 attempts to verify this converse; if successful, it would close the logical loop. **THEORIST must either prove the converse or retract the uniqueness claim.**
+
+### **From ADVERSARY → COMPUTER**
+ADVERSARY's Insight 1 (weak vs. strong ZSF partition the space) enables COMPUTER to design a **two-phase verification**:
+- Phase 1: Enumerate all 17-vector sets in F_5^4 satisfying weak ZSF (faster, larger set).
+- Phase 2: Filter to strongly ZSF, then check if any non-doubled+e1 alternative has shadow saturation.
+
+This refocuses the computational search from "does doubled+e1 work?" (already verified) to "is doubled+e1 unique among strongly ZSF sets with saturation?" (still open).
+
+---
+
+## DIRECTIVES
+
+### **THEORIST (Dependency: ADVERSARY's p=3 exhaustive search)**
+**Instruction**: Reformulate Theorem 1 as a **sufficiency statement only**:
+> "**Theorem 1 (Revised)**: If A = {a₁,...,a₈} ⊂ F_p^{r} is extremal strongly ZSF (length η(C_p^r) − 1), then S = doubled+e1(A) is strongly ZSF in F_p^{r+1}."
+
+Then, prove or disprove the **converse uniqueness conjecture**:
+> "**Conjecture (for ADVERSARY to test)**: Every strongly ZSF set in F_p^4 of size 17 with shadow saturation has fiber structure isomorphic to (8, 8, 1)."
+
+**Reference**: ADVERSARY's exhaustive check at p=3 will either confirm or refute this. If ADVERSARY finds a counterexample (e.g., a (7,7,3) or (6,6,5) partition that is strongly ZSF), retract uniqueness and focus on characterizing the fiber-structure lattice instead.
+
+---
+
+### **COMPUTER (Dependency: THEORIST's reformulated Theorem 1 + ADVERSARY's gap analysis)**
+**Instruction**: Execute a **three-phase computational cascade**:
+
+1. **Phase 1 (Weak ZSF enumeration)**: Generate all sets S ⊂ F_5^4, |S|=17 with weak ZSF property (no weight-≤4 zero-sum). Count: ~O(10⁶) candidates. Record fiber partitions.
+
+2. **Phase 2 (Strong ZSF filter)**: Among Phase 1 results, test for strong ZSF (no weight-≤5 zero-sum). Keep only those with shadow saturation verified. Record which fiber partitions survive.
+
+3. **Phase 3 (Uniqueness census)**: Partition survivors by fiber structure (e.g., (8,8,1) vs. others). If only (8,8,1) partition appears, THEORIST's uniqueness is supported; if others appear, ADVERSARY's conjecture is falsified.
+
+**Report results as**: "(X sets with weak ZSF) → (Y sets with strong ZSF + saturation) → (fiber structure census)."
+
+**Reference**: This directly addresses ADVERSARY's Insight 2 and bridges THEORIST's sufficiency proof to necessity.
+
+---
+
+### **ADVERSARY (Dependency: THEORIST's converse uniqueness conjecture + COMPUTER's Phase 2 results)**
+**Instruction**: Launch **two targeted attacks**:
+
+1. **Exhaustive p=3 closure**: Complete the p=3 search for all 8-element strongly ZSF sets in F_3^3 (at most C(13,8)=1287 projectivizations). Verify whether doubled+e1 is unique. Report: "Uniqueness at p=3: [YES/NO]. Alternative fiber structures found: [list or none]."
+
+2. **Proof-gap forensics**: Identify exactly which assumptions in THEORIST's proof are *unstated*. Create a **minimal counterexample template**: "If a 17-vector set S in F_p^4 is strongly ZSF with fiber partition OTHER than (8,8,1), then it must violate [property X] from Theorem 1's proof." Test this template computationally at p=5,7 to either strengthen the theorem or reveal a flaw.
+
+**Report**: Formal statement of the **necessary and sufficient conditions** for a 17-vector set to be strongly ZSF and have shadow saturation. This will either vindicate or overturn THEORIST's uniqueness framing.
+
+---
+
+## SYNTHESIS VERDICT
+
+| Claim | Status | Resolution Authority |
+|-------|--------|----------------------|
+| Doubled+e1 is strongly ZSF | ✓ **PROVEN** | THEORIST (Theorem A) + COMPUTER verification |
+| Doubled+e1 is **unique** among strongly ZSF 17-vectors | ✗ **UNPROVEN** | ADVERSARY (p=3 exhaustive) decides; COMPUTER (Phase 3) validates census |
+| Case 3 (multi-fiber alternatives) is vacuous | ⚠ **UNDECIDABLE** | Resolved by: ADVERSARY exhaustive result ⟹ THEORIST converse proof ⟹ COMPUTER census |
+| Shadow saturation is construction-topological | ⚠ **SUPPORTED but not proven** | COMPUTER Phase 1 count of weak-ZSF sets with (8,8,1) partition will test |
+
+**Next Milestone**: ADVERSARY completes p=3 exhaustive check (yes/no on uniqueness). This single boolean result gates all downstream conclusions on the full grail conjecture.

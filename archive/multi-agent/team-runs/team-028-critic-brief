@@ -1,0 +1,44 @@
+# Research Briefing (CRITIC thread)
+
+**Goal:** Prove: for a,b,c in F_p* with no pair summing to 0 mod p and a+b+c != 0 mod p,
+the wrap count k(lambda) = floor(([la]+[lb]+[lc])/p) is NOT identically 1.
+
+Equivalently: f(lambda) = [la]+[lb]+[lc] < p for some lambda in F_p*.
+
+By the involution f(l)+f(-l)=3p and sum(k)=p-1: this is equivalent to showing
+k=2 for some lambda (then -lambda gives k=0, f <= p-1).
+
+Verified for p = 5,7,11,13,17,19. Zero exceptions.
+
+---
+
+### Round 1  (00:11)
+
+You tried to prove that for nonzero a,b,c in F_p with no pair summing to 0 and a+b+c ≠ 0, the “wrap count” k(λ) = floor(([λa]+[λb]+[λc])/p) cannot be 1 for every nonzero λ (equivalently some λ gives [λa]+[λb]+[λc] < p). The worker ran exhaustive computations for small primes (p = 5,7,11,13,17,19) and found no counterexamples to the main claim — e.g. for p=11 and (a,b,c)=(1,5,7) they found λ=5 with total 10<p, so k(λ)≠1 — so the numerical evidence supports the statement on tested primes. However, while attempting a combinatorial proof they used an intermediate lemma (that if x+y+z ∈ (p,2p) then exactly one of the three pairwise sums is ≥ p) which turns out to be false (counterexample (1,1,10) for p=11), so that line of reasoning is broken and must be revised; in short, computations look good but the attempted analytic argument contains a mistake and needs a new idea. (yellow)
+
+**Cost so far: $0.24** | Tokens: 59,644 in / 10,772 out
+
+### Round 2  (00:16)
+
+You want to show that for nonzero a,b,c in the field F_p with no pair summing to 0 and a+b+c ≠ 0, the integer f(λ) = [λa]+[λb]+[λc] is < p for at least one λ (equivalently the wrap-count k(λ) is not always 1). In this round the worker proved a routine but useful two-term “carry” lemma that writes [x+y] as [x]+[y] minus p when and only when a single wrap occurs, and printed small-p inverse tables; otherwise no new structural input toward the main claim was produced. That lemma is standard bookkeeping and the missing piece is a workable three-term carry description plus a global counting/contradiction that uses the involution f(λ)+f(−λ)=3p and the fact ∑k(λ)=p−1. My concrete next step (one new thing I will try and do now) is to derive an explicit formula for the three-summand case expressing the three-term wrap count k(λ) in terms of the two-term carry indicators (so we can classify the possible carry-patterns per λ) and then count how many λ can realize each pattern — aiming to show it’s impossible for every λ to give k(λ)=1. This is a clear, doable pivot from bookkeeping to a counting/contradiction attack. (yellow)
+
+**Cost so far: $0.28** | Tokens: 70,908 in / 12,898 out
+
+### Round 3  (00:22)
+
+You were trying to show that for nonzero residues a,b,c mod p (with no cancelling pairs and a+b+c ≠ 0) the integer k(λ) = floor(([λa]+[λb]+[λc])/p) cannot be 1 for every λ — equivalently that for some λ the sum of the three lifts is < p (or, by symmetry, that k(λ)=2 for some λ). In this round the worker replaced an incorrect global bound with a precise, provable structural lemma about inverses: among residues whose standard lifts lie in the “upper half” {(p+1)/2,…,p−1}, the smallest possible lifted inverse is exactly 2 and it occurs for one residue only, namely (p+1)/2; they proved this and checked it numerically across many primes, and also observed the opposite extreme (maximum lifted inverse p−1 at a=p−1). That gives a sharp description of the lower edge of the inverse distribution, which is useful for comparing sums [λa]+[λb]+[λc], and the stated next step is to analyse the maximal inverse in that upper set and how these extremes interact across the three given residues — progress on a structural subproblem but the main goal (ruling out k≡1) is not yet resolved. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.34** | Tokens: 92,220 in / 14,941 out
+
+### Round 4  (00:27)
+
+You set out to prove that for nonzero a,b,c mod p with no pair summing to 0 and a+b+c ≠ 0, the wrap-count k(λ) = floor(([λa]+[λb]+[λc])/p) is not constantly 1 (equivalently that some λ gives [λa]+[λb]+[λc]<p, so some k=2 and hence some k=0 by the involution), and you checked small primes up to 19 with no exceptions; the worker’s main concrete progress is a clean two-step carry decomposition (binary indicators c1,c2 for whether a+b and then s1+c overflow) which exactly describes the total carry T∈{0,1,2} and the final residue, and therefore suggests stratifying triples by the pattern (c1,c2,r) and counting them. However, after setting up that decomposition the work veered into exploratory tallying (computer tables of pairwise-overflow counts versus total carry) without deriving the promised closed-form counts N(c1,c2,r) or showing how those counts force some λ to give k=2; the gap is a concrete combinatorial enumeration or algebraic argument that exploits the no-pair-sum-zero constraint and ties the carry-pattern counts to the k(λ) distribution. In short: a useful structural observation was made (the c1,c2 decomposition) and computations support the conjecture for small p, but there’s no committed next step for turning the decomposition into the decisive counting argument—so progress, but the path to a proof is not yet clear. (yellow)
+
+**Cost so far: $0.44** | Tokens: 124,310 in / 18,591 out
+
+### Round 5  (00:29)
+
+We were trying to show that for nonzero a,b,c mod p with no pair summing to 0 and a+b+c ≠ 0, the “wrap count” k(λ) = floor(([λa]+[λb]+[λc])/p) is not identically 1 (equivalently that for some λ the sum of the residues is < p). In this round the worker carried out exact bookkeeping of the three-term base‑p carry patterns when adding a, b, c (i.e. whether the first and second carries are 0 or 1) and derived closed-form formulas for the number of ordered triples giving each carry pattern: N(0,0) = (p²−1)(p+2)/6, N(0,1)=N(1,0)=p(p−1)(p+1)/3, and N(1,1)=(p−1)(p−2)(p+1)/6 (expressed via the standard sums S1,S2), and these formulas were checked by brute force for small primes. However the evaluator halted the line of work because, although the counts are correct and potentially useful, the worker did not complete the crucial step of translating k(λ) into these N(c1,c2) counts and using that translation to prove or disprove the conjecture (or produce the promised counterexample/polynomial contradiction), so the main goal remains unresolved. Next sensible steps are to express the distribution of k(λ) in terms of the N(c1,c2), substitute the closed forms, and simplify to see whether the conjectured identity can hold for all odd primes or to find an explicit counterexample; until that connection is made the effort is promising but incomplete. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.52** | Tokens: 163,814 in / 21,538 out
+

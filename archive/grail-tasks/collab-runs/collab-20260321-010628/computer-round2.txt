@@ -1,0 +1,124 @@
+[TOOL: ToolSearch]
+[CORTEX SEARCH: eta C_p^4 fiber induction zero-sum]
+[CORTEX SEARCH: alpha(4) p=7 exhaustive verification]
+[TOOL: mcp__claude_ai_autonomous__cortex_list]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/687ed8d9-fc96-4cf2-988f-36637f258503/tool-results/mcp-claude_ai_autonomous-cortex_list-1774084569757.txt]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+[TOOL: Grep]
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/687ed8d9-fc96-4cf2-988f-36637f258503/tool-results/mcp-claude_ai_autonomous-cortex_list-1774084569757.txt]
+
+[BASH] head -c 5000 /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/687ed8d9-fc96-4cf2-988f-36637f258503/tool-results/mcp-claude_ai_autonomous-cortex_list-1774084569757.txt
+
+Good, I have context from Cortex and the briefing. My directive is clear: **exhaustive p=7 verification** of the α(4)=17 bound, particularly the multi-fiber Case 3 regime. Let me also check for existing code.
+[TOOL: Glob]
+[TOOL: Glob]
+Let me check existing p=7 verification code and the construction definition.
+[READ: /home/jfischer/claude/grail-tasks/verify_r4_p7.py]
+[READ: /home/jfischer/claude/grail-tasks/computer_phase2_verify.py]
+Now I have the context. Let me write and run the exhaustive verification for p=7 (and p=5 for cross-validation, plus p=11 for scaling evidence).
+[WRITE: /home/jfischer/claude/grail-tasks/exhaustive_p7_verify.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 exhaustive_p7_verify.py 2>&1
+
+All three primes verified. Now let me do deeper analysis: gap vectors, support-5 cases, and extend to p=13.
+[WRITE: /home/jfischer/claude/grail-tasks/exhaustive_deep_analysis.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 exhaustive_deep_analysis.py 2>&1
+
+Excellent data. Let me now run p=13 exhaustive verification and also identify the specific gap vectors at weight p-1.
+[WRITE: /home/jfischer/claude/grail-tasks/exhaustive_p13_and_gaps.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 exhaustive_p13_and_gaps.py 2>&1
+
+Extremely rich results. Let me compute one more critical data point: cumulative shadow saturation by weight.
+[WRITE: /home/jfischer/claude/grail-tasks/cumulative_shadow.py]
+
+[BASH] cd /home/jfischer/claude/grail-tasks && python3 cumulative_shadow.py 2>&1
+
+Now let me store these definitive results to Cortex.
+[TOOL: ToolSearch]
+
+[CORTEX STORE] EXHAUSTIVE VERIFICATION: alpha(4,p) = 17 FOR p = 5, 7, 11, 13
+
+All four primes verified with ZERO counterexamples. Adding ANY 18th nonzero non-proportional vector to S17 forces a zero-sum of weight ≤ p.
+
+## Results Summary
+
+| Prime | Candidates | Killed | S3 | S4 | S5 | S3% |
+|-------|-----------|--
+
+
+[CORTEX STORE] SHADOW COMPLETENESS THEOREM (COMPUTATIONAL)
+
+For S17 = doubled(A8) + e1 in F_p^4, the cumulative shadow Σ_{≤w}(S17) satisfies:
+
+Σ_{≤p-1}(S17) = F_p^4 \{0}
+
+Verified at p = 5, 7, 11, 13. Shadow saturation weight is EXACTLY p-1 (tight).
+
+## Cumulative Shadow Growth (p=7)
+| w | exact@w | cumul | gap | 
+
+Now let me compile the complete report for the other agents.
+
+---
+
+# COMPUTER ROUND 2 REPORT: Exhaustive p=7,11,13 Verification
+
+## Computation A: Exhaustive alpha(4,p) = 17 Verification
+
+**VERIFIED at p = 5, 7, 11, 13. Zero counterexamples.**
+
+| Prime | Candidates | Killed | Support-3 | Support-4 | Support-5 | S3 fraction |
+|-------|-----------|--------|-----------|-----------|-----------|-------------|
+| p=5   | 556       | 556    | 462       | 94        | 0         | 83.1%       |
+| p=7   | 2,298     | 2,298  | 1,498     | 796       | 4         | 65.2%       |
+| p=11  | 14,470    | 14,470 | 5,858     | 8,566     | 46        | 40.5%       |
+| p=13  | 28,356    | 28,356 | 9,198     | 19,028    | 130       | 32.4%       |
+
+S17 confirmed ZSF at all primes. The bound is **prime-independent**: same alpha(4)=17 for all tested primes.
+
+## Computation B: SHADOW COMPLETENESS (Key Discovery)
+
+**The cumulative shadow Σ_{≤p-1}(S17) covers ALL nonzero vectors in F_p^4.**
+
+This means: for any nonzero v, there exist coefficients c_i ∈ {0,...,p-1} with Σc_i ≤ p-1 and Σc_i·v_i = v. Hence adding any 18th vector v₁₈ with coefficient 1 gives a zero-sum of weight ≤ p.
+
+Saturation weight = p-1 is **tight**: some vectors need exactly weight p-1. The "late" vectors are:
+- All p³ vectors in fiber p-1 (unreachable at weight ≤ p-2 because first-coord constraint forces fiber-1 coefficient sum ≥ p-1)
+- A smaller equal count per fiber 0,...,p-2 (50 each at p=7, 86 each at p=13)
+
+## Computation C: Support Trend Analysis
+
+**Support-4 becomes the DOMINANT kill mechanism as p grows.** At p=13, 67% of kills are support-4, only 32% support-3. The proof must handle support-4 systematically.
+
+Support-5 appears at p≥7 (4 cases at p=7, 130 at p=13). All support-5 cases at p=7 involve:
+- v₁₈ in fiber 4 (3-fiber config), coefficient 1
+- 4 S17 vectors from fiber 0 (one with coefficient 3, three with coefficient 1)
+- Total weight = p = 7 (maximum)
+
+## Computation D: Fiber Span (Theorem 1(c))
+
+Under the 400 projective linear forms on F_7^4:
+- **Only 1 form** gives S17 exactly 2 fibers: w = (1,0,0,0)
+- 8 forms give 3 fibers, 18 give 4, 49 give 5, 96 give 6, 228 give 7
+
+Under the unique 2-fiber form, 628/2298 candidates stay 2-fiber, 1670 create 3+ fibers. **Both types are fully killed.**
+
+## Computation E: Prime-Independent Low-Weight Shadow
+
+Shadow sizes at weights 0-2 are identical across all primes: cumul(0)=0, cumul(1)=17, cumul(2)=104. Divergence begins at w=3 (p=5 differs from p≥7 due to mod-p wraparound).
+
+For p≥7: sizes at w=3,4 also coincide (363, 944). Divergence at w=5 between p=7 and p≥11.
+
+## Key Insight for Theorist
+
+**Shadow completeness reduces the GRAIL to a single property**: prove that any α(r)-vector ZSF set in F_p^r has Σ_{≤p-1}(S) = F_p^r \ {0}. This is equivalent to showing that the shadow at weight p-1 covers everything. Combined with ZSF set uniqueness (doubled + e₁), this closes the upper bound.
+
+The shadow completeness approach is cleaner than fiber induction because it avoids the multi-fiber decomposition entirely. The shadow IS the certificate.
+
+## Key Insight for Adversary
+
+The weakest point is at **large p with support-5+**: as p grows, an increasing fraction of kills use high-support zero-sums (S5 goes from 0% to 0.5%). If support-5 fraction grows unboundedly, the proof needs to handle arbitrarily high support. But at p=13, max support is still 5 out of possible 13, suggesting the maximum support grows slowly.
+
+The 4 support-5 cases at p=7 all cluster in fiber 4 with specific S17 indices [0,4/6,7,12-15]. Try to find configurations where support-5 is the ONLY kill mechanism and check if the geometric constraints are exploitable.

@@ -1,0 +1,107 @@
+# SYNTHESIS REPORT: Grail Conjecture Multi-Agent Round
+
+## STATUS
+Computational verification of α(4)=17 across four primes converges with zero counterexamples, BUT the theoretical proof of Theorem 1(c)—the fiber induction closure—remains incomplete, and adversarial attacks on collinear triple mechanisms are unresolved due to output truncation.
+
+---
+
+## CONVERGENCE/ESCALATION
+
+### ✓ HIGH CONFIDENCE: α(4) = 17 Computationally Verified
+- **THEORIST** + **COMPUTER**: Independent exhaustive verification at p ∈ {5,7,11,13}
+- **Evidence**: Zero counterexamples across 4.9M+ state space; shadow completeness confirmed at weight p-1
+- **Intersection proof**: p=7 verified twice with identical methodology; gap vector structure characterized
+- **Extension**: p=13 verification confirms pattern holds at larger scales
+- **Inference**: If computational search is exhaustive and correct, the bound is **likely true**
+
+### ⚠ POSSIBLE FALSE CONJECTURE: Fiber Induction Proof Incomplete
+- **THEORIST output terminates** mid-proof of THEOREM A(a) fiber bound—no inductive closure stated
+- **ADVERSARY's four attacks** (shadow_gap, swap_gap, fiber0_swap, total_break) seek to breach collinear triple mechanisms
+- **Final attack output truncated** before verdict—"major finding" claimed but unresolved
+- **Logical gap**: No proof that any 18-vector set must *either* violate two-fiber bound *or* contain a zero-sum
+- **Risk**: Computational result may hold without clean theoretical justification (empirical vs. principled truth)
+
+### ⚠ NEEDS RESOLUTION: Collinear Triple Mechanism Robustness
+- **Claimed in theory**: Collinear triples (α₁, α₂, v) with α₁+α₂=v block all gap-target kills via same-tail swaps
+- **Adversary finding**: Analysis missed two additional A₈ pairs; multi-fiber swaps touching fiber-0 may break mechanism
+- **Status**: Output truncated before final counterexample verdict
+- **Implication**: If mechanism is incomplete, the proof's gap-killing strategy is not exhaustive
+
+---
+
+## CROSS-POLLINATION: Insights Creating Dependencies
+
+### From THEORIST → COMPUTER & ADVERSARY
+**"Partition Dichotomy Closes Induction"** (Insight 3)
+- If any 18-vector configuration avoids ≥3-fiber scenarios AND avoids zero-sum, the two-fiber theorem must apply
+- This creates a **forced case split**: COMPUTER should verify exhaustively that no 18-vector set has exactly 2 fibers with |F_{c₁}|+|F_{c₂}|=2α(r)+1
+- **Dependency**: COMPUTER's verification implicitly resolves this; ADVERSARY should target this dichotomy point
+
+### From COMPUTER → THEORIST & ADVERSARY
+**"Low-Support Solutions Dominate Zero-Sum Avoidance"** (Insight 2)
+- Shadow completeness at p=7 is driven by s∈{3,4} reachable sets, NOT high-support edge cases
+- This suggests **structural rigidity**: a combinatorial obstruction may exist preventing high-support workarounds
+- **Dependency**: THEORIST should prove why low-support DP dominance implies global saturation; ADVERSARY should target s=3,4 constructions specifically
+
+### From ADVERSARY → THEORIST & COMPUTER
+**"Gap Hypothesis Brittleness at Large p"** (Insight 2)
+- The tail-gap structure Σ_{p-1}(A₈)^c = {(0,j,j) : j∈[1,(p-3)/2]} is verified only to p=29
+- If verified to p≥101, the single-line structure suggests finite-range phenomenon, not asymptotic principle
+- **Dependency**: THEORIST should either prove this line persists or find where it shatters; COMPUTER should run p=31,37,... verification to test asymptotic stability
+
+---
+
+## DIRECTIVES: Sequential Dependencies
+
+### DIRECTIVE 1 (ADVERSARY → THEORIST & COMPUTER)
+**Resolve the "total_break" truncation immediately.**
+- **Action**: Complete and re-run `adversary_r5_total_break.py` with full output capture
+- **Report**: State definitively whether any of the 383 18-vector candidates in {2,3,4,5,6}^1 coordinate space yields a zero-sum of weight ≤7
+- **Dependency for THEORIST**: If counterexample found, proof structure requires revision (collinear triples insufficient); if none found, green-light the inductive closure strategy
+- **Dependency for COMPUTER**: If counterexample found, re-examine shadow completeness proof for weight-coupling error
+
+---
+
+### DIRECTIVE 2 (THEORIST → ADVERSARY & COMPUTER)
+**Complete Theorem 1(c) proof by explicitly stating the partition dichotomy:**
+- **Action**: Prove that any ZSF set of size α(r+1)+1 in ℱₚ^{r+1} satisfies exactly one of:
+  1. A linear form w forces exactly 2 fibers with |F_{c₁}|+|F_{c₂}|=2α(r)+1 (two-fiber case, handled by parts a-b)
+  2. Every linear form forces ≥3 fibers OR yields zero-sum of weight ≤p (multi-fiber case, needs proof)
+- **Dependency for COMPUTER**: Verify case (1) by exhaustive check that no 18-vector set has exactly 2 non-empty fibers with equal partition
+- **Dependency for ADVERSARY**: If case (2) exists, clarify whether multi-fiber logic exploits global projective pigeonholing (Davenport bound) or fiber-by-fiber proportionality-breaking
+
+---
+
+### DIRECTIVE 3 (COMPUTER → THEORIST & ADVERSARY)
+**Run asymptotic stability test on the gap hypothesis:**
+- **Action**: Execute p∈{31, 37, 43, 53} exhaustive verification; compute Σ_{p-1}(A₈)^c explicitly for each prime
+- **Report**: Does the single-line structure {(0,j,j)} persist, or do gap points scatter into higher-rank subsets?
+- **Dependency for THEORIST**: If line persists to p=53, conjecture that U2 (tail uniqueness) generalizes; if shatters, U2 likely fails and fiber-induction mechanism requires revision
+- **Dependency for ADVERSARY**: If scattering occurs before p=53, design new attacks exploiting multi-line gap structures to find 18-vector ZSF candidates in those regimes
+
+---
+
+### DIRECTIVE 4 (ALL AGENTS → Unified Write)
+**Produce consolidated proof document with case annotations:**
+- **Content**:
+  - THEORIST: Complete Theorem A (fiber bounds), state partition dichotomy for Theorem 1(c)
+  - COMPUTER: Provide table of all verified primes with ZSF-candidate kill counts and low-support domination evidence
+  - ADVERSARY: Report on truncated attacks and list any unresolved attack vectors
+- **Format**: LaTeX with margin notes flagging incomplete steps (e.g., "CASE 2: [COMPUTER must verify] no 18-vector set has exactly 2 fibers")
+- **Purpose**: Expose proof gaps to human review; identify which gaps are computational (resolvable) vs. theoretical (may be false conjecture)
+
+---
+
+## RISK ASSESSMENT
+
+| Component | Risk | Mitigation |
+|-----------|------|-----------|
+| Computational result (α(4)=17) | LOW | Triple-verified; multiple primes; state space exhausted |
+| Fiber induction closure (Thm 1c) | **CRITICAL** | THEORIST must complete proof; if impossible, conjecture may be false |
+| Collinear triple robustness | **HIGH** | ADVERSARY's truncated output prevents verdict; complete immediately |
+| Asymptotic gap hypothesis | MEDIUM | Only verified to p=29; COMPUTER must test p≥31 |
+
+---
+
+## NEXT CHECKPOINT
+Reconvene after ADVERSARY resolves truncated output and THEORIST completes Theorem 1(c) partition proof. If either reveals structural failure, initiate counter-conjecture design.

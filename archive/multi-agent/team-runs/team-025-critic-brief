@@ -1,0 +1,72 @@
+# Research Briefing (CRITIC thread)
+
+**Goal:** Prove: for any 9 nonzero vectors in F_p^3 NOT lying on a common affine hyperplane, with multiplicities p-1, there exists a short zero-sum.
+
+This is Case A of the eta(C_p^3) upper bound. Case B is fully solved (see seed).
+
+The most promising approach: project to C_p^2 using eta(C_p^2) = 3p-2, extract partial zero-sums, combine them. This is standard in additive combinatorics.
+
+Alternatively: reduce to Case B by studying K_0 (the sum-0 part of the kernel).
+
+---
+
+### Round 1  (21:48)
+
+You aimed to prove that from nine nonzero vectors in F_p^3 (none on a common affine hyperplane), each taken with multiplicity p−1, one can extract a short zero-sum; the worker picked the natural “project to F_p^2 and extract” tactic and proved the key first lemma: using the known Olson constant η(C_p^2)=3p−2, any such multiset contains a nonempty subsequence of length at most p whose projection to F_p^2 sums to zero, so its lift in F_p^3 has form (0,0,r) — a genuine partial zero-sum (r may be 0, in which case we’re done). This gives a reliable building block: each extraction removes ≤p elements and produces one residue r in F_p, so the next phase is to iterate the extraction to produce several residues r_i and then show some subcollection of those residues can be combined to cancel to 0 while keeping the total number of removed elements ≤p; that combinatorial synthesis (how many residues you can force, how to net them to zero, and the tight length accounting) is not yet resolved, and the attempt at computational checks was started but incomplete. Progress is real — a central lemma is in hand and the plan is clear — but the critical combining step remains to be completed, so: vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $0.17** | Tokens: 15,949 in / 9,989 out
+
+### Round 2  (21:55)
+
+We tried to push the standard “project to C_p^2 and extract short zero-sums” plan, but the last write-up (Step 2) has a crucial bookkeeping mistake that invalidates the claimed bounds: you cannot argue that each projection-round deletes ≥3p−2 elements (you only remove the short subsequence found, ≤p), so the inequality ℓ(3p−2) ≤ 9(p−1) and the derived bound k=2 for the number of rounds are not justified as written, and the subsequent bound on |T₂| is muddled; there were also broken code snippets in the log. What is salvageable is the simple, correct observation that you can partition the multiset of size 9(p−1) into at most two disjoint blocks of size 3p−2 (floor(9(p−1)/(3p−2)) = 2), so you can extract two disjoint projection-zero subsequences T₁,T₂ with 1 ≤ |T_i| ≤ p (hence |T₁|+|T₂| ≤ 2p) — but the stronger p+2 bound claimed earlier needs a fresh, rigorous derivation. Concrete next moves: (1) fix the counting by distinguishing “number of disjoint blocks available” (exactly 2) from “how many rounds you might run depending on extracted lengths,” and derive sharp attainable ranges for |T₁|+|T₂|; (2) do the residue casework for the two third-coordinate residues r₁,r₂ using the leftover pool of size 3p−5 to see when you can augment/trim to reach length ≤p and sum 0 (use 1D zero-sum facts over F_p for these small residue-sets); or (3) pivot to the K₀/kernel reduction to reduce to the already-solved Case B. Right now the project is spinning on flawed bookkeeping and needs one clean rewrite of the counting step before continuing. Vibe check: (red) — workable ideas exist but the current round is blocked by a concrete arithmetic/counting error and must be corrected.
+
+**Cost so far: $0.39** | Tokens: 70,641 in / 20,219 out
+
+### Round 3  (22:02)
+
+You want to show that any nine nonzero directions in F_p^3 (none all on one affine plane), each repeated p−1 times, force a short zero-sum; the worker attempted the standard two-round projection to F_p^2 (using η(C_p^2)=3p−2) and isolated a concrete bottleneck: after extracting one zero-projection subsequence T1 with third-coordinate r1, you must be able to choose the second 3p−2 block so that its zero-projection subsequence has third-coordinate −r1, and this reduces to Problem (*): for any multiset B of 3p−2 vectors in F_p^3 and any target t in F_p, find a nonempty subsequence U of size ≤p with projection-sum 0 and third-coordinate sum t. The worker made this reformulation explicit and proposed to attack (*) by importing Reiher’s “stable Cauchy–Davenport’’ ideas to show the lifting (from zero-projection subsets to third-coordinate sums) is surjective, but did not actually fix an earlier bookkeeping mistake about the “two rounds only’’ claim, did not prove (*), and their computation attempts failed, so no new lemma or verified construction was produced this turn—next concrete step must be to either prove (*) or exhibit a counterexample configuration; (yellow)
+
+**Cost so far: $0.57** | Tokens: 132,055 in / 26,020 out
+
+### Round 4  (22:09)
+
+Goal: from nine nonzero vectors in the 3-dimensional vector space over F_p (with each vector repeated p–1 times) produce a “short” nonempty subcollection that sums to the zero vector. What I did this round: I rigorously fixed the counting error in the projection-to-2D strategy and proved a clean lemma giving the exact number of times you can apply the C_p^2 η=3p–2 extractor to disjoint blocks of the multiset — namely R(p)=⌊(6p–7)/p⌋, which concretely is 3 rounds for p=3, 4 for p=5 and 5 for all p≥7 — so we can always pull out at least three (and for p≥5 at least four) disjoint partial zero-sums each of length at most p while leaving ≥3p–2 vectors unused. That is genuine progress (the bookkeeping and availability argument is now correct). What is still blocking completion is the crucial “length control” step: the writeup currently makes an unjustified jump from having up to five small partial sums (with residues in F_p and varying sizes 1…p) to producing a single short zero-sum — some of the length claims were incorrect or impossible as written — so we lack a precise combinatorial lemma that turns those residues and lengths into a zero-sum whose total length stays ≤ p (or a clear reduction to the already-solved Case B by using the kernel K_0). Next concrete move is to either (A) prove or find a counterexample to a weighted subset-sum statement: given up to five residues with attached sizes in [1,p], there exists a subcollection whose residues sum to 0 mod p and whose total size ≤ p; or (B) carefully analyze K_0 to implement a length-adjustment reduction to Case B. Vibe check: (yellow) = working but unclear if productive — the counting fix is solid, but the key combinatorial/length-control lemma is missing and must be resolved before the case can be closed.
+
+**Cost so far: $0.64** | Tokens: 151,026 in / 29,875 out
+
+### Round 5  (22:14)
+
+Goal: show a short zero-sum exists for the Case A configuration in F_p^3 by projecting to F_p^2 and extracting p-element zero-projection blocks whose third-coordinate sums can be arranged to cancel. Worker claimed a key lemma: from any multiset of size 3p–2 in F_p^3 one can pick a p-subset whose projection to F_p^2 is zero and whose third-coordinate sum equals any prescribed value; the proof sketched used character sums but crucial steps were omitted and contain dubious assertions (e.g. unjustified vanishing of certain symmetric sums and an unproven p-adic divisibility claim), and the final "trim 2p down to ≤p" step is only hand-waved. The evaluator judged the submission as spinning: the surjectivity lemma — the linchpin of the two-round strategy — is currently unproven (and likely incorrect as stated), so the round has not produced a valid step forward and we must either repair the character-sum argument with full correct details or find a different combinatorial route/reduction to Case B before progress can be claimed. (red) = stuck or spinning.
+
+**Cost so far: $0.74** | Tokens: 186,129 in / 33,355 out
+
+### Round 6  (22:18)
+
+We tried the standard projection-to-C_p^2 + residue-splitting plan and thought we had closed the last gap by invoking an “EGZ trimming” to shrink a 2p-term zero-sum to a p-term one, but that step is invalid for C_p^3 (the EGZ constant 2p−1 does not hold in higher-rank p-groups), so the argument as written is broken; testing the smallest nontrivial prime (p=3) via the well-known cap-set fact that F_3^3 admits a 9-point cap (a set of 9 nonzero points not contained in any affine plane and containing no three distinct summing to 0) shows a concrete obstruction: doubling each of those 9 points gives an 18-term multiset (the p−1 multiplicity construction) with no 1-, 2- or 3-term zero-sum, so the current Case A route (which needed a guaranteed p-term zero-sum inside a 2p-term zero-sum) cannot succeed as stated. (red)
+
+**Cost so far: $0.81** | Tokens: 211,266 in / 36,389 out
+
+### Round 7  (22:22)
+
+We tested the “Case A” claim on the smallest nontrivial prime p = 3: pick nine distinct nonzero vectors in F_3^3 that do not lie in a common affine plane, repeat each vector twice (so the multiset has size 16), and check exhaustively whether any 1-, 2-, or 3-term subsequence sums to zero; after 50 000 random supports we found an explicit support S = {(2,1,0),(1,1,0),(0,2,2),(0,1,0),(1,2,1),(0,0,2),(2,2,0),(1,0,0),(1,1,2)} whose doubled multiset has no zero-sum subsequence of length ≤3, so the advertised Case A statement (“there always exists a short zero-sum of length ≤ p”) is false already for p = 3; this is decisive: any proof route that assumed Case A is invalid, and the immediate next steps are to compute the true minimal guaranteed zero-sum length for that counterexample and to search for a general construction or corrected bound for higher p. (green)
+
+**Cost so far: $0.94** | Tokens: 284,799 in / 38,493 out
+
+### Round 8  (22:28)
+
+We set out to prove that any multiset formed by taking 9 nonzero vectors in F_p^3 that are not all contained in an affine hyperplane, each repeated p−1 times, must contain a short zero-sum; the team tried the standard projection-to-F_p^2 strategy but also ran a brute-force check for the first nontrivial prime p=3. The worker enumerated projective representatives, listed the 9-point supports not lying in a hyperplane (714 cases), formed multisets with multiplicity p−1=2, and exhaustively tested small subsequences, reporting that every Case A support had a zero-sum of length ≤3 (worst cases require length exactly 3). However the evaluator flagged contradictions and sloppy bookkeeping in the notes (conflicting earlier claims, a miscount of multiset size in a previous turn), so the computational evidence needs a careful, authoritative re-run with a clarified definition of “Case A” and a corrected program before extrapolating to p=5 or trying to extract a structural proof — next steps are to fix the code, confirm the p=3 census, then search for the combinatorial mechanism that forces 2- or 3-term zero-sums and attempt to reduce Case A to the already-solved Case B. (yellow) = working but unclear if productive.
+
+**Cost so far: $1.15** | Tokens: 389,139 in / 43,309 out
+
+### Round 9  (22:31)
+
+We tried to prove that any multiset of nine nonzero vectors in F_p^3 (none all lying in a single affine plane), each repeated p−1 times, contains a short zero-sum by the usual projection-to-2D extraction strategy: project to F_p^2, use the known 2D constant to pull out complementary zero-sum blocks, and then combine them. In that process we discovered that a naive appeal to the classic EGZ bound in the 3D setting was wrong, so a tailored “Radial-Pair Lemma” was proposed to exploit the extra structure that each extracted block already kills the first two coordinates. However, the proposed proof for that lemma contains several fatal gaps: it asserts unjustified uniformity of partial-sum residues, misuses a pigeonhole-style argument to force a short coincidence with j+k ≤ p, and then illegitimately assumes one can add zero elements or find cancelling pairs (x,−x) inside the given multiset. In short, the round produced a clear diagnosis of where EGZ fails here and a plausible direction (a geometry-aware combinatorial lemma or a reduction to the previously solved Case B via kernel analysis), but no airtight replacement argument yet; next steps are to either prove a correct Radial-Pair-type statement with rigorous counting (or algebraic/combinatorial tools), or test small p computationally to guide the right conjecture. Vibe check: (yellow) = working but unclear if productive.
+
+**Cost so far: $1.20** | Tokens: 427,274 in / 45,858 out
+
+### Round 10  (22:35)
+
+Goal was to prove a combinatorial zero-sum statement in F_p^3 (Case A of an eta(C_p^3) bound) by either projecting to F_p^2 and combining partial zero-sums or by reducing to the already-solved Case B via the kernel-sum structure; I ran small-p experiments to check a purported p=3 counterexample and, after fixing several variable-scope bugs, found it was not a counterexample (there is a 2-term zero-sum pair (1,1,0)+(2,2,0)=0), so the ad hoc example collapses; the main problem now is conceptual rather than computational — we never articulated a precise structural lemma to aim for, and the code work has been mainly debugging rather than giving insight.  The concrete next move is to state a clear dichotomy to prove and then test it: for any multiset of 9 nonzero vectors in F_p^3 not contained in an affine hyperplane (with multiplicities p−1) either (A) there exists an opposite pair (a 2-term zero-sum) or (B) a projection to some F_p^2 fiber contains enough points so that eta(C_p^2)=3p−2 produces a short zero-sum whose lifts combine to the desired short zero-sum in F_p^3 — this is plausible because nine points that don’t lie in a plane force spread among projections, but it needs a precise count and then small-p computation only to check candidate statements.  Plan: formalize one precise structural claim of that form, prove or disprove it by focused small-p tests (no more broad ad hoc searches), then convert the successful pattern into a rigorous argument; vibe: (yellow) = working but unclear if productive.
+
+**Cost so far: $1.43** | Tokens: 571,089 in / 47,643 out
+

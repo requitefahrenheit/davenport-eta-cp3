@@ -1,0 +1,227 @@
+[TOOL: ToolSearch]
+[CORTEX SEARCH: shadow saturation ZSF zero-sum-free]
+[CORTEX SEARCH: grail eta alpha Chevalley-Warning]
+[CORTEX SEARCH: computational verification shadow coverage weight p-1 ZSF sets F_p]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+Let me read the full Cortex results and search for more prior computational work.
+[READ: /home/jfischer/.claude/projects/--auto-home7a-jfischer-claude-grail-tasks/63ea81fb-2a5c-41a6-8e7f-ac123c797769/tool-results/toolu_014ea5HRi72PY2BQYntxa9no.txt]
+[CORTEX SEARCH: shadow weight sumset growth]
+[CORTEX SEARCH: ZSF maximal construction]
+Good, I have the Cortex data and the briefing. Prior work verified shadow saturation for the specific doubled+e1 construction at p=5 and p=7. Let me now compute something NEW and definitive.
+
+I'll run three parallel computations:
+1. Extend shadow saturation verification to p=11 and p=13
+2. Compute detailed representation counts for CW analysis
+3. Find the minimum ZSF subset size needed for saturation
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/shadow_sat.py << 'PYEOF'
+#!/usr/bin/env python3
+"""
+Shadow Saturation Exhaustive Verification for ZSF Sets.
+Computes weight-(p-1) shadow coverage and representation counts.
+"""
+
+import numpy as np
+import time
+import sys
+
+def build_doubled_e1(p, dim=4):
+    """Build the doubled+e1 construction for F_p^4."""
+    pm1 = p - 1
+    fiber0 = [
+        (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1), (0, pm1, 1, 1),
+        (0, 1, 1, 0), (0, 1, 0, 1), (0, pm1, 2, 1), (0,
+
+No numpy available. Let me rewrite in pure Python with optimized data structures.
+[WRITE: /home/jfischer/claude/grail-tasks/shadow_sat.py]
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/shadow_sat.py << 'PYEOF'
+#!/usr/bin/env python3
+"""Shadow Saturation Exhaustive Verification for ZSF Sets. Pure Python."""
+import time
+from collections import defaultdict
+
+def build_doubled_e1(p, dim=4):
+    pm1 = p - 1
+    fiber0 = [
+        (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1), (0, pm1, 1, 1),
+        (0, 1, 1, 0), (0, 1, 0, 1), (0, pm1, 2, 1), (0, pm1, 1, 2),
+    ]
+    fiber1 = [
+        (1, 1, 0, 0), (1, 0, 1, 0), (1, 0, 0, 1), (1, pm1, 1, 1),
+    
+
+Excellent results! Shadow saturation **VERIFIED** at p=5, 7, and **NEW at p=11**. All 17 vectors are critical. Size 17 is minimal.
+
+The ZSF check has a bug (trivial zero at weight 0). Let me fix that and dig deeper into the structure.
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/shadow_sat2.py << 'PYEOF'
+#!/usr/bin/env python3
+"""Phase 2: Fix ZSF check, analyze gap structure, p=11 counts."""
+import time
+from collections import defaultdict
+
+def build_doubled_e1(p, dim=4):
+    pm1 = p - 1
+    fiber0 = [
+        (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1), (0, pm1, 1, 1),
+        (0, 1, 1, 0), (0, 1, 0, 1), (0, pm1, 2, 1), (0, pm1, 1, 2),
+    ]
+    fiber1 = [
+        (1, 1, 0, 0), (1, 0, 1, 0), (1, 0, 0, 1), (1, pm1, 1, 1),
+        (1, 
+
+Outstanding results! Let me catalog the key findings:
+
+**ZSF verified precisely**: First zero-sum at weight **p+1** for all three primes (not p, not p-1).
+- p=5: first at w=6, p=7: first at w=8, p=11: first at w=12
+
+**Shadow at weight p already covers everything — nothing new at weight p**. Shadow saturates at p-1, and weight p adds zero new targets.
+
+**All 17 vectors critical**, size 17 minimal. Gap structure when removing vectors is highly structured.
+
+**Layer growth p-independent** at weights 1-2 (17, 87 for all p), diverges at weight 3 (only for p=5).
+
+Now let me store to Cortex and push to p=13 + deeper structural analysis.
+[TOOL: ToolSearch]
+
+[CORTEX STORE] COMPUTER VERIFICATION: Shadow Saturation Extended to p=11 + Structural Findings
+
+## Shadow Saturation VERIFIED for p=5, 7, 11
+
+All three primes: weight-(p-1) shadow of the doubled+e1 17-vector construction covers ALL nonzero vectors in F_p^4.
+
+p=5 (624 nonzero): w=1:+17, w=2:+87, w=3:+243, w=4:+277 
+
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/shadow_p13.py << 'PYEOF'
+#!/usr/bin/env python3
+"""Shadow saturation at p=13 + random ZSF search at p=7."""
+import time
+import random
+from collections import defaultdict
+
+def build_doubled_e1(p, dim=4):
+    pm1 = p - 1
+    fiber0 = [
+        (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1), (0, pm1, 1, 1),
+        (0, 1, 1, 0), (0, 1, 0, 1), (0, pm1, 2, 1), (0, pm1, 1, 2),
+    ]
+    fiber1 = [
+        (1, 1, 0, 0), (1, 0, 1, 0), (1, 0, 0, 1), (1, pm1, 1, 1),
+     
+
+Shadow saturation now verified at **p=5, 7, 11, 13** — all four primes. Let me now do the deepest structural analysis: identify barely-reachable targets and look for patterns that could inform a proof.
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/deep_analysis.py << 'PYEOF'
+#!/usr/bin/env python3
+"""Deep structural analysis of shadow representations."""
+import time
+from collections import defaultdict
+from itertools import combinations
+
+def build_doubled_e1(p, dim=4):
+    pm1 = p - 1
+    fiber0 = [
+        (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1), (0, pm1, 1, 1),
+        (0, 1, 1, 0), (0, 1, 0, 1), (0, pm1, 2, 1), (0, pm1, 1, 2),
+    ]
+    fiber1 = [
+        (1, 1, 0, 0), (1, 0, 1, 0), (1, 0, 0, 1),
+
+Rich structural data despite the minor error at the end. The key finding: **barely-reachable targets (1 rep) have a precise algebraic characterization**. Let me fix the error, complete the analysis, and store the deep findings.
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/final_analysis.py << 'PYEOF'
+#!/usr/bin/env python3
+"""Final analysis: barely-reachable structure + CW-relevant counts."""
+import time
+from collections import defaultdict
+
+def build_doubled_e1(p, dim=4):
+    pm1 = p - 1
+    fiber0 = [
+        (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1), (0, pm1, 1, 1),
+        (0, 1, 1, 0), (0, 1, 0, 1), (0, pm1, 2, 1), (0, pm1, 1, 2),
+    ]
+    fiber1 = [
+        (1, 1, 0, 0), (1, 0, 1, 0), (1, 0, 0, 1), (1, pm1, 1, 1),
+    
+
+Now let me store all the deep structural findings to Cortex.
+
+[CORTEX STORE] COMPUTER DEEP ANALYSIS: Barely-Reachable Structure + Proof-Relevant Findings
+
+## Shadow Saturation Verified at p=5, 7, 11, 13
+
+All four primes: weight-(p-1) shadow covers ALL of F_p^4 \ {0}. p=13 is new.
+
+p=13 layers: w=1:17, w=2:87, w=3:259, w=4:581, w=5:1101, w=6:1867, w=7:2895, w=8:4037, w=9:5045
+
+Now let me do one final CW-relevant computation: check if the total reps satisfy a Lucas-theorem congruence.
+
+[BASH] cat > /home/jfischer/claude/grail-tasks/cw_check.py << 'PYEOF'
+#!/usr/bin/env python3
+"""CW congruence analysis and Lucas theorem check."""
+
+def comb(n, k):
+    if k < 0 or k > n: return 0
+    if k == 0 or k == n: return 1
+    k = min(k, n - k)
+    r = 1
+    for i in range(k): r = r * (n - i) // (i + 1)
+    return r
+
+def lucas(n, k, p):
+    """C(n, k) mod p using Lucas' theorem."""
+    result = 1
+    while n > 0 or k > 0:
+        ni, ki = n % p, k % p
+        if ki > ni: return 0
+        result 
+
+This is a goldmine. Let me store the CW findings and provide the comprehensive summary.
+
+[CORTEX STORE] COMPUTER: CW Congruence Analysis + Random Model for Shadow Saturation
+
+## Lucas Theorem: C(p+16, 17) ≡ 0 (mod p) for all p ≥ 5, p ≠ 17
+
+Total coefficient vectors at weight ≤ p-1: S = C(p+16, 17).
+By Lucas: S ≡ 0 (mod p) for p ∈ {5,7,11,13,19,23,...}, and S ≡ 1 (mod 17).
+Consequence: nonzero target r
+
+## Round 1 Summary: Definitive Computational Findings
+
+### Shadow Saturation VERIFIED at 4 primes (p=11, 13 are NEW)
+
+| p | Nonzero targets | Weight p-1 shadow | Saturates? | First zero-sum weight |
+|---|---|---|---|---|
+| 5 | 624 | 624 | **YES** | 6 = p+1 |
+| 7 | 2400 | 2400 | **YES** | 8 = p+1 |
+| 11 | 14640 | 14640 | **YES** | 12 = p+1 |
+| 13 | 28560 | 28560 | **YES** | 14 = p+1 |
+
+### Key structural findings
+
+1. **First zero-sum always at weight p+1** (one more than required by eta). The construction avoids zero-sums even at weight p.
+
+2. **All 17 vectors are critical**. Removing ANY single vector creates 6-25 gaps. Size 17 is minimal for saturation.
+
+3. **Barely-reachable targets (exactly 1 rep) are ALL 2-vector combinations**:
+   - 17 are (p-1)-scalings of individual construction vectors
+   - The rest are pair combos a\*vi + b\*vj with a+b=p-1
+   - Only exceptions: multiples of e1 (3 at p=5, 5 at p=7)
+
+4. **Layer growth is p-independent at low weights**: weights 1-2 give 17, 87 for all p; weights 3-5 stabilize at p >= 7.
+
+5. **CW/Lucas congruence**: C(p+16, 17) ≡ 0 (mod p) for p != 17. Total nonzero reps ≡ -1 (mod p).
+
+6. **Random model**: Expected misses under uniform distribution:
+   - p=5: **0.27** (razor-thin margin!)
+   - p=7: 7.6 × 10^-11 (negligible)
+   - p >= 11: essentially 0
+
+### Proof-relevant insight
+
+**For p >= 7**, the exponential over-counting (avg p^12/17 reps per target) makes shadow saturation almost trivial from a counting perspective. A CW or character-sum argument showing "sufficient uniformity" should close it.
+
+**For p = 5**, the margin is tight. The 44 barely-reachable targets each have exactly 1 representation — always a specific 2-vector combination. Proving these are always covered requires understanding the ZSF algebraic structure, not just counting.

@@ -1,0 +1,186 @@
+[TOOL: ToolSearch]
+[CORTEX SEARCH: grail eta zero-sum upper bound fiber induction]
+[CORTEX SEARCH: counterexample multi-fiber zero-sum free set rank 4]
+[CORTEX SEARCH: adversary obstruction failure inductive upper bound]
+[READ: /home/jfischer/claude/multi-agent/seeds/grail-briefing.md]
+Good, I have the Cortex entries and briefing. Let me search for more specific findings about the approaches being proposed this round.
+[CORTEX SEARCH: multi-fiber strongly ZSF set not doubled e1 construction counterexample]
+[CORTEX SEARCH: Nullstellensatz polynomial method weight constraint zero-sum obstruction]
+[CORTEX SEARCH: cross-fiber combination weight prescribed sumset Cauchy-Davenport]
+Now let me search for the latest round's proposed approaches and any p=3 counterexample details.
+[CORTEX SEARCH: alpha 4 3 cap set p=3 counterexample formula wrong]
+[CORTEX SEARCH: weight flexibility theorem shadow window general rank induction strengthening]
+I have the full Cortex picture. Let me now do deep adversary analysis on the proposed approaches.
+
+---
+
+# ADVERSARY ROUND 2: SIX ATTACKS + ONE NEW STRUCTURAL FINDING
+
+## ATTACK 1: The Grail is FALSE as Stated (p=3 Counterexample)
+
+The Grail claims: η(C_p^r) ≤ (9·2^{r−3} − 1)(p−1) + 1 for all r ≥ 3, **all odd primes p**.
+
+**p=3 is an odd prime.** At r=4, the formula gives η(C_3^4) ≤ 17·2+1 = 35.
+
+But Cortex entry `19d033679f8` confirms: **α(4,3) ≥ 19** (greedy search found 19-element ZSF sets in F_3^4). This gives:
+
+η(C_3^4) ≥ 19·2+1 = **39 > 35**
+
+The upper bound is BELOW the lower bound. **Contradiction.**
+
+The mechanism: at p=3, the ZSF condition reduces to "no three-term zero-sum v₁+v₂+v₃=0" (since 2v₁+v₂=0 forces v₂=v₁, excluded by non-proportionality). This is exactly the **cap set condition**. Cap sets in F_3^r grow faster than 2^r — the Hill cap in PG(3,3) has 20 points, giving α(4,3) ≥ 20.
+
+**The Grail must restrict to p ≥ 5.** The base case η(C_p^3) = 8(p-1)+1 is only proved for p ≥ 5. The formula α(r) = 9·2^{r-3}-1 is p-independent only for p ≥ 5.
+
+**Impact**: Every approach must verify its hypotheses exclude p=3. Any "all odd primes" claim in a proof draft is wrong.
+
+---
+
+## ATTACK 2: Projection Strategy Has a Provable Arithmetic Gap
+
+The projection strategy (Cortex entries `19d0b14f4fa`, `19d091a9035`): project α(r)+1 vectors along one vector v_k, apply the inductive hypothesis in the quotient F_p^{r-1}, lift back.
+
+**The lift always gives c ≠ 0.** Here's why:
+
+A quotient zero-sum Σs_i·π(v_i) = 0 lifts to Σs_i·v_i = c·v_k in F_p^r. If c = 0, we have Σs_i·v_i = 0 at weight ≤ p — a zero-sum among the ORIGINAL vectors, contradicting the ZSF assumption.
+
+**Therefore c ≠ 0 for EVERY quotient zero-sum.** This is not a rare failure; it's a theorem.
+
+To complete the zero-sum, set s_k = p−c. Total weight becomes (quotient weight) + (p−c). For weight ≤ p, we need:
+
+**(quotient weight) ≤ c**
+
+But the inductive hypothesis only guarantees quotient weight ≤ p. And c ∈ {1,...,p-1}. When quotient weight = p (the maximum the theorem gives), the condition c ≥ p is IMPOSSIBLE.
+
+**The projection strategy therefore requires a STRICT STRENGTHENING of the inductive hypothesis**: not just "zero-sums at weight ≤ p" but "zero-sums at weight ≤ c" for a geometry-dependent c < p.
+
+The computer verified this works at p=5,7 for rank 4 (Cortex `19d0b14f4fa`). The minimum lifted weight distribution shows weights 3,4,5 at p=5 and 3,4,5,6,7 at p=7 — so low-weight quotient zero-sums exist in practice. But **no theorem guarantees their existence in general**.
+
+---
+
+## ATTACK 3: Fiber Induction Has Zero Surplus
+
+The Weight Flexibility / Cauchy-Davenport approach (Cortex `19d0f99be96`):
+
+N = 2α(r-1)+2 vectors across k ≥ 3 fibers. Largest fiber has at most ⌈N/2⌉ ≈ α(r-1)+1 vectors. **Surplus over α(r-1) ≤ 1.**
+
+Weight Flexibility at surplus 1: produces f(1) distinct achievable weights. Even optimistically, f(1) ≈ O(1).
+
+Cauchy-Davenport combining two fibers: |W₁ + W₂| ≥ |W₁| + |W₂| − 1 ≈ 1+1−1 = 1.
+
+**One achievable weight gives no useful information.** The cross-fiber combination needs weights to be in complementary ranges ({1,...,c} and {1,...,p−c} for some c), requiring Ω(p) achievable weights per fiber. Surplus 1 gives O(1). Fatal arithmetic mismatch.
+
+This is the same as my Attack 3 from last round, but now I'm emphasizing the QUANTITATIVE failure: the surplus is bounded by a constant (≈ 1), independent of p, while the weight range is {1,...,p}. No amount of structural cleverness can bridge this gap within the fiber induction framework.
+
+---
+
+## ATTACK 4: CW Is Dead at ALL Ranks for p ≥ 7
+
+Chevalley-Warning requires deg(F) < n (variables). The zero-sum polynomial has degree r(p−1). Variables = α(r)+1 = 9·2^{r-3}.
+
+| Rank r | deg = r(p−1) | vars = 9·2^{r-3} | CW works iff p < |
+|--------|-------------|-------------------|-----------------|
+| 3 | 3(p−1) | 9 | p < 4 (NEVER for p≥5!) |
+| 4 | 4(p−1) | 18 | p ≤ 5 |
+| 5 | 5(p−1) | 36 | p ≤ 8 |
+| 6 | 6(p−1) | 72 | p ≤ 13 |
+
+Wait — at rank 3, CW requires 3(p−1) < 9, so p < 4. **CW doesn't even work for the base case at p=5!**
+
+The rank-3 proof uses CHARACTER SUMS (Schlage-Puchta style), not CW. CW is a red herring for this problem at every rank ≥ 3 and every p ≥ 5.
+
+Grynkiewicz's weighted CW (Theorem 1.3) has the same degree constraint. It can't overcome the degree > variables barrier.
+
+**The polynomial method (CW, Nullstellensatz, slice rank) contributes NOTHING to the all-primes upper bound.** (Consistent with the literature survey in Cortex `19d00113327`.)
+
+---
+
+## ATTACK 5: Character Sum Method Dies at Rank ≥ 4
+
+At rank 3: the generating function f₃(μ) = p + ⟨μs⟩ is pinned to a SINGLE level by one character sum equation. This gives the antipodal contradiction.
+
+At rank r: the level function f_r(μ₁,...,μ_{r-2}) has **2^{r-3} possible levels** (one per parity pattern of the coordinates). The character sum still gives one equation per character, but the unknowns (level values) grow exponentially.
+
+| Rank | Levels (unknowns) | Characters (equations) | Status |
+|------|------------------|----------------------|--------|
+| 3 | 1 | p−1 | Overdetermined |
+| 4 | 2 | p−1 | Overdetermined, but can't pin both |
+| 5 | 4 | p−1 | Underdetermined for p < 6 |
+| r | 2^{r-3} | p−1 | Underdetermined for r > log₂(p) |
+
+The issue at rank 4 was already identified as Dead End #1: W(χ) = 0 for all nontrivial even characters. **Half the equations vanish**, leaving the system underdetermined even at rank 4.
+
+No "generalized character argument" can overcome this: the even-character vanishing is structural (it comes from the symmetry v ↔ −v in the summation), not an accident of the specific construction.
+
+---
+
+## ATTACK 6: Weight Flexibility Induction Is Circular
+
+The proposed strengthening: prove "zero-sums exist at f(k) distinct weights" when you have α(r)+k vectors.
+
+To use this inductively, you need:
+1. **Base case**: Weight Flexibility at rank 3 ✓ (Shadow Window Theorem, A8-specific)
+2. **Inductive step**: Weight Flexibility at rank r−1 ⟹ Weight Flexibility at rank r ✗
+
+The inductive step requires EXACTLY the same fiber decomposition + cross-fiber combination that the original problem does. The strengthened hypothesis doesn't make the inductive step easier — it makes it HARDER (you need to prove more).
+
+More precisely: to prove "many achievable weights at rank r," you project to rank r−1 and try to combine weights from fibers. But Attack 3 shows: each fiber has surplus ≈ 1, giving O(1) weights. Combining O(1) sets via Cauchy-Davenport still gives O(1). You can't bootstrap O(1) to Ω(p).
+
+**The circularity**: Weight Flexibility at rank r needs Weight Flexibility at rank r with k > 1 (to get more weights per fiber), which needs Weight Flexibility at rank r with k > 2, etc. The induction never grounds out.
+
+---
+
+## NEW FINDING: The Hard Core Is a Prescribed-Weight Sumset Problem
+
+Every approach eventually reduces to the same bottleneck:
+
+> Given n non-proportional vectors in F_p^r forming a ZSF set of size near α(r), and a target t ∈ F_p^r, prove there exist coefficients s_i ∈ {0,...,p-1} with Σs_i·v_i = t and **Σs_i = w for some prescribed weight w**.
+
+This is the **prescribed-weight representation problem**. It's strictly harder than the unconstrained representation problem (which follows from standard counting arguments).
+
+At rank 3, this is proved via the Shadow Window Theorem + character sums. At rank 4+, no tool handles it.
+
+**The obstruction is not combinatorial but analytic**: the weight constraint Σs_i = w is an INTEGER constraint on the coefficients, not a modular one. Standard algebraic tools (CW, Nullstellensatz, character sums) work modulo p. The integer constraint lives outside their reach.
+
+---
+
+## BOTTOM LINE
+
+| Approach | Named Obstruction | Severity |
+|----------|------------------|----------|
+| Fiber induction | Zero surplus per fiber | Fatal |
+| Projection + lift | c ≠ 0 forced; need weight < c | Fatal without strengthening |
+| CW / Nullstellensatz | Degree > variables for p ≥ 5 | Dead |
+| Character sums | Even characters vanish | Dead at rank ≥ 4 |
+| Weight Flexibility induction | Circular (needs itself to prove itself) | Structural |
+| Sumset growth | Prescribed-weight gap | Open |
+
+**What survives**: The only approach not definitively killed is a **direct structural argument** — proving that ANY ZSF set of size α(r)+1 has some exploitable property (shadow saturation, specific fiber structure, etc.) that forces a zero-sum when one more vector is added. This requires understanding WHY the construction is extremal, not just that it is.
+
+The most promising specific target remains: prove shadow saturation for all strongly ZSF sets of size α(r) at all ranks. The computer confirms this universally at ranks 3-4 and all tested primes. But no proof technique currently reaches it.
+
+Now let me store the key new findings to Cortex.
+
+[CORTEX STORE] ADVERSARY ROUND 2 KEY FINDING: The projection strategy has a PROVABLE gap.
+
+Every quotient zero-sum lifts to Σs_i v_i = c·v_k with c ≠ 0 (c=0 would violate ZSF on original set). To complete: set s_k = p-c, total weight = (quotient weight) + (p-c). Need quotient weight ≤ c < p. But the inductive hypo
+
+
+[CORTEX STORE] ADVERSARY ROUND 2: Grail FALSE at p=3.
+
+The Grail states 'all odd primes p' but α(4,3) ≥ 19 > 17 = 9·2^{4-3}-1. So η(C_3^4) ≥ 39 > 35 = 17·2+1. The formula gives wrong answer.
+
+Mechanism: at p=3, ZSF = cap set condition (no v₁+v₂+v₃=0). Cap sets in F_3^r grow faster than 2^r. Hill cap in PG(3,3) has
+
+
+[CORTEX STORE] ADVERSARY SESSION 6 ROUND 2: FULL OBSTRUCTION MAP
+
+Six approaches analyzed, all with named obstructions:
+
+1. Fiber induction: zero surplus per fiber (largest fiber has ≤ α(r-1)+1 vectors, surplus ≤1)
+2. Projection + lift: c≠0 forced by ZSF; need quotient weight ≤ c < p; no theorem for this
+3. CW / N
+
+Stored to Cortex. The key new contribution this round is the **provable c≠0 gap** in the projection strategy — this isn't just a "maybe it doesn't work" concern but a theorem: **ZSF forces every quotient zero-sum to have nonzero lift error c**, requiring a strict strengthening of the inductive hypothesis that no existing result provides.
+
+The full obstruction map above should guide the theorist: the only path not definitively killed is a **direct shadow saturation argument** that works from the ZSF property alone, without fiber decomposition, without CW, and without character sums. The problem's hard core is an integer-constrained sumset question outside the reach of standard modular tools.
